@@ -1,0 +1,6 @@
+logs/
+.DS_Store
+phpunit.xml
+vendor/
+*.ast
+test/fixture/systems
