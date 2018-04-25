@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace PhpIntel\Symbol;
 
+use PhpIntel\Symbol;
 use PhpIntel\Protocol\Location;
 
-class DefineConstantSymbol extends BaseSymbol
+class DefineConstantSymbol extends Symbol
 {
     /**
      * @var string

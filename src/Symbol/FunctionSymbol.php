@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace PhpIntel\Symbol;
 
 use PhpIntel\Entity;
+use PhpIntel\Symbol;
 use PhpIntel\Protocol\Location;
 
-class FunctionSymbol extends BaseSymbol
+class FunctionSymbol extends Symbol
 {
     /**
      * @var Entity\Parameter[]

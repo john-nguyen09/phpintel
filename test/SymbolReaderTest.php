@@ -23,12 +23,11 @@ final class SymbolReaderTest extends PhpIntelTestCase
 
     public function testReadingFunctionType()
     {
+        $doc = $this->getPhpDocument('function_type.php');
         $symbolReader = new Symbol\Reader();
-        $traverser = new Nodetraverser();
-
+        $traverser = new NodeTraverser();
         $traverser->addVisitor($symbolReader);
-
-        $traverser->traverse($this->getPhpDocument('function_type.php'));
+        $traverser->traverse($doc);
 
         $expectedFunctionType = [
             'string_function' => ['string'],
@@ -39,11 +38,35 @@ final class SymbolReaderTest extends PhpIntelTestCase
             'composite_types_function' => ['string', 'int', 'bool', 'Class1', 'null']
         ];
 
-        foreach ($symbolReader->symbols as $symbol) {
+        $functionSymbols = array_filter($doc->symbols, function($symbol) {
+            return $symbol instanceof Symbol\FunctionSymbol;
+        });
+
+        $this->assertEquals(\count($functionSymbols), \count($expectedFunctionType));
+
+        foreach ($functionSymbols as $symbol) {
             $actualTypes = $symbol->types;
             $expectedTypes = $expectedFunctionType[$symbol->name];
 
             $this->assertEquals($expectedTypes, $actualTypes);
         }
+    }
+
+    public function testReadingClass()
+    {
+        $symbolReader = new Symbol\Reader();
+        $traverser = new NodeTraverser();
+
+        $traverser->addVisitor($symbolReader);
+        $docs = [
+            $this->getPhpDocument('Model.php'),
+            $this->getPhpDocument('User.php')
+        ];
+
+        foreach ($docs as $doc) {
+            $traverser->traverse($doc);
+        }
+
+        var_dump($docs[1]->symbols);
     }
 }

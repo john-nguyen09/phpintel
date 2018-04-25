@@ -5,6 +5,8 @@ namespace PhpIntel;
 
 use Microsoft\PhpParser\Node\SourceFileNode;
 use PhpIntel\Protocol\Position;
+use PhpIntel\Symbol;
+use Microsoft\PhpParser\Token;
 
 class PhpDocument
 {
@@ -24,6 +26,13 @@ class PhpDocument
      * @var string
      */
     public $text;
+
+    /**
+     * Symbols defined in this document
+     *
+     * @var Symbol[]
+     */
+    public $symbols = [];
 
     /**
      * Index of end of lines
@@ -74,29 +83,39 @@ class PhpDocument
         $left = 0;
         $right = \count($this->linesIndex) - 1;
 
-        while ($left < $right) {
-            $mid = (int)(($left + $right) / 2);
+        while ($left <= $right) {
+            $mid = (int) floor(($left + $right) / 2);
             if ($offset > $this->linesIndex[$mid]) {
                 $left = $mid + 1;
             } else if ($offset < $this->linesIndex[$mid]) {
                 $right = $mid - 1;
             } else {
-                return $mid + 1;
+                return $mid;
             }
         }
 
-        return $left + 1;
+        return $left - 1;
     }
 
     public function getPositionByOffset(int $offset) : Position
     {
         $line = $this->getLineByOffset($offset);
 
-        return new Position($line, $offset - $this->linesIndex[$line - 1]);
+        if ($line === 29 && ($offset - $this->linesIndex[$line]) === -1) {
+            var_dump($this->linesIndex);
+            var_dump($offset);
+        }
+
+        return new Position($line + 1, $offset - $this->linesIndex[$line]);
     }
 
     public function getNumOfLines()
     {
         return \count($this->linesIndex);
+    }
+
+    public function addSymbol(Symbol $symbol)
+    {
+        $this->symbols[] = $symbol;
     }
 }

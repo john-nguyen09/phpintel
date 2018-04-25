@@ -1,7 +1,8 @@
 <?php
 namespace PhpIntel\Symbol;
 
-class Modifier {
+class Modifier
+{
     public const NONE = 0;
     public const PUBLIC = 1 << 0;
     public const PROTECTED = 1 << 1;

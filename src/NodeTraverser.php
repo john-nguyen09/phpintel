@@ -72,8 +72,18 @@ class NodeTraverser
         $doc = $this->docs[$docId];
         $shouldTraverseChildren = $this->visitBefore($doc, $node);
 
-        if ($shouldTraverseChildren && $node instanceof Node) {
+        if ($shouldTraverseChildren !== false && $node instanceof Node) {
+            $traversedChildren = [];
+
+            if (\is_array($shouldTraverseChildren)) {
+                $traversedChildren = $shouldTraverseChildren;
+            }
+
             foreach ($node::CHILD_NAMES as $name) {
+                if (\in_array($name, $traversedChildren)) {
+                    continue;
+                }
+
                 $childNode = $node->$name;
     
                 if ($childNode === null) {
@@ -91,19 +101,21 @@ class NodeTraverser
         }
     }
 
-    protected function visitBefore(PhpDocument $doc, $node) : bool
+    protected function visitBefore(PhpDocument $doc, $node)
     {
-        $shouldTraverseChildren = true;
+        $traversedChildren = true;
 
         foreach ($this->visitors as $visitor) {
             $result = $visitor->before($doc, $node);
 
             // Only if false is returned implicitly
             if ($result === false) {
-                $shouldTraverseChildren = false;
+                $traversedChildren = false;
+            } else if (\is_array($result)) {
+                $traversedChildren = $result;
             }
         }
 
-        return $shouldTraverseChildren;
+        return $traversedChildren;
     }
 }

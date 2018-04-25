@@ -27,15 +27,9 @@ class Location
      * @param Node $node
      * @return self
      */
-    public static function fromNode(PhpDocument $doc, $node)
+    public static function fromNode(PhpDocument $doc, Node $node)
     {
-        $startOffset = $node->getStart();
-        $endOffset = $startOffset + $node->getWidth();
-
-        return new self($node->getUri(), new Range(
-            $doc->getPositionByOffset($startOffset),
-            $doc->getPositionByOffset($endOffset)
-        ));
+        return new self($doc->uri, Range::fromNode($doc, $node));
     }
 
     public function __construct(string $uri = null, Range $range = null)

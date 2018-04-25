@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace PhpIntel\Symbol;
+namespace PhpIntel;
 
 use PhpIntel\Protocol\Location;
 
-class BaseSymbol {
+abstract class Symbol
+{
     /**
      *
      * @var Location
@@ -24,7 +25,8 @@ class BaseSymbol {
      */
     public $types;
 
-    public function __construct(Location $location, string $name, array $types) {
+    public function __construct(Location $location, string $name, array $types)
+    {
         $this->location = $location;
         $this->name = $name;
         $this->types = $types;

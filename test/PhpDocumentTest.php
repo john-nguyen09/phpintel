@@ -16,8 +16,8 @@ class PhpDocumentTest extends PhpIntelTestcase
         $doc = $this->getPhpDocument('lines.php');
 
         $this->assertEquals(48, $doc->getNumOfLines());
-        $this->assertEquals(8, $doc->getLineByOffset(140));
-        $this->assertEquals(38, $doc->getLineByOffset(558));
+        $this->assertEquals(8, $doc->getLineByOffset(140) + 1);
+        $this->assertEquals(38, $doc->getLineByOffset(558) + 1);
         $this->assertEquals(new Position(38, 22), $doc->getPositionByOffset(558));
     }
 }
