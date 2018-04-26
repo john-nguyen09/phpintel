@@ -66,7 +66,5 @@ final class SymbolReaderTest extends PhpIntelTestCase
         foreach ($docs as $doc) {
             $traverser->traverse($doc);
         }
-
-        var_dump($docs[1]->symbols);
     }
 }

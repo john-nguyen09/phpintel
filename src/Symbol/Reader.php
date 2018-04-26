@@ -39,6 +39,8 @@ class Reader extends NodeVisitor
             if ($lcName === '\define' || $lcName === 'define') {
                 return $this->readDefine($doc, $node);
             }
+        } else if ($node instanceof Statement\ConstDeclaration) {
+            return $this->readConstant($doc, $node);
         } else if ($node instanceof Statement\FunctionDeclaration) {
             return $this->readFunction($doc, $node);
         } else if ($node instanceof Statement\ClassDeclaration) {
@@ -51,6 +53,8 @@ class Reader extends NodeVisitor
             return $this->readProperty($doc, $node);
         } else if ($node instanceof Node\MethodDeclaration) {
             return $this->readMethod($doc, $node);
+        } else if ($node instanceof Node\ClassConstDeclaration) {
+            return $this->readClassConstant($doc, $node);
         }
     }
 
@@ -156,12 +160,28 @@ class Reader extends NodeVisitor
             ->getStringContentsText();
         $valueNode = $callExpr->argumentExpressionList->children[2]->expression;
 
-        $this->addSymbol($doc ,new DefineConstantSymbol(
+        $doc->addSymbol(new DefineConstantSymbol(
             Location::fromNode($doc, $node),
             $name,
             Resolver::resolveExpressionToType($valueNode),
             $valueNode->getText()
         ));
+
+        return false;
+    }
+
+    protected function readConstant(PhpDocument $doc, Statement\ConstDeclaration $node)
+    {
+        foreach ($node->constElements->getElements() as $constElement) {
+            if ($constElement instanceof Node\ConstElement) {
+                $doc->addSymbol(new ConstantSymbol(
+                    Location::fromNode($doc, $constElement),
+                    $constElement->name->getText($doc->text),
+                    Resolver::resolveExpressionToType($constElement->assignment),
+                    $constElement->assignment->getText()
+                ));
+            }
+        }
 
         return false;
     }
@@ -342,6 +362,36 @@ class Reader extends NodeVisitor
         ));
 
         // Return false to stop children traversing
+        return false;
+    }
+
+    protected function readClassConstant(PhpDocument $doc, Node\ClassConstDeclaration $node)
+    {
+        $modifier = Modifier::NONE;
+
+        foreach ($node->modifiers as $nodeModifier) {
+            if ($nodeModifier->kind === TokenKind::PublicKeyword) {
+                $modifier |= Modifier::PUBLIC;
+            } else if ($nodeModifier->kind === TokenKind::PrivateKeyword) {
+                $modifier |= Modifier::PRIVATE;
+            } else if ($nodeModifier->kind === TokenKind::ProtectedKeyword) {
+                $modifier |= Modifier::PROTECTED;
+            }
+        }
+
+        foreach ($node->constElements->getElements() as $constElement) {
+            if ($constElement instanceof Node\ConstElement) {
+                $doc->addSymbol(new ClassConstantSymbol(
+                    Location::fromNode($doc, $constElement),
+                    $constElement->name->getText($doc->text),
+                    Resolver::resolveExpressionToType($constElement->assignment),
+                    $constElement->assignment->getText(),
+                    $modifier,
+                    $this->getScope()
+                ));
+            }
+        }
+
         return false;
     }
 }

@@ -64,7 +64,15 @@ final class Resolver
                     $operator === PhpParser\TokenKind::LessThanEqualsGreaterThanToken ||
                     $operator === PhpParser\TokenKind::AmpersandToken ||
                     $operator === PhpParser\TokenKind::CaretToken ||
-                    $operator === PhpParser\TokenKind::BarToken
+                    $operator === PhpParser\TokenKind::BarToken ||
+                    $operator === PhpParser\TokenKind::PlusToken ||
+                    $operator === PhpParser\TokenKind::MinusToken ||
+                    $operator === PhpParser\TokenKind::AsteriskToken ||
+                    $operator === PhpParser\TokenKind::SlashToken ||
+                    $operator === PhpParser\TokenKind::PlusPlusToken ||
+                    $operator === PhpParser\TokenKind::MinusMinusToken ||
+                    $operator === PhpParser\TokenKind::AsteriskAsteriskEqualsToken ||
+                    $operator === PhpParser\TokenKind::SlashEqualsToken
                 )
             )
         ) {
