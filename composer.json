@@ -1,8 +1,8 @@
 {
     "name": "john-nguyen09/phpintel",
     "description": "PHP language server",
-    "type": "oriject",
     "require": {
+        "php": "^7.0",
         "microsoft/tolerant-php-parser": "^0.0.10",
         "league/container": "^2.4"
     },

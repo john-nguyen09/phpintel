@@ -54,12 +54,6 @@ class Reader extends NodeVisitor
         }
     }
 
-    private function addSymbol(PhpDocument $doc, Symbol $symbol)
-    {
-        // TODO: Index the symbol
-        $doc->addSymbol($symbol);
-    }
-
     private function pushScope(string $scope) {
         $this->scopeStack[$this->scopeStackIndex] = $scope;
     }
@@ -181,7 +175,7 @@ class Reader extends NodeVisitor
         $name = $node->name->getText($doc->text);
         $parameters = $this->getParameters($doc, $node->parameters);
 
-        $this->addSymbol($doc, new FunctionSymbol(
+        $doc->addSymbol(new FunctionSymbol(
             Location::fromNode($doc, $node),
             $name,
             FunctionResolver::resolveFunctionType($node),
@@ -225,7 +219,7 @@ class Reader extends NodeVisitor
         $name = $node->name->getText($doc->text);
         $traversedChildren[] = 'name';
 
-        $this->addSymbol($doc, new ClassSymbol(
+        $doc->addSymbol(new ClassSymbol(
             Location::fromNode($doc, $node),
             $name,
             $modifier,
@@ -256,7 +250,7 @@ class Reader extends NodeVisitor
 
         $name = $node->name->getText($doc->text);
 
-        $this->addSymbol($doc, new InterfaceSymbol(
+        $doc->addSymbol(new InterfaceSymbol(
             Location::fromNode($doc, $node),
             $name,
             $parents
@@ -272,7 +266,7 @@ class Reader extends NodeVisitor
     {
         $name = $node->name->getText($doc->text);
 
-        $this->addSymbol($doc, new TraitSymbol(
+        $doc->addSymbol(new TraitSymbol(
             Location::fromNode($doc, $node),
             $name
         ));
@@ -301,7 +295,7 @@ class Reader extends NodeVisitor
                 $propertyName = $element->getName();
 
                 if ($propertyName !== null) {
-                    $this->addSymbol($doc, new PropertySymbol(
+                    $doc->addSymbol(new PropertySymbol(
                         Location::fromNode($doc, $element),
                         $propertyName,
                         [], // TODO: resolve type based on documentation
@@ -338,7 +332,7 @@ class Reader extends NodeVisitor
             }
         }
 
-        $this->addSymbol($doc, new MethodSymbol(
+        $doc->addSymbol(new MethodSymbol(
             Location::fromNode($doc, $node),
             $name,
             FunctionResolver::resolveFunctionType($node),
