@@ -5,9 +5,9 @@ namespace PhpIntel\Entity;
 class Parameter
 {
     /**
-     * @var string
+     * @var string[]
      */
-    public $type;
+    public $types;
 
     /**
      * @var string
@@ -19,9 +19,9 @@ class Parameter
      */
     public $value;
 
-    public function __construct($type, string $name, $value)
+    public function __construct(array $types, string $name, $value)
     {
-        $this->type = $type;
+        $this->types = $types;
         $this->name = $name;
         $this->value = $value;
     }

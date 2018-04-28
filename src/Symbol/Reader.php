@@ -5,6 +5,7 @@ use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\DelimitedList;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\Statement;
+use Microsoft\PhpParser\ResolvedName;
 use Microsoft\PhpParser\Token;
 use Microsoft\PhpParser\TokenKind;
 use PhpIntel\Entity;
@@ -32,7 +33,11 @@ class Reader extends NodeVisitor
 
     public function before(PhpDocument $doc, $node)
     {
-        if ($node instanceof Node\QualifiedName) {
+        if ($node instanceof Statement\NamespaceDefinition) {
+            return $this->readNamespace($doc, $node);
+        } else if ($node instanceof Statement\NamespaceUseDeclaration) {
+            return $this->readNamespaceUse($doc, $node);
+        } else if ($node instanceof Node\QualifiedName) {
             $name = $node->getText();
             $lcName = strtolower($name);
             
@@ -96,39 +101,31 @@ class Reader extends NodeVisitor
              * @var Node\Parameter $parameterNode
              */
 
-            $type = null;
+            $types = [];
             $typeNode = $parameterNode->typeDeclaration;
             $value = null;
 
             if ($typeNode !== null) {
                 if ($typeNode instanceof Token) {
-                    $type = $parameterNode->typeDeclaration->getText($doc->text);
+                    $types[] = $parameterNode->typeDeclaration->getText($doc->text);
                 } else if ($typeNode instanceof Node\QualifiedName) {
                     /**
                      * @var Node\QualifiedName $typeNode
                      */
-                    $type = '';
-                    $stringParts = [];
-                    foreach ($typeNode->getNameParts() as $part) {
-                        if ($part->kind === TokenKind::Name) {
-                            $stringParts[] = $part->getText($doc->text);
-                        }
-                    }
-
-                    $type = implode('\\', $stringParts);
+                    $types[] = (string) ResolvedName::buildName(
+                        $typeNode->getNameParts(), $doc->text
+                    );
                 }
             }
 
             if ($parameterNode->default !== null) {
                 $value = $parameterNode->default->getText();
 
-                if ($type !== null) {
-                    $type = Resolver::resolveExpressionToType($parameterNode->default);
-                }
+                $types[] = Resolver::resolveExpressionToType($parameterNode->default);
             }
 
             $parameters[] = new Entity\Parameter(
-                $type,
+                $types,
                 $parameterNode->variableName->getText($doc->text),
                 $value
             );
@@ -147,6 +144,75 @@ class Reader extends NodeVisitor
         }
 
         return $names;
+    }
+
+    protected function readNamespace(PhpDocument $doc, Statement\NamespaceDefinition $node)
+    {
+        $doc->setNamespace($node->name->getText());
+
+        return false;
+    }
+
+    protected function readNamespaceUse(
+        PhpDocument $doc, Statement\NamespaceUseDeclaration $node
+    ) {
+        if (!isset($node->useClauses)) {
+            return false;
+        }
+
+            // TODO fix getValues
+        foreach ($node->useClauses->getValues()  as $useClause) {
+            /**
+             * @var Node\NamespaceUseClause $useClause
+             */
+
+            $namespaceNamePartsPrefix =
+                $useClause->namespaceName !== null ? $useClause->namespaceName->nameParts : [];
+
+            if ($useClause->groupClauses !== null && $useClause instanceof Node\NamespaceUseClause) {
+                // use A\B\C\{D\E};             namespace import: ["E" => [A,B,C,D,E]]
+                // use A\B\C\{D\E as F};        namespace import: ["F" => [A,B,C,D,E]]
+                // use function A\B\C\{A, B}    function import: ["A" => [A,B,C,A], "B" => [A,B,C]]
+                // use function A\B\C\{const A} const import: ["A" => [A,B,C,A]]
+                foreach ($useClause->groupClauses->children as $groupClause) {
+                    if (!($groupClause instanceof Node\NamespaceUseGroupClause)) {
+                        continue;
+                    }
+                    $namespaceNameParts = \array_merge(
+                        $namespaceNamePartsPrefix,
+                        $groupClause->namespaceName->nameParts
+                    );
+                    $functionOrConst = $groupClause->functionOrConst ?? $node->functionOrConst;
+                    $alias = $groupClause->namespaceAliasingClause === null
+                        ? $groupClause->namespaceName->getLastNamePart()->getText($doc->text)
+                        : $groupClause->namespaceAliasingClause->name->getText($doc->text);
+
+                    $doc->addToImportTable(
+                        $alias,
+                        $functionOrConst,
+                        $namespaceNameParts
+                    );
+                }
+            } else {
+                // use A\B\C;               namespace import: ["C" => [A,B,C]]
+                // use A\B\C as D;          namespace import: ["D" => [A,B,C]]
+                // use function A\B\C as D  function import: ["D" => [A,B,C]]
+                // use A\B, C\D;            namespace import: ["B" => [A,B], "D" => [C,D]]
+                $alias = $useClause->namespaceAliasingClause === null
+                    ? $useClause->namespaceName->getLastNamePart()->getText($doc->text)
+                    : $useClause->namespaceAliasingClause->name->getText($doc->text);
+                $functionOrConst = $node->functionOrConst;
+                $namespaceNameParts = $namespaceNamePartsPrefix;
+
+                $doc->addToImportTable(
+                    $alias,
+                    $functionOrConst,
+                    $namespaceNameParts
+                );
+            }
+        }
+
+        return false;
     }
 
     protected function readDefine(PhpDocument $doc, $node)

@@ -2,9 +2,14 @@
 declare(strict_types=1);
 namespace PhpIntel\Test;
 
+use PhpIntel\Entity\Parameter;
+use PhpIntel\Protocol\{
+    Location, Range, Position
+};
 use PhpIntel\PhpDocument;
 use PhpIntel\Symbol;
 use PhpIntel\NodeTraverser;
+use PhpIntel\Symbol\Modifier;
 
 final class SymbolReaderTest extends PhpIntelTestCase
 {
@@ -66,5 +71,59 @@ final class SymbolReaderTest extends PhpIntelTestCase
         foreach ($docs as $doc) {
             $traverser->traverse($doc);
         }
+    }
+
+    public function testReadingNamespace()
+    {
+        $traverser = new NodeTraverser();
+        $docs = [
+            'different_namespace' => $this->getPhpDocument('different_namespace.php'),
+            'import_table' => $this->getPhpDocument('import_table.php'),
+            'namespace' => $this->getPhpDocument('namespace.php'),
+            'nested_import_table' => $this->getPhpDocument('nested_import_table.php')
+        ];
+
+        $traverser->addVisitor(new Symbol\Reader());
+
+        foreach ($docs as $doc) {
+            $traverser->traverse($doc);
+        }
+
+        $this->assertEquals(
+            $this->getNestedImportTableFileSymbols(), $docs['nested_import_table']->symbols
+        );
+    }
+
+    private function getNestedImportTableFileSymbols()
+    {
+        return [
+            new Symbol\ClassSymbol(
+                new Location(
+                    'file:///Users/nana/Documents/Development/phpintel/test/fixture/nested_import_table.php',
+                    new Range(new Position(11, 0), new Position(17, 1))
+                ),
+                'PhpIntel\\Test\\Fixture\\Nested\\NestedImportTable',
+                Modifier::NONE,
+                null,
+                []
+            ),
+            new Symbol\MethodSymbol(
+                new Location(
+                    'file:///Users/nana/Documents/Development/phpintel/test/fixture/nested_import_table.php',
+                    new Range(new Position(13, 4), new Position(16, 5))
+                ),
+                'PhpIntel\\Test\\Fixture\\Nested\\doSomething',
+                [],
+                [
+                    new Parameter(
+                        ['PhpIntel\\Test\\Fixture\\Nested\\Namespace1\\DifferentNamespaceClass1'],
+                        '$arg1',
+                        null
+                    )
+                ],
+                Modifier::PUBLIC,
+                'PhpIntel\\Test\\Fixture\\Nested\\NestedImportTable'
+            )
+        ];
     }
 }
