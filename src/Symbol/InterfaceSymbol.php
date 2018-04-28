@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace PhpIntel\Symbol;
 
+use PhpIntel\PhpDocument;
 use PhpIntel\Symbol;
 use PhpIntel\Protocol\Location;
 
@@ -18,5 +19,10 @@ class InterfaceSymbol extends Symbol
         parent::__construct($location, $name, []);
 
         $this->parents = $parents;
+    }
+
+    public function resolveToFqn(PhpDocument $doc)
+    {
+        $this->appendNamespaceToName($doc);
     }
 }

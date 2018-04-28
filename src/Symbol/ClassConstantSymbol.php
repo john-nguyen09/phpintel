@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace PhpIntel\Symbol;
 
+use PhpIntel\PhpDocument;
 use PhpIntel\Protocol\Location;
 
 class ClassConstantSymbol extends ConstantSymbol
@@ -27,5 +28,12 @@ class ClassConstantSymbol extends ConstantSymbol
 
         $this->modifier = $modifier;
         $this->scope = $scope;
+    }
+
+    public function resolveToFqn(PhpDocument $doc)
+    {
+        parent::resolveToFqn($doc);
+
+        $this->scope = $this->aliasToFqn($doc, $this->scope);
     }
 }

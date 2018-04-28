@@ -2,11 +2,21 @@
 declare(strict_types=1);
 namespace PhpIntel\Symbol;
 
+use PhpIntel\PhpDocument;
 use PhpIntel\Symbol;
 use PhpIntel\Protocol\Location;
 
 class MethodSymbol extends FunctionSymbol
 {
+    use SymbolWithType;
+
+    /**
+     * Fully qualified name
+     *
+     * @var string[]
+     */
+    public $types;
+
     /**
      * Modifier of the method (public, private, protected, final, abstract, static)
      *
@@ -27,5 +37,12 @@ class MethodSymbol extends FunctionSymbol
 
         $this->modifier = $modifier;
         $this->scope = $scope;
+    }
+
+    public function resolveToFqn(PhpDocument $doc)
+    {
+        parent::resolveToFqn($doc);
+
+        $this->scope = $this->aliasToFqn($doc, $this->scope);
     }
 }

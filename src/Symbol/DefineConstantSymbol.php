@@ -9,6 +9,6 @@ use PhpIntel\Protocol\Location;
  * Extended to ConstantSymbol to differentiate the type
  * but all the behaviours are the same
  */
-class DefineConstantSymbol extends Symbol
+class DefineConstantSymbol extends ConstantSymbol
 {
 }
