@@ -27,4 +27,7 @@
     <php>
         <ini name="memory_limit" value="1024M"/>
     </php>
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
 </phpunit>

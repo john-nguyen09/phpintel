@@ -1,5 +1,8 @@
 # PHPIntel
 
+[![Build Status](https://travis-ci.org/john-nguyen09/phpintel.svg?branch=master)](https://travis-ci.org/john-nguyen09/phpintel)
+[![codecov](https://codecov.io/gh/john-nguyen09/phpintel/branch/master/graph/badge.svg)](https://codecov.io/gh/john-nguyen09/phpintel)
+
 An early stage code static analyser for PHP, uses the great [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) to provide IDE-like features to any editor.
 
 The project uses [Tolerant PHP Parser](https://github.com/Microsoft/tolerant-php-parser) for generating the AST.
