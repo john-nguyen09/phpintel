@@ -10,6 +10,7 @@ use PhpIntel\PhpDocument;
 use PhpIntel\Symbol;
 use PhpIntel\NodeTraverser;
 use PhpIntel\Symbol\Modifier;
+use function PhpIntel\Uri\pathToUri;
 
 final class SymbolReaderTest extends PhpIntelTestCase
 {
@@ -96,7 +97,7 @@ final class SymbolReaderTest extends PhpIntelTestCase
         return [
             new Symbol\ClassSymbol(
                 new Location(
-                    'file:///Users/nana/Documents/Development/phpintel/test/fixture/nested_import_table.php',
+                    pathToUri(__DIR__ . '/fixture/nested_import_table.php'),
                     new Range(new Position(11, 0), new Position(17, 1))
                 ),
                 'PhpIntel\\Test\\Fixture\\Nested\\NestedImportTable',
@@ -106,7 +107,7 @@ final class SymbolReaderTest extends PhpIntelTestCase
             ),
             new Symbol\MethodSymbol(
                 new Location(
-                    'file:///Users/nana/Documents/Development/phpintel/test/fixture/nested_import_table.php',
+                    pathToUri(__DIR__ . '/fixture/nested_import_table.php'),
                     new Range(new Position(13, 4), new Position(16, 5))
                 ),
                 'PhpIntel\\Test\\Fixture\\Nested\\doSomething',
