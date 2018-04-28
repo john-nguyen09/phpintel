@@ -35,12 +35,12 @@ final class SymbolReaderTest extends PhpIntelTestCase
         $traverser->traverse($doc);
 
         $expectedFunctionType = [
-            'string_function' => ['string'],
-            'int_function' => ['int'],
-            'boolean_function' => ['bool'],
-            'float_function' => ['float'],
-            'class_function' => ['Class1'],
-            'composite_types_function' => ['string', 'int', 'bool', 'Class1', 'null']
+            '\string_function' => ['string'],
+            '\int_function' => ['int'],
+            '\boolean_function' => ['bool'],
+            '\float_function' => ['float'],
+            '\class_function' => ['\Class1'],
+            '\composite_types_function' => ['string', 'int', 'bool', '\Class1', 'null']
         ];
 
         $functionSymbols = array_filter($doc->symbols, function($symbol) {
@@ -50,10 +50,7 @@ final class SymbolReaderTest extends PhpIntelTestCase
         $this->assertEquals(\count($functionSymbols), \count($expectedFunctionType));
 
         foreach ($functionSymbols as $symbol) {
-            $actualTypes = $symbol->types;
-            $expectedTypes = $expectedFunctionType[$symbol->name];
-
-            $this->assertEquals($expectedTypes, $actualTypes);
+            $this->assertEquals($expectedFunctionType[$symbol->name], $symbol->types);
         }
     }
 

@@ -6,7 +6,7 @@ use Microsoft\PhpParser;
 use PhpIntel\PhpDocument;
 use PhpIntel\Protocol\Position;
 
-class PhpDocumentTest extends PhpIntelTestcase
+class PhpDocumentTest extends PhpIntelTestCase
 {
     public function testLineFunctions()
     {

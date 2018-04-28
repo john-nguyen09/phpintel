@@ -39,7 +39,7 @@ class PropertySymbol extends Symbol
 
     public function resolveToFqn(PhpDocument $doc)
     {
-        $this->scope = $this->aliasToFqn($doc, $alias);
+        $this->scope = $this->aliasToFqn($doc, $this->scope);
         $this->resolveTypesToFqn($doc);
     }
 }
