@@ -1,0 +1,28 @@
+{
+  "name": "phpintel",
+  "version": "0.0.1",
+  "description": "A static analyser for PHP",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/*.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "PHP",
+    "static",
+    "analyser",
+    "language",
+    "server"
+  ],
+  "author": "John Nguyen",
+  "license": "ISC",
+  "dependencies": {
+    "level": "^4.0.0",
+    "php7parser": "^1.0.8"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  }
+}
