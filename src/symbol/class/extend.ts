@@ -1,6 +1,7 @@
 import { Symbol } from "../symbol";
-import { NameNode } from "../name/nameNode";
 import { TreeNode } from "../../util/parseTree";
+import { QualifiedNameList } from "../list/qualifiedNameList";
+import { QualifiedName } from "../name/qualifiedName";
 
 export class ClassExtend implements Symbol {
     public name: string;
@@ -9,9 +10,13 @@ export class ClassExtend implements Symbol {
         this.name = '';
     }
 
-    consume(symbol: Symbol) {
-        if (symbol instanceof NameNode) {
-            this.name = symbol.name;
+    consume(other: Symbol) {
+        if (other instanceof QualifiedName) {
+            this.name = other.name;
+
+            return true;
         }
+
+        return false;
     }
 }

@@ -1,17 +1,21 @@
 import { Symbol } from "../symbol";
-import { NameNode } from "../name/nameNode";
 import { TreeNode } from "../../util/parseTree";
+import { QualifiedNameList } from "../list/qualifiedNameList";
 
 export class ClassTraitUse implements Symbol {
-    public names: NameNode[];
+    public names: string[];
 
     constructor(public node: TreeNode) {
         this.names = [];
     }
 
     consume(other: Symbol) {
-        if (other instanceof NameNode) {
-            this.names.push(other);
+        if (other instanceof QualifiedNameList) {
+            this.names = other.names;
+
+            return true;
         }
+
+        return false;
     }
 }

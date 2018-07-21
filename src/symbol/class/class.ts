@@ -3,13 +3,10 @@ import { Location } from "../meta/location";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../../phpDocument";
 import { SymbolModifier } from "../meta/modifier";
-import { NameNode } from "../name/nameNode";
-import { ClassExtend } from "./extend";
-import { ClassImplement } from "./implement";
-import { ClassModifier } from "./modifier";
 import { ClassTraitUse } from "./traitUse";
+import { ClassHeader } from "./header";
 
-export class ClassSymbol implements Symbol {
+export class Class implements Symbol {
     public name: string;
     public extend: string;
     public location: Location;
@@ -24,20 +21,24 @@ export class ClassSymbol implements Symbol {
     }
 
     consume(other: Symbol) {
-        if (other instanceof NameNode) {
+        if (other instanceof ClassHeader) {
             this.name = other.name;
-        } else if (other instanceof ClassExtend) {
-            this.extend = other.name;
-        } else if (other instanceof ClassImplement) {
-            for (let implement of other.interfaces) {
-                this.implements.push(implement.name);
+            this.extend = other.extend ? other.extend.name : '';
+            this.implements = other.implement ? other.implement.interfaces : [];
+            
+            for (let modifier of other.modifiers) {
+                this.modifier.include(modifier);
             }
-        } else if (other instanceof ClassModifier) {
-            this.modifier.include(other.modifier);
+
+            return true;
         } else if (other instanceof ClassTraitUse) {
-            for (let trait of other.names) {
-                this.traits.push(trait.name);
+            for (let name of other.names) {
+                this.traits.push(name);
             }
+
+            return true;
         }
+
+        return false;
     }
 }

@@ -58,7 +58,7 @@ export function firstToken(node: TreeNode): Token {
 
     let t: Token;
     for (let n = 0, l = (<Phrase>node).children.length; n < l; ++n) {
-        t = this.firstToken((<Phrase>node).children[n]);
+        t = firstToken((<Phrase>node).children[n]);
         if (t !== null) {
             return t;
         }
@@ -74,7 +74,7 @@ export function lastToken(node: TreeNode): Token {
 
     let t: Token;
     for (let n = (<Phrase>node).children.length - 1; n >= 0; --n) {
-        t = this.lastToken((<Phrase>node).children[n]);
+        t = lastToken((<Phrase>node).children[n]);
         if (t !== null) {
             return t;
         }

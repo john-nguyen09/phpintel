@@ -18,9 +18,12 @@
   "license": "ISC",
   "dependencies": {
     "level": "^4.0.0",
-    "php7parser": "^1.0.8"
+    "php7parser": "^1.0.8",
+    "vscode-uri": "^1.0.5"
   },
   "devDependencies": {
+    "@types/node": "^10.5.2",
+    "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
