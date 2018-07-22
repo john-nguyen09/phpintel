@@ -1,1 +1,71 @@
-{"symbols":[{"name":"TestInterface@Object"},{"name":"TestInterface@Object"},{"symbols":[{"name":"TestInterface@Object"},{"name":"TestInterface@Object"}]},{"interfaces":["TestInterface"]},{"name":"TestClass@Object","modifiers":[],"extend":null,"implement":{"interfaces":["TestInterface"]}},{"name":"self@Object"},{"name":"self@Object"},{"name":"TestInterface@Object"},{"name":"TestInterface@Object"},{"location":{"uri":"file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php","range":{"start":{"line":0,"character":630},"end":{"line":0,"character":1658}}},"modifier":{"modifier":0},"implements":["TestInterface"],"name":"TestClass@Object","extend":""},{"name":"TestClass@Object"},{"name":"TestClass@Object"},{"name":"TestClass@Object"},{"name":"ChildClass@Object","modifiers":[],"extend":{"name":"TestClass@Object"},"implement":null},{"location":{"uri":"file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php","range":{"start":{"line":0,"character":2138},"end":{"line":0,"character":2175}}},"modifier":{"modifier":0},"implements":[],"name":"ChildClass@Object","extend":"TestClass"},{"name":"define@Object"},{"name":"define@Object"},{"name":"false@Object"},{"name":"false@Object"},{"name":"TEST_DEFINE_CONSTANT@Object"},{"name":"TEST_DEFINE_CONSTANT@Object"},{"name":"UnusedClass@Object","modifiers":[],"extend":null,"implement":null},{"location":{"uri":"file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php","range":{"start":{"line":0,"character":2399},"end":{"line":118,"character":2511}}},"modifier":{"modifier":0},"implements":[],"name":"UnusedClass@Object","extend":""}]}
+File {
+  node: null,
+  symbols: 
+   [ Class {
+       node: { phraseType: 28, children: [Array] },
+       location: 
+        Location {
+          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
+          range: [Object] },
+       modifier: SymbolModifier { modifier: 0 },
+       implements: [ 'TestInterface', 'TestInterface2' ],
+       name: 'TestClass2',
+       extend: '' },
+     QualifiedName { node: { phraseType: 141, children: [Array] }, name: 'self' },
+     QualifiedName {
+       node: { phraseType: 141, children: [Array] },
+       name: 'TestInterface' },
+     Class {
+       node: { phraseType: 28, children: [Array] },
+       location: 
+        Location {
+          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
+          range: [Object] },
+       modifier: SymbolModifier { modifier: 0 },
+       implements: [ 'TestInterface' ],
+       name: 'TestClass',
+       extend: '' },
+     Class {
+       node: { phraseType: 28, children: [Array] },
+       location: 
+        Location {
+          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
+          range: [Object] },
+       modifier: SymbolModifier { modifier: 0 },
+       implements: [],
+       name: 'ChildClass',
+       extend: 'TestClass' },
+     DefineConstant {
+       node: { phraseType: 85, children: [Array] },
+       name: 'TEST_DEFINE_CONSTANT',
+       value: 'false',
+       type: 'boolean' },
+     DefineConstant {
+       node: { phraseType: 85, children: [Array] },
+       name: 'TEST_STRING_CONSTANT1',
+       value: '\'simple string\'',
+       type: 'string' },
+     DefineConstant {
+       node: { phraseType: 85, children: [Array] },
+       name: 'TEST_STRING_CONSTANT2',
+       value: '\'not so simple string\'',
+       type: 'string' },
+     DefineConstant {
+       node: { phraseType: 85, children: [Array] },
+       name: 'TEST_STRING_CONSTANT3',
+       value: '\'more of \' . TEST_STRING_CONSTANT2',
+       type: 'string' },
+     ConstantAccess {
+       node: { phraseType: 41, children: [Array] },
+       value: 'TEST_DEFINE_CONSTANT',
+       type: 'TEST_DEFINE_CONSTANT' },
+     Class {
+       node: { phraseType: 28, children: [Array] },
+       location: 
+        Location {
+          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
+          range: [Object] },
+       modifier: SymbolModifier { modifier: 0 },
+       implements: [],
+       name: 'UnusedClass',
+       extend: '' } ] }

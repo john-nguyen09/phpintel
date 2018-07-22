@@ -14,6 +14,7 @@ import { NamespaceName } from "./symbol/name/namespaceName";
 import { FunctionCall } from "./symbol/functionCall";
 import { ArgumentExpressionList } from "./symbol/argumentExpressionList";
 import { ConstantAccess } from "./symbol/constant/constantAccess";
+import { AdditiveExpression } from "./symbol/type/additiveExpression";
 
 export class SymbolParser {
     protected symbolStack: Symbol[] = [];
@@ -106,6 +107,9 @@ export class SymbolParser {
                     break;
                 case PhraseType.ConstantAccessExpression:
                     this.pushSymbol(new ConstantAccess(p));
+                    break;
+                case PhraseType.AdditiveExpression:
+                    this.pushSymbol(new AdditiveExpression(p));
                     break;
 
                 default:

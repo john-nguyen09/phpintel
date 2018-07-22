@@ -23,6 +23,7 @@ export class ConstantAccess implements Symbol {
                 this.value = other.name;
                 this.type = ConstantAccess.BUILTINS[other.name];
             } else {
+                this.value = other.name;
                 this.type = other.name;
             }
 

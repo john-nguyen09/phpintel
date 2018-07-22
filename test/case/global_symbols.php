@@ -9,6 +9,8 @@
  */
 const TEST_CONST = 123;
 
+const TEST_CONST1 = 456, TEST_CONST2 = 789;
+
 class TestClass2 implements TestInterface, TestInterface2
 {
     
@@ -114,7 +116,7 @@ class ChildClass extends TestClass {}
  */
 define('TEST_DEFINE_CONSTANT', false);
 define('TEST_STRING_CONSTANT1', 'simple string');
-define('TEST_STRING_CONSTANT2', 'not so' . 'simple string');
+define('TEST_STRING_CONSTANT2', 'not so ' . 'simple string');
 define('TEST_STRING_CONSTANT3', 'more of ' . TEST_STRING_CONSTANT2);
 
 print TEST_DEFINE_CONSTANT ? 'true' : 'false';

@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { SymbolParser } from '../src/symbolParser';
 import { phraseTypeToString, tokenTypeToString } from '../node_modules/php7parser';
+import * as util from 'util';
 
 describe('symbolParser', () => {
     it('shall return symbol tree', () => {
@@ -15,10 +16,6 @@ describe('symbolParser', () => {
         let symbolParser = new SymbolParser(doc);
 
         symbolParser.traverse(tree);
-
-        console.dir(symbolParser.getTree(), {
-            depth: 3
-        });
 
         fs.writeFile(
             path.resolve(__dirname, '..', 'ast.json'),
@@ -44,20 +41,16 @@ describe('symbolParser', () => {
             }
         );
 
-        // fs.writeFile(
-        //     path.resolve(__dirname, '..', 'test.json'),
-        //     JSON.stringify(symbolParser.getTree(), (key, value) => {
-        //         if (key == 'node') {
-        //             return undefined;
-        //         }
-    
-        //         return value;
-        //     }),
-        //     (err) => {
-        //         if (err) {
-        //             console.log(err);
-        //         }
-        //     }
-        // );
+        fs.writeFile(
+            path.resolve(__dirname, '..', 'test.json'),
+            util.inspect(symbolParser.getTree(), {
+                depth: 3
+            }),
+            (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            }
+        );
     });
 });
