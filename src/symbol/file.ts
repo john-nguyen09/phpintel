@@ -1,13 +1,11 @@
 import { Symbol } from "./symbol";
-import { TreeNode } from "../util/parseTree";
+import { PhpDocument } from "../phpDocument";
 
-export class File implements Symbol {
-    public node: TreeNode;
-    public symbols: Symbol[];
+export class File extends Symbol {
+    public symbols: Symbol[] = [];
 
-    constructor() {
-        this.node = null;
-        this.symbols = [];
+    constructor(doc: PhpDocument) {
+        super(null, doc);
     }
 
     consume(other: Symbol) {

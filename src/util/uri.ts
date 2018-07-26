@@ -1,4 +1,4 @@
-import URI from 'vscode-uri';
+import URI from 'vscode-uri/lib/umd';
 
 export function pathToUri(filePath: string): string {
     filePath = filePath.split('\\').join('/').trim();

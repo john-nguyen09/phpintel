@@ -4,19 +4,13 @@ import { ClassImplement } from "./implement";
 import { TreeNode } from "../../util/parseTree";
 import { TokenType } from "php7parser";
 import { SymbolModifier } from "../meta/modifier";
+import { PhpDocument } from "../../phpDocument";
 
-export class ClassHeader implements Symbol {
-    public name: string;
-    public modifiers: number[];
-    public extend: ClassExtend;
-    public implement: ClassImplement;
-
-    constructor(public node: TreeNode) {
-        this.name = null;
-        this.modifiers = [];
-        this.extend = null;
-        this.implement = null;
-    }
+export class ClassHeader extends Symbol {
+    public name: string = '';
+    public modifiers: number[] = [];
+    public extend: ClassExtend = null;
+    public implement: ClassImplement = null;
 
     consume(symbol: Symbol) {
         if (symbol instanceof TokenSymbol) {

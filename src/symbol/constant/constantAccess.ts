@@ -1,21 +1,17 @@
 import { Symbol } from "../symbol";
 import { TreeNode } from "../../util/parseTree";
 import { QualifiedName } from "../name/qualifiedName";
+import { PhpDocument } from "../../phpDocument";
 
-export class ConstantAccess implements Symbol {
+export class ConstantAccess extends Symbol {
     public static readonly BUILTINS: {[key: string]: string} = {
-        'false': 'boolean',
-        'true': 'boolean',
+        'false': 'bool',
+        'true': 'bool',
         'null': 'null'
     };
 
-    public value: string;
-    public type: string;
-
-    constructor(public node: TreeNode) {
-        this.value = '';
-        this.type = '';
-    }
+    public value: string = '';
+    public type: string = '';
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

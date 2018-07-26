@@ -30,7 +30,7 @@ export function substr_count(
 
     while ((offset = haystack.indexOf(needle, offset + 1)) !== -1) {
         if (length > 0 && (offset + needle.length) > length) {
-            return 0;
+            break;
         }
         cnt++;
     }

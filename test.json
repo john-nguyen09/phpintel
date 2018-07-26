@@ -1,71 +1,28 @@
 File {
-  node: null,
   symbols: 
-   [ Class {
-       node: { phraseType: 28, children: [Array] },
-       location: 
-        Location {
-          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
-          range: [Object] },
-       modifier: SymbolModifier { modifier: 0 },
-       implements: [ 'TestInterface', 'TestInterface2' ],
-       name: 'TestClass2',
-       extend: '' },
-     QualifiedName { node: { phraseType: 141, children: [Array] }, name: 'self' },
-     QualifiedName {
-       node: { phraseType: 141, children: [Array] },
-       name: 'TestInterface' },
-     Class {
-       node: { phraseType: 28, children: [Array] },
-       location: 
-        Location {
-          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
-          range: [Object] },
-       modifier: SymbolModifier { modifier: 0 },
-       implements: [ 'TestInterface' ],
-       name: 'TestClass',
-       extend: '' },
-     Class {
-       node: { phraseType: 28, children: [Array] },
-       location: 
-        Location {
-          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
-          range: [Object] },
-       modifier: SymbolModifier { modifier: 0 },
-       implements: [],
-       name: 'ChildClass',
-       extend: 'TestClass' },
-     DefineConstant {
-       node: { phraseType: 85, children: [Array] },
-       name: 'TEST_DEFINE_CONSTANT',
-       value: 'false',
-       type: 'boolean' },
-     DefineConstant {
-       node: { phraseType: 85, children: [Array] },
-       name: 'TEST_STRING_CONSTANT1',
-       value: '\'simple string\'',
-       type: 'string' },
-     DefineConstant {
-       node: { phraseType: 85, children: [Array] },
-       name: 'TEST_STRING_CONSTANT2',
-       value: '\'not so simple string\'',
-       type: 'string' },
-     DefineConstant {
-       node: { phraseType: 85, children: [Array] },
-       name: 'TEST_STRING_CONSTANT3',
-       value: '\'more of \' . TEST_STRING_CONSTANT2',
-       type: 'string' },
-     ConstantAccess {
-       node: { phraseType: 41, children: [Array] },
-       value: 'TEST_DEFINE_CONSTANT',
-       type: 'TEST_DEFINE_CONSTANT' },
-     Class {
-       node: { phraseType: 28, children: [Array] },
-       location: 
-        Location {
-          uri: 'file:///C:/Users/Thuan-PC/Development/phpintel/test/case/global_symbols.php',
-          range: [Object] },
-       modifier: SymbolModifier { modifier: 0 },
-       implements: [],
-       name: 'UnusedClass',
-       extend: '' } ] }
+   [ FunctionCall {
+       realSymbol: [Circular],
+       argumentList: ArgumentExpressionList { arguments: [Array] },
+       type: 'is_string' },
+     FunctionCall {
+       realSymbol: [Circular],
+       argumentList: ArgumentExpressionList { arguments: [Array] },
+       type: 'is_object' },
+     FunctionCall {
+       realSymbol: [Circular],
+       argumentList: ArgumentExpressionList { arguments: [Array] },
+       type: 'is_numeric' },
+     Function {
+       name: 'test_function1',
+       parameters: [ [Object], [Object], [Object], [Object] ],
+       scopeVar: Scope { variables: [Object] },
+       types: 
+        [ 'bool',
+          '$stringParam',
+          '$intParam',
+          '$boolParam',
+          '$floatParam',
+          'bool',
+          'TestClass',
+          'int',
+          'string' ] } ] }

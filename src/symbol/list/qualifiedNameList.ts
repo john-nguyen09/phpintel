@@ -1,14 +1,8 @@
-import { Symbol, TokenSymbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
-import { TokenType } from "php7parser";
+import { Symbol } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 
-export class QualifiedNameList implements Symbol {
-    public symbols: QualifiedName[];
-
-    constructor(public node: TreeNode) {
-        this.symbols = [];
-    }
+export class QualifiedNameList extends Symbol {
+    public symbols: QualifiedName[] = [];
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

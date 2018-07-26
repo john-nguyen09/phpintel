@@ -11,6 +11,10 @@ const TEST_CONST = 123;
 
 const TEST_CONST1 = 456, TEST_CONST2 = 789;
 
+const TEST_CONST_STRING = 'Simple string';
+const TEST_CONST_STRING2 = 'Not so ' . 'simple string';
+const TEST_CONST_STRING3 = 'Quite complex ' . TEST_CONST_STRING;
+
 class TestClass2 implements TestInterface, TestInterface2
 {
     

@@ -1,13 +1,8 @@
 import { Symbol, TokenSymbol } from "./symbol";
-import { TreeNode } from "../util/parseTree";
-import { TokenType } from "../../node_modules/php7parser";
+import { TokenType } from "php7parser";
 
-export class ArgumentExpressionList implements Symbol {
-    public arguments: Symbol[];
-
-    constructor(public node: TreeNode) {
-        this.arguments = [];
-    }
+export class ArgumentExpressionList extends Symbol {
+    public arguments: Symbol[] = [];
 
     consume(other: Symbol) {
         let isCommaOrWhitespace = false;

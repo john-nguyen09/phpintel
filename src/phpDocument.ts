@@ -1,4 +1,4 @@
-import { Phrase, Parser } from "../node_modules/php7parser";
+import { Phrase, Parser } from "php7parser";
 
 export class PhpDocument {
     constructor(public uri: string, public text: string) { }

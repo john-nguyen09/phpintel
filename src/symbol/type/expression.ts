@@ -1,22 +1,46 @@
-import { Symbol, TokenSymbol } from "../symbol";
-import { TreeNode, nodeText } from "../../util/parseTree";
+import { Symbol, TokenSymbol, TransformSymbol } from "../symbol";
 import { ConstantAccess } from "../constant/constantAccess";
-import { TokenType } from "../../../node_modules/php7parser";
+import { TokenType } from "php7parser";
+import { ClassTypeDesignator } from "../class/typeDesignator";
 
-export class Expression implements Symbol {
-    public type: string;
-    public value: string;
+export class Expression extends TransformSymbol {
+    public realSymbol: Expression = null;
 
-    constructor(public node: TreeNode) {
-        this.type = '';
-        this.value = '';
-    }
+    protected currentSymbol: Symbol;
 
-    consume(other: Symbol) {
-        this.value = this.getValue(other);
-        this.type = this.getType(other);
+    consume(other: Symbol): boolean {
+        if (other instanceof Expression) {
+            this.realSymbol = other;
+        }
+
+        if (this.realSymbol == null) {
+            if (
+                !(other instanceof TokenSymbol) ||
+                Expression.hasTokenType(other.type)
+            ) {
+                this.currentSymbol = other;
+            }
+        } else {
+            return this.realSymbol.consume(other);
+        }
 
         return true;
+    }
+
+    get value() {
+        if (this.realSymbol) {
+            return this.realSymbol.value;
+        }
+
+        return this.getValue(this.currentSymbol);
+    }
+
+    get type(): string {
+        if (this.realSymbol) {
+            return this.realSymbol.type;
+        }
+
+        return this.getType(this.currentSymbol);
     }
 
     protected getValue(symbol: Symbol) {
@@ -29,18 +53,36 @@ export class Expression implements Symbol {
         return '';
     }
 
-    protected getType(symbol: Symbol) {
+    protected getType(symbol: Symbol): string {
         if (symbol instanceof ConstantAccess) {
             return symbol.type;
         } else if (symbol instanceof TokenSymbol) {
-            switch(symbol.type) {
-                case TokenType.StringLiteral:
-                    return 'string';
-                case TokenType.IntegerLiteral:
-                    return 'int';
-                case TokenType.FloatingLiteral:
-                    return 'float';
+            let type = Expression.getTokenType(symbol.type);
+
+            if (type) {
+                return type;
             }
+        } else if (symbol instanceof ClassTypeDesignator) {
+            return symbol.type;
         }
+
+        return '';
+    }
+
+    static hasTokenType(tokenType: TokenType): boolean {
+        return this.getTokenType(tokenType) != null;
+    }
+
+    static getTokenType(tokenType: TokenType): string {
+        switch(tokenType) {
+            case TokenType.StringLiteral:
+                return 'string';
+            case TokenType.IntegerLiteral:
+                return 'int';
+            case TokenType.FloatingLiteral:
+                return 'float';
+        }
+
+        return null;
     }
 }

@@ -9,7 +9,9 @@ import * as util from 'util';
 
 describe('symbolParser', () => {
     it('shall return symbol tree', () => {
-        let filePath = path.join(__dirname, 'case', 'global_symbols.php');
+        // let filePath = path.join(__dirname, 'case', 'global_symbols.php');
+        // let filePath = path.join(__dirname, 'case', 'class_constants.php');
+        let filePath = path.join(__dirname, 'case', 'function_declare.php');
         let text = fs.readFileSync(filePath).toString();
         let doc = new PhpDocument(pathToUri(filePath), text);
         let tree = doc.getTree();

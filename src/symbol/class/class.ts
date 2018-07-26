@@ -6,18 +6,18 @@ import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
 
-export class Class implements Symbol {
-    public name: string;
-    public extend: string;
+export class Class extends Symbol {
+    public name: string = '';
+    public extend: string = '';
     public location: Location;
-    public implements: string[];
-    public modifier: SymbolModifier;
-    public traits: string[];
+    public implements: string[] = [];
+    public modifier: SymbolModifier = new SymbolModifier();
+    public traits: string[] = [];
 
-    constructor(public node: TreeNode, doc: PhpDocument) {
+    constructor(node: TreeNode, doc: PhpDocument) {
+        super(node, doc);
+
         this.location = new Location(doc.uri, nodeRange(node, doc.text));
-        this.modifier = new SymbolModifier();
-        this.implements = [];
     }
 
     consume(other: Symbol) {

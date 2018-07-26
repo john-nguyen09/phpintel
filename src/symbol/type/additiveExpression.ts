@@ -1,17 +1,9 @@
 import { Symbol, TokenSymbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
-import { TokenType, tokenTypeToString } from "../../../node_modules/php7parser";
-import { ConstantAccess } from "../constant/constantAccess";
+import { TokenType } from "php7parser";
 import { Expression } from "./expression";
 
 export class AdditiveExpression extends Expression {
-    protected valueSymbols: Symbol[];
-
-    constructor(node: TreeNode) {
-        super(node);
-
-        this.valueSymbols = [];
-    }
+    protected valueSymbols: Symbol[] = [];
 
     consume(other: Symbol) {
         this.valueSymbols.push(other);
@@ -58,8 +50,6 @@ export class AdditiveExpression extends Expression {
         return values.join('');
     }
 
-    set value(value: string) { }
-
     get type(): string {
         if (this.valueSymbols.length >= 1) {
             let firstValue = this.valueSymbols[0];
@@ -69,8 +59,6 @@ export class AdditiveExpression extends Expression {
 
         return '';
     }
-
-    set type(type: string) { }
 
     private concatStrings(stringValues: TokenSymbol[]): string {
         if (stringValues.length == 0) {

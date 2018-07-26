@@ -1,14 +1,9 @@
 import { Symbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
 import { QualifiedNameList } from "../list/qualifiedNameList";
 import { QualifiedName } from "../name/qualifiedName";
 
-export class ClassImplement implements Symbol {
-    public interfaces: string[];
-
-    constructor(public node: TreeNode) {
-        this.interfaces = [];
-    }
+export class ClassImplement extends Symbol {
+    public interfaces: string[] = [];
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
