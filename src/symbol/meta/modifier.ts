@@ -1,3 +1,6 @@
+import { TokenSymbol } from "../symbol";
+import { TokenType } from "../../../node_modules/php7parser";
+
 export class SymbolModifier {
     static readonly NONE = 0;
     static readonly PUBLIC = 1 << 0;
@@ -23,5 +26,25 @@ export class SymbolModifier {
 
     include(modifier: number) {
         this.modifier |= modifier;
+    }
+
+    consume(token: TokenSymbol) {
+        switch (token.type) {
+            case TokenType.Public:
+                this.include(SymbolModifier.PUBLIC);
+                break;
+            case TokenType.Protected:
+                this.include(SymbolModifier.PROTECTED);
+                break;
+            case TokenType.Private:
+                this.include(SymbolModifier.PRIVATE);
+                break;
+            case TokenType.Abstract:
+                this.include(SymbolModifier.ABSTRACT);
+                break;
+            case TokenType.Final:
+                this.include(SymbolModifier.FINAL);
+                break;
+        }
     }
 }

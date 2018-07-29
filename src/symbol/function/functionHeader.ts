@@ -1,7 +1,7 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { TokenType } from "php7parser";
 
-export class FunctionHeader extends Symbol {
+export class FunctionHeader extends Symbol implements Consumer {
     public name: string = '';
 
     consume(other: Symbol) {

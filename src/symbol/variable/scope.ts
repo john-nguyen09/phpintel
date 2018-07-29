@@ -1,10 +1,8 @@
-import { Symbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { Symbol, Consumer } from "../symbol";
 import { Variable } from "./variable";
-import { Parameter } from "../function/parameter";
+import { Parameter } from "./parameter";
 
-export class Scope extends Symbol {
+export class Scope extends Symbol implements Consumer {
     public variables: { [name: string]: Variable } = {};
 
     constructor() {
@@ -27,7 +25,7 @@ export class Scope extends Symbol {
 
     getType(variableName: string) {
         if (variableName in this.variables) {
-            return this.variables[variableName].name;
+            return this.variables[variableName].type;
         }
 
         return '';

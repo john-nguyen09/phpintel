@@ -1,8 +1,8 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { TokenType } from "php7parser";
 import { Expression } from "./expression";
 
-export class AdditiveExpression extends Expression {
+export class AdditiveExpression extends Expression implements Consumer {
     protected valueSymbols: Symbol[] = [];
 
     consume(other: Symbol) {

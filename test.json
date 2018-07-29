@@ -1,28 +1,55 @@
 File {
   symbols: 
-   [ FunctionCall {
-       realSymbol: [Circular],
-       argumentList: ArgumentExpressionList { arguments: [Array] },
-       type: 'is_string' },
-     FunctionCall {
-       realSymbol: [Circular],
-       argumentList: ArgumentExpressionList { arguments: [Array] },
-       type: 'is_object' },
-     FunctionCall {
-       realSymbol: [Circular],
-       argumentList: ArgumentExpressionList { arguments: [Array] },
-       type: 'is_numeric' },
-     Function {
-       name: 'test_function1',
+   [ ConstantAccess { value: 'false', type: 'bool' },
+     Method {
+       name: '__construct',
+       parameters: [ [Object] ],
+       scopeVar: Scope { variables: [Object] },
+       typeAggregate: TypeAggregate { _types: [] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'method1',
+       parameters: [],
+       scopeVar: Scope { variables: {} },
+       typeAggregate: TypeAggregate { _types: [Array] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'method2',
+       parameters: [],
+       scopeVar: Scope { variables: {} },
+       typeAggregate: TypeAggregate { _types: [] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'method3',
+       parameters: [],
+       scopeVar: Scope { variables: {} },
+       typeAggregate: TypeAggregate { _types: [Array] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'method4',
+       parameters: [],
+       scopeVar: Scope { variables: {} },
+       typeAggregate: TypeAggregate { _types: [Array] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'protectedMethod1',
+       parameters: [ [Object] ],
+       scopeVar: Scope { variables: [Object] },
+       typeAggregate: TypeAggregate { _types: [] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Method {
+       name: 'privateMethod1',
        parameters: [ [Object], [Object], [Object], [Object] ],
        scopeVar: Scope { variables: [Object] },
-       types: 
-        [ 'bool',
-          '$stringParam',
-          '$intParam',
-          '$boolParam',
-          '$floatParam',
-          'bool',
-          'TestClass',
-          'int',
-          'string' ] } ] }
+       typeAggregate: TypeAggregate { _types: [Array] },
+       modifier: SymbolModifier { modifier: 0 } },
+     Class {
+       name: 'ClassWithMethod',
+       extend: '',
+       implements: [],
+       modifier: SymbolModifier { modifier: 0 },
+       traits: [],
+       location: 
+        Location {
+          uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/class_methods.php',
+          range: [Object] } } ] }

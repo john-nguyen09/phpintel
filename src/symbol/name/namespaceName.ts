@@ -1,8 +1,6 @@
-import { Symbol, TokenSymbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 
-export class NamespaceName extends Symbol {
+export class NamespaceName extends Symbol implements Consumer {
     public name: string = '';
 
     consume(other: Symbol) {

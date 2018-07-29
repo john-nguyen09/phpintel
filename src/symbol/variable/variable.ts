@@ -1,9 +1,7 @@
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
-import { Symbol } from "../symbol";
+import { Symbol, Consumer, Reference } from "../symbol";
 import { Expression } from "../type/expression";
 
-export class Variable extends Symbol {
+export class Variable extends Symbol implements Consumer, Reference {
     public type: string;
 
     protected expression: Expression;

@@ -14,8 +14,6 @@ export abstract class Symbol {
         this.node = node;
         this.doc = doc;
     }
-
-    abstract consume(other: Symbol): boolean;
 }
 
 export class TokenSymbol extends Symbol {
@@ -33,13 +31,36 @@ export class TokenSymbol extends Symbol {
         this.type = token.tokenType;
         this.text = nodeText(token, doc.text);
     }
-
-    consume(other: Symbol): boolean {
-        return false;
-    }
 }
 
 export abstract class TransformSymbol extends Symbol {
     abstract realSymbol: Symbol;
-    abstract consume(other: Symbol): boolean;
+}
+
+export interface Consumer {
+    consume(other: Symbol): boolean;
+}
+
+export interface Intaker {
+    intake(other: Symbol): void;
+}
+
+export interface Reference {
+    type: string;
+    }
+
+export interface ScopeMember {
+    scope: string;
+}
+
+export function isTransform(symbol: Symbol): symbol is TransformSymbol {
+    return symbol != null && 'realSymbol' in symbol;
+}
+
+export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
+    return 'consume' in symbol;
+}
+
+export function isIntaker(symbol: Symbol): symbol is (Symbol & Intaker) {
+    return 'intake' in symbol;
 }

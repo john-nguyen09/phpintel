@@ -1,10 +1,10 @@
-import { Symbol, TransformSymbol } from "../symbol";
+import { Symbol, TransformSymbol, Reference, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 import { DefineConstant } from "../constant/defineConstant";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 
-export class FunctionCall extends TransformSymbol {
-    public realSymbol: Symbol = null;
+export class FunctionCall extends TransformSymbol implements Consumer, Reference {
+    public realSymbol: (Symbol & Consumer) = null;
     public type: string;
     public argumentList: ArgumentExpressionList = null;
 
@@ -13,7 +13,6 @@ export class FunctionCall extends TransformSymbol {
             if (other.name.toLowerCase() == 'define') {
                 this.realSymbol = new DefineConstant(this.node, this.doc);
             } else {
-                this.realSymbol = this;
                 this.type = other.name;
             }
 

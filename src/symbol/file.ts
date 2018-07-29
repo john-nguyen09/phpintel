@@ -1,7 +1,7 @@
-import { Symbol } from "./symbol";
+import { Symbol, Consumer } from "./symbol";
 import { PhpDocument } from "../phpDocument";
 
-export class File extends Symbol {
+export class File extends Symbol implements Consumer {
     public symbols: Symbol[] = [];
 
     constructor(doc: PhpDocument) {

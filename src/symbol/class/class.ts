@@ -1,4 +1,4 @@
-import { Symbol } from "../symbol";
+import { Symbol, Consumer } from "../symbol";
 import { Location } from "../meta/location";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../../phpDocument";
@@ -6,7 +6,7 @@ import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
 
-export class Class extends Symbol {
+export class Class extends Symbol implements Consumer {
     public name: string = '';
     public extend: string = '';
     public location: Location;
@@ -25,10 +25,7 @@ export class Class extends Symbol {
             this.name = other.name;
             this.extend = other.extend ? other.extend.name : '';
             this.implements = other.implement ? other.implement.interfaces : [];
-            
-            for (let modifier of other.modifiers) {
-                this.modifier.include(modifier);
-            }
+            this.modifier = other.modifier;
 
             return true;
         } else if (other instanceof ClassTraitUse) {

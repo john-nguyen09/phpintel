@@ -1,7 +1,7 @@
-import { Symbol } from "../symbol";
+import { Symbol, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 
-export class QualifiedNameList extends Symbol {
+export class QualifiedNameList extends Symbol implements Consumer {
     public symbols: QualifiedName[] = [];
 
     consume(other: Symbol) {

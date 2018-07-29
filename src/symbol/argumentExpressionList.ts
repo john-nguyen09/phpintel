@@ -1,7 +1,7 @@
-import { Symbol, TokenSymbol } from "./symbol";
+import { Symbol, TokenSymbol, Consumer } from "./symbol";
 import { TokenType } from "php7parser";
 
-export class ArgumentExpressionList extends Symbol {
+export class ArgumentExpressionList extends Symbol implements Consumer {
     public arguments: Symbol[] = [];
 
     consume(other: Symbol) {

@@ -1,4 +1,4 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer, Reference } from "../symbol";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { Expression } from "../type/expression";
 import { TokenType } from "php7parser";
@@ -6,7 +6,7 @@ import { inspect } from "util";
 import { Location } from "../meta/location";
 import { PhpDocument } from "../../phpDocument";
 
-export class Constant extends Symbol {
+export class Constant extends Symbol implements Consumer, Reference {
     public name: string = '';
     public expression: Expression = null;
     public location: Location;

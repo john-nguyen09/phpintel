@@ -1,7 +1,7 @@
-import { Symbol } from "../symbol";
+import { Symbol, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 
-export class ClassExtend extends Symbol {
+export class ClassExtend extends Symbol implements Consumer {
     public name: string = '';
 
     consume(other: Symbol) {

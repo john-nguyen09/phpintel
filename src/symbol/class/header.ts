@@ -1,38 +1,34 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { ClassExtend } from "./extend";
 import { ClassImplement } from "./implement";
-import { TreeNode } from "../../util/parseTree";
 import { TokenType } from "php7parser";
 import { SymbolModifier } from "../meta/modifier";
-import { PhpDocument } from "../../phpDocument";
 
-export class ClassHeader extends Symbol {
+export class ClassHeader extends Symbol implements Consumer {
     public name: string = '';
-    public modifiers: number[] = [];
+    public modifier: SymbolModifier = new SymbolModifier();
     public extend: ClassExtend = null;
     public implement: ClassImplement = null;
 
-    consume(symbol: Symbol) {
-        if (symbol instanceof TokenSymbol) {
-            switch (symbol.type) {
+    consume(other: Symbol) {
+        if (other instanceof TokenSymbol) {
+            switch (other.type) {
                 case TokenType.Name:
-                    this.name = symbol.text;
+                    this.name = other.text;
                     break;
                 case TokenType.Abstract:
-                    this.modifiers.push(SymbolModifier.ABSTRACT);
-                    break;
                 case TokenType.Final:
-                    this.modifiers.push(SymbolModifier.FINAL);
+                    this.modifier.consume(other);
                     break;
             }
 
             return true;
-        } else if (symbol instanceof ClassExtend) {
-            this.extend = symbol;
+        } else if (other instanceof ClassExtend) {
+            this.extend = other;
 
             return true;
-        } else if (symbol instanceof ClassImplement) {
-            this.implement = symbol;
+        } else if (other instanceof ClassImplement) {
+            this.implement = other;
 
             return true;
         }

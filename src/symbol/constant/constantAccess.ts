@@ -1,9 +1,7 @@
-import { Symbol } from "../symbol";
-import { TreeNode } from "../../util/parseTree";
+import { Symbol, Consumer, Reference } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
-import { PhpDocument } from "../../phpDocument";
 
-export class ConstantAccess extends Symbol {
+export class ConstantAccess extends Symbol implements Consumer, Reference {
     public static readonly BUILTINS: {[key: string]: string} = {
         'false': 'bool',
         'true': 'bool',

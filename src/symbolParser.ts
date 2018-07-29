@@ -1,6 +1,6 @@
 import { TreeNode, isToken, isPhrase } from "./util/parseTree";
 import { Token, Phrase, TokenType, PhraseType } from "php7parser";
-import { Symbol, TokenSymbol, TransformSymbol } from "./symbol/symbol";
+import { Symbol, TokenSymbol, TransformSymbol, isIntaker, isConsumer, isTransform } from "./symbol/symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./symbol/class/class";
 import { ClassHeader } from "./symbol/class/header";
@@ -20,11 +20,13 @@ import { Identifier } from "./symbol/identifier";
 import { ClassConstant } from "./symbol/constant/classConstant";
 import { Function } from "./symbol/function/function";
 import { Return } from "./symbol/type/return";
-import { FunctionHeader } from "./symbol/function/header";
-import { Parameter } from "./symbol/function/parameter";
+import { FunctionHeader } from "./symbol/function/functionHeader";
+import { Parameter } from "./symbol/variable/parameter";
 import { TypeDeclaration } from "./symbol/type/typeDeclaration";
 import { SimpleVariable } from "./symbol/variable/simpleVariable";
 import { ClassTypeDesignator } from "./symbol/class/typeDesignator";
+import { Method } from "./symbol/function/method";
+import { MethodHeader } from "./symbol/function/methodHeader";
 
 export class SymbolParser {
     protected symbolStack: Symbol[] = [];
@@ -76,7 +78,7 @@ export class SymbolParser {
         if (isToken(node)) {
             let t = <Token>node;
 
-            if (parentSymbol) {
+            if (parentSymbol && isConsumer(parentSymbol)) {
                 parentSymbol.consume(new TokenSymbol(t, this.doc));
             }
         } else if (isPhrase(node)) {
@@ -137,6 +139,12 @@ export class SymbolParser {
                 case PhraseType.FunctionDeclarationHeader:
                     this.pushSymbol(new FunctionHeader(p, this.doc));
                     break;
+                case PhraseType.MethodDeclaration:
+                    this.pushSymbol(new Method(p, this.doc));
+                    break;
+                case PhraseType.MethodDeclarationHeader:
+                    this.pushSymbol(new MethodHeader(p, this.doc));
+                    break;
                 case PhraseType.ParameterDeclaration:
                     this.pushSymbol(new Parameter(p, this.doc));
                     break;
@@ -165,8 +173,8 @@ export class SymbolParser {
 
         let symbol = this.symbolStack.pop();
 
-        if (symbol != null && 'realSymbol' in symbol) {
-            symbol = (<TransformSymbol>symbol).realSymbol;
+        if (isTransform(symbol) && symbol.realSymbol) {
+            symbol = symbol.realSymbol;
         }
 
         if (symbol == null) {
@@ -174,7 +182,22 @@ export class SymbolParser {
         }
 
         for (let i = this.symbolStack.length - 1; i >= 0; i--) {
-            if (this.symbolStack[i] && this.symbolStack[i].consume(symbol)) {
+            let parent = this.symbolStack[i];
+            let isConsumed = false;
+
+            if (!parent) {
+                continue;
+            }
+
+            if (isConsumer(parent)) {
+                isConsumed = parent.consume(symbol);
+            }
+
+            if (isIntaker(symbol)) {
+                symbol.intake(parent);
+            }
+
+            if (isConsumed) {
                 break;
             }
         }

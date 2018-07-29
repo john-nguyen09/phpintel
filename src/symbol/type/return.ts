@@ -1,9 +1,9 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Variable } from "../variable/variable";
 import { Expression } from "./expression";
 import { TokenType } from "php7parser";
 
-export class Return extends Symbol {
+export class Return extends Symbol implements Consumer {
     public returnSymbol: Symbol = null;
 
     protected expression: Expression;

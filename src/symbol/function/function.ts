@@ -1,17 +1,18 @@
-import { Symbol } from "../symbol";
-import { Parameter } from "./parameter";
-import { FunctionHeader } from "./header";
+import { Symbol, Consumer } from "../symbol";
+import { Parameter } from "../variable/parameter";
+import { FunctionHeader } from "./functionHeader";
 import { Scope } from "../variable/scope";
 import { Return } from "../type/return";
 import { Variable } from "../variable/variable";
 import { Expression } from "../type/expression";
 import { SimpleVariable } from "../variable/simpleVariable";
+import { TypeAggregate } from "../../type/aggregate";
 
-export class Function extends Symbol {
+export class Function extends Symbol implements Consumer {
     public name: string = '';
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
-    public types: string[] = [];
+    public typeAggregate: TypeAggregate = new TypeAggregate();
 
     consume(other: Symbol) {
         if (other instanceof Parameter) {
@@ -27,9 +28,9 @@ export class Function extends Symbol {
             let returnSymbol = other.returnSymbol;
 
             if (returnSymbol instanceof Variable) {
-                this.types.push(this.scopeVar.getType(returnSymbol.name));
+                this.typeAggregate.push(this.scopeVar.getType(returnSymbol.name));
             } else if (returnSymbol instanceof Expression) {
-                this.types.push(returnSymbol.type);
+                this.typeAggregate.push(returnSymbol.type);
             }
 
             return true;
@@ -40,5 +41,9 @@ export class Function extends Symbol {
         }
 
         return false;
+    }
+
+    get types(): string[] {
+        return this.typeAggregate.types;
     }
 }

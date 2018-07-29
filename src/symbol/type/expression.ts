@@ -1,9 +1,9 @@
-import { Symbol, TokenSymbol, TransformSymbol } from "../symbol";
+import { Symbol, TokenSymbol, TransformSymbol, Consumer, Reference } from "../symbol";
 import { ConstantAccess } from "../constant/constantAccess";
 import { TokenType } from "php7parser";
 import { ClassTypeDesignator } from "../class/typeDesignator";
 
-export class Expression extends TransformSymbol {
+export class Expression extends TransformSymbol implements Consumer, Reference {
     public realSymbol: Expression = null;
 
     protected currentSymbol: Symbol;
