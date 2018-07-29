@@ -1,6 +1,6 @@
 import { Symbol, Consumer } from "../symbol";
-import { Parameter } from "../variable/parameter";
 import { FunctionHeader } from "./functionHeader";
+import { Parameter } from "../variable/parameter";
 import { Scope } from "../variable/scope";
 import { Return } from "../type/return";
 import { Variable } from "../variable/variable";
