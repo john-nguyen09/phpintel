@@ -1,7 +1,7 @@
-import { TokenSymbol } from "../symbol";
-import { TokenType } from "../../../node_modules/php7parser";
+import { Consumer, Symbol, TokenSymbol } from "../symbol";
+import { TokenType } from "php7parser";
 
-export class SymbolModifier {
+export class SymbolModifier implements Consumer {
     static readonly NONE = 0;
     static readonly PUBLIC = 1 << 0;
     static readonly PROTECTED = 1 << 1;
@@ -28,7 +28,11 @@ export class SymbolModifier {
         this.modifier |= modifier;
     }
 
-    consume(token: TokenSymbol) {
+    consume(token: Symbol): boolean {
+        if (!(token instanceof TokenSymbol)) {
+            return false;
+        }
+
         switch (token.type) {
             case TokenType.Public:
                 this.include(SymbolModifier.PUBLIC);
@@ -46,5 +50,7 @@ export class SymbolModifier {
                 this.include(SymbolModifier.FINAL);
                 break;
         }
+
+        return true;
     }
 }

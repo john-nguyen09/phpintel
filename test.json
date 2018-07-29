@@ -1,42 +1,68 @@
 File {
   symbols: 
-   [ ConstantAccess { value: 'false', type: 'bool' },
+   [ MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
+     Property {
+       name: '$property1',
+       expression: Expression { realSymbol: null },
+       modifier: SymbolModifier { modifier: 1 },
+       type: 'bool' },
+     MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
+     Property {
+       name: '$property2',
+       expression: Expression { realSymbol: null },
+       modifier: SymbolModifier { modifier: 1 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 2 } },
+     Property {
+       name: '$protectedProperty1',
+       expression: Expression { realSymbol: null },
+       modifier: SymbolModifier { modifier: 1 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 4 } },
+     Property {
+       name: '$privateProperty1',
+       expression: Expression { realSymbol: null },
+       modifier: SymbolModifier { modifier: 1 } },
      Method {
        name: '__construct',
        parameters: [ [Object] ],
        scopeVar: Scope { variables: [Object] },
        typeAggregate: TypeAggregate { _types: [] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
      Method {
        name: 'method1',
        parameters: [],
        scopeVar: Scope { variables: {} },
        typeAggregate: TypeAggregate { _types: [Array] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
      Method {
        name: 'method2',
        parameters: [],
        scopeVar: Scope { variables: {} },
        typeAggregate: TypeAggregate { _types: [] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
      Method {
        name: 'method3',
        parameters: [],
        scopeVar: Scope { variables: {} },
        typeAggregate: TypeAggregate { _types: [Array] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 1 } },
      Method {
        name: 'method4',
        parameters: [],
        scopeVar: Scope { variables: {} },
        typeAggregate: TypeAggregate { _types: [Array] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 2 } },
      Method {
        name: 'protectedMethod1',
        parameters: [ [Object] ],
        scopeVar: Scope { variables: [Object] },
        typeAggregate: TypeAggregate { _types: [] },
        modifier: SymbolModifier { modifier: 0 } },
+     MemberModifierList { modifier: SymbolModifier { modifier: 4 } },
      Method {
        name: 'privateMethod1',
        parameters: [ [Object], [Object], [Object], [Object] ],

@@ -1,6 +1,6 @@
 import { TreeNode, isToken, isPhrase } from "./util/parseTree";
-import { Token, Phrase, TokenType, PhraseType } from "php7parser";
-import { Symbol, TokenSymbol, TransformSymbol, isIntaker, isConsumer, isTransform } from "./symbol/symbol";
+import { Token, Phrase, PhraseType } from "php7parser";
+import { Symbol, TokenSymbol, isIntaker, isConsumer, isTransform } from "./symbol/symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./symbol/class/class";
 import { ClassHeader } from "./symbol/class/header";
@@ -27,6 +27,9 @@ import { SimpleVariable } from "./symbol/variable/simpleVariable";
 import { ClassTypeDesignator } from "./symbol/class/typeDesignator";
 import { Method } from "./symbol/function/method";
 import { MethodHeader } from "./symbol/function/methodHeader";
+import { Property } from "./symbol/variable/property";
+import { PropertyInitialiser } from "./symbol/variable/propertyInitialiser";
+import { MemberModifierList } from "./symbol/class/memberModifierList";
 
 export class SymbolParser {
     protected symbolStack: Symbol[] = [];
@@ -42,22 +45,24 @@ export class SymbolParser {
     }
 
     traverse(tree: Phrase) {
+        let depth = 1;
+
         this.spine = [];
-        this.realTraverse(tree, this.spine);
+        this.realTraverse(tree, depth, this.spine);
     }
 
-    private realTraverse(node: TreeNode, spine: TreeNode[]) {
-        this.preorder(node, spine);
+    private realTraverse(node: TreeNode, depth: number, spine: TreeNode[]) {
+        this.preorder(node, depth, spine);
 
         if ('children' in node) {
             spine.push(node);
             for (let child of node.children) {
-                this.realTraverse(child, spine);
+                this.realTraverse(child, depth, spine);
             }
             spine.pop();
         }
 
-        this.postorder(node, spine);
+        this.postorder(node, depth, spine);
     }
 
     public getTree(): Symbol {
@@ -68,11 +73,11 @@ export class SymbolParser {
         return this.symbolStack[this.symbolStack.length - 1];
     }
 
-    pushSymbol(symbol: Symbol) {
+    pushSymbol(symbol: Symbol, depth: number) {
         this.symbolStack.push(symbol);
     }
 
-    preorder(node: TreeNode, spine: TreeNode[]) {
+    preorder(node: TreeNode, depth: number, spine: TreeNode[]) {
         let parentSymbol = this.getParentSymbol();
 
         if (isToken(node)) {
@@ -86,87 +91,97 @@ export class SymbolParser {
 
             switch(p.phraseType) {
                 case PhraseType.NamespaceName:
-                    this.pushSymbol(new NamespaceName(node, this.doc));
+                    this.pushSymbol(new NamespaceName(node, this.doc), depth);
                     break;
                 case PhraseType.QualifiedName:
-                    this.pushSymbol(new QualifiedName(node, this.doc));
+                    this.pushSymbol(new QualifiedName(node, this.doc), depth);
                     break;
                 case PhraseType.QualifiedNameList:
-                    this.pushSymbol(new QualifiedNameList(p, this.doc));
+                    this.pushSymbol(new QualifiedNameList(p, this.doc), depth);
                     break;
                 case PhraseType.Identifier:
-                    this.pushSymbol(new Identifier(p, this.doc));
+                    this.pushSymbol(new Identifier(p, this.doc), depth);
                     break;
 
                 case PhraseType.ClassDeclaration:
-                    this.pushSymbol(new Class(p, this.doc));
+                    this.pushSymbol(new Class(p, this.doc), depth);
                     break;
                 case PhraseType.ClassDeclarationHeader:
-                    this.pushSymbol(new ClassHeader(p, this.doc));
+                    this.pushSymbol(new ClassHeader(p, this.doc), depth);
                     break;
                 case PhraseType.ClassBaseClause:
-                    this.pushSymbol(new ClassExtend(p, this.doc));
+                    this.pushSymbol(new ClassExtend(p, this.doc), depth);
                     break;
                 case PhraseType.ClassInterfaceClause:
-                    this.pushSymbol(new ClassImplement(p, this.doc));
+                    this.pushSymbol(new ClassImplement(p, this.doc), depth);
                     break;
                 case PhraseType.TraitUseClause:
-                    this.pushSymbol(new ClassTraitUse(p, this.doc));
+                    this.pushSymbol(new ClassTraitUse(p, this.doc), depth);
                     break;
 
                 case PhraseType.ConstElement:
-                    this.pushSymbol(new Constant(p, this.doc));
+                    this.pushSymbol(new Constant(p, this.doc), depth);
                     break;
                 case PhraseType.FunctionCallExpression:
-                    this.pushSymbol(new FunctionCall(p, this.doc));
+                    this.pushSymbol(new FunctionCall(p, this.doc), depth);
                     break;
                 case PhraseType.ClassConstElement:
-                    this.pushSymbol(new ClassConstant(p, this.doc));
+                    this.pushSymbol(new ClassConstant(p, this.doc), depth);
                     break;
                 case PhraseType.ArgumentExpressionList:
-                    this.pushSymbol(new ArgumentExpressionList(p, this.doc));
+                    this.pushSymbol(new ArgumentExpressionList(p, this.doc), depth);
                     break;
                 case PhraseType.ConstantAccessExpression:
-                    this.pushSymbol(new ConstantAccess(p, this.doc));
+                    this.pushSymbol(new ConstantAccess(p, this.doc), depth);
                     break;
                 case PhraseType.AdditiveExpression:
-                    this.pushSymbol(new AdditiveExpression(p, this.doc));
+                    this.pushSymbol(new AdditiveExpression(p, this.doc), depth);
                     break;
 
                 case PhraseType.FunctionDeclaration:
-                    this.pushSymbol(new Function(p, this.doc));
+                    this.pushSymbol(new Function(p, this.doc), depth);
                     break;
                 case PhraseType.FunctionDeclarationHeader:
-                    this.pushSymbol(new FunctionHeader(p, this.doc));
+                    this.pushSymbol(new FunctionHeader(p, this.doc), depth);
                     break;
                 case PhraseType.MethodDeclaration:
-                    this.pushSymbol(new Method(p, this.doc));
+                    this.pushSymbol(new Method(p, this.doc), depth);
                     break;
                 case PhraseType.MethodDeclarationHeader:
-                    this.pushSymbol(new MethodHeader(p, this.doc));
+                    this.pushSymbol(new MethodHeader(p, this.doc), depth);
                     break;
                 case PhraseType.ParameterDeclaration:
-                    this.pushSymbol(new Parameter(p, this.doc));
+                    this.pushSymbol(new Parameter(p, this.doc), depth);
                     break;
                 case PhraseType.TypeDeclaration:
-                    this.pushSymbol(new TypeDeclaration(p, this.doc));
+                    this.pushSymbol(new TypeDeclaration(p, this.doc), depth);
                     break;
                 case PhraseType.ReturnStatement:
-                    this.pushSymbol(new Return(p, this.doc));
+                    this.pushSymbol(new Return(p, this.doc), depth);
                     break;
                 case PhraseType.SimpleVariable:
-                    this.pushSymbol(new SimpleVariable(p, this.doc));
+                    this.pushSymbol(new SimpleVariable(p, this.doc), depth);
                     break;
                 case PhraseType.ClassTypeDesignator:
-                    this.pushSymbol(new ClassTypeDesignator(p, this.doc));
+                    this.pushSymbol(new ClassTypeDesignator(p, this.doc), depth);
+
+                case PhraseType.PropertyElement:
+                    this.pushSymbol(new Property(p, this.doc), depth);
+                    break;
+                case PhraseType.PropertyInitialiser:
+                    this.pushSymbol(new PropertyInitialiser(p, this.doc), depth);
+                    break;
+                case PhraseType.MemberModifierList:
+                    this.pushSymbol(new MemberModifierList(p, this.doc), depth);
+                    break;
 
                 default:
-                    this.pushSymbol(null);
+                    this.pushSymbol(null, depth);
             }
         }
     }
 
-    postorder(node: TreeNode, spine: TreeNode[]) {
+    postorder(node: TreeNode, depth: number, spine: TreeNode[]) {
         if (isToken(node)) {
             return;
         }
@@ -182,23 +197,26 @@ export class SymbolParser {
         }
 
         for (let i = this.symbolStack.length - 1; i >= 0; i--) {
-            let parent = this.symbolStack[i];
-            let isConsumed = false;
+            let prev = this.symbolStack[i];
 
-            if (!parent) {
+            if (!prev) {
                 continue;
             }
 
-            if (isConsumer(parent)) {
-                isConsumed = parent.consume(symbol);
+            if (isConsumer(prev) && prev.consume(symbol)) {
+                break;
+            }
+            }
+
+        for (let i = this.symbolStack.length - 1; i >= 0; i--) {
+            let prev = this.symbolStack[i];
+
+            if (!prev) {
+                continue;
             }
 
             if (isIntaker(symbol)) {
-                symbol.intake(parent);
-            }
-
-            if (isConsumed) {
-                break;
+                symbol.intake(prev);
             }
         }
     }
