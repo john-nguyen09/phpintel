@@ -41,10 +41,6 @@ export interface Consumer {
     consume(other: Symbol): boolean;
 }
 
-export interface Intaker {
-    intake(other: Symbol): void;
-}
-
 export interface Reference {
     type: string;
     }
@@ -59,8 +55,4 @@ export function isTransform(symbol: Symbol): symbol is TransformSymbol {
 
 export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
     return 'consume' in symbol;
-}
-
-export function isIntaker(symbol: Symbol): symbol is (Symbol & Intaker) {
-    return 'intake' in symbol;
 }

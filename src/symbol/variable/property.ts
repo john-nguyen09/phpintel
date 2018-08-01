@@ -1,13 +1,13 @@
-import { Symbol, TokenSymbol, Intaker } from "../symbol";
+import { Symbol, TokenSymbol } from "../symbol";
 import { Variable } from "./variable";
-import { TokenType } from "../../../node_modules/php7parser";
+import { TokenType } from "php7parser";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../../phpDocument";
 
-export class Property extends Variable implements Intaker {
+export class Property extends Variable {
     public modifier: SymbolModifier = null;
 
     constructor(public node: TreeNode, public doc: PhpDocument) {

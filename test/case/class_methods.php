@@ -5,6 +5,8 @@ class ClassWithMethod
     public $property1 = false;
     public $property2;
 
+    protected $protected1, $protected2, $protected3;
+
     protected $protectedProperty1;
 
     private $privateProperty1;
