@@ -47,7 +47,7 @@ export interface Consumer {
 
 export interface Reference {
     type: string;
-    }
+}
 
 export interface ScopeMember {
     scope: string;
