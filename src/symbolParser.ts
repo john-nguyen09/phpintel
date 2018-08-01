@@ -1,6 +1,6 @@
 import { TreeNode, isToken, isPhrase } from "./util/parseTree";
 import { Token, Phrase, PhraseType } from "php7parser";
-import { Symbol, TokenSymbol, isConsumer, isTransform } from "./symbol/symbol";
+import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection } from "./symbol/symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./symbol/class/class";
 import { ClassHeader } from "./symbol/class/header";
@@ -30,6 +30,7 @@ import { MethodHeader } from "./symbol/function/methodHeader";
 import { Property } from "./symbol/variable/property";
 import { PropertyInitialiser } from "./symbol/variable/propertyInitialiser";
 import { MemberModifierList } from "./symbol/class/memberModifierList";
+import { PropertyDeclaration } from "./symbol/variable/propertyDeclaration";
 
 export class SymbolParser {
     protected symbolStack: Symbol[] = [];
@@ -168,6 +169,9 @@ export class SymbolParser {
                 case PhraseType.MemberModifierList:
                     this.pushSymbol(new MemberModifierList(p, this.doc));
                     break;
+                case PhraseType.PropertyDeclaration:
+                    this.pushSymbol(new PropertyDeclaration(p, this.doc));
+                    break;
 
                 default:
                     this.pushSymbol(null);
@@ -193,12 +197,28 @@ export class SymbolParser {
         for (let i = this.symbolStack.length - 1; i >= 0; i--) {
             let prev = this.symbolStack[i];
 
-            if (!prev) {
+            if (!prev || !isConsumer(prev)) {
                 continue;
             }
 
-            if (isConsumer(prev) && prev.consume(symbol)) {
-                break;
+            if (isCollection(symbol)) {
+                let isConsumed = false;
+
+                for (let realSymbol of symbol.realSymbols) {
+                    if (!realSymbol) {
+                        continue;
+                    }
+
+                    isConsumed = prev.consume(realSymbol) || isConsumed;
+                }
+
+                if (isConsumed) {
+                    break;
+                }
+            } else {
+                if (prev.consume(symbol)) {
+                    break;
+                }
             }
         }
     }

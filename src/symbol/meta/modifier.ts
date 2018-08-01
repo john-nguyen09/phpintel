@@ -10,21 +10,35 @@ export class SymbolModifier implements Consumer {
     static readonly ABSTRACT = 1 << 4;
     static readonly STATIC = 1 << 5;
 
+    private visibility: number;
     private modifier: number;
 
-    constructor(modifier?: number) {
+    constructor(modifier?: number, visibility?: number) {
         if (!modifier) {
             modifier = SymbolModifier.NONE;
+        }
+        if (visibility) {
+            this.visibility = visibility;
         }
         
         this.modifier = modifier;
     }
 
     has(modifier: number) {
+        if (this.isVisibility(modifier)) {
+            return this.visibility == modifier;
+        }
+
         return (this.modifier & modifier) > 0;
     }
 
     include(modifier: number) {
+        if (this.isVisibility(modifier)) {
+            this.visibility = modifier;
+
+            return;
+        }
+
         this.modifier |= modifier;
     }
 
@@ -52,5 +66,9 @@ export class SymbolModifier implements Consumer {
         }
 
         return true;
+    }
+
+    private isVisibility(modifier: number): boolean {
+        return modifier >= SymbolModifier.PUBLIC && modifier <= SymbolModifier.PRIVATE;
     }
 }

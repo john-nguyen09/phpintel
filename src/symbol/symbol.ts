@@ -37,6 +37,10 @@ export abstract class TransformSymbol extends Symbol {
     abstract realSymbol: Symbol;
 }
 
+export abstract class CollectionSymbol extends Symbol {
+    abstract realSymbols: Symbol[];
+}
+
 export interface Consumer {
     consume(other: Symbol): boolean;
 }
@@ -51,6 +55,10 @@ export interface ScopeMember {
 
 export function isTransform(symbol: Symbol): symbol is TransformSymbol {
     return symbol != null && 'realSymbol' in symbol;
+}
+
+export function isCollection(symbol: Symbol): symbol is CollectionSymbol {
+    return symbol != null && 'realSymbols' in symbol;
 }
 
 export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
