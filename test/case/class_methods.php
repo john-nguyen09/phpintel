@@ -5,10 +5,22 @@ class ClassWithMethod
     public $property1 = false;
     public $property2;
 
+    /**
+     * Defines protected properties
+     * 
+     * @var boolean $protected1 Description of boolean
+     * @var string $protected2 Description of string
+     * @var int $protected3 Description of int
+     */
     protected $protected1, $protected2, $protected3;
 
     protected $protectedProperty1;
 
+    /**
+     * A private proterty which is only used by this class
+     * 
+     * @var ClassWithMethod This is a description
+     */
     private $privateProperty1;
 
     function __construct($optional = null) {

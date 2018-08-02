@@ -1,7 +1,7 @@
 import { Symbol, Consumer } from "../symbol";
 import { Location } from "../meta/location";
 import { TreeNode, nodeRange } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { PhpDocument } from "../phpDocument";
 import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";

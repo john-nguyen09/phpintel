@@ -4,7 +4,7 @@ import { Expression } from "../type/expression";
 import { TokenType } from "php7parser";
 import { inspect } from "util";
 import { Location } from "../meta/location";
-import { PhpDocument } from "../../phpDocument";
+import { PhpDocument } from "../phpDocument";
 
 export class Constant extends Symbol implements Consumer, Reference {
     public name: string = '';

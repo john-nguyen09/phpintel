@@ -1,14 +1,13 @@
 import { TreeNode, isToken, isPhrase } from "./util/parseTree";
-import { Token, Phrase, PhraseType } from "php7parser";
-import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection } from "./symbol/symbol";
-import { PhpDocument } from "./phpDocument";
+import { Token, Phrase, PhraseType, TokenType } from "php7parser";
+import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer } from "./symbol/symbol";
+import { PhpDocument } from "./symbol/phpDocument";
 import { Class } from "./symbol/class/class";
 import { ClassHeader } from "./symbol/class/header";
 import { ClassExtend } from "./symbol/class/extend";
 import { ClassImplement } from "./symbol/class/implement";
 import { ClassTraitUse } from "./symbol/class/traitUse";
 import { QualifiedNameList } from "./symbol/list/qualifiedNameList";
-import { File } from "./symbol/file";
 import { QualifiedName } from "./symbol/name/qualifiedName";
 import { NamespaceName } from "./symbol/name/namespaceName";
 import { FunctionCall } from "./symbol/function/functionCall";
@@ -31,37 +30,38 @@ import { Property } from "./symbol/variable/property";
 import { PropertyInitialiser } from "./symbol/variable/propertyInitialiser";
 import { MemberModifierList } from "./symbol/class/memberModifierList";
 import { PropertyDeclaration } from "./symbol/variable/propertyDeclaration";
+import { DocBlock } from "./symbol/docBlock";
 
 export class SymbolParser {
     protected symbolStack: Symbol[] = [];
     protected doc: PhpDocument;
-    protected file: Symbol;
+    protected lastDocBlock: DocBlock = null
 
     constructor(doc: PhpDocument) {
         this.doc = doc;
-
-        this.file = new File(doc);
-        this.pushSymbol(this.file);
+        this.pushSymbol(this.doc);
     }
 
     traverse(tree: Phrase) {
-        this.realTraverse(tree);
+        let depth = 0;
+
+        this.realTraverse(tree, depth);
     }
 
-    private realTraverse(node: TreeNode) {
-        this.preorder(node);
+    private realTraverse(node: TreeNode, depth: number) {
+        this.preorder(node, depth);
         
         if ('children' in node) {
             for (let child of node.children) {
-                this.realTraverse(child);
+                this.realTraverse(child, depth + 1);
             }
         }
 
-        this.postorder(node);
+        this.postorder(node, depth);
     }
 
     public getTree(): Symbol {
-        return this.file;
+        return this.doc;
     }
 
     getParentSymbol(): Symbol {
@@ -72,14 +72,18 @@ export class SymbolParser {
         this.symbolStack.push(symbol);
     }
 
-    preorder(node: TreeNode) {
+    preorder(node: TreeNode, depth: number) {
         let parentSymbol = this.getParentSymbol();
 
         if (isToken(node)) {
-            let t = <Token>node;
+            if (node.tokenType == TokenType.DocumentComment) {
+                this.lastDocBlock = new DocBlock(node, this.doc, depth);
+            } else {
+                let symbol = new TokenSymbol(node, this.doc);
 
-            if (parentSymbol && isConsumer(parentSymbol)) {
-                parentSymbol.consume(new TokenSymbol(t, this.doc));
+                if (parentSymbol && isConsumer(parentSymbol)) {
+                    parentSymbol.consume(symbol);
+                }
             }
         } else if (isPhrase(node)) {
             let p = <Phrase>node;
@@ -179,7 +183,7 @@ export class SymbolParser {
         }
     }
 
-    postorder(node: TreeNode) {
+    postorder(node: TreeNode, depth: number) {
         if (isToken(node)) {
             return;
         }
@@ -220,6 +224,13 @@ export class SymbolParser {
                     break;
                 }
             }
+        }
+
+        if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
+            console.log(symbol);
+            symbol.consumeDocBlock(this.lastDocBlock);
+
+            this.lastDocBlock = null;
         }
     }
 }

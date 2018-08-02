@@ -191,6 +191,16 @@
                   "length": 8
                 },
                 {
+                  "tokenType": "DocumentComment",
+                  "offset": 97,
+                  "length": 216
+                },
+                {
+                  "tokenType": "Whitespace",
+                  "offset": 313,
+                  "length": 6
+                },
+                {
                   "phraseType": "PropertyDeclaration",
                   "children": [
                     {
@@ -198,14 +208,14 @@
                       "children": [
                         {
                           "tokenType": "Protected",
-                          "offset": 97,
+                          "offset": 319,
                           "length": 9
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 106,
+                      "offset": 328,
                       "length": 1
                     },
                     {
@@ -216,19 +226,19 @@
                           "children": [
                             {
                               "tokenType": "VariableName",
-                              "offset": 107,
+                              "offset": 329,
                               "length": 11
                             }
                           ]
                         },
                         {
                           "tokenType": "Comma",
-                          "offset": 118,
+                          "offset": 340,
                           "length": 1
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 119,
+                          "offset": 341,
                           "length": 1
                         },
                         {
@@ -236,19 +246,19 @@
                           "children": [
                             {
                               "tokenType": "VariableName",
-                              "offset": 120,
+                              "offset": 342,
                               "length": 11
                             }
                           ]
                         },
                         {
                           "tokenType": "Comma",
-                          "offset": 131,
+                          "offset": 353,
                           "length": 1
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 132,
+                          "offset": 354,
                           "length": 1
                         },
                         {
@@ -256,7 +266,7 @@
                           "children": [
                             {
                               "tokenType": "VariableName",
-                              "offset": 133,
+                              "offset": 355,
                               "length": 11
                             }
                           ]
@@ -265,14 +275,14 @@
                     },
                     {
                       "tokenType": "Semicolon",
-                      "offset": 144,
+                      "offset": 366,
                       "length": 1
                     }
                   ]
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 145,
+                  "offset": 367,
                   "length": 8
                 },
                 {
@@ -283,14 +293,14 @@
                       "children": [
                         {
                           "tokenType": "Protected",
-                          "offset": 153,
+                          "offset": 375,
                           "length": 9
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 162,
+                      "offset": 384,
                       "length": 1
                     },
                     {
@@ -301,7 +311,7 @@
                           "children": [
                             {
                               "tokenType": "VariableName",
-                              "offset": 163,
+                              "offset": 385,
                               "length": 19
                             }
                           ]
@@ -310,15 +320,25 @@
                     },
                     {
                       "tokenType": "Semicolon",
-                      "offset": 182,
+                      "offset": 404,
                       "length": 1
                     }
                   ]
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 183,
+                  "offset": 405,
                   "length": 8
+                },
+                {
+                  "tokenType": "DocumentComment",
+                  "offset": 413,
+                  "length": 132
+                },
+                {
+                  "tokenType": "Whitespace",
+                  "offset": 545,
+                  "length": 6
                 },
                 {
                   "phraseType": "PropertyDeclaration",
@@ -328,14 +348,14 @@
                       "children": [
                         {
                           "tokenType": "Private",
-                          "offset": 191,
+                          "offset": 551,
                           "length": 7
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 198,
+                      "offset": 558,
                       "length": 1
                     },
                     {
@@ -346,7 +366,7 @@
                           "children": [
                             {
                               "tokenType": "VariableName",
-                              "offset": 199,
+                              "offset": 559,
                               "length": 17
                             }
                           ]
@@ -355,14 +375,14 @@
                     },
                     {
                       "tokenType": "Semicolon",
-                      "offset": 216,
+                      "offset": 576,
                       "length": 1
                     }
                   ]
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 217,
+                  "offset": 577,
                   "length": 8
                 },
                 {
@@ -373,12 +393,12 @@
                       "children": [
                         {
                           "tokenType": "Function",
-                          "offset": 225,
+                          "offset": 585,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 233,
+                          "offset": 593,
                           "length": 1
                         },
                         {
@@ -386,14 +406,14 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 234,
+                              "offset": 594,
                               "length": 11
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 245,
+                          "offset": 605,
                           "length": 1
                         },
                         {
@@ -404,22 +424,22 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 246,
+                                  "offset": 606,
                                   "length": 9
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 255,
+                                  "offset": 615,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Equals",
-                                  "offset": 256,
+                                  "offset": 616,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 257,
+                                  "offset": 617,
                                   "length": 1
                                 },
                                 {
@@ -433,7 +453,7 @@
                                           "children": [
                                             {
                                               "tokenType": "Name",
-                                              "offset": 258,
+                                              "offset": 618,
                                               "length": 4
                                             }
                                           ]
@@ -448,14 +468,14 @@
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 262,
+                          "offset": 622,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 263,
+                      "offset": 623,
                       "length": 1
                     },
                     {
@@ -466,17 +486,17 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 264,
+                              "offset": 624,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 265,
+                              "offset": 625,
                               "length": 8
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 273,
+                              "offset": 633,
                               "length": 1
                             }
                           ]
@@ -487,7 +507,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 274,
+                  "offset": 634,
                   "length": 8
                 },
                 {
@@ -501,24 +521,24 @@
                           "children": [
                             {
                               "tokenType": "Public",
-                              "offset": 282,
+                              "offset": 642,
                               "length": 6
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 288,
+                          "offset": 648,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 289,
+                          "offset": 649,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 297,
+                          "offset": 657,
                           "length": 1
                         },
                         {
@@ -526,26 +546,26 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 298,
+                              "offset": 658,
                               "length": 7
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 305,
+                          "offset": 665,
                           "length": 1
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 306,
+                          "offset": 666,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 307,
+                      "offset": 667,
                       "length": 1
                     },
                     {
@@ -556,12 +576,12 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 308,
+                              "offset": 668,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 309,
+                              "offset": 669,
                               "length": 10
                             },
                             {
@@ -572,12 +592,12 @@
                                   "children": [
                                     {
                                       "tokenType": "Return",
-                                      "offset": 319,
+                                      "offset": 679,
                                       "length": 6
                                     },
                                     {
                                       "tokenType": "Whitespace",
-                                      "offset": 325,
+                                      "offset": 685,
                                       "length": 1
                                     },
                                     {
@@ -591,7 +611,7 @@
                                               "children": [
                                                 {
                                                   "tokenType": "Name",
-                                                  "offset": 326,
+                                                  "offset": 686,
                                                   "length": 4
                                                 }
                                               ]
@@ -602,7 +622,7 @@
                                     },
                                     {
                                       "tokenType": "Semicolon",
-                                      "offset": 330,
+                                      "offset": 690,
                                       "length": 1
                                     }
                                   ]
@@ -611,12 +631,12 @@
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 331,
+                              "offset": 691,
                               "length": 6
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 337,
+                              "offset": 697,
                               "length": 1
                             }
                           ]
@@ -627,7 +647,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 338,
+                  "offset": 698,
                   "length": 8
                 },
                 {
@@ -641,24 +661,24 @@
                           "children": [
                             {
                               "tokenType": "Public",
-                              "offset": 346,
+                              "offset": 706,
                               "length": 6
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 352,
+                          "offset": 712,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 353,
+                          "offset": 713,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 361,
+                          "offset": 721,
                           "length": 1
                         },
                         {
@@ -666,26 +686,26 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 362,
+                              "offset": 722,
                               "length": 7
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 369,
+                          "offset": 729,
                           "length": 1
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 370,
+                          "offset": 730,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 371,
+                      "offset": 731,
                       "length": 1
                     },
                     {
@@ -696,12 +716,12 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 372,
+                              "offset": 732,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 373,
+                              "offset": 733,
                               "length": 10
                             },
                             {
@@ -712,12 +732,12 @@
                                   "children": [
                                     {
                                       "tokenType": "Return",
-                                      "offset": 383,
+                                      "offset": 743,
                                       "length": 6
                                     },
                                     {
                                       "tokenType": "Whitespace",
-                                      "offset": 389,
+                                      "offset": 749,
                                       "length": 1
                                     },
                                     {
@@ -725,12 +745,12 @@
                                       "children": [
                                         {
                                           "tokenType": "OpenBracket",
-                                          "offset": 390,
+                                          "offset": 750,
                                           "length": 1
                                         },
                                         {
                                           "tokenType": "Whitespace",
-                                          "offset": 391,
+                                          "offset": 751,
                                           "length": 14
                                         },
                                         {
@@ -744,7 +764,7 @@
                                                   "children": [
                                                     {
                                                       "tokenType": "StringLiteral",
-                                                      "offset": 405,
+                                                      "offset": 765,
                                                       "length": 6
                                                     }
                                                   ]
@@ -753,12 +773,12 @@
                                             },
                                             {
                                               "tokenType": "Comma",
-                                              "offset": 411,
+                                              "offset": 771,
                                               "length": 1
                                             },
                                             {
                                               "tokenType": "Whitespace",
-                                              "offset": 412,
+                                              "offset": 772,
                                               "length": 14
                                             },
                                             {
@@ -769,7 +789,7 @@
                                                   "children": [
                                                     {
                                                       "tokenType": "StringLiteral",
-                                                      "offset": 426,
+                                                      "offset": 786,
                                                       "length": 6
                                                     }
                                                   ]
@@ -780,19 +800,19 @@
                                         },
                                         {
                                           "tokenType": "Whitespace",
-                                          "offset": 432,
+                                          "offset": 792,
                                           "length": 10
                                         },
                                         {
                                           "tokenType": "CloseBracket",
-                                          "offset": 442,
+                                          "offset": 802,
                                           "length": 1
                                         }
                                       ]
                                     },
                                     {
                                       "tokenType": "Semicolon",
-                                      "offset": 443,
+                                      "offset": 803,
                                       "length": 1
                                     }
                                   ]
@@ -801,12 +821,12 @@
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 444,
+                              "offset": 804,
                               "length": 6
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 450,
+                              "offset": 810,
                               "length": 1
                             }
                           ]
@@ -817,7 +837,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 451,
+                  "offset": 811,
                   "length": 8
                 },
                 {
@@ -831,24 +851,24 @@
                           "children": [
                             {
                               "tokenType": "Public",
-                              "offset": 459,
+                              "offset": 819,
                               "length": 6
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 465,
+                          "offset": 825,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 466,
+                          "offset": 826,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 474,
+                          "offset": 834,
                           "length": 1
                         },
                         {
@@ -856,26 +876,26 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 475,
+                              "offset": 835,
                               "length": 7
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 482,
+                          "offset": 842,
                           "length": 1
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 483,
+                          "offset": 843,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 484,
+                      "offset": 844,
                       "length": 1
                     },
                     {
@@ -886,12 +906,12 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 485,
+                              "offset": 845,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 486,
+                              "offset": 846,
                               "length": 10
                             },
                             {
@@ -902,22 +922,22 @@
                                   "children": [
                                     {
                                       "tokenType": "Return",
-                                      "offset": 496,
+                                      "offset": 856,
                                       "length": 6
                                     },
                                     {
                                       "tokenType": "Whitespace",
-                                      "offset": 502,
+                                      "offset": 862,
                                       "length": 1
                                     },
                                     {
                                       "tokenType": "IntegerLiteral",
-                                      "offset": 503,
+                                      "offset": 863,
                                       "length": 1
                                     },
                                     {
                                       "tokenType": "Semicolon",
-                                      "offset": 504,
+                                      "offset": 864,
                                       "length": 1
                                     }
                                   ]
@@ -926,12 +946,12 @@
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 505,
+                              "offset": 865,
                               "length": 6
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 511,
+                              "offset": 871,
                               "length": 1
                             }
                           ]
@@ -942,7 +962,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 512,
+                  "offset": 872,
                   "length": 8
                 },
                 {
@@ -956,24 +976,24 @@
                           "children": [
                             {
                               "tokenType": "Public",
-                              "offset": 520,
+                              "offset": 880,
                               "length": 6
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 526,
+                          "offset": 886,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 527,
+                          "offset": 887,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 535,
+                          "offset": 895,
                           "length": 1
                         },
                         {
@@ -981,26 +1001,26 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 536,
+                              "offset": 896,
                               "length": 7
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 543,
+                          "offset": 903,
                           "length": 1
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 544,
+                          "offset": 904,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 545,
+                      "offset": 905,
                       "length": 1
                     },
                     {
@@ -1011,12 +1031,12 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 546,
+                              "offset": 906,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 547,
+                              "offset": 907,
                               "length": 10
                             },
                             {
@@ -1027,22 +1047,22 @@
                                   "children": [
                                     {
                                       "tokenType": "Return",
-                                      "offset": 557,
+                                      "offset": 917,
                                       "length": 6
                                     },
                                     {
                                       "tokenType": "Whitespace",
-                                      "offset": 563,
+                                      "offset": 923,
                                       "length": 1
                                     },
                                     {
                                       "tokenType": "FloatingLiteral",
-                                      "offset": 564,
+                                      "offset": 924,
                                       "length": 4
                                     },
                                     {
                                       "tokenType": "Semicolon",
-                                      "offset": 568,
+                                      "offset": 928,
                                       "length": 1
                                     }
                                   ]
@@ -1051,12 +1071,12 @@
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 569,
+                              "offset": 929,
                               "length": 6
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 575,
+                              "offset": 935,
                               "length": 1
                             }
                           ]
@@ -1067,7 +1087,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 576,
+                  "offset": 936,
                   "length": 8
                 },
                 {
@@ -1081,24 +1101,24 @@
                           "children": [
                             {
                               "tokenType": "Protected",
-                              "offset": 584,
+                              "offset": 944,
                               "length": 9
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 593,
+                          "offset": 953,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 594,
+                          "offset": 954,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 602,
+                          "offset": 962,
                           "length": 1
                         },
                         {
@@ -1106,14 +1126,14 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 603,
+                              "offset": 963,
                               "length": 16
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 619,
+                          "offset": 979,
                           "length": 1
                         },
                         {
@@ -1124,7 +1144,7 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 620,
+                                  "offset": 980,
                                   "length": 11
                                 }
                               ]
@@ -1133,14 +1153,14 @@
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 631,
+                          "offset": 991,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 632,
+                      "offset": 992,
                       "length": 1
                     },
                     {
@@ -1151,17 +1171,17 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 633,
+                              "offset": 993,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 634,
+                              "offset": 994,
                               "length": 8
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 642,
+                              "offset": 1002,
                               "length": 1
                             }
                           ]
@@ -1172,7 +1192,7 @@
                 },
                 {
                   "tokenType": "Whitespace",
-                  "offset": 643,
+                  "offset": 1003,
                   "length": 8
                 },
                 {
@@ -1186,24 +1206,24 @@
                           "children": [
                             {
                               "tokenType": "Private",
-                              "offset": 651,
+                              "offset": 1011,
                               "length": 7
                             }
                           ]
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 658,
+                          "offset": 1018,
                           "length": 1
                         },
                         {
                           "tokenType": "Function",
-                          "offset": 659,
+                          "offset": 1019,
                           "length": 8
                         },
                         {
                           "tokenType": "Whitespace",
-                          "offset": 667,
+                          "offset": 1027,
                           "length": 1
                         },
                         {
@@ -1211,14 +1231,14 @@
                           "children": [
                             {
                               "tokenType": "Name",
-                              "offset": 668,
+                              "offset": 1028,
                               "length": 14
                             }
                           ]
                         },
                         {
                           "tokenType": "OpenParenthesis",
-                          "offset": 682,
+                          "offset": 1042,
                           "length": 1
                         },
                         {
@@ -1229,19 +1249,19 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 683,
+                                  "offset": 1043,
                                   "length": 6
                                 }
                               ]
                             },
                             {
                               "tokenType": "Comma",
-                              "offset": 689,
+                              "offset": 1049,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 690,
+                              "offset": 1050,
                               "length": 1
                             },
                             {
@@ -1249,19 +1269,19 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 691,
+                                  "offset": 1051,
                                   "length": 7
                                 }
                               ]
                             },
                             {
                               "tokenType": "Comma",
-                              "offset": 698,
+                              "offset": 1058,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 699,
+                              "offset": 1059,
                               "length": 1
                             },
                             {
@@ -1269,22 +1289,22 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 700,
+                                  "offset": 1060,
                                   "length": 10
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 710,
+                                  "offset": 1070,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Equals",
-                                  "offset": 711,
+                                  "offset": 1071,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 712,
+                                  "offset": 1072,
                                   "length": 1
                                 },
                                 {
@@ -1298,7 +1318,7 @@
                                           "children": [
                                             {
                                               "tokenType": "Name",
-                                              "offset": 713,
+                                              "offset": 1073,
                                               "length": 4
                                             }
                                           ]
@@ -1311,12 +1331,12 @@
                             },
                             {
                               "tokenType": "Comma",
-                              "offset": 717,
+                              "offset": 1077,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 718,
+                              "offset": 1078,
                               "length": 1
                             },
                             {
@@ -1324,27 +1344,27 @@
                               "children": [
                                 {
                                   "tokenType": "VariableName",
-                                  "offset": 719,
+                                  "offset": 1079,
                                   "length": 10
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 729,
+                                  "offset": 1089,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Equals",
-                                  "offset": 730,
+                                  "offset": 1090,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "Whitespace",
-                                  "offset": 731,
+                                  "offset": 1091,
                                   "length": 1
                                 },
                                 {
                                   "tokenType": "StringLiteral",
-                                  "offset": 732,
+                                  "offset": 1092,
                                   "length": 2
                                 }
                               ]
@@ -1353,14 +1373,14 @@
                         },
                         {
                           "tokenType": "CloseParenthesis",
-                          "offset": 734,
+                          "offset": 1094,
                           "length": 1
                         }
                       ]
                     },
                     {
                       "tokenType": "Whitespace",
-                      "offset": 735,
+                      "offset": 1095,
                       "length": 1
                     },
                     {
@@ -1371,12 +1391,12 @@
                           "children": [
                             {
                               "tokenType": "OpenBrace",
-                              "offset": 736,
+                              "offset": 1096,
                               "length": 1
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 737,
+                              "offset": 1097,
                               "length": 10
                             },
                             {
@@ -1387,12 +1407,12 @@
                                   "children": [
                                     {
                                       "tokenType": "Return",
-                                      "offset": 747,
+                                      "offset": 1107,
                                       "length": 6
                                     },
                                     {
                                       "tokenType": "Whitespace",
-                                      "offset": 753,
+                                      "offset": 1113,
                                       "length": 1
                                     },
                                     {
@@ -1406,7 +1426,7 @@
                                               "children": [
                                                 {
                                                   "tokenType": "Name",
-                                                  "offset": 754,
+                                                  "offset": 1114,
                                                   "length": 4
                                                 }
                                               ]
@@ -1417,7 +1437,7 @@
                                     },
                                     {
                                       "tokenType": "Semicolon",
-                                      "offset": 758,
+                                      "offset": 1118,
                                       "length": 1
                                     }
                                   ]
@@ -1426,12 +1446,12 @@
                             },
                             {
                               "tokenType": "Whitespace",
-                              "offset": 759,
+                              "offset": 1119,
                               "length": 6
                             },
                             {
                               "tokenType": "CloseBrace",
-                              "offset": 765,
+                              "offset": 1125,
                               "length": 1
                             }
                           ]
@@ -1444,12 +1464,12 @@
             },
             {
               "tokenType": "Whitespace",
-              "offset": 766,
+              "offset": 1126,
               "length": 2
             },
             {
               "tokenType": "CloseBrace",
-              "offset": 768,
+              "offset": 1128,
               "length": 1
             }
           ]

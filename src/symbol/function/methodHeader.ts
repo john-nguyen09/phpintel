@@ -4,7 +4,7 @@ import { FunctionHeader } from "./functionHeader";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { PhpDocument } from "../phpDocument";
 
 export class MethodHeader extends FunctionHeader {
     public modifier: SymbolModifier = null;

@@ -1,4 +1,6 @@
-File {
+PhpDocument {
+  uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/class_methods.php',
+  text: '<?php\r\n\r\nclass ClassWithMethod\r\n{\r\n    public $property1 = false;\r\n    public $property2;\r\n\r\n    /**\r\n     * Defines protected properties\r\n     * \r\n     * @var boolean $protected1 Description of boolean\r\n     * @var string $protected2 Description of string\r\n     * @var int $protected3 Description of int\r\n     */\r\n    protected $protected1, $protected2, $protected3;\r\n\r\n    protected $protectedProperty1;\r\n\r\n    /**\r\n     * A private proterty which is only used by this class\r\n     * \r\n     * @var ClassWithMethod This is a description\r\n     */\r\n    private $privateProperty1;\r\n\r\n    function __construct($optional = null) {\r\n\r\n    }\r\n\r\n    public function method1() {\r\n        return true;\r\n    }\r\n\r\n    public function method2() {\r\n        return [\r\n            \'abc1\',\r\n            \'abc2\'\r\n        ];\r\n    }\r\n\r\n    public function method3() {\r\n        return 5;\r\n    }\r\n\r\n    public function method4() {\r\n        return 3.14;\r\n    }\r\n\r\n    protected function protectedMethod1($firstParam) {\r\n\r\n    }\r\n\r\n    private function privateMethod1($first, $second, $optional1 = null, $optional2 = \'\') {\r\n        return null;\r\n    }\r\n}',
   symbols: 
    [ Property {
        name: '$property1',
@@ -12,15 +14,18 @@ File {
      Property {
        name: '$protected1',
        expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 } },
+       modifier: SymbolModifier { modifier: 0, visibility: 2 },
+       type: 'boolean' },
      Property {
        name: '$protected2',
        expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 } },
+       modifier: SymbolModifier { modifier: 0, visibility: 2 },
+       type: 'string' },
      Property {
        name: '$protected3',
        expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 } },
+       modifier: SymbolModifier { modifier: 0, visibility: 2 },
+       type: 'int' },
      Property {
        name: '$protectedProperty1',
        expression: Expression { realSymbol: null },
@@ -28,7 +33,8 @@ File {
      Property {
        name: '$privateProperty1',
        expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 4 } },
+       modifier: SymbolModifier { modifier: 0, visibility: 4 },
+       type: 'ClassWithMethod' },
      Method {
        name: '__construct',
        parameters: [ [Object] ],

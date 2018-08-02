@@ -83,12 +83,12 @@ export function lastToken(node: TreeNode): Token {
     return null;
 }
 
-export function isToken(node: Phrase | Token, types?: TokenType[]): boolean {
+export function isToken(node: Phrase | Token, types?: TokenType[]): node is Token {
     return node && (<Token>node).tokenType !== undefined &&
         (!types || types.indexOf((<Token>node).tokenType) > -1);
 }
 
-export function isPhrase(node: Phrase | Token, types?: PhraseType[]): boolean {
+export function isPhrase(node: Phrase | Token, types?: PhraseType[]): node is Phrase {
     return node && (<Phrase>node).phraseType !== undefined &&
         (!types || types.indexOf((<Phrase>node).phraseType) > -1);
 }

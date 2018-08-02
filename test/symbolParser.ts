@@ -1,5 +1,5 @@
 import { describe, it } from 'mocha';
-import { PhpDocument } from '../src/phpDocument';
+import { PhpDocument } from '../src/symbol/phpDocument';
 import { pathToUri } from '../src/util/uri';
 import * as path from 'path';
 import * as fs from 'fs';

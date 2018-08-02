@@ -1,7 +1,8 @@
 import { TreeNode, nodeText } from '../util/parseTree';
 import { Token, TokenType } from 'php7parser';
-import { PhpDocument } from '../phpDocument';
+import { PhpDocument } from './phpDocument';
 import { nonenumerable } from '../util/decorator';
+import { DocBlock } from './docBlock';
 
 export abstract class Symbol {
     @nonenumerable
@@ -45,6 +46,10 @@ export interface Consumer {
     consume(other: Symbol): boolean;
 }
 
+export interface DocBlockConsumer {
+    consumeDocBlock(docBlock: DocBlock);
+}
+
 export interface Reference {
     type: string;
 }
@@ -63,4 +68,8 @@ export function isCollection(symbol: Symbol): symbol is CollectionSymbol {
 
 export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
     return 'consume' in symbol;
+}
+
+export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlockConsumer) {
+    return 'consumeDocBlock' in symbol;
 }

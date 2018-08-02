@@ -17,6 +17,7 @@
   "author": "John Nguyen",
   "license": "ISC",
   "dependencies": {
+    "doc-parser": "^0.4.8",
     "level": "^4.0.0",
     "php7parser": "^1.0.8",
     "vscode-uri": "^1.0.5"

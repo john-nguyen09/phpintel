@@ -3,9 +3,8 @@ import { Variable } from "./variable";
 import { TokenType } from "php7parser";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
-import { MemberModifierList } from "../class/memberModifierList";
 import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { PhpDocument } from "../phpDocument";
 
 export class Property extends Variable {
     public modifier: SymbolModifier = null;
@@ -26,11 +25,5 @@ export class Property extends Variable {
         }
 
         return false;
-    }
-
-    intake(other: Symbol) {
-        if (other instanceof MemberModifierList) {
-            this.modifier = other.modifier;
-        }
     }
 }

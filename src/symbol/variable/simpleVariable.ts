@@ -1,6 +1,6 @@
 import { Variable } from "./variable";
 import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../../phpDocument";
+import { PhpDocument } from "../phpDocument";
 import { Symbol, TokenSymbol } from "../symbol";
 import { TokenType } from "php7parser";
 
