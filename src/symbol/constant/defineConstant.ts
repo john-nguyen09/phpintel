@@ -4,10 +4,10 @@ import { TokenType } from "php7parser";
 import { Constant } from "./constant";
 import { PhpDocument } from "../phpDocument";
 import { TreeNode } from "../../util/parseTree";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class DefineConstant extends Symbol {
-    public name: Name = null;
+    public name: TypeName = null;
 
     private constant: Constant = null;
 
@@ -27,7 +27,7 @@ export class DefineConstant extends Symbol {
                     firstArg instanceof TokenSymbol &&
                     firstArg.type == TokenType.StringLiteral
                 ) {
-                    this.name = new Name(firstArg.text.slice(1, -1)); // remove quotes
+                    this.name = new TypeName(firstArg.text.slice(1, -1)); // remove quotes
                 }
 
                 this.constant.consume(args[1]);
@@ -43,7 +43,7 @@ export class DefineConstant extends Symbol {
         return this.constant.value;
     }
 
-    get type(): Name {
+    get type(): TypeName {
         return this.constant.type;
     }
 }

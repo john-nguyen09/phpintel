@@ -2,10 +2,10 @@ import { Symbol } from "../symbol";
 import { Identifier } from "../identifier";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class MethodHeader extends Symbol {
-    public name: Name = null;
+    public name: TypeName = null;
     public modifier: SymbolModifier = null;
 
     consume(other: Symbol): boolean {

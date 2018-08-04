@@ -1,13 +1,13 @@
 import { Symbol, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class ClassExtend extends Symbol implements Consumer {
-    public name: Name = null;
+    public name: TypeName = null;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
-            this.name = new Name(other.name);
+            this.name = new TypeName(other.name);
 
             return true;
         }

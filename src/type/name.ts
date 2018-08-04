@@ -1,6 +1,6 @@
 import { ImportTable } from './importTable';
 
-export class Name {
+export class TypeName {
     public static readonly BUILT_INS = [
         'boolean',
         'int',
@@ -31,7 +31,7 @@ export class Name {
     }
 
     public static isFullyQualifiedName(typeName: string): boolean {
-        if (Name.BUILT_INS.indexOf(typeName) >= 0) {
+        if (TypeName.BUILT_INS.indexOf(typeName) >= 0) {
             return true;
         }
 

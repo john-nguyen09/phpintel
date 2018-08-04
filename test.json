@@ -4,24 +4,26 @@ PhpDocument {
   symbols: 
    [ Property {
        name: '$foo',
+       type: TypeComposite { _types: [] },
        expression: Expression { realSymbol: null },
        modifier: SymbolModifier { modifier: 0, visibility: 1 },
-       description: 'Description of $foo',
-       type: Name { isArray: false, name: 'string' } },
+       description: '' },
      Property {
        name: '$bluesky_color_code',
+       type: TypeComposite { _types: [] },
        expression: Expression { realSymbol: null },
        modifier: SymbolModifier { modifier: 0, visibility: 1 },
-       description: 'RGB code for blue sky color',
-       type: Name { isArray: false, name: 'int' } },
+       description: '' },
      Method {
        modifier: SymbolModifier { modifier: 0, visibility: 1 },
-       name: Name { isArray: false, name: 'getRainbowColors' } },
+       name: TypeName { isArray: false, name: 'getRainbowColors' },
+       description: 'Get the rainbow color based on some preference' },
      Method {
        modifier: SymbolModifier { modifier: 0, visibility: 4 },
-       name: Name { isArray: false, name: 'calculateRGBColor' } },
+       name: TypeName { isArray: false, name: 'calculateRGBColor' },
+       description: 'Calculate RGB color code based on red, green and blue' },
      Class {
-       name: Name { isArray: false, name: 'ClassWithDoc' },
+       name: TypeName { isArray: false, name: 'ClassWithDoc' },
        extend: null,
        implements: [],
        modifier: SymbolModifier { modifier: 0 },

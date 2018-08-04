@@ -10,10 +10,6 @@ export class DocBlock extends TokenSymbol {
         super(token, doc);
 
         this.docAst = DocParser.parse(this.text);
-
-        // console.dir(this.docAst, {
-        //     depth: 4
-        // });
     }
 
     public getNodes<T extends DocNode>(kind: string): T[] {
@@ -26,5 +22,9 @@ export class DocBlock extends TokenSymbol {
         }
 
         return nodes;
+    }
+
+    public static isType<T extends DocNode>(docNode: DocNode, type: string): docNode is T {
+        return docNode.kind == type;
     }
 }

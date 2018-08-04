@@ -1,14 +1,14 @@
 import { Symbol, Consumer } from "../symbol";
 import { QualifiedNameList } from "../list/qualifiedNameList";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class ClassTraitUse extends Symbol implements Consumer {
-    public names: Name[] = [];
+    public names: TypeName[] = [];
 
     consume(other: Symbol) {
         if (other instanceof QualifiedNameList) {
             this.names = other.names.map(name => {
-                return new Name(name);
+                return new TypeName(name);
             });
 
             return true;

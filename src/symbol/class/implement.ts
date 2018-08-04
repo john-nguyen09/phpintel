@@ -1,19 +1,19 @@
 import { Symbol, Consumer } from "../symbol";
 import { QualifiedNameList } from "../list/qualifiedNameList";
 import { QualifiedName } from "../name/qualifiedName";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class ClassImplement extends Symbol implements Consumer {
-    public interfaces: Name[] = [];
+    public interfaces: TypeName[] = [];
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
-            this.interfaces.push(new Name(other.name));
+            this.interfaces.push(new TypeName(other.name));
 
             return true;
         } else if (other instanceof QualifiedNameList) {
             this.interfaces.push(...other.names.map(name => {
-                return new Name(name);
+                return new TypeName(name);
             }));
 
             return true;

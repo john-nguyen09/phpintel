@@ -20,7 +20,7 @@ export class Property extends Variable {
                 this.name = other.text;
             }
         } else if (other instanceof PropertyInitialiser) {
-            this.type = other.expression.type;
+            this.type.push(other.expression.type);
 
             return true;
         }

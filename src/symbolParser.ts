@@ -180,6 +180,14 @@ export class SymbolParser {
                 default:
                     this.pushSymbol(null);
             }
+
+            let symbol = this.symbolStack[this.symbolStack.length - 1];
+
+            if (symbol != null && isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
+                symbol.consumeDocBlock(this.lastDocBlock);
+
+                this.lastDocBlock = null;
+            }
         }
     }
 
@@ -224,12 +232,6 @@ export class SymbolParser {
                     break;
                 }
             }
-        }
-
-        if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
-            symbol.consumeDocBlock(this.lastDocBlock);
-
-            this.lastDocBlock = null;
         }
     }
 }

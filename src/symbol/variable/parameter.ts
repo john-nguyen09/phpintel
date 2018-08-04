@@ -2,11 +2,11 @@ import { Symbol, TokenSymbol, Reference, Consumer } from "../symbol";
 import { TokenType } from "php7parser";
 import { TypeDeclaration } from "../type/typeDeclaration";
 import { Expression } from "../type/expression";
-import { Name } from "../../type/name";
+import { TypeComposite } from "../../type/composite";
 
 export class Parameter extends Symbol implements Consumer, Reference {
     public name: string = '';
-    public type: Name = null;
+    public type: TypeComposite = new TypeComposite();
     public value: string = '';
 
     protected expression: Expression = null;
@@ -22,14 +22,14 @@ export class Parameter extends Symbol implements Consumer, Reference {
                     break;
             }
         } else if (other instanceof TypeDeclaration) {
-            this.type = other.type;
+            this.type.push(other.type);
 
             return true;
         } else if (this.expression != null) {
             this.expression.consume(other);
 
             if (this.expression.type != null) {
-                this.type = this.expression.type;
+                this.type.push(this.expression.type);
             }
 
             return true;

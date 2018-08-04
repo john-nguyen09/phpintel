@@ -1,13 +1,13 @@
 import { Symbol, Consumer, Reference } from "../symbol";
 import { Expression } from "../type/expression";
-import { Name } from "../../type/name";
+import { TypeComposite } from "../../type/composite";
 
 export class Variable extends Symbol implements Consumer, Reference {
-    public type: Name;
+    public type: TypeComposite = new TypeComposite;
 
     protected expression: Expression;
 
-    constructor(public name: string, type?: Name) {
+    constructor(public name: string, type?: TypeComposite) {
         super(null, null);
 
         if (type) {
@@ -20,7 +20,7 @@ export class Variable extends Symbol implements Consumer, Reference {
     consume(other: Symbol) {
         let result = this.expression.consume(other);
 
-        this.type = this.expression.type;
+        this.type.push(this.expression.type);
 
         return result;
     }

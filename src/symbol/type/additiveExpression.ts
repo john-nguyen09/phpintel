@@ -1,7 +1,7 @@
 import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { TokenType } from "php7parser";
 import { Expression } from "./expression";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class AdditiveExpression extends Expression implements Consumer {
     protected valueSymbols: Symbol[] = [];
@@ -51,7 +51,7 @@ export class AdditiveExpression extends Expression implements Consumer {
         return values.join('');
     }
 
-    get type(): Name {
+    get type(): TypeName {
         if (this.valueSymbols.length >= 1) {
             let firstValue = this.valueSymbols[0];
 

@@ -1,5 +1,10 @@
 const _DocParser = require("doc-parser");
 
+export enum DocNodeKind {
+    Var = 'var',
+    Param = 'param'
+}
+
 export namespace DocParser {
     const customDocBlocks = {
         global: [
@@ -59,6 +64,11 @@ export interface VarDocNode extends DocNode {
     type: DocType;
     variable: string;
     description: string;
+}
+
+export interface ParamDocNode extends DocNode {
+    type: DocType;
+    name: string
 }
 
 export interface DocType {

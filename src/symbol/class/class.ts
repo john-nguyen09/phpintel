@@ -5,15 +5,15 @@ import { PhpDocument } from "../phpDocument";
 import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class Class extends Symbol implements Consumer {
-    public name: Name = null;
-    public extend: Name = null;
+    public name: TypeName = null;
+    public extend: TypeName = null;
     public location: Location;
-    public implements: Name[] = [];
+    public implements: TypeName[] = [];
     public modifier: SymbolModifier = new SymbolModifier();
-    public traits: Name[] = [];
+    public traits: TypeName[] = [];
 
     constructor(node: TreeNode, doc: PhpDocument) {
         super(node, doc);

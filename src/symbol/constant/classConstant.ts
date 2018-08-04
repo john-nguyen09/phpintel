@@ -3,10 +3,10 @@ import { Identifier } from "../identifier";
 import { Constant } from "./constant";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class ClassConstant extends Symbol {
-    public name: Name;
+    public name: TypeName;
 
     private constant: Constant;
 
@@ -32,7 +32,7 @@ export class ClassConstant extends Symbol {
         return this.constant.value;
     }
 
-    get type(): Name {
+    get type(): TypeName {
         return this.constant.type;
     }
 }

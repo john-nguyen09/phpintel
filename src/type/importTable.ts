@@ -1,4 +1,4 @@
-import { Name } from './name';
+import { TypeName } from './name';
 
 export class ImportTable {
     private namespace: string = '';
@@ -23,7 +23,7 @@ export class ImportTable {
     }
 
     public getFqn(name: string) {
-        if (Name.isFullyQualifiedName(name)) {
+        if (TypeName.isFullyQualifiedName(name)) {
             return name;
         }
 

@@ -3,7 +3,8 @@ import { Token, TokenType } from 'php7parser';
 import { PhpDocument } from './phpDocument';
 import { nonenumerable } from '../util/decorator';
 import { DocBlock } from './docBlock';
-import { Name } from '../type/name';
+import { TypeName } from '../type/name';
+import { TypeComposite } from '../type/composite';
 
 export abstract class Symbol {
     @nonenumerable
@@ -52,7 +53,7 @@ export interface DocBlockConsumer {
 }
 
 export interface Reference {
-    type: Name;
+    type: TypeName | TypeComposite;
 }
 
 export interface ScopeMember {

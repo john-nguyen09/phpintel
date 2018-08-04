@@ -5,7 +5,8 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/*.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "compile-all": "tsc --watch --noEmit --project ."
   },
   "keywords": [
     "PHP",

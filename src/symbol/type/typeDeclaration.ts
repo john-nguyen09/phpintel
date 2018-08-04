@@ -1,13 +1,13 @@
 import { Symbol, Consumer, Reference } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 
 export class TypeDeclaration extends Symbol implements Consumer, Reference {
-    public type: Name = null;
+    public type: TypeName = null;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
-            this.type = new Name(other.name);
+            this.type = new TypeName(other.name);
 
             return true;
         }

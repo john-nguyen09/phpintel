@@ -1,15 +1,17 @@
-import { Symbol } from "../symbol";
+import { Symbol, DocBlockConsumer } from "../symbol";
 import { Function } from "./function";
 import { SymbolModifier } from "../meta/modifier";
 import { MethodHeader } from "./methodHeader";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
-import { Name } from "../../type/name";
+import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
+import { DocBlock } from "../docBlock";
 
-export class Method extends Symbol {
+export class Method extends Symbol implements DocBlockConsumer {
     public modifier: SymbolModifier = new SymbolModifier();
-    public name: Name = null;
+    public name: TypeName = null;
+    public description: string = '';
 
     @nonenumerable
     private func: Function = null;
@@ -29,6 +31,12 @@ export class Method extends Symbol {
         }
 
         return this.func.consume(other);;
+    }
+
+    consumeDocBlock(doc: DocBlock) {
+        this.func.consumeDocBlock(doc);
+
+        this.description = this.func.description;
     }
 
     get types() {
