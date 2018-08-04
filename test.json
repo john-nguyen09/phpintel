@@ -1,89 +1,32 @@
 PhpDocument {
-  uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/class_methods.php',
-  text: '<?php\r\n\r\nclass ClassWithMethod\r\n{\r\n    public $property1 = false;\r\n    public $property2;\r\n\r\n    /**\r\n     * Defines protected properties\r\n     * \r\n     * @var boolean $protected1 Description of boolean\r\n     * @var string $protected2 Description of string\r\n     * @var int $protected3 Description of int\r\n     */\r\n    protected $protected1, $protected2, $protected3;\r\n\r\n    protected $protectedProperty1;\r\n\r\n    /**\r\n     * A private proterty which is only used by this class\r\n     * \r\n     * @var ClassWithMethod This is a description\r\n     */\r\n    private $privateProperty1;\r\n\r\n    function __construct($optional = null) {\r\n\r\n    }\r\n\r\n    public function method1() {\r\n        return true;\r\n    }\r\n\r\n    public function method2() {\r\n        return [\r\n            \'abc1\',\r\n            \'abc2\'\r\n        ];\r\n    }\r\n\r\n    public function method3() {\r\n        return 5;\r\n    }\r\n\r\n    public function method4() {\r\n        return 3.14;\r\n    }\r\n\r\n    protected function protectedMethod1($firstParam) {\r\n\r\n    }\r\n\r\n    private function privateMethod1($first, $second, $optional1 = null, $optional2 = \'\') {\r\n        return null;\r\n    }\r\n}',
+  uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/doc_blocks.php',
+  text: '<?php\r\n\r\n/**\r\n * This is a class that has description\r\n */\r\nclass ClassWithDoc\r\n{\r\n    /**\r\n     * Description of $foo\r\n     * @var string\r\n     */\r\n    public $foo;\r\n\r\n    /**\r\n     * RGB code for blue sky color\r\n     * @var int\r\n     */\r\n    public $bluesky_color_code;\r\n\r\n    /**\r\n     * Get the rainbow color based on some preference\r\n     * @param  int $bluesky_color_code The blue sky color code\r\n     * @param  int $your_prefer_color  Your preference RGB color code\r\n     * @return int[]                     All possible RGB color codes of rainbow (length is 7)\r\n     */\r\n    public function getRainbowColors($bluesky_color_code, $your_prefer_color)\r\n    {\r\n\r\n    }\r\n\r\n    /**\r\n     * Calculate RGB color code based on red, green and blue\r\n     * @param  int $red   Red color range from 0-255\r\n     * @param  int $green\r\n     * @param  int $blue\r\n     * @return int\r\n     */\r\n    private function calculateRGBColor($red, $green, $blue)\r\n    {\r\n\r\n    }\r\n}\r\n',
   symbols: 
    [ Property {
-       name: '$property1',
+       name: '$foo',
        expression: Expression { realSymbol: null },
        modifier: SymbolModifier { modifier: 0, visibility: 1 },
-       type: 'bool' },
+       description: 'Description of $foo',
+       type: Name { isArray: false, name: 'string' } },
      Property {
-       name: '$property2',
+       name: '$bluesky_color_code',
        expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 1 } },
-     Property {
-       name: '$protected1',
-       expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 },
-       type: 'boolean' },
-     Property {
-       name: '$protected2',
-       expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 },
-       type: 'string' },
-     Property {
-       name: '$protected3',
-       expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 },
-       type: 'int' },
-     Property {
-       name: '$protectedProperty1',
-       expression: Expression { realSymbol: null },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 } },
-     Property {
-       name: '$privateProperty1',
-       expression: Expression { realSymbol: null },
+       modifier: SymbolModifier { modifier: 0, visibility: 1 },
+       description: 'RGB code for blue sky color',
+       type: Name { isArray: false, name: 'int' } },
+     Method {
+       modifier: SymbolModifier { modifier: 0, visibility: 1 },
+       name: Name { isArray: false, name: 'getRainbowColors' } },
+     Method {
        modifier: SymbolModifier { modifier: 0, visibility: 4 },
-       type: 'ClassWithMethod' },
-     Method {
-       name: '__construct',
-       parameters: [ [Object] ],
-       scopeVar: Scope { variables: [Object] },
-       typeAggregate: TypeAggregate { _types: [] },
-       modifier: null },
-     Method {
-       name: 'method1',
-       parameters: [],
-       scopeVar: Scope { variables: {} },
-       typeAggregate: TypeAggregate { _types: [Array] },
-       modifier: SymbolModifier { modifier: 0, visibility: 1 } },
-     Method {
-       name: 'method2',
-       parameters: [],
-       scopeVar: Scope { variables: {} },
-       typeAggregate: TypeAggregate { _types: [] },
-       modifier: SymbolModifier { modifier: 0, visibility: 1 } },
-     Method {
-       name: 'method3',
-       parameters: [],
-       scopeVar: Scope { variables: {} },
-       typeAggregate: TypeAggregate { _types: [Array] },
-       modifier: SymbolModifier { modifier: 0, visibility: 1 } },
-     Method {
-       name: 'method4',
-       parameters: [],
-       scopeVar: Scope { variables: {} },
-       typeAggregate: TypeAggregate { _types: [Array] },
-       modifier: SymbolModifier { modifier: 0, visibility: 1 } },
-     Method {
-       name: 'protectedMethod1',
-       parameters: [ [Object] ],
-       scopeVar: Scope { variables: [Object] },
-       typeAggregate: TypeAggregate { _types: [] },
-       modifier: SymbolModifier { modifier: 0, visibility: 2 } },
-     Method {
-       name: 'privateMethod1',
-       parameters: [ [Object], [Object], [Object], [Object] ],
-       scopeVar: Scope { variables: [Object] },
-       typeAggregate: TypeAggregate { _types: [Array] },
-       modifier: SymbolModifier { modifier: 0, visibility: 4 } },
+       name: Name { isArray: false, name: 'calculateRGBColor' } },
      Class {
-       name: 'ClassWithMethod',
-       extend: '',
+       name: Name { isArray: false, name: 'ClassWithDoc' },
+       extend: null,
        implements: [],
        modifier: SymbolModifier { modifier: 0 },
        traits: [],
        location: 
         Location {
-          uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/class_methods.php',
+          uri: 'file:///C:/Users/snowk/Development/phpintel/test/case/doc_blocks.php',
           range: [Object] } } ] }

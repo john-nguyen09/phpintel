@@ -50,7 +50,7 @@ export class SymbolParser {
 
     private realTraverse(node: TreeNode, depth: number) {
         this.preorder(node, depth);
-        
+
         if ('children' in node) {
             for (let child of node.children) {
                 this.realTraverse(child, depth + 1);
@@ -227,7 +227,6 @@ export class SymbolParser {
         }
 
         if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
-            console.log(symbol);
             symbol.consumeDocBlock(this.lastDocBlock);
 
             this.lastDocBlock = null;

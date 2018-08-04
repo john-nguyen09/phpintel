@@ -2,10 +2,11 @@ import { Symbol, TokenSymbol, Reference, Consumer } from "../symbol";
 import { TokenType } from "php7parser";
 import { TypeDeclaration } from "../type/typeDeclaration";
 import { Expression } from "../type/expression";
+import { Name } from "../../type/name";
 
 export class Parameter extends Symbol implements Consumer, Reference {
     public name: string = '';
-    public type: string = '';
+    public type: Name = null;
     public value: string = '';
 
     protected expression: Expression = null;
@@ -27,7 +28,7 @@ export class Parameter extends Symbol implements Consumer, Reference {
         } else if (this.expression != null) {
             this.expression.consume(other);
 
-            if (this.expression.type != '') {
+            if (this.expression.type != null) {
                 this.type = this.expression.type;
             }
 

@@ -1,6 +1,7 @@
 import { Symbol, Consumer } from "../symbol";
 import { Variable } from "./variable";
 import { Parameter } from "./parameter";
+import { Name } from "../../type/name";
 
 export class Scope extends Symbol implements Consumer {
     public variables: { [name: string]: Variable } = {};
@@ -23,11 +24,11 @@ export class Scope extends Symbol implements Consumer {
         this.variables[variable.name] = variable;
     }
 
-    getType(variableName: string) {
+    getType(variableName: string): Name {
         if (variableName in this.variables) {
             return this.variables[variableName].type;
         }
 
-        return '';
+        return null;
     }
 }

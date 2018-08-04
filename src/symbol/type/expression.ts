@@ -2,6 +2,7 @@ import { Symbol, TokenSymbol, TransformSymbol, Consumer, Reference } from "../sy
 import { ConstantAccess } from "../constant/constantAccess";
 import { TokenType } from "php7parser";
 import { ClassTypeDesignator } from "../class/typeDesignator";
+import { Name } from "../../type/name";
 
 export class Expression extends TransformSymbol implements Consumer, Reference {
     public realSymbol: Expression = null;
@@ -35,7 +36,7 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
         return this.getValue(this.currentSymbol);
     }
 
-    get type(): string {
+    get type(): Name {
         if (this.realSymbol) {
             return this.realSymbol.type;
         }
@@ -53,20 +54,21 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
         return '';
     }
 
-    protected getType(symbol: Symbol): string {
-        if (symbol instanceof ConstantAccess) {
+    protected getType(symbol: Symbol): Name {
+        if (
+            symbol instanceof ConstantAccess ||
+            symbol instanceof ClassTypeDesignator
+        ) {
             return symbol.type;
         } else if (symbol instanceof TokenSymbol) {
             let type = Expression.getTokenType(symbol.type);
 
             if (type) {
-                return type;
+                return new Name(type);
             }
-        } else if (symbol instanceof ClassTypeDesignator) {
-            return symbol.type;
         }
 
-        return '';
+        return null;
     }
 
     static hasTokenType(tokenType: TokenType): boolean {

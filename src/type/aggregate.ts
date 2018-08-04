@@ -1,13 +1,13 @@
-export class TypeAggregate {
-    protected _types: string[] = [];
+import { Name } from "./name";
 
-    push(type: string) {
-        if (this._types.indexOf(type) == -1) {
-            this._types.push(type);
-        }
+export class TypeAggregate {
+    protected _types: Name[] = [];
+
+    push(type: Name) {
+        this._types.push(type);
     }
 
-    get types(): string[] {
+    get types(): Name[] {
         return this._types;
     }
 }

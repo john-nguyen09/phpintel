@@ -1,17 +1,12 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol } from "../symbol";
 import { Identifier } from "../identifier";
-import { FunctionHeader } from "./functionHeader";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
+import { Name } from "../../type/name";
 
-export class MethodHeader extends FunctionHeader {
+export class MethodHeader extends Symbol {
+    public name: Name = null;
     public modifier: SymbolModifier = null;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-    }
 
     consume(other: Symbol): boolean {
         if (other instanceof Identifier) {

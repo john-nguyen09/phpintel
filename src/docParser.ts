@@ -34,8 +34,7 @@ export namespace DocParser {
             {
                 property: 'description',
                 parser: 'text',
-                optional: true,
-                default: ''
+                optional: true
             }
         ]
     };

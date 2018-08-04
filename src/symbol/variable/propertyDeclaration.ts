@@ -4,6 +4,7 @@ import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { DocBlock } from "../docBlock";
 import { VarDocNode } from "../../docParser";
+import { Name } from "../../type/name";
 
 export class PropertyDeclaration extends CollectionSymbol implements Consumer, DocBlockConsumer {
     public realSymbols: Property[] = [];
@@ -32,15 +33,28 @@ export class PropertyDeclaration extends CollectionSymbol implements Consumer, D
             let varDocNodes = docBlock.getNodes<VarDocNode>('var');
             let endIndex = Math.min(this.realSymbols.length, varDocNodes.length);
 
+            for (let symbol of this.realSymbols) {
+                symbol.description = docAst.summary;
+            }
+
             for (let i = 0; i < endIndex; i++) {
                 if (varDocNodes[i].variable == null) {
-                    this.realSymbols[i].type = varDocNodes[i].type.name;
+                    this.realSymbols[i].type = new Name(varDocNodes[i].type.name);
+                    console.log(varDocNodes[i].type);
+
+                    if (varDocNodes[i].description) {
+                        this.realSymbols[i].description = varDocNodes[i].description;
+                    }
                 } else {
                     let docVarName = '$' + varDocNodes[i].variable;
 
                     for (let variable of this.realSymbols) {
                         if (variable.name == docVarName) {
-                            variable.type = varDocNodes[i].type.name;
+                            variable.type = new Name(varDocNodes[i].type.name);
+
+                            if (varDocNodes[i].description) {
+                                variable.description = varDocNodes[i].description;
+                            }
                             break;
                         }
                     }

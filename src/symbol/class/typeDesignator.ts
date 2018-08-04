@@ -1,12 +1,13 @@
 import { Symbol, Reference, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
+import { Name } from "../../type/name";
 
 export class ClassTypeDesignator extends Symbol implements Reference, Consumer {
-    public type: string;
+    public type: Name;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
-            this.type = other.name;
+            this.type = new Name(other.name);
         }
 
         return false;

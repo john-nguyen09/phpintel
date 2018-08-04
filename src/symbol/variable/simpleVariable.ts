@@ -6,7 +6,7 @@ import { TokenType } from "php7parser";
 
 export class SimpleVariable extends Variable {
     constructor(public node: TreeNode, public doc: PhpDocument) {
-        super('', '');
+        super('', null);
     }
 
     consume(other: Symbol): boolean {

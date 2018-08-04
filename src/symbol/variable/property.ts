@@ -8,6 +8,7 @@ import { PhpDocument } from "../phpDocument";
 
 export class Property extends Variable {
     public modifier: SymbolModifier = null;
+    public description: string = '';
 
     constructor(public node: TreeNode, public doc: PhpDocument) {
         super('');

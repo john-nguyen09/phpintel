@@ -5,14 +5,15 @@ import { PhpDocument } from "../phpDocument";
 import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
+import { Name } from "../../type/name";
 
 export class Class extends Symbol implements Consumer {
-    public name: string = '';
-    public extend: string = '';
+    public name: Name = null;
+    public extend: Name = null;
     public location: Location;
-    public implements: string[] = [];
+    public implements: Name[] = [];
     public modifier: SymbolModifier = new SymbolModifier();
-    public traits: string[] = [];
+    public traits: Name[] = [];
 
     constructor(node: TreeNode, doc: PhpDocument) {
         super(node, doc);
@@ -23,7 +24,7 @@ export class Class extends Symbol implements Consumer {
     consume(other: Symbol) {
         if (other instanceof ClassHeader) {
             this.name = other.name;
-            this.extend = other.extend ? other.extend.name : '';
+            this.extend = other.extend ? other.extend.name : null;
             this.implements = other.implement ? other.implement.interfaces : [];
             this.modifier = other.modifier;
 

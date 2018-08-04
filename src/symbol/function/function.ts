@@ -7,9 +7,10 @@ import { Variable } from "../variable/variable";
 import { Expression } from "../type/expression";
 import { SimpleVariable } from "../variable/simpleVariable";
 import { TypeAggregate } from "../../type/aggregate";
+import { Name } from "../../type/name";
 
 export class Function extends Symbol implements Consumer {
-    public name: string = '';
+    public name: Name = null;
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
     public typeAggregate: TypeAggregate = new TypeAggregate();
@@ -43,7 +44,7 @@ export class Function extends Symbol implements Consumer {
         return false;
     }
 
-    get types(): string[] {
+    get types(): Name[] {
         return this.typeAggregate.types;
     }
 }

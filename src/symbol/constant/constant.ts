@@ -5,9 +5,10 @@ import { TokenType } from "php7parser";
 import { inspect } from "util";
 import { Location } from "../meta/location";
 import { PhpDocument } from "../phpDocument";
+import { Name } from "../../type/name";
 
 export class Constant extends Symbol implements Consumer, Reference {
-    public name: string = '';
+    public name: Name = null;
     public expression: Expression = null;
     public location: Location;
 
@@ -24,7 +25,7 @@ export class Constant extends Symbol implements Consumer, Reference {
         if (other instanceof TokenSymbol) {
             switch (other.type) {
                 case TokenType.Name:
-                    this.name = other.text;
+                    this.name = new Name(other.text);
                     break;
                 case TokenType.Equals:
                     this.hasEqual = true;

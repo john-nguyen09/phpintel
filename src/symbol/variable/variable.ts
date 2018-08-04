@@ -1,12 +1,13 @@
 import { Symbol, Consumer, Reference } from "../symbol";
 import { Expression } from "../type/expression";
+import { Name } from "../../type/name";
 
 export class Variable extends Symbol implements Consumer, Reference {
-    public type: string;
+    public type: Name;
 
     protected expression: Expression;
 
-    constructor(public name: string, type?: string) {
+    constructor(public name: string, type?: Name) {
         super(null, null);
 
         if (type) {
