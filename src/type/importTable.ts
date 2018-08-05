@@ -1,12 +1,13 @@
 import { TypeName } from './name';
+import { NamespaceName } from '../symbol/name/namespaceName';
 
 export class ImportTable {
-    private namespace: string = '';
+    private namespace: NamespaceName;
     private imports: {[key: string]: string} = {};
 
     constructor() { }
 
-    public setNamespace(namespace: string) {
+    public setNamespace(namespace: NamespaceName) {
         this.namespace = namespace;
     }
 
@@ -15,11 +16,13 @@ export class ImportTable {
             return part != '';
         });
 
-        if (!alias) {
+        if (alias == undefined) {
             alias = parts.pop();
         }
 
-        this.imports[alias] = '\\' + parts.join('\\');
+        if (alias != undefined) {
+            this.imports[alias] = '\\' + parts.join('\\');
+        }
     }
 
     public getFqn(name: string) {
@@ -31,10 +34,10 @@ export class ImportTable {
         let alias = parts.shift();
         let namespace: string;
 
-        if (alias in this.imports) {
+        if (alias != undefined && alias in this.imports) {
             namespace = this.imports[alias];
         } else {
-            namespace = this.namespace;
+            namespace = this.namespace != null ? this.namespace.fqn : '';
         }
 
         return namespace + (parts.length > 0 ? '\\' + parts.join('\\') : '');

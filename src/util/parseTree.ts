@@ -1,4 +1,4 @@
-import { Phrase, Token, TokenType, PhraseType } from 'php7parser';
+import { Phrase, Token } from 'php7parser';
 import { Position } from '../symbol/meta/position';
 import { Range } from '../symbol/meta/range';
 
@@ -51,12 +51,12 @@ export function nodeText(node: TreeNode, text: string): string {
     return text.slice(offset, endOffset);
 }
 
-export function firstToken(node: TreeNode): Token {
+export function firstToken(node: TreeNode): Token | null {
     if (isToken(node)) {
         return node as Token;
     }
 
-    let t: Token;
+    let t: Token | null;
     for (let n = 0, l = (<Phrase>node).children.length; n < l; ++n) {
         t = firstToken((<Phrase>node).children[n]);
         if (t !== null) {
@@ -67,12 +67,12 @@ export function firstToken(node: TreeNode): Token {
     return null;
 }
 
-export function lastToken(node: TreeNode): Token {
+export function lastToken(node: TreeNode): Token | null {
     if (isToken(node)) {
         return node as Token;
     }
 
-    let t: Token;
+    let t: Token | null;
     for (let n = (<Phrase>node).children.length - 1; n >= 0; --n) {
         t = lastToken((<Phrase>node).children[n]);
         if (t !== null) {
@@ -83,12 +83,10 @@ export function lastToken(node: TreeNode): Token {
     return null;
 }
 
-export function isToken(node: Phrase | Token, types?: TokenType[]): node is Token {
-    return node && (<Token>node).tokenType !== undefined &&
-        (!types || types.indexOf((<Token>node).tokenType) > -1);
+export function isToken(node: Phrase | Token): node is Token {
+    return node && (<Token>node).tokenType !== undefined;
 }
 
-export function isPhrase(node: Phrase | Token, types?: PhraseType[]): node is Phrase {
-    return node && (<Phrase>node).phraseType !== undefined &&
-        (!types || types.indexOf((<Phrase>node).phraseType) > -1);
+export function isPhrase(node: Phrase | Token): node is Phrase {
+    return node && (<Phrase>node).phraseType !== undefined;
 }

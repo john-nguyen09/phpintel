@@ -8,6 +8,24 @@ export class TypeComposite {
     }
 
     get types(): TypeName[] {
-        return this._types;
+        let result: TypeName[] = [];
+
+        for (let type of this._types) {
+            let doesContain = false;
+
+            for (let currType of result)  {
+                if (type.isSameAs(currType)) {
+                    doesContain = true;
+
+                    break;
+                }
+            }
+
+            if (!doesContain) {
+                result.push(type);
+            }
+        }
+
+        return result;
     }
 }

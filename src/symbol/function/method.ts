@@ -10,11 +10,11 @@ import { DocBlock } from "../docBlock";
 
 export class Method extends Symbol implements DocBlockConsumer {
     public modifier: SymbolModifier = new SymbolModifier();
-    public name: TypeName = null;
+    public name: TypeName;
     public description: string = '';
 
     @nonenumerable
-    private func: Function = null;
+    private func: Function;
 
     constructor(node: TreeNode, doc: PhpDocument) {
         super(node, doc);
@@ -41,5 +41,9 @@ export class Method extends Symbol implements DocBlockConsumer {
 
     get types() {
         return this.func.types;
+    }
+
+    get variables() {
+        return this.func.scopeVar.variables;
     }
 }

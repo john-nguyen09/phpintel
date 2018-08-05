@@ -1,11 +1,11 @@
 import { Symbol, TokenSymbol, TransformSymbol, Consumer, Reference } from "../symbol";
 import { ConstantAccess } from "../constant/constantAccess";
-import { TokenType } from "php7parser";
 import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";
+import { TokenKind } from "../../util/parser";
 
 export class Expression extends TransformSymbol implements Consumer, Reference {
-    public realSymbol: Expression = null;
+    public realSymbol: Expression;
 
     protected currentSymbol: Symbol;
 
@@ -17,7 +17,7 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
         if (this.realSymbol == null) {
             if (
                 !(other instanceof TokenSymbol) ||
-                Expression.hasTokenType(other.type)
+                Expression.tokenHasType(other.type)
             ) {
                 this.currentSymbol = other;
             }
@@ -28,7 +28,7 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
         return true;
     }
 
-    get value() {
+    get value(): string {
         if (this.realSymbol) {
             return this.realSymbol.value;
         }
@@ -61,30 +61,30 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
         ) {
             return symbol.type;
         } else if (symbol instanceof TokenSymbol) {
-            let type = Expression.getTokenType(symbol.type);
+            let type = Expression.getTypeOfToken(symbol.type);
 
             if (type) {
                 return new TypeName(type);
             }
         }
 
-        return null;
+        return new TypeName('');
     }
 
-    static hasTokenType(tokenType: TokenType): boolean {
-        return this.getTokenType(tokenType) != null;
+    static tokenHasType(tokenType: TokenKind): boolean {
+        return this.getTypeOfToken(tokenType) != '';
     }
 
-    static getTokenType(tokenType: TokenType): string {
+    static getTypeOfToken(tokenType: TokenKind): string {
         switch(tokenType) {
-            case TokenType.StringLiteral:
+            case TokenKind.StringLiteral:
                 return 'string';
-            case TokenType.IntegerLiteral:
+            case TokenKind.IntegerLiteral:
                 return 'int';
-            case TokenType.FloatingLiteral:
+            case TokenKind.FloatingLiteral:
                 return 'float';
         }
 
-        return null;
+        return '';
     }
 }

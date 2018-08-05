@@ -1,13 +1,13 @@
 import { Symbol, TokenSymbol } from "../symbol";
 import { Variable } from "./variable";
-import { TokenType } from "php7parser";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
+import { TokenKind } from "../../util/parser";
 
 export class Property extends Variable {
-    public modifier: SymbolModifier = null;
+    public modifier: SymbolModifier;
     public description: string = '';
 
     constructor(public node: TreeNode, public doc: PhpDocument) {
@@ -16,7 +16,7 @@ export class Property extends Variable {
 
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol) {
-            if (other.type == TokenType.VariableName) {
+            if (other.type == TokenKind.VariableName) {
                 this.name = other.text;
             }
         } else if (other instanceof PropertyInitialiser) {

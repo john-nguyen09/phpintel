@@ -1,24 +1,24 @@
 import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { ClassExtend } from "./extend";
 import { ClassImplement } from "./implement";
-import { TokenType } from "php7parser";
 import { SymbolModifier } from "../meta/modifier";
 import { TypeName } from "../../type/name";
+import { TokenKind } from "../../util/parser";
 
 export class ClassHeader extends Symbol implements Consumer {
-    public name: TypeName = null;
+    public name: TypeName;
     public modifier: SymbolModifier = new SymbolModifier();
-    public extend: ClassExtend = null;
-    public implement: ClassImplement = null;
+    public extend: ClassExtend;
+    public implement: ClassImplement;
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {
             switch (other.type) {
-                case TokenType.Name:
+                case TokenKind.Name:
                     this.name = new TypeName(other.text);
                     break;
-                case TokenType.Abstract:
-                case TokenType.Final:
+                case TokenKind.Abstract:
+                case TokenKind.Final:
                     this.modifier.consume(other);
                     break;
             }

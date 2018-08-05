@@ -29,6 +29,6 @@ export class Scope extends Symbol implements Consumer {
             return this.variables[variableName].type;
         }
 
-        return null;
+        return new TypeComposite();
     }
 }

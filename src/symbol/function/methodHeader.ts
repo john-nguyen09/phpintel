@@ -5,8 +5,8 @@ import { MemberModifierList } from "../class/memberModifierList";
 import { TypeName } from "../../type/name";
 
 export class MethodHeader extends Symbol {
-    public name: TypeName = null;
-    public modifier: SymbolModifier = null;
+    public name: TypeName;
+    public modifier: SymbolModifier;
 
     consume(other: Symbol): boolean {
         if (other instanceof Identifier) {

@@ -1,23 +1,26 @@
 import URI from 'vscode-uri/lib/umd';
+import * as path from 'path';
 
 export function pathToUri(filePath: string): string {
-    filePath = filePath.split('\\').join('/').trim();
-    let parts = filePath.split('/');
-    // Don't %-encode the colon after a Windows drive letter
-    let first = parts.shift();
-    if (first.substr(-1) !== ':') {
-        first = encodeURIComponent(first);
+    filePath = path.resolve(filePath).replace(/\\/g, '/');
+
+    if (filePath[0] != '/') {
+        filePath = '/' + filePath;
     }
-    parts = parts.map((part) => {
-        return encodeURIComponent(part);
-    });
-    parts.unshift(first);
-    filePath = parts.join('/');
     
-    return 'file:///' + filePath;
+    return encodeURI('file://' + filePath);
 }
 
-export function uriToPath(uri: string)
-{
+export function uriToPath(uri: string) {
     return URI.parse(uri).fsPath;
+}
+
+export function toRelative(uri: string) {
+    let baseUri = pathToUri(path.resolve(__dirname, '..' , '..'));
+
+    if (uri.indexOf(baseUri) === 0) {
+        return uri.substr(baseUri.length + 1);
+    }
+
+    return uri;
 }

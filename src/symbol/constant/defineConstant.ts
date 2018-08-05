@@ -1,17 +1,17 @@
 import { Symbol, TokenSymbol } from "../symbol";
 import { ArgumentExpressionList } from "../argumentExpressionList";
-import { TokenType } from "php7parser";
 import { Constant } from "./constant";
 import { PhpDocument } from "../phpDocument";
 import { TreeNode } from "../../util/parseTree";
 import { TypeName } from "../../type/name";
+import { TokenKind } from "../../util/parser";
 
 export class DefineConstant extends Symbol {
-    public name: TypeName = null;
+    public name: TypeName;
 
-    private constant: Constant = null;
+    private constant: Constant;
 
-    constructor(node: TreeNode, doc: PhpDocument) {
+    constructor(node: TreeNode | null, doc: PhpDocument | null) {
         super(node, doc);
 
         this.constant = new Constant(node, doc);
@@ -25,7 +25,7 @@ export class DefineConstant extends Symbol {
 
                 if (
                     firstArg instanceof TokenSymbol &&
-                    firstArg.type == TokenType.StringLiteral
+                    firstArg.type == TokenKind.StringLiteral
                 ) {
                     this.name = new TypeName(firstArg.text.slice(1, -1)); // remove quotes
                 }

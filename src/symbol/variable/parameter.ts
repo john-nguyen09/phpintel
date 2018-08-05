@@ -1,23 +1,23 @@
 import { Symbol, TokenSymbol, Reference, Consumer } from "../symbol";
-import { TokenType } from "php7parser";
 import { TypeDeclaration } from "../type/typeDeclaration";
 import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
+import { TokenKind } from "../../util/parser";
 
 export class Parameter extends Symbol implements Consumer, Reference {
     public name: string = '';
     public type: TypeComposite = new TypeComposite();
     public value: string = '';
 
-    protected expression: Expression = null;
+    protected expression: Expression;
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {
             switch (other.type) {
-                case TokenType.VariableName:
+                case TokenKind.VariableName:
                     this.name = other.text;
                     break;
-                case TokenType.Equals:
+                case TokenKind.Equals:
                     this.expression = new Expression(other.node, this.doc);
                     break;
             }

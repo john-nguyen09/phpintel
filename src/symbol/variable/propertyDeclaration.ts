@@ -8,7 +8,7 @@ import { TypeName } from "../../type/name";
 
 export class PropertyDeclaration extends CollectionSymbol implements Consumer, DocBlockConsumer {
     public realSymbols: Property[] = [];
-    public modifier: SymbolModifier = null;
+    public modifier: SymbolModifier;
 
     consume(other: Symbol): boolean {
         if (other instanceof MemberModifierList) {

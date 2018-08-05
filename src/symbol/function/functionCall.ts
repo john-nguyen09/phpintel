@@ -5,9 +5,9 @@ import { ArgumentExpressionList } from "../argumentExpressionList";
 import { TypeName } from "../../type/name";
 
 export class FunctionCall extends TransformSymbol implements Consumer, Reference {
-    public realSymbol: (Symbol & Consumer) = null;
+    public realSymbol: (Symbol & Consumer);
     public type: TypeName;
-    public argumentList: ArgumentExpressionList = null;
+    public argumentList: ArgumentExpressionList;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

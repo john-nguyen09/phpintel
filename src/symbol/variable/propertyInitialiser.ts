@@ -2,7 +2,7 @@ import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Expression } from "../type/expression";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
-import { TokenType } from "php7parser";
+import { TokenKind } from "../../util/parser";
 
 export class PropertyInitialiser extends Symbol implements Consumer {
     public expression: Expression;
@@ -18,11 +18,11 @@ export class PropertyInitialiser extends Symbol implements Consumer {
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {
-            if (other.type == TokenType.Equals && !this.hasFirstEqual) {
+            if (other.type == TokenKind.Equals && !this.hasFirstEqual) {
                 this.hasFirstEqual = true;
                 
                 return true;
-            } else if (other.type == TokenType.Whitespace && !this.hasInitialWhitespaces) {
+            } else if (other.type == TokenKind.Whitespace && !this.hasInitialWhitespaces) {
                 return true;
             } else {
                 this.hasInitialWhitespaces = true;

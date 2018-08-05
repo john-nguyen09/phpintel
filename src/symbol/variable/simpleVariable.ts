@@ -2,16 +2,16 @@ import { Variable } from "./variable";
 import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
 import { Symbol, TokenSymbol } from "../symbol";
-import { TokenType } from "php7parser";
+import { TokenKind } from "../../util/parser";
 
 export class SimpleVariable extends Variable {
     constructor(public node: TreeNode, public doc: PhpDocument) {
-        super('', null);
+        super('', undefined);
     }
 
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol) {
-            if (other.type == TokenType.VariableName) {
+            if (other.type == TokenKind.VariableName) {
                 this.name = other.text;
             }
         }

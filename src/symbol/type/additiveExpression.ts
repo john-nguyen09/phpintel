@@ -1,7 +1,7 @@
 import { Symbol, TokenSymbol, Consumer } from "../symbol";
-import { TokenType } from "php7parser";
 import { Expression } from "./expression";
 import { TypeName } from "../../type/name";
+import { TokenKind } from "../../util/parser";
 
 export class AdditiveExpression extends Expression implements Consumer {
     protected valueSymbols: Symbol[] = [];
@@ -20,10 +20,10 @@ export class AdditiveExpression extends Expression implements Consumer {
             if (value instanceof TokenSymbol) {
                 if (
                     // This is a string
-                    value.type == TokenType.StringLiteral ||
+                    value.type == TokenKind.StringLiteral ||
                     // Or a string concat token
                     (
-                        (value.type == TokenType.Whitespace || value.type == TokenType.Dot) &&
+                        (value.type == TokenKind.Whitespace || value.type == TokenKind.Dot) &&
                         stringValues.length != 0
                     )
                 ) {
@@ -58,7 +58,7 @@ export class AdditiveExpression extends Expression implements Consumer {
             return this.getType(firstValue);
         }
 
-        return null;
+        return new TypeName('');
     }
 
     private concatStrings(stringValues: TokenSymbol[]): string {
@@ -68,7 +68,7 @@ export class AdditiveExpression extends Expression implements Consumer {
 
         let quote = stringValues[0].text.slice(0, 1);
         let result: string = '';
-        let isConcatString = stringValues[stringValues.length - 1].type == TokenType.StringLiteral;
+        let isConcatString = stringValues[stringValues.length - 1].type == TokenKind.StringLiteral;
 
         if (isConcatString) {
             result += quote;
@@ -77,12 +77,12 @@ export class AdditiveExpression extends Expression implements Consumer {
         for (let stringValue of stringValues) {
             if (
                 isConcatString &&
-                (stringValue.type == TokenType.Dot || stringValue.type == TokenType.Whitespace)
+                (stringValue.type == TokenKind.Dot || stringValue.type == TokenKind.Whitespace)
             ) {
                 continue;
             }
 
-            if (isConcatString && stringValue.type == TokenType.StringLiteral) {
+            if (isConcatString && stringValue.type == TokenKind.StringLiteral) {
                 result += stringValue.text.slice(1, -1);
             } else {
                 result += stringValue.text;

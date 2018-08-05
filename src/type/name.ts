@@ -27,7 +27,7 @@ export class TypeName {
     }
 
     public resolveToFullyQualified(importTable: ImportTable) {
-        return importTable.getFqn(this.name);
+        this.name = importTable.getFqn(this.name);
     }
 
     public static isFullyQualifiedName(typeName: string): boolean {
@@ -39,6 +39,10 @@ export class TypeName {
     }
 
     public toString(): string {
-        return this.name;
+        return this.name + (this.isArray ? '[]' : '');
+    }
+
+    public isSameAs(other: TypeName): boolean {
+        return (this.isArray == other.isArray) && this.name == other.name
     }
 }

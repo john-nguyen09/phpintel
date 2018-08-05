@@ -3,7 +3,7 @@ import { QualifiedName } from "../name/qualifiedName";
 import { TypeName } from "../../type/name";
 
 export class TypeDeclaration extends Symbol implements Consumer, Reference {
-    public type: TypeName = null;
+    public type: TypeName;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

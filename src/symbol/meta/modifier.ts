@@ -1,5 +1,5 @@
 import { Consumer, Symbol, TokenSymbol } from "../symbol";
-import { TokenType } from "php7parser";
+import { TokenKind } from "../../util/parser";
 
 export class SymbolModifier implements Consumer {
     static readonly NONE = 0;
@@ -10,7 +10,7 @@ export class SymbolModifier implements Consumer {
     static readonly ABSTRACT = 1 << 4;
     static readonly STATIC = 1 << 5;
 
-    private visibility: number;
+    private visibility: number = SymbolModifier.NONE;
     private modifier: number;
 
     constructor(modifier?: number, visibility?: number) {
@@ -48,19 +48,19 @@ export class SymbolModifier implements Consumer {
         }
 
         switch (token.type) {
-            case TokenType.Public:
+            case TokenKind.Public:
                 this.include(SymbolModifier.PUBLIC);
                 break;
-            case TokenType.Protected:
+            case TokenKind.Protected:
                 this.include(SymbolModifier.PROTECTED);
                 break;
-            case TokenType.Private:
+            case TokenKind.Private:
                 this.include(SymbolModifier.PRIVATE);
                 break;
-            case TokenType.Abstract:
+            case TokenKind.Abstract:
                 this.include(SymbolModifier.ABSTRACT);
                 break;
-            case TokenType.Final:
+            case TokenKind.Final:
                 this.include(SymbolModifier.FINAL);
                 break;
         }

@@ -9,10 +9,10 @@ import { SimpleVariable } from "../variable/simpleVariable";
 import { TypeComposite } from "../../type/composite";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
-import { DocNode, ParamDocNode } from "../../docParser";
+import { ParamDocNode, DocNodeKind } from "../../docParser";
 
 export class Function extends Symbol implements Consumer, DocBlockConsumer {
-    public name: TypeName = null;
+    public name: TypeName;
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
     public typeAggregate: TypeComposite = new TypeComposite();
@@ -63,7 +63,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer {
         this.description = docAst.summary;
 
         for (let docNode of docAst.body) {
-            if (DocBlock.isType<ParamDocNode>(docNode, 'param')) {
+            if (DocBlock.isType<ParamDocNode>(docNode, DocNodeKind.Param)) {
                 this.docParamTypes['$' + docNode.name] = new TypeName(docNode.type.name);
             }
         }

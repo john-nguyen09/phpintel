@@ -4,7 +4,7 @@
   "description": "A static analyser for PHP",
   "main": "lib/server.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/*.ts",
+    "test": "jest",
     "build": "tsc",
     "compile-all": "tsc --watch --noEmit --project ."
   },
@@ -24,9 +24,12 @@
     "vscode-uri": "^1.0.5"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.1",
     "@types/node": "^10.5.2",
     "chai": "^4.1.2",
+    "jest": "^23.4.2",
     "mocha": "^5.2.0",
+    "ts-jest": "^23.1.2",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
   }

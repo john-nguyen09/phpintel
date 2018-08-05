@@ -1,13 +1,13 @@
 import { Symbol, TokenSymbol, Consumer } from "./symbol";
-import { TokenType } from "php7parser";
 import { TypeName } from "../type/name";
+import { TokenKind } from "../util/parser";
 
 export class Identifier extends Symbol implements Consumer {
-    public name: TypeName = null;
+    public name: TypeName;
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {
-            if (other.type == TokenType.Name) {
+            if (other.type == TokenKind.Name) {
                 this.name = new TypeName(other.text);
 
                 return true;

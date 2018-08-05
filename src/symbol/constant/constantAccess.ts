@@ -10,7 +10,7 @@ export class ConstantAccess extends Symbol implements Consumer, Reference {
     };
 
     public value: string = '';
-    public type: TypeName = null;
+    public type: TypeName;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

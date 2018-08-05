@@ -3,7 +3,7 @@ import { QualifiedName } from "../name/qualifiedName";
 import { TypeName } from "../../type/name";
 
 export class ClassExtend extends Symbol implements Consumer {
-    public name: TypeName = null;
+    public name: TypeName;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

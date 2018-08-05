@@ -8,8 +8,8 @@ import { ClassHeader } from "./header";
 import { TypeName } from "../../type/name";
 
 export class Class extends Symbol implements Consumer {
-    public name: TypeName = null;
-    public extend: TypeName = null;
+    public name: TypeName;
+    public extend: TypeName | null;
     public location: Location;
     public implements: TypeName[] = [];
     public modifier: SymbolModifier = new SymbolModifier();

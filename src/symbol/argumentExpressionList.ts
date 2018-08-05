@@ -1,5 +1,5 @@
 import { Symbol, TokenSymbol, Consumer } from "./symbol";
-import { TokenType } from "php7parser";
+import { TokenKind } from "../util/parser";
 
 export class ArgumentExpressionList extends Symbol implements Consumer {
     public arguments: Symbol[] = [];
@@ -9,7 +9,7 @@ export class ArgumentExpressionList extends Symbol implements Consumer {
 
         if (
             other instanceof TokenSymbol &&
-            (other.type == TokenType.Comma || other.type == TokenType.Whitespace)
+            (other.type == TokenKind.Comma || other.type == TokenKind.Whitespace)
         ) {
             isCommaOrWhitespace = true;
         }

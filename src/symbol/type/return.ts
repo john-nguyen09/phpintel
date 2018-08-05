@@ -1,10 +1,10 @@
 import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Variable } from "../variable/variable";
 import { Expression } from "./expression";
-import { TokenType } from "php7parser";
+import { TokenKind } from "../../util/parser";
 
 export class Return extends Symbol implements Consumer {
-    public returnSymbol: Symbol = null;
+    public returnSymbol: Symbol;
 
     protected expression: Expression;
 
@@ -12,9 +12,9 @@ export class Return extends Symbol implements Consumer {
         if (
             other instanceof TokenSymbol &&
             (
-                other.type == TokenType.Return ||
-                other.type == TokenType.Whitespace ||
-                other.type == TokenType.Semicolon
+                other.type == TokenKind.Return ||
+                other.type == TokenKind.Whitespace ||
+                other.type == TokenKind.Semicolon
             )
         ) {
             return true;
