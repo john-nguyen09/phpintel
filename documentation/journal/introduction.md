@@ -5,6 +5,7 @@
 - Order by date of introduction descendant
 
 **Journals**
+- [5 August 2018](2018-08-05.md)
 - [4 August 2018](2018-08-04.md)
 - [1 August 2018](2018-08-01.md)
 - [22 July 2018](2018-07-22.md)
