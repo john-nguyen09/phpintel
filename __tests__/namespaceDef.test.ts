@@ -1,10 +1,9 @@
 import { SymbolParser } from "../src/symbolParser";
 import { PhpDocument } from "../src/symbol/phpDocument";
-import { pathToUri } from "../src/util/uri";
+import { pathToUri, toRelative } from "../src/util/uri";
 import * as path from 'path';
 import * as fs from 'fs';
-import { Parser } from "php7parser";
-import { inspect } from "util";
+import { Parser, phraseTypeToString, tokenTypeToString } from "php7parser";
 
 describe('namespaceDef', () => {
     it('should assign namespace to phpDocument', () => {
@@ -21,8 +20,33 @@ describe('namespaceDef', () => {
                     fileUri,
                     fileContent
                 ));
+                let parseTree = Parser.parse(fileContent);
+                
+                fs.writeFile(
+                    path.resolve(__dirname, '..', 'debug', file + '.ast.json'),
+                    JSON.stringify(parseTree, (key, value) => {
+                        if (key == 'modeStack') {
+                            return undefined;
+                        }
+        
+                        if (key == 'phraseType') {
+                            return phraseTypeToString(value);
+                        }
+        
+                        if (key == 'tokenType') {
+                            return tokenTypeToString(value);
+                        }
+        
+                        return value;
+                    }, 2),
+                    (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    }
+                );
 
-                symbolParser.traverse(Parser.parse(fileContent));
+                symbolParser.traverse(parseTree);
 
                 expect(symbolParser.getTree().toObject()).toMatchSnapshot();
             }

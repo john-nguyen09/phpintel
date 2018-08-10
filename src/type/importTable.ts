@@ -31,7 +31,7 @@ export class ImportTable {
         }
 
         let parts = name.split('\\');
-        let alias = parts.shift();
+        let alias = parts[0];
         let namespace: string;
 
         if (alias != undefined && alias in this.imports) {

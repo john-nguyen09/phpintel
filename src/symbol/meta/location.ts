@@ -1,16 +1,17 @@
 import { Range } from "./range";
 import { toRelative } from "../../util/uri";
+import { FieldGetter } from "../../fieldGetter";
 
-export class Location {
+export class Location implements FieldGetter {
     constructor(public uri: string, public range: Range) { }
 
-    toObject(): any {
-        Object.prototype.constructor = this.constructor;
-        let object: any = new Object();
-        
-        object.uri = toRelative(this.uri);
-        object.range = this.range;
+    get relativeUri(): string {
+        return toRelative(this.uri);
+    }
 
-        return object;
+    getFields(): string[] {
+        return [
+            'relativeUri', 'range'
+        ];
     }
 }

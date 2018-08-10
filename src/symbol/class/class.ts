@@ -28,6 +28,10 @@ export class Class extends Symbol implements Consumer {
             this.implements = other.implement ? other.implement.interfaces : [];
             this.modifier = other.modifier;
 
+            if (this.doc != null) {
+                this.name.resolveToFullyQualified(this.doc.importTable);
+            }
+
             return true;
         } else if (other instanceof ClassTraitUse) {
             for (let name of other.names) {

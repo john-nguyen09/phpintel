@@ -6,6 +6,7 @@ import { DocBlock } from './docBlock';
 import { TypeName } from '../type/name';
 import { TypeComposite } from '../type/composite';
 import { TokenKind } from '../util/parser';
+import { isFieldGetter, FieldGetter } from '../fieldGetter';
 import { createObject } from '../util/genericObject';
 
 export abstract class Symbol {
@@ -21,29 +22,57 @@ export abstract class Symbol {
     }
 
     toObject(): any {
-        let object: any = createObject((<any>this).constructor);
+        let instance = this;
+        let object: any = createObject((<any>instance).constructor);
+
+        if (isFieldGetter(instance)) {
+            this.assignFieldGetter(object, instance);
+
+            return object;
+        }
 
         for (let key in this) {
             let value: any = this[key];
 
-            if (value instanceof Object && 'toObject' in value && typeof value.toObject == 'function') {
-                object[key] = value.toObject();
-            } else if (value instanceof Array) {
+            if (value instanceof Array) {
                 object[key] = [];
 
                 for (let child of value) {
-                    if ('toObject' in child) {
-                        object[key] = child.toObject();
-                    } else {
-                        object[key].push(child);
-                    }
+                    object[key].push(this.createNewObject(child));
                 }
             } else {
-                object[key] = value;
+                object[key] = this.createNewObject(value);
             }
         }
 
         return object;
+    }
+
+    private assignFieldGetter(object: any, fieldGetter: FieldGetter) {
+        let fields = fieldGetter.getFields();
+
+        for (let key of fields) {
+            object[key] = (<any>fieldGetter)[key];
+        }
+    }
+
+    private createNewObject(currObj: any): any {
+        if (currObj instanceof Object) {
+            let newObj: any;
+
+            if ('toObject' in currObj && typeof currObj.toObject == 'function') {
+                newObj = currObj.toObject();
+            } else if (isFieldGetter(currObj)) {
+                newObj = createObject(currObj.constructor);
+                this.assignFieldGetter(newObj, currObj);
+            } else {
+                newObj = currObj;
+            }
+
+            return newObj;
+        }
+
+        return currObj;
     }
 }
 

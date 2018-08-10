@@ -5,8 +5,9 @@ import { PhpDocument } from "../phpDocument";
 import { TreeNode } from "../../util/parseTree";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
+import { FieldGetter } from "../../fieldGetter";
 
-export class DefineConstant extends Symbol {
+export class DefineConstant extends Symbol implements FieldGetter {
     public name: TypeName;
 
     private constant: Constant;
@@ -31,6 +32,10 @@ export class DefineConstant extends Symbol {
                 }
 
                 this.constant.consume(args[1]);
+
+                if (this.doc != null) {
+                    this.name.resolveToFullyQualified(this.doc.importTable);
+                }
             }
 
             return true;
@@ -45,5 +50,9 @@ export class DefineConstant extends Symbol {
 
     get type(): TypeName {
         return this.constant.type;
+    }
+
+    getFields(): string[] {
+        return ['name', 'value', 'type'];
     }
 }

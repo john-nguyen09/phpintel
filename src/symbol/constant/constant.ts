@@ -6,8 +6,9 @@ import { Location } from "../meta/location";
 import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
+import { FieldGetter } from "../../fieldGetter";
 
-export class Constant extends Symbol implements Consumer, Reference {
+export class Constant extends Symbol implements Consumer, Reference, FieldGetter {
     public name: TypeName;
     public expression: Expression;
     public location: Location;
@@ -28,6 +29,11 @@ export class Constant extends Symbol implements Consumer, Reference {
             switch (other.type) {
                 case TokenKind.Name:
                     this.name = new TypeName(other.text);
+
+                    if (this.doc != null) {
+                        this.name.resolveToFullyQualified(this.doc.importTable);
+                    }
+
                     break;
                 case TokenKind.Equals:
                     this.hasEqual = true;
@@ -65,21 +71,8 @@ export class Constant extends Symbol implements Consumer, Reference {
     get type() {
         return this.expression.type;
     }
-
-    inspect(depth: number, options: any) {
-        if (depth < 0) {
-            return options.stylize(`[${(<any>this).constructor.name}]`, 'special');
-        }
-
-        const newObj = {
-            name: this.name,
-            location: this.location,
-            value: this.value,
-            type: this.type
-        }
-        
-        const inner = inspect(newObj, options);
-
-        return `${options.stylize((<any>this).constructor.name, 'special')} ${inner}`;
+    
+    getFields(): string[] {
+        return ['name', 'value', 'type'];
     }
 }

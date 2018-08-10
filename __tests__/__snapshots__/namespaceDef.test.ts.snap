@@ -3,241 +3,270 @@
 exports[`namespaceDef should assign namespace to phpDocument 1`] = `
 PhpDocument {
   "importTable": ImportTable {
-    "imports": Location {},
+    "imports": Object {},
     "namespace": NamespaceName {
       "parts": Array [
         "NamespaceDef",
       ],
     },
   },
-  "symbols": Class {
-    "extend": null,
-    "implements": Array [],
-    "location": Location {
-      "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 5,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 3,
-        },
-      },
-      "uri": "case/namespaceDef/class.php",
-    },
-    "modifier": SymbolModifier {
-      "modifier": 0,
-      "visibility": 0,
-    },
-    "name": TypeName {
-      "isArray": false,
-      "name": "TestClassNamespace1",
-    },
-    "traits": Array [],
-  },
-}
-`;
-
-exports[`namespaceDef should assign namespace to phpDocument 2`] = `
-PhpDocument {
-  "importTable": ImportTable {
-    "imports": Location {},
-    "namespace": NamespaceName {
-      "parts": Array [
-        "NamespaceDef",
-      ],
-    },
-  },
-  "symbols": Constant {
-    "acceptWhitespace": true,
-    "expression": Expression {
-      "currentSymbol": TokenSymbol {
-        "text": "3.14",
-      },
-    },
-    "hasEqual": true,
-    "location": Location {
-      "range": Range {
-        "end": Position {
-          "character": 15,
-          "line": 3,
-        },
-        "start": Position {
-          "character": 6,
-          "line": 3,
-        },
-      },
-      "uri": "case/namespaceDef/constant.php",
-    },
-    "name": TypeName {
-      "isArray": false,
-      "name": "PI",
-    },
-  },
-}
-`;
-
-exports[`namespaceDef should assign namespace to phpDocument 3`] = `
-PhpDocument {
-  "importTable": ImportTable {
-    "imports": Location {},
-    "namespace": NamespaceName {
-      "parts": Array [
-        "NamespaceDef",
-      ],
-    },
-  },
-  "symbols": DefineConstant {
-    "constant": Constant {
-      "acceptWhitespace": true,
-      "expression": Expression {
-        "currentSymbol": TokenSymbol {
-          "text": "'Hello world!!!'",
-        },
-      },
-      "hasEqual": false,
+  "symbols": Array [
+    Class {
+      "extend": null,
+      "implements": Array [],
       "location": Location {
         "range": Range {
           "end": Position {
-            "character": 40,
-            "line": 3,
+            "character": 1,
+            "line": 5,
           },
           "start": Position {
             "character": 0,
             "line": 3,
           },
         },
-        "uri": "case/namespaceDef/defineConst.php",
+        "relativeUri": "case/namespaceDef/class.php",
       },
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+      },
+      "traits": Array [],
     },
-    "name": TypeName {
-      "isArray": false,
-      "name": "DEFINE_CONST",
-    },
-  },
+  ],
 }
 `;
 
-exports[`namespaceDef should assign namespace to phpDocument 4`] = `
+exports[`namespaceDef should assign namespace to phpDocument 2`] = `
 PhpDocument {
   "importTable": ImportTable {
-    "imports": Location {},
+    "imports": Object {},
     "namespace": NamespaceName {
       "parts": Array [
         "NamespaceDef",
       ],
     },
   },
-  "symbols": Function {
-    "description": "",
-    "docParamTypes": Location {
-      "$null": TypeName {
+  "symbols": Array [
+    Constant {
+      "name": TypeName {
         "isArray": false,
-        "name": "boolean",
+        "name": "\\\\NamespaceDef\\\\PI",
       },
-      "$param1": TypeName {
+      "type": TypeName {
         "isArray": false,
-        "name": "TestClassNamespace1",
+        "name": "float",
       },
-      "$param2": TypeName {
+      "value": "3.14",
+    },
+  ],
+}
+`;
+
+exports[`namespaceDef should assign namespace to phpDocument 3`] = `
+PhpDocument {
+  "importTable": ImportTable {
+    "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [
+        "NamespaceDef",
+      ],
+    },
+  },
+  "symbols": Array [
+    DefineConstant {
+      "name": TypeName {
         "isArray": false,
-        "name": "FullyQualified\\\\Name\\\\Class",
+        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
       },
-    },
-    "name": TypeName {
-      "isArray": false,
-      "name": "function_with_namespace",
-    },
-    "parameters": Parameter {
-      "name": "$param3",
-      "type": TypeComposite {
-        "_types": Array [
-          TypeName {
-            "isArray": false,
-            "name": "bool",
-          },
-        ],
+      "type": TypeName {
+        "isArray": false,
+        "name": "string",
       },
-      "value": "",
+      "value": "'Hello world!!!'",
     },
-    "scopeVar": Scope {
-      "variables": Location {
-        "$param1": Variable {
-          "expression": Expression {},
+  ],
+}
+`;
+
+exports[`namespaceDef should assign namespace to phpDocument 4`] = `
+PhpDocument {
+  "importTable": ImportTable {
+    "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [
+        "NamespaceDef",
+      ],
+    },
+  },
+  "symbols": Array [
+    Function {
+      "description": "",
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\NamespaceDef\\\\function_with_namespace",
+      },
+      "parameters": Array [
+        Parameter {
           "name": "$param1",
           "type": TypeComposite {
             "_types": Array [
               TypeName {
                 "isArray": false,
-                "name": "TestClassNamespace1",
+                "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
           },
+          "value": "",
         },
-        "$param2": Variable {
-          "expression": Expression {},
+        Parameter {
           "name": "$param2",
           "type": TypeComposite {
             "_types": Array [
               TypeName {
                 "isArray": false,
-                "name": "FullyQualified\\\\Name\\\\Class",
+                "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
           },
+          "value": "",
         },
-        "$param3": Variable {
-          "expression": Expression {},
+        Parameter {
           "name": "$param3",
           "type": TypeComposite {
             "_types": Array [
               TypeName {
                 "isArray": false,
-                "name": "bool",
+                "name": "boolean",
               },
             ],
           },
+          "value": "",
         },
-        "$var1": SimpleVariable {
-          "expression": Expression {},
-          "name": "$var1",
-          "type": TypeComposite {
-            "_types": Array [],
+      ],
+      "scopeVar": Scope {
+        "variables": Object {
+          "$param1": Variable {
+            "expression": Expression {},
+            "name": "$param1",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+                },
+              ],
+            },
           },
-        },
-        "$var2": SimpleVariable {
-          "expression": Expression {},
-          "name": "$var2",
-          "type": TypeComposite {
-            "_types": Array [],
+          "$param2": Variable {
+            "expression": Expression {},
+            "name": "$param2",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "\\\\FullyQualified\\\\Name\\\\Class",
+                },
+              ],
+            },
           },
-        },
-        "$var3": SimpleVariable {
-          "expression": Expression {},
-          "name": "$var3",
-          "type": TypeComposite {
-            "_types": Array [],
+          "$param3": Variable {
+            "expression": Expression {},
+            "name": "$param3",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "boolean",
+                },
+              ],
+            },
+          },
+          "$var1": SimpleVariable {
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "type": TypeName {
+                  "isArray": false,
+                  "name": "boolean",
+                },
+                "value": "false",
+              },
+            },
+            "name": "$var1",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "boolean",
+                },
+              ],
+            },
+          },
+          "$var2": SimpleVariable {
+            "expression": Expression {
+              "currentSymbol": TokenSymbol {
+                "text": "'abc'",
+              },
+            },
+            "name": "$var2",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "string",
+                },
+              ],
+            },
+          },
+          "$var3": SimpleVariable {
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "type": TypeName {
+                  "isArray": false,
+                  "name": "CONSTANT_IN_NAMESPACE",
+                },
+                "value": "CONSTANT_IN_NAMESPACE",
+              },
+            },
+            "name": "$var3",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "CONSTANT_IN_NAMESPACE",
+                },
+              ],
+            },
           },
         },
       },
-    },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
+      "types": Array [
         TypeName {
           "isArray": false,
-          "name": "TestClassNamespace1",
+          "name": "CONSTANT_IN_NAMESPACE",
         },
         TypeName {
           "isArray": false,
-          "name": "FullyQualified\\\\Name\\\\Class",
+          "name": "string",
         },
         TypeName {
           "isArray": false,
-          "name": "bool",
+          "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "\\\\FullyQualified\\\\Name\\\\Class",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "boolean",
         },
       ],
     },
-  },
+  ],
 }
 `;

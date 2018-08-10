@@ -20,7 +20,9 @@ export class Variable extends Symbol implements Consumer, Reference {
     consume(other: Symbol) {
         let result = this.expression.consume(other);
 
-        this.type.push(this.expression.type);
+        if (!this.expression.type.isEmptyName()) {
+            this.type.push(this.expression.type);
+        }
 
         return result;
     }

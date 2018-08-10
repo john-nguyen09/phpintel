@@ -9,6 +9,12 @@ export class TypeName {
         'string'
     ];
 
+    public static readonly ALIASES: {[alias: string]: string} = {
+        'bool': 'boolean',
+        'double': 'float',
+        'integer': 'int'
+    };
+
     private name: string;
     private isArray: boolean = false;
 
@@ -24,6 +30,10 @@ export class TypeName {
         } else {
             this.name = name;
         }
+
+        if (this.name in TypeName.ALIASES) {
+            this.name = TypeName.ALIASES[this.name];
+        }
     }
 
     public resolveToFullyQualified(importTable: ImportTable) {
@@ -31,6 +41,10 @@ export class TypeName {
     }
 
     public static isFullyQualifiedName(typeName: string): boolean {
+        if (typeName == '') {
+            return true;
+        }
+
         if (TypeName.BUILT_INS.indexOf(typeName) >= 0) {
             return true;
         }
@@ -44,5 +58,9 @@ export class TypeName {
 
     public isSameAs(other: TypeName): boolean {
         return (this.isArray == other.isArray) && this.name == other.name
+    }
+
+    public isEmptyName(): boolean {
+        return this.name == '';
     }
 }

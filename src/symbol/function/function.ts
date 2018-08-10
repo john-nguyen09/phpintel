@@ -10,8 +10,10 @@ import { TypeComposite } from "../../type/composite";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
 import { ParamDocNode, DocNodeKind } from "../../docParser";
+import { VariableAssignment } from "../variable/varibleAssignment";
+import { FieldGetter } from "../../fieldGetter";
 
-export class Function extends Symbol implements Consumer, DocBlockConsumer {
+export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter {
     public name: TypeName;
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
@@ -24,6 +26,12 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer {
         if (other instanceof Parameter) {
             if (other.name in this.docParamTypes) {
                 other.type.push(this.docParamTypes[other.name]);
+
+                if (this.doc != null) {
+                    for (let type of other.type.types) {
+                        type.resolveToFullyQualified(this.doc.importTable);
+                    }
+                }
             }
 
             this.parameters.push(other);
@@ -32,6 +40,10 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer {
             return true;
         } else if (other instanceof FunctionHeader) {
             this.name = other.name;
+
+            if (this.doc != null) {
+                this.name.resolveToFullyQualified(this.doc.importTable);
+            }
 
             return true;
         } else if (other instanceof Return) {
@@ -44,13 +56,19 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer {
                     this.typeAggregate.push(type);
                 }
             } else if (returnSymbol instanceof Expression) {
+                if (this.doc != null) {
+                    returnSymbol.type.resolveToFullyQualified(this.doc.importTable);
+                }
+
                 this.typeAggregate.push(returnSymbol.type);
             }
 
             return true;
-        } else if (other instanceof SimpleVariable) {
-            this.scopeVar.set(other);
+        } else if (other instanceof VariableAssignment) {
+            this.scopeVar.set(other.variable);
 
+            return true;
+        } else if (other instanceof SimpleVariable) {
             return true;
         }
 
@@ -64,12 +82,30 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer {
 
         for (let docNode of docAst.body) {
             if (DocBlock.isType<ParamDocNode>(docNode, DocNodeKind.Param)) {
-                this.docParamTypes['$' + docNode.name] = new TypeName(docNode.type.name);
+                let type = docNode.type.name;
+
+                if (docNode.type.fqn) {
+                    type = '\\' + type;
+                }
+
+                let typeName = new TypeName(type);
+
+                if (this.doc != null) {
+                    typeName.resolveToFullyQualified(this.doc.importTable);
+                }
+
+                this.docParamTypes['$' + docNode.name] = typeName;
             }
         }
     }
 
     get types(): TypeName[] {
         return this.typeAggregate.types;
+    }
+
+    getFields(): string[] {
+        return [
+            'name', 'parameters', 'scopeVar', 'types', 'description'
+        ];
     }
 }

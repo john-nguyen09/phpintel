@@ -36,6 +36,7 @@ import { NamespaceUse } from "./symbol/namespace/Use";
 import { NamespaceUseClause } from "./symbol/namespace/useClause";
 import { NamespaceAliasClause } from "./symbol/namespace/aliasClause";
 import { PhraseKind, TokenKind } from "./util/parser";
+import { VariableAssignment } from "./symbol/variable/varibleAssignment";
 
 export class SymbolParser {
     protected symbolStack: (Symbol | null)[] = [];
@@ -181,6 +182,9 @@ export class SymbolParser {
                     break;
                 case PhraseKind.ReturnStatement:
                     this.pushSymbol(new Return(p, this.doc));
+                    break;
+                case PhraseKind.SimpleAssignmentExpression:
+                    this.pushSymbol(new VariableAssignment(p, this.doc));
                     break;
                 case PhraseKind.SimpleVariable:
                     this.pushSymbol(new SimpleVariable(p, this.doc));

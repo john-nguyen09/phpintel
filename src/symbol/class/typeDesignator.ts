@@ -8,6 +8,10 @@ export class ClassTypeDesignator extends Symbol implements Reference, Consumer {
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
             this.type = new TypeName(other.name);
+
+            if (this.doc != null) {
+                this.type.resolveToFullyQualified(this.doc.importTable);
+            }
         }
 
         return false;

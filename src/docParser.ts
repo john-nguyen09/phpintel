@@ -68,7 +68,7 @@ export interface VarDocNode extends DocNode {
 
 export interface ParamDocNode extends DocNode {
     type: DocType;
-    name: string
+    name: string;
 }
 
 export interface DocType {

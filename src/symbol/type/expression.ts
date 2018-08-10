@@ -37,11 +37,15 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
     }
 
     get type(): TypeName {
+        let type: TypeName;
+
         if (this.realSymbol) {
-            return this.realSymbol.type;
+            type = this.realSymbol.type;
+        } else {
+            type = this.getType(this.currentSymbol);
         }
 
-        return this.getType(this.currentSymbol);
+        return type;
     }
 
     protected getValue(symbol: Symbol) {
