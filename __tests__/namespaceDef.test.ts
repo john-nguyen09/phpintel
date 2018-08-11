@@ -1,14 +1,16 @@
 import { SymbolParser } from "../src/symbolParser";
 import { PhpDocument } from "../src/symbol/phpDocument";
-import { pathToUri, toRelative } from "../src/util/uri";
+import { pathToUri } from "../src/util/uri";
 import * as path from 'path';
 import * as fs from 'fs';
 import { Parser, phraseTypeToString, tokenTypeToString } from "php7parser";
+import { RecursiveTraverser } from "../src/treeTraverser/recursive";
 
 describe('namespaceDef', () => {
     it('should assign namespace to phpDocument', () => {
         let workspaceDir = path.resolve(__dirname, '..', 'case', 'namespaceDef');
         let files = fs.readdirSync(workspaceDir);
+        let treeTraverser = new RecursiveTraverser();
         
         for (let file of files) {
             let filePath = path.join(workspaceDir, file);
@@ -46,7 +48,9 @@ describe('namespaceDef', () => {
                     }
                 );
 
-                symbolParser.traverse(parseTree);
+                treeTraverser.traverse(parseTree, [
+                    symbolParser
+                ]);
 
                 expect(symbolParser.getTree().toObject()).toMatchSnapshot();
             }

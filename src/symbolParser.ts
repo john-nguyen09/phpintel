@@ -37,8 +37,9 @@ import { NamespaceUseClause } from "./symbol/namespace/useClause";
 import { NamespaceAliasClause } from "./symbol/namespace/aliasClause";
 import { PhraseKind, TokenKind } from "./util/parser";
 import { VariableAssignment } from "./symbol/variable/varibleAssignment";
+import { Visitor } from "./treeTraverser/structures";
 
-export class SymbolParser {
+export class SymbolParser implements Visitor<TreeNode> {
     protected symbolStack: (Symbol | null)[] = [];
     protected doc: PhpDocument;
     protected lastDocBlock: DocBlock | null = null;
@@ -46,24 +47,6 @@ export class SymbolParser {
     constructor(doc: PhpDocument) {
         this.doc = doc;
         this.pushSymbol(this.doc);
-    }
-
-    traverse(tree: Phrase) {
-        let depth = 0;
-
-        this.realTraverse(tree, depth);
-    }
-
-    private realTraverse(node: TreeNode, depth: number) {
-        this.preorder(node, depth);
-
-        if ('children' in node) {
-            for (let child of node.children) {
-                this.realTraverse(child, depth + 1);
-            }
-        }
-
-        this.postorder(node, depth);
     }
 
     public getTree(): PhpDocument {
@@ -78,14 +61,14 @@ export class SymbolParser {
         this.symbolStack.push(symbol);
     }
 
-    preorder(node: TreeNode, depth: number) {
+    preorder(node: TreeNode) {
         let parentSymbol = this.getParentSymbol();
 
         if (isToken(node)) {
             let tokenType: number = <number>node.tokenType;
 
             if (tokenType == TokenKind.DocumentComment) {
-                this.lastDocBlock = new DocBlock(node, this.doc, depth);
+                this.lastDocBlock = new DocBlock(node, this.doc);
             } else {
                 let symbol = new TokenSymbol(node, this.doc);
 
@@ -219,7 +202,7 @@ export class SymbolParser {
         }
     }
 
-    postorder(node: TreeNode, depth: number) {
+    postorder(node: TreeNode) {
         if (isToken(node)) {
             return;
         }

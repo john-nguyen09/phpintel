@@ -6,7 +6,7 @@ import { DocParser, DocAst, DocNode } from "../docParser";
 export class DocBlock extends TokenSymbol {
     public docAst: DocAst;
 
-    constructor(token: Token, doc: PhpDocument, public depth: number) {
+    constructor(token: Token, doc: PhpDocument) {
         super(token, doc);
 
         this.docAst = DocParser.parse(this.text);
