@@ -6,8 +6,10 @@ import { DocBlock } from './docBlock';
 import { TypeName } from '../type/name';
 import { TypeComposite } from '../type/composite';
 import { TokenKind } from '../util/parser';
-import { isFieldGetter, FieldGetter } from '../fieldGetter';
+import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';
+import { DbStoreInfo } from '../storage/structures';
+import { Location } from './meta/location';
 
 export abstract class Symbol {
     @nonenumerable
@@ -117,6 +119,14 @@ export interface ScopeMember {
     scope: string;
 }
 
+export interface Identifiable {
+    getIdentifier(): string;
+}
+
+export interface Locatable {
+    getLocation(): Location;
+}
+
 export function isTransform(symbol: Symbol): symbol is TransformSymbol {
     return symbol != null && 'realSymbol' in symbol;
 }
@@ -131,4 +141,12 @@ export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
 
 export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlockConsumer) {
     return 'consumeDocBlock' in symbol;
+}
+
+export function isIdentifiable(symbol: Symbol): symbol is (Symbol & Identifiable) {
+    return 'getIdentifier' in symbol;
+}
+
+export function isLocatable(symbol: Symbol): symbol is (Symbol & Locatable) {
+    return 'getLocation' in symbol;
 }

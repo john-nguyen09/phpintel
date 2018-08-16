@@ -3,7 +3,7 @@ import { Property } from "./property";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { DocBlock } from "../docBlock";
-import { VarDocNode, DocNodeKind } from "../../docParser";
+import { VarDocNode, DocNodeKind } from "../../util/docParser";
 import { TypeName } from "../../type/name";
 
 export class PropertyDeclaration extends CollectionSymbol implements Consumer, DocBlockConsumer {

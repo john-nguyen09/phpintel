@@ -6,7 +6,7 @@ import { Location } from "../meta/location";
 import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
-import { FieldGetter } from "../../fieldGetter";
+import { FieldGetter } from "../fieldGetter";
 
 export class Constant extends Symbol implements Consumer, Reference, FieldGetter {
     public name: TypeName;

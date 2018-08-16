@@ -9,9 +9,9 @@ import { SimpleVariable } from "../variable/simpleVariable";
 import { TypeComposite } from "../../type/composite";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
-import { ParamDocNode, DocNodeKind } from "../../docParser";
+import { DocNodeKind } from "../../util/docParser";
 import { VariableAssignment } from "../variable/varibleAssignment";
-import { FieldGetter } from "../../fieldGetter";
+import { FieldGetter } from "../fieldGetter";
 
 export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter {
     public name: TypeName;
@@ -81,7 +81,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
         this.description = docAst.summary;
 
         for (let docNode of docAst.body) {
-            if (DocBlock.isType<ParamDocNode>(docNode, DocNodeKind.Param)) {
+            if (docNode.kind == DocNodeKind.Var) {
                 let type = docNode.type.name;
 
                 if (docNode.type.fqn) {
@@ -94,7 +94,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
                     typeName.resolveToFullyQualified(this.doc.importTable);
                 }
 
-                this.docParamTypes['$' + docNode.name] = typeName;
+                this.docParamTypes['$' + docNode.variable] = typeName;
             }
         }
     }

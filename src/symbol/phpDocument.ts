@@ -4,6 +4,7 @@ import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
 import { nonenumerable } from "../util/decorator";
+import { DbStoreInfo } from "../storage/structures";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable

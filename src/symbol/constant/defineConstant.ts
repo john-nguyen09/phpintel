@@ -5,7 +5,7 @@ import { PhpDocument } from "../phpDocument";
 import { TreeNode } from "../../util/parseTree";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
-import { FieldGetter } from "../../fieldGetter";
+import { FieldGetter } from "../fieldGetter";
 
 export class DefineConstant extends Symbol implements FieldGetter {
     public name: TypeName;

@@ -1,6 +1,6 @@
 import { Range } from "./range";
 import { toRelative } from "../../util/uri";
-import { FieldGetter } from "../../fieldGetter";
+import { FieldGetter } from "../fieldGetter";
 
 export class Location implements FieldGetter {
     constructor(public uri: string, public range: Range) { }

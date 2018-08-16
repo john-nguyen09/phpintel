@@ -1,7 +1,7 @@
 import { TokenSymbol } from "./symbol";
 import { PhpDocument } from "./phpDocument";
 import { Token } from "php7parser";
-import { DocParser, DocAst, DocNode } from "../docParser";
+import { DocParser, DocAst, DocNode } from "../util/docParser";
 
 export class DocBlock extends TokenSymbol {
     public docAst: DocAst;

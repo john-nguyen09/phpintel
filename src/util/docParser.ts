@@ -56,17 +56,17 @@ export interface DocAst {
     body: DocNode[]
 }
 
-export interface DocNode {
-    kind: string;
-}
+export type DocNode = VarDocNode | ParamDocNode;
 
-export interface VarDocNode extends DocNode {
+export interface VarDocNode {
+    kind: DocNodeKind.Var;
     type: DocType;
     variable: string;
     description: string;
 }
 
-export interface ParamDocNode extends DocNode {
+export interface ParamDocNode {
+    kind: DocNodeKind.Param;
     type: DocType;
     name: string;
 }

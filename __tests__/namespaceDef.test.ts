@@ -1,4 +1,4 @@
-import { SymbolParser } from "../src/symbolParser";
+import { SymbolParser } from "../src/symbol/symbolParser";
 import { PhpDocument } from "../src/symbol/phpDocument";
 import { pathToUri } from "../src/util/uri";
 import * as path from 'path';

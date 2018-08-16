@@ -21,6 +21,7 @@
     "doc-parser": "^0.4.8",
     "level": "^4.0.0",
     "php7parser": "^1.0.8",
+    "vscode-languageserver": "^4.4.0",
     "vscode-uri": "^1.0.5"
   },
   "devDependencies": {

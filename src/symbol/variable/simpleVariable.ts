@@ -3,7 +3,7 @@ import { TreeNode } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
 import { Symbol, TokenSymbol } from "../symbol";
 import { TokenKind } from "../../util/parser";
-import { FieldGetter } from "../../fieldGetter";
+import { FieldGetter } from "../fieldGetter";
 import { Expression } from "../type/expression";
 
 export class SimpleVariable extends Variable implements FieldGetter {
