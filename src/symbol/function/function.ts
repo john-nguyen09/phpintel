@@ -81,7 +81,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
         this.description = docAst.summary;
 
         for (let docNode of docAst.body) {
-            if (docNode.kind == DocNodeKind.Var) {
+            if (docNode.kind == DocNodeKind.Param) {
                 let type = docNode.type.name;
 
                 if (docNode.type.fqn) {
@@ -94,7 +94,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
                     typeName.resolveToFullyQualified(this.doc.importTable);
                 }
 
-                this.docParamTypes['$' + docNode.variable] = typeName;
+                this.docParamTypes['$' + docNode.name] = typeName;
             }
         }
     }

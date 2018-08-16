@@ -19,10 +19,12 @@ PhpDocument {
           "end": Position {
             "character": 1,
             "line": 5,
+            "offset": 66,
           },
           "start": Position {
             "character": 0,
             "line": 3,
+            "offset": 34,
           },
         },
         "relativeUri": "case/namespaceDef/class.php",
