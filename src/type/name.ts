@@ -18,22 +18,20 @@ export class TypeName {
     private name: string;
     private isArray: boolean = false;
 
-    constructor(name: string) {
-        let indexOfBox = name.lastIndexOf('[]');
-
-        if ((name.length - indexOfBox) == '[]'.length) {
-            this.isArray = true;
-        }
-
-        if (this.isArray) {
-            this.name = name.substr(0, indexOfBox);
-        } else {
-            this.name = name;
-        }
+    constructor(name: string, isArray?: boolean) {
+        this.name = name;
 
         if (this.name in TypeName.ALIASES) {
             this.name = TypeName.ALIASES[this.name];
         }
+
+        if (isArray !== undefined) {
+            this.isArray = isArray;
+        }
+    }
+
+    public setIsArray(isArray: boolean): void {
+        this.isArray = isArray;
     }
 
     public resolveToFullyQualified(importTable: ImportTable) {
@@ -57,6 +55,10 @@ export class TypeName {
     }
 
     public isSameAs(other: TypeName): boolean {
+        if (other == undefined) {
+            return false;
+        }
+
         return (this.isArray == other.isArray) && this.name == other.name
     }
 

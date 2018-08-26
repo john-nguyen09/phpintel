@@ -3,7 +3,7 @@ import { Property } from "./property";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { DocBlock } from "../docBlock";
-import { VarDocNode, DocNodeKind } from "../../util/docParser";
+import { VarDocNode, DocNodeKind, toTypeName } from "../../util/docParser";
 import { TypeName } from "../../type/name";
 
 export class PropertyDeclaration extends CollectionSymbol implements Consumer, DocBlockConsumer {
@@ -28,35 +28,40 @@ export class PropertyDeclaration extends CollectionSymbol implements Consumer, D
 
     consumeDocBlock(docBlock: DocBlock) {
         let docAst = docBlock.docAst;
-        let variables = this.realSymbols;
+        let properties = this.realSymbols;
 
         if (docAst.kind == 'doc') {
             let varDocNodes = docBlock.getNodes<VarDocNode>(DocNodeKind.Var);
-            let endIndex = Math.min(variables.length, varDocNodes.length);
+            let endIndex = Math.min(properties.length, varDocNodes.length);
 
-            for (let symbol of variables) {
+            for (let symbol of properties) {
                 symbol.description = docAst.summary;
             }
 
             for (let i = 0; i < endIndex; i++) {
-                if (varDocNodes[i].variable == null) {
-                    variables[i].type.push(new TypeName(varDocNodes[i].type.name));
+                let target: Property | null = null;
 
-                    if (varDocNodes[i].description) {
-                        variables[i].description = varDocNodes[i].description;
-                    }
+                if (varDocNodes[i].variable == null) {
+                    target = properties[i];
                 } else {
                     let docVarName = '$' + varDocNodes[i].variable;
 
-                    for (let variable of variables) {
-                        if (variable.name == docVarName) {
-                            variable.type.push(new TypeName(varDocNodes[i].type.name));
-
-                            if (varDocNodes[i].description) {
-                                variable.description = varDocNodes[i].description;
-                            }
-                            break;
+                    for (let property of properties) {
+                        if (property.name == docVarName) {
+                            target = property;
                         }
+                    }
+                }
+
+                if (target != null) {
+                    let typeName = toTypeName(varDocNodes[i].type);
+
+                    if (typeName != null) {
+                        target.type.push(typeName);
+                    }
+
+                    if (varDocNodes[i].description) {
+                        target.description = varDocNodes[i].description;
                     }
                 }
             }

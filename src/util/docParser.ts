@@ -1,8 +1,14 @@
+import { TypeName } from "../type/name";
 const _DocParser = require("doc-parser");
 
 export enum DocNodeKind {
     Var = 'var',
     Param = 'param'
+}
+
+export enum DocTypeKind {
+    Collection = 'collection',
+    Type = 'type'
 }
 
 export namespace DocParser {
@@ -57,22 +63,54 @@ export interface DocAst {
 }
 
 export type DocNode = VarDocNode | ParamDocNode;
+export type DocTypeNode = DocType | DocTypeCollection;
 
 export interface VarDocNode {
     kind: DocNodeKind.Var;
-    type: DocType;
+    type: DocTypeNode;
     variable: string;
     description: string;
 }
 
 export interface ParamDocNode {
     kind: DocNodeKind.Param;
-    type: DocType;
+    type: DocTypeNode;
     name: string;
 }
 
 export interface DocType {
-    kind: string;
+    kind: DocTypeKind.Type;
     fqn: boolean;
     name: string;
+}
+
+export interface DocTypeCollection {
+    kind: DocTypeKind.Collection;
+    value: DocType;
+    index: any;
+}
+
+export function toTypeName(typeNode: DocTypeNode): TypeName | null {
+    let docType: DocType | null = null;
+    let isArray = false;
+    let name = '';
+
+    if (typeNode.kind == DocTypeKind.Type) {
+        docType = typeNode;
+    } else if (typeNode.kind == DocTypeKind.Collection) {
+        docType = typeNode.value;
+        isArray = true;
+    }
+
+    if (docType == null) {
+        return null;
+    }
+
+    if (docType.fqn) {
+        name += '\\';
+    }
+
+    name += docType.name;
+
+    return new TypeName(name, isArray);
 }

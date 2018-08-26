@@ -4,6 +4,10 @@ export class TypeComposite {
     protected _types: TypeName[] = [];
 
     push(type: TypeName) {
+        if (type == undefined) {
+            return;
+        }
+
         this._types.push(type);
     }
 

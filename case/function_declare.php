@@ -30,3 +30,16 @@ function test_function1(string $stringParam, int $intParam, bool $boolParam, flo
 
     return 'string';
 }
+
+/**
+ * Test function 2
+ * @param array|int $param1 array of something or int
+ * @param string[] $param2 array of string
+ */
+function test_function2($param1, $param2) {
+
+}
+
+$callback = function() {
+    
+}

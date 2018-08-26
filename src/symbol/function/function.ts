@@ -9,7 +9,7 @@ import { SimpleVariable } from "../variable/simpleVariable";
 import { TypeComposite } from "../../type/composite";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
-import { DocNodeKind } from "../../util/docParser";
+import { DocNodeKind, toTypeName } from "../../util/docParser";
 import { VariableAssignment } from "../variable/varibleAssignment";
 import { FieldGetter } from "../fieldGetter";
 
@@ -55,7 +55,10 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
                 for (let type of types) {
                     this.typeAggregate.push(type);
                 }
-            } else if (returnSymbol instanceof Expression) {
+            } else if (
+                returnSymbol instanceof Expression &&
+                returnSymbol.type != undefined
+            ) {
                 if (this.doc != null) {
                     returnSymbol.type.resolveToFullyQualified(this.doc.importTable);
                 }
@@ -65,7 +68,9 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
 
             return true;
         } else if (other instanceof VariableAssignment) {
-            this.scopeVar.set(other.variable);
+            if (other.variable != undefined) {
+                this.scopeVar.set(other.variable);
+            }
 
             return true;
         } else if (other instanceof SimpleVariable) {
@@ -82,19 +87,13 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
 
         for (let docNode of docAst.body) {
             if (docNode.kind == DocNodeKind.Param) {
-                let type = docNode.type.name;
+                let typeName = toTypeName(docNode.type);
 
-                if (docNode.type.fqn) {
-                    type = '\\' + type;
-                }
-
-                let typeName = new TypeName(type);
-
-                if (this.doc != null) {
+                if (this.doc != null && typeName != null) {
                     typeName.resolveToFullyQualified(this.doc.importTable);
+                    
+                    this.docParamTypes['$' + docNode.name] = typeName;
                 }
-
-                this.docParamTypes['$' + docNode.name] = typeName;
             }
         }
     }

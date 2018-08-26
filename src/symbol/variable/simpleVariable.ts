@@ -17,7 +17,13 @@ export class SimpleVariable extends Variable implements FieldGetter {
         if (other instanceof TokenSymbol && other.type == TokenKind.VariableName) {
             this.name = other.text;
         } else {
-            return super.consume(other);
+            let result = this.expression.consume(other);
+            
+            if (this.expression.type == undefined || !this.expression.type.isEmptyName()) {
+                this.type.push(this.expression.type);
+            }
+
+            return result;
         }
 
         return false;
