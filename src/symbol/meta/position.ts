@@ -1,7 +1,7 @@
 import { substr_count } from "../../util/string";
 
 export class Position {
-    constructor(public offset:number, public line: number, public character: number) { }
+    constructor(public offset: number, public line: number, public character: number) { }
 
     static fromOffset(offset: number, text: string): Position {
         let startAt = Math.min(offset, text.length);

@@ -2,7 +2,7 @@
 // Project: https://github.com/Level/level
 
 declare module 'level' {
-    function level(location: string): Level.LevelUp;
+    function level(location: string, options?: any): Level.LevelUp;
 
     export = level;
 }
@@ -16,6 +16,7 @@ declare namespace Level {
         createReadStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createKeyStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createValueStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
+        iterator(options?: ReadStreamOptions): Iterator;
     }
     
     export interface BatchOperation {
@@ -33,5 +34,11 @@ declare namespace Level {
         limit?: number;
         keys?: boolean;
         values?: boolean;
+    }
+
+    export interface Iterator {
+        next(callback: any): void;
+        seek(target: any): void;
+        end(callback?: any): void;
     }
 }

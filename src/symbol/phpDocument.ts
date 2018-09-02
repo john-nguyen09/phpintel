@@ -4,27 +4,37 @@ import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
 import { nonenumerable } from "../util/decorator";
-import { DbStoreInfo } from "../storage/structures";
+import { TextDocument } from "../textDocument";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
-    public uri: string;
+    public textDocument: TextDocument;
+
     @nonenumerable
-    public text: string;
+    private _uri: string;
 
     public importTable: ImportTable;
+    public branchSymbols: Symbol[] = [];
     public symbols: Symbol[] = [];
 
     constructor(uri: string, text: string) {
         super(null, null);
-        this.uri = uri;
-        this.text = text;
+        this._uri = uri;
+        this.textDocument = new TextDocument(text);
 
         this.importTable = new ImportTable();
     }
 
+    get uri(): string {
+        return this._uri;
+    }
+
+    get text(): string {
+        return this.textDocument.text;
+    }
+
     getTree(): Phrase {
-        return Parser.parse(this.text);
+        return Parser.parse(this.textDocument.text);
     }
 
     consume(other: Symbol): boolean {
@@ -40,8 +50,12 @@ export class PhpDocument extends Symbol implements Consumer {
             return true;
         }
 
-        this.symbols.push(other);
+        this.branchSymbols.push(other);
 
         return true;
+    }
+
+    onSymbolDequeued(symbol: Symbol): void {
+        this.symbols.push(symbol);
     }
 }

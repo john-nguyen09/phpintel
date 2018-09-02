@@ -19,8 +19,12 @@
   "license": "ISC",
   "dependencies": {
     "doc-parser": "^0.4.8",
+    "inversify": "^4.13.0",
     "level": "^4.0.0",
     "php7parser": "^1.0.8",
+    "reflect-metadata": "^0.1.12",
+    "runtypes": "^2.1.6",
+    "subleveldown": "^3.0.1",
     "vscode-languageserver": "^4.4.0",
     "vscode-uri": "^1.0.5"
   },

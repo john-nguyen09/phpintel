@@ -217,6 +217,7 @@ export class SymbolParser implements Visitor<TreeNode> {
             return;
         }
 
+        let isConsumed: boolean = false;
         for (let i = this.symbolStack.length - 1; i >= 0; i--) {
             let prev = this.symbolStack[i];
 
@@ -225,8 +226,6 @@ export class SymbolParser implements Visitor<TreeNode> {
             }
 
             if (isCollection(symbol)) {
-                let isConsumed = false;
-
                 for (let realSymbol of symbol.realSymbols) {
                     if (!realSymbol) {
                         continue;
@@ -234,14 +233,13 @@ export class SymbolParser implements Visitor<TreeNode> {
 
                     isConsumed = prev.consume(realSymbol) || isConsumed;
                 }
-
-                if (isConsumed) {
-                    break;
-                }
             } else {
-                if (prev.consume(symbol)) {
-                    break;
-                }
+                isConsumed = prev.consume(symbol);
+            }
+
+            if (isConsumed) {
+                this.doc.onSymbolDequeued(symbol);
+                break;
             }
         }
     }

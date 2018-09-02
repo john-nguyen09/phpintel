@@ -1,28 +1,32 @@
-import { Symbol, isIdentifiable } from "../symbol/symbol";
 import { DbStore } from "../storage/db";
-import { IdentifierMatchIndex } from "./identifierMatch";
+import { inject, named, injectable } from "inversify";
+import { IndexId } from "../constant";
+import { IdentifierIndex } from "./identifierIndex";
 
-export class UriMatchIndex {
+@injectable()
+export class UriIndex {
     private static readonly uriSeparator = '#';
 
     private db: DbStore;
+    private identifierIndex: IdentifierIndex;
 
-    constructor(private identifierMatch: IdentifierMatchIndex) {
-        this.db = new DbStore({
-            name: 'document_store',
-            version: 1
-        });
+    constructor(
+        @inject(BindingIdentifier.DB_STORE) @named(IndexId.URI) store: DbStore,
+        @inject(BindingIdentifier.IDENTIFIER_INDEX) identifierIndex: IdentifierIndex
+    ) {
+        this.db = store;
+        this.identifierIndex = identifierIndex;
     }
 
     async put(uri: string, identifier: string): Promise<void> {
-        let key = uri + UriMatchIndex.uriSeparator + identifier;
+        let key = uri + UriIndex.uriSeparator + identifier;
 
         return this.db.put(key, identifier);
     }
 
     async delete(uri: string): Promise<void> {
         const _db = this.db;
-        const _identifierMatch = this.identifierMatch;
+        const _identifierMatch = this.identifierIndex;
 
         return new Promise<void>((resolve, reject) => {
             _db.prefixSearch(uri)

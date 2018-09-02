@@ -1,8 +1,13 @@
 import { TextDocumentPositionParams, Hover } from "vscode-languageserver";
+import { PositionIndex } from "../index/positionIndex";
+import { inject } from "inversify";
 
-export namespace HoverProvider {
-    export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
-        
+export class HoverProvider {
+    constructor(
+        @inject(BindingIdentifier.POSITION_INDEX) private positionIndex: PositionIndex
+    ) { }
+
+    async provide(params: TextDocumentPositionParams): Promise<Hover> {
 
         return {
             contents: ''

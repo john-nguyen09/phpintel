@@ -8,7 +8,6 @@ import { TypeComposite } from '../type/composite';
 import { TokenKind } from '../util/parser';
 import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';
-import { DbStoreInfo } from '../storage/structures';
 import { Location } from './meta/location';
 
 export abstract class Symbol {
@@ -91,7 +90,7 @@ export class TokenSymbol extends Symbol {
         super(token, doc);
 
         this.type = <number>token.tokenType;
-        this.text = nodeText(token, doc.text);
+        this.text = nodeText(token, doc.textDocument.text);
     }
 }
 

@@ -11,7 +11,9 @@
         "noEmitOnError": true,
         "strictNullChecks": true,
         "experimentalDecorators": true,
-        "noResolve": false
+        "noResolve": false,
+        "types": ["reflect-metadata"],
+        "emitDecoratorMetadata": true
     },
     "include": [
         "src/**/*.ts"

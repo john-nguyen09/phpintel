@@ -1,72 +1,61 @@
 import level = require("level");
+import sublevel = require("subleveldown");
 import { DbStoreInfo } from "./structures";
+import { injectable, inject } from "inversify";
 
-export namespace DB {
-    var _db: Level.LevelUp;
+@injectable()
+export class LevelDatasource {
+    private db: Level.LevelUp;
 
-    export function init(location: string): void {
-        _db = level(location);
+    constructor(location: string, options: any) {
+        this.db = level(location, options);
     }
 
-    export async function put(key: string, value: any): Promise<void> {
-        return _db.put(key, JSON.stringify(value));
-    }
-
-    export async function get(key: string): Promise<any> {
-        let jsonString = await _db.get(key);
-
-        return JSON.parse(jsonString);
-    }
-
-    export async function del(key: string): Promise<void> {
-        return _db.del(key);
-    }
-
-    export function createReadableStream(options: Level.ReadStreamOptions): NodeJS.ReadableStream {
-        return _db.createReadStream(options);
+    getDb() {
+        return this.db;
     }
 }
 
+@injectable()
 export class DbStore {
     private static readonly separator = '!';
     private static readonly versionPrefix = '@';
 
     private storeKey: string;
-    private prefix: string;
+    private db: Level.LevelUp;
 
-    constructor(private storeInfo: DbStoreInfo) {
+    constructor(
+        datasource: LevelDatasource,
+        storeInfo: DbStoreInfo
+    ) {
         this.storeKey = storeInfo.name + DbStore.versionPrefix + storeInfo.version;
-        this.prefix = this.storeKey + DbStore.separator;
+        this.db = sublevel(datasource.getDb(), this.storeKey, {
+            separator: DbStore.separator
+        });
     }
 
     async put(key: string, value: any): Promise<void> {
-        return DB.put(this.prefix + key, value);
+        return this.db.put(key, value);
     }
-    
-    async get(key: string, value: any): Promise<any> {
-        return DB.get(this.prefix + key);
+
+    async get(key: string): Promise<any> {
+        return this.db.get(key);
     }
 
     async del(key: string): Promise<void> {
-        return DB.del(this.prefix + key);
+        return this.db.del(key);
     }
 
-    createReadableStream(options: Level.ReadStreamOptions): NodeJS.ReadableStream {
-        const needPrefixList: Extract<keyof Level.ReadStreamOptions, string>[] = [
-            'gt', 'gte', 'lt', 'lte'
-        ];
+    createReadStream(options?: Level.ReadStreamOptions): NodeJS.ReadableStream {
+        return this.db.createReadStream(options);
+    }
 
-        for (let needPrefix of needPrefixList) {
-            if (needPrefix in options && options[needPrefix] != undefined) {
-                options[needPrefix] = this.prefix + options[needPrefix];
-            }
-        }
-
-        return DB.createReadableStream(options);
+    iterator(options?: Level.ReadStreamOptions): Level.Iterator {
+        return this.db.iterator(options);
     }
 
     prefixSearch(prefix: string): NodeJS.ReadableStream {
-        return this.createReadableStream({
+        return this.createReadStream({
             gte: prefix,
             lte: prefix + '\xFF'
         });

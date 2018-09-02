@@ -1,16 +1,16 @@
 import { DbStore } from "../storage/db";
-import { Symbol, isIdentifiable, Identifiable } from "../symbol/symbol";
+import { Symbol, Identifiable } from "../symbol/symbol";
+import { injectable, inject, named } from "inversify";
+import { IndexId } from "../constant";
 
-export class IdentifierMatchIndex {
+@injectable()
+export class IdentifierIndex {
     private static readonly nameGlue = '#';
 
     private db: DbStore;
 
-    constructor() {
-        this.db = new DbStore({
-            name: 'symbol_store',
-            version: 1
-        });
+    constructor(@inject(BindingIdentifier.DB_STORE) @named(IndexId.IDENTIFIER) store: DbStore) {
+        this.db = store;
     }
 
     async put(symbol: (Symbol & Identifiable), uri: string): Promise<void> {
@@ -43,6 +43,6 @@ export class IdentifierMatchIndex {
             uri = '';
         }
 
-        return identifier + IdentifierMatchIndex.nameGlue + uri;
+        return identifier + IdentifierIndex.nameGlue + uri;
     }
 }
