@@ -2,13 +2,16 @@ import { DbStore } from "../storage/db";
 import { Locatable, Symbol } from "../symbol/symbol";
 import { intToBytes, multipleIntToBytes } from "../util/bytewise";
 import { inject, named, injectable } from "inversify";
-import { IndexId } from "../constant";
+import { IndexId } from "../constant/indexId";
+import { BindingIdentifier } from "../constant/bindingIdentifier";
+import { Messenger } from "../service/messenger";
 
 @injectable()
 export class PositionIndex {
     private db: DbStore;
 
-    constructor(@inject(BindingIdentifier.DB_STORE) @named(IndexId.POSITION) store: DbStore) {
+    constructor(@inject(BindingIdentifier.DB_STORE) @named(IndexId.POSITION) store: DbStore,
+        @inject(BindingIdentifier.MESSENGER) private logger: Messenger) {
         this.db = store;
     }
 
@@ -35,21 +38,26 @@ export class PositionIndex {
                 key: string | undefined,
                 symbol: (Symbol & Locatable) | undefined
             ): void => {
-                if (!err) {
-                    iterator.end();
+                if (err) {
+                    iterator.end(() => { });
 
                     return reject(err);
                 }
 
                 // End of stream reached
                 if (key == undefined || symbol == undefined) {
-                    iterator.end();
+                    iterator.end(() => {
+                        resolve(null);
+                    });
                     return;
                 }
 
+                this.logger.info(JSON.stringify(symbol));
+
                 if (symbol.getLocation().range.end.offset <= offset) {
-                    resolve(symbol);
-                    iterator.end();
+                    iterator.end(() => {
+                        resolve(symbol);
+                    });
 
                     return;
                 }

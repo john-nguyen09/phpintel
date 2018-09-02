@@ -1,15 +1,19 @@
 import { Variable } from "./variable";
-import { TreeNode } from "../../util/parseTree";
+import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Locatable } from "../symbol";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
 import { Expression } from "../type/expression";
+import { Location } from "../meta/location";
 
-export class SimpleVariable extends Variable implements FieldGetter {
+export class SimpleVariable extends Variable implements FieldGetter, Locatable {
+    private location: Location;
+
     constructor(public node: TreeNode, public doc: PhpDocument) {
         super('', undefined);
 
+        this.location = new Location(doc.uri, nodeRange(node, doc.text));
         this.expression = new Expression(null, this.doc);
     }
 
@@ -19,7 +23,7 @@ export class SimpleVariable extends Variable implements FieldGetter {
         } else {
             let result = this.expression.consume(other);
             
-            if (this.expression.type == undefined || !this.expression.type.isEmptyName()) {
+            if (this.expression.type != undefined && !this.expression.type.isEmptyName()) {
                 this.type.push(this.expression.type);
             }
 
@@ -31,5 +35,9 @@ export class SimpleVariable extends Variable implements FieldGetter {
 
     getFields(): string[] {
         return ['name', 'type'];
+    }
+
+    getLocation(): Location {
+        return this.location;
     }
 }

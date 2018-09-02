@@ -39,6 +39,6 @@ declare namespace Level {
     export interface Iterator {
         next(callback: any): void;
         seek(target: any): void;
-        end(callback?: any): void;
+        end(callback: any): void;
     }
 }

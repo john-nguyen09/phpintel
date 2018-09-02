@@ -1,4 +1,4 @@
-import { Symbol, Consumer, Identifiable } from "../symbol";
+import { Symbol, Consumer, Identifiable, Locatable } from "../symbol";
 import { Location } from "../meta/location";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
@@ -7,7 +7,7 @@ import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
 import { TypeName } from "../../type/name";
 
-export class Class extends Symbol implements Consumer, Identifiable {
+export class Class extends Symbol implements Consumer, Identifiable, Locatable {
     public name: TypeName;
     public extend: TypeName | null;
     public location: Location;
@@ -46,5 +46,9 @@ export class Class extends Symbol implements Consumer, Identifiable {
 
     getIdentifier(): string {
         return this.name.toString();
+    }
+
+    getLocation(): Location {
+        return this.location;
     }
 }

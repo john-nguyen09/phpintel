@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { SymbolParser } from "../src/symbol/symbolParser";
 import { PhpDocument } from "../src/symbol/phpDocument";
 import { pathToUri } from "../src/util/uri";

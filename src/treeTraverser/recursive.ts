@@ -1,5 +1,7 @@
 import { TreeTraverser, Visitor, isTraversable} from "./structures";
+import { injectable } from "inversify";
 
+@injectable()
 export class RecursiveTraverser<T> implements TreeTraverser<T> {
     private visitors: Visitor<T>[] = [];
 

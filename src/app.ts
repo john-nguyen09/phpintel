@@ -1,32 +1,40 @@
+import "reflect-metadata";
 import { IdentifierIndex } from "./index/identifierIndex";
 import { PositionIndex } from "./index/positionIndex";
 import { TimestampIndex } from "./index/timestampIndex";
 import { LevelDatasource, DbStore } from "./storage/db";
 import { UriIndex } from "./index/uriIndex";
-import { IConnection, createConnection } from "vscode-languageserver";
-import { Logger } from "./service/logger";
+import { IConnection, createConnection, Hover } from "vscode-languageserver";
+import { Messenger } from "./service/messenger";
 import { Hasher } from "./service/hasher";
 import { InitializeProvider } from "./provider/initialize";
 import { HoverProvider } from "./provider/hover";
 import { Container } from "inversify";
-import { IndexNames, IndexId, IndexVersion } from "./constant/index";
+import { IndexNames, IndexId, IndexVersion } from "./constant/indexId";
 import { TreeTraverser } from "./treeTraverser/structures";
 import { TreeNode } from "./util/parseTree";
 import { RecursiveTraverser } from "./treeTraverser/recursive";
 import { Indexer } from "./index/indexer";
+import { TextDocumentStore } from "./textDocumentStore";
+import { BindingIdentifier } from "./constant/bindingIdentifier";
 
 export namespace Application {
-    let container: Container;
+    let container: Container = new Container();
 
     export function run() {
-        beforeConnection();
-        initConnection();
-        afterConnection();
+        let connection = createConnection();
+
+        container.bind<IConnection>(BindingIdentifier.CONNECTION).toConstantValue(connection);
+        beforeListen();
+
+        connection.onInitialize(InitializeProvider.provide);
+        connection.onHover(HoverProvider.provide);
+        connection.listen();
     }
 
     export function initStorage(location: string) {
         let datasource = new LevelDatasource(location, {
-            encodingValue: 'json'
+            valueEncoding: 'json'
         });
 
         container.bind<LevelDatasource>(BindingIdentifier.DATASOURCE)
@@ -41,38 +49,39 @@ export namespace Application {
                 .whenTargetNamed(IndexId[indexName.value]);
         });
 
-        container.bind<IdentifierIndex>(BindingIdentifier.IDENTIFIER_INDEX).to(IdentifierIndex);
-        container.bind<PositionIndex>(BindingIdentifier.POSITION_INDEX).to(PositionIndex);
-        container.bind<TimestampIndex>(BindingIdentifier.TIMESTAMP_INDEX).to(TimestampIndex);
-        container.bind<UriIndex>(BindingIdentifier.URI_INDEX).to(UriIndex);
+        container.bind<IdentifierIndex>(BindingIdentifier.IDENTIFIER_INDEX)
+            .to(IdentifierIndex)
+            .inSingletonScope();
+        container.bind<PositionIndex>(BindingIdentifier.POSITION_INDEX)
+            .to(PositionIndex)
+            .inSingletonScope();
+        container.bind<TimestampIndex>(BindingIdentifier.TIMESTAMP_INDEX)
+            .to(TimestampIndex)
+            .inSingletonScope();
+        container.bind<UriIndex>(BindingIdentifier.URI_INDEX)
+            .to(UriIndex)
+            .inSingletonScope();
     }
 
-    function beforeConnection() {
-        container.bind<InitializeProvider>(BindingIdentifier.INITIALIZE_PROVIDER)
-            .to(InitializeProvider);
-        container.bind<HoverProvider>(BindingIdentifier.HOVER_PROVIDER)
-            .to(HoverProvider);
+    export function get<T>(identifier: string): T {
+        return container.get(identifier);
     }
 
-    function afterConnection() {
-        container.bind<Logger>(BindingIdentifier.LOGGER).to(Logger);
-        container.bind<Hasher>(BindingIdentifier.HASHER).to(Hasher);
+    function beforeListen() {
+        container.bind<Messenger>(BindingIdentifier.MESSENGER)
+            .to(Messenger)
+            .inSingletonScope();
+        container.bind<Hasher>(BindingIdentifier.HASHER)
+            .to(Hasher)
+            .inSingletonScope();
         container.bind<TreeTraverser<TreeNode>>(BindingIdentifier.TREE_NODE_TRAVERSER)
-            .to(RecursiveTraverser);
-        container.bind<Indexer>(BindingIdentifier.INDEXER).to(Indexer);
-    }
-
-    function initConnection() {
-        let connection = createConnection();
-
-        connection.onInitialize(
-            container.get<InitializeProvider>(BindingIdentifier.INITIALIZE_PROVIDER).provide
-        );
-        connection.onHover(
-            container.get<HoverProvider>(BindingIdentifier.HOVER_PROVIDER).provide
-        );
-        connection.listen();
-
-        container.bind<IConnection>(BindingIdentifier.CONNECTION).toConstantValue(connection);
+            .to(RecursiveTraverser)
+            .inSingletonScope();
+        container.bind<TextDocumentStore>(BindingIdentifier.TEXT_DOCUMENT_STORE)
+            .to(TextDocumentStore)
+            .inSingletonScope();
+        container.bind<Indexer>(BindingIdentifier.INDEXER)
+            .to(Indexer)
+            .inSingletonScope();
     }
 }

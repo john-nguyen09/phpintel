@@ -7,13 +7,15 @@ import { PhpDocument } from "../symbol/phpDocument";
 import { Parser } from "php7parser";
 import { TreeTraverser } from "../treeTraverser/structures";
 import { TreeNode } from "../util/parseTree";
-import { RecursiveTraverser } from "../treeTraverser/recursive";
 import { isIdentifiable, Symbol, isLocatable } from "../symbol/symbol";
 import { IdentifierIndex } from "./identifierIndex";
 import { UriIndex } from "./uriIndex";
 import { PositionIndex } from "./positionIndex";
 import { TimestampIndex } from "./timestampIndex";
 import { inject, injectable } from "inversify";
+import { TextDocumentStore } from "../textDocumentStore";
+import { BindingIdentifier } from "../constant/bindingIdentifier";
+import { Messenger } from "../service/messenger";
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
@@ -28,7 +30,8 @@ export class Indexer {
         @inject(BindingIdentifier.IDENTIFIER_INDEX) private identifierIndex: IdentifierIndex,
         @inject(BindingIdentifier.URI_INDEX) private uriIndex: UriIndex,
         @inject(BindingIdentifier.POSITION_INDEX) private positionIndex: PositionIndex,
-        @inject(BindingIdentifier.TIMESTAMP_INDEX) private timestampIndex: TimestampIndex
+        @inject(BindingIdentifier.TIMESTAMP_INDEX) private timestampIndex: TimestampIndex,
+        @inject(BindingIdentifier.TEXT_DOCUMENT_STORE) private textDocumentStore: TextDocumentStore
     ) { }
 
     async indexDir(directory: string): Promise<void> {
@@ -40,14 +43,20 @@ export class Indexer {
             let fstat = await stat(filePath);
             let lastIndexTime = await this.timestampIndex.get(fileUri);
 
-            if (file.endsWith('.php') && fstat.mtimeMs != lastIndexTime) {
+            if (file.endsWith('.php')) {
                 let fileContent = (await readFile(filePath)).toString();
-                let symbolParser = new SymbolParser(new PhpDocument(fileUri, fileContent));
-                let parseTree = Parser.parse(fileContent);
+                let phpDoc = new PhpDocument(fileUri, fileContent);
 
-                this.treeTraverser.traverse(parseTree, [symbolParser]);
-                await this.indexPhpDocument(symbolParser.getTree());
-                await this.timestampIndex.put(fileUri, fstat.mtimeMs);
+                this.textDocumentStore.add(fileUri, phpDoc.textDocument);
+
+                if (fstat.mtimeMs != lastIndexTime) {
+                    let symbolParser = new SymbolParser(new PhpDocument(fileUri, fileContent));
+                    let parseTree = Parser.parse(fileContent);
+
+                    this.treeTraverser.traverse(parseTree, [symbolParser]);
+                    await this.indexPhpDocument(symbolParser.getTree());
+                    await this.timestampIndex.put(fileUri, fstat.mtimeMs);
+                }
             } else if (fstat.isDirectory()) {
                 await this.indexDir(filePath);
             }

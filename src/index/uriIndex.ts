@@ -1,7 +1,8 @@
 import { DbStore } from "../storage/db";
 import { inject, named, injectable } from "inversify";
-import { IndexId } from "../constant";
+import { IndexId } from "../constant/indexId";
 import { IdentifierIndex } from "./identifierIndex";
+import { BindingIdentifier } from "../constant/bindingIdentifier";
 
 @injectable()
 export class UriIndex {

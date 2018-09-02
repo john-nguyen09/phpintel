@@ -30,7 +30,8 @@ export class DbStore {
     ) {
         this.storeKey = storeInfo.name + DbStore.versionPrefix + storeInfo.version;
         this.db = sublevel(datasource.getDb(), this.storeKey, {
-            separator: DbStore.separator
+            separator: DbStore.separator,
+            valueEncoding: 'json'
         });
     }
 

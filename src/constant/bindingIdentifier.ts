@@ -1,4 +1,4 @@
-namespace BindingIdentifier {
+export namespace BindingIdentifier {
     export const CONNECTION = 'connection';
     export const INITIALIZE_PROVIDER = 'InitializeProvider';
     export const HOVER_PROVIDER = 'HoverProvider';
@@ -11,8 +11,9 @@ namespace BindingIdentifier {
     export const TIMESTAMP_INDEX = 'timestamp_index';
     export const URI_INDEX = 'uri_index';
 
-    export const LOGGER = 'logger';
+    export const MESSENGER = 'messenger';
     export const HASHER = 'hasher';
     export const TREE_NODE_TRAVERSER = 'tree_node_traverser';
     export const INDEXER = 'indexer';
+    export const TEXT_DOCUMENT_STORE = 'text_document_store';
 }

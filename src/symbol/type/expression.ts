@@ -12,6 +12,8 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
     consume(other: Symbol): boolean {
         if (other instanceof Expression) {
             this.realSymbol = other;
+
+            return true;
         }
 
         if (this.realSymbol == null) {

@@ -8,24 +8,20 @@ import { uriToPath } from "../util/uri";
 import * as path from "path";
 import { elapsed } from "../util/hrtime";
 import { Application } from "../app";
-import { Logger } from "../service/logger";
+import { Messenger } from "../service/messenger";
 import { Hasher } from "../service/hasher";
-import { inject } from "inversify";
+import { BindingIdentifier } from "../constant/bindingIdentifier";
 const pjson = require("../../package.json");
 const homedir = require('os').homedir();
 
-export class InitializeProvider {
-    constructor(
-        @inject(BindingIdentifier.LOGGER) private logger: Logger,
-        @inject(BindingIdentifier.HASHER) private hasher: Hasher,
-        @inject(BindingIdentifier.INDEXER) private indexer: Indexer
-    ) { }
-
-    provide(params: InitializeParams): InitializeResult {
+export namespace InitializeProvider {
+    export function provide(params: InitializeParams): InitializeResult {
+        const logger = Application.get<Messenger>(BindingIdentifier.MESSENGER);
+        const hasher = Application.get<Hasher>(BindingIdentifier.HASHER);
         let rootPath: string = '';
 
-        this.logger.info(`node ${process.version}`);
-        this.logger.info(`phpintel ${pjson.version} server started`);
+        logger.info(`node ${process.version}`);
+        logger.info(`phpintel ${pjson.version} server started`);
 
         if (params.rootUri != null) {
             rootPath = uriToPath(params.rootUri);
@@ -33,17 +29,18 @@ export class InitializeProvider {
             rootPath = params.rootPath;
         }
 
-        let storagePath = path.join(homedir, '.phpintel', this.hasher.getHash(rootPath));
+        let storagePath = path.join(homedir, '.phpintel', hasher.getHash(rootPath));
         Application.initStorage(storagePath);
 
-        this.logger.info(`storagePath: ${storagePath}`);
+        logger.info(`storagePath: ${storagePath}`);
         let start = process.hrtime();
 
-        this.indexer.indexDir(rootPath)
+        let indexer = Application.get<Indexer>(BindingIdentifier.INDEXER);
+        indexer.indexDir(rootPath)
             .catch((err) => {
-                this.logger.error(err);
+                logger.error(err);
             }).then(() => {
-                this.logger.info(`Finish indexing in ${elapsed(start).toFixed()} ms`);
+                logger.info(`Finish indexing in ${elapsed(start).toFixed()} ms`);
             });
 
         return <InitializeResult>{
