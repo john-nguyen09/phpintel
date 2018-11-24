@@ -1,0 +1,1055 @@
+{
+  "PhraseType": "StatementList",
+  "Children": [
+    {
+      "PhraseType": "InlineText",
+      "Children": [
+        {
+          "TokenType": "OpenTag",
+          "Offset": 0,
+          "Length": 6
+        }
+      ]
+    },
+    {
+      "TokenType": "Whitespace",
+      "Offset": 6,
+      "Length": 1
+    },
+    {
+      "PhraseType": "FunctionDeclaration",
+      "Children": [
+        {
+          "PhraseType": "FunctionDeclarationHeader",
+          "Children": [
+            {
+              "TokenType": "Function",
+              "Offset": 7,
+              "Length": 8
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 15,
+              "Length": 1
+            },
+            {
+              "TokenType": "Name",
+              "Offset": 16,
+              "Length": 9
+            },
+            {
+              "TokenType": "OpenParenthesis",
+              "Offset": 25,
+              "Length": 1
+            },
+            {
+              "PhraseType": "ParameterDeclarationList",
+              "Children": [
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 26,
+                      "Length": 7
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 33,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 34,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 35,
+                      "Length": 7
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 42,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 43,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 44,
+                      "Length": 7
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 51,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Equals",
+                      "Offset": 52,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 53,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "ConstantAccessExpression",
+                      "Children": [
+                        {
+                          "PhraseType": "QualifiedName",
+                          "Children": [
+                            {
+                              "PhraseType": "NamespaceName",
+                              "Children": [
+                                {
+                                  "TokenType": "Name",
+                                  "Offset": 54,
+                                  "Length": 4
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 58,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 59,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 60,
+                      "Length": 7
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 67,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Equals",
+                      "Offset": 68,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 69,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "StringLiteral",
+                      "Offset": 70,
+                      "Length": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "TokenType": "CloseParenthesis",
+              "Offset": 72,
+              "Length": 1
+            }
+          ]
+        },
+        {
+          "TokenType": "Whitespace",
+          "Offset": 73,
+          "Length": 1
+        },
+        {
+          "PhraseType": "FunctionDeclarationBody",
+          "Children": [
+            {
+              "TokenType": "OpenBrace",
+              "Offset": 74,
+              "Length": 1
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 75,
+              "Length": 2
+            },
+            {
+              "TokenType": "CloseBrace",
+              "Offset": 77,
+              "Length": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "TokenType": "Whitespace",
+      "Offset": 78,
+      "Length": 2
+    },
+    {
+      "PhraseType": "FunctionDeclaration",
+      "Children": [
+        {
+          "PhraseType": "FunctionDeclarationHeader",
+          "Children": [
+            {
+              "TokenType": "Function",
+              "Offset": 80,
+              "Length": 8
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 88,
+              "Length": 1
+            },
+            {
+              "TokenType": "Name",
+              "Offset": 89,
+              "Length": 9
+            },
+            {
+              "TokenType": "OpenParenthesis",
+              "Offset": 98,
+              "Length": 1
+            },
+            {
+              "PhraseType": "ParameterDeclarationList",
+              "Children": [
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 99,
+                      "Length": 7
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 106,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Equals",
+                      "Offset": 107,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 108,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "ConstantAccessExpression",
+                      "Children": [
+                        {
+                          "PhraseType": "QualifiedName",
+                          "Children": [
+                            {
+                              "PhraseType": "NamespaceName",
+                              "Children": [
+                                {
+                                  "TokenType": "Name",
+                                  "Offset": 109,
+                                  "Length": 4
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 113,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 114,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "PhraseType": "TypeDeclaration",
+                      "Children": [
+                        {
+                          "PhraseType": "QualifiedName",
+                          "Children": [
+                            {
+                              "PhraseType": "NamespaceName",
+                              "Children": [
+                                {
+                                  "TokenType": "Name",
+                                  "Offset": 115,
+                                  "Length": 3
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 118,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 119,
+                      "Length": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "TokenType": "CloseParenthesis",
+              "Offset": 126,
+              "Length": 1
+            }
+          ]
+        },
+        {
+          "TokenType": "Whitespace",
+          "Offset": 127,
+          "Length": 1
+        },
+        {
+          "PhraseType": "FunctionDeclarationBody",
+          "Children": [
+            {
+              "TokenType": "OpenBrace",
+              "Offset": 128,
+              "Length": 1
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 129,
+              "Length": 5
+            },
+            {
+              "PhraseType": "StatementList",
+              "Children": [
+                {
+                  "PhraseType": "ReturnStatement",
+                  "Children": [
+                    {
+                      "TokenType": "Return",
+                      "Offset": 134,
+                      "Length": 6
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 140,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "IntegerLiteral",
+                      "Offset": 141,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Semicolon",
+                      "Offset": 142,
+                      "Length": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 143,
+              "Length": 1
+            },
+            {
+              "TokenType": "CloseBrace",
+              "Offset": 144,
+              "Length": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "TokenType": "Whitespace",
+      "Offset": 145,
+      "Length": 2
+    },
+    {
+      "PhraseType": "FunctionDeclaration",
+      "Children": [
+        {
+          "PhraseType": "FunctionDeclarationHeader",
+          "Children": [
+            {
+              "TokenType": "Function",
+              "Offset": 147,
+              "Length": 8
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 155,
+              "Length": 1
+            },
+            {
+              "TokenType": "Name",
+              "Offset": 156,
+              "Length": 9
+            },
+            {
+              "TokenType": "OpenParenthesis",
+              "Offset": 165,
+              "Length": 1
+            },
+            {
+              "PhraseType": "ParameterDeclarationList",
+              "Children": [
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 166,
+                      "Length": 7
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 173,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 174,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 175,
+                      "Length": 7
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 182,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 183,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 184,
+                      "Length": 7
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Comma",
+                  "Offset": 191,
+                  "Length": 1
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 192,
+                  "Length": 1
+                },
+                {
+                  "PhraseType": "ParameterDeclaration",
+                  "Children": [
+                    {
+                      "PhraseType": "TypeDeclaration",
+                      "Children": [
+                        {
+                          "PhraseType": "QualifiedName",
+                          "Children": [
+                            {
+                              "PhraseType": "NamespaceName",
+                              "Children": [
+                                {
+                                  "TokenType": "Name",
+                                  "Offset": 193,
+                                  "Length": 4
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 197,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "VariableName",
+                      "Offset": 198,
+                      "Length": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "TokenType": "CloseParenthesis",
+              "Offset": 205,
+              "Length": 1
+            }
+          ]
+        },
+        {
+          "TokenType": "Whitespace",
+          "Offset": 206,
+          "Length": 1
+        },
+        {
+          "PhraseType": "FunctionDeclarationBody",
+          "Children": [
+            {
+              "TokenType": "OpenBrace",
+              "Offset": 207,
+              "Length": 1
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 208,
+              "Length": 5
+            },
+            {
+              "PhraseType": "StatementList",
+              "Children": [
+                {
+                  "PhraseType": "IfStatement",
+                  "Children": [
+                    {
+                      "TokenType": "If",
+                      "Offset": 213,
+                      "Length": 2
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 215,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "OpenParenthesis",
+                      "Offset": 216,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "SimpleVariable",
+                      "Children": [
+                        {
+                          "TokenType": "VariableName",
+                          "Offset": 217,
+                          "Length": 7
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "CloseParenthesis",
+                      "Offset": 224,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 225,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "CompoundStatement",
+                      "Children": [
+                        {
+                          "TokenType": "OpenBrace",
+                          "Offset": 226,
+                          "Length": 1
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 227,
+                          "Length": 9
+                        },
+                        {
+                          "PhraseType": "StatementList",
+                          "Children": [
+                            {
+                              "PhraseType": "ReturnStatement",
+                              "Children": [
+                                {
+                                  "TokenType": "Return",
+                                  "Offset": 236,
+                                  "Length": 6
+                                },
+                                {
+                                  "TokenType": "Whitespace",
+                                  "Offset": 242,
+                                  "Length": 1
+                                },
+                                {
+                                  "PhraseType": "ConstantAccessExpression",
+                                  "Children": [
+                                    {
+                                      "PhraseType": "QualifiedName",
+                                      "Children": [
+                                        {
+                                          "PhraseType": "NamespaceName",
+                                          "Children": [
+                                            {
+                                              "TokenType": "Name",
+                                              "Offset": 243,
+                                              "Length": 4
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "TokenType": "Semicolon",
+                                  "Offset": 247,
+                                  "Length": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 248,
+                          "Length": 5
+                        },
+                        {
+                          "TokenType": "CloseBrace",
+                          "Offset": 253,
+                          "Length": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 254,
+                  "Length": 6
+                },
+                {
+                  "PhraseType": "IfStatement",
+                  "Children": [
+                    {
+                      "TokenType": "If",
+                      "Offset": 260,
+                      "Length": 2
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 262,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "OpenParenthesis",
+                      "Offset": 263,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "SimpleVariable",
+                      "Children": [
+                        {
+                          "TokenType": "VariableName",
+                          "Offset": 264,
+                          "Length": 7
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "CloseParenthesis",
+                      "Offset": 271,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 272,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "CompoundStatement",
+                      "Children": [
+                        {
+                          "TokenType": "OpenBrace",
+                          "Offset": 273,
+                          "Length": 1
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 274,
+                          "Length": 9
+                        },
+                        {
+                          "PhraseType": "StatementList",
+                          "Children": [
+                            {
+                              "PhraseType": "ReturnStatement",
+                              "Children": [
+                                {
+                                  "TokenType": "Return",
+                                  "Offset": 283,
+                                  "Length": 6
+                                },
+                                {
+                                  "TokenType": "Whitespace",
+                                  "Offset": 289,
+                                  "Length": 1
+                                },
+                                {
+                                  "TokenType": "FloatingLiteral",
+                                  "Offset": 290,
+                                  "Length": 4
+                                },
+                                {
+                                  "TokenType": "Semicolon",
+                                  "Offset": 294,
+                                  "Length": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 295,
+                          "Length": 5
+                        },
+                        {
+                          "TokenType": "CloseBrace",
+                          "Offset": 300,
+                          "Length": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 301,
+                  "Length": 6
+                },
+                {
+                  "PhraseType": "IfStatement",
+                  "Children": [
+                    {
+                      "TokenType": "If",
+                      "Offset": 307,
+                      "Length": 2
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 309,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "OpenParenthesis",
+                      "Offset": 310,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "SimpleVariable",
+                      "Children": [
+                        {
+                          "TokenType": "VariableName",
+                          "Offset": 311,
+                          "Length": 7
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "CloseParenthesis",
+                      "Offset": 318,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 319,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "CompoundStatement",
+                      "Children": [
+                        {
+                          "TokenType": "OpenBrace",
+                          "Offset": 320,
+                          "Length": 1
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 321,
+                          "Length": 9
+                        },
+                        {
+                          "PhraseType": "StatementList",
+                          "Children": [
+                            {
+                              "PhraseType": "ReturnStatement",
+                              "Children": [
+                                {
+                                  "TokenType": "Return",
+                                  "Offset": 330,
+                                  "Length": 6
+                                },
+                                {
+                                  "TokenType": "Whitespace",
+                                  "Offset": 336,
+                                  "Length": 1
+                                },
+                                {
+                                  "TokenType": "IntegerLiteral",
+                                  "Offset": 337,
+                                  "Length": 2
+                                },
+                                {
+                                  "TokenType": "Semicolon",
+                                  "Offset": 339,
+                                  "Length": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 340,
+                          "Length": 5
+                        },
+                        {
+                          "TokenType": "CloseBrace",
+                          "Offset": 345,
+                          "Length": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 346,
+                  "Length": 6
+                },
+                {
+                  "PhraseType": "IfStatement",
+                  "Children": [
+                    {
+                      "TokenType": "If",
+                      "Offset": 352,
+                      "Length": 2
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 354,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "OpenParenthesis",
+                      "Offset": 355,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "UnaryOpExpression",
+                      "Children": [
+                        {
+                          "TokenType": "Exclamation",
+                          "Offset": 356,
+                          "Length": 1
+                        },
+                        {
+                          "PhraseType": "SimpleVariable",
+                          "Children": [
+                            {
+                              "TokenType": "VariableName",
+                              "Offset": 357,
+                              "Length": 7
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "CloseParenthesis",
+                      "Offset": 364,
+                      "Length": 1
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 365,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "CompoundStatement",
+                      "Children": [
+                        {
+                          "TokenType": "OpenBrace",
+                          "Offset": 366,
+                          "Length": 1
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 367,
+                          "Length": 9
+                        },
+                        {
+                          "PhraseType": "StatementList",
+                          "Children": [
+                            {
+                              "PhraseType": "ReturnStatement",
+                              "Children": [
+                                {
+                                  "TokenType": "Return",
+                                  "Offset": 376,
+                                  "Length": 6
+                                },
+                                {
+                                  "TokenType": "Whitespace",
+                                  "Offset": 382,
+                                  "Length": 1
+                                },
+                                {
+                                  "PhraseType": "ConstantAccessExpression",
+                                  "Children": [
+                                    {
+                                      "PhraseType": "QualifiedName",
+                                      "Children": [
+                                        {
+                                          "PhraseType": "NamespaceName",
+                                          "Children": [
+                                            {
+                                              "TokenType": "Name",
+                                              "Offset": 383,
+                                              "Length": 4
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "TokenType": "Semicolon",
+                                  "Offset": 387,
+                                  "Length": 1
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "TokenType": "Whitespace",
+                          "Offset": 388,
+                          "Length": 5
+                        },
+                        {
+                          "TokenType": "CloseBrace",
+                          "Offset": 393,
+                          "Length": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "TokenType": "Whitespace",
+                  "Offset": 394,
+                  "Length": 6
+                },
+                {
+                  "PhraseType": "ReturnStatement",
+                  "Children": [
+                    {
+                      "TokenType": "Return",
+                      "Offset": 400,
+                      "Length": 6
+                    },
+                    {
+                      "TokenType": "Whitespace",
+                      "Offset": 406,
+                      "Length": 1
+                    },
+                    {
+                      "PhraseType": "SimpleVariable",
+                      "Children": [
+                        {
+                          "TokenType": "VariableName",
+                          "Offset": 407,
+                          "Length": 7
+                        }
+                      ]
+                    },
+                    {
+                      "TokenType": "Semicolon",
+                      "Offset": 414,
+                      "Length": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "TokenType": "Whitespace",
+              "Offset": 415,
+              "Length": 1
+            },
+            {
+              "TokenType": "CloseBrace",
+              "Offset": 416,
+              "Length": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "TokenType": "Whitespace",
+      "Offset": 417,
+      "Length": 1
+    }
+  ]
+}
