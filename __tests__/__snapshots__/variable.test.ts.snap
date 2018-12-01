@@ -2,77 +2,14 @@
 
 exports[`variable simple variable 1`] = `
 PhpDocument {
-  "branchSymbols": Array [
-    VariableAssignment {
-      "variable": SimpleVariable {
-        "name": "$varName",
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "isArray": false,
-              "name": "string",
-            },
-          ],
-        },
-      },
-    },
-  ],
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
   },
-  "symbols": Array [
-    SimpleVariable {
-      "name": "$varName",
-      "type": TypeComposite {
-        "_types": Array [
-          TypeName {
-            "isArray": false,
-            "name": "string",
-          },
-        ],
-      },
-    },
-    SimpleVariable {
-      "name": "$fieldName",
-      "type": TypeComposite {
-        "_types": Array [],
-      },
-    },
-    AdditiveExpression {
-      "valueSymbols": Array [
-        TokenSymbol {
-          "text": "'field_'",
-        },
-        TokenSymbol {
-          "text": " ",
-        },
-        TokenSymbol {
-          "text": ".",
-        },
-        TokenSymbol {
-          "text": " ",
-        },
-        SimpleVariable {
-          "name": "$fieldName",
-          "type": TypeComposite {
-            "_types": Array [],
-          },
-        },
-      ],
-    },
-    VariableAssignment {
-      "variable": SimpleVariable {
-        "name": "$varName",
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "isArray": false,
-              "name": "string",
-            },
-          ],
-        },
-      },
-    },
-  ],
+  "methods": Array [],
+  "properties": Array [],
 }
 `;

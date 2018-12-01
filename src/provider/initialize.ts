@@ -8,7 +8,7 @@ import { uriToPath } from "../util/uri";
 import * as path from "path";
 import { elapsed } from "../util/hrtime";
 import { Application } from "../app";
-import { Messenger } from "../service/messenger";
+import { LogWriter } from "../service/logWriter";
 import { Hasher } from "../service/hasher";
 import { BindingIdentifier } from "../constant/bindingIdentifier";
 const pjson = require("../../package.json");
@@ -16,7 +16,7 @@ const homedir = require('os').homedir();
 
 export namespace InitializeProvider {
     export function provide(params: InitializeParams): InitializeResult {
-        const logger = Application.get<Messenger>(BindingIdentifier.MESSENGER);
+        const logger = Application.get<LogWriter>(BindingIdentifier.MESSENGER);
         const hasher = Application.get<Hasher>(BindingIdentifier.HASHER);
         let rootPath: string = '';
 

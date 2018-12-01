@@ -1,4 +1,4 @@
-import { Symbol, DocBlockConsumer } from "../symbol";
+import { Symbol, DocBlockConsumer, ScopeMember } from "../symbol";
 import { Function } from "./function";
 import { SymbolModifier } from "../meta/modifier";
 import { MethodHeader } from "./methodHeader";
@@ -8,10 +8,11 @@ import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
 import { DocBlock } from "../docBlock";
 
-export class Method extends Symbol implements DocBlockConsumer {
+export class Method extends Symbol implements DocBlockConsumer, ScopeMember {
     public modifier: SymbolModifier = new SymbolModifier();
     public name: TypeName;
     public description: string = '';
+    public scope: string = '';
 
     @nonenumerable
     private func: Function;

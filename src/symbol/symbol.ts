@@ -118,14 +118,6 @@ export interface ScopeMember {
     scope: string;
 }
 
-export interface Identifiable {
-    getIdentifier(): string;
-}
-
-export interface Locatable {
-    getLocation(): Location;
-}
-
 export function isTransform(symbol: Symbol): symbol is TransformSymbol {
     return symbol != null && 'realSymbol' in symbol;
 }
@@ -142,10 +134,6 @@ export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlock
     return 'consumeDocBlock' in symbol;
 }
 
-export function isIdentifiable(symbol: Symbol): symbol is (Symbol & Identifiable) {
-    return 'getIdentifier' in symbol;
-}
-
-export function isLocatable(symbol: Symbol): symbol is (Symbol & Locatable) {
-    return 'getLocation' in symbol;
+export function isScopeMember(symbol: Symbol): symbol is (Symbol & ScopeMember) {
+    return 'scope' in symbol;
 }

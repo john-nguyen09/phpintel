@@ -1,7 +1,6 @@
 import { Symbol, TokenSymbol, Consumer, Reference } from "../symbol";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { Expression } from "../type/expression";
-import { inspect } from "util";
 import { Location } from "../meta/location";
 import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";

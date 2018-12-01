@@ -59,6 +59,7 @@ export class SymbolParser implements Visitor<TreeNode> {
 
     pushSymbol(symbol: Symbol | null) {
         this.symbolStack.push(symbol);
+        this.doc.pushSymbol(symbol);
     }
 
     preorder(node: TreeNode) {
@@ -174,7 +175,7 @@ export class SymbolParser implements Visitor<TreeNode> {
                     break;
                 case PhraseKind.ClassTypeDesignator:
                     this.pushSymbol(new ClassTypeDesignator(p, this.doc));
-
+                    break;
                 case PhraseKind.PropertyElement:
                     this.pushSymbol(new Property(p, this.doc));
                     break;
@@ -238,7 +239,6 @@ export class SymbolParser implements Visitor<TreeNode> {
             }
 
             if (isConsumed) {
-                this.doc.onSymbolDequeued(symbol);
                 break;
             }
         }

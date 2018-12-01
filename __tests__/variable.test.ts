@@ -7,6 +7,7 @@ import { pathToUri } from "../src/util/uri";
 import { PhpDocument } from "../src/symbol/phpDocument";
 import { Parser, phraseTypeToString, tokenTypeToString } from "php7parser";
 import { TreeNode } from "../src/util/parseTree";
+import { dumpAstToDebug } from "../src/testHelpers";
 
 describe('variable', () => {
     it('simple variable', () => {
@@ -25,29 +26,7 @@ describe('variable', () => {
             symbolParser
         ]);
 
-        fs.writeFile(
-            path.resolve(__dirname, '..', 'debug', 'variable', 'simpleVariable.ast.json'),
-            JSON.stringify(parseTree, (key, value) => {
-                if (key == 'modeStack') {
-                    return undefined;
-                }
-
-                if (key == 'phraseType') {
-                    return phraseTypeToString(value);
-                }
-
-                if (key == 'tokenType') {
-                    return tokenTypeToString(value);
-                }
-
-                return value;
-            }, 2),
-            (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            }
-        );
+        dumpAstToDebug(path.join('variable', 'simpleVariable.ast.json'), parseTree);
         
         expect(symbolParser.getTree().toObject()).toMatchSnapshot();
     });

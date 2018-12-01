@@ -15,7 +15,7 @@ import { TimestampIndex } from "./timestampIndex";
 import { inject, injectable } from "inversify";
 import { TextDocumentStore } from "../textDocumentStore";
 import { BindingIdentifier } from "../constant/bindingIdentifier";
-import { Messenger } from "../service/messenger";
+import { LogWriter } from "../service/logWriter";
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
@@ -92,6 +92,7 @@ export class Indexer {
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         // Symbol name index
         this.removeIndexes(doc.uri);
+        console.log(doc.branchSymbols);
         for (let branchSymbol of doc.branchSymbols) {
             await this.indexBranchSymbol(branchSymbol, doc.uri);
         }

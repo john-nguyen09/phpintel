@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { TreeTraverser, Visitor, isTraversable} from "./structures";
 import { injectable } from "inversify";
 

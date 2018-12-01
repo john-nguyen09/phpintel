@@ -15,8 +15,8 @@
     "language",
     "server"
   ],
-  "author": "John Nguyen",
-  "license": "ISC",
+  "author": "John Nguyen (john.nguyen09@outlook.com)",
+  "license": "MIT",
   "dependencies": {
     "doc-parser": "^0.4.8",
     "inversify": "^4.13.0",

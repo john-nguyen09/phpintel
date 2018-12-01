@@ -4,14 +4,14 @@ import { intToBytes, multipleIntToBytes } from "../util/bytewise";
 import { inject, named, injectable } from "inversify";
 import { IndexId } from "../constant/indexId";
 import { BindingIdentifier } from "../constant/bindingIdentifier";
-import { Messenger } from "../service/messenger";
+import { LogWriter } from "../service/logWriter";
 
 @injectable()
 export class PositionIndex {
     private db: DbStore;
 
     constructor(@inject(BindingIdentifier.DB_STORE) @named(IndexId.POSITION) store: DbStore,
-        @inject(BindingIdentifier.MESSENGER) private logger: Messenger) {
+        @inject(BindingIdentifier.MESSENGER) private logger: LogWriter) {
         this.db = store;
     }
 

@@ -5,6 +5,12 @@ import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
 import { nonenumerable } from "../util/decorator";
 import { TextDocument } from "../textDocument";
+import { Class } from "./class/class";
+import { Constant } from "./constant/constant";
+import { Function } from "./function/function";
+import { ClassConstant } from "./constant/classConstant";
+import { Method } from "./function/method";
+import { Property } from "./variable/property";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
@@ -14,8 +20,13 @@ export class PhpDocument extends Symbol implements Consumer {
     private _uri: string;
 
     public importTable: ImportTable;
-    public branchSymbols: Symbol[] = [];
-    public symbols: Symbol[] = [];
+
+    public classes: Class[] = [];
+    public functions: Function[] = [];
+    public constants: Constant[] = [];
+    public classConstants: ClassConstant[] = [];
+    public methods: Method[] = [];
+    public properties: Property[] = [];
 
     constructor(uri: string, text: string) {
         super(null, null);
@@ -50,12 +61,26 @@ export class PhpDocument extends Symbol implements Consumer {
             return true;
         }
 
-        this.branchSymbols.push(other);
-
         return true;
     }
 
-    onSymbolDequeued(symbol: Symbol): void {
-        this.symbols.push(symbol);
+    pushSymbol(symbol: Symbol | null): void {
+        if (symbol === null) {
+            return;
+        }
+
+        if (symbol instanceof Class) {
+            this.classes.push(symbol);
+        } else if (symbol instanceof Function) {
+            this.functions.push(symbol);
+        } else if (symbol instanceof Constant) {
+            this.constants.push(symbol);
+        } else if (symbol instanceof ClassConstant) {
+            this.classConstants.push(symbol);
+        } else if (symbol instanceof Method) {
+            this.methods.push(symbol);
+        } else if (symbol instanceof Property) {
+            this.properties.push(symbol);
+        }
     }
 }

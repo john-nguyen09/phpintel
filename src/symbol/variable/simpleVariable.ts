@@ -1,13 +1,13 @@
 import { Variable } from "./variable";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
-import { Symbol, TokenSymbol, Locatable } from "../symbol";
+import { Symbol, TokenSymbol } from "../symbol";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
 import { Expression } from "../type/expression";
 import { Location } from "../meta/location";
 
-export class SimpleVariable extends Variable implements FieldGetter, Locatable {
+export class SimpleVariable extends Variable implements FieldGetter {
     private location: Location;
 
     constructor(public node: TreeNode, public doc: PhpDocument) {
