@@ -9,19 +9,9 @@ import { TokenKind } from '../util/parser';
 import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';
 import { Location } from './meta/location';
+import { ImportTable } from '../type/importTable';
 
 export abstract class Symbol {
-    @nonenumerable
-    public node: TreeNode | null;
-
-    @nonenumerable
-    public doc: PhpDocument | null;
-
-    constructor(node: TreeNode | null, doc: PhpDocument | null) {
-        this.node = node;
-        this.doc = doc;
-    }
-
     toObject(): any {
         let instance = this;
         let object: any = createObject((<any>instance).constructor);
@@ -87,7 +77,7 @@ export class TokenSymbol extends Symbol {
     public type: TokenKind;
 
     constructor(token: Token, doc: PhpDocument) {
-        super(token, doc);
+        super();
 
         this.type = <number>token.tokenType;
         this.text = nodeText(token, doc.textDocument.text);
@@ -115,7 +105,19 @@ export interface Reference {
 }
 
 export interface ScopeMember {
-    scope: string;
+    scope: TypeName;
+}
+
+export interface NamedSymbol {
+    getName(): string;
+}
+
+export interface Locatable {
+    location: Location;
+}
+
+export interface NameResolvable {
+    resolveName(importTable: ImportTable): void;
 }
 
 export function isTransform(symbol: Symbol): symbol is TransformSymbol {
@@ -136,4 +138,16 @@ export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlock
 
 export function isScopeMember(symbol: Symbol): symbol is (Symbol & ScopeMember) {
     return 'scope' in symbol;
+}
+
+export function isNamedSymbol(symbol: Symbol): symbol is (Symbol & NamedSymbol) {
+    return 'getName' in symbol && typeof (<any>symbol).getName == 'function';
+}
+
+export function needsNameResolve(symbol: Symbol): symbol is (Symbol & NameResolvable) {
+    return 'resolveName' in symbol && typeof (<any>symbol).resolveName == 'function';
+}
+
+export function isLocatable(symbol: Symbol): symbol is (Symbol & Locatable) {
+    return 'location' in symbol;
 }

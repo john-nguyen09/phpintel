@@ -8,23 +8,17 @@ import { TokenKind, PhraseKind } from "../../util/parser";
 import { nonenumerable } from "../../util/decorator";
 import { TypeComposite } from "../../type/composite";
 import { Location } from "../meta/location";
+import { TypeName } from "../../type/name";
 
 export class Property extends Symbol implements ScopeMember {
     public name: string;
     public location: Location;
     public modifier: SymbolModifier;
     public description: string = '';
-    public scope: string = '';
+    public scope: TypeName;
 
     @nonenumerable
-    private _variable: Variable;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this._variable = new Variable('');
-        this.location = new Location(doc.uri, nodeRange(node, doc.text));
-    }
+    private _variable: Variable = new Variable('');
 
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol) {

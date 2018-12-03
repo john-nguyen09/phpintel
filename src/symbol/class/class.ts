@@ -1,25 +1,18 @@
-import { Symbol, Consumer, isScopeMember } from "../symbol";
+import { Symbol, Consumer, isScopeMember, NamedSymbol, Locatable } from "../symbol";
 import { Location } from "../meta/location";
-import { TreeNode, nodeRange } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
 import { TypeName } from "../../type/name";
+import { ImportTable } from "../../type/importTable";
 
-export class Class extends Symbol implements Consumer {
+export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
     public extend: TypeName | null;
-    public location: Location;
+    public location: Location = new Location();
     public implements: TypeName[] = [];
     public modifier: SymbolModifier = new SymbolModifier();
     public traits: TypeName[] = [];
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this.location = new Location(doc.uri, nodeRange(node, doc.text));
-    }
 
     consume(other: Symbol) {
         if (other instanceof ClassHeader) {
@@ -27,10 +20,6 @@ export class Class extends Symbol implements Consumer {
             this.extend = other.extend ? other.extend.name : null;
             this.implements = other.implement ? other.implement.interfaces : [];
             this.modifier = other.modifier;
-
-            if (this.doc != null) {
-                this.name.resolveToFullyQualified(this.doc.importTable);
-            }
 
             return true;
         } else if (other instanceof ClassTraitUse) {
@@ -40,9 +29,17 @@ export class Class extends Symbol implements Consumer {
 
             return true;
         } else if (isScopeMember(other)) {
-            other.scope = this.name.toString();
+            other.scope = this.name;
         }
 
         return false;
+    }
+
+    public getName(): string {
+        return this.name.toString();
+    }
+
+    public resolveName(importTable: ImportTable): void {
+        this.name.resolveToFullyQualified(importTable);
     }
 }

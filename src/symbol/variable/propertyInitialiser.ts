@@ -1,20 +1,12 @@
 import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Expression } from "../type/expression";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 import { TokenKind } from "../../util/parser";
 
 export class PropertyInitialiser extends Symbol implements Consumer {
-    public expression: Expression;
+    public expression: Expression = new Expression();
 
     protected hasFirstEqual = false;
     protected hasInitialWhitespaces = false;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this.expression = new Expression(node, doc);
-    }
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {

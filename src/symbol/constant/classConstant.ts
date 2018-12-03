@@ -1,23 +1,17 @@
-import { Symbol, ScopeMember } from "../symbol";
+import { Symbol, ScopeMember, NamedSymbol, Locatable } from "../symbol";
 import { Identifier } from "../identifier";
 import { Constant } from "./constant";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
+import { Location } from "../meta/location";
 
-export class ClassConstant extends Symbol implements ScopeMember {
+export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, Locatable {
     public name: TypeName;
-    public scope: string = '';
+    public location: Location;
+    public scope: TypeName = new TypeName();
 
     @nonenumerable
-    private constant: Constant;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this.constant = new Constant(node, doc);
-    }
+    private constant: Constant = new Constant();
 
     consume(other: Symbol) {
         if (other instanceof Identifier) {
@@ -37,5 +31,9 @@ export class ClassConstant extends Symbol implements ScopeMember {
 
     get type(): TypeName {
         return this.constant.type;
+    }
+
+    public getName(): string {
+        return this.name.toString();
     }
 }

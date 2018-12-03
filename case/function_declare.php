@@ -42,4 +42,4 @@ function test_function2($param1, $param2) {
 
 $callback = function() {
     
-}
+};

@@ -1,4 +1,4 @@
-import { Symbol, Consumer, DocBlockConsumer } from "../symbol";
+import { Symbol, Consumer, DocBlockConsumer, NamedSymbol, Locatable } from "../symbol";
 import { FunctionHeader } from "./functionHeader";
 import { Parameter } from "../variable/parameter";
 import { Scope } from "../variable/scope";
@@ -12,9 +12,12 @@ import { DocBlock } from "../docBlock";
 import { DocNodeKind, toTypeName } from "../../util/docParser";
 import { VariableAssignment } from "../variable/varibleAssignment";
 import { FieldGetter } from "../fieldGetter";
+import { ImportTable } from "../../type/importTable";
+import { Location } from "../meta/location";
 
-export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter {
+export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
+    public location: Location;
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
     public typeAggregate: TypeComposite = new TypeComposite();
@@ -26,12 +29,6 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
         if (other instanceof Parameter) {
             if (other.name in this.docParamTypes) {
                 other.type.push(this.docParamTypes[other.name]);
-
-                if (this.doc != null) {
-                    for (let type of other.type.types) {
-                        type.resolveToFullyQualified(this.doc.importTable);
-                    }
-                }
             }
 
             this.parameters.push(other);
@@ -40,10 +37,6 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
             return true;
         } else if (other instanceof FunctionHeader) {
             this.name = other.name;
-
-            if (this.doc != null) {
-                this.name.resolveToFullyQualified(this.doc.importTable);
-            }
 
             return true;
         } else if (other instanceof Return) {
@@ -59,10 +52,6 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
                 returnSymbol instanceof Expression &&
                 returnSymbol.type != undefined
             ) {
-                if (this.doc != null) {
-                    returnSymbol.type.resolveToFullyQualified(this.doc.importTable);
-                }
-
                 this.typeAggregate.push(returnSymbol.type);
             }
 
@@ -89,9 +78,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
             if (docNode.kind == DocNodeKind.Param) {
                 let typeName = toTypeName(docNode.type);
 
-                if (this.doc != null && typeName != null) {
-                    typeName.resolveToFullyQualified(this.doc.importTable);
-                    
+                if (typeName != null) {                    
                     this.docParamTypes['$' + docNode.name] = typeName;
                 }
             }
@@ -106,5 +93,23 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
         return [
             'name', 'parameters', 'scopeVar', 'types', 'description'
         ];
+    }
+
+    public getName(): string {
+        return this.name.toString();
+    }
+
+    public resolveName(importTable: ImportTable): void {
+        for (let param of this.parameters) {
+            for (let type of param.type.types) {
+                type.resolveToFullyQualified(importTable);
+            }
+        }
+
+        this.name.resolveToFullyQualified(importTable);
+
+        for (let type of this.typeAggregate.types) {
+            type.resolveToFullyQualified(importTable);
+        }
     }
 }

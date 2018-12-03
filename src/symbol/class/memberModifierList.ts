@@ -1,13 +1,11 @@
 import { Consumer, Symbol, TokenSymbol } from "../symbol";
 import { SymbolModifier } from "../meta/modifier";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 
 export class MemberModifierList extends Symbol implements Consumer {
     public modifier: SymbolModifier = new SymbolModifier();
 
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
+    constructor() {
+        super();
 
         this.modifier.include(SymbolModifier.PUBLIC);
     }

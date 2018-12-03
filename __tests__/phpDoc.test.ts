@@ -1,4 +1,4 @@
-import { indexFiles, getCaseDir, dumpToDebug, dumpAstToDebug } from "../src/testHelpers";
+import { indexFiles, getCaseDir, dumpToDebug, dumpAstToDebug } from "../src/testHelper";
 import * as path from "path";
 
 describe('phpDoc', () => {
@@ -12,8 +12,7 @@ describe('phpDoc', () => {
 
         for (let phpDoc of phpDocs) {
             // dumpAstToDebug(path.basename(phpDoc.uri) + '.ast.json', phpDoc.getTree());
-            expect(phpDoc.toObject).toMatchSnapshot();
+            expect(phpDoc.toObject()).toMatchSnapshot();
         }
-        // dumpToDebug('phpDocs.dump', dumpObjects, 6);
     });
 });

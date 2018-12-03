@@ -1,4 +1,4 @@
-import { Symbol, TransformSymbol, Reference, Consumer } from "../symbol";
+import { Symbol, TransformSymbol, Reference, Consumer, Locatable } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 import { DefineConstant } from "../constant/defineConstant";
 import { ArgumentExpressionList } from "../argumentExpressionList";
@@ -7,23 +7,20 @@ import { Location } from "../meta/location";
 import { TreeNode, nodeRange } from "../../util/parseTree";
 import { PhpDocument } from "../phpDocument";
 
-export class FunctionCall extends TransformSymbol implements Consumer, Reference {
+export class FunctionCall extends TransformSymbol implements Consumer, Reference, Locatable {
     public realSymbol: (Symbol & Consumer);
     public type: TypeName;
     public argumentList: ArgumentExpressionList;
 
-    private location: Location;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this.location = new Location(doc.uri, nodeRange(node, doc.text));
-    }
+    public location: Location;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
             if (other.name.toLowerCase() == 'define') {
-                this.realSymbol = new DefineConstant(this.node, this.doc);
+                let defineConstant = new DefineConstant();
+
+                defineConstant.location = this.location;
+                this.realSymbol = defineConstant;
             } else {
                 this.type = new TypeName(other.name);
             }
@@ -40,9 +37,5 @@ export class FunctionCall extends TransformSymbol implements Consumer, Reference
         }
 
         return false;
-    }
-
-    getLocation(): Location {
-        return this.location;
     }
 }

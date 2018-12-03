@@ -2,7 +2,7 @@ import { PhpDocument } from "./symbol/phpDocument";
 import { pathToUri } from "./util/uri";
 import * as fs from "fs";
 import { SymbolParser } from "./symbol/symbolParser";
-import { RecursiveTraverser } from "./treeTraverser/recursive";
+import { RecursiveTraverser } from "./treeTraverser";
 import { TreeNode } from "./util/parseTree";
 import { Parser, Phrase, phraseTypeToString, tokenTypeToString } from "php7parser";
 import * as path from "path";

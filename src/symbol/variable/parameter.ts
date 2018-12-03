@@ -18,7 +18,7 @@ export class Parameter extends Symbol implements Consumer, Reference {
                     this.name = other.text;
                     break;
                 case TokenKind.Equals:
-                    this.expression = new Expression(other.node, this.doc);
+                    this.expression = new Expression();
                     break;
             }
         } else if (other instanceof TypeDeclaration) {

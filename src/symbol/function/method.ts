@@ -1,4 +1,4 @@
-import { Symbol, DocBlockConsumer, ScopeMember } from "../symbol";
+import { Symbol, DocBlockConsumer, ScopeMember, NamedSymbol, Locatable } from "../symbol";
 import { Function } from "./function";
 import { SymbolModifier } from "../meta/modifier";
 import { MethodHeader } from "./methodHeader";
@@ -7,21 +7,17 @@ import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
 import { DocBlock } from "../docBlock";
+import { Location } from "../meta/location";
 
-export class Method extends Symbol implements DocBlockConsumer, ScopeMember {
+export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
     public name: TypeName;
+    public location: Location;
     public description: string = '';
-    public scope: string = '';
+    public scope: TypeName;
 
     @nonenumerable
-    private func: Function;
-
-    constructor(node: TreeNode, doc: PhpDocument) {
-        super(node, doc);
-
-        this.func = new Function(node, doc);
-    }
+    private func: Function = new Function();
 
     consume(other: Symbol): boolean {
         if (other instanceof MethodHeader) {
@@ -46,5 +42,9 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember {
 
     get variables() {
         return this.func.scopeVar.variables;
+    }
+
+    public getName(): string {
+        return this.name.toString();
     }
 }

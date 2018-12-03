@@ -1,6 +1,6 @@
-import { TreeNode, isToken, isPhrase } from "../util/parseTree";
+import { TreeNode, isToken, isPhrase, nodeRange } from "../util/parseTree";
 import { Phrase } from "php7parser";
-import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer } from "./symbol";
+import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer, isLocatable } from "./symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./class/class";
 import { ClassHeader } from "./class/header";
@@ -37,7 +37,8 @@ import { NamespaceUseClause } from "./namespace/useClause";
 import { NamespaceAliasClause } from "./namespace/aliasClause";
 import { PhraseKind, TokenKind } from "../util/parser";
 import { VariableAssignment } from "./variable/varibleAssignment";
-import { Visitor } from "../treeTraverser/structures";
+import { Visitor } from "../treeTraverser";
+import { Location } from "./meta/location";
 
 export class SymbolParser implements Visitor<TreeNode> {
     protected symbolStack: (Symbol | null)[] = [];
@@ -83,110 +84,110 @@ export class SymbolParser implements Visitor<TreeNode> {
 
             switch (phraseType) {
                 case PhraseKind.NamespaceDefinition:
-                    this.pushSymbol(new NamespaceDefinition(node, this.doc));
+                    this.pushSymbol(new NamespaceDefinition());
                     break;
                 case PhraseKind.NamespaceName:
-                    this.pushSymbol(new NamespaceName(node, this.doc));
+                    this.pushSymbol(new NamespaceName());
                     break;
                 case PhraseKind.QualifiedName:
-                    this.pushSymbol(new QualifiedName(node, this.doc));
+                    this.pushSymbol(new QualifiedName());
                     break;
                 case PhraseKind.QualifiedNameList:
-                    this.pushSymbol(new QualifiedNameList(p, this.doc));
+                    this.pushSymbol(new QualifiedNameList());
                     break;
                 case PhraseKind.Identifier:
-                    this.pushSymbol(new Identifier(p, this.doc));
+                    this.pushSymbol(new Identifier());
                     break;
 
                 case PhraseKind.NamespaceUseDeclaration:
-                    this.pushSymbol(new NamespaceUse(p, this.doc));
+                    this.pushSymbol(new NamespaceUse());
                     break;
                 case PhraseKind.NamespaceUseClause:
-                    this.pushSymbol(new NamespaceUseClause(p, this.doc));
+                    this.pushSymbol(new NamespaceUseClause());
                     break;
                 case PhraseKind.NamespaceUseGroupClause:
-                    this.pushSymbol(new NamespaceUseClause(p, this.doc));
+                    this.pushSymbol(new NamespaceUseClause());
                     break;
                 case PhraseKind.NamespaceAliasingClause:
-                    this.pushSymbol(new NamespaceAliasClause(p, this.doc));
+                    this.pushSymbol(new NamespaceAliasClause());
                     break;
 
                 case PhraseKind.ClassDeclaration:
-                    this.pushSymbol(new Class(p, this.doc));
+                    this.pushSymbol(new Class());
                     break;
                 case PhraseKind.ClassDeclarationHeader:
-                    this.pushSymbol(new ClassHeader(p, this.doc));
+                    this.pushSymbol(new ClassHeader());
                     break;
                 case PhraseKind.ClassBaseClause:
-                    this.pushSymbol(new ClassExtend(p, this.doc));
+                    this.pushSymbol(new ClassExtend());
                     break;
                 case PhraseKind.ClassInterfaceClause:
-                    this.pushSymbol(new ClassImplement(p, this.doc));
+                    this.pushSymbol(new ClassImplement());
                     break;
                 case PhraseKind.TraitUseClause:
-                    this.pushSymbol(new ClassTraitUse(p, this.doc));
+                    this.pushSymbol(new ClassTraitUse());
                     break;
 
                 case PhraseKind.ConstElement:
-                    this.pushSymbol(new Constant(p, this.doc));
+                    this.pushSymbol(new Constant());
                     break;
                 case PhraseKind.FunctionCallExpression:
-                    this.pushSymbol(new FunctionCall(p, this.doc));
+                    this.pushSymbol(new FunctionCall());
                     break;
                 case PhraseKind.ClassConstElement:
-                    this.pushSymbol(new ClassConstant(p, this.doc));
+                    this.pushSymbol(new ClassConstant());
                     break;
                 case PhraseKind.ArgumentExpressionList:
-                    this.pushSymbol(new ArgumentExpressionList(p, this.doc));
+                    this.pushSymbol(new ArgumentExpressionList());
                     break;
                 case PhraseKind.ConstantAccessExpression:
-                    this.pushSymbol(new ConstantAccess(p, this.doc));
+                    this.pushSymbol(new ConstantAccess());
                     break;
                 case PhraseKind.AdditiveExpression:
-                    this.pushSymbol(new AdditiveExpression(p, this.doc));
+                    this.pushSymbol(new AdditiveExpression());
                     break;
 
                 case PhraseKind.FunctionDeclaration:
-                    this.pushSymbol(new Function(p, this.doc));
+                    this.pushSymbol(new Function());
                     break;
                 case PhraseKind.FunctionDeclarationHeader:
-                    this.pushSymbol(new FunctionHeader(p, this.doc));
+                    this.pushSymbol(new FunctionHeader());
                     break;
                 case PhraseKind.MethodDeclaration:
-                    this.pushSymbol(new Method(p, this.doc));
+                    this.pushSymbol(new Method());
                     break;
                 case PhraseKind.MethodDeclarationHeader:
-                    this.pushSymbol(new MethodHeader(p, this.doc));
+                    this.pushSymbol(new MethodHeader());
                     break;
                 case PhraseKind.ParameterDeclaration:
-                    this.pushSymbol(new Parameter(p, this.doc));
+                    this.pushSymbol(new Parameter());
                     break;
                 case PhraseKind.TypeDeclaration:
-                    this.pushSymbol(new TypeDeclaration(p, this.doc));
+                    this.pushSymbol(new TypeDeclaration());
                     break;
                 case PhraseKind.ReturnStatement:
-                    this.pushSymbol(new Return(p, this.doc));
+                    this.pushSymbol(new Return());
                     break;
                 case PhraseKind.SimpleAssignmentExpression:
-                    this.pushSymbol(new VariableAssignment(p, this.doc));
+                    this.pushSymbol(new VariableAssignment());
                     break;
                 case PhraseKind.SimpleVariable:
-                    this.pushSymbol(new SimpleVariable(p, this.doc));
+                    this.pushSymbol(new SimpleVariable());
                     break;
                 case PhraseKind.ClassTypeDesignator:
-                    this.pushSymbol(new ClassTypeDesignator(p, this.doc));
+                    this.pushSymbol(new ClassTypeDesignator());
                     break;
                 case PhraseKind.PropertyElement:
-                    this.pushSymbol(new Property(p, this.doc));
+                    this.pushSymbol(new Property());
                     break;
                 case PhraseKind.PropertyInitialiser:
-                    this.pushSymbol(new PropertyInitialiser(p, this.doc));
+                    this.pushSymbol(new PropertyInitialiser());
                     break;
                 case PhraseKind.MemberModifierList:
-                    this.pushSymbol(new MemberModifierList(p, this.doc));
+                    this.pushSymbol(new MemberModifierList());
                     break;
                 case PhraseKind.PropertyDeclaration:
-                    this.pushSymbol(new PropertyDeclaration(p, this.doc));
+                    this.pushSymbol(new PropertyDeclaration());
                     break;
 
                 default:
@@ -195,10 +196,20 @@ export class SymbolParser implements Visitor<TreeNode> {
 
             let symbol = this.symbolStack[this.symbolStack.length - 1];
 
-            if (symbol != null && isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
-                symbol.consumeDocBlock(this.lastDocBlock);
+            if (symbol !== null) {
+                if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
+                    symbol.consumeDocBlock(this.lastDocBlock);
+    
+                    this.lastDocBlock = null;
+                }
 
-                this.lastDocBlock = null;
+                if (symbol instanceof Class) {
+                    console.log(isLocatable(symbol));
+                }
+                
+                if (isLocatable(symbol)) {
+                    symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));
+                }
             }
         }
     }

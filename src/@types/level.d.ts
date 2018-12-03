@@ -41,4 +41,11 @@ declare namespace Level {
         seek(target: any): void;
         end(callback: any): void;
     }
+
+    export interface Encoding {
+        type: string;
+        encode: (obj: any) => Buffer;
+        decode: (buffer: Buffer) => any;
+        buffer: boolean;
+    }
 }

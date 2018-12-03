@@ -1,9 +1,720 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`phpDoc snapshot of phpDocs 1`] = `[Function]`;
+exports[`phpDoc snapshot of phpDocs 1`] = `
+PhpDocument {
+  "classConstants": Array [
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "CONST1",
+      },
+    },
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "PI",
+      },
+    },
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "STATUS_ACTIVE",
+      },
+    },
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "STATUS_INACTIVE",
+      },
+    },
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "IS_ACTIVE",
+      },
+    },
+  ],
+  "classes": Array [
+    Class {
+      "extend": null,
+      "implements": Array [],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
+      },
+      "traits": Array [],
+    },
+  ],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [],
+  "properties": Array [],
+}
+`;
 
-exports[`phpDoc snapshot of phpDocs 2`] = `[Function]`;
+exports[`phpDoc snapshot of phpDocs 2`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [
+    Class {
+      "extend": null,
+      "implements": Array [],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
+      },
+      "traits": Array [],
+    },
+  ],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [
+    Method {
+      "description": "",
+      "modifier": undefined,
+      "name": TypeName {
+        "isArray": false,
+        "name": "__construct",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "method1",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "method2",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "method3",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "method4",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 2,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "protectedMethod1",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 4,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "privateMethod1",
+      },
+    },
+  ],
+  "properties": Array [
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$property1",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$property2",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 2,
+      },
+      "name": "$protected1",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 2,
+      },
+      "name": "$protected2",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 2,
+      },
+      "name": "$protected3",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 2,
+      },
+      "name": "$protectedProperty1",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 4,
+      },
+      "name": "$privateProperty1",
+    },
+  ],
+}
+`;
 
-exports[`phpDoc snapshot of phpDocs 3`] = `[Function]`;
+exports[`phpDoc snapshot of phpDocs 3`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [
+    Function {
+      "description": "",
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\test_function1",
+      },
+      "parameters": Array [
+        Parameter {
+          "name": "$stringParam",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": false,
+                "name": "string",
+              },
+            ],
+          },
+          "value": "",
+        },
+        Parameter {
+          "name": "$intParam",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": false,
+                "name": "int",
+              },
+            ],
+          },
+          "value": "",
+        },
+        Parameter {
+          "name": "$boolParam",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": false,
+                "name": "boolean",
+              },
+            ],
+          },
+          "value": "",
+        },
+        Parameter {
+          "name": "$floatParam",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": false,
+                "name": "float",
+              },
+            ],
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": Scope {
+        "variables": Object {
+          "$boolParam": Variable {
+            "expression": Expression {},
+            "name": "$boolParam",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "boolean",
+                },
+              ],
+            },
+          },
+          "$floatParam": Variable {
+            "expression": Expression {},
+            "name": "$floatParam",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "float",
+                },
+              ],
+            },
+          },
+          "$intParam": Variable {
+            "expression": Expression {},
+            "name": "$intParam",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "int",
+                },
+              ],
+            },
+          },
+          "$stringParam": Variable {
+            "expression": Expression {},
+            "name": "$stringParam",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "string",
+                },
+              ],
+            },
+          },
+          "$test": SimpleVariable {
+            "expression": Expression {
+              "currentSymbol": TokenSymbol {
+                "text": "1",
+              },
+            },
+            "name": "$test",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "int",
+                },
+              ],
+            },
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "isArray": false,
+          "name": "boolean",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "string",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "int",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "float",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "\\\\TestClass",
+        },
+      ],
+    },
+    Function {
+      "description": "Test function 2",
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\test_function2",
+      },
+      "parameters": Array [
+        Parameter {
+          "name": "$param1",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": false,
+                "name": "\\\\array|int",
+              },
+            ],
+          },
+          "value": "",
+        },
+        Parameter {
+          "name": "$param2",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "isArray": true,
+                "name": "string",
+              },
+            ],
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": Scope {
+        "variables": Object {
+          "$param1": Variable {
+            "expression": Expression {},
+            "name": "$param1",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": false,
+                  "name": "\\\\array|int",
+                },
+              ],
+            },
+          },
+          "$param2": Variable {
+            "expression": Expression {},
+            "name": "$param2",
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "isArray": true,
+                  "name": "string",
+                },
+              ],
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+  ],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [],
+  "properties": Array [],
+}
+`;
 
-exports[`phpDoc snapshot of phpDocs 4`] = `[Function]`;
+exports[`phpDoc snapshot of phpDocs 4`] = `
+PhpDocument {
+  "classConstants": Array [
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "TEST_CLASS_CONST",
+      },
+    },
+    ClassConstant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "TEST_CLASS_CONST",
+      },
+    },
+  ],
+  "classes": Array [
+    Class {
+      "extend": null,
+      "implements": Array [
+        TypeName {
+          "isArray": false,
+          "name": "TestInterface",
+        },
+        TypeName {
+          "isArray": false,
+          "name": "TestInterface2",
+        },
+      ],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass2",
+      },
+      "traits": Array [],
+    },
+    Class {
+      "extend": null,
+      "implements": Array [
+        TypeName {
+          "isArray": false,
+          "name": "TestInterface",
+        },
+      ],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass",
+      },
+      "traits": Array [],
+    },
+    Class {
+      "extend": TypeName {
+        "isArray": false,
+        "name": "TestClass",
+      },
+      "implements": Array [],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\ChildClass",
+      },
+      "traits": Array [],
+    },
+    Class {
+      "extend": null,
+      "implements": Array [],
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 0,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\UnusedClass",
+      },
+      "traits": Array [],
+    },
+  ],
+  "constants": Array [
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "int",
+      },
+      "value": "123",
+    },
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST1",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "int",
+      },
+      "value": "456",
+    },
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST2",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "int",
+      },
+      "value": "789",
+    },
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST_STRING",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "string",
+      },
+      "value": "'Simple string'",
+    },
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST_STRING2",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "string",
+      },
+      "value": "'Not so simple string'",
+    },
+    Constant {
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\TEST_CONST_STRING3",
+      },
+      "type": TypeName {
+        "isArray": false,
+        "name": "string",
+      },
+      "value": "'Quite complex ' . TEST_CONST_STRING",
+    },
+  ],
+  "functions": Array [
+    Function {
+      "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
+",
+      "name": TypeName {
+        "isArray": false,
+        "name": "\\\\test_function",
+      },
+      "parameters": Array [],
+      "scopeVar": Scope {
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+  ],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [
+    Method {
+      "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "staticTestMethod",
+      },
+    },
+    Method {
+      "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "testMethod",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "staticTestMethod",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "testMethod",
+      },
+    },
+    Method {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": TypeName {
+        "isArray": false,
+        "name": "unusedMethod",
+      },
+    },
+  ],
+  "properties": Array [
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$staticTestProperty",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$testProperty",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$staticTestProperty",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$testProperty",
+    },
+    Property {
+      "description": "",
+      "modifier": SymbolModifier {
+        "modifier": 0,
+        "visibility": 1,
+      },
+      "name": "$unusedProperty",
+    },
+  ],
+}
+`;

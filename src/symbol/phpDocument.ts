@@ -1,5 +1,5 @@
 import { Phrase, Parser } from "php7parser";
-import { Consumer, Symbol } from "./symbol";
+import { Consumer, Symbol, isNamedSymbol, NamedSymbol, needsNameResolve } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
@@ -29,10 +29,10 @@ export class PhpDocument extends Symbol implements Consumer {
     public properties: Property[] = [];
 
     constructor(uri: string, text: string) {
-        super(null, null);
+        super();
+
         this._uri = uri;
         this.textDocument = new TextDocument(text);
-
         this.importTable = new ImportTable();
     }
 
@@ -59,6 +59,10 @@ export class PhpDocument extends Symbol implements Consumer {
             }
 
             return true;
+        }
+
+        if (needsNameResolve(other)) {
+            other.resolveName(this.importTable);
         }
 
         return true;

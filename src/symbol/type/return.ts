@@ -24,7 +24,7 @@ export class Return extends Symbol implements Consumer {
             this.returnSymbol = other;
         } else {
             if (!this.expression) {
-                this.expression = new Expression(other.node, other.doc);
+                this.expression = new Expression();
             }
 
             this.expression.consume(other);

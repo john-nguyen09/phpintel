@@ -6,10 +6,6 @@ import { TypeComposite } from "../../type/composite";
 export class Scope extends Symbol implements Consumer {
     public variables: { [name: string]: Variable } = {};
 
-    constructor() {
-        super(null, null);
-    }
-
     consume(other: Symbol) {
         if (other instanceof Parameter) {
             let variable = new Variable(other.name, other.type);

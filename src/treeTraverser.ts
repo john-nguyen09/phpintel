@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { TreeTraverser, Visitor, isTraversable} from "./structures";
 import { injectable } from "inversify";
 
 @injectable()
@@ -29,4 +28,17 @@ export class RecursiveTraverser<T> implements TreeTraverser<T> {
             }
         }
     }
+}
+
+export interface Visitor<T> {
+    preorder(node: T): void;
+    postorder?(node: T): void;
+}
+
+export interface TreeTraverser<T> {
+    traverse(rootNode: T, visitors: Visitor<T>[]): void;
+}
+
+export function isTraversable<T>(node: T): node is (T & { children: T[] }) {
+    return 'children' in node && Array.isArray((<any>node).children);
 }

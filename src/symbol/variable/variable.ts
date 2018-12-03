@@ -8,13 +8,13 @@ export class Variable extends Symbol implements Consumer, Reference {
     protected expression: Expression;
 
     constructor(public name: string, type?: TypeComposite) {
-        super(null, null);
+        super();
 
         if (type) {
             this.type = type;
         }
 
-        this.expression = new Expression(null, null);
+        this.expression = new Expression();
     }
 
     consume(other: Symbol) {

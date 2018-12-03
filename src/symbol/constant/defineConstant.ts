@@ -1,22 +1,16 @@
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, NamedSymbol, Locatable } from "../symbol";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 import { Constant } from "./constant";
-import { PhpDocument } from "../phpDocument";
-import { TreeNode } from "../../util/parseTree";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
+import { Location } from "../meta/location";
 
-export class DefineConstant extends Symbol implements FieldGetter {
+export class DefineConstant extends Symbol implements FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
+    public location: Location;
 
-    private constant: Constant;
-
-    constructor(node: TreeNode | null, doc: PhpDocument | null) {
-        super(node, doc);
-
-        this.constant = new Constant(node, doc);
-    }
+    private constant: Constant = new Constant();
 
     consume(other: Symbol) {
         if (other instanceof ArgumentExpressionList) {
@@ -32,10 +26,6 @@ export class DefineConstant extends Symbol implements FieldGetter {
                 }
 
                 this.constant.consume(args[1]);
-
-                if (this.doc != null) {
-                    this.name.resolveToFullyQualified(this.doc.importTable);
-                }
             }
 
             return true;
@@ -54,5 +44,9 @@ export class DefineConstant extends Symbol implements FieldGetter {
 
     getFields(): string[] {
         return ['name', 'value', 'type'];
+    }
+
+    public getName(): string {
+        return this.name.toString();
     }
 }

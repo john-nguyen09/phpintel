@@ -5,7 +5,7 @@ import { pathToUri } from "../src/util/uri";
 import * as path from 'path';
 import * as fs from 'fs';
 import { Parser, phraseTypeToString, tokenTypeToString } from "php7parser";
-import { RecursiveTraverser } from "../src/treeTraverser/recursive";
+import { RecursiveTraverser } from "../src/treeTraverser";
 
 describe('namespaceDef', () => {
     it('should assign namespace to phpDocument', () => {
