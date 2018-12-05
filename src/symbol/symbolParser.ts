@@ -202,10 +202,6 @@ export class SymbolParser implements Visitor<TreeNode> {
     
                     this.lastDocBlock = null;
                 }
-
-                if (symbol instanceof Class) {
-                    console.log(isLocatable(symbol));
-                }
                 
                 if (isLocatable(symbol)) {
                     symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));

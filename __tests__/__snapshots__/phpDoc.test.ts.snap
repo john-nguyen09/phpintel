@@ -4,33 +4,128 @@ exports[`phpDoc snapshot of phpDocs 1`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 21,
+            "line": 2,
+            "offset": 50,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 2,
+            "offset": 39,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "CONST1",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
+      },
     },
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 19,
+            "line": 3,
+            "offset": 71,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 3,
+            "offset": 62,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "PI",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
+      },
     },
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 34,
+            "line": 4,
+            "offset": 107,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 4,
+            "offset": 83,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "STATUS_ACTIVE",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
+      },
     },
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 38,
+            "line": 5,
+            "offset": 147,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 5,
+            "offset": 119,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "STATUS_INACTIVE",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
+      },
     },
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 26,
+            "line": 6,
+            "offset": 175,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 6,
+            "offset": 159,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "IS_ACTIVE",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithConst",
       },
     },
   ],
@@ -38,6 +133,21 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 1,
+            "line": 7,
+            "offset": 178,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 1,
+            "offset": 6,
+          },
+        },
+        "relativeUri": "case/class_constants.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -66,6 +176,21 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 1,
+            "line": 55,
+            "offset": 1074,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 2,
+            "offset": 7,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -85,6 +210,21 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 27,
+            "offset": 607,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 25,
+            "offset": 560,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": undefined,
       "name": TypeName {
         "isArray": false,
@@ -93,6 +233,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 31,
+            "offset": 667,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 29,
+            "offset": 613,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -104,6 +259,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 38,
+            "offset": 773,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 33,
+            "offset": 673,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -115,6 +285,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 42,
+            "offset": 830,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 40,
+            "offset": 779,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -126,6 +311,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 46,
+            "offset": 890,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 44,
+            "offset": 836,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -137,6 +337,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 50,
+            "offset": 953,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 48,
+            "offset": 896,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 2,
@@ -148,6 +363,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 54,
+            "offset": 1072,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 52,
+            "offset": 959,
+          },
+        },
+        "relativeUri": "case/class_methods.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 4,
@@ -447,16 +677,51 @@ exports[`phpDoc snapshot of phpDocs 4`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 32,
+            "line": 38,
+            "offset": 1084,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 38,
+            "offset": 1062,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "TEST_CLASS_CONST",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass",
       },
     },
     ClassConstant {
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 32,
+            "line": 100,
+            "offset": 2128,
+          },
+          "start": Position {
+            "character": 10,
+            "line": 100,
+            "offset": 2106,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "name": TypeName {
         "isArray": false,
         "name": "TEST_CLASS_CONST",
       },
+      "scope": null,
     },
   ],
   "classes": Array [
@@ -472,6 +737,21 @@ PhpDocument {
           "name": "TestInterface2",
         },
       ],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 20,
+            "offset": 409,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 17,
+            "offset": 343,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -490,6 +770,21 @@ PhpDocument {
           "name": "TestInterface",
         },
       ],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 72,
+            "offset": 1875,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 31,
+            "offset": 888,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -506,6 +801,21 @@ PhpDocument {
         "name": "TestClass",
       },
       "implements": Array [],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 115,
+            "offset": 2385,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 115,
+            "offset": 2348,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -519,6 +829,21 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": 1,
+            "line": 137,
+            "offset": 2883,
+          },
+          "start": Position {
+            "character": 0,
+            "line": 130,
+            "offset": 2778,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
@@ -619,6 +944,21 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 60,
+            "offset": 1547,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 57,
+            "offset": 1457,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -631,6 +971,21 @@ PhpDocument {
     Method {
       "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
 ",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 71,
+            "offset": 1873,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 68,
+            "offset": 1758,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -642,6 +997,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 107,
+            "offset": 2254,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 104,
+            "offset": 2200,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -653,6 +1023,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 112,
+            "offset": 2343,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 109,
+            "offset": 2260,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,
@@ -664,6 +1049,21 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "location": Location {
+        "range": Range {
+          "end": Position {
+            "character": -1,
+            "line": 136,
+            "offset": 2881,
+          },
+          "start": Position {
+            "character": 4,
+            "line": 134,
+            "offset": 2831,
+          },
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 1,

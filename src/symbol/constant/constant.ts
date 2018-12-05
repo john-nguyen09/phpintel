@@ -11,7 +11,7 @@ import { ImportTable } from "../../type/importTable";
 export class Constant extends Symbol implements Consumer, Reference, FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
     public expression: Expression;
-    public location: Location;
+    public location: Location | null = null;
 
     protected hasEqual: boolean = false;
     protected acceptWhitespace: boolean = true;

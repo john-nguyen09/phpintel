@@ -105,7 +105,7 @@ export interface Reference {
 }
 
 export interface ScopeMember {
-    scope: TypeName;
+    scope: TypeName | null;
 }
 
 export interface NamedSymbol {
@@ -113,7 +113,7 @@ export interface NamedSymbol {
 }
 
 export interface Locatable {
-    location: Location;
+    location: Location | null;
 }
 
 export interface NameResolvable {

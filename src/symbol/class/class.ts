@@ -9,7 +9,7 @@ import { ImportTable } from "../../type/importTable";
 export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
     public extend: TypeName | null;
-    public location: Location = new Location();
+    public location: Location | null = null;
     public implements: TypeName[] = [];
     public modifier: SymbolModifier = new SymbolModifier();
     public traits: TypeName[] = [];

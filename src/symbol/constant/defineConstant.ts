@@ -8,7 +8,7 @@ import { Location } from "../meta/location";
 
 export class DefineConstant extends Symbol implements FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
-    public location: Location;
+    public location: Location | null = null;
 
     private constant: Constant = new Constant();
 

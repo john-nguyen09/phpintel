@@ -2,8 +2,6 @@ import { Symbol, DocBlockConsumer, ScopeMember, NamedSymbol, Locatable } from ".
 import { Function } from "./function";
 import { SymbolModifier } from "../meta/modifier";
 import { MethodHeader } from "./methodHeader";
-import { TreeNode } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
 import { DocBlock } from "../docBlock";
@@ -12,7 +10,7 @@ import { Location } from "../meta/location";
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
     public name: TypeName;
-    public location: Location;
+    public location: Location | null = null;
     public description: string = '';
     public scope: TypeName;
 
