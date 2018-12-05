@@ -230,6 +230,10 @@ PhpDocument {
         "isArray": false,
         "name": "__construct",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
+      },
     },
     Method {
       "description": "",
@@ -255,6 +259,10 @@ PhpDocument {
       "name": TypeName {
         "isArray": false,
         "name": "method1",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -282,6 +290,10 @@ PhpDocument {
         "isArray": false,
         "name": "method2",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
+      },
     },
     Method {
       "description": "",
@@ -307,6 +319,10 @@ PhpDocument {
       "name": TypeName {
         "isArray": false,
         "name": "method3",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -334,6 +350,10 @@ PhpDocument {
         "isArray": false,
         "name": "method4",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
+      },
     },
     Method {
       "description": "",
@@ -360,6 +380,10 @@ PhpDocument {
         "isArray": false,
         "name": "protectedMethod1",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
+      },
     },
     Method {
       "description": "",
@@ -385,6 +409,10 @@ PhpDocument {
       "name": TypeName {
         "isArray": false,
         "name": "privateMethod1",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
@@ -967,6 +995,10 @@ PhpDocument {
         "isArray": false,
         "name": "staticTestMethod",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass",
+      },
     },
     Method {
       "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
@@ -994,6 +1026,10 @@ PhpDocument {
         "isArray": false,
         "name": "testMethod",
       },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass",
+      },
     },
     Method {
       "description": "",
@@ -1020,6 +1056,7 @@ PhpDocument {
         "isArray": false,
         "name": "staticTestMethod",
       },
+      "scope": null,
     },
     Method {
       "description": "",
@@ -1046,6 +1083,7 @@ PhpDocument {
         "isArray": false,
         "name": "testMethod",
       },
+      "scope": null,
     },
     Method {
       "description": "",
@@ -1071,6 +1109,10 @@ PhpDocument {
       "name": TypeName {
         "isArray": false,
         "name": "unusedMethod",
+      },
+      "scope": TypeName {
+        "isArray": false,
+        "name": "\\\\UnusedClass",
       },
     },
   ],
