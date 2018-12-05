@@ -12,7 +12,7 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember, Nam
     public name: TypeName;
     public location: Location | null = null;
     public description: string = '';
-    public scope: TypeName;
+    public scope: TypeName | null = null;
 
     @nonenumerable
     private func: Function = new Function();
