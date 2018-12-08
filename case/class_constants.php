@@ -1,5 +1,5 @@
 <?php
-class ClassWithConst {
+abstract class ClassWithConst {
     const CONST1 = 50;
     const PI = 3.14;
     const STATUS_ACTIVE = 'active';

@@ -1,0 +1,998 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 1`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 21,
+        "line": 2,
+        "offset": 59,
+      },
+      "start": Position {
+        "character": 10,
+        "line": 2,
+        "offset": 48,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "CONST1",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 2`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 19,
+        "line": 3,
+        "offset": 80,
+      },
+      "start": Position {
+        "character": 10,
+        "line": 3,
+        "offset": 71,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "PI",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 3`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 34,
+        "line": 4,
+        "offset": 116,
+      },
+      "start": Position {
+        "character": 10,
+        "line": 4,
+        "offset": 92,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "STATUS_ACTIVE",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 4`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 38,
+        "line": 5,
+        "offset": 156,
+      },
+      "start": Position {
+        "character": 10,
+        "line": 5,
+        "offset": 128,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "STATUS_INACTIVE",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 5`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 26,
+        "line": 6,
+        "offset": 184,
+      },
+      "start": Position {
+        "character": 10,
+        "line": 6,
+        "offset": 168,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "IS_ACTIVE",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 1`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 22,
+        "line": 9,
+        "offset": 130,
+      },
+      "start": Position {
+        "character": 6,
+        "line": 9,
+        "offset": 114,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "int",
+  },
+  "resolvedValue": "123",
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 2`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 23,
+        "line": 11,
+        "offset": 156,
+      },
+      "start": Position {
+        "character": 6,
+        "line": 11,
+        "offset": 139,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST1",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "int",
+  },
+  "resolvedValue": "456",
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 3`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 42,
+        "line": 11,
+        "offset": 175,
+      },
+      "start": Position {
+        "character": 25,
+        "line": 11,
+        "offset": 158,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST2",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "int",
+  },
+  "resolvedValue": "789",
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 4`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 41,
+        "line": 13,
+        "offset": 219,
+      },
+      "start": Position {
+        "character": 6,
+        "line": 13,
+        "offset": 184,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST_STRING",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "string",
+  },
+  "resolvedValue": "'Simple string'",
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 5`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 54,
+        "line": 14,
+        "offset": 275,
+      },
+      "start": Position {
+        "character": 6,
+        "line": 14,
+        "offset": 227,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST_STRING2",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "string",
+  },
+  "resolvedValue": "'Not so simple string'",
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 6`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 63,
+        "line": 15,
+        "offset": 340,
+      },
+      "start": Position {
+        "character": 6,
+        "line": 15,
+        "offset": 283,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\TEST_CONST_STRING3",
+  },
+  "resolvedType": TypeName {
+    "isArray": false,
+    "name": "string",
+  },
+  "resolvedValue": "'Quite complex ' . TEST_CONST_STRING",
+}
+`;
+
+exports[`symbolEncoding snapshot of function symbols after encode and decode 1`] = `
+Function {
+  "description": "",
+  "docParamTypes": Object {},
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 31,
+        "offset": 582,
+      },
+      "start": Position {
+        "character": 0,
+        "line": 2,
+        "offset": 7,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/function_declare.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\test_function1",
+  },
+  "parameters": Array [
+    Parameter {
+      "name": "$stringParam",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": false,
+            "name": "string",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "name": "$intParam",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": false,
+            "name": "int",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "name": "$boolParam",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": false,
+            "name": "boolean",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "name": "$floatParam",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": false,
+            "name": "float",
+          },
+        ],
+      },
+      "value": "",
+    },
+  ],
+  "scopeVar": Scope {
+    "variables": Object {
+      "$boolParam": Variable {
+        "expression": Expression {},
+        "name": "$boolParam",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "boolean",
+            },
+          ],
+        },
+      },
+      "$floatParam": Variable {
+        "expression": Expression {},
+        "name": "$floatParam",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "float",
+            },
+          ],
+        },
+      },
+      "$intParam": Variable {
+        "expression": Expression {},
+        "name": "$intParam",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "int",
+            },
+          ],
+        },
+      },
+      "$stringParam": Variable {
+        "expression": Expression {},
+        "name": "$stringParam",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "string",
+            },
+          ],
+        },
+      },
+      "$test": Variable {
+        "expression": Expression {},
+        "name": "$test",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "int",
+            },
+          ],
+        },
+      },
+    },
+  },
+  "typeAggregate": TypeComposite {
+    "_types": Array [
+      TypeName {
+        "isArray": false,
+        "name": "boolean",
+      },
+      TypeName {
+        "isArray": false,
+        "name": "string",
+      },
+      TypeName {
+        "isArray": false,
+        "name": "int",
+      },
+      TypeName {
+        "isArray": false,
+        "name": "float",
+      },
+      TypeName {
+        "isArray": false,
+        "name": "\\\\TestClass",
+      },
+    ],
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of function symbols after encode and decode 2`] = `
+Function {
+  "description": "Test function 2",
+  "docParamTypes": Object {},
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 40,
+        "offset": 754,
+      },
+      "start": Position {
+        "character": 0,
+        "line": 38,
+        "offset": 708,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/function_declare.php",
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "\\\\test_function2",
+  },
+  "parameters": Array [
+    Parameter {
+      "name": "$param1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": false,
+            "name": "\\\\array|int",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "name": "$param2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "isArray": true,
+            "name": "string",
+          },
+        ],
+      },
+      "value": "",
+    },
+  ],
+  "scopeVar": Scope {
+    "variables": Object {
+      "$param1": Variable {
+        "expression": Expression {},
+        "name": "$param1",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": false,
+              "name": "\\\\array|int",
+            },
+          ],
+        },
+      },
+      "$param2": Variable {
+        "expression": Expression {},
+        "name": "$param2",
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "isArray": true,
+              "name": "string",
+            },
+          ],
+        },
+      },
+    },
+  },
+  "typeAggregate": TypeComposite {
+    "_types": Array [],
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 1`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 27,
+        "offset": 607,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 25,
+        "offset": 560,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 0,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "__construct",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 2`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 31,
+        "offset": 667,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 29,
+        "offset": 613,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "method1",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 3`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 38,
+        "offset": 773,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 33,
+        "offset": 673,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "method2",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 4`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 42,
+        "offset": 830,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 40,
+        "offset": 779,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "method3",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 5`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 46,
+        "offset": 890,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 44,
+        "offset": 836,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "method4",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 6`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 50,
+        "offset": 953,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 48,
+        "offset": 896,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "protectedMethod1",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 7`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": -1,
+        "line": 54,
+        "offset": 1072,
+      },
+      "start": Position {
+        "character": 4,
+        "line": 52,
+        "offset": 959,
+      },
+    },
+    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 4,
+  },
+  "name": TypeName {
+    "isArray": false,
+    "name": "privateMethod1",
+  },
+  "scope": TypeName {
+    "isArray": false,
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 1`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 29,
+        "line": 4,
+        "offset": 60,
+      },
+      "start": Position {
+        "character": 11,
+        "line": 4,
+        "offset": 42,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": "$property1",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 2`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 21,
+        "line": 5,
+        "offset": 83,
+      },
+      "start": Position {
+        "character": 11,
+        "line": 5,
+        "offset": 73,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": "$property2",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 3`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 25,
+        "line": 14,
+        "offset": 326,
+      },
+      "start": Position {
+        "character": 14,
+        "line": 14,
+        "offset": 315,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected1",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 4`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 38,
+        "line": 14,
+        "offset": 339,
+      },
+      "start": Position {
+        "character": 27,
+        "line": 14,
+        "offset": 328,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected2",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 5`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 51,
+        "line": 14,
+        "offset": 352,
+      },
+      "start": Position {
+        "character": 40,
+        "line": 14,
+        "offset": 341,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected3",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 6`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 33,
+        "line": 16,
+        "offset": 388,
+      },
+      "start": Position {
+        "character": 14,
+        "line": 16,
+        "offset": 369,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protectedProperty1",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 7`] = `
+Property {
+  "description": "A private proterty which is only used by this class
+",
+  "location": Location {
+    "range": Range {
+      "end": Position {
+        "character": 29,
+        "line": 23,
+        "offset": 553,
+      },
+      "start": Position {
+        "character": 12,
+        "line": 23,
+        "offset": 536,
+      },
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 4,
+  },
+  "name": "$privateProperty1",
+  "scope": null,
+}
+`;

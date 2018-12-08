@@ -37,5 +37,8 @@
     "ts-jest": "^23.1.2",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

@@ -30,6 +30,10 @@ export function getCaseDir(): string {
     return path.resolve(__dirname, "..", "case");
 }
 
+export function getDebugDir(): string {
+    return path.resolve(__dirname, '..', 'debug');
+}
+
 export function dumpToDebug(name: string, object: any, depth?: number): void {
     fs.writeFile(
         path.resolve(__dirname, '..', 'debug', name),

@@ -16,7 +16,7 @@ export class TypeName {
     };
 
     private name: string;
-    private isArray: boolean = false;
+    public isArray: boolean = false;
 
     constructor(name: string, isArray?: boolean) {
         this.name = name;
@@ -28,10 +28,6 @@ export class TypeName {
         if (isArray !== undefined) {
             this.isArray = isArray;
         }
-    }
-
-    public setIsArray(isArray: boolean): void {
-        this.isArray = isArray;
     }
 
     public resolveToFullyQualified(importTable: ImportTable) {
@@ -48,6 +44,10 @@ export class TypeName {
         }
 
         return typeName.indexOf('\\') === 0;
+    }
+
+    public getName(): string {
+        return this.name;
     }
 
     public toString(): string {

@@ -29,8 +29,16 @@ export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, L
         return this.constant.value;
     }
 
+    set value(val: string) {
+        this.constant.resolvedValue = val;
+    }
+
     get type(): TypeName {
         return this.constant.type;
+    }
+
+    set type(val: TypeName) {
+        this.constant.resolvedType = val;
     }
 
     public getName(): string {

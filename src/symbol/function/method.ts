@@ -6,6 +6,7 @@ import { TypeName } from "../../type/name";
 import { nonenumerable } from "../../util/decorator";
 import { DocBlock } from "../docBlock";
 import { Location } from "../meta/location";
+import { Variable } from "../variable/variable";
 
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
@@ -38,8 +39,20 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember, Nam
         return this.func.types;
     }
 
+    pushType(type: TypeName | null) {
+        if (type === null) {
+            return;
+        }
+
+        this.func.typeAggregate.push(type);
+    }
+
     get variables() {
         return this.func.scopeVar.variables;
+    }
+
+    setVariable(variable: Variable) {
+        this.func.scopeVar.set(variable);
     }
 
     public getName(): string {

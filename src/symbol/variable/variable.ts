@@ -1,8 +1,10 @@
-import { Symbol, Consumer, Reference } from "../symbol";
+import { Symbol, Consumer, Reference, DocBlockConsumer } from "../symbol";
 import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
+import { DocBlock } from "../docBlock";
+import { DocNodeKind, toTypeName, VarDocNode } from "../../util/docParser";
 
-export class Variable extends Symbol implements Consumer, Reference {
+export class Variable extends Symbol implements Consumer, DocBlockConsumer, Reference {
     public type: TypeComposite = new TypeComposite;
 
     protected expression: Expression;
@@ -25,5 +27,34 @@ export class Variable extends Symbol implements Consumer, Reference {
         }
 
         return result;
+    }
+
+    consumeDocBlock(doc: DocBlock) {
+        let docAst = doc.docAst;
+        if (docAst.kind == 'doc') {
+            let varDocNodes = doc.getNodes<VarDocNode>(DocNodeKind.Var);
+
+            for (let i = 0; i < varDocNodes.length; i++) {
+                let isThisVar = false;
+
+                if (varDocNodes[i].variable == null) {
+                    isThisVar = true;
+                } else {
+                    let docVarName = '$' + varDocNodes[i].variable;
+
+                    if (this.name == docVarName) {
+                        isThisVar = true;
+                    }
+                }
+
+                if (isThisVar) {
+                    let typeName = toTypeName(varDocNodes[i].type);
+
+                    if (typeName != null) {
+                        this.type.push(typeName);
+                    }
+                }
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ import { TypeName } from "../../type/name";
 
 export class MethodHeader extends Symbol {
     public name: TypeName;
-    public modifier: SymbolModifier;
+    public modifier: SymbolModifier = new SymbolModifier();
 
     consume(other: Symbol): boolean {
         if (other instanceof Identifier) {

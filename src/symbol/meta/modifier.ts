@@ -71,4 +71,12 @@ export class SymbolModifier implements Consumer {
     private isVisibility(modifier: number): boolean {
         return modifier >= SymbolModifier.PUBLIC && modifier <= SymbolModifier.PRIVATE;
     }
+
+    public getModifier(): number {
+        return this.modifier;
+    }
+
+    public getVisibility(): number {
+        return this.visibility;
+    }
 }

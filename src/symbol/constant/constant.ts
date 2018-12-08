@@ -12,6 +12,8 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
     public name: TypeName;
     public expression: Expression;
     public location: Location | null = null;
+    public resolvedType: TypeName | null = null;
+    public resolvedValue: string | null = null;
 
     protected hasEqual: boolean = false;
     protected acceptWhitespace: boolean = true;
@@ -53,11 +55,19 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
     }
 
     get value() {
-        return this.expression.value;
+        if (this.resolvedValue === null) {
+            this.resolvedValue = this.expression.value;
+        }
+
+        return this.resolvedValue;
     }
 
     get type() {
-        return this.expression.type;
+        if (this.resolvedType === null) {
+            this.resolvedType = this.expression.type;
+        }
+
+        return this.resolvedType;
     }
     
     getFields(): string[] {

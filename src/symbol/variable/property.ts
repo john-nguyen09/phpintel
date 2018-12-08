@@ -1,4 +1,4 @@
-import { Symbol, TokenSymbol, ScopeMember } from "../symbol";
+import { Symbol, TokenSymbol, ScopeMember, Locatable, DocBlockConsumer } from "../symbol";
 import { Variable } from "./variable";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
@@ -9,13 +9,14 @@ import { nonenumerable } from "../../util/decorator";
 import { TypeComposite } from "../../type/composite";
 import { Location } from "../meta/location";
 import { TypeName } from "../../type/name";
+import { DocBlock } from "../docBlock";
 
-export class Property extends Symbol implements ScopeMember {
+export class Property extends Symbol implements DocBlockConsumer, ScopeMember, Locatable {
     public name: string;
-    public location: Location;
+    public location: Location | null = null;
     public modifier: SymbolModifier;
     public description: string = '';
-    public scope: TypeName;
+    public scope: TypeName | null = null;
 
     @nonenumerable
     private _variable: Variable = new Variable('');
@@ -34,7 +35,19 @@ export class Property extends Symbol implements ScopeMember {
         return false;
     }
 
-    public get type(): TypeComposite {
+    consumeDocBlock(doc: DocBlock) {
+        let docAst = doc.docAst;
+
+        this.description = docAst.summary;
+
+        this._variable.consumeDocBlock(doc);
+    }
+
+    get type(): TypeComposite {
         return this._variable.type;
+    }
+
+    set type(val: TypeComposite) {
+        this._variable.type = val;
     }
 }
