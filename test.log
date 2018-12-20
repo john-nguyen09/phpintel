@@ -1,0 +1,5 @@
+
+> phpintel@0.0.1 test C:\Users\johnn\Development\phpintel
+> jest "-t" "reference at the cursor"
+
+Terminate batch job (Y/N)? 

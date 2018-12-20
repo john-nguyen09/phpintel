@@ -20,6 +20,10 @@ export class Location implements FieldGetter {
         return toRelative(this.uri);
     }
 
+    get isEmpty(): boolean {
+        return typeof this.uri === 'undefined' || typeof this.range === 'undefined';
+    }
+
     getFields(): string[] {
         return [
             'relativeUri', 'range'

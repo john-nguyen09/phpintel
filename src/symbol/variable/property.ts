@@ -2,8 +2,6 @@ import { Symbol, TokenSymbol, ScopeMember, Locatable, DocBlockConsumer } from ".
 import { Variable } from "./variable";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
-import { TreeNode, nodeRange } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 import { TokenKind, PhraseKind } from "../../util/parser";
 import { nonenumerable } from "../../util/decorator";
 import { TypeComposite } from "../../type/composite";
@@ -13,8 +11,8 @@ import { DocBlock } from "../docBlock";
 
 export class Property extends Symbol implements DocBlockConsumer, ScopeMember, Locatable {
     public name: string;
-    public location: Location | null = null;
-    public modifier: SymbolModifier;
+    public location: Location = new Location();
+    public modifier: SymbolModifier = new SymbolModifier();
     public description: string = '';
     public scope: TypeName | null = null;
 

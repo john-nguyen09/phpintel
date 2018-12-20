@@ -5,8 +5,10 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "compile-all": "tsc --watch --noEmit --project ."
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./lib && mkdir lib",
+    "compile-all": "tsc --watch --noEmit --project .",
+    "watch": "npm run clean && tsc --watch -p ./tsconfig.json"
   },
   "keywords": [
     "PHP",
@@ -23,6 +25,7 @@
     "level": "^4.0.0",
     "php7parser": "^1.0.8",
     "reflect-metadata": "^0.1.12",
+    "rimraf": "^2.6.2",
     "runtypes": "^2.1.6",
     "subleveldown": "^3.0.1",
     "vscode-languageserver": "^4.4.0",

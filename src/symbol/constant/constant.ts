@@ -11,7 +11,7 @@ import { ImportTable } from "../../type/importTable";
 export class Constant extends Symbol implements Consumer, Reference, FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
     public expression: Expression;
-    public location: Location | null = null;
+    public location: Location = new Location();
     public resolvedType: TypeName | null = null;
     public resolvedValue: string | null = null;
 
@@ -56,7 +56,11 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
 
     get value() {
         if (this.resolvedValue === null) {
-            this.resolvedValue = this.expression.value;
+            if (typeof this.expression === 'undefined') {
+                this.resolvedValue = '';
+            } else {
+                this.resolvedValue = this.expression.value;
+            }
         }
 
         return this.resolvedValue;
@@ -64,7 +68,11 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
 
     get type() {
         if (this.resolvedType === null) {
-            this.resolvedType = this.expression.type;
+            if (typeof this.expression === 'undefined') {
+                this.resolvedType = new TypeName('');
+            } else {
+                this.resolvedType = this.expression.type;
+            }
         }
 
         return this.resolvedType;

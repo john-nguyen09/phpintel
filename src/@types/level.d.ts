@@ -9,9 +9,9 @@ declare module 'level' {
 
 declare namespace Level {
     export interface LevelUp {
-        put(key: string, value: any): Promise<void>;
-        get(key: string): Promise<any>;
-        del(key: string): Promise<void>;
+        put(key: string | Buffer, value: any): Promise<void>;
+        get(key: string | Buffer): Promise<any>;
+        del(key: string | Buffer): Promise<void>;
         batch(ops: BatchOperation[]): Promise<void>;
         createReadStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createKeyStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
@@ -21,15 +21,15 @@ declare namespace Level {
     
     export interface BatchOperation {
         type: string;
-        key: string;
+        key: string | Buffer;
         value?: any;
     }
     
     export interface ReadStreamOptions {
-        gt?: string;
-        gte?: string;
-        lt?: string;
-        lte?: string;
+        gt?: string | Buffer;
+        gte?: string | Buffer;
+        lt?: string | Buffer;
+        lte?: string | Buffer;
         reverse?: boolean;
         limit?: number;
         keys?: boolean;

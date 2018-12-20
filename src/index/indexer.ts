@@ -5,99 +5,122 @@ import { pathToUri } from "../util/uri";
 import { SymbolParser } from "../symbol/symbolParser";
 import { PhpDocument } from "../symbol/phpDocument";
 import { Parser } from "php7parser";
-import { TreeTraverser } from "../treeTraverser/structures";
-import { TreeNode } from "../util/parseTree";
-import { isIdentifiable, Symbol, isLocatable } from "../symbol/symbol";
-import { IdentifierIndex } from "./identifierIndex";
-import { UriIndex } from "./uriIndex";
-import { PositionIndex } from "./positionIndex";
-import { TimestampIndex } from "./timestampIndex";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { TextDocumentStore } from "../textDocumentStore";
-import { BindingIdentifier } from "../constant/bindingIdentifier";
-import { LogWriter } from "../service/logWriter";
+import { Traverser } from "../traverser";
+import { ClassTable } from "../storage/table/class";
+import { ClassConstantTable } from "../storage/table/classConstant";
+import { ConstantTable } from "../storage/table/constant";
+import { FunctionTable } from "../storage/table/function";
+import { MethodTable } from "../storage/table/method";
+import { PropertyTable } from "../storage/table/property";
+import { PhpDocumentTable } from "../storage/table/phpDoc";
+import { ReferenceTable } from "../storage/table/referenceTable";
 
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
-const stat = promisify(fs.stat);
+const readdirAsync = promisify(fs.readdir);
+const readFileAsync = promisify(fs.readFile);
+const statAsync = promisify(fs.stat);
 
 @injectable()
 export class Indexer {
     static readonly separator = '#';
 
     constructor(
-        @inject(BindingIdentifier.TREE_NODE_TRAVERSER) private treeTraverser: TreeTraverser<TreeNode>,
-        @inject(BindingIdentifier.IDENTIFIER_INDEX) private identifierIndex: IdentifierIndex,
-        @inject(BindingIdentifier.URI_INDEX) private uriIndex: UriIndex,
-        @inject(BindingIdentifier.POSITION_INDEX) private positionIndex: PositionIndex,
-        @inject(BindingIdentifier.TIMESTAMP_INDEX) private timestampIndex: TimestampIndex,
-        @inject(BindingIdentifier.TEXT_DOCUMENT_STORE) private textDocumentStore: TextDocumentStore
+        private treeTraverser: Traverser,
+        private textDocumentStore: TextDocumentStore,
+        private phpDocTable: PhpDocumentTable,
+        private classTable: ClassTable,
+        private classConstantTable: ClassConstantTable,
+        private constantTable: ConstantTable,
+        private functionTable: FunctionTable,
+        private methodTable: MethodTable,
+        private propertyTable: PropertyTable,
+        private referenceTable: ReferenceTable
     ) { }
 
+    async indexFile(filePath: string, fstat?: fs.Stats): Promise<void> {
+        if (typeof fstat === 'undefined') {
+            fstat = await statAsync(filePath);
+        }
+
+        let fileUri = pathToUri(filePath);
+        let lastIndexTime = await this.phpDocTable.get(fileUri);
+        
+        // let fileContent = (await readFileAsync(filePath)).toString();
+        let fileContent = fs.readFileSync(filePath).toString();
+
+        let phpDoc = new PhpDocument(fileUri, fileContent);
+
+        this.textDocumentStore.add(fileUri, phpDoc.textDocument);
+
+        const fileModified = Math.round(fstat.mtime.getTime() / 1000);
+
+        if (fileModified !== lastIndexTime) {
+            let symbolParser = new SymbolParser(new PhpDocument(fileUri, fileContent));
+            let parseTree = Parser.parse(fileContent);
+
+            this.treeTraverser.traverse(parseTree, [symbolParser]);
+            await this.indexPhpDocument(symbolParser.getTree(), fileModified);
+        }
+    }
+
     async indexDir(directory: string): Promise<void> {
-        let files = await readdir(directory);
+        let files = await readdirAsync(directory);
 
         for (let file of files) {
             let filePath = path.join(directory, file);
-            let fileUri = pathToUri(filePath);
-            let fstat = await stat(filePath);
-            let lastIndexTime = await this.timestampIndex.get(fileUri);
+            let fstat = await statAsync(filePath);
 
-            if (file.endsWith('.php')) {
-                let fileContent = (await readFile(filePath)).toString();
-                let phpDoc = new PhpDocument(fileUri, fileContent);
-
-                this.textDocumentStore.add(fileUri, phpDoc.textDocument);
-
-                if (fstat.mtimeMs != lastIndexTime) {
-                    let symbolParser = new SymbolParser(new PhpDocument(fileUri, fileContent));
-                    let parseTree = Parser.parse(fileContent);
-
-                    this.treeTraverser.traverse(parseTree, [symbolParser]);
-                    await this.indexPhpDocument(symbolParser.getTree());
-                    await this.timestampIndex.put(fileUri, fstat.mtimeMs);
-                }
-            } else if (fstat.isDirectory()) {
+            if (fstat.isDirectory()) {
                 await this.indexDir(filePath);
+            } else if (file.endsWith('.php')) {
+                await this.indexFile(filePath);
             }
         }
     }
 
-    private async indexBranchSymbol(symbol: Symbol, uri: string): Promise<void> {
-        if (!isIdentifiable(symbol)) {
-            return;
-        }
-
-        await [
-            this.identifierIndex.put(symbol, uri),
-            this.uriIndex.put(uri, symbol.getIdentifier()),
-        ];
+    private async removeSymbolsByDoc(uri: string) {
+        return Promise.all([
+            this.classTable.removeByDoc(uri),
+            this.classConstantTable.removeByDoc(uri),
+            this.constantTable.removeByDoc(uri),
+            this.functionTable.removeByDoc(uri),
+            this.methodTable.removeByDoc(uri),
+            this.propertyTable.removeByDoc(uri),
+            this.referenceTable.removeByDoc(uri)
+        ]);
     }
 
-    private async indexSymbol(symbol: Symbol): Promise<void> {
-        if (!isLocatable(symbol)) {
-            return;
+    private async indexPhpDocument(doc: PhpDocument, modifiedTime: number): Promise<void> {
+        // await this.phpDocTable.put(doc.uri, modifiedTime);
+        await this.removeSymbolsByDoc(doc.uri);
+        
+        for (let theClass of doc.classes) {
+            await this.classTable.put(doc, theClass);
         }
 
-        await this.positionIndex.put(symbol);
-    }
-
-    private async removeIndexes(uri: string): Promise<void> {
-        await [
-            this.uriIndex.delete(uri),
-            this.positionIndex.delete(uri)
-        ];
-    }
-
-    private async indexPhpDocument(doc: PhpDocument): Promise<void> {
-        // Symbol name index
-        this.removeIndexes(doc.uri);
-        console.log(doc.branchSymbols);
-        for (let branchSymbol of doc.branchSymbols) {
-            await this.indexBranchSymbol(branchSymbol, doc.uri);
+        for (let classConstant of doc.classConstants) {
+            await this.classConstantTable.put(doc, classConstant);
         }
-        for (let symbol of doc.symbols) {
-            await this.indexSymbol(symbol);
+
+        for (let constant of doc.constants) {
+            await this.constantTable.put(doc, constant);
+        }
+
+        for (let func of doc.functions) {
+            await this.functionTable.put(doc, func);
+        }
+
+        for (let method of doc.methods) {
+            await this.methodTable.put(doc, method);
+        }
+
+        for (let property of doc.properties) {
+            await this.propertyTable.put(doc, property);
+        }
+
+        for (let reference of doc.references) {
+            await this.referenceTable.put(reference);
         }
     }
 }

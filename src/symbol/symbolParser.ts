@@ -37,10 +37,10 @@ import { NamespaceUseClause } from "./namespace/useClause";
 import { NamespaceAliasClause } from "./namespace/aliasClause";
 import { PhraseKind, TokenKind } from "../util/parser";
 import { VariableAssignment } from "./variable/varibleAssignment";
-import { Visitor } from "../treeTraverser";
+import { Visitor } from "../traverser";
 import { Location } from "./meta/location";
 
-export class SymbolParser implements Visitor<TreeNode> {
+export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
     protected doc: PhpDocument;
     protected lastDocBlock: DocBlock | null = null;

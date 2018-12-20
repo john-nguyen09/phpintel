@@ -7,7 +7,7 @@ import { injectable, inject } from "inversify";
 export class LevelDatasource {
     private db: Level.LevelUp;
 
-    constructor(location: string, options: any) {
+    constructor(location: string, options?: any) {
         this.db = level(location, options);
     }
 
@@ -18,32 +18,23 @@ export class LevelDatasource {
 
 @injectable()
 export class DbStore {
-    private static readonly separator = '!';
-    private static readonly versionPrefix = '@';
+    public static readonly uriSep = '#';
+    
+    protected static readonly separator = '!';
+    protected static readonly versionPrefix = '@';
 
-    private storeKey: string;
-    private db: Level.LevelUp;
+    protected storeKey: string;
+    protected db: Level.LevelUp;
 
-    constructor(
-        datasource: LevelDatasource,
-        storeInfo: DbStoreInfo
-    ) {
-        this.storeKey = storeInfo.name + DbStore.versionPrefix + storeInfo.version;
-        this.db = sublevel(datasource.getDb(), this.storeKey, {
-            separator: DbStore.separator,
-            valueEncoding: 'json'
-        });
-    }
-
-    async put(key: string, value: any): Promise<void> {
+    async put(key: string | Buffer, value: any): Promise<void> {
         return this.db.put(key, value);
     }
 
-    async get(key: string): Promise<any> {
+    async get(key: string | Buffer): Promise<any> {
         return this.db.get(key);
     }
 
-    async del(key: string): Promise<void> {
+    async del(key: string | Buffer): Promise<void> {
         return this.db.del(key);
     }
 
@@ -59,6 +50,23 @@ export class DbStore {
         return this.createReadStream({
             gte: prefix,
             lte: prefix + '\xFF'
+        });
+    }
+}
+
+@injectable()
+export class SubStore extends DbStore {
+    constructor(
+        datasource: LevelDatasource,
+        storeInfo: DbStoreInfo,
+        valueEncoding: Level.Encoding
+    ) {
+        super();
+
+        this.storeKey = storeInfo.name + DbStore.versionPrefix + storeInfo.version;
+        this.db = sublevel(datasource.getDb(), this.storeKey, {
+            separator: DbStore.separator,
+            valueEncoding: valueEncoding
         });
     }
 }

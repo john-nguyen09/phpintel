@@ -1,11 +1,11 @@
-import { CollectionSymbol, Symbol, Consumer, DocBlockConsumer } from "../symbol";
+import { Symbol, Consumer, DocBlockConsumer } from "../symbol";
 import { Property } from "./property";
 import { SymbolModifier } from "../meta/modifier";
 import { MemberModifierList } from "../class/memberModifierList";
 import { DocBlock } from "../docBlock";
 
 export class PropertyDeclaration extends Symbol implements Consumer, DocBlockConsumer {
-    public modifier: SymbolModifier;
+    public modifier: SymbolModifier = new SymbolModifier();
 
     private doc: DocBlock | null = null;
 

@@ -3,9 +3,11 @@ import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
 import { DocBlock } from "../docBlock";
 import { DocNodeKind, toTypeName, VarDocNode } from "../../util/docParser";
+import { Location } from "../meta/location";
 
 export class Variable extends Symbol implements Consumer, DocBlockConsumer, Reference {
     public type: TypeComposite = new TypeComposite;
+    public location: Location = new Location();
 
     protected expression: Expression;
 

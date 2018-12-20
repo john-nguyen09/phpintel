@@ -1,5 +1,5 @@
 import { Phrase, Parser } from "php7parser";
-import { Consumer, Symbol, isNamedSymbol, NamedSymbol, needsNameResolve } from "./symbol";
+import { Consumer, Symbol, isNamedSymbol, NamedSymbol, needsNameResolve, Reference, isReference } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
@@ -11,6 +11,8 @@ import { Function } from "./function/function";
 import { ClassConstant } from "./constant/classConstant";
 import { Method } from "./function/method";
 import { Property } from "./variable/property";
+import { Variable } from "./variable/variable";
+import { FunctionCall } from "./function/functionCall";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
@@ -27,6 +29,7 @@ export class PhpDocument extends Symbol implements Consumer {
     public classConstants: ClassConstant[] = [];
     public methods: Method[] = [];
     public properties: Property[] = [];
+    public references: Reference[] = [];
 
     constructor(uri: string, text: string) {
         super();
@@ -85,6 +88,10 @@ export class PhpDocument extends Symbol implements Consumer {
             this.methods.push(symbol);
         } else if (symbol instanceof Property) {
             this.properties.push(symbol);
+        }
+        
+        if (isReference(symbol)) {
+            this.references.push(symbol);
         }
     }
 }

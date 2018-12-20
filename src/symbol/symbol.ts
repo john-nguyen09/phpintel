@@ -102,6 +102,7 @@ export interface DocBlockConsumer {
 
 export interface Reference {
     type: TypeName | TypeComposite;
+    location: Location;
 }
 
 export interface ScopeMember {
@@ -113,7 +114,7 @@ export interface NamedSymbol {
 }
 
 export interface Locatable {
-    location: Location | null;
+    location: Location;
 }
 
 export interface NameResolvable {
@@ -150,4 +151,8 @@ export function needsNameResolve(symbol: Symbol): symbol is (Symbol & NameResolv
 
 export function isLocatable(symbol: Symbol): symbol is (Symbol & Locatable) {
     return 'location' in symbol;
+}
+
+export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {
+    return 'type' in symbol && 'location' in symbol;
 }

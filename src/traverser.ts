@@ -1,22 +1,23 @@
 import "reflect-metadata";
 import { injectable } from "inversify";
+import { TreeNode, isPhrase } from "./util/parseTree";
 
 @injectable()
-export class RecursiveTraverser<T> implements TreeTraverser<T> {
-    private visitors: Visitor<T>[] = [];
+export class Traverser {
+    private visitors: Visitor[] = [];
 
-    traverse(rootNode: T, visitors: Visitor<T>[]): void {
+    traverse(rootNode: TreeNode, visitors: Visitor[]): void {
         this.visitors = visitors;
         this.realTraverse(rootNode);
         this.visitors = [];
     }
 
-    private realTraverse(node: T) {
+    private realTraverse(node: TreeNode) {
         for (let visitor of this.visitors) {
             visitor.preorder(node);
         }
 
-        if (isTraversable<T>(node)) {
+        if (isPhrase(node)) {
             for (let child of node.children) {
                 this.realTraverse(child);
             }
@@ -30,15 +31,7 @@ export class RecursiveTraverser<T> implements TreeTraverser<T> {
     }
 }
 
-export interface Visitor<T> {
-    preorder(node: T): void;
-    postorder?(node: T): void;
-}
-
-export interface TreeTraverser<T> {
-    traverse(rootNode: T, visitors: Visitor<T>[]): void;
-}
-
-export function isTraversable<T>(node: T): node is (T & { children: T[] }) {
-    return 'children' in node && Array.isArray((<any>node).children);
+export interface Visitor {
+    preorder(node: TreeNode): void;
+    postorder?(node: TreeNode): void;
 }

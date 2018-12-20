@@ -7,17 +7,16 @@ import { Indexer } from "../index/indexer";
 import { uriToPath } from "../util/uri";
 import * as path from "path";
 import { elapsed } from "../util/hrtime";
-import { Application } from "../app";
 import { LogWriter } from "../service/logWriter";
 import { Hasher } from "../service/hasher";
-import { BindingIdentifier } from "../constant/bindingIdentifier";
+import { App } from "../app";
 const pjson = require("../../package.json");
 const homedir = require('os').homedir();
 
 export namespace InitializeProvider {
     export function provide(params: InitializeParams): InitializeResult {
-        const logger = Application.get<LogWriter>(BindingIdentifier.MESSENGER);
-        const hasher = Application.get<Hasher>(BindingIdentifier.HASHER);
+        const logger = App.get<LogWriter>(LogWriter);
+        const hasher = App.get<Hasher>(Hasher);
         let rootPath: string = '';
 
         logger.info(`node ${process.version}`);
@@ -30,14 +29,14 @@ export namespace InitializeProvider {
         }
 
         let storagePath = path.join(homedir, '.phpintel', hasher.getHash(rootPath));
-        Application.initStorage(storagePath);
+        App.initStorage(storagePath);
 
         logger.info(`storagePath: ${storagePath}`);
         let start = process.hrtime();
 
-        let indexer = Application.get<Indexer>(BindingIdentifier.INDEXER);
+        let indexer = App.get<Indexer>(Indexer);
         indexer.indexDir(rootPath)
-            .catch((err) => {
+            .catch((err: Error) => {
                 logger.error(err);
             }).then(() => {
                 logger.info(`Finish indexing in ${elapsed(start).toFixed()} ms`);

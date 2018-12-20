@@ -1,29 +1,25 @@
 import { TextDocumentPositionParams, Hover } from "vscode-languageserver";
-import { PositionIndex } from "../index/positionIndex";
 import { TextDocumentStore } from "../textDocumentStore";
 import { LogWriter } from "../service/logWriter";
-import { BindingIdentifier } from "../constant/bindingIdentifier";
-import { Application } from "../app";
+import { App } from "../app";
+import { ReferenceTable } from "../storage/table/referenceTable";
 
 export namespace HoverProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
-        const textDocumentStore = Application.get<TextDocumentStore>(BindingIdentifier.TEXT_DOCUMENT_STORE);
-        const positionIndex = Application.get<PositionIndex>(BindingIdentifier.POSITION_INDEX);
-        const logger = Application.get<LogWriter>(BindingIdentifier.MESSENGER);
+        const textDocumentStore = App.get<TextDocumentStore>(TextDocumentStore);
+        const logger = App.get<LogWriter>(LogWriter);
+        const referenceTable = App.get<ReferenceTable>(ReferenceTable);
 
         let uri = params.textDocument.uri;
         let textDocument = textDocumentStore.get(uri);
-        
-        if (textDocument != undefined) {
-            try {
-                let offset = textDocument.getOffset(params.position.line, params.position.character);
-                logger.info(offset.toString());
-                let symbol = await positionIndex.find(uri, offset);
-    
-                logger.info(JSON.stringify(symbol));
-            } catch(err) {
-                logger.error(err);
-            }
+
+        if (typeof textDocument !== 'undefined') {
+            let ref = referenceTable.findAt(
+                uri,
+                textDocument.getOffset(params.position.line, params.position.character)
+            );
+
+            logger.info(JSON.stringify(ref));
         }
 
         return {

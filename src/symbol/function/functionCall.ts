@@ -4,15 +4,13 @@ import { DefineConstant } from "../constant/defineConstant";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
-import { TreeNode, nodeRange } from "../../util/parseTree";
-import { PhpDocument } from "../phpDocument";
 
 export class FunctionCall extends TransformSymbol implements Consumer, Reference, Locatable {
     public realSymbol: (Symbol & Consumer);
-    public type: TypeName;
+    public type: TypeName = new TypeName('');
     public argumentList: ArgumentExpressionList;
 
-    public location: Location;
+    public location: Location = new Location();
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

@@ -4,6 +4,8 @@ import { Range } from "../symbol/meta/range";
 import { Position } from "../symbol/meta/position";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { TypeComposite } from "../type/composite";
+import { App } from "../app";
+import { LogWriter } from "../service/logWriter";
 
 export class Serializer {
     public static readonly DEFAULT_SIZE = 1024;
@@ -13,7 +15,13 @@ export class Serializer {
     private length: number;
 
     constructor(buffer?: Buffer) {
+        let logger = App.get<LogWriter>(LogWriter);
+
         if (buffer !== undefined) {
+            if (typeof buffer == 'string') {
+                logger.info(JSON.stringify(buffer));
+            }
+
             this.buffer = buffer;
             this.length = buffer.length;
         } else {
@@ -126,8 +134,8 @@ export class Serializer {
         return new TypeName(this.readString(), this.readBool());
     }
 
-    public writeLocation(location: Location | null) {
-        if (location == null) {
+    public writeLocation(location: Location) {
+        if (location.isEmpty) {
             this.writeBool(false);
         } else {
             this.writeBool(true);
@@ -136,11 +144,11 @@ export class Serializer {
         }
     }
 
-    public readLocation(): Location | null {
+    public readLocation(): Location {
         let hasLocation = this.readBool();
         
         if (!hasLocation) {
-            return null;
+            return new Location();
         }
 
         return new Location(this.readString(), this.readRange());

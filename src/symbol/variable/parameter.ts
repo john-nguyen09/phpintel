@@ -3,10 +3,12 @@ import { TypeDeclaration } from "../type/typeDeclaration";
 import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
+import { Location } from "../meta/location";
 
 export class Parameter extends Symbol implements Consumer, Reference {
     public name: string = '';
     public type: TypeComposite = new TypeComposite();
+    public location: Location = new Location();
     public value: string = '';
 
     protected expression: Expression;

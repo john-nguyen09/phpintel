@@ -90,10 +90,14 @@ export interface DocTypeCollection {
     index: any;
 }
 
-export function toTypeName(typeNode: DocTypeNode): TypeName | null {
+export function toTypeName(typeNode: DocTypeNode | null): TypeName | null {
     let docType: DocType | null = null;
     let isArray = false;
     let name = '';
+
+    if (typeNode === null) {
+        return null;
+    }
 
     if (typeNode.kind == DocTypeKind.Type) {
         docType = typeNode;

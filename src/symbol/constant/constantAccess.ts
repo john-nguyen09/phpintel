@@ -1,6 +1,7 @@
 import { Symbol, Consumer, Reference } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 import { TypeName } from "../../type/name";
+import { Location } from "../meta/location";
 
 export class ConstantAccess extends Symbol implements Consumer, Reference {
     public static readonly KEYWORD_TYPES: {[key: string]: string} = {
@@ -10,7 +11,8 @@ export class ConstantAccess extends Symbol implements Consumer, Reference {
     };
 
     public value: string = '';
-    public type: TypeName;
+    public type: TypeName = new TypeName('');
+    public location: Location = new Location();
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

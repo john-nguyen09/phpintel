@@ -1,9 +1,8 @@
 const symbolEncoding =  require('../src/storage/symbolEncoding');
-import { indexFiles, getCaseDir, getDebugDir } from "../src/testHelper";
+import { indexFiles, getCaseDir } from "../src/testHelper";
 import * as path from 'path';
 import { Class } from "../src/symbol/class/class";
 import { Serializer } from "../src/storage/serializer";
-import * as fs from 'fs';
 import { Constant } from "../src/symbol/constant/constant";
 import { Method } from "../src/symbol/function/method";
 import { ClassConstant } from "../src/symbol/constant/classConstant";

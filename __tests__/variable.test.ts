@@ -1,18 +1,17 @@
 import "reflect-metadata";
 import * as path from "path";
 import * as fs from "fs";
-import { RecursiveTraverser } from "../src/treeTraverser";
+import { Traverser } from "../src/traverser";
 import { SymbolParser } from "../src/symbol/symbolParser";
 import { pathToUri } from "../src/util/uri";
 import { PhpDocument } from "../src/symbol/phpDocument";
-import { Parser, phraseTypeToString, tokenTypeToString } from "php7parser";
-import { TreeNode } from "../src/util/parseTree";
+import { Parser } from "php7parser";
 import { dumpAstToDebug } from "../src/testHelper";
 
 describe('variable', () => {
     it('simple variable', () => {
         let filePath = path.resolve(__dirname, '..', 'case', 'variable', 'simpleVariable.php');
-        let treeTraverser = new RecursiveTraverser<TreeNode>();
+        let treeTraverser = new Traverser();
 
         const fileUri = pathToUri(filePath);
         const fileContent = fs.readFileSync(filePath).toString();

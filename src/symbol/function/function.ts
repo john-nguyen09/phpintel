@@ -17,7 +17,7 @@ import { Location } from "../meta/location";
 
 export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter, NamedSymbol, Locatable {
     public name: TypeName;
-    public location: Location | null = null;
+    public location: Location = new Location();
     public parameters: Parameter[] = [];
     public scopeVar: Scope = new Scope();
     public typeAggregate: TypeComposite = new TypeComposite();

@@ -1,17 +1,20 @@
-import { IConnection } from "vscode-languageserver";
+import { IConnection, createConnection } from "vscode-languageserver";
 import { injectable, inject } from "inversify";
-import { BindingIdentifier } from "../constant/bindingIdentifier";
 
 @injectable()
 export class LogWriter {
-    private conn: IConnection;
+    private conn: IConnection | undefined;
 
-    constructor(@inject(BindingIdentifier.CONNECTION) conn: IConnection) {
+    constructor(@inject('IConnection') conn?: IConnection) {
         this.conn = conn;
     }
 
     info(message: string) {
-        this.conn.console.info(message);
+        if (typeof this.conn !== 'undefined') {
+            this.conn.console.info(message);
+        } else {
+            console.info(message);
+        }
     }
 
     error(err: any) {
@@ -25,6 +28,10 @@ export class LogWriter {
             errMessage = err.toString();
         }
 
-        this.conn.console.error(errMessage);
+        if (typeof this.conn !== 'undefined') {
+            this.conn.console.error(errMessage);
+        } else {
+            console.error(errMessage);
+        }
     }
 }

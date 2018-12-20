@@ -2,14 +2,11 @@ import { Class } from "../symbol/class/class";
 import { TypeName } from "../type/name";
 import { Serializer } from "./serializer";
 import { Symbol } from "../symbol/symbol";
-import * as fs from 'fs';
-import * as path from 'path';
 import { Function } from "../symbol/function/function";
 import { Variable } from "../symbol/variable/variable";
 import { Parameter } from "../symbol/variable/parameter";
 import { Constant } from "../symbol/constant/constant";
 import { ClassConstant } from "../symbol/constant/classConstant";
-import { Union, Literal } from "runtypes";
 import { Method } from "../symbol/function/method";
 import { Property } from "../symbol/variable/property";
 
@@ -309,5 +306,5 @@ export = {
 
         throw new Error(`Invalid buffer`);
     },
-    buffer: false
+    buffer: true
 } as Level.Encoding;

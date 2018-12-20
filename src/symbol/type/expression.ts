@@ -4,7 +4,7 @@ import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 
-export class Expression extends TransformSymbol implements Consumer, Reference {
+export class Expression extends TransformSymbol implements Consumer {
     public realSymbol: Expression;
 
     protected currentSymbol: Symbol;
@@ -45,6 +45,10 @@ export class Expression extends TransformSymbol implements Consumer, Reference {
             type = this.realSymbol.type;
         } else {
             type = this.getType(this.currentSymbol);
+        }
+
+        if (typeof type === 'undefined') {
+            type = new TypeName('');
         }
 
         return type;
