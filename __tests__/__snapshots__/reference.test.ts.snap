@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing functions around references should return the reference at the cursor 1`] = `
+Array [
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 7,
+          "line": 1,
+          "offset": 14,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 1,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "Variable",
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 7,
+          "line": 1,
+          "offset": 14,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 1,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "Variable",
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 7,
+          "line": 1,
+          "offset": 14,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 1,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "Variable",
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 16,
+          "line": 3,
+          "offset": 53,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 3,
+          "offset": 37,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "FunctionCall",
+    "type": TypeName {
+      "name": "test_function1",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 16,
+          "line": 3,
+          "offset": 53,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 3,
+          "offset": 37,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "FunctionCall",
+    "type": TypeName {
+      "name": "test_function1",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 16,
+          "line": 3,
+          "offset": 53,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 3,
+          "offset": 37,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": "FunctionCall",
+    "type": TypeName {
+      "name": "test_function1",
+    },
+  },
+]
+`;

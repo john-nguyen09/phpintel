@@ -1,4 +1,4 @@
-import { Symbol, Consumer, DocBlockConsumer, NamedSymbol, Locatable } from "../symbol";
+import { Symbol, Consumer, DocBlockConsumer, NamedSymbol, Locatable, NameResolvable } from "../symbol";
 import { FunctionHeader } from "./functionHeader";
 import { Parameter } from "../variable/parameter";
 import { Scope } from "../variable/scope";
@@ -15,7 +15,13 @@ import { FieldGetter } from "../fieldGetter";
 import { ImportTable } from "../../type/importTable";
 import { Location } from "../meta/location";
 
-export class Function extends Symbol implements Consumer, DocBlockConsumer, FieldGetter, NamedSymbol, Locatable {
+export class Function extends Symbol implements
+    Consumer,
+    DocBlockConsumer,
+    FieldGetter,
+    NamedSymbol,
+    Locatable,
+    NameResolvable {
     public name: TypeName;
     public location: Location = new Location();
     public parameters: Parameter[] = [];
@@ -23,7 +29,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
     public typeAggregate: TypeComposite = new TypeComposite();
     public description: string = '';
 
-    private docParamTypes: {[key: string]: TypeName} = {};
+    private docParamTypes: { [key: string]: TypeName } = {};
 
     consume(other: Symbol) {
         if (other instanceof Parameter) {
@@ -78,7 +84,7 @@ export class Function extends Symbol implements Consumer, DocBlockConsumer, Fiel
             if (docNode.kind == DocNodeKind.Param) {
                 let typeName = toTypeName(docNode.type);
 
-                if (typeName != null) {                    
+                if (typeName != null) {
                     this.docParamTypes['$' + docNode.name] = typeName;
                 }
             }

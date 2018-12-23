@@ -11,8 +11,9 @@ export class PhpDocumentTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'php_document',
-            version: 1
-        }, PhpDocEncoding);
+            version: 1,
+            valueEncoding: PhpDocEncoding
+        });
     }
 
     async put(uri: string, lastModified: number) {
@@ -35,7 +36,6 @@ const PhpDocEncoding = {
     encode(lastModified: number): Buffer {
         let serializer = new Serializer;
 
-        console.log(lastModified);
         serializer.writeInt32(lastModified);
 
         return serializer.getBuffer();

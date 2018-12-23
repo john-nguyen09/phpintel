@@ -1,11 +1,13 @@
-import { Symbol, TokenSymbol, Reference, Consumer } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { TypeDeclaration } from "../type/typeDeclaration";
 import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
 import { Location } from "../meta/location";
+import { Reference, RefKind } from "../reference";
 
 export class Parameter extends Symbol implements Consumer, Reference {
+    public readonly refKind = RefKind.Parameter;
     public name: string = '';
     public type: TypeComposite = new TypeComposite();
     public location: Location = new Location();

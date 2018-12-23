@@ -11,8 +11,9 @@ export class MethodTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'method',
-            version: 1
-        }, require('../symbolEncoding'));
+            version: 1,
+            valueEncoding: require('../symbolEncoding')
+        });
     }
 
     async put(phpDoc: PhpDocument, symbol: Method) {

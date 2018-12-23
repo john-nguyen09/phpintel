@@ -16,17 +16,12 @@ export class TypeName {
     };
 
     private name: string;
-    public isArray: boolean = false;
 
-    constructor(name: string, isArray?: boolean) {
+    constructor(name: string) {
         this.name = name;
 
         if (this.name in TypeName.ALIASES) {
             this.name = TypeName.ALIASES[this.name];
-        }
-
-        if (isArray !== undefined) {
-            this.isArray = isArray;
         }
     }
 
@@ -51,7 +46,7 @@ export class TypeName {
     }
 
     public toString(): string {
-        return this.name + (this.isArray ? '[]' : '');
+        return this.getName();
     }
 
     public isSameAs(other: TypeName): boolean {
@@ -59,7 +54,7 @@ export class TypeName {
             return false;
         }
 
-        return (this.isArray == other.isArray) && this.name == other.name
+        return this.name == other.name
     }
 
     public isEmptyName(): boolean {

@@ -11,8 +11,9 @@ export class PropertyTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'property',
-            version: 1
-        }, require('../symbolEncoding'));
+            version: 1,
+            valueEncoding: require('../symbolEncoding')
+        });
     }
 
     async put(phpDoc: PhpDocument, symbol: Property) {

@@ -1,5 +1,5 @@
 import { Phrase, Parser } from "php7parser";
-import { Consumer, Symbol, isNamedSymbol, NamedSymbol, needsNameResolve, Reference, isReference } from "./symbol";
+import { Consumer, Symbol, needsNameResolve } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
@@ -13,6 +13,7 @@ import { Method } from "./function/method";
 import { Property } from "./variable/property";
 import { Variable } from "./variable/variable";
 import { FunctionCall } from "./function/functionCall";
+import { isReference, Reference } from "./reference";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable

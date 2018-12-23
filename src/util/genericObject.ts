@@ -1,4 +1,4 @@
-export function createObject(constructor: any): Object {
+export function createObject(constructor: Function): Object {
     let GenericObject = (() => {
         function Constructor() { }
 

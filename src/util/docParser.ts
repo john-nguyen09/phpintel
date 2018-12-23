@@ -92,7 +92,6 @@ export interface DocTypeCollection {
 
 export function toTypeName(typeNode: DocTypeNode | null): TypeName | null {
     let docType: DocType | null = null;
-    let isArray = false;
     let name = '';
 
     if (typeNode === null) {
@@ -103,7 +102,6 @@ export function toTypeName(typeNode: DocTypeNode | null): TypeName | null {
         docType = typeNode;
     } else if (typeNode.kind == DocTypeKind.Collection) {
         docType = typeNode.value;
-        isArray = true;
     }
 
     if (docType == null) {
@@ -116,5 +114,5 @@ export function toTypeName(typeNode: DocTypeNode | null): TypeName | null {
 
     name += docType.name;
 
-    return new TypeName(name, isArray);
+    return new TypeName(name);
 }

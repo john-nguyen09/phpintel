@@ -120,7 +120,6 @@ export class Serializer {
         } else {
             this.writeBool(true);
             this.writeString(name.getName());
-            this.writeBool(name.isArray);
         }
     }
 
@@ -131,7 +130,7 @@ export class Serializer {
             return null;
         }
 
-        return new TypeName(this.readString(), this.readBool());
+        return new TypeName(this.readString());
     }
 
     public writeLocation(location: Location) {

@@ -1,11 +1,9 @@
-import { Reference } from "../../symbol/symbol";
 import { DbStore, LevelDatasource, SubStore } from "../db";
 import { Serializer } from "../serializer";
 import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
-import { App } from "../../app";
-import { LogWriter } from "../../service/logWriter";
+import { Reference } from "../../symbol/reference";
 
 @injectable()
 export class ReferenceTable {
@@ -14,8 +12,9 @@ export class ReferenceTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'reference',
-            version: 1
-        }, ReferenceEncoding);
+            version: 1,
+            valueEncoding: ReferenceEncoding
+        });
     }
 
     async put(reference: Reference) {
@@ -64,10 +63,11 @@ export class ReferenceTable {
 
             let key = Buffer.concat([
                 uriBuffer,
-                serializer.getBuffer()
+                serializer.getBuffer(),
+                Buffer.from('\xFF')
             ]);
-            let iterator = db.iterator({
-                lt: key,
+            let iterator = db.iterator<Reference>({
+                lte: key,
                 gte: uriBuffer
             });
 
@@ -90,7 +90,7 @@ export class ReferenceTable {
                     return;
                 }
 
-                // logger.info(JSON.stringify(ref));
+                // logger.info(JSON.stringify(refObject(ref)));
                 // logger.info(ref.location.range.end.offset.toString());
                 // logger.info(offset.toString());
                 // logger.info(JSON.stringify(ref.location.range.end.offset >= offset));
@@ -130,6 +130,7 @@ const ReferenceEncoding = {
         }
 
         serializer.writeLocation(ref.location);
+        serializer.writeInt32(ref.refKind);
 
         return serializer.getBuffer();
     },
@@ -147,10 +148,14 @@ const ReferenceEncoding = {
         } else if (typeKind === TypeKind.TYPE_COMPOSITE) {
             type = serializer.readTypeComposite();
         }
+
+        let location = serializer.readLocation();
+        let refKind = serializer.readInt32();
         
         return {
-            type: type,
-            location: serializer.readLocation()
+            type,
+            location,
+            refKind
         } as Reference;
     }
 } as Level.Encoding;

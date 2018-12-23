@@ -3,8 +3,6 @@ import { LevelDatasource, DbStore } from "./storage/db";
 import { IConnection, createConnection, Hover } from "vscode-languageserver";
 import { LogWriter } from "./service/logWriter";
 import { Hasher } from "./service/hasher";
-import { InitializeProvider } from "./provider/initialize";
-import { HoverProvider } from "./provider/hover";
 import { Container, interfaces } from "inversify";
 import { Indexer } from "./index/indexer";
 import { TextDocumentStore } from "./textDocumentStore";
@@ -18,54 +16,84 @@ import { Traverser } from "./traverser";
 import { ReferenceTable } from "./storage/table/referenceTable";
 import * as path from "path";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
+import { InitializeProvider } from "./provider/initialize";
+import { HoverProvider } from "./provider/hover";
 
-export namespace App {
-    let container: Container = new Container();
+export interface IApp {
+    run(): void;
+    initStorage(location: string): void;
+    get<T>(
+        identifier: string | symbol | interfaces.Newable<T> | interfaces.Abstract<T>
+    ): T;
+}
 
-    export function run() {
-        let connection = createConnection();
+export abstract class Application {
+    protected container: Container = new Container();
 
-        container.bind<IConnection>('IConnection').toConstantValue(connection);
-        beforeListen();
-
-        connection.onInitialize(InitializeProvider.provide);
-        connection.onHover(HoverProvider.provide);
-        connection.listen();
+    constructor() {
+        this.initBind();
     }
 
-    export function setUpForTest() {
-        container.bind<IConnection | undefined>('IConnection').toConstantValue(undefined);
-        beforeListen();
-        App.initStorage(path.join(__dirname, '..', 'debug', 'storage'));
-    }
-
-    export function initStorage(location: string) {
+    public initStorage(location: string) {
         let datasource = new LevelDatasource(location);
-
-        container.bind<LevelDatasource>(LevelDatasource).toConstantValue(datasource);
+        this.container.bind<LevelDatasource>(LevelDatasource).toConstantValue(datasource);
 
         // Tables
-        container.bind<ClassTable>(ClassTable).toSelf();
-        container.bind<ClassConstantTable>(ClassConstantTable).toSelf();
-        container.bind<ConstantTable>(ConstantTable).toSelf();
-        container.bind<FunctionTable>(FunctionTable).toSelf();
-        container.bind<MethodTable>(MethodTable).toSelf();
-        container.bind<PropertyTable>(PropertyTable).toSelf();
-        container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf();
-        container.bind<ReferenceTable>(ReferenceTable).toSelf();
+        this.container.bind<ClassTable>(ClassTable).toSelf();
+        this.container.bind<ClassConstantTable>(ClassConstantTable).toSelf();
+        this.container.bind<ConstantTable>(ConstantTable).toSelf();
+        this.container.bind<FunctionTable>(FunctionTable).toSelf();
+        this.container.bind<MethodTable>(MethodTable).toSelf();
+        this.container.bind<PropertyTable>(PropertyTable).toSelf();
+        this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf();
+        this.container.bind<ReferenceTable>(ReferenceTable).toSelf();
+    }
+
+    public get<T>(
+        identifier: string | symbol | interfaces.Newable<T> | interfaces.Abstract<T>
+    ): T {
+        return this.container.get(identifier);
+    }
+
+    protected initBind() {
+        this.container.bind<LogWriter>(LogWriter).toSelf().inSingletonScope();
+        this.container.bind<Hasher>(Hasher).toSelf().inSingletonScope();
+        this.container.bind<TextDocumentStore>(TextDocumentStore).toSelf().inSingletonScope();
+        this.container.bind<Indexer>(Indexer).toSelf().inSingletonScope();
+        this.container.bind<Traverser>(Traverser).toSelf().inSingletonScope();
+    }
+}
+
+class LspApplication extends Application implements IApp {
+    private connection: IConnection;
+
+    constructor() {
+        super();
+
+        this.connection = createConnection();
+        this.container.bind<IConnection>('IConnection').toConstantValue(this.connection);
+    }
+
+    public run() {
+        this.connection.listen();
+    }
+}
+
+export namespace App {
+    const app: IApp = new LspApplication();
+
+    export function run(initProviders: (connection: IConnection) => void) {
+        initProviders(app.get<IConnection>('IConnection'));
+        app.run();
+    }
+
+    export function getApp() {
+        return app;
     }
 
     export function get<T>(
         identifier: string | symbol | interfaces.Newable<T> | interfaces.Abstract<T>
     ): T {
-        return container.get(identifier);
-    }
-
-    function beforeListen() {
-        container.bind<LogWriter>(LogWriter).toSelf().inSingletonScope();
-        container.bind<Hasher>(Hasher).toSelf().inSingletonScope();
-        container.bind<TextDocumentStore>(TextDocumentStore).toSelf().inSingletonScope();
-        container.bind<Indexer>(Indexer).toSelf().inSingletonScope();
-        container.bind<Traverser>(Traverser).toSelf().inSingletonScope();
+        return app.get(identifier);
     }
 }

@@ -100,11 +100,6 @@ export interface DocBlockConsumer {
     consumeDocBlock(docBlock: DocBlock): void;
 }
 
-export interface Reference {
-    type: TypeName | TypeComposite;
-    location: Location;
-}
-
 export interface ScopeMember {
     scope: TypeName | null;
 }
@@ -153,6 +148,3 @@ export function isLocatable(symbol: Symbol): symbol is (Symbol & Locatable) {
     return 'location' in symbol;
 }
 
-export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {
-    return 'type' in symbol && 'location' in symbol;
-}

@@ -1,12 +1,14 @@
-import { Symbol, TokenSymbol, NamedSymbol, Locatable, Reference } from "../symbol";
+import { Symbol, TokenSymbol, NamedSymbol, Locatable } from "../symbol";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 import { Constant } from "./constant";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
 import { Location } from "../meta/location";
+import { Reference, RefKind } from "../reference";
 
 export class DefineConstant extends Symbol implements Reference, FieldGetter, NamedSymbol, Locatable {
+    public readonly refKind = RefKind.DefineConstant;
     public name: TypeName;
     public location: Location = new Location();
 

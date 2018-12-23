@@ -11,8 +11,9 @@ export class ConstantTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'constant',
-            version: 1
-        }, require('../symbolEncoding'));
+            version: 1,
+            valueEncoding: require('../symbolEncoding')
+        });
     }
 
     async put(phpDoc: PhpDocument, symbol: Constant) {

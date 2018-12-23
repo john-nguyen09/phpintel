@@ -1,11 +1,13 @@
-import { Symbol, Consumer, Reference, DocBlockConsumer } from "../symbol";
+import { Symbol, Consumer, DocBlockConsumer } from "../symbol";
 import { Expression } from "../type/expression";
 import { TypeComposite } from "../../type/composite";
 import { DocBlock } from "../docBlock";
 import { DocNodeKind, toTypeName, VarDocNode } from "../../util/docParser";
 import { Location } from "../meta/location";
+import { Reference, RefKind } from "../reference";
 
 export class Variable extends Symbol implements Consumer, DocBlockConsumer, Reference {
+    public readonly refKind = RefKind.Variable;
     public type: TypeComposite = new TypeComposite;
     public location: Location = new Location();
 

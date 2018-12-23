@@ -9,19 +9,23 @@ export namespace BelongsToDoc {
         return db.put(key, symbol);
     }
 
-    export async function removeByDoc(db: DbStore, uri: string) {
+    export async function removeByDoc(db: DbStore, uri: string): Promise<string[]> {
         let prefix = uri + DbStore.uriSep;
 
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<string[]>((resolve, reject) => {
+            let names: string[] = [];
+
             db.prefixSearch(prefix)
                 .on('data', (data) => {
+                    names.push(data.key.substr(data.key.indexOf(DbStore.uriSep)));
+
                     db.del(data.key);
                 })
                 .on('error', (err) => {
                     reject(err);
                 })
                 .on('end', () => {
-                    resolve();
+                    resolve(names);
                 });
         });
     }

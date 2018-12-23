@@ -1,9 +1,11 @@
-import { Symbol, Consumer, Reference } from "../symbol";
+import { Symbol, Consumer } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
+import { Reference, RefKind } from "../reference";
 
 export class ConstantAccess extends Symbol implements Consumer, Reference {
+    public readonly refKind = RefKind.ConstantAccess;
     public static readonly KEYWORD_TYPES: {[key: string]: string} = {
         'false': 'bool',
         'true': 'bool',

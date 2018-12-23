@@ -29,7 +29,7 @@ export namespace InitializeProvider {
         }
 
         let storagePath = path.join(homedir, '.phpintel', hasher.getHash(rootPath));
-        App.initStorage(storagePath);
+        App.getApp().initStorage(storagePath);
 
         logger.info(`storagePath: ${storagePath}`);
         let start = process.hrtime();

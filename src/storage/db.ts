@@ -42,8 +42,8 @@ export class DbStore {
         return this.db.createReadStream(options);
     }
 
-    iterator(options?: Level.ReadStreamOptions): Level.Iterator {
-        return this.db.iterator(options);
+    iterator<T>(options?: Level.ReadStreamOptions): Level.Iterator<T> {
+        return this.db.iterator<T>(options);
     }
 
     prefixSearch(prefix: string): NodeJS.ReadableStream {
@@ -58,15 +58,15 @@ export class DbStore {
 export class SubStore extends DbStore {
     constructor(
         datasource: LevelDatasource,
-        storeInfo: DbStoreInfo,
-        valueEncoding: Level.Encoding
+        storeInfo: DbStoreInfo
     ) {
         super();
 
         this.storeKey = storeInfo.name + DbStore.versionPrefix + storeInfo.version;
         this.db = sublevel(datasource.getDb(), this.storeKey, {
             separator: DbStore.separator,
-            valueEncoding: valueEncoding
+            keyEncoding: storeInfo.keyEncoding,
+            valueEncoding: storeInfo.valueEncoding
         });
     }
 }

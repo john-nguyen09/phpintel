@@ -1,4 +1,4 @@
-import { Symbol, TokenSymbol, TransformSymbol, Consumer, Reference } from "../symbol";
+import { Symbol, TokenSymbol, TransformSymbol, Consumer } from "../symbol";
 import { ConstantAccess } from "../constant/constantAccess";
 import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";

@@ -1,4 +1,4 @@
-import { App } from '../src/app';
+import { App } from '../src/appTest';
 import { Indexer } from '../src/index/indexer';
 import { getCaseDir } from "../src/testHelper";
 import * as path from "path";
@@ -7,7 +7,7 @@ import { pathToUri } from '../src/util/uri';
 
 describe('Testing functions around references', () => {
     it('should return the reference at the cursor', async () => {
-        App.setUpForTest();
+        App.run();
 
         const indexer = App.get<Indexer>(Indexer);
         const caseDir = getCaseDir();
@@ -18,8 +18,16 @@ describe('Testing functions around references', () => {
         await indexer.indexFile(path.join(caseDir, 'function_declare.php'));
         await indexer.indexFile(refTestFile);
 
-        let ref1 = await refTable.findAt(pathToUri(refTestFile), 10);
+        let refTestUri = pathToUri(refTestFile);
+        let refs = [
+            await refTable.findAt(refTestUri, 7),
+            await refTable.findAt(refTestUri, 14),
+            await refTable.findAt(refTestUri, 10),
+            await refTable.findAt(refTestUri, 37),
+            await refTable.findAt(refTestUri, 51),
+            await refTable.findAt(refTestUri, 42),
+        ];
 
-        console.log(ref1);
+        expect(refs).toMatchSnapshot();
     });
 });

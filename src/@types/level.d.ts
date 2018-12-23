@@ -16,7 +16,7 @@ declare namespace Level {
         createReadStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createKeyStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createValueStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
-        iterator(options?: ReadStreamOptions): Iterator;
+        iterator<T>(options?: ReadStreamOptions): Iterator<T>;
     }
     
     export interface BatchOperation {
@@ -36,10 +36,16 @@ declare namespace Level {
         values?: boolean;
     }
 
-    export interface Iterator {
-        next(callback: any): void;
+    export type IteratorNextCallback<T> = (
+        error: Error | null,
+        key: string | Buffer,
+        value?: T
+    ) => void;
+
+    export interface Iterator<T> {
+        next(callback: IteratorNextCallback<T>): void;
         seek(target: any): void;
-        end(callback: any): void;
+        end(callback?: () => void): void;
     }
 
     export interface Encoding {

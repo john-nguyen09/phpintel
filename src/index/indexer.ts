@@ -23,8 +23,6 @@ const statAsync = promisify(fs.stat);
 
 @injectable()
 export class Indexer {
-    static readonly separator = '#';
-
     constructor(
         private treeTraverser: Traverser,
         private textDocumentStore: TextDocumentStore,
@@ -45,10 +43,7 @@ export class Indexer {
 
         let fileUri = pathToUri(filePath);
         let lastIndexTime = await this.phpDocTable.get(fileUri);
-        
-        // let fileContent = (await readFileAsync(filePath)).toString();
-        let fileContent = fs.readFileSync(filePath).toString();
-
+        let fileContent = (await readFileAsync(filePath)).toString();
         let phpDoc = new PhpDocument(fileUri, fileContent);
 
         this.textDocumentStore.add(fileUri, phpDoc.textDocument);
@@ -92,7 +87,7 @@ export class Indexer {
     }
 
     private async indexPhpDocument(doc: PhpDocument, modifiedTime: number): Promise<void> {
-        // await this.phpDocTable.put(doc.uri, modifiedTime);
+        await this.phpDocTable.put(doc.uri, modifiedTime);
         await this.removeSymbolsByDoc(doc.uri);
         
         for (let theClass of doc.classes) {
