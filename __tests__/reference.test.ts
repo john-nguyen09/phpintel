@@ -1,13 +1,13 @@
-import { App } from '../src/appTest';
+import { App } from '../src/app';
 import { Indexer } from '../src/index/indexer';
-import { getCaseDir } from "../src/testHelper";
+import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/referenceTable';
 import { pathToUri } from '../src/util/uri';
 
 describe('Testing functions around references', () => {
     it('should return the reference at the cursor', async () => {
-        App.run();
+        App.init(path.join(getDebugDir(), 'storage'));
 
         const indexer = App.get<Indexer>(Indexer);
         const caseDir = getCaseDir();

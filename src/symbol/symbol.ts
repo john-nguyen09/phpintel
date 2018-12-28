@@ -80,7 +80,7 @@ export class TokenSymbol extends Symbol {
         super();
 
         this.type = <number>token.tokenType;
-        this.text = nodeText(token, doc.textDocument.text);
+        this.text = nodeText(token, doc.text);
     }
 }
 

@@ -3,7 +3,6 @@ import { pathToUri } from "./util/uri";
 import * as fs from "fs";
 import { SymbolParser } from "./symbol/symbolParser";
 import { Traverser } from "./traverser";
-import { TreeNode } from "./util/parseTree";
 import { Parser, Phrase, phraseTypeToString, tokenTypeToString } from "php7parser";
 import * as path from "path";
 import { inspect } from "util";
@@ -20,7 +19,7 @@ export function indexFiles(filePaths: string[]): PhpDocument[] {
         
         treeTraverser.traverse(parseTree, [symbolParser]);
 
-        phpDocs.push(symbolParser.getTree());
+        phpDocs.push(symbolParser.getPhpDoc());
     }
 
     return phpDocs;

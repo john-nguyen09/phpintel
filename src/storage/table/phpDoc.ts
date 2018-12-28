@@ -1,8 +1,7 @@
 import { DbStore, LevelDatasource, SubStore } from "../db";
 import { Serializer } from "../serializer";
 import { injectable } from "inversify";
-import { App } from "../../app";
-import { LogWriter } from "../../service/logWriter";
+import { PhpDocument } from "../../symbol/phpDocument";
 
 @injectable()
 export class PhpDocumentTable {
@@ -11,39 +10,41 @@ export class PhpDocumentTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'php_document',
-            version: 1,
+            version: 2,
             valueEncoding: PhpDocEncoding
         });
     }
 
-    async put(uri: string, lastModified: number) {
-        return this.db.put(uri, lastModified);
+    async put(phpDoc: PhpDocument) {
+        return this.db.put(phpDoc.uri, phpDoc);
     }
 
-    async get(uri: string): Promise<number> {
+    async get(uri: string): Promise<PhpDocument | null> {
         try {
-            let lastUpdated = await this.db.get(uri);
-
-            return lastUpdated;
-        } catch (err) {
-            return -1;
+            return await this.db.get(uri);
+        } catch {
+            return null;
         }
     }
 }
 
 const PhpDocEncoding = {
     type: 'php-doc-encoding',
-    encode(lastModified: number): Buffer {
+    encode(phpDoc: PhpDocument): Buffer {
         let serializer = new Serializer;
 
-        serializer.writeInt32(lastModified);
+        serializer.writeString(phpDoc.uri);
+        serializer.writeString(phpDoc.text);
+        serializer.writeInt32(phpDoc.modifiedTime);
 
         return serializer.getBuffer();
     },
-    decode(buffer: Buffer): number {
+    decode(buffer: Buffer): PhpDocument {
         let serializer = new Serializer(buffer);
+        let phpDoc = new PhpDocument(serializer.readString(), serializer.readString());
+        phpDoc.modifiedTime = serializer.readInt32();
 
-        return serializer.readInt32();
+        return phpDoc;
     },
     buffer: true
 } as Level.Encoding;

@@ -18,7 +18,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "Variable",
+    "refKind": 2,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -43,7 +43,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "Variable",
+    "refKind": 2,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -68,7 +68,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "Variable",
+    "refKind": 2,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -93,7 +93,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "FunctionCall",
+    "refKind": 1,
     "type": TypeName {
       "name": "test_function1",
     },
@@ -114,7 +114,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "FunctionCall",
+    "refKind": 1,
     "type": TypeName {
       "name": "test_function1",
     },
@@ -135,7 +135,7 @@ Array [
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": "FunctionCall",
+    "refKind": 1,
     "type": TypeName {
       "name": "test_function1",
     },

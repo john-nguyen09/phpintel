@@ -50,7 +50,7 @@ export class SymbolParser implements Visitor {
         this.pushSymbol(this.doc);
     }
 
-    public getTree(): PhpDocument {
+    public getPhpDoc(): PhpDocument {
         return this.doc;
     }
 

@@ -1,4 +1,5 @@
-import { IConnection, createConnection } from "vscode-languageserver";
+import "reflect-metadata";
+import { IConnection } from "vscode-languageserver";
 import { injectable, inject } from "inversify";
 
 @injectable()

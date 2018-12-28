@@ -4,24 +4,22 @@ import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/Use";
 import { nonenumerable } from "../util/decorator";
-import { TextDocument } from "../textDocument";
 import { Class } from "./class/class";
 import { Constant } from "./constant/constant";
 import { Function } from "./function/function";
 import { ClassConstant } from "./constant/classConstant";
 import { Method } from "./function/method";
 import { Property } from "./variable/property";
-import { Variable } from "./variable/variable";
-import { FunctionCall } from "./function/functionCall";
 import { isReference, Reference } from "./reference";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
-    public textDocument: TextDocument;
+    public text: string;
 
     @nonenumerable
     private _uri: string;
 
+    public modifiedTime: number = -1;
     public importTable: ImportTable;
 
     public classes: Class[] = [];
@@ -36,7 +34,7 @@ export class PhpDocument extends Symbol implements Consumer {
         super();
 
         this._uri = uri;
-        this.textDocument = new TextDocument(text);
+        this.text = text;
         this.importTable = new ImportTable();
     }
 
@@ -44,12 +42,19 @@ export class PhpDocument extends Symbol implements Consumer {
         return this._uri;
     }
 
-    get text(): string {
-        return this.textDocument.text;
+    getTree(): Phrase {
+        return Parser.parse(this.text);
     }
 
-    getTree(): Phrase {
-        return Parser.parse(this.textDocument.text);
+    getOffset(line: number, character: number): number {
+        let lines = this.text.split('\n');
+        let slice = lines.slice(0, line);
+
+        return slice.map((line) => {
+            return line.length;
+        }).reduce((total, lineCount) => {
+            return total + lineCount;
+        }) + slice.length + character;
     }
 
     consume(other: Symbol): boolean {

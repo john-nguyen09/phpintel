@@ -1,5 +1,4 @@
 import { TextDocumentPositionParams, Hover, MarkedString, LogMessageNotification } from "vscode-languageserver";
-import { TextDocumentStore } from "../textDocumentStore";
 import { App } from "../app";
 import { ReferenceTable } from "../storage/table/referenceTable";
 import { RefKind, Reference } from "../symbol/reference";
@@ -7,24 +6,23 @@ import { Range } from "../symbol/meta/range";
 import { FunctionTable } from "../storage/table/function";
 import { Formatter } from "./formatter";
 import { TypeComposite } from "../type/composite";
-import { LogWriter } from "../service/logWriter";
-import { inspect } from "util";
+import { PhpDocumentTable } from "../storage/table/phpDoc";
 
 export namespace HoverProvider {
-    export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
-        const textDocumentStore = App.get<TextDocumentStore>(TextDocumentStore);
-        const referenceTable = App.get<ReferenceTable>(ReferenceTable);
-        const functionTable = App.get<FunctionTable>(FunctionTable);
+    const referenceTable = App.get<ReferenceTable>(ReferenceTable);
+    const functionTable = App.get<FunctionTable>(FunctionTable);
+    const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
+    export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
         let uri = params.textDocument.uri;
-        let textDocument = textDocumentStore.get(uri);
+        let phpDoc = await phpDocTable.get(uri);
         let contents: string[] = [];
         let range: Range | undefined = undefined;
 
-        if (typeof textDocument !== 'undefined') {
+        if (phpDoc !== null) {
             let ref = await referenceTable.findAt(
                 uri,
-                textDocument.getOffset(params.position.line, params.position.character)
+                phpDoc.getOffset(params.position.line, params.position.character)
             );
 
             if (ref !== null) {

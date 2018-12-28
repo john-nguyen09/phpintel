@@ -1,13 +1,12 @@
-import { Symbol, TransformSymbol, Consumer, Locatable, NameResolvable } from "../symbol";
+import { Symbol, TransformSymbol, Consumer, Locatable } from "../symbol";
 import { QualifiedName } from "../name/qualifiedName";
 import { DefineConstant } from "../constant/defineConstant";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { Reference, RefKind } from "../reference";
-import { ImportTable } from "../../type/importTable";
 
-export class FunctionCall extends TransformSymbol implements Consumer, Reference, Locatable, NameResolvable {
+export class FunctionCall extends TransformSymbol implements Consumer, Reference, Locatable {
     public readonly refKind = RefKind.FunctionCall;
     public realSymbol: (Symbol & Consumer);
     public type: TypeName = new TypeName('');
@@ -37,9 +36,5 @@ export class FunctionCall extends TransformSymbol implements Consumer, Reference
         }
 
         return false;
-    }
-
-    resolveName(importTable: ImportTable): void {
-        this.type.resolveToFullyQualified(importTable);
     }
 }

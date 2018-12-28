@@ -4,9 +4,7 @@ import { promisify } from "util";
 import { pathToUri } from "../util/uri";
 import { SymbolParser } from "../symbol/symbolParser";
 import { PhpDocument } from "../symbol/phpDocument";
-import { Parser } from "php7parser";
 import { injectable } from "inversify";
-import { TextDocumentStore } from "../textDocumentStore";
 import { Traverser } from "../traverser";
 import { ClassTable } from "../storage/table/class";
 import { ClassConstantTable } from "../storage/table/classConstant";
@@ -25,7 +23,6 @@ const statAsync = promisify(fs.stat);
 export class Indexer {
     constructor(
         private treeTraverser: Traverser,
-        private textDocumentStore: TextDocumentStore,
         private phpDocTable: PhpDocumentTable,
         private classTable: ClassTable,
         private classConstantTable: ClassConstantTable,
@@ -42,20 +39,23 @@ export class Indexer {
         }
 
         let fileUri = pathToUri(filePath);
-        let lastIndexTime = await this.phpDocTable.get(fileUri);
-        let fileContent = (await readFileAsync(filePath)).toString();
-        let phpDoc = new PhpDocument(fileUri, fileContent);
+        let lastIndexedPhpDoc = await this.phpDocTable.get(fileUri);
+        let phpDoc: PhpDocument;
 
-        this.textDocumentStore.add(fileUri, phpDoc.textDocument);
+        if (lastIndexedPhpDoc !== null) {
+            phpDoc = lastIndexedPhpDoc;
+        } else {
+            let fileContent = (await readFileAsync(filePath)).toString();
+            phpDoc = new PhpDocument(fileUri, fileContent);
+        }
 
-        const fileModified = Math.round(fstat.mtime.getTime() / 1000);
+        const fileModifiedTime = Math.round(fstat.mtime.getTime() / 1000);
 
-        if (fileModified !== lastIndexTime) {
-            let symbolParser = new SymbolParser(new PhpDocument(fileUri, fileContent));
-            let parseTree = Parser.parse(fileContent);
+        if (fileModifiedTime !== phpDoc.modifiedTime) {
+            let symbolParser = new SymbolParser(phpDoc);
 
-            this.treeTraverser.traverse(parseTree, [symbolParser]);
-            await this.indexPhpDocument(symbolParser.getTree(), fileModified);
+            this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
+            await this.indexPhpDocument(symbolParser.getPhpDoc());
         }
     }
 
@@ -86,9 +86,9 @@ export class Indexer {
         ]);
     }
 
-    private async indexPhpDocument(doc: PhpDocument, modifiedTime: number): Promise<void> {
-        await this.phpDocTable.put(doc.uri, modifiedTime);
+    private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
+        await this.phpDocTable.put(doc);
         
         for (let theClass of doc.classes) {
             await this.classTable.put(doc, theClass);

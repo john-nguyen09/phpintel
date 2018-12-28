@@ -4,8 +4,8 @@ import { Range } from "../symbol/meta/range";
 import { Position } from "../symbol/meta/position";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { TypeComposite } from "../type/composite";
-import { App } from "../app";
 import { LogWriter } from "../service/logWriter";
+import { App } from "../app";
 
 export class Serializer {
     public static readonly DEFAULT_SIZE = 1024;
