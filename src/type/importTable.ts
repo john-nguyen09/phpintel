@@ -26,7 +26,7 @@ export class ImportTable {
     }
 
     public getFqn(name: string) {
-        if (TypeName.isFullyQualifiedName(name)) {
+        if (TypeName.isBuiltin(name) || TypeName.isFullyQualifiedName(name)) {
             return name;
         }
 
@@ -41,5 +41,36 @@ export class ImportTable {
         }
 
         return namespace + (parts.length > 0 ? '\\' + parts.join('\\') : '');
+    }
+
+    public getQualified(fqn: string) {
+        if (TypeName.isBuiltin(fqn) || !TypeName.isFullyQualifiedName(fqn)) {
+            return fqn;
+        }
+
+        let parts = fqn.split('\\');
+        parts.shift();
+        let index = parts.length - 1;
+
+        for (; index >= 0; index--) {
+            if (parts[index] in this.imports) {
+                break;
+            }
+        }
+
+        const isRoot = typeof this.namespace === 'undefined' || this.namespace.isRoot;
+
+        // No part is found in import table
+        if (!isRoot && index < 0) {
+            return fqn;
+        }
+
+        const qualifiedName = parts.slice(index).join('\\');
+
+        if (isRoot) {
+            return qualifiedName;
+        }
+
+        return '\\' + qualifiedName;
     }
 }

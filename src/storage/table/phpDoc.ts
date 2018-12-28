@@ -10,7 +10,7 @@ export class PhpDocumentTable {
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
             name: 'php_document',
-            version: 2,
+            version: 1,
             valueEncoding: PhpDocEncoding
         });
     }
@@ -26,9 +26,13 @@ export class PhpDocumentTable {
             return null;
         }
     }
+
+    async remove(uri: string) {
+        return this.db.del(uri);
+    }
 }
 
-const PhpDocEncoding = {
+export const PhpDocEncoding = {
     type: 'php-doc-encoding',
     encode(phpDoc: PhpDocument): Buffer {
         let serializer = new Serializer;

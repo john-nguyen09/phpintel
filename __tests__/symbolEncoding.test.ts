@@ -7,6 +7,9 @@ import { Constant } from "../src/symbol/constant/constant";
 import { Method } from "../src/symbol/function/method";
 import { ClassConstant } from "../src/symbol/constant/classConstant";
 import { Property } from "../src/symbol/variable/property";
+import { toRelative } from "../src/util/uri";
+import { PhpDocument } from "../src/symbol/phpDocument";
+import { PhpDocEncoding } from "../src/storage/table/phpDoc";
 
 describe('symbolEncoding', () => {
     it('serializer test', () => {
@@ -37,6 +40,8 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let theClass of phpDoc.classes) {
+                theClass.location.uri = theClass.location.relativeUri;
+
                 let buffer = symbolEncoding.encode(theClass);
                 let decoded = symbolEncoding.decode(buffer) as Class;
 
@@ -52,6 +57,8 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let func of phpDoc.functions) {
+                func.location.uri = func.location.relativeUri;
+                
                 let buffer = symbolEncoding.encode(func);
                 let decoded = symbolEncoding.decode(buffer) as Function;
 
@@ -67,6 +74,8 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let constant of phpDoc.constants) {
+                constant.location.uri = constant.location.relativeUri;
+                
                 let buffer = symbolEncoding.encode(constant);
                 let decoded = symbolEncoding.decode(buffer) as Constant;
 
@@ -82,6 +91,8 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let classConstant of phpDoc.classConstants) {
+                classConstant.location.uri = classConstant.location.relativeUri;
+                
                 let buffer = symbolEncoding.encode(classConstant);
                 let decoded = symbolEncoding.decode(buffer) as ClassConstant;
 
@@ -97,6 +108,8 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let method of phpDoc.methods) {
+                method.location.uri = method.location.relativeUri;
+                
                 let buffer = symbolEncoding.encode(method);
                 let decoded = symbolEncoding.decode(buffer) as Method;
 
@@ -112,11 +125,29 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let property of phpDoc.properties) {
+                property.location.uri = property.location.relativeUri;
+                
                 let buffer = symbolEncoding.encode(property);
                 let decoded = symbolEncoding.decode(buffer) as Property;
 
                 expect(decoded.toObject()).toMatchSnapshot();
             }
+        }
+    });
+
+    it('snapshot of phpDoc symbols after encode and decode', () => {
+        let phpDocs = indexFiles([
+            path.join(getCaseDir(), 'bigFile.php'),
+        ]);
+
+        for (let phpDoc of phpDocs) {
+            phpDoc.uri = toRelative(phpDoc.uri);
+
+            let buffer = PhpDocEncoding.encode(phpDoc);
+            let decoded = PhpDocEncoding.decode(buffer) as PhpDocument;
+
+            expect(decoded.toObject()).toMatchSnapshot();
+            expect(decoded.text).toEqual(phpDoc.text);
         }
     });
 });

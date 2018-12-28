@@ -17,7 +17,7 @@ export class PhpDocument extends Symbol implements Consumer {
     public text: string;
 
     @nonenumerable
-    private _uri: string;
+    public uri: string;
 
     public modifiedTime: number = -1;
     public importTable: ImportTable;
@@ -33,13 +33,9 @@ export class PhpDocument extends Symbol implements Consumer {
     constructor(uri: string, text: string) {
         super();
 
-        this._uri = uri;
+        this.uri = uri;
         this.text = text;
         this.importTable = new ImportTable();
-    }
-
-    get uri(): string {
-        return this._uri;
     }
 
     getTree(): Phrase {

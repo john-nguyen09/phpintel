@@ -21,4 +21,8 @@ export class NamespaceName extends Symbol implements Consumer {
     get fqn(): string {
         return '\\' + this.name;
     }
+
+    get isRoot(): boolean {
+        return this.parts.length === 0 || this.fqn === '\\';
+    }
 }

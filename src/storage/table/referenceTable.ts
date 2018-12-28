@@ -116,7 +116,7 @@ enum TypeKind {
     TYPE_COMPOSITE = 2
 };
 
-const ReferenceEncoding = {
+export const ReferenceEncoding = {
     type: 'reference-encoding',
     encode(ref: Reference): Buffer {
         let serializer = new Serializer();

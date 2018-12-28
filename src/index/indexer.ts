@@ -41,17 +41,19 @@ export class Indexer {
         let fileUri = pathToUri(filePath);
         let lastIndexedPhpDoc = await this.phpDocTable.get(fileUri);
         let phpDoc: PhpDocument;
+        let fileContent = (await readFileAsync(filePath)).toString('utf-8');
 
         if (lastIndexedPhpDoc !== null) {
             phpDoc = lastIndexedPhpDoc;
         } else {
-            let fileContent = (await readFileAsync(filePath)).toString();
             phpDoc = new PhpDocument(fileUri, fileContent);
         }
 
         const fileModifiedTime = Math.round(fstat.mtime.getTime() / 1000);
 
         if (fileModifiedTime !== phpDoc.modifiedTime) {
+            phpDoc.text = fileContent;
+            phpDoc.modifiedTime = fileModifiedTime;
             let symbolParser = new SymbolParser(phpDoc);
 
             this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
@@ -82,13 +84,13 @@ export class Indexer {
             this.functionTable.removeByDoc(uri),
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
-            this.referenceTable.removeByDoc(uri)
+            this.referenceTable.removeByDoc(uri),
+            this.phpDocTable.remove(uri)
         ]);
     }
 
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
-        await this.phpDocTable.put(doc);
         
         for (let theClass of doc.classes) {
             await this.classTable.put(doc, theClass);
@@ -117,5 +119,7 @@ export class Indexer {
         for (let reference of doc.references) {
             await this.referenceTable.put(reference);
         }
+        
+        await this.phpDocTable.put(doc);
     }
 }

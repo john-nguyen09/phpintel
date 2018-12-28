@@ -15,14 +15,12 @@ ClassConstant {
         "offset": 48,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "CONST1",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithConst",
   },
 }
@@ -43,14 +41,12 @@ ClassConstant {
         "offset": 71,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "PI",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithConst",
   },
 }
@@ -71,14 +67,12 @@ ClassConstant {
         "offset": 92,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "STATUS_ACTIVE",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithConst",
   },
 }
@@ -99,14 +93,12 @@ ClassConstant {
         "offset": 128,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "STATUS_INACTIVE",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithConst",
   },
 }
@@ -127,14 +119,12 @@ ClassConstant {
         "offset": 168,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_constants.php",
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "IS_ACTIVE",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithConst",
   },
 }
@@ -157,14 +147,13 @@ Constant {
         "offset": 114,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "int",
   },
   "resolvedValue": "123",
@@ -188,14 +177,13 @@ Constant {
         "offset": 139,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST1",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "int",
   },
   "resolvedValue": "456",
@@ -219,14 +207,13 @@ Constant {
         "offset": 158,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST2",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "int",
   },
   "resolvedValue": "789",
@@ -250,14 +237,13 @@ Constant {
         "offset": 184,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST_STRING",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "string",
   },
   "resolvedValue": "'Simple string'",
@@ -281,14 +267,13 @@ Constant {
         "offset": 227,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST_STRING2",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "string",
   },
   "resolvedValue": "'Not so simple string'",
@@ -312,14 +297,13 @@ Constant {
         "offset": 283,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/global_symbols.php",
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\TEST_CONST_STRING3",
   },
+  "refKind": 5,
   "resolvedType": TypeName {
-    "isArray": false,
     "name": "string",
   },
   "resolvedValue": "'Quite complex ' . TEST_CONST_STRING",
@@ -343,19 +327,19 @@ Function {
         "offset": 7,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/function_declare.php",
+    "uri": "case/function_declare.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\test_function1",
   },
   "parameters": Array [
     Parameter {
+      "location": Location {},
       "name": "$stringParam",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": false,
             "name": "string",
           },
         ],
@@ -363,11 +347,12 @@ Function {
       "value": "",
     },
     Parameter {
+      "location": Location {},
       "name": "$intParam",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": false,
             "name": "int",
           },
         ],
@@ -375,11 +360,12 @@ Function {
       "value": "",
     },
     Parameter {
+      "location": Location {},
       "name": "$boolParam",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": false,
             "name": "boolean",
           },
         ],
@@ -387,11 +373,12 @@ Function {
       "value": "",
     },
     Parameter {
+      "location": Location {},
       "name": "$floatParam",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": false,
             "name": "float",
           },
         ],
@@ -403,11 +390,12 @@ Function {
     "variables": Object {
       "$boolParam": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$boolParam",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "boolean",
             },
           ],
@@ -415,11 +403,12 @@ Function {
       },
       "$floatParam": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$floatParam",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "float",
             },
           ],
@@ -427,11 +416,12 @@ Function {
       },
       "$intParam": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$intParam",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "int",
             },
           ],
@@ -439,11 +429,12 @@ Function {
       },
       "$stringParam": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$stringParam",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "string",
             },
           ],
@@ -451,11 +442,12 @@ Function {
       },
       "$test": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$test",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "int",
             },
           ],
@@ -466,23 +458,18 @@ Function {
   "typeAggregate": TypeComposite {
     "_types": Array [
       TypeName {
-        "isArray": false,
         "name": "boolean",
       },
       TypeName {
-        "isArray": false,
         "name": "string",
       },
       TypeName {
-        "isArray": false,
         "name": "int",
       },
       TypeName {
-        "isArray": false,
         "name": "float",
       },
       TypeName {
-        "isArray": false,
         "name": "\\\\TestClass",
       },
     ],
@@ -507,19 +494,19 @@ Function {
         "offset": 708,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/function_declare.php",
+    "uri": "case/function_declare.php",
   },
   "name": TypeName {
-    "isArray": false,
     "name": "\\\\test_function2",
   },
   "parameters": Array [
     Parameter {
+      "location": Location {},
       "name": "$param1",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": false,
             "name": "\\\\array|int",
           },
         ],
@@ -527,11 +514,12 @@ Function {
       "value": "",
     },
     Parameter {
+      "location": Location {},
       "name": "$param2",
+      "refKind": 3,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "isArray": true,
             "name": "string",
           },
         ],
@@ -543,11 +531,12 @@ Function {
     "variables": Object {
       "$param1": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$param1",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": false,
               "name": "\\\\array|int",
             },
           ],
@@ -555,11 +544,12 @@ Function {
       },
       "$param2": Variable {
         "expression": Expression {},
+        "location": Location {},
         "name": "$param2",
+        "refKind": 2,
         "type": TypeComposite {
           "_types": Array [
             TypeName {
-              "isArray": true,
               "name": "string",
             },
           ],
@@ -589,18 +579,16 @@ Method {
         "offset": 560,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 0,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "__construct",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -622,18 +610,16 @@ Method {
         "offset": 613,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 1,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "method1",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -655,18 +641,16 @@ Method {
         "offset": 673,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 1,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "method2",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -688,18 +672,16 @@ Method {
         "offset": 779,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 1,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "method3",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -721,18 +703,16 @@ Method {
         "offset": 836,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 1,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "method4",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -754,18 +734,16 @@ Method {
         "offset": 896,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 2,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "protectedMethod1",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
 }
@@ -787,20 +765,34 @@ Method {
         "offset": 959,
       },
     },
-    "uri": "file:///C:/Users/Thuan/Development/phpintel/case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
     "visibility": 4,
   },
   "name": TypeName {
-    "isArray": false,
     "name": "privateMethod1",
   },
   "scope": TypeName {
-    "isArray": false,
     "name": "\\\\ClassWithMethod",
   },
+}
+`;
+
+exports[`symbolEncoding snapshot of phpDoc symbols after encode and decode 1`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [],
+  "modifiedTime": -1,
+  "properties": Array [],
+  "references": Array [],
 }
 `;
 

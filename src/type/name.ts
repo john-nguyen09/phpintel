@@ -18,7 +18,7 @@ export class TypeName {
     private name: string;
 
     constructor(name: string) {
-        this.name = name;
+        this.name = name.trim();
 
         if (this.name in TypeName.ALIASES) {
             this.name = TypeName.ALIASES[this.name];
@@ -29,12 +29,12 @@ export class TypeName {
         this.name = importTable.getFqn(this.name);
     }
 
+    public static isBuiltin(typeName: string) {
+        return TypeName.BUILT_INS.indexOf(typeName) >= 0;
+    }
+
     public static isFullyQualifiedName(typeName: string): boolean {
         if (typeName == '') {
-            return true;
-        }
-
-        if (TypeName.BUILT_INS.indexOf(typeName) >= 0) {
             return true;
         }
 
@@ -43,6 +43,10 @@ export class TypeName {
 
     public getName(): string {
         return this.name;
+    }
+
+    public getQualified(importTable: ImportTable): string {
+        return importTable.getQualified(this.name);
     }
 
     public toString(): string {

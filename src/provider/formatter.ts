@@ -1,6 +1,7 @@
 import { MarkedString } from "vscode-languageserver";
 import { Function } from "../symbol/function/function";
 import { TypeName } from "../type/name";
+import { PhpDocument } from "../symbol/phpDocument";
 
 export namespace Formatter {
     export function beautifyPhpContent(content: string): MarkedString {
@@ -22,7 +23,7 @@ export namespace Formatter {
         }).join('|');
     }
 
-    export function funcDef(symbol: Function): string {
+    export function funcDef(phpDoc: PhpDocument, symbol: Function): MarkedString {
         let params = symbol.parameters.map((param) => {
             return [
                 types(param.type.types),
@@ -32,7 +33,8 @@ export namespace Formatter {
                 return value !== null;
             }).join(' ');
         }).join(', ').trim();
+        let qualifiedName = symbol.name.getQualified(phpDoc.importTable);
 
-        return `function ${symbol.getName()}(${params})`;
+        return beautifyPhpContent(`function ${qualifiedName}(${params})`);
     }
 }
