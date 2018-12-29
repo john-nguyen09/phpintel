@@ -1,6 +1,6 @@
 import { TreeNode, isToken, isPhrase, nodeRange } from "../util/parseTree";
 import { Phrase } from "php7parser";
-import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer, isLocatable } from "./symbol";
+import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer, isLocatable, needsNameResolve } from "./symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./class/class";
 import { ClassHeader } from "./class/header";
@@ -246,6 +246,22 @@ export class SymbolParser implements Visitor {
             }
 
             if (isConsumed) {
+                if (isCollection(symbol)) {
+                    for (let realSymbol of symbol.realSymbols) {
+                        if (!realSymbol) {
+                            continue;
+                        }
+
+                        if (needsNameResolve(realSymbol)) {
+                            realSymbol.resolveName(this.doc.importTable);
+                        }
+                    }
+                } else {
+                    if (needsNameResolve(symbol)) {
+                        symbol.resolveName(this.doc.importTable);
+                    }
+                }
+
                 break;
             }
         }

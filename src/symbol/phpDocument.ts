@@ -66,10 +66,6 @@ export class PhpDocument extends Symbol implements Consumer {
             return true;
         }
 
-        if (needsNameResolve(other)) {
-            other.resolveName(this.importTable);
-        }
-
         return true;
     }
 

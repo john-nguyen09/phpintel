@@ -32,10 +32,10 @@ export class FunctionTable {
 
     async get(name: string): Promise<Function[]> {
         let funcs: Function[] = [];
-        let keys = await NameIndex.get(this.nameIndex, name);
+        let uris = await NameIndex.get(this.nameIndex, name);
 
-        for (let key of keys) {
-            funcs.push(await this.db.get(key) as Function);
+        for (let uri of uris) {
+            funcs.push(await this.db.get(BelongsToDoc.getKey(uri, name)) as Function);
         }
 
         return funcs;

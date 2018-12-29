@@ -18,7 +18,7 @@ export class LevelDatasource {
 
 @injectable()
 export class DbStore {
-    public static readonly uriSep = '#';
+    public static readonly URI_SEP = '#';
     
     protected static readonly separator = '!';
     protected static readonly versionPrefix = '@';

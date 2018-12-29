@@ -55,6 +55,10 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember, Nam
         this.func.scopeVar.set(variable);
     }
 
+    get parameters() {
+        return this.func.parameters;
+    }
+
     public getName(): string {
         return this.name.toString();
     }
