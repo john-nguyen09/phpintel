@@ -131,6 +131,7 @@ export const ReferenceEncoding = {
 
         serializer.writeLocation(ref.location);
         serializer.writeInt32(ref.refKind);
+        serializer.writeTypeName(ref.scope);
 
         return serializer.getBuffer();
     },
@@ -151,11 +152,13 @@ export const ReferenceEncoding = {
 
         let location = serializer.readLocation();
         let refKind = serializer.readInt32();
+        let scope = serializer.readTypeName();
         
         return {
             type,
             location,
-            refKind
+            refKind,
+            scope
         } as Reference;
     }
 } as Level.Encoding;

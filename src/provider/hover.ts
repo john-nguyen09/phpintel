@@ -6,7 +6,6 @@ import { Range } from "../symbol/meta/range";
 import { Formatter } from "./formatter";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
-import { TypeName } from "../type/name";
 
 export namespace HoverProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
@@ -34,7 +33,7 @@ export namespace HoverProvider {
                         contents.push(Formatter.funcDef(phpDoc, func));
                     }
                 } else if (ref.refKind === RefKind.ClassTypeDesignator) {
-                    let constructors = await RefResolver.getClassConstructorSymbols(phpDoc, ref);
+                    let constructors = await RefResolver.getMethodSymbols(phpDoc, ref);
 
                     if (constructors.length === 0) {
                         let classes = await RefResolver.getClassSymbols(phpDoc, ref);
@@ -46,6 +45,24 @@ export namespace HoverProvider {
                         for (let constructor of constructors) {
                             contents.push(Formatter.methodDef(phpDoc, constructor));
                         }
+                    }
+                } else if (ref.refKind === RefKind.Class) {
+                    let classes = await RefResolver.getClassSymbols(phpDoc, ref);
+
+                    for (let theClass of classes) {
+                        contents.push(Formatter.classDef(phpDoc, theClass));
+                    }
+                } else if (ref.refKind === RefKind.MethodCall) {
+                    let methods = await RefResolver.getMethodSymbols(phpDoc, ref);
+
+                    for (let method of methods) {
+                        contents.push(Formatter.methodDef(phpDoc, method));
+                    }
+                } else if (ref.refKind === RefKind.Property) {
+                    let props = await RefResolver.getPropSymbols(phpDoc, ref);
+
+                    for (let prop of props) {
+                        contents.push(Formatter.propDef(phpDoc, prop));
                     }
                 }
             }

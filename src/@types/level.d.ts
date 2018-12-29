@@ -17,6 +17,7 @@ declare namespace Level {
         createKeyStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         createValueStream(options?: ReadStreamOptions): NodeJS.ReadableStream;
         iterator<T>(options?: ReadStreamOptions): Iterator<T>;
+        close(): Promise<void>;
     }
     
     export interface BatchOperation {

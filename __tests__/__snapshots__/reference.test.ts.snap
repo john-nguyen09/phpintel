@@ -19,6 +19,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
+    "scope": null,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -44,6 +45,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
+    "scope": null,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -69,6 +71,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
+    "scope": null,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -81,9 +84,9 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 16,
+          "character": 14,
           "line": 3,
-          "offset": 53,
+          "offset": 51,
         },
         "start": Position {
           "character": 0,
@@ -94,6 +97,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "scope": null,
     "type": TypeName {
       "name": "test_function1",
     },
@@ -102,9 +106,9 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 16,
+          "character": 14,
           "line": 3,
-          "offset": 53,
+          "offset": 51,
         },
         "start": Position {
           "character": 0,
@@ -115,6 +119,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "scope": null,
     "type": TypeName {
       "name": "test_function1",
     },
@@ -123,9 +128,9 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 16,
+          "character": 14,
           "line": 3,
-          "offset": 53,
+          "offset": 51,
         },
         "start": Position {
           "character": 0,
@@ -136,8 +141,101 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "scope": null,
     "type": TypeName {
       "name": "test_function1",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 23,
+          "line": 11,
+          "offset": 241,
+        },
+        "start": Position {
+          "character": 8,
+          "line": 11,
+          "offset": 226,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 9,
+    "scope": null,
+    "type": TypeName {
+      "name": "ClassWithMethod",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 23,
+          "line": 11,
+          "offset": 241,
+        },
+        "start": Position {
+          "character": 8,
+          "line": 11,
+          "offset": 226,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 9,
+    "scope": null,
+    "type": TypeName {
+      "name": "ClassWithMethod",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 37,
+          "line": 11,
+          "offset": 255,
+        },
+        "start": Position {
+          "character": 25,
+          "line": 11,
+          "offset": 243,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 10,
+    "scope": TypeName {
+      "name": "ClassWithMethod",
+    },
+    "type": TypeName {
+      "name": "staticMethod",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 37,
+          "line": 11,
+          "offset": 255,
+        },
+        "start": Position {
+          "character": 25,
+          "line": 11,
+          "offset": 243,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 10,
+    "scope": TypeName {
+      "name": "ClassWithMethod",
+    },
+    "type": TypeName {
+      "name": "staticMethod",
     },
   },
 ]

@@ -5,6 +5,7 @@ import { PhpDocument } from "../symbol/phpDocument";
 import { Class } from "../symbol/class/class";
 import { Method } from "../symbol/function/method";
 import { SymbolModifier } from "../symbol/meta/modifier";
+import { Property } from "../symbol/variable/property";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -88,5 +89,16 @@ export namespace Formatter {
         }
 
         return highlightPhp(`${modifiers} function ${className}.${qualifiedName}(${params})`);
+    }
+
+    export function propDef(phpDoc: PhpDocument, symbol: Property): MarkedString {
+        let className = '';
+        let modifiers = modifierDef(symbol.modifier);
+
+        if (symbol.scope !== null) {
+            className = symbol.scope.getQualified(phpDoc.importTable);
+        }
+
+        return highlightPhp(`${modifiers} ${className}::$${symbol.name}`);
     }
 }

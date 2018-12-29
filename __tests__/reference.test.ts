@@ -1,6 +1,6 @@
 import { App } from '../src/app';
 import { Indexer } from '../src/index/indexer';
-import { getCaseDir, getDebugDir } from "../src/testHelper";
+import { getCaseDir, getDebugDir, dumpAstToDebug } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/referenceTable';
 import { pathToUri } from '../src/util/uri';
@@ -30,6 +30,10 @@ describe('Testing functions around references', () => {
             await refTable.findAt(refTestUri, 37),
             await refTable.findAt(refTestUri, 51),
             await refTable.findAt(refTestUri, 42),
+            await refTable.findAt(refTestUri, 241),
+            await refTable.findAt(refTestUri, 226),
+            await refTable.findAt(refTestUri, 243),
+            await refTable.findAt(refTestUri, 255)
         ];
 
         // let refTestDoc = await phpDocTable.get(refTestUri);
@@ -37,5 +41,7 @@ describe('Testing functions around references', () => {
         // console.log(await RefResolver.getClassConstructorSymbols(refTestDoc, typeDesignator));
 
         expect(refs).toMatchSnapshot();
+
+        await App.clearCache();
     });
 });

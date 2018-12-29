@@ -11,6 +11,7 @@ export class DefineConstant extends Symbol implements Reference, FieldGetter, Na
     public readonly refKind = RefKind.DefineConstant;
     public name: TypeName;
     public location: Location = new Location();
+    public scope: TypeName | null = null;
 
     private constant: Constant = new Constant();
 

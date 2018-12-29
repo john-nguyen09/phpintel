@@ -14,9 +14,20 @@ import { Traverser } from "./traverser";
 import { ReferenceTable } from "./storage/table/referenceTable";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
+import * as fs from "fs";
+import { promisify } from "util";
+
+const unlinkAsync = promisify(fs.unlink);
+
+export interface AppOptions {
+    storage: string;
+}
 
 export class Application {
     protected container: Container = new Container();
+    protected options: AppOptions = {
+        storage: ''
+    };
 
     constructor(storageLocation: string, connection?: IConnection) {
         this.container.bind<IConnection | undefined>('IConnection').toConstantValue(connection);
@@ -29,7 +40,26 @@ export class Application {
         return this.container;
     }
 
+    public async clearCache() {
+        const db = this.container.get<LevelDatasource>(LevelDatasource).getDb();
+
+        return new Promise<void>((resolve, reject) => {
+            db.createKeyStream()
+                .on('data', async (key) => {
+                    await db.del(key);
+                })
+                .on('end', () => {
+                    resolve();
+                })
+                .on('error', (err: Error) => {
+                    reject(err);
+                });
+        });
+    }
+
     protected initStorage(location: string) {
+        this.options.storage = location;
+
         let datasource = new LevelDatasource(location);
         this.container.bind<LevelDatasource>(LevelDatasource).toConstantValue(datasource);
 
@@ -63,5 +93,9 @@ export namespace App {
         identifier: string | symbol | interfaces.Newable<T> | interfaces.Abstract<T>
     ): T {
         return app.getContainer().get(identifier);
+    }
+
+    export async function clearCache() {
+        return app.clearCache();
     }
 }

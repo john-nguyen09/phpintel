@@ -8,6 +8,7 @@ export class ClassTypeDesignator extends Symbol implements Reference, Locatable,
     public readonly refKind = RefKind.ClassTypeDesignator;
     public type: TypeName = new TypeName('');
     public location: Location = new Location();
+    public scope: TypeName | null = null;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {

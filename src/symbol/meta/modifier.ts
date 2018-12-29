@@ -63,6 +63,9 @@ export class SymbolModifier implements Consumer {
             case TokenKind.Final:
                 this.include(SymbolModifier.FINAL);
                 break;
+            case TokenKind.Static:
+                this.include(SymbolModifier.STATIC);
+                break;
         }
 
         return true;

@@ -1,4 +1,4 @@
-import { Reference } from "../symbol/reference";
+import { Reference, RefKind } from "../symbol/reference";
 import { App } from "../app";
 import { FunctionTable } from "../storage/table/function";
 import { TypeComposite } from "../type/composite";
@@ -8,6 +8,8 @@ import { Class } from "../symbol/class/class";
 import { ClassTable } from "../storage/table/class";
 import { Method } from "../symbol/function/method";
 import { MethodTable } from "../storage/table/method";
+import { Property } from "../symbol/variable/property";
+import { PropertyTable } from "../storage/table/property";
 
 export namespace RefResolver {
     export async function getFuncSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Function[]> {
@@ -22,16 +24,42 @@ export namespace RefResolver {
         return await funcTable.get(ref.type.getName());
     }
 
-    export async function getClassConstructorSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Method[]> {
-        const methodTable = App.get<MethodTable>(MethodTable);
-
+    export async function getMethodSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Method[]> {
         if (ref.type instanceof TypeComposite) {
             return [];
         }
 
-        ref.type.resolveToFullyQualified(phpDoc.importTable);
+        const methodTable = App.get<MethodTable>(MethodTable);
+        let className: string = '';
+        let methodName: string = '';
 
-        return await methodTable.searchByClass(ref.type.getName(), '__construct');
+        if (ref.refKind === RefKind.ClassTypeDesignator) {
+            ref.type.resolveToFullyQualified(phpDoc.importTable);
+            className = ref.type.getName();
+            methodName = '__construct';
+        } else if (ref.refKind === RefKind.MethodCall && ref.scope !== null) {
+            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            className = ref.scope.getName();
+            methodName = ref.type.getName();
+        }
+
+        return await methodTable.searchByClass(className, methodName);
+    }
+
+    export async function getPropSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Property[]> {
+        if (ref.type instanceof TypeComposite) {
+            return [];
+        }
+
+        const propTable = App.get<PropertyTable>(PropertyTable);
+        let className = '';
+
+        if (ref.scope !== null) {
+            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            className = ref.scope.getName();
+        }
+
+        return await propTable.searchByClass(className, ref.type.getName());
     }
 
     export async function getClassSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Class[]> {

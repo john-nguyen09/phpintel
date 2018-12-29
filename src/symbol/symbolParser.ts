@@ -39,6 +39,11 @@ import { PhraseKind, TokenKind } from "../util/parser";
 import { VariableAssignment } from "./variable/varibleAssignment";
 import { Visitor } from "../traverser";
 import { Location } from "./meta/location";
+import { MethodCallExpression } from "./type/methodCallExpression";
+import { ScopedMemberName } from "./name/scopedMemberName";
+import { ClassRef } from "./class/classRef";
+import { PropertyRef } from "./variable/propertyRef";
+import { PropRefExpression } from "./type/propRefExpression";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -60,7 +65,12 @@ export class SymbolParser implements Visitor {
 
     pushSymbol(symbol: Symbol | null) {
         this.symbolStack.push(symbol);
-        this.doc.pushSymbol(symbol);
+
+        if (symbol !== null) {
+            this.forEachSymbol(symbol, (symbol) => {
+                this.doc.pushSymbol(symbol);
+            });
+        }
     }
 
     preorder(node: TreeNode) {
@@ -189,6 +199,15 @@ export class SymbolParser implements Visitor {
                 case PhraseKind.PropertyDeclaration:
                     this.pushSymbol(new PropertyDeclaration());
                     break;
+                case PhraseKind.ScopedCallExpression:
+                    this.pushSymbol(new MethodCallExpression());
+                    break;
+                case PhraseKind.ScopedMemberName:
+                    this.pushSymbol(new ScopedMemberName());
+                    break;
+                case PhraseKind.ScopedPropertyAccessExpression:
+                    this.pushSymbol(new PropRefExpression());
+                    break;
 
                 default:
                     this.pushSymbol(null);
@@ -197,15 +216,17 @@ export class SymbolParser implements Visitor {
             let symbol = this.symbolStack[this.symbolStack.length - 1];
 
             if (symbol !== null) {
-                if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
-                    symbol.consumeDocBlock(this.lastDocBlock);
-    
-                    this.lastDocBlock = null;
-                }
-                
-                if (isLocatable(symbol)) {
-                    symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));
-                }
+                this.forEachSymbol(symbol, (symbol) => {
+                    if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
+                        symbol.consumeDocBlock(this.lastDocBlock);
+        
+                        this.lastDocBlock = null;
+                    }
+                    
+                    if (isLocatable(symbol)) {
+                        symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));
+                    }
+                });
             }
         }
     }
@@ -229,41 +250,40 @@ export class SymbolParser implements Visitor {
         for (let i = this.symbolStack.length - 1; i >= 0; i--) {
             let prev = this.symbolStack[i];
 
-            if (!prev || !isConsumer(prev)) {
+            if (prev === null || !isConsumer(prev)) {
                 continue;
             }
 
-            if (isCollection(symbol)) {
-                for (let realSymbol of symbol.realSymbols) {
-                    if (!realSymbol) {
-                        continue;
-                    }
-
-                    isConsumed = prev.consume(realSymbol) || isConsumed;
+            this.forEachSymbol(symbol, (symbol) => {
+                if (prev === null || !isConsumer(prev)) {
+                    return;
                 }
-            } else {
-                isConsumed = prev.consume(symbol);
-            }
+
+                isConsumed = prev.consume(symbol) || isConsumed;
+            });
 
             if (isConsumed) {
-                if (isCollection(symbol)) {
-                    for (let realSymbol of symbol.realSymbols) {
-                        if (!realSymbol) {
-                            continue;
-                        }
-
-                        if (needsNameResolve(realSymbol)) {
-                            realSymbol.resolveName(this.doc.importTable);
-                        }
-                    }
-                } else {
+                const importTable = this.doc.importTable;
+                this.forEachSymbol(symbol, (symbol) => {
                     if (needsNameResolve(symbol)) {
-                        symbol.resolveName(this.doc.importTable);
+                        symbol.resolveName(importTable);
                     }
-                }
+                });
 
                 break;
             }
         }
+    }
+
+    private forEachSymbol(symbol: Symbol, callback: (symbol: Symbol) => void) {
+        if (isCollection(symbol)) {
+            for (let realSymbol of symbol.realSymbols) {
+                callback(realSymbol);
+            }
+
+            return;
+        }
+
+        callback(symbol);
     }
 }

@@ -12,6 +12,7 @@ export class FunctionCall extends TransformSymbol implements Consumer, Reference
     public type: TypeName = new TypeName('');
     public argumentList: ArgumentExpressionList;
     public location: Location = new Location();
+    public scope: TypeName | null = null;
 
     consume(other: Symbol) {
         if (other instanceof QualifiedName) {
@@ -22,6 +23,7 @@ export class FunctionCall extends TransformSymbol implements Consumer, Reference
                 this.realSymbol = defineConstant;
             } else {
                 this.type = new TypeName(other.name);
+                this.location = other.location;
             }
 
             return true;

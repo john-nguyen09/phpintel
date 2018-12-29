@@ -5,6 +5,7 @@ import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
 import { Location } from "../meta/location";
 import { Reference, RefKind } from "../reference";
+import { TypeName } from "../../type/name";
 
 export class Parameter extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Parameter;
@@ -12,6 +13,7 @@ export class Parameter extends Symbol implements Consumer, Reference {
     public type: TypeComposite = new TypeComposite();
     public location: Location = new Location();
     public value: string = '';
+    public scope: TypeName | null = null;
 
     protected expression: Expression;
 

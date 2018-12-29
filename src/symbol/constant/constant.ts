@@ -14,6 +14,7 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
     public location: Location = new Location();
     public resolvedType: TypeName | null = null;
     public resolvedValue: string | null = null;
+    public scope: TypeName | null = null;
 
     protected hasEqual: boolean = false;
     protected acceptWhitespace: boolean = true;

@@ -11,13 +11,17 @@ export enum RefKind {
     Constant = 5,
     ConstantAccess = 6,
     DefineConstant = 7,
-    ClassTypeDesignator = 8
+    ClassTypeDesignator = 8,
+    Class = 9,
+    MethodCall = 10,
+    Property = 11
 }
 
 export interface Reference {
     refKind: RefKind;
     type: TypeName | TypeComposite;
     location: Location;
+    scope: TypeName | null;
 }
 
 export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {

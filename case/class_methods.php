@@ -2,6 +2,8 @@
 
 class ClassWithMethod
 {
+    public static $staticVariable = false;
+
     public $property1 = false;
     public $property2;
 
@@ -52,5 +54,9 @@ class ClassWithMethod
 
     private function privateMethod1($first, $second, $optional1 = null, $optional2 = '') {
         return null;
+    }
+
+    public static function staticMethod($param1, $param2) {
+        return true;
     }
 }

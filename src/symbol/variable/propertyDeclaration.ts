@@ -20,8 +20,6 @@ export class PropertyDeclaration extends Symbol implements Consumer, DocBlockCon
             if (this.doc !== null) {
                 other.consumeDocBlock(this.doc);
             }
-
-            return true;
         }
 
         return false;

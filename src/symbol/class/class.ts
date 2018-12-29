@@ -5,6 +5,7 @@ import { ClassTraitUse } from "./traitUse";
 import { ClassHeader } from "./header";
 import { TypeName } from "../../type/name";
 import { ImportTable } from "../../type/importTable";
+import { Property } from "../variable/property";
 
 export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
