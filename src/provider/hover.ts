@@ -26,7 +26,7 @@ export namespace HoverProvider {
             if (ref !== null) {
                 range = ref.location.range;
 
-                if (ref.refKind === RefKind.FunctionCall) {
+                if (ref.refKind === RefKind.Function) {
                     let funcs = await RefResolver.getFuncSymbols(phpDoc, ref);
 
                     for (let func of funcs) {
@@ -52,7 +52,7 @@ export namespace HoverProvider {
                     for (let theClass of classes) {
                         contents.push(Formatter.classDef(phpDoc, theClass));
                     }
-                } else if (ref.refKind === RefKind.MethodCall) {
+                } else if (ref.refKind === RefKind.Method) {
                     let methods = await RefResolver.getMethodSymbols(phpDoc, ref);
 
                     for (let method of methods) {
@@ -63,6 +63,12 @@ export namespace HoverProvider {
 
                     for (let prop of props) {
                         contents.push(Formatter.propDef(phpDoc, prop));
+                    }
+                } else if (ref.refKind === RefKind.ClassConst) {
+                    let classConsts = await RefResolver.getClassConstSymbols(phpDoc, ref);
+
+                    for (let classConst of classConsts) {
+                        contents.push(Formatter.classConstDef(phpDoc, classConst));
                     }
                 }
             }

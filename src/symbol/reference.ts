@@ -4,7 +4,7 @@ import { Symbol } from "./symbol";
 import { Location } from "./meta/location";
 
 export enum RefKind {
-    FunctionCall = 1,
+    Function = 1,
     Variable = 2,
     Parameter = 3,
     TypeDeclaration = 4,
@@ -13,8 +13,9 @@ export enum RefKind {
     DefineConstant = 7,
     ClassTypeDesignator = 8,
     Class = 9,
-    MethodCall = 10,
-    Property = 11
+    Method = 10,
+    Property = 11,
+    ClassConst = 12
 }
 
 export interface Reference {
@@ -30,7 +31,7 @@ export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {
 
 export function refKindToString(refKind: RefKind): string {
     switch (refKind) {
-        case RefKind.FunctionCall:
+        case RefKind.Function:
             return 'FunctionCall';
         case RefKind.Variable:
             return 'Variable';

@@ -7,7 +7,7 @@ import { Location } from "../meta/location";
 import { Reference, RefKind } from "../reference";
 
 export class FunctionCall extends TransformSymbol implements Consumer, Reference, Locatable {
-    public readonly refKind = RefKind.FunctionCall;
+    public readonly refKind = RefKind.Function;
     public realSymbol: (Symbol & Consumer);
     public type: TypeName = new TypeName('');
     public argumentList: ArgumentExpressionList;

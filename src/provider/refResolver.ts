@@ -10,6 +10,8 @@ import { Method } from "../symbol/function/method";
 import { MethodTable } from "../storage/table/method";
 import { Property } from "../symbol/variable/property";
 import { PropertyTable } from "../storage/table/property";
+import { ClassConstant } from "../symbol/constant/classConstant";
+import { ClassConstantTable } from "../storage/table/classConstant";
 
 export namespace RefResolver {
     export async function getFuncSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Function[]> {
@@ -37,7 +39,7 @@ export namespace RefResolver {
             ref.type.resolveToFullyQualified(phpDoc.importTable);
             className = ref.type.getName();
             methodName = '__construct';
-        } else if (ref.refKind === RefKind.MethodCall && ref.scope !== null) {
+        } else if (ref.refKind === RefKind.Method && ref.scope !== null) {
             ref.scope.resolveToFullyQualified(phpDoc.importTable);
             className = ref.scope.getName();
             methodName = ref.type.getName();
@@ -72,5 +74,21 @@ export namespace RefResolver {
         ref.type.resolveToFullyQualified(phpDoc.importTable);
 
         return await classTable.get(ref.type.getName());
+    }
+
+    export async function getClassConstSymbols(phpDoc: PhpDocument, ref: Reference): Promise<ClassConstant[]> {
+        if (ref.type instanceof TypeComposite) {
+            return [];
+        }
+
+        const classConstTable = App.get<ClassConstantTable>(ClassConstantTable);
+        let className = '';
+
+        if (ref.scope !== null) {
+            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            className = ref.scope.getName();
+        }
+
+        return await classConstTable.searchByClass(className, ref.type.getName());
     }
 }

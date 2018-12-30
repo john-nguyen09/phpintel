@@ -6,78 +6,66 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 7,
+          "character": 23,
           "line": 1,
-          "offset": 14,
+          "offset": 30,
         },
         "start": Position {
-          "character": 0,
+          "character": 14,
           "line": 1,
-          "offset": 7,
+          "offset": 21,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": 2,
+    "refKind": 8,
     "scope": null,
-    "type": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "TestClass",
-        },
-      ],
+    "type": TypeName {
+      "name": "\\\\TestClass",
     },
   },
   Object {
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 7,
+          "character": 23,
           "line": 1,
-          "offset": 14,
+          "offset": 30,
         },
         "start": Position {
-          "character": 0,
+          "character": 14,
           "line": 1,
-          "offset": 7,
+          "offset": 21,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": 2,
+    "refKind": 8,
     "scope": null,
-    "type": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "TestClass",
-        },
-      ],
+    "type": TypeName {
+      "name": "\\\\TestClass",
     },
   },
   Object {
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": 7,
+          "character": 23,
           "line": 1,
-          "offset": 14,
+          "offset": 30,
         },
         "start": Position {
-          "character": 0,
+          "character": 14,
           "line": 1,
-          "offset": 7,
+          "offset": 21,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
-    "refKind": 2,
+    "refKind": 8,
     "scope": null,
-    "type": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "TestClass",
-        },
-      ],
+    "type": TypeName {
+      "name": "\\\\TestClass",
     },
   },
   Object {
@@ -99,7 +87,7 @@ Array [
     "refKind": 1,
     "scope": null,
     "type": TypeName {
-      "name": "test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -121,7 +109,7 @@ Array [
     "refKind": 1,
     "scope": null,
     "type": TypeName {
-      "name": "test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -143,7 +131,7 @@ Array [
     "refKind": 1,
     "scope": null,
     "type": TypeName {
-      "name": "test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -165,7 +153,7 @@ Array [
     "refKind": 9,
     "scope": null,
     "type": TypeName {
-      "name": "ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
@@ -187,7 +175,7 @@ Array [
     "refKind": 9,
     "scope": null,
     "type": TypeName {
-      "name": "ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
@@ -208,7 +196,7 @@ Array [
     },
     "refKind": 10,
     "scope": TypeName {
-      "name": "ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "staticMethod",
@@ -232,10 +220,931 @@ Array [
     },
     "refKind": 10,
     "scope": TypeName {
-      "name": "ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "staticMethod",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 40,
+          "line": 12,
+          "offset": 304,
+        },
+        "start": Position {
+          "character": 25,
+          "line": 12,
+          "offset": 289,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 11,
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+    "type": TypeName {
+      "name": "$staticVariable",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 40,
+          "line": 12,
+          "offset": 304,
+        },
+        "start": Position {
+          "character": 25,
+          "line": 12,
+          "offset": 289,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 11,
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+    "type": TypeName {
+      "name": "$staticVariable",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 33,
+          "line": 13,
+          "offset": 340,
+        },
+        "start": Position {
+          "character": 24,
+          "line": 13,
+          "offset": 331,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 12,
+    "scope": TypeName {
+      "name": "\\\\ClassWithConst",
+    },
+    "type": TypeName {
+      "name": "IS_ACTIVE",
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 33,
+          "line": 13,
+          "offset": 340,
+        },
+        "start": Position {
+          "character": 24,
+          "line": 13,
+          "offset": 331,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 12,
+    "scope": TypeName {
+      "name": "\\\\ClassWithConst",
+    },
+    "type": TypeName {
+      "name": "IS_ACTIVE",
+    },
+  },
+]
+`;
+
+exports[`Testing functions around references should return the reference at the cursor 2`] = `
+Array [
+  Class {
+    "extend": null,
+    "implements": Array [
+      TypeName {
+        "name": "TestInterface",
+      },
+    ],
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 72,
+          "offset": 1875,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 31,
+          "offset": 888,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "\\\\TestClass",
+    },
+    "traits": Array [],
+  },
+  Class {
+    "extend": null,
+    "implements": Array [
+      TypeName {
+        "name": "TestInterface",
+      },
+    ],
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 72,
+          "offset": 1875,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 31,
+          "offset": 888,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "\\\\TestClass",
+    },
+    "traits": Array [],
+  },
+  Class {
+    "extend": null,
+    "implements": Array [
+      TypeName {
+        "name": "TestInterface",
+      },
+    ],
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 72,
+          "offset": 1875,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 31,
+          "offset": 888,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "\\\\TestClass",
+    },
+    "traits": Array [],
+  },
+  Function {
+    "description": "",
+    "docParamTypes": Object {},
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 31,
+          "offset": 582,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+    },
+    "name": TypeName {
+      "name": "\\\\test_function1",
+    },
+    "parameters": Array [
+      Parameter {
+        "location": Location {},
+        "name": "$stringParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$intParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$boolParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$floatParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": Scope {
+      "variables": Object {
+        "$boolParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$boolParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "boolean",
+              },
+            ],
+          },
+        },
+        "$floatParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$floatParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "float",
+              },
+            ],
+          },
+        },
+        "$intParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$intParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+        "$stringParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$stringParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "string",
+              },
+            ],
+          },
+        },
+        "$test": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$test",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+        TypeName {
+          "name": "string",
+        },
+        TypeName {
+          "name": "int",
+        },
+        TypeName {
+          "name": "float",
+        },
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+    },
+  },
+  Function {
+    "description": "",
+    "docParamTypes": Object {},
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 31,
+          "offset": 582,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+    },
+    "name": TypeName {
+      "name": "\\\\test_function1",
+    },
+    "parameters": Array [
+      Parameter {
+        "location": Location {},
+        "name": "$stringParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$intParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$boolParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$floatParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": Scope {
+      "variables": Object {
+        "$boolParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$boolParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "boolean",
+              },
+            ],
+          },
+        },
+        "$floatParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$floatParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "float",
+              },
+            ],
+          },
+        },
+        "$intParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$intParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+        "$stringParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$stringParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "string",
+              },
+            ],
+          },
+        },
+        "$test": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$test",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+        TypeName {
+          "name": "string",
+        },
+        TypeName {
+          "name": "int",
+        },
+        TypeName {
+          "name": "float",
+        },
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+    },
+  },
+  Function {
+    "description": "",
+    "docParamTypes": Object {},
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 31,
+          "offset": 582,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+    },
+    "name": TypeName {
+      "name": "\\\\test_function1",
+    },
+    "parameters": Array [
+      Parameter {
+        "location": Location {},
+        "name": "$stringParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$intParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$boolParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+        },
+        "value": "",
+      },
+      Parameter {
+        "location": Location {},
+        "name": "$floatParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": Scope {
+      "variables": Object {
+        "$boolParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$boolParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "boolean",
+              },
+            ],
+          },
+        },
+        "$floatParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$floatParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "float",
+              },
+            ],
+          },
+        },
+        "$intParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$intParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+        "$stringParam": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$stringParam",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "string",
+              },
+            ],
+          },
+        },
+        "$test": Variable {
+          "expression": Expression {},
+          "location": Location {},
+          "name": "$test",
+          "refKind": 2,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+          },
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+        TypeName {
+          "name": "string",
+        },
+        TypeName {
+          "name": "int",
+        },
+        TypeName {
+          "name": "float",
+        },
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+    },
+  },
+  Class {
+    "extend": null,
+    "implements": Array [],
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 1,
+          "line": 61,
+          "offset": 1206,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+    "traits": Array [],
+  },
+  Class {
+    "extend": null,
+    "implements": Array [],
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 1,
+          "line": 61,
+          "offset": 1206,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+    "traits": Array [],
+  },
+  Method {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 60,
+          "offset": 1204,
+        },
+        "start": Position {
+          "character": 4,
+          "line": 58,
+          "offset": 1122,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": -1,
+          "line": 60,
+          "offset": 1204,
+        },
+        "start": Position {
+          "character": 4,
+          "line": 58,
+          "offset": 1122,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 41,
+          "line": 4,
+          "offset": 72,
+        },
+        "start": Position {
+          "character": 18,
+          "line": 4,
+          "offset": 49,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticVariable",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 41,
+          "line": 4,
+          "offset": 72,
+        },
+        "start": Position {
+          "character": 18,
+          "line": 4,
+          "offset": 49,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticVariable",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 26,
+          "line": 6,
+          "offset": 184,
+        },
+        "start": Position {
+          "character": 10,
+          "line": 6,
+          "offset": 168,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
+    },
+    "name": TypeName {
+      "name": "IS_ACTIVE",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithConst",
+    },
+  },
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 26,
+          "line": 6,
+          "offset": 184,
+        },
+        "start": Position {
+          "character": 10,
+          "line": 6,
+          "offset": 168,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
+    },
+    "name": TypeName {
+      "name": "IS_ACTIVE",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithConst",
     },
   },
 ]

@@ -44,6 +44,7 @@ import { ScopedMemberName } from "./name/scopedMemberName";
 import { ClassRef } from "./class/classRef";
 import { PropertyRef } from "./variable/propertyRef";
 import { PropRefExpression } from "./type/propRefExpression";
+import { ClassConstRefExpression } from "./type/classConstRefExpression";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -207,6 +208,9 @@ export class SymbolParser implements Visitor {
                     break;
                 case PhraseKind.ScopedPropertyAccessExpression:
                     this.pushSymbol(new PropRefExpression());
+                    break;
+                case PhraseKind.ClassConstantAccessExpression:
+                    this.pushSymbol(new ClassConstRefExpression());
                     break;
 
                 default:

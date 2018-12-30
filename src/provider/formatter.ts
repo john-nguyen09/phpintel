@@ -6,6 +6,7 @@ import { Class } from "../symbol/class/class";
 import { Method } from "../symbol/function/method";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { Property } from "../symbol/variable/property";
+import { ClassConstant } from "../symbol/constant/classConstant";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -99,6 +100,16 @@ export namespace Formatter {
             className = symbol.scope.getQualified(phpDoc.importTable);
         }
 
-        return highlightPhp(`${modifiers} ${className}::$${symbol.name}`);
+        return highlightPhp(`${modifiers} ${className}::${symbol.name}`);
+    }
+
+    export function classConstDef(phpDoc: PhpDocument, symbol: ClassConstant): MarkedString {
+        let className = '';
+
+        if (symbol.scope !== null) {
+            className = symbol.scope.getQualified(phpDoc.importTable);
+        }
+
+        return highlightPhp(`const ${className}::${symbol.name}`);
     }
 }

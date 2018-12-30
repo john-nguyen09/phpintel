@@ -40,7 +40,9 @@ export function dumpToDebug(name: string, object: any, depth?: number): void {
             depth: depth
         }),
         (err) => {
-            console.error(err);
+            if (err) {
+                console.error(err);
+            }
         }
     );
 }
