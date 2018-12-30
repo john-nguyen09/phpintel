@@ -27,7 +27,7 @@ export class PropertyTable {
     async put(phpDoc: PhpDocument, symbol: Property) {
         let className = '';
         if (symbol.scope !== null) {
-            className = symbol.scope.getName();
+            className = symbol.scope.name;
         }
 
         let key = this.getKey(className, symbol.name);
@@ -56,7 +56,7 @@ export class PropertyTable {
         for (let prop of props) {
             let className = '';
             if (prop.scope !== null) {
-                className = prop.scope.getName();
+                className = prop.scope.name;
             }
 
             await NameIndex.remove(this.classIndex, uri, this.getKey(className, prop.name));

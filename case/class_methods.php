@@ -2,6 +2,8 @@
 
 class ClassWithMethod
 {
+    const CONST1 = 1;
+
     public static $staticVariable = false;
 
     public $property1 = false;
@@ -58,5 +60,13 @@ class ClassWithMethod
 
     public static function staticMethod($param1, $param2) {
         return true;
+    }
+
+    public function publicMethod1($param1, $param2) {
+        if (self::$staticVariable && self::CONST1) {
+            return self::staticMethod($param1, $param2);
+        }
+
+        return false;
     }
 }

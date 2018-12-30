@@ -17,8 +17,6 @@ import { IConnection } from "vscode-languageserver";
 import * as fs from "fs";
 import { promisify } from "util";
 
-const unlinkAsync = promisify(fs.unlink);
-
 export interface AppOptions {
     storage: string;
 }
@@ -93,6 +91,13 @@ export namespace App {
         identifier: string | symbol | interfaces.Newable<T> | interfaces.Abstract<T>
     ): T {
         return app.getContainer().get(identifier);
+    }
+
+    export function set<T>(
+        identifier: string,
+        value: T
+    ): void {
+        app.getContainer().bind<T>(identifier).toConstantValue(value);
     }
 
     export async function clearCache() {

@@ -23,7 +23,7 @@ export namespace RefResolver {
 
         ref.type.resolveToFullyQualified(phpDoc.importTable);
 
-        return await funcTable.get(ref.type.getName());
+        return await funcTable.get(ref.type.name);
     }
 
     export async function getMethodSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Method[]> {
@@ -37,12 +37,12 @@ export namespace RefResolver {
 
         if (ref.refKind === RefKind.ClassTypeDesignator) {
             ref.type.resolveToFullyQualified(phpDoc.importTable);
-            className = ref.type.getName();
+            className = ref.type.name;
             methodName = '__construct';
         } else if (ref.refKind === RefKind.Method && ref.scope !== null) {
             ref.scope.resolveToFullyQualified(phpDoc.importTable);
-            className = ref.scope.getName();
-            methodName = ref.type.getName();
+            className = ref.scope.name;
+            methodName = ref.type.name;
         }
 
         return await methodTable.searchByClass(className, methodName);
@@ -58,10 +58,10 @@ export namespace RefResolver {
 
         if (ref.scope !== null) {
             ref.scope.resolveToFullyQualified(phpDoc.importTable);
-            className = ref.scope.getName();
+            className = ref.scope.name;
         }
 
-        return await propTable.searchByClass(className, ref.type.getName());
+        return await propTable.searchByClass(className, ref.type.name);
     }
 
     export async function getClassSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Class[]> {
@@ -73,7 +73,7 @@ export namespace RefResolver {
 
         ref.type.resolveToFullyQualified(phpDoc.importTable);
 
-        return await classTable.get(ref.type.getName());
+        return await classTable.get(ref.type.name);
     }
 
     export async function getClassConstSymbols(phpDoc: PhpDocument, ref: Reference): Promise<ClassConstant[]> {
@@ -86,9 +86,9 @@ export namespace RefResolver {
 
         if (ref.scope !== null) {
             ref.scope.resolveToFullyQualified(phpDoc.importTable);
-            className = ref.scope.getName();
+            className = ref.scope.name;
         }
 
-        return await classConstTable.searchByClass(className, ref.type.getName());
+        return await classConstTable.searchByClass(className, ref.type.name);
     }
 }

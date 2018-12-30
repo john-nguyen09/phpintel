@@ -4,6 +4,7 @@ import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
+import { MethodCall } from "../../symbol/function/methodCall";
 
 @injectable()
 export class ReferenceTable {

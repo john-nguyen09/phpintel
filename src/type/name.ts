@@ -15,7 +15,7 @@ export class TypeName {
         'integer': 'int'
     };
 
-    private name: string;
+    public name: string;
 
     constructor(name: string) {
         this.name = name.trim();
@@ -41,16 +41,12 @@ export class TypeName {
         return typeName.indexOf('\\') === 0;
     }
 
-    public getName(): string {
-        return this.name;
-    }
-
     public getQualified(importTable: ImportTable): string {
         return importTable.getQualified(this.name);
     }
 
     public toString(): string {
-        return this.getName();
+        return this.name;
     }
 
     public isSameAs(other: TypeName): boolean {

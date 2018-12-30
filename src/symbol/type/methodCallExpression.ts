@@ -3,6 +3,7 @@ import { ClassRef } from "../class/classRef";
 import { MethodCall } from "../function/methodCall";
 import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
+import { App } from "../../app";
 
 export class MethodCallExpression extends CollectionSymbol implements Consumer {
     public classRef: ClassRef = new ClassRef();

@@ -18,8 +18,9 @@ describe('Testing functions around references', () => {
         const refTable = App.get<ReferenceTable>(ReferenceTable);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
+        const testFile2 = path.join(caseDir, 'class_methods.php');
 
-        await indexer.indexFile(path.join(caseDir, 'class_methods.php'));
+        await indexer.indexFile(testFile2);
         await indexer.indexFile(path.join(caseDir, 'class_constants.php'));
         await indexer.indexFile(path.join(caseDir, 'global_symbols.php'));
         await indexer.indexFile(path.join(caseDir, 'function_declare.php'));
@@ -44,8 +45,6 @@ describe('Testing functions around references', () => {
         ];
 
         let refTestDoc = await phpDocTable.get(refTestUri);
-        // let typeDesignator = await refTable.findAt(refTestUri, 196);
-        // console.log(await RefResolver.getClassConstructorSymbols(refTestDoc, typeDesignator));
 
         let defs: Symbol[] = [];
         for (let ref of refs) {

@@ -3,12 +3,17 @@ import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { QualifiedName } from "../name/qualifiedName";
+import { nonenumerable } from "../../util/decorator";
+import { App } from "../../app";
+import { MethodCall } from "../function/methodCall";
 
 export class ClassRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Class;
     public type: TypeName = new TypeName('');
     public location: Location = new Location();
-    public scope: TypeName | null = null;
+
+    @nonenumerable
+    private _scope: TypeName | null = null;
 
     consume(other: Symbol): boolean {
         if (other instanceof QualifiedName) {
@@ -17,5 +22,17 @@ export class ClassRef extends Symbol implements Consumer, Reference {
         }
 
         return false;
+    }
+
+    get scope(): TypeName | null {
+        return this._scope;
+    }
+
+    set scope(value: TypeName | null) {
+        this._scope = value;
+
+        if (value !== null && this.type.name === 'self') {
+            this.type.name = value.name;
+        }
     }
 }

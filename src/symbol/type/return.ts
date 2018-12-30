@@ -31,6 +31,6 @@ export class Return extends Symbol implements Consumer {
             this.returnSymbol = this.expression;
         }
 
-        return true;
+        return false;
     }
 }

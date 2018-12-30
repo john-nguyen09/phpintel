@@ -112,7 +112,7 @@ export class Serializer {
             this.writeBool(false);
         } else {
             this.writeBool(true);
-            this.writeString(name.getName());
+            this.writeString(name.name);
         }
     }
 

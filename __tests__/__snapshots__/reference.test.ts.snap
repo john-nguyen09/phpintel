@@ -946,8 +946,8 @@ Array [
       "range": Range {
         "end": Position {
           "character": 1,
-          "line": 61,
-          "offset": 1206,
+          "line": 71,
+          "offset": 1433,
         },
         "start": Position {
           "character": 0,
@@ -973,8 +973,8 @@ Array [
       "range": Range {
         "end": Position {
           "character": 1,
-          "line": 61,
-          "offset": 1206,
+          "line": 71,
+          "offset": 1433,
         },
         "start": Position {
           "character": 0,
@@ -999,13 +999,13 @@ Array [
       "range": Range {
         "end": Position {
           "character": -1,
-          "line": 60,
-          "offset": 1204,
+          "line": 62,
+          "offset": 1227,
         },
         "start": Position {
           "character": 4,
-          "line": 58,
-          "offset": 1122,
+          "line": 60,
+          "offset": 1145,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
@@ -1027,13 +1027,13 @@ Array [
       "range": Range {
         "end": Position {
           "character": -1,
-          "line": 60,
-          "offset": 1204,
+          "line": 62,
+          "offset": 1227,
         },
         "start": Position {
           "character": 4,
-          "line": 58,
-          "offset": 1122,
+          "line": 60,
+          "offset": 1145,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
@@ -1055,13 +1055,13 @@ Array [
       "range": Range {
         "end": Position {
           "character": 41,
-          "line": 4,
-          "offset": 72,
+          "line": 6,
+          "offset": 95,
         },
         "start": Position {
           "character": 18,
-          "line": 4,
-          "offset": 49,
+          "line": 6,
+          "offset": 72,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
@@ -1081,13 +1081,13 @@ Array [
       "range": Range {
         "end": Position {
           "character": 41,
-          "line": 4,
-          "offset": 72,
+          "line": 6,
+          "offset": 95,
         },
         "start": Position {
           "character": 18,
-          "line": 4,
-          "offset": 49,
+          "line": 6,
+          "offset": 72,
         },
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",

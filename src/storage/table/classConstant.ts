@@ -27,7 +27,7 @@ export class ClassConstantTable {
     async put(phpDoc: PhpDocument, symbol: ClassConstant) {
         let className = '';
         if (symbol.scope !== null) {
-            className = symbol.scope.getName();
+            className = symbol.scope.name;
         }
 
         let key = ClassConstantTable.getKey(className, symbol.getName());
@@ -56,7 +56,7 @@ export class ClassConstantTable {
         for (let classConst of classConsts) {
             let className = '';
             if (classConst.scope !== null) {
-                className = classConst.scope.getName();
+                className = classConst.scope.name;
             }
 
             await NameIndex.remove(

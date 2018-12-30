@@ -28,7 +28,7 @@ export class MethodTable {
         let className = '';
 
         if (symbol.scope !== null) {
-            className = symbol.scope.getName();
+            className = symbol.scope.name;
         }
 
         let key = this.getKey(className, symbol.getName());
@@ -59,7 +59,7 @@ export class MethodTable {
             let className = '';
 
             if (method.scope !== null) {
-                className = method.scope.getName();
+                className = method.scope.name;
             }
 
             await NameIndex.remove(this.classIndex, uri, this.getKey(className, method.getName()));

@@ -6,6 +6,10 @@ import { ClassHeader } from "./header";
 import { TypeName } from "../../type/name";
 import { ImportTable } from "../../type/importTable";
 import { Property } from "../variable/property";
+import { ClassConstRef } from "../constant/classConstRef";
+import { PropertyRef } from "../variable/propertyRef";
+import { MethodCall } from "../function/methodCall";
+import { ClassRef } from "./classRef";
 
 export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
@@ -29,7 +33,14 @@ export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
             }
 
             return true;
-        } else if (isScopeMember(other)) {
+        } else if (
+            isScopeMember(other) &&
+            !(
+                other instanceof ClassConstRef ||
+                other instanceof PropertyRef ||
+                other instanceof MethodCall
+            )
+        ) {
             other.scope = this.name;
         }
 
