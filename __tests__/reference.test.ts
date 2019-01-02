@@ -42,6 +42,7 @@ describe('Testing functions around references', () => {
             await refTable.findAt(refTestUri, 304),
             await refTable.findAt(refTestUri, 331),
             await refTable.findAt(refTestUri, 340),
+            await refTable.findAt(refTestUri, 351),
         ];
 
         let refTestDoc = await phpDocTable.get(refTestUri);
@@ -75,6 +76,9 @@ describe('Testing functions around references', () => {
                         } else {
                             def = constructors.shift();
                         }
+                        break;
+                    case RefKind.ConstantAccess:
+                        def = (await RefResolver.getConstSymbols(refTestDoc, ref)).shift();
                         break;
                 }
             }

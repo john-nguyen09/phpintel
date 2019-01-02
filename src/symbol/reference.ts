@@ -10,7 +10,6 @@ export enum RefKind {
     TypeDeclaration = 4,
     Constant = 5,
     ConstantAccess = 6,
-    DefineConstant = 7,
     ClassTypeDesignator = 8,
     Class = 9,
     Method = 10,
@@ -43,8 +42,6 @@ export function refKindToString(refKind: RefKind): string {
             return 'Constant';
         case RefKind.ConstantAccess:
             return 'ConstantAccess';
-        case RefKind.DefineConstant:
-            return 'DefineConstant';
         case RefKind.ClassTypeDesignator:
             return 'ClassTypeDesignator';
     }

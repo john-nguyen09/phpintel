@@ -12,6 +12,8 @@ import { Property } from "../symbol/variable/property";
 import { PropertyTable } from "../storage/table/property";
 import { ClassConstant } from "../symbol/constant/classConstant";
 import { ClassConstantTable } from "../storage/table/classConstant";
+import { Constant } from "../symbol/constant/constant";
+import { ConstantTable } from "../storage/table/constant";
 
 export namespace RefResolver {
     export async function getFuncSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Function[]> {
@@ -90,5 +92,20 @@ export namespace RefResolver {
         }
 
         return await classConstTable.searchByClass(className, ref.type.name);
+    }
+
+    export async function getConstSymbols(
+        phpDoc: PhpDocument,
+        ref: Reference
+    ): Promise<Constant[]> {
+        if (ref.type instanceof TypeComposite) {
+            return [];
+        }
+
+        ref.type.resolveToFullyQualified(phpDoc.importTable);
+
+        const constTable = App.get<ConstantTable>(ConstantTable);
+        
+        return constTable.get(ref.type.name);
     }
 }

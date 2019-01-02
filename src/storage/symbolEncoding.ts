@@ -9,6 +9,7 @@ import { Constant } from "../symbol/constant/constant";
 import { ClassConstant } from "../symbol/constant/classConstant";
 import { Method } from "../symbol/function/method";
 import { Property } from "../symbol/variable/property";
+import { DefineConstant } from "../symbol/constant/defineConstant";
 
 interface SymbolEncoding {
     encode(symbol: Symbol): Buffer;
@@ -120,9 +121,13 @@ const functionEncoding = {
 };
 
 const constEncoding = {
+    DEFINE_CONSTANT: 1,
+    CONSTANT: 2,
     encode: (symbol: Constant): Buffer => {
         let serializer = new Serializer();
 
+        serializer.writeInt32(symbol instanceof DefineConstant ?
+            constEncoding.DEFINE_CONSTANT : constEncoding.CONSTANT);
         serializer.writeTypeName(symbol.name);
         serializer.writeLocation(symbol.location);
         serializer.writeTypeName(symbol.type);
@@ -131,8 +136,15 @@ const constEncoding = {
         return serializer.getBuffer();
     },
     decode: (buffer: Buffer): Constant => {
-        let constant = new Constant();
+        let constant: Constant;
         let serializer = new Serializer(buffer);
+        let constType = serializer.readInt32();
+
+        if (constType == constEncoding.DEFINE_CONSTANT) {
+            constant = new DefineConstant();
+        } else {
+            constant = new Constant();
+        }
 
         constant.name = serializer.readTypeName() || new TypeName('');
         constant.location = serializer.readLocation();

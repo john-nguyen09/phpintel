@@ -322,6 +322,28 @@ Array [
       "name": "IS_ACTIVE",
     },
   },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 28,
+          "line": 14,
+          "offset": 371,
+        },
+        "start": Position {
+          "character": 8,
+          "line": 14,
+          "offset": 351,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 6,
+    "scope": null,
+    "type": TypeName {
+      "name": "\\\\TEST_DEFINE_CONSTANT",
+    },
+  },
 ]
 `;
 
@@ -1146,6 +1168,34 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithConst",
     },
+  },
+  DefineConstant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 37,
+          "line": 120,
+          "offset": 2476,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 120,
+          "offset": 2439,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "\\\\TEST_DEFINE_CONSTANT",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "boolean",
+    },
+    "resolvedValue": "false",
+    "scope": null,
   },
 ]
 `;

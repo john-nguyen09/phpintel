@@ -244,6 +244,9 @@ export class SymbolParser implements Visitor {
 
         if (symbol && isTransform(symbol) && symbol.realSymbol) {
             symbol = symbol.realSymbol;
+            if (symbol !== null || symbol !== undefined) {
+                this.doc.pushSymbol(symbol);
+            }
         }
 
         if (symbol == null || symbol == undefined) {

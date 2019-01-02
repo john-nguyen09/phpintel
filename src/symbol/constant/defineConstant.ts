@@ -4,17 +4,9 @@ import { Constant } from "./constant";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
-import { Location } from "../meta/location";
-import { Reference, RefKind } from "../reference";
+import { Reference } from "../reference";
 
-export class DefineConstant extends Symbol implements Reference, FieldGetter, NamedSymbol, Locatable {
-    public readonly refKind = RefKind.DefineConstant;
-    public name: TypeName;
-    public location: Location = new Location();
-    public scope: TypeName | null = null;
-
-    private constant: Constant = new Constant();
-
+export class DefineConstant extends Constant implements Reference, FieldGetter, NamedSymbol, Locatable {
     consume(other: Symbol) {
         if (other instanceof ArgumentExpressionList) {
             if (other.arguments.length == 2) {
@@ -28,28 +20,12 @@ export class DefineConstant extends Symbol implements Reference, FieldGetter, Na
                     this.name = new TypeName(firstArg.text.slice(1, -1)); // remove quotes
                 }
 
-                this.constant.consume(args[1]);
+                return super.consume(args[1]);
             }
 
             return true;
         }
 
         return false;
-    }
-
-    get value(): string {
-        return this.constant.value;
-    }
-
-    get type(): TypeName {
-        return this.constant.type;
-    }
-
-    getFields(): string[] {
-        return ['name', 'value', 'type'];
-    }
-
-    public getName(): string {
-        return this.name.toString();
     }
 }

@@ -12,3 +12,4 @@ $classInstance = new ClassWithMethod();
 $var1 = ClassWithMethod::staticMethod(1, 2);
 $var2 = ClassWithMethod::$staticVariable;
 $var3 = ClassWithConst::IS_ACTIVE;
+$var4 = TEST_DEFINE_CONSTANT;
