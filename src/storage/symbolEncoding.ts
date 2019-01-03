@@ -77,8 +77,8 @@ const functionEncoding = {
         for (let varName in symbol.scopeVar.variables) {
             let variable = symbol.scopeVar.variables[varName];
 
-            serializer.writeString(variable.name);
-            serializer.writeTypeComposite(variable.type);
+            serializer.writeString(varName);
+            serializer.writeTypeComposite(variable);
         }
 
         serializer.writeInt32(symbol.parameters.length);
@@ -199,7 +199,7 @@ const methodEncoding = {
         serializer.writeInt32(Object.keys(symbol.variables).length);
         for (let varName in symbol.variables) {
             serializer.writeString(varName);
-            serializer.writeTypeComposite(symbol.variables[varName].type);
+            serializer.writeTypeComposite(symbol.variables[varName]);
         }
 
         return serializer.getBuffer();

@@ -1,7 +1,7 @@
 import { Symbol, Consumer, DocBlockConsumer, NamedSymbol, Locatable, NameResolvable } from "../symbol";
 import { FunctionHeader } from "./functionHeader";
 import { Parameter } from "../variable/parameter";
-import { Scope } from "../variable/scope";
+import { ScopeVar } from "../variable/scopeVar";
 import { Return } from "../type/return";
 import { Variable } from "../variable/variable";
 import { Expression } from "../type/expression";
@@ -25,7 +25,7 @@ export class Function extends Symbol implements
     public name: TypeName;
     public location: Location = new Location();
     public parameters: Parameter[] = [];
-    public scopeVar: Scope = new Scope();
+    public scopeVar: ScopeVar = new ScopeVar();
     public typeAggregate: TypeComposite = new TypeComposite();
     public description: string = '';
 

@@ -8,11 +8,18 @@ import { RefResolver } from "../src/provider/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';
 import { RefKind } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
+import { inspect } from 'util';
+
+beforeEach(() => {
+    App.init(path.join(getDebugDir(), 'storage'));
+});
+
+afterEach(async () => {
+    await App.clearCache();
+})
 
 describe('Testing functions around references', () => {
     it('should return the reference at the cursor', async () => {
-        App.init(path.join(getDebugDir(), 'storage'));
-
         const indexer = App.get<Indexer>(Indexer);
         const caseDir = getCaseDir();
         const refTable = App.get<ReferenceTable>(ReferenceTable);
@@ -88,7 +95,31 @@ describe('Testing functions around references', () => {
 
         expect(refs).toMatchSnapshot();
         expect(defs).toMatchSnapshot();
+    });
 
-        await App.clearCache();
+    it('reference variable', async () => {
+        const indexer = App.get<Indexer>(Indexer);
+        const caseDir = getCaseDir();
+        const refTable = App.get<ReferenceTable>(ReferenceTable);
+        const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
+        const refTestFile = path.join(caseDir, 'reference', 'references.php');
+        let refTestUri = pathToUri(refTestFile);
+
+        await indexer.indexFile(refTestFile);
+        
+        let variables = [
+            await refTable.findAt(refTestUri, 376),
+            await refTable.findAt(refTestUri, 418),
+            await refTable.findAt(refTestUri, 437),
+        ];
+
+        expect(variables).toMatchSnapshot();
+
+        // for (let variable of variables) {
+        //     console.log(inspect(variable, {
+        //         depth: 4,
+        //         colors: true,
+        //     }));
+        // }
     });
 });

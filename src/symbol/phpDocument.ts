@@ -11,6 +11,8 @@ import { ClassConstant } from "./constant/classConstant";
 import { Method } from "./function/method";
 import { Property } from "./variable/property";
 import { isReference, Reference } from "./reference";
+import { SimpleVariable } from "./variable/simpleVariable";
+import { Variable } from "./variable/variable";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable

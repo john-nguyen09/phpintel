@@ -7,6 +7,9 @@ import { Method } from "../symbol/function/method";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { Property } from "../symbol/variable/property";
 import { ClassConstant } from "../symbol/constant/classConstant";
+import { Variable } from "../symbol/variable/variable";
+import { Reference } from "../symbol/reference";
+import { TypeComposite } from "../type/composite";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -111,5 +114,19 @@ export namespace Formatter {
         }
 
         return highlightPhp(`const ${className}::${symbol.name}`);
+    }
+
+    export function varRef(phpDoc: PhpDocument, ref: Reference): MarkedString {
+        let types: TypeName[] = [];
+
+        if (ref.type instanceof TypeComposite) {
+            for (let type of ref.type.types) {
+                types.push(type);
+            }
+        } else {
+            types.push(ref.type);
+        }
+
+        return highlightPhp(`${Formatter.types(types)} ${ref.refName}`);
     }
 }

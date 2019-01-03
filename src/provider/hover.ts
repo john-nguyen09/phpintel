@@ -70,6 +70,8 @@ export namespace HoverProvider {
                     for (let classConst of classConsts) {
                         contents.push(Formatter.classConstDef(phpDoc, classConst));
                     }
+                } else if (ref.refKind === RefKind.Variable) {
+                    contents.push(Formatter.varRef(phpDoc, ref));
                 }
             }
         }

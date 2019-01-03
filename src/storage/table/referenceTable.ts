@@ -4,7 +4,6 @@ import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
-import { MethodCall } from "../../symbol/function/methodCall";
 
 @injectable()
 export class ReferenceTable {
@@ -121,6 +120,12 @@ export const ReferenceEncoding = {
     type: 'reference-encoding',
     encode(ref: Reference): Buffer {
         let serializer = new Serializer();
+        let hasName = ref.refName !== undefined;
+
+        serializer.writeBool(hasName);
+        if (ref.refName !== undefined) {
+            serializer.writeString(ref.refName);
+        }
 
         if (ref.type instanceof TypeName) {
             serializer.writeInt32(TypeKind.TYPE_NAME);
@@ -143,6 +148,13 @@ export const ReferenceEncoding = {
 
         let serializer = new Serializer(buffer);
         let type: TypeName | TypeComposite = new TypeName('');
+        let hasName = serializer.readBool();
+        let refName: string | undefined = undefined;
+
+        if (hasName) {
+            refName = serializer.readString();
+        }
+
         let typeKind: TypeKind = serializer.readInt32();
 
         if (typeKind == TypeKind.TYPE_NAME) {
@@ -156,6 +168,7 @@ export const ReferenceEncoding = {
         let scope = serializer.readTypeName();
         
         return {
+            refName,
             type,
             location,
             refKind,

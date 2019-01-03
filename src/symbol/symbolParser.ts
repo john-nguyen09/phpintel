@@ -41,19 +41,21 @@ import { Visitor } from "../traverser";
 import { Location } from "./meta/location";
 import { MethodCallExpression } from "./type/methodCallExpression";
 import { ScopedMemberName } from "./name/scopedMemberName";
-import { ClassRef } from "./class/classRef";
-import { PropertyRef } from "./variable/propertyRef";
 import { PropRefExpression } from "./type/propRefExpression";
 import { ClassConstRefExpression } from "./type/classConstRefExpression";
+import { ScopeVar } from "./variable/scopeVar";
+import { Variable } from "./variable/variable";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
+    protected scopeVarStack: ScopeVar[] = [];
     protected doc: PhpDocument;
     protected lastDocBlock: DocBlock | null = null;
 
     constructor(doc: PhpDocument) {
         this.doc = doc;
         this.pushSymbol(this.doc);
+        this.pushScopeVar(new ScopeVar());
     }
 
     public getPhpDoc(): PhpDocument {
@@ -72,6 +74,18 @@ export class SymbolParser implements Visitor {
                 this.doc.pushSymbol(symbol);
             });
         }
+    }
+
+    pushScopeVar(scopeVar: ScopeVar) {
+        this.scopeVarStack.push(scopeVar);
+    }
+
+    getScopeVar(): ScopeVar {
+        return this.scopeVarStack[this.scopeVarStack.length - 1];
+    }
+
+    popScopeVar(): ScopeVar | undefined {
+        return this.scopeVarStack.pop();
     }
 
     preorder(node: TreeNode) {
@@ -159,7 +173,10 @@ export class SymbolParser implements Visitor {
                     break;
 
                 case PhraseKind.FunctionDeclaration:
-                    this.pushSymbol(new Function());
+                    let funcSymbol = new Function();
+
+                    this.pushScopeVar(funcSymbol.scopeVar);
+                    this.pushSymbol(funcSymbol);
                     break;
                 case PhraseKind.FunctionDeclarationHeader:
                     this.pushSymbol(new FunctionHeader());
@@ -183,7 +200,10 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new VariableAssignment());
                     break;
                 case PhraseKind.SimpleVariable:
-                    this.pushSymbol(new SimpleVariable());
+                    let variable = new SimpleVariable();
+
+                    variable.scopeVar = this.getScopeVar();
+                    this.pushSymbol(variable);
                     break;
                 case PhraseKind.ClassTypeDesignator:
                     this.pushSymbol(new ClassTypeDesignator());
@@ -223,10 +243,10 @@ export class SymbolParser implements Visitor {
                 this.forEachSymbol(symbol, (symbol) => {
                     if (isDocBlockConsumer(symbol) && this.lastDocBlock != null) {
                         symbol.consumeDocBlock(this.lastDocBlock);
-        
+
                         this.lastDocBlock = null;
                     }
-                    
+
                     if (isLocatable(symbol)) {
                         symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));
                     }
@@ -279,6 +299,12 @@ export class SymbolParser implements Visitor {
 
                 break;
             }
+        }
+
+        if (symbol instanceof VariableAssignment && typeof symbol.variable !== 'undefined') {
+            this.getScopeVar().set(symbol.variable);
+        } else if (symbol instanceof Function) {
+            this.popScopeVar();
         }
     }
 

@@ -9,7 +9,7 @@ import { Reference, RefKind } from "../reference";
 
 export class Constant extends Symbol implements Consumer, Reference, FieldGetter, NamedSymbol, Locatable {
     public readonly refKind = RefKind.Constant;
-    public name: TypeName;
+    public name: TypeName = new TypeName('');
     public expression: Expression;
     public location: Location = new Location();
     public resolvedType: TypeName | null = null;

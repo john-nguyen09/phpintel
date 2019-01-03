@@ -18,6 +18,7 @@ export enum RefKind {
 }
 
 export interface Reference {
+    refName?: string;
     refKind: RefKind;
     type: TypeName | TypeComposite;
     location: Location;

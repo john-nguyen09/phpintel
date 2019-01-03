@@ -1,11 +1,22 @@
-import { Consumer, Symbol } from "../symbol";
+import { Consumer, Symbol, TokenSymbol } from "../symbol";
 import { SimpleVariable } from "./simpleVariable";
+import { nonenumerable } from "../../util/decorator";
+import { TokenKind } from "../../util/parser";
 
 export class VariableAssignment extends Symbol implements Consumer {
     public variable: SimpleVariable;
 
+    @nonenumerable
+    private hasEqual = false;
+
     consume(other: Symbol): boolean {
-        if (other instanceof SimpleVariable) {
+        if (other instanceof TokenSymbol && other.type === TokenKind.Equals) {
+            this.hasEqual = true;
+
+            return true;
+        }
+
+        if (other instanceof SimpleVariable && !this.hasEqual) {
             this.variable = other;
 
             return true;

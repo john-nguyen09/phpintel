@@ -11,6 +11,16 @@ export class TypeComposite {
         this._types.push(type);
     }
 
+    clone(): TypeComposite {
+        let result = new TypeComposite();
+
+        for (let type of this.types) {
+            result.push(type);
+        }
+
+        return result;
+    }
+
     get types(): TypeName[] {
         let result: TypeName[] = [];
 

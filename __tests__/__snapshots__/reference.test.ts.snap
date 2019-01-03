@@ -1,5 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Testing functions around references reference variable 1`] = `
+Array [
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 7,
+          "line": 16,
+          "offset": 383,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 16,
+          "offset": 376,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 2,
+    "refName": "$refVar",
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 11,
+          "line": 19,
+          "offset": 425,
+        },
+        "start": Position {
+          "character": 4,
+          "line": 19,
+          "offset": 418,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 2,
+    "refName": "$refVar",
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+        TypeName {
+          "name": "int",
+        },
+      ],
+    },
+  },
+  Object {
+    "location": Location {
+      "range": Range {
+        "end": Position {
+          "character": 8,
+          "line": 22,
+          "offset": 445,
+        },
+        "start": Position {
+          "character": 0,
+          "line": 22,
+          "offset": 437,
+        },
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 2,
+    "refName": "$refVar2",
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+        TypeName {
+          "name": "int",
+        },
+      ],
+    },
+  },
+]
+`;
+
 exports[`Testing functions around references should return the reference at the cursor 1`] = `
 Array [
   Object {
@@ -521,77 +613,42 @@ Array [
         "value": "",
       },
     ],
-    "scopeVar": Scope {
+    "scopeVar": ScopeVar {
       "variables": Object {
-        "$boolParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$boolParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "boolean",
-              },
-            ],
-          },
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
         },
-        "$floatParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$floatParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "float",
-              },
-            ],
-          },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
         },
-        "$intParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$intParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
-        "$stringParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$stringParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "string",
-              },
-            ],
-          },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
         },
-        "$test": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$test",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
       },
     },
@@ -694,77 +751,42 @@ Array [
         "value": "",
       },
     ],
-    "scopeVar": Scope {
+    "scopeVar": ScopeVar {
       "variables": Object {
-        "$boolParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$boolParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "boolean",
-              },
-            ],
-          },
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
         },
-        "$floatParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$floatParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "float",
-              },
-            ],
-          },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
         },
-        "$intParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$intParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
-        "$stringParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$stringParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "string",
-              },
-            ],
-          },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
         },
-        "$test": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$test",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
       },
     },
@@ -867,77 +889,42 @@ Array [
         "value": "",
       },
     ],
-    "scopeVar": Scope {
+    "scopeVar": ScopeVar {
       "variables": Object {
-        "$boolParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$boolParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "boolean",
-              },
-            ],
-          },
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
         },
-        "$floatParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$floatParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "float",
-              },
-            ],
-          },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
         },
-        "$intParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$intParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
-        "$stringParam": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$stringParam",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "string",
-              },
-            ],
-          },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
         },
-        "$test": Variable {
-          "expression": Expression {},
-          "location": Location {},
-          "name": "$test",
-          "refKind": 2,
-          "scope": null,
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-          },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
         },
       },
     },
