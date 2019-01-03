@@ -111,6 +111,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\TestClass",
@@ -133,6 +134,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\TestClass",
@@ -155,6 +157,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\TestClass",
@@ -177,6 +180,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\test_function1",
@@ -199,6 +203,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\test_function1",
@@ -221,6 +226,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\test_function1",
@@ -243,6 +249,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 9,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\ClassWithMethod",
@@ -265,6 +272,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 9,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\ClassWithMethod",
@@ -287,6 +295,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 10,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -311,6 +320,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 10,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -335,6 +345,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 11,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -359,6 +370,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 11,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -383,6 +395,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 12,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithConst",
     },
@@ -407,6 +420,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 12,
+    "refName": undefined,
     "scope": TypeName {
       "name": "\\\\ClassWithConst",
     },
@@ -431,6 +445,7 @@ Array [
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 6,
+    "refName": undefined,
     "scope": null,
     "type": TypeName {
       "name": "\\\\TEST_DEFINE_CONSTANT",
@@ -451,7 +466,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 72,
           "offset": 1875,
         },
@@ -482,7 +497,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 72,
           "offset": 1875,
         },
@@ -513,7 +528,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 72,
           "offset": 1875,
         },
@@ -540,7 +555,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 31,
           "offset": 582,
         },
@@ -678,7 +693,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 31,
           "offset": 582,
         },
@@ -816,7 +831,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 1,
           "line": 31,
           "offset": 582,
         },
@@ -1007,7 +1022,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 5,
           "line": 62,
           "offset": 1227,
         },
@@ -1035,7 +1050,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": Position {
-          "character": -1,
+          "character": 5,
           "line": 62,
           "offset": 1227,
         },

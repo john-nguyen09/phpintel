@@ -7,6 +7,7 @@ import * as path from "path";
 import { Indexer } from "./index/indexer";
 import { elapsed } from "./util/hrtime";
 import { HoverProvider } from "./provider/hover";
+import { DefinitionProvider } from "./provider/definition";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -14,6 +15,7 @@ const connection = createConnection();
 const hasher = new Hasher();
 
 connection.onHover(HoverProvider.provide);
+connection.onDefinition(DefinitionProvider.provide);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
     let rootPath: string = '';
@@ -46,7 +48,8 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
     return <InitializeResult>{
         capabilities: {
             textDocumentSync: TextDocumentSyncKind.Full,
-            hoverProvider: true
+            hoverProvider: true,
+            definitionProvider: true,
         }
     };
 });

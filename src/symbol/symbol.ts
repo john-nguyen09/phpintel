@@ -1,10 +1,9 @@
-import { TreeNode, nodeText } from '../util/parseTree';
+import { nodeText } from '../util/parseTree';
 import { Token } from 'php7parser';
 import { PhpDocument } from './phpDocument';
 import { nonenumerable } from '../util/decorator';
 import { DocBlock } from './docBlock';
 import { TypeName } from '../type/name';
-import { TypeComposite } from '../type/composite';
 import { TokenKind } from '../util/parser';
 import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';

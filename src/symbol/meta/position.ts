@@ -5,7 +5,7 @@ export class Position {
 
     static fromOffset(offset: number, text: string): Position {
         let startAt = Math.min(offset, text.length);
-        let lastNewLine = text.lastIndexOf("\n", startAt);
+        let lastNewLine = text.lastIndexOf("\n", startAt - 1);
         let character = offset - (lastNewLine + 1);
         let line = offset > 0 ? substr_count(text, "\n", 0, offset) : 0;
 

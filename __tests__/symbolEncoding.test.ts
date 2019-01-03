@@ -40,7 +40,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let theClass of phpDoc.classes) {
-                theClass.location.uri = theClass.location.relativeUri;
+                theClass.location.uri = toRelative(theClass.location.uri);
 
                 let buffer = symbolEncoding.encode(theClass);
                 let decoded = symbolEncoding.decode(buffer) as Class;
@@ -57,7 +57,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let func of phpDoc.functions) {
-                func.location.uri = func.location.relativeUri;
+                func.location.uri = toRelative(func.location.uri);
                 
                 let buffer = symbolEncoding.encode(func);
                 let decoded = symbolEncoding.decode(buffer) as Function;
@@ -74,7 +74,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let constant of phpDoc.constants) {
-                constant.location.uri = constant.location.relativeUri;
+                constant.location.uri = toRelative(constant.location.uri);
                 
                 let buffer = symbolEncoding.encode(constant);
                 let decoded = symbolEncoding.decode(buffer) as Constant;
@@ -91,7 +91,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let classConstant of phpDoc.classConstants) {
-                classConstant.location.uri = classConstant.location.relativeUri;
+                classConstant.location.uri = toRelative(classConstant.location.uri);
                 
                 let buffer = symbolEncoding.encode(classConstant);
                 let decoded = symbolEncoding.decode(buffer) as ClassConstant;
@@ -108,7 +108,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let method of phpDoc.methods) {
-                method.location.uri = method.location.relativeUri;
+                method.location.uri = toRelative(method.location.uri);
                 
                 let buffer = symbolEncoding.encode(method);
                 let decoded = symbolEncoding.decode(buffer) as Method;
@@ -125,7 +125,7 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let property of phpDoc.properties) {
-                property.location.uri = property.location.relativeUri;
+                property.location.uri = toRelative(property.location.uri);
                 
                 let buffer = symbolEncoding.encode(property);
                 let decoded = symbolEncoding.decode(buffer) as Property;

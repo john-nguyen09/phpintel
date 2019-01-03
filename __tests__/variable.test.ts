@@ -27,6 +27,6 @@ describe('variable', () => {
 
         dumpAstToDebug(path.join('variable', 'simpleVariable.ast.json'), parseTree);
         
-        expect(symbolParser.getTree().toObject()).toMatchSnapshot();
+        expect(symbolParser.getPhpDoc().toObject()).toMatchSnapshot();
     });
 });

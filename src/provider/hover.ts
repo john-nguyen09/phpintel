@@ -2,14 +2,14 @@ import { TextDocumentPositionParams, Hover, MarkedString, LogMessageNotification
 import { App } from "../app";
 import { ReferenceTable } from "../storage/table/referenceTable";
 import { RefKind } from "../symbol/reference";
-import { Range } from "../symbol/meta/range";
+import { Range } from "vscode-languageserver";
 import { Formatter } from "./formatter";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
 
 export namespace HoverProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
-        const referenceTable = App.get<ReferenceTable>(ReferenceTable);
+        const refTable = App.get<ReferenceTable>(ReferenceTable);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
         let uri = params.textDocument.uri;
@@ -18,7 +18,7 @@ export namespace HoverProvider {
         let range: Range | undefined = undefined;
 
         if (phpDoc !== null) {
-            let ref = await referenceTable.findAt(
+            let ref = await refTable.findAt(
                 uri,
                 phpDoc.getOffset(params.position.line, params.position.character)
             );

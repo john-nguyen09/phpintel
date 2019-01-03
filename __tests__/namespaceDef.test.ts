@@ -53,7 +53,7 @@ describe('namespaceDef', () => {
                     symbolParser
                 ]);
 
-                expect(symbolParser.getTree().toObject()).toMatchSnapshot();
+                expect(symbolParser.getPhpDoc().toObject()).toMatchSnapshot();
             }
         }
     });

@@ -11,8 +11,6 @@ import { ClassConstant } from "./constant/classConstant";
 import { Method } from "./function/method";
 import { Property } from "./variable/property";
 import { isReference, Reference } from "./reference";
-import { SimpleVariable } from "./variable/simpleVariable";
-import { Variable } from "./variable/variable";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
@@ -48,11 +46,17 @@ export class PhpDocument extends Symbol implements Consumer {
         let lines = this.text.split('\n');
         let slice = lines.slice(0, line);
 
-        return slice.map((line) => {
-            return line.length;
-        }).reduce((total, lineCount) => {
-            return total + lineCount;
-        }) + slice.length + character;
+        let lineCount = 0;
+
+        if (slice.length > 0) {
+            lineCount = slice.map((line) => {
+                return line.length;
+            }).reduce((total, lineCount) => {
+                return total + lineCount;
+            });
+        }
+
+        return lineCount + slice.length + character;
     }
 
     consume(other: Symbol): boolean {

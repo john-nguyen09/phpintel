@@ -4,8 +4,6 @@ import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { QualifiedName } from "../name/qualifiedName";
 import { nonenumerable } from "../../util/decorator";
-import { App } from "../../app";
-import { MethodCall } from "../function/methodCall";
 
 export class ClassRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Class;

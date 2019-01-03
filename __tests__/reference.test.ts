@@ -1,6 +1,6 @@
 import { App } from '../src/app';
 import { Indexer } from '../src/index/indexer';
-import { getCaseDir, getDebugDir, dumpAstToDebug, dumpToDebug } from "../src/testHelper";
+import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/referenceTable';
 import { pathToUri } from '../src/util/uri';
@@ -8,7 +8,6 @@ import { RefResolver } from "../src/provider/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';
 import { RefKind } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
-import { inspect } from 'util';
 
 beforeEach(() => {
     App.init(path.join(getDebugDir(), 'storage'));
@@ -16,7 +15,8 @@ beforeEach(() => {
 
 afterEach(async () => {
     await App.clearCache();
-})
+    await App.shutdown();
+});
 
 describe('Testing functions around references', () => {
     it('should return the reference at the cursor', async () => {

@@ -7,9 +7,10 @@ import { Method } from "../symbol/function/method";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { Property } from "../symbol/variable/property";
 import { ClassConstant } from "../symbol/constant/classConstant";
-import { Variable } from "../symbol/variable/variable";
 import { Reference } from "../symbol/reference";
 import { TypeComposite } from "../type/composite";
+import { Location } from "../symbol/meta/location";
+import { Location as LspLocation } from "vscode-languageserver";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -92,7 +93,7 @@ export namespace Formatter {
             className = symbol.scope.getQualified(phpDoc.importTable);
         }
 
-        return highlightPhp(`${modifiers} function ${className}.${qualifiedName}(${params})`);
+        return highlightPhp(`${modifiers} function ${className}::${qualifiedName}(${params})`);
     }
 
     export function propDef(phpDoc: PhpDocument, symbol: Property): MarkedString {
@@ -128,5 +129,15 @@ export namespace Formatter {
         }
 
         return highlightPhp(`${Formatter.types(types)} ${ref.refName}`);
+    }
+
+    export function toLspLocation(loc: Location): LspLocation {
+        return {
+            uri: loc.uri,
+            range: {
+                start: loc.range.start,
+                end: loc.range.end
+            }
+        }
     }
 }

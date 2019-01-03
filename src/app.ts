@@ -55,6 +55,10 @@ export class Application {
         });
     }
 
+    public async shutdown() {
+        await this.container.get<LevelDatasource>(LevelDatasource).getDb().close();
+    }
+
     protected initStorage(location: string) {
         this.options.storage = location;
 
@@ -101,6 +105,10 @@ export namespace App {
     }
 
     export async function clearCache() {
-        return app.clearCache();
+        return await app.clearCache();
+    }
+
+    export async function shutdown() {
+        return await app.shutdown();
     }
 }

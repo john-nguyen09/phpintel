@@ -2,7 +2,6 @@ import { Symbol, Consumer, TokenSymbol } from "../symbol";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
-import { TokenKind } from "../../util/parser";
 import { ScopedMemberName } from "../name/scopedMemberName";
 
 export class PropertyRef extends Symbol implements Consumer, Reference {
