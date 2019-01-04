@@ -5,16 +5,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 7,
-          "line": 16,
-          "offset": 383,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 16,
-          "offset": 376,
-        },
+        "end": 383,
+        "start": 376,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -32,16 +24,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 11,
-          "line": 19,
-          "offset": 425,
-        },
-        "start": Position {
-          "character": 4,
-          "line": 19,
-          "offset": 418,
-        },
+        "end": 425,
+        "start": 418,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -62,16 +46,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 8,
-          "line": 22,
-          "offset": 445,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 22,
-          "offset": 437,
-        },
+        "end": 445,
+        "start": 437,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -97,16 +73,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 23,
-          "line": 1,
-          "offset": 30,
-        },
-        "start": Position {
-          "character": 14,
-          "line": 1,
-          "offset": 21,
-        },
+        "end": 30,
+        "start": 21,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -120,16 +88,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 23,
-          "line": 1,
-          "offset": 30,
-        },
-        "start": Position {
-          "character": 14,
-          "line": 1,
-          "offset": 21,
-        },
+        "end": 30,
+        "start": 21,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -143,16 +103,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 23,
-          "line": 1,
-          "offset": 30,
-        },
-        "start": Position {
-          "character": 14,
-          "line": 1,
-          "offset": 21,
-        },
+        "end": 30,
+        "start": 21,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -166,16 +118,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 14,
-          "line": 3,
-          "offset": 51,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 3,
-          "offset": 37,
-        },
+        "end": 51,
+        "start": 37,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -189,16 +133,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 14,
-          "line": 3,
-          "offset": 51,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 3,
-          "offset": 37,
-        },
+        "end": 51,
+        "start": 37,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -212,16 +148,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 14,
-          "line": 3,
-          "offset": 51,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 3,
-          "offset": 37,
-        },
+        "end": 51,
+        "start": 37,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -235,16 +163,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 23,
-          "line": 11,
-          "offset": 241,
-        },
-        "start": Position {
-          "character": 8,
-          "line": 11,
-          "offset": 226,
-        },
+        "end": 241,
+        "start": 226,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -258,16 +178,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 23,
-          "line": 11,
-          "offset": 241,
-        },
-        "start": Position {
-          "character": 8,
-          "line": 11,
-          "offset": 226,
-        },
+        "end": 241,
+        "start": 226,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -281,16 +193,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 37,
-          "line": 11,
-          "offset": 255,
-        },
-        "start": Position {
-          "character": 25,
-          "line": 11,
-          "offset": 243,
-        },
+        "end": 255,
+        "start": 243,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -306,16 +210,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 37,
-          "line": 11,
-          "offset": 255,
-        },
-        "start": Position {
-          "character": 25,
-          "line": 11,
-          "offset": 243,
-        },
+        "end": 255,
+        "start": 243,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -331,16 +227,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 40,
-          "line": 12,
-          "offset": 304,
-        },
-        "start": Position {
-          "character": 25,
-          "line": 12,
-          "offset": 289,
-        },
+        "end": 304,
+        "start": 289,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -356,16 +244,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 40,
-          "line": 12,
-          "offset": 304,
-        },
-        "start": Position {
-          "character": 25,
-          "line": 12,
-          "offset": 289,
-        },
+        "end": 304,
+        "start": 289,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -381,16 +261,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 33,
-          "line": 13,
-          "offset": 340,
-        },
-        "start": Position {
-          "character": 24,
-          "line": 13,
-          "offset": 331,
-        },
+        "end": 340,
+        "start": 331,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -406,16 +278,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 33,
-          "line": 13,
-          "offset": 340,
-        },
-        "start": Position {
-          "character": 24,
-          "line": 13,
-          "offset": 331,
-        },
+        "end": 340,
+        "start": 331,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -431,16 +295,8 @@ Array [
   Object {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 28,
-          "line": 14,
-          "offset": 371,
-        },
-        "start": Position {
-          "character": 8,
-          "line": 14,
-          "offset": 351,
-        },
+        "end": 371,
+        "start": 351,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
@@ -465,16 +321,8 @@ Array [
     ],
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 72,
-          "offset": 1875,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 31,
-          "offset": 888,
-        },
+        "end": 1875,
+        "start": 888,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
@@ -496,16 +344,8 @@ Array [
     ],
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 72,
-          "offset": 1875,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 31,
-          "offset": 888,
-        },
+        "end": 1875,
+        "start": 888,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
@@ -527,16 +367,8 @@ Array [
     ],
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 72,
-          "offset": 1875,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 31,
-          "offset": 888,
-        },
+        "end": 1875,
+        "start": 888,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
@@ -554,16 +386,8 @@ Array [
     "docParamTypes": Object {},
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 31,
-          "offset": 582,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 2,
-          "offset": 7,
-        },
+        "end": 582,
+        "start": 7,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
@@ -692,16 +516,8 @@ Array [
     "docParamTypes": Object {},
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 31,
-          "offset": 582,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 2,
-          "offset": 7,
-        },
+        "end": 582,
+        "start": 7,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
@@ -830,16 +646,8 @@ Array [
     "docParamTypes": Object {},
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 31,
-          "offset": 582,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 2,
-          "offset": 7,
-        },
+        "end": 582,
+        "start": 7,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
@@ -968,16 +776,8 @@ Array [
     "implements": Array [],
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 71,
-          "offset": 1433,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 2,
-          "offset": 7,
-        },
+        "end": 1433,
+        "start": 7,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -995,16 +795,8 @@ Array [
     "implements": Array [],
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 1,
-          "line": 71,
-          "offset": 1433,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 2,
-          "offset": 7,
-        },
+        "end": 1433,
+        "start": 7,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -1021,16 +813,8 @@ Array [
     "description": "",
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 5,
-          "line": 62,
-          "offset": 1227,
-        },
-        "start": Position {
-          "character": 4,
-          "line": 60,
-          "offset": 1145,
-        },
+        "end": 1227,
+        "start": 1145,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -1049,16 +833,8 @@ Array [
     "description": "",
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 5,
-          "line": 62,
-          "offset": 1227,
-        },
-        "start": Position {
-          "character": 4,
-          "line": 60,
-          "offset": 1145,
-        },
+        "end": 1227,
+        "start": 1145,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -1077,16 +853,8 @@ Array [
     "description": "",
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 41,
-          "line": 6,
-          "offset": 95,
-        },
-        "start": Position {
-          "character": 18,
-          "line": 6,
-          "offset": 72,
-        },
+        "end": 95,
+        "start": 72,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -1103,16 +871,8 @@ Array [
     "description": "",
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 41,
-          "line": 6,
-          "offset": 95,
-        },
-        "start": Position {
-          "character": 18,
-          "line": 6,
-          "offset": 72,
-        },
+        "end": 95,
+        "start": 72,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
@@ -1128,16 +888,8 @@ Array [
   ClassConstant {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 26,
-          "line": 6,
-          "offset": 184,
-        },
-        "start": Position {
-          "character": 10,
-          "line": 6,
-          "offset": 168,
-        },
+        "end": 184,
+        "start": 168,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
     },
@@ -1151,16 +903,8 @@ Array [
   ClassConstant {
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 26,
-          "line": 6,
-          "offset": 184,
-        },
-        "start": Position {
-          "character": 10,
-          "line": 6,
-          "offset": 168,
-        },
+        "end": 184,
+        "start": 168,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
     },
@@ -1176,16 +920,8 @@ Array [
     "hasEqual": false,
     "location": Location {
       "range": Range {
-        "end": Position {
-          "character": 37,
-          "line": 120,
-          "offset": 2476,
-        },
-        "start": Position {
-          "character": 0,
-          "line": 120,
-          "offset": 2439,
-        },
+        "end": 2476,
+        "start": 2439,
       },
       "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },

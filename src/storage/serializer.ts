@@ -1,7 +1,6 @@
 import { TypeName } from "../type/name";
 import { Location } from "../symbol/meta/location";
 import { Range } from "../symbol/meta/range";
-import { Position } from "../symbol/meta/position";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { TypeComposite } from "../type/composite";
 
@@ -147,22 +146,12 @@ export class Serializer {
     }
 
     public writeRange(range: Range) {
-        this.writePosition(range.start);
-        this.writePosition(range.end);
+        this.writeInt32(range.start);
+        this.writeInt32(range.end);
     }
 
     public readRange(): Range {
-        return new Range(this.readPosition(), this.readPosition());
-    }
-
-    public writePosition(position: Position) {
-        this.writeInt32(position.offset);
-        this.writeInt32(position.line);
-        this.writeInt32(position.character);
-    }
-
-    public readPosition(): Position {
-        return new Position(this.readInt32(), this.readInt32(), this.readInt32());
+        return new Range(this.readInt32(), this.readInt32());
     }
 
     public writeSymbolModifier(modifier: SymbolModifier) {

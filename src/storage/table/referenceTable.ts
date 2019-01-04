@@ -23,8 +23,8 @@ export class ReferenceTable {
         }
 
         let serializer = new Serializer();
-        serializer.writeInt32(reference.location.range.start.offset);
-        serializer.writeInt32(reference.location.range.end.offset);
+        serializer.writeInt32(reference.location.range.start);
+        serializer.writeInt32(reference.location.range.end);
 
         let key = Buffer.concat([
             Buffer.from(reference.location.uri),
@@ -95,7 +95,7 @@ export class ReferenceTable {
                 // logger.info(offset.toString());
                 // logger.info(JSON.stringify(ref.location.range.end.offset >= offset));
 
-                if (ref.location.range.end.offset >= offset) {
+                if (ref.location.range.end >= offset) {
                     iterator.end(() => {
                         resolve(ref);
                     });

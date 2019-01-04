@@ -11,6 +11,8 @@ import { ClassConstant } from "./constant/classConstant";
 import { Method } from "./function/method";
 import { Property } from "./variable/property";
 import { isReference, Reference } from "./reference";
+import { Position } from "vscode-languageserver";
+import { substr_count } from "../util/string";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
@@ -57,6 +59,15 @@ export class PhpDocument extends Symbol implements Consumer {
         }
 
         return lineCount + slice.length + character;
+    }
+
+    getPosition(offset: number): Position {
+        let startAt = Math.min(offset, this.text.length);
+        let lastNewLine = this.text.lastIndexOf("\n", startAt - 1);
+        let character = offset - (lastNewLine + 1);
+        let line = offset > 0 ? substr_count(this.text, "\n", 0, offset) : 0;
+
+        return { line, character };
     }
 
     consume(other: Symbol): boolean {

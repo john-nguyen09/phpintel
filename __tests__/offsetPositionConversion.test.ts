@@ -3,7 +3,6 @@ import * as path from "path";
 import { getCaseDir } from "../src/testHelper";
 import { pathToUri } from "../src/util/uri";
 import * as fs from "fs";
-import { Position } from "../src/symbol/meta/position";
 
 interface ConversionCase {
     path: string;
@@ -34,7 +33,7 @@ describe('Test offset and position conversion', () => {
         for (let testCase of TEST_CASES) {
             let fileUri = pathToUri(testCase.path);
             let phpDoc = new PhpDocument(fileUri, fs.readFileSync(testCase.path).toString());
-            let position = Position.fromOffset(testCase.offset, phpDoc.text);
+            let position = phpDoc.getPosition(testCase.offset);
 
             expect({
                 line: position.line,

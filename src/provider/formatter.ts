@@ -10,7 +10,8 @@ import { ClassConstant } from "../symbol/constant/classConstant";
 import { Reference } from "../symbol/reference";
 import { TypeComposite } from "../type/composite";
 import { Location } from "../symbol/meta/location";
-import { Location as LspLocation } from "vscode-languageserver";
+import { Location as LspLocation, Range as LspRange } from "vscode-languageserver";
+import { Range } from "../symbol/meta/range";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -131,13 +132,17 @@ export namespace Formatter {
         return highlightPhp(`${Formatter.types(types)} ${ref.refName}`);
     }
 
-    export function toLspLocation(loc: Location): LspLocation {
+    export function toLspLocation(phpDoc: PhpDocument, loc: Location): LspLocation {
         return {
             uri: loc.uri,
-            range: {
-                start: loc.range.start,
-                end: loc.range.end
-            }
+            range: toLspRange(phpDoc, loc.range)
         }
+    }
+
+    export function toLspRange(phpDoc: PhpDocument, range: Range): LspRange {
+        return {
+            start: phpDoc.getPosition(range.start),
+            end: phpDoc.getPosition(range.end)
+        };
     }
 }

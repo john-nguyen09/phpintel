@@ -49,14 +49,6 @@ export class TypeName {
         return this.name;
     }
 
-    public isSameAs(other: TypeName): boolean {
-        if (other == undefined) {
-            return false;
-        }
-
-        return this.name == other.name
-    }
-
     public isEmptyName(): boolean {
         return this.name == '';
     }

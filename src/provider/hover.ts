@@ -1,11 +1,12 @@
-import { TextDocumentPositionParams, Hover, MarkedString, LogMessageNotification } from "vscode-languageserver";
+import { TextDocumentPositionParams, Hover, MarkedString } from "vscode-languageserver";
 import { App } from "../app";
 import { ReferenceTable } from "../storage/table/referenceTable";
 import { RefKind } from "../symbol/reference";
-import { Range } from "vscode-languageserver";
+import { Range as LspRange } from "vscode-languageserver";
 import { Formatter } from "./formatter";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
+import { Range } from "../symbol/meta/range";
 
 export namespace HoverProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<Hover> {
@@ -76,9 +77,15 @@ export namespace HoverProvider {
             }
         }
 
+        let lspRange: LspRange | undefined = undefined;
+
+        if (phpDoc !== null && range !== undefined) {
+            lspRange = Formatter.toLspRange(phpDoc, range);
+        }
+
         return {
             contents,
-            range
+            range: lspRange
         };
     }
 }

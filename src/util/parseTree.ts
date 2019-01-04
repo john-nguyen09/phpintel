@@ -1,5 +1,4 @@
 import { Phrase, Token } from 'php7parser';
-import { Position } from '../symbol/meta/position';
 import { Range } from '../symbol/meta/range';
 
 export type TreeNode = Phrase | Token;
@@ -9,7 +8,7 @@ export function nodeRange(node: TreeNode, text: string): Range {
     let end = 0;
 
     if (isToken(node)) {
-        let t = <Token>node;
+        let t = node;
 
         start = t.offset;
         end = t.offset + t.length;
@@ -24,14 +23,14 @@ export function nodeRange(node: TreeNode, text: string): Range {
     }
 
     return new Range(
-        Position.fromOffset(start, text),
-        Position.fromOffset(end, text)
+        start,
+        end
     );
 }
 
 export function nodeText(node: TreeNode, text: string): string {
     if (isToken(node)) {
-        let t = <Token>node;
+        let t = node;
         let offset = t.offset;
         let length = t.length;
 
@@ -53,12 +52,12 @@ export function nodeText(node: TreeNode, text: string): string {
 
 export function firstToken(node: TreeNode): Token | null {
     if (isToken(node)) {
-        return node as Token;
+        return node;
     }
 
     let t: Token | null;
-    for (let n = 0, l = (<Phrase>node).children.length; n < l; ++n) {
-        t = firstToken((<Phrase>node).children[n]);
+    for (let n = 0, l = node.children.length; n < l; ++n) {
+        t = firstToken(node.children[n]);
         if (t !== null) {
             return t;
         }
@@ -69,12 +68,12 @@ export function firstToken(node: TreeNode): Token | null {
 
 export function lastToken(node: TreeNode): Token | null {
     if (isToken(node)) {
-        return node as Token;
+        return node;
     }
 
     let t: Token | null;
-    for (let n = (<Phrase>node).children.length - 1; n >= 0; --n) {
-        t = lastToken((<Phrase>node).children[n]);
+    for (let n = node.children.length - 1; n >= 0; --n) {
+        t = lastToken(node.children[n]);
         if (t !== null) {
             return t;
         }

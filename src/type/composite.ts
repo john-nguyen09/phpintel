@@ -1,14 +1,18 @@
 import { TypeName } from "./name";
+import { nonenumerable } from "../util/decorator";
 
 export class TypeComposite {
+    @nonenumerable
+    protected existingTypes: { [key: string]: boolean } = {};
     protected _types: TypeName[] = [];
 
     push(type: TypeName) {
-        if (type == undefined) {
+        if (type == undefined || type.name in this.existingTypes) {
             return;
         }
 
         this._types.push(type);
+        this.existingTypes[type.name] = true;
     }
 
     clone(): TypeComposite {
@@ -22,24 +26,6 @@ export class TypeComposite {
     }
 
     get types(): TypeName[] {
-        let result: TypeName[] = [];
-
-        for (let type of this._types) {
-            let doesContain = false;
-
-            for (let currType of result)  {
-                if (type.isSameAs(currType)) {
-                    doesContain = true;
-
-                    break;
-                }
-            }
-
-            if (!doesContain) {
-                result.push(type);
-            }
-        }
-
-        return result;
+        return this._types;
     }
 }
