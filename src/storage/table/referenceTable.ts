@@ -13,6 +13,7 @@ export class ReferenceTable {
         this.db = new SubStore(level, {
             name: 'reference',
             version: 1,
+            keyEncoding: 'binary',
             valueEncoding: ReferenceEncoding
         });
     }

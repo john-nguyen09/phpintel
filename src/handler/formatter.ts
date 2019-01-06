@@ -12,6 +12,8 @@ import { TypeComposite } from "../type/composite";
 import { Location } from "../symbol/meta/location";
 import { Location as LspLocation, Range as LspRange } from "vscode-languageserver";
 import { Range } from "../symbol/meta/range";
+import { Constant } from "../symbol/constant/constant";
+import { DefineConstant } from "../symbol/constant/defineConstant";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -130,6 +132,14 @@ export namespace Formatter {
         }
 
         return highlightPhp(`${Formatter.types(types)} ${ref.refName}`);
+    }
+
+    export function constDef(phpDoc: PhpDocument, constant: Constant): MarkedString {
+        if (constant instanceof DefineConstant) {
+            return highlightPhp(`define(${constant.name.getQualified(phpDoc.importTable)}, ${constant.value})`);
+        } else {
+            return highlightPhp(`const ${constant.name.getQualified(phpDoc.importTable)} = ${constant.value}`);
+        }
     }
 
     export function toLspLocation(phpDoc: PhpDocument, loc: Location): LspLocation {

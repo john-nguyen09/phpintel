@@ -73,6 +73,12 @@ export namespace HoverProvider {
                     }
                 } else if (ref.refKind === RefKind.Variable) {
                     contents.push(Formatter.varRef(phpDoc, ref));
+                } else if (ref.refKind === RefKind.ConstantAccess) {
+                    let consts = await RefResolver.getConstSymbols(phpDoc, ref);
+
+                    for (let constant of consts) {
+                        contents.push(Formatter.constDef(phpDoc, constant));
+                    }
                 }
             }
         }

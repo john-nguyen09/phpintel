@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
-import { pathToUri } from "../util/uri";
+import { pathToUri, uriToPath } from "../util/uri";
 import { SymbolParser } from "../symbol/symbolParser";
 import { PhpDocument } from "../symbol/phpDocument";
 import { injectable } from "inversify";
@@ -33,32 +33,39 @@ export class Indexer {
         private referenceTable: ReferenceTable
     ) { }
 
-    async indexFile(filePath: string, fstat?: fs.Stats): Promise<void> {
-        if (typeof fstat === 'undefined') {
-            fstat = await statAsync(filePath);
-        }
-
-        let fileUri = pathToUri(filePath);
-        let lastIndexedPhpDoc = await this.phpDocTable.get(fileUri);
+    async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
         let phpDoc: PhpDocument;
-        let fileContent = (await readFileAsync(filePath)).toString('utf-8');
+        let lastIndexedPhpDoc = await this.phpDocTable.get(uri);
+        let filePath = uriToPath(uri);
 
         if (lastIndexedPhpDoc !== null) {
             phpDoc = lastIndexedPhpDoc;
         } else {
-            phpDoc = new PhpDocument(fileUri, fileContent);
+            let fileContent = (await readFileAsync(filePath)).toString('utf-8');
+            phpDoc = new PhpDocument(uri, fileContent);
         }
 
+        return phpDoc;
+    }
+
+    async syncFileSystem(filePath: string): Promise<void> {
+        let fstat = await statAsync(filePath);
+        let fileUri = pathToUri(filePath);
         const fileModifiedTime = Math.round(fstat.mtime.getTime() / 1000);
 
-        if (fileModifiedTime !== phpDoc.modifiedTime) {
-            phpDoc.text = fileContent;
+        let phpDoc = await this.getOrCreatePhpDoc(fileUri);
+        if (phpDoc.modifiedTime !== fileModifiedTime) {
             phpDoc.modifiedTime = fileModifiedTime;
-            let symbolParser = new SymbolParser(phpDoc);
-
-            this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
-            await this.indexPhpDocument(symbolParser.getPhpDoc());
+            await this.indexFile(phpDoc);
         }
+    }
+
+    async indexFile(phpDoc: PhpDocument): Promise<void> {
+        let symbolParser = new SymbolParser(phpDoc);
+
+        phpDoc.refresh();
+        this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
+        await this.indexPhpDocument(phpDoc);
     }
 
     async indexDir(directory: string): Promise<void> {
@@ -71,7 +78,7 @@ export class Indexer {
             if (fstat.isDirectory()) {
                 await this.indexDir(filePath);
             } else if (file.endsWith('.php')) {
-                await this.indexFile(filePath);
+                await this.syncFileSystem(filePath);
             }
         }
     }

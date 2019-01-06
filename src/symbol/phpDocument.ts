@@ -24,20 +24,33 @@ export class PhpDocument extends Symbol implements Consumer {
     public modifiedTime: number = -1;
     public importTable: ImportTable;
 
-    public classes: Class[] = [];
-    public functions: Function[] = [];
-    public constants: Constant[] = [];
-    public classConstants: ClassConstant[] = [];
-    public methods: Method[] = [];
-    public properties: Property[] = [];
-    public references: Reference[] = [];
+    public classes: Class[];
+    public functions: Function[];
+    public constants: Constant[];
+    public classConstants: ClassConstant[];
+    public methods: Method[];
+    public properties: Property[];
+    public references: Reference[];
 
     constructor(uri: string, text: string) {
         super();
 
         this.uri = uri;
         this.text = text;
-        this.importTable = new ImportTable();
+        
+        this.refresh();
+    }
+
+    refresh() {
+        this.importTable = new ImportTable();;
+    
+        this.classes = [];
+        this.functions = [];
+        this.constants = [];
+        this.classConstants = [];
+        this.methods = [];
+        this.properties = [];
+        this.references = [];
     }
 
     getTree(): Phrase {

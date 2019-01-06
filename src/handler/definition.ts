@@ -80,17 +80,35 @@ export namespace DefinitionProvider {
                     result.push(classConst.location);
                 }
                 break;
+            case RefKind.ConstantAccess:
+                let consts = await RefResolver.getConstSymbols(phpDoc, ref);
+
+                for (let constant of consts) {
+                    result.push(constant.location);
+                }
+                break;
         }
 
         if (result.length === 0) {
             return null;
         } else if (result.length === 1) {
-            return Formatter.toLspLocation(phpDoc, result[0]);
+            let defDoc = await phpDocTable.get(result[0].uri);
+
+            if (defDoc === null) {
+                return null;
+            }
+
+            return Formatter.toLspLocation(defDoc, result[0]);
         } else {
             let lspLocs: LspLocation[] = [];
 
             for (let loc of result) {
-                lspLocs.push(Formatter.toLspLocation(phpDoc, loc));
+                let defDoc = await phpDocTable.get(loc.uri);
+                if (defDoc === null) {
+                    continue;
+                }
+
+                lspLocs.push(Formatter.toLspLocation(defDoc, loc));
             }
 
             return lspLocs;

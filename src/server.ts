@@ -6,8 +6,9 @@ import { uriToPath } from "./util/uri";
 import * as path from "path";
 import { Indexer } from "./index/indexer";
 import { elapsed } from "./util/hrtime";
-import { HoverProvider } from "./provider/hover";
-import { DefinitionProvider } from "./provider/definition";
+import { HoverProvider } from "./handler/hover";
+import { DefinitionProvider } from "./handler/definition";
+import { ChangeNotification } from "./handler/changeNotification";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -16,6 +17,7 @@ const hasher = new Hasher();
 
 connection.onHover(HoverProvider.provide);
 connection.onDefinition(DefinitionProvider.provide);
+connection.onDidChangeTextDocument(ChangeNotification.provide);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
     let rootPath: string = '';

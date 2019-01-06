@@ -4,7 +4,7 @@ import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/referenceTable';
 import { pathToUri } from '../src/util/uri';
-import { RefResolver } from "../src/provider/refResolver";
+import { RefResolver } from "../src/handler/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';
 import { RefKind } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
@@ -27,11 +27,11 @@ describe('Testing functions around references', () => {
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
         const testFile2 = path.join(caseDir, 'class_methods.php');
 
-        await indexer.indexFile(testFile2);
-        await indexer.indexFile(path.join(caseDir, 'class_constants.php'));
-        await indexer.indexFile(path.join(caseDir, 'global_symbols.php'));
-        await indexer.indexFile(path.join(caseDir, 'function_declare.php'));
-        await indexer.indexFile(refTestFile);
+        await indexer.syncFileSystem(testFile2);
+        await indexer.syncFileSystem(path.join(caseDir, 'class_constants.php'));
+        await indexer.syncFileSystem(path.join(caseDir, 'global_symbols.php'));
+        await indexer.syncFileSystem(path.join(caseDir, 'function_declare.php'));
+        await indexer.syncFileSystem(refTestFile);
 
         let refTestUri = pathToUri(refTestFile);
         let refs = [
@@ -105,7 +105,7 @@ describe('Testing functions around references', () => {
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
         let refTestUri = pathToUri(refTestFile);
 
-        await indexer.indexFile(refTestFile);
+        await indexer.syncFileSystem(refTestFile);
         
         let variables = [
             await refTable.findAt(refTestUri, 376),
