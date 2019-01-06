@@ -1,5 +1,5 @@
-import { DbStore } from "../db";
-import { PhpDocument } from "../../symbol/phpDocument";
+import { DbStore } from "../../db";
+import { PhpDocument } from "../../../symbol/phpDocument";
 
 export namespace NameIndex {
     export async function put(db: DbStore, phpDoc: PhpDocument, name: string) {

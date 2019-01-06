@@ -1,9 +1,9 @@
 import { DbStore, LevelDatasource, SubStore } from "../db";
 import { PhpDocument } from "../../symbol/phpDocument";
 import { Method } from "../../symbol/function/method";
-import { BelongsToDoc } from "./belongsToDoc";
+import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
-import { NameIndex } from "./nameIndex";
+import { NameIndex } from "./index/nameIndex";
 
 @injectable()
 export class MethodTable {

@@ -1,6 +1,6 @@
-import { PhpDocument } from "../../symbol/phpDocument";
-import { Symbol } from "../../symbol/symbol";
-import { DbStore } from "../db";
+import { PhpDocument } from "../../../symbol/phpDocument";
+import { Symbol } from "../../../symbol/symbol";
+import { DbStore } from "../../db";
 
 export namespace BelongsToDoc {
     export async function put(db: DbStore, phpDoc: PhpDocument, name: string, symbol: Symbol) {
