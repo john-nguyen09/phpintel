@@ -54,9 +54,13 @@ describe('Testing functions around references', () => {
 
         let refTestDoc = await phpDocTable.get(refTestUri);
 
+        if (refTestDoc === null) {
+            return;
+        }
+
         let defs: Symbol[] = [];
         for (let ref of refs) {
-            let def: Symbol | null = null;
+            let def: Symbol | undefined = undefined;
 
             if (ref !== null) {
                 switch (ref.refKind) {
@@ -90,7 +94,9 @@ describe('Testing functions around references', () => {
                 }
             }
 
-            defs.push(def);
+            if (def !== undefined) {
+                defs.push(def);
+            }
         }
 
         expect(refs).toMatchSnapshot();

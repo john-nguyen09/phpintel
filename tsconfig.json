@@ -12,10 +12,11 @@
         "strictNullChecks": true,
         "experimentalDecorators": true,
         "noResolve": false,
-        "types": ["reflect-metadata"],
+        "types": ["reflect-metadata", "jest"],
         "emitDecoratorMetadata": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "__tests__/**/*.ts"
     ]
 }

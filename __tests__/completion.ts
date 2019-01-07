@@ -32,6 +32,10 @@ describe('completion', () => {
         let ref = await refTable.findAt(testFileUri, 18);
         let phpDoc = await phpDocTable.get(testFileUri);
 
+        if (phpDoc === null || ref === null) {
+            return;
+        }
+
         console.log({
             ref,
             keyword: ref.type.toString()
