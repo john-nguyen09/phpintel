@@ -1,0 +1,917 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 1`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": 59,
+      "start": 48,
+    },
+    "uri": "case/class_constants.php",
+  },
+  "name": TypeName {
+    "name": "CONST1",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 2`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": 80,
+      "start": 71,
+    },
+    "uri": "case/class_constants.php",
+  },
+  "name": TypeName {
+    "name": "PI",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 3`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": 116,
+      "start": 92,
+    },
+    "uri": "case/class_constants.php",
+  },
+  "name": TypeName {
+    "name": "STATUS_ACTIVE",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 4`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": 156,
+      "start": 128,
+    },
+    "uri": "case/class_constants.php",
+  },
+  "name": TypeName {
+    "name": "STATUS_INACTIVE",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of class constant symbols after encode and decode 5`] = `
+ClassConstant {
+  "location": Location {
+    "range": Range {
+      "end": 184,
+      "start": 168,
+    },
+    "uri": "case/class_constants.php",
+  },
+  "name": TypeName {
+    "name": "IS_ACTIVE",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithConst",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 1`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 130,
+      "start": 114,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "int",
+  },
+  "resolvedValue": "123",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 2`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 156,
+      "start": 139,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST1",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "int",
+  },
+  "resolvedValue": "456",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 3`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 175,
+      "start": 158,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST2",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "int",
+  },
+  "resolvedValue": "789",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 4`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 219,
+      "start": 184,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST_STRING",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'Simple string'",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 5`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 275,
+      "start": 227,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST_STRING2",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'Not so simple string'",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 6`] = `
+Constant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 340,
+      "start": 283,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_CONST_STRING3",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'Quite complex ' . TEST_CONST_STRING",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 7`] = `
+DefineConstant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 2476,
+      "start": 2439,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_DEFINE_CONSTANT",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "boolean",
+  },
+  "resolvedValue": "false",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 8`] = `
+DefineConstant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 2526,
+      "start": 2478,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_STRING_CONSTANT1",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'simple string'",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 9`] = `
+DefineConstant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 2588,
+      "start": 2528,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_STRING_CONSTANT2",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'not so simple string'",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 10`] = `
+DefineConstant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 2657,
+      "start": 2590,
+    },
+    "uri": "case/global_symbols.php",
+  },
+  "name": TypeName {
+    "name": "\\\\TEST_STRING_CONSTANT3",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'more of ' . TEST_STRING_CONSTANT2",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of function symbols after encode and decode 1`] = `
+Function {
+  "description": "",
+  "docParamTypes": Object {},
+  "location": Location {
+    "range": Range {
+      "end": 582,
+      "start": 7,
+    },
+    "uri": "case/function_declare.php",
+  },
+  "name": TypeName {
+    "name": "\\\\test_function1",
+  },
+  "parameters": Array [
+    Parameter {
+      "location": Location {},
+      "name": "$stringParam",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {},
+      "name": "$intParam",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {},
+      "name": "$boolParam",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {},
+      "name": "$floatParam",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "float",
+          },
+        ],
+      },
+      "value": "",
+    },
+  ],
+  "scopeVar": ScopeVar {
+    "variables": Object {
+      "$boolParam": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "$floatParam": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "float",
+          },
+        ],
+      },
+      "$intParam": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+      },
+      "$stringParam": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+      "$test": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+      },
+    },
+  },
+  "typeAggregate": TypeComposite {
+    "_types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of function symbols after encode and decode 2`] = `
+Function {
+  "description": "Test function 2",
+  "docParamTypes": Object {},
+  "location": Location {
+    "range": Range {
+      "end": 754,
+      "start": 708,
+    },
+    "uri": "case/function_declare.php",
+  },
+  "name": TypeName {
+    "name": "\\\\test_function2",
+  },
+  "parameters": Array [
+    Parameter {
+      "location": Location {},
+      "name": "$param1",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\array|int",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {},
+      "name": "$param2",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+      "value": "",
+    },
+  ],
+  "scopeVar": ScopeVar {
+    "variables": Object {
+      "$param1": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\array|int",
+          },
+        ],
+      },
+      "$param2": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+  },
+  "typeAggregate": TypeComposite {
+    "_types": Array [],
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 1`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 674,
+      "start": 627,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 0,
+  },
+  "name": TypeName {
+    "name": "__construct",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 2`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 734,
+      "start": 680,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "method1",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 3`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 840,
+      "start": 740,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "method2",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 4`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 897,
+      "start": 846,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "method3",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 5`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 957,
+      "start": 903,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "method4",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 6`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 1020,
+      "start": 963,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": TypeName {
+    "name": "protectedMethod1",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 7`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 1139,
+      "start": 1026,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 4,
+  },
+  "name": TypeName {
+    "name": "privateMethod1",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 8`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 1227,
+      "start": 1145,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 32,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "staticMethod",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of method symbols after encode and decode 9`] = `
+Method {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 1431,
+      "start": 1233,
+    },
+    "uri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": TypeName {
+    "name": "publicMethod1",
+  },
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of phpDoc symbols after encode and decode 1`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [],
+  "modifiedTime": -1,
+  "properties": Array [],
+  "references": Array [],
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 1`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 95,
+      "start": 72,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 32,
+    "visibility": 1,
+  },
+  "name": "$staticVariable",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 2`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 127,
+      "start": 109,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": "$property1",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 3`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 150,
+      "start": 140,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 1,
+  },
+  "name": "$property2",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 4`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": 393,
+      "start": 382,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected1",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 5`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": 406,
+      "start": 395,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected2",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 6`] = `
+Property {
+  "description": "Defines protected properties
+",
+  "location": Location {
+    "range": Range {
+      "end": 419,
+      "start": 408,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protected3",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 7`] = `
+Property {
+  "description": "",
+  "location": Location {
+    "range": Range {
+      "end": 455,
+      "start": 436,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 2,
+  },
+  "name": "$protectedProperty1",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;
+
+exports[`symbolEncoding snapshot of property symbols after encode and decode 8`] = `
+Property {
+  "description": "A private proterty which is only used by this class
+",
+  "location": Location {
+    "range": Range {
+      "end": 620,
+      "start": 603,
+    },
+    "relativeUri": "case/class_methods.php",
+  },
+  "modifier": SymbolModifier {
+    "modifier": 0,
+    "visibility": 4,
+  },
+  "name": "$privateProperty1",
+  "scope": TypeName {
+    "name": "\\\\ClassWithMethod",
+  },
+}
+`;

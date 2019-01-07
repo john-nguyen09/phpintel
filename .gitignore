@@ -1,6 +1,4 @@
-logs/
-.DS_Store
-phpunit.xml
-vendor/
-*.ast
-test/fixture/systems
+coverage
+node_modules
+lib
+debug

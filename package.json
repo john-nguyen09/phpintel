@@ -1,0 +1,47 @@
+{
+  "name": "phpintel",
+  "version": "0.0.1",
+  "description": "A static analyser for PHP",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "jest",
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./lib && mkdir lib",
+    "compile-all": "tsc --watch --noEmit --project .",
+    "watch": "npm run clean && tsc --watch -p ./tsconfig.json"
+  },
+  "keywords": [
+    "PHP",
+    "static",
+    "analyser",
+    "language",
+    "server"
+  ],
+  "author": "John Nguyen (john.nguyen09@outlook.com)",
+  "license": "MIT",
+  "dependencies": {
+    "doc-parser": "^0.4.8",
+    "inversify": "^4.13.0",
+    "level": "^4.0.0",
+    "php7parser": "^1.0.8",
+    "reflect-metadata": "^0.1.12",
+    "rimraf": "^2.6.2",
+    "runtypes": "^2.1.6",
+    "subleveldown": "^3.0.1",
+    "vscode-languageserver": "^4.4.0",
+    "vscode-uri": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.12",
+    "@types/node": "^10.5.2",
+    "chai": "^4.1.2",
+    "jest": "^23.4.2",
+    "mocha": "^5.2.0",
+    "ts-jest": "^23.1.2",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

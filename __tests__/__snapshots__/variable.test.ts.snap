@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`variable simple variable 1`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {},
+  },
+  "methods": Array [],
+  "modifiedTime": -1,
+  "properties": Array [],
+  "references": Array [
+    SimpleVariable {
+      "name": "$varName",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$fieldName",
+      "type": TypeComposite {
+        "_types": Array [],
+      },
+    },
+  ],
+}
+`;
