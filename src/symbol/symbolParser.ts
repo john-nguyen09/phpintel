@@ -32,7 +32,7 @@ import { MemberModifierList } from "./class/memberModifierList";
 import { PropertyDeclaration } from "./variable/propertyDeclaration";
 import { DocBlock } from "./docBlock";
 import { NamespaceDefinition } from "./namespace/definition";
-import { NamespaceUse } from "./namespace/Use";
+import { NamespaceUse } from "./namespace/use";
 import { NamespaceUseClause } from "./namespace/useClause";
 import { NamespaceAliasClause } from "./namespace/aliasClause";
 import { PhraseKind, TokenKind } from "../util/parser";

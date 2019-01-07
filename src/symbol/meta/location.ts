@@ -1,8 +1,10 @@
 import { Range } from "./range";
 import { toRelative } from "../../util/uri";
 import { FieldGetter } from "../fieldGetter";
+import { nonenumerable } from "../../util/decorator";
 
 export class Location implements FieldGetter {
+    @nonenumerable
     public uri: string;
     public range: Range;
 

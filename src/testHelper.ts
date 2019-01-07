@@ -30,7 +30,13 @@ export function getCaseDir(): string {
 }
 
 export function getDebugDir(): string {
-    return path.resolve(__dirname, '..', 'debug');
+    let dir = path.resolve(__dirname, '..', 'debug');
+
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+
+    return dir;
 }
 
 export function dumpToDebug(name: string, object: any, depth?: number): void {

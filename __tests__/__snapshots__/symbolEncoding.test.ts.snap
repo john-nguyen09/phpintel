@@ -7,7 +7,6 @@ ClassConstant {
       "end": 59,
       "start": 48,
     },
-    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "CONST1",
@@ -25,7 +24,6 @@ ClassConstant {
       "end": 80,
       "start": 71,
     },
-    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "PI",
@@ -43,7 +41,6 @@ ClassConstant {
       "end": 116,
       "start": 92,
     },
-    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_ACTIVE",
@@ -61,7 +58,6 @@ ClassConstant {
       "end": 156,
       "start": 128,
     },
-    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_INACTIVE",
@@ -79,7 +75,6 @@ ClassConstant {
       "end": 184,
       "start": 168,
     },
-    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "IS_ACTIVE",
@@ -99,7 +94,6 @@ Constant {
       "end": 130,
       "start": 114,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST",
@@ -122,7 +116,6 @@ Constant {
       "end": 156,
       "start": 139,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST1",
@@ -145,7 +138,6 @@ Constant {
       "end": 175,
       "start": 158,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST2",
@@ -168,7 +160,6 @@ Constant {
       "end": 219,
       "start": 184,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING",
@@ -191,7 +182,6 @@ Constant {
       "end": 275,
       "start": 227,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING2",
@@ -214,7 +204,6 @@ Constant {
       "end": 340,
       "start": 283,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING3",
@@ -237,7 +226,6 @@ DefineConstant {
       "end": 2476,
       "start": 2439,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_DEFINE_CONSTANT",
@@ -260,7 +248,6 @@ DefineConstant {
       "end": 2526,
       "start": 2478,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT1",
@@ -283,7 +270,6 @@ DefineConstant {
       "end": 2588,
       "start": 2528,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT2",
@@ -306,7 +292,6 @@ DefineConstant {
       "end": 2657,
       "start": 2590,
     },
-    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT3",
@@ -329,7 +314,6 @@ Function {
       "end": 582,
       "start": 7,
     },
-    "uri": "case/function_declare.php",
   },
   "name": TypeName {
     "name": "\\\\test_function1",
@@ -462,7 +446,6 @@ Function {
       "end": 754,
       "start": 708,
     },
-    "uri": "case/function_declare.php",
   },
   "name": TypeName {
     "name": "\\\\test_function2",
@@ -529,7 +512,6 @@ Method {
       "end": 674,
       "start": 627,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -552,7 +534,6 @@ Method {
       "end": 734,
       "start": 680,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -575,7 +556,6 @@ Method {
       "end": 840,
       "start": 740,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -598,7 +578,6 @@ Method {
       "end": 897,
       "start": 846,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -621,7 +600,6 @@ Method {
       "end": 957,
       "start": 903,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -644,7 +622,6 @@ Method {
       "end": 1020,
       "start": 963,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -667,7 +644,6 @@ Method {
       "end": 1139,
       "start": 1026,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -690,7 +666,6 @@ Method {
       "end": 1227,
       "start": 1145,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 32,
@@ -713,7 +688,6 @@ Method {
       "end": 1431,
       "start": 1233,
     },
-    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,

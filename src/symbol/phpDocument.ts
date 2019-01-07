@@ -2,7 +2,7 @@ import { Phrase, Parser } from "php7parser";
 import { Consumer, Symbol, needsNameResolve } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
-import { NamespaceUse } from "./namespace/Use";
+import { NamespaceUse } from "./namespace/use";
 import { nonenumerable } from "../util/decorator";
 import { Class } from "./class/class";
 import { Constant } from "./constant/constant";
