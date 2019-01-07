@@ -9,16 +9,8 @@ PhpDocument {
       "implements": Array [],
       "location": Location {
         "range": Range {
-          "end": Position {
-            "character": 1,
-            "line": 5,
-            "offset": 66,
-          },
-          "start": Position {
-            "character": 0,
-            "line": 3,
-            "offset": 34,
-          },
+          "end": 61,
+          "start": 31,
         },
         "relativeUri": "case/namespaceDef/class.php",
       },
@@ -27,7 +19,6 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "isArray": false,
         "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
       },
       "traits": Array [],
@@ -44,7 +35,9 @@ PhpDocument {
     },
   },
   "methods": Array [],
+  "modifiedTime": -1,
   "properties": Array [],
+  "references": Array [],
 }
 `;
 
@@ -55,11 +48,9 @@ PhpDocument {
   "constants": Array [
     Constant {
       "name": TypeName {
-        "isArray": false,
         "name": "\\\\NamespaceDef\\\\PI",
       },
       "type": TypeName {
-        "isArray": false,
         "name": "float",
       },
       "value": "3.14",
@@ -75,7 +66,19 @@ PhpDocument {
     },
   },
   "methods": Array [],
+  "modifiedTime": -1,
   "properties": Array [],
+  "references": Array [
+    Constant {
+      "name": TypeName {
+        "name": "\\\\NamespaceDef\\\\PI",
+      },
+      "type": TypeName {
+        "name": "float",
+      },
+      "value": "3.14",
+    },
+  ],
 }
 `;
 
@@ -83,7 +86,17 @@ exports[`namespaceDef should assign namespace to phpDocument 3`] = `
 PhpDocument {
   "classConstants": Array [],
   "classes": Array [],
-  "constants": Array [],
+  "constants": Array [
+    DefineConstant {
+      "name": TypeName {
+        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+      },
+      "type": TypeName {
+        "name": "string",
+      },
+      "value": "'Hello world!!!'",
+    },
+  ],
   "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
@@ -94,7 +107,42 @@ PhpDocument {
     },
   },
   "methods": Array [],
+  "modifiedTime": -1,
   "properties": Array [],
+  "references": Array [
+    FunctionCall {
+      "location": Location {
+        "range": Range {
+          "end": 71,
+          "start": 31,
+        },
+        "relativeUri": "case/namespaceDef/defineConst.php",
+      },
+      "realSymbol": DefineConstant {
+        "name": TypeName {
+          "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+        },
+        "type": TypeName {
+          "name": "string",
+        },
+        "value": "'Hello world!!!'",
+      },
+      "refKind": 1,
+      "scope": null,
+      "type": TypeName {
+        "name": "",
+      },
+    },
+    DefineConstant {
+      "name": TypeName {
+        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+      },
+      "type": TypeName {
+        "name": "string",
+      },
+      "value": "'Hello world!!!'",
+    },
+  ],
 }
 `;
 
@@ -107,16 +155,23 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "isArray": false,
         "name": "\\\\NamespaceDef\\\\function_with_namespace",
       },
       "parameters": Array [
         Parameter {
+          "location": Location {
+            "range": Range {
+              "end": 215,
+              "start": 208,
+            },
+            "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/function.php",
+          },
           "name": "$param1",
+          "refKind": 3,
+          "scope": null,
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "isArray": false,
                 "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
@@ -124,11 +179,19 @@ PhpDocument {
           "value": "",
         },
         Parameter {
+          "location": Location {
+            "range": Range {
+              "end": 224,
+              "start": 217,
+            },
+            "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/function.php",
+          },
           "name": "$param2",
+          "refKind": 3,
+          "scope": null,
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "isArray": false,
                 "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
@@ -136,11 +199,19 @@ PhpDocument {
           "value": "",
         },
         Parameter {
+          "location": Location {
+            "range": Range {
+              "end": 238,
+              "start": 226,
+            },
+            "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/function.php",
+          },
           "name": "$param3",
+          "refKind": 3,
+          "scope": null,
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "isArray": false,
                 "name": "boolean",
               },
             ],
@@ -148,166 +219,66 @@ PhpDocument {
           "value": "",
         },
       ],
-      "scopeVar": Scope {
+      "scopeVar": ScopeVar {
         "variables": Object {
-          "$param1": Variable {
-            "expression": Expression {},
-            "name": "$param1",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
-                },
-              ],
-            },
+          "$param1": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+              },
+            ],
           },
-          "$param2": Variable {
-            "expression": Expression {},
-            "name": "$param2",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "\\\\FullyQualified\\\\Name\\\\Class",
-                },
-              ],
-            },
+          "$param2": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "\\\\FullyQualified\\\\Name\\\\Class",
+              },
+            ],
           },
-          "$param3": Variable {
-            "expression": Expression {},
-            "name": "$param3",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "boolean",
-                },
-              ],
-            },
+          "$param3": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "boolean",
+              },
+            ],
           },
-          "$var1": SimpleVariable {
-            "expression": Expression {
-              "currentSymbol": ConstantAccess {
-                "type": TypeName {
-                  "isArray": false,
-                  "name": "boolean",
-                },
-                "value": "false",
+          "$var1": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "boolean",
               },
-            },
-            "location": Location {
-              "range": Range {
-                "end": Position {
-                  "character": 9,
-                  "line": 11,
-                  "offset": 262,
-                },
-                "start": Position {
-                  "character": 4,
-                  "line": 11,
-                  "offset": 257,
-                },
-              },
-              "uri": "file:///C:/Users/Thuan/Development/phpintel/case/namespaceDef/function.php",
-            },
-            "name": "$var1",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "boolean",
-                },
-              ],
-            },
+            ],
           },
-          "$var2": SimpleVariable {
-            "expression": Expression {
-              "currentSymbol": TokenSymbol {
-                "text": "'abc'",
+          "$var2": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "string",
               },
-            },
-            "location": Location {
-              "range": Range {
-                "end": Position {
-                  "character": 9,
-                  "line": 12,
-                  "offset": 282,
-                },
-                "start": Position {
-                  "character": 4,
-                  "line": 12,
-                  "offset": 277,
-                },
-              },
-              "uri": "file:///C:/Users/Thuan/Development/phpintel/case/namespaceDef/function.php",
-            },
-            "name": "$var2",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "string",
-                },
-              ],
-            },
+            ],
           },
-          "$var3": SimpleVariable {
-            "expression": Expression {
-              "currentSymbol": ConstantAccess {
-                "type": TypeName {
-                  "isArray": false,
-                  "name": "CONSTANT_IN_NAMESPACE",
-                },
-                "value": "CONSTANT_IN_NAMESPACE",
+          "$var3": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
               },
-            },
-            "location": Location {
-              "range": Range {
-                "end": Position {
-                  "character": 9,
-                  "line": 13,
-                  "offset": 302,
-                },
-                "start": Position {
-                  "character": 4,
-                  "line": 13,
-                  "offset": 297,
-                },
-              },
-              "uri": "file:///C:/Users/Thuan/Development/phpintel/case/namespaceDef/function.php",
-            },
-            "name": "$var3",
-            "type": TypeComposite {
-              "_types": Array [
-                TypeName {
-                  "isArray": false,
-                  "name": "CONSTANT_IN_NAMESPACE",
-                },
-              ],
-            },
+            ],
           },
         },
       },
       "types": Array [
         TypeName {
-          "isArray": false,
-          "name": "CONSTANT_IN_NAMESPACE",
+          "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
         },
         TypeName {
-          "isArray": false,
           "name": "string",
         },
         TypeName {
-          "isArray": false,
           "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
         },
         TypeName {
-          "isArray": false,
           "name": "\\\\FullyQualified\\\\Name\\\\Class",
         },
         TypeName {
-          "isArray": false,
           "name": "boolean",
         },
       ],
@@ -322,6 +293,259 @@ PhpDocument {
     },
   },
   "methods": Array [],
+  "modifiedTime": -1,
   "properties": Array [],
+  "references": Array [
+    Parameter {
+      "location": Location {
+        "range": Range {
+          "end": 215,
+          "start": 208,
+        },
+        "relativeUri": "case/namespaceDef/function.php",
+      },
+      "name": "$param1",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {
+        "range": Range {
+          "end": 224,
+          "start": 217,
+        },
+        "relativeUri": "case/namespaceDef/function.php",
+      },
+      "name": "$param2",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\FullyQualified\\\\Name\\\\Class",
+          },
+        ],
+      },
+      "value": "",
+    },
+    Parameter {
+      "location": Location {
+        "range": Range {
+          "end": 238,
+          "start": 226,
+        },
+        "relativeUri": "case/namespaceDef/function.php",
+      },
+      "name": "$param3",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "value": "",
+    },
+    SimpleVariable {
+      "name": "$var1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+    },
+    ConstantAccess {
+      "location": Location {
+        "range": Range {
+          "end": 259,
+          "start": 254,
+        },
+        "relativeUri": "case/namespaceDef/function.php",
+      },
+      "refKind": 6,
+      "scope": null,
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "false",
+    },
+    SimpleVariable {
+      "name": "$var2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var3",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+          },
+        ],
+      },
+    },
+    ConstantAccess {
+      "location": Location {
+        "range": Range {
+          "end": 313,
+          "start": 292,
+        },
+        "relativeUri": "case/namespaceDef/function.php",
+      },
+      "refKind": 6,
+      "scope": null,
+      "type": TypeName {
+        "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+      },
+      "value": "CONSTANT_IN_NAMESPACE",
+    },
+    SimpleVariable {
+      "name": "$var1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var3",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var3",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$param1",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$param2",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\FullyQualified\\\\Name\\\\Class",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$var3",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$param3",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+    },
+  ],
 }
 `;

@@ -10,6 +10,25 @@ PhpDocument {
     "imports": Object {},
   },
   "methods": Array [],
+  "modifiedTime": -1,
   "properties": Array [],
+  "references": Array [
+    SimpleVariable {
+      "name": "$varName",
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "string",
+          },
+        ],
+      },
+    },
+    SimpleVariable {
+      "name": "$fieldName",
+      "type": TypeComposite {
+        "_types": Array [],
+      },
+    },
+  ],
 }
 `;

@@ -36,10 +36,10 @@ describe('completion', () => {
             return;
         }
 
-        console.log({
-            ref,
-            keyword: ref.type.toString()
-        });
-        console.log(await funcTable.search(phpDoc, ref.type.toString()));
+        // console.log({
+        //     ref,
+        //     keyword: ref.type.toString()
+        // });
+        // console.log(await funcTable.search(phpDoc, ref.type.toString()));
     });
 });
