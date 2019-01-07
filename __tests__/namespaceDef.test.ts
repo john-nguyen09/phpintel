@@ -12,7 +12,7 @@ describe('namespaceDef', () => {
         let workspaceDir = path.resolve(__dirname, '..', 'case', 'namespaceDef');
         let files = fs.readdirSync(workspaceDir);
         let treeTraverser = new Traverser();
-        
+
         for (let file of files) {
             let filePath = path.join(workspaceDir, file);
             let fileUri = pathToUri(filePath);
@@ -24,30 +24,6 @@ describe('namespaceDef', () => {
                     fileContent
                 ));
                 let parseTree = Parser.parse(fileContent);
-                
-                fs.writeFile(
-                    path.resolve(__dirname, '..', 'debug', file + '.ast.json'),
-                    JSON.stringify(parseTree, (key, value) => {
-                        if (key == 'modeStack') {
-                            return undefined;
-                        }
-        
-                        if (key == 'phraseType') {
-                            return phraseTypeToString(value);
-                        }
-        
-                        if (key == 'tokenType') {
-                            return tokenTypeToString(value);
-                        }
-        
-                        return value;
-                    }, 2),
-                    (err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    }
-                );
 
                 treeTraverser.traverse(parseTree, [
                     symbolParser

@@ -25,7 +25,7 @@ describe('variable', () => {
             symbolParser
         ]);
 
-        dumpAstToDebug(path.join('variable', 'simpleVariable.ast.json'), parseTree);
+        // dumpAstToDebug(path.join('variable', 'simpleVariable.ast.json'), parseTree);
         
         expect(symbolParser.getPhpDoc().toObject()).toMatchSnapshot();
     });

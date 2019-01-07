@@ -4,7 +4,7 @@
   "description": "A static analyser for PHP",
   "main": "lib/server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --coverage",
     "build": "npm run clean && tsc",
     "clean": "rimraf ./lib && mkdir lib",
     "compile-all": "tsc --watch --noEmit --project .",
