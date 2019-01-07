@@ -4,7 +4,8 @@ import { Function } from "../../symbol/function/function";
 import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
-import { CompletionIndex } from "./index/completionIndex";
+import { CompletionIndex, CompletionValue } from "./index/completionIndex";
+import { TypeName } from "../../type/name";
 
 @injectable()
 export class FunctionTable {
@@ -28,10 +29,12 @@ export class FunctionTable {
     }
 
     async put(phpDoc: PhpDocument, symbol: Function) {
+        let name = symbol.getName();
+
         return Promise.all([
-            BelongsToDoc.put(this.db, phpDoc, symbol.getName(), symbol),
-            NameIndex.put(this.nameIndex, phpDoc, symbol.getName()),
-            this.completionIndex.put(phpDoc, symbol.name.getQualified(phpDoc.importTable))
+            BelongsToDoc.put(this.db, phpDoc, name, symbol),
+            NameIndex.put(this.nameIndex, phpDoc, name),
+            this.completionIndex.put(phpDoc, name)
         ]);
     }
 
@@ -46,15 +49,11 @@ export class FunctionTable {
         return funcs;
     }
 
-    async search(keyword: string): Promise<string[]> {
-        let completions = await this.completionIndex.search(keyword);
-        let results: string[] = [];
+    async search(phpDoc: PhpDocument, keyword: string): Promise<CompletionValue[]> {
+        let typeName = new TypeName(keyword);
+        typeName.resolveToFullyQualified(phpDoc.importTable);
 
-        for (let completion of completions) {
-            results.push(completion.name);
-        }
-
-        return results;
+        return await this.completionIndex.search(typeName.name);
     }
 
     async removeByDoc(uri: string) {

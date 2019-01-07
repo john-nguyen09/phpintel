@@ -2,11 +2,10 @@ import { TextDocumentPositionParams, Location as LspLocation } from "vscode-lang
 import { ReferenceTable } from "../storage/table/referenceTable";
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
-import { RefKind } from "../symbol/reference";
 import { RefResolver } from "./refResolver";
-import { inspect } from "util";
 import { Formatter } from "./formatter";
 import { Location } from "../symbol/meta/location";
+import { isLocatable } from "../symbol/symbol";
 
 export namespace DefinitionProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<LspLocation | LspLocation[] | null> {
@@ -29,64 +28,11 @@ export namespace DefinitionProvider {
             return null;
         }
 
-        switch (ref.refKind) {
-            case RefKind.Function:
-                let funcs = await RefResolver.getFuncSymbols(phpDoc, ref);
-
-                for (let func of funcs) {
-                    result.push(func.location);
-                }
-                break;
-            case RefKind.ClassTypeDesignator:
-                let constructors = await RefResolver.getMethodSymbols(phpDoc, ref);
-
-                if (constructors.length === 0) {
-                    let classes = await RefResolver.getClassSymbols(phpDoc, ref);
-
-                    for (let theClass of classes) {
-                        result.push(theClass.location);
-                    }
-                } else {
-                    for (let constructor of constructors) {
-                        result.push(constructor.location);
-                    }
-                }
-                break;
-            case RefKind.Class:
-                let classes = await RefResolver.getClassSymbols(phpDoc, ref);
-
-                for (let theClass of classes) {
-                    result.push(theClass.location);
-                }
-                break;
-            case RefKind.Method:
-                let methods = await RefResolver.getMethodSymbols(phpDoc, ref);
-
-                for (let method of methods) {
-                    result.push(method.location);
-                }
-                break;
-            case RefKind.Property:
-                let props = await RefResolver.getPropSymbols(phpDoc, ref);
-
-                for (let prop of props) {
-                    result.push(prop.location);
-                }
-                break;
-            case RefKind.ClassConst:
-                let classConsts = await RefResolver.getClassConstSymbols(phpDoc, ref);
-
-                for (let classConst of classConsts) {
-                    result.push(classConst.location);
-                }
-                break;
-            case RefKind.ConstantAccess:
-                let consts = await RefResolver.getConstSymbols(phpDoc, ref);
-
-                for (let constant of consts) {
-                    result.push(constant.location);
-                }
-                break;
+        let symbols = await RefResolver.getSymbolsByReference(phpDoc, ref);
+        for (let symbol of symbols) {
+            if (isLocatable(symbol)) {
+                result.push(symbol.location);
+            }
         }
 
         if (result.length === 0) {

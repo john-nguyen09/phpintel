@@ -20,6 +20,7 @@ describe('completion', () => {
         const indexer = App.get<Indexer>(Indexer);
         const funcTable = App.get<FunctionTable>(FunctionTable);
         const refTable = App.get<ReferenceTable>(ReferenceTable);
+        const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
         const testFilePath = path.join(getCaseDir(), 'completion', 'function.php');
         const testFileUri = pathToUri(testFilePath);
@@ -29,11 +30,12 @@ describe('completion', () => {
         await indexer.syncFileSystem(testFilePath);
 
         let ref = await refTable.findAt(testFileUri, 18);
+        let phpDoc = await phpDocTable.get(testFileUri);
 
         console.log({
             ref,
             keyword: ref.type.toString()
         });
-        console.log(await funcTable.search(ref.type.toString()));
+        console.log(await funcTable.search(phpDoc, ref.type.toString()));
     });
 });
