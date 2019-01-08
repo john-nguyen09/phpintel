@@ -19,6 +19,11 @@ const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 const statAsync = promisify(fs.stat);
 
+export interface PhpFileInfo {
+    filePath: string;
+    fstats: fs.Stats;
+}
+
 @injectable()
 export class Indexer {
     constructor(
@@ -34,24 +39,19 @@ export class Indexer {
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
-        let phpDoc: PhpDocument;
-        let lastIndexedPhpDoc = await this.phpDocTable.get(uri);
-        let filePath = uriToPath(uri);
+        let phpDoc = await this.phpDocTable.get(uri);
 
-        if (lastIndexedPhpDoc !== null) {
-            phpDoc = lastIndexedPhpDoc;
-        } else {
-            let fileContent = (await readFileAsync(filePath)).toString('utf-8');
+        if (phpDoc === null) {
+            let fileContent = (await readFileAsync(uriToPath(uri))).toString('utf-8');
             phpDoc = new PhpDocument(uri, fileContent);
         }
 
         return phpDoc;
     }
 
-    async syncFileSystem(filePath: string): Promise<void> {
-        let fstat = await statAsync(filePath);
-        let fileUri = pathToUri(filePath);
-        const fileModifiedTime = Math.round(fstat.mtime.getTime() / 1000);
+    async syncFileSystem(fileInfo: PhpFileInfo): Promise<void> {
+        let fileUri = pathToUri(fileInfo.filePath);
+        const fileModifiedTime = Math.round(fileInfo.fstats.mtime.getTime() / 1000);
 
         let phpDoc = await this.getOrCreatePhpDoc(fileUri);
         if (phpDoc.modifiedTime !== fileModifiedTime) {
@@ -68,19 +68,35 @@ export class Indexer {
         await this.indexPhpDocument(phpDoc);
     }
 
-    async indexDir(directory: string): Promise<void> {
-        let files = await readdirAsync(directory);
+    async indexWorkspace(directory: string): Promise<void> {
+        let directories: string[] = [
+            directory
+        ];
+        const promises: Promise<void>[] = [];
+        
+        while (directories.length > 0) {
+            let dir = directories.shift();
+            if (dir === undefined) {
+                continue;
+            }
+            let files = await readdirAsync(dir);
 
-        for (let file of files) {
-            let filePath = path.join(directory, file);
-            let fstat = await statAsync(filePath);
+            for (let file of files) {
+                const filePath = path.join(dir, file);
+                const fstats = await statAsync(filePath);
 
-            if (fstat.isDirectory()) {
-                await this.indexDir(filePath);
-            } else if (file.endsWith('.php')) {
-                await this.syncFileSystem(filePath);
+                if (file.endsWith('.php')) {
+                    const fileInfo: PhpFileInfo = {
+                        filePath, fstats
+                    }
+                    promises.push(this.syncFileSystem(fileInfo));
+                } else if (fstats.isDirectory()) {
+                    directories.push(filePath);
+                }
             }
         }
+
+        await Promise.all(promises);
     }
 
     private async removeSymbolsByDoc(uri: string) {
@@ -99,34 +115,37 @@ export class Indexer {
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
         
+        const promises: Promise<void | void[]>[] = [];
+
         for (let theClass of doc.classes) {
-            await this.classTable.put(doc, theClass);
+            promises.push(this.classTable.put(doc, theClass));
         }
 
         for (let classConstant of doc.classConstants) {
-            await this.classConstantTable.put(doc, classConstant);
+            promises.push(this.classConstantTable.put(doc, classConstant));
         }
 
         for (let constant of doc.constants) {
-            await this.constantTable.put(doc, constant);
+            promises.push(this.constantTable.put(doc, constant));
         }
 
         for (let func of doc.functions) {
-            await this.functionTable.put(doc, func);
+            promises.push(this.functionTable.put(doc, func));
         }
 
         for (let method of doc.methods) {
-            await this.methodTable.put(doc, method);
+            promises.push(this.methodTable.put(doc, method));
         }
 
         for (let property of doc.properties) {
-            await this.propertyTable.put(doc, property);
+            promises.push(this.propertyTable.put(doc, property));
         }
 
         for (let reference of doc.references) {
-            await this.referenceTable.put(reference);
+            promises.push(this.referenceTable.put(reference));
         }
         
+        await Promise.all(promises);
         await this.phpDocTable.put(doc);
     }
 }

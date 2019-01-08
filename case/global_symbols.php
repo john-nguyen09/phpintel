@@ -15,6 +15,8 @@ const TEST_CONST_STRING = 'Simple string';
 const TEST_CONST_STRING2 = 'Not so ' . 'simple string';
 const TEST_CONST_STRING3 = 'Quite complex ' . TEST_CONST_STRING;
 
+define('CONSTANT_SAMPLE1', false);
+
 class TestClass2 implements TestInterface, TestInterface2
 {
     

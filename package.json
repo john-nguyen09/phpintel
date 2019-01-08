@@ -5,6 +5,7 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "jest --runInBand --coverage",
+    "test-only": "jest --runInBand",
     "build": "npm run clean && tsc",
     "clean": "rimraf ./lib && mkdir lib",
     "compile-all": "tsc --watch --noEmit --project .",

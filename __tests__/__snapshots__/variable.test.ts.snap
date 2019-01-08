@@ -8,6 +8,9 @@ PhpDocument {
   "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [],
+    },
   },
   "methods": Array [],
   "modifiedTime": -1,

@@ -2,7 +2,7 @@ import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { TokenKind } from "../../util/parser";
 
 export class NamespaceName extends Symbol implements Consumer {
-    private parts: string[] = [];
+    public parts: string[] = [];
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol && other.type == TokenKind.Name) {

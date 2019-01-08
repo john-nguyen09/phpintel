@@ -2,8 +2,8 @@ import { TypeName } from './name';
 import { NamespaceName } from '../symbol/name/namespaceName';
 
 export class ImportTable {
-    private namespace: NamespaceName;
-    private imports: {[key: string]: string} = {};
+    public namespace: NamespaceName = new NamespaceName();
+    public imports: {[key: string]: string} = {};
 
     constructor() { }
 

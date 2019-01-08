@@ -52,9 +52,30 @@ export namespace RefResolver {
     }
 
     export async function searchSymbolsForReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
+        const funcTable = App.get<FunctionTable>(FunctionTable);
+        const classTable = App.get<ClassTable>(ClassTable);
+        const constTable = App.get<ConstantTable>(ConstantTable);
         let symbols: Symbol[] = [];
 
         switch (ref.refKind) {
+            case RefKind.ConstantAccess:
+                let keyword: string = ref.type.toString();
+                let completions = await funcTable.search(keyword);
+                for (let completion of completions) {
+                    symbols.push(...await funcTable.get(completion.name));
+                }
+
+                completions = await classTable.search(keyword);
+                for (let completion of completions) {
+                    symbols.push(...await classTable.get(completion.name));
+                }
+
+                completions = await constTable.search(keyword);
+                for (let completion of completions) {
+                    symbols.push(...await constTable.get(completion.name));
+                }
+
+                break;
         }
 
         return symbols;
@@ -62,7 +83,7 @@ export namespace RefResolver {
 
     export async function getFuncSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Function[]> {
         const funcTable = App.get<FunctionTable>(FunctionTable);
-        
+
         if (ref.type instanceof TypeComposite) {
             return [];
         }
@@ -149,7 +170,7 @@ export namespace RefResolver {
         ref.type.resolveToFullyQualified(phpDoc.importTable);
 
         const constTable = App.get<ConstantTable>(ConstantTable);
-        
+
         return constTable.get(ref.type.name);
     }
 }
