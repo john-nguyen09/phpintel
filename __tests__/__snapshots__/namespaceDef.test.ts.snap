@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`namespaceDef returns import table 1`] = `
+ImportTable {
+  "imports": Object {
+    "": "\\\\NamespaceDef\\\\TestClassNamespace1",
+  },
+  "namespace": NamespaceName {
+    "parts": Array [
+      "ImportTable",
+    ],
+  },
+}
+`;
+
 exports[`namespaceDef should assign namespace to phpDocument 1`] = `
 PhpDocument {
   "classConstants": Array [],
@@ -544,5 +557,28 @@ PhpDocument {
       },
     },
   ],
+}
+`;
+
+exports[`namespaceDef should assign namespace to phpDocument 5`] = `
+PhpDocument {
+  "classConstants": Array [],
+  "classes": Array [],
+  "constants": Array [],
+  "functions": Array [],
+  "importTable": ImportTable {
+    "imports": Object {
+      "": "\\\\NamespaceDef\\\\TestClassNamespace1",
+    },
+    "namespace": NamespaceName {
+      "parts": Array [
+        "ImportTable",
+      ],
+    },
+  },
+  "methods": Array [],
+  "modifiedTime": -1,
+  "properties": Array [],
+  "references": Array [],
 }
 `;

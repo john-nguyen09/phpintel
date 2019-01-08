@@ -4,11 +4,14 @@ import { PhpDocument } from "../../symbol/phpDocument";
 import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
+import { CompletionValue, CompletionIndex } from "./index/completionIndex";
+import { TypeName } from "../../type/name";
 
 @injectable()
 export class ClassTable {
     private db: DbStore;
     private nameIndex: DbStore;
+    private completionIndex: CompletionIndex;
 
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
@@ -20,12 +23,16 @@ export class ClassTable {
             name: 'classNameIndex',
             version: 1
         });
+        this.completionIndex = new CompletionIndex(level, 'classCompletionIndex');
     }
 
     async put(phpDoc: PhpDocument, symbol: Class) {
+        let name = symbol.getName();
+
         return Promise.all([
-            BelongsToDoc.put(this.db, phpDoc, symbol.getName(), symbol),
-            NameIndex.put(this.nameIndex, phpDoc, symbol.getName())
+            BelongsToDoc.put(this.db, phpDoc, name, symbol),
+            NameIndex.put(this.nameIndex, phpDoc, name),
+            this.completionIndex.put(phpDoc, name)
         ]);
     }
 
@@ -40,11 +47,16 @@ export class ClassTable {
         return classes;
     }
 
+    async search(keyword: string): Promise<CompletionValue[]> {
+        return await this.completionIndex.search(keyword);
+    }
+
     async removeByDoc(uri: string) {
         let names = await BelongsToDoc.removeByDoc(this.db, uri);
 
         for (let name of names) {
             await NameIndex.remove(this.nameIndex, uri, name);
+            await this.completionIndex.del(uri, name);
         }
     }
 }

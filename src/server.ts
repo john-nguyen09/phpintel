@@ -40,7 +40,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
     let start = process.hrtime();
 
     let indexer = App.get<Indexer>(Indexer);
-    indexer.indexDir(rootPath)
+    indexer.indexWorkspace(rootPath)
         .catch((err: Error) => {
             logger.error(err);
         }).then(() => {

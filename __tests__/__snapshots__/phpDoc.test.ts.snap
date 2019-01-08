@@ -15,7 +15,7 @@ PhpDocument {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -30,7 +30,7 @@ PhpDocument {
         "name": "PI",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -45,7 +45,7 @@ PhpDocument {
         "name": "STATUS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -60,7 +60,7 @@ PhpDocument {
         "name": "STATUS_INACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -75,7 +75,7 @@ PhpDocument {
         "name": "IS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
     },
   ],
@@ -95,7 +95,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
       "traits": Array [],
     },
@@ -104,6 +104,9 @@ PhpDocument {
   "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [],
+    },
   },
   "methods": Array [],
   "modifiedTime": -1,
@@ -119,7 +122,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\ClassWithConst",
+        "name": "\\\\\\\\ClassWithConst",
       },
       "type": TypeName {
         "name": "boolean",
@@ -145,7 +148,7 @@ PhpDocument {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
   ],
@@ -165,7 +168,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
       "traits": Array [],
     },
@@ -174,6 +177,9 @@ PhpDocument {
   "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [],
+    },
   },
   "methods": Array [
     Method {
@@ -193,7 +199,7 @@ PhpDocument {
         "name": "__construct",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -213,7 +219,7 @@ PhpDocument {
         "name": "method1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -233,7 +239,7 @@ PhpDocument {
         "name": "method2",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -253,7 +259,7 @@ PhpDocument {
         "name": "method3",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -273,7 +279,7 @@ PhpDocument {
         "name": "method4",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -293,7 +299,7 @@ PhpDocument {
         "name": "protectedMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -313,7 +319,7 @@ PhpDocument {
         "name": "privateMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -333,7 +339,7 @@ PhpDocument {
         "name": "staticMethod",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Method {
@@ -353,7 +359,7 @@ PhpDocument {
         "name": "publicMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
   ],
@@ -374,7 +380,7 @@ PhpDocument {
       },
       "name": "$staticVariable",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -392,7 +398,7 @@ PhpDocument {
       },
       "name": "$property1",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -410,7 +416,7 @@ PhpDocument {
       },
       "name": "$property2",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -429,7 +435,7 @@ PhpDocument {
       },
       "name": "$protected1",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -448,7 +454,7 @@ PhpDocument {
       },
       "name": "$protected2",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -467,7 +473,7 @@ PhpDocument {
       },
       "name": "$protected3",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -485,7 +491,7 @@ PhpDocument {
       },
       "name": "$protectedProperty1",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
     Property {
@@ -504,7 +510,7 @@ PhpDocument {
       },
       "name": "$privateProperty1",
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
     },
   ],
@@ -601,7 +607,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -735,7 +741,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "null",
@@ -784,7 +790,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -932,7 +938,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
+        "name": "\\\\\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -952,7 +958,7 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "name": "\\\\test_function1",
+        "name": "\\\\\\\\test_function1",
       },
       "parameters": Array [
         Parameter {
@@ -1085,14 +1091,14 @@ PhpDocument {
           "name": "float",
         },
         TypeName {
-          "name": "\\\\TestClass",
+          "name": "\\\\\\\\TestClass",
         },
       ],
     },
     Function {
       "description": "Test function 2",
       "name": TypeName {
-        "name": "\\\\test_function2",
+        "name": "\\\\\\\\test_function2",
       },
       "parameters": Array [
         Parameter {
@@ -1108,7 +1114,7 @@ PhpDocument {
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\array|int",
+                "name": "\\\\\\\\array|int",
               },
             ],
           },
@@ -1139,7 +1145,7 @@ PhpDocument {
           "$param1": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\array|int",
+                "name": "\\\\\\\\array|int",
               },
             ],
           },
@@ -1157,6 +1163,9 @@ PhpDocument {
   ],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [],
+    },
   },
   "methods": Array [],
   "modifiedTime": -1,
@@ -1419,7 +1428,7 @@ PhpDocument {
       "refKind": 8,
       "scope": null,
       "type": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     FunctionCall {
@@ -1474,7 +1483,7 @@ PhpDocument {
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\array|int",
+            "name": "\\\\\\\\array|int",
           },
         ],
       },
@@ -1516,8 +1525,8 @@ PhpDocument {
     ClassConstant {
       "location": Location {
         "range": Range {
-          "end": 1084,
-          "start": 1062,
+          "end": 1120,
+          "start": 1098,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1525,14 +1534,14 @@ PhpDocument {
         "name": "TEST_CLASS_CONST",
       },
       "scope": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     ClassConstant {
       "location": Location {
         "range": Range {
-          "end": 2128,
-          "start": 2106,
+          "end": 2164,
+          "start": 2142,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1555,8 +1564,8 @@ PhpDocument {
       ],
       "location": Location {
         "range": Range {
-          "end": 409,
-          "start": 343,
+          "end": 445,
+          "start": 379,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1565,7 +1574,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\TestClass2",
+        "name": "\\\\\\\\TestClass2",
       },
       "traits": Array [],
     },
@@ -1578,8 +1587,8 @@ PhpDocument {
       ],
       "location": Location {
         "range": Range {
-          "end": 1875,
-          "start": 888,
+          "end": 1911,
+          "start": 924,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1588,7 +1597,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
       "traits": Array [],
     },
@@ -1599,8 +1608,8 @@ PhpDocument {
       "implements": Array [],
       "location": Location {
         "range": Range {
-          "end": 2385,
-          "start": 2348,
+          "end": 2421,
+          "start": 2384,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1609,7 +1618,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\ChildClass",
+        "name": "\\\\\\\\ChildClass",
       },
       "traits": Array [],
     },
@@ -1618,8 +1627,8 @@ PhpDocument {
       "implements": Array [],
       "location": Location {
         "range": Range {
-          "end": 2883,
-          "start": 2778,
+          "end": 2919,
+          "start": 2814,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1628,7 +1637,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\UnusedClass",
+        "name": "\\\\\\\\UnusedClass",
       },
       "traits": Array [],
     },
@@ -1636,7 +1645,7 @@ PhpDocument {
   "constants": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST",
+        "name": "\\\\\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1645,7 +1654,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST1",
+        "name": "\\\\\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1654,7 +1663,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST2",
+        "name": "\\\\\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1663,7 +1672,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING",
+        "name": "\\\\\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1672,7 +1681,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING2",
+        "name": "\\\\\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -1681,7 +1690,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING3",
+        "name": "\\\\\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -1690,7 +1699,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\\\\\CONSTANT_SAMPLE1",
       },
       "type": TypeName {
         "name": "boolean",
@@ -1699,7 +1708,16 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "false",
+    },
+    DefineConstant {
+      "name": TypeName {
+        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -1708,7 +1726,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -1717,7 +1735,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
@@ -1730,7 +1748,7 @@ PhpDocument {
       "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
 ",
       "name": TypeName {
-        "name": "\\\\test_function",
+        "name": "\\\\\\\\test_function",
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
@@ -1741,14 +1759,17 @@ PhpDocument {
   ],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [],
+    },
   },
   "methods": Array [
     Method {
       "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
       "location": Location {
         "range": Range {
-          "end": 1547,
-          "start": 1457,
+          "end": 1583,
+          "start": 1493,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1760,7 +1781,7 @@ PhpDocument {
         "name": "staticTestMethod",
       },
       "scope": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     Method {
@@ -1768,8 +1789,8 @@ PhpDocument {
 ",
       "location": Location {
         "range": Range {
-          "end": 1873,
-          "start": 1758,
+          "end": 1909,
+          "start": 1794,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1781,15 +1802,15 @@ PhpDocument {
         "name": "testMethod",
       },
       "scope": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     Method {
       "description": "",
       "location": Location {
         "range": Range {
-          "end": 2254,
-          "start": 2200,
+          "end": 2290,
+          "start": 2236,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1806,8 +1827,8 @@ PhpDocument {
       "description": "",
       "location": Location {
         "range": Range {
-          "end": 2343,
-          "start": 2260,
+          "end": 2379,
+          "start": 2296,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1824,8 +1845,8 @@ PhpDocument {
       "description": "",
       "location": Location {
         "range": Range {
-          "end": 2881,
-          "start": 2831,
+          "end": 2917,
+          "start": 2867,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1837,7 +1858,7 @@ PhpDocument {
         "name": "unusedMethod",
       },
       "scope": TypeName {
-        "name": "\\\\UnusedClass",
+        "name": "\\\\\\\\UnusedClass",
       },
     },
   ],
@@ -1848,8 +1869,8 @@ PhpDocument {
 ",
       "location": Location {
         "range": Range {
-          "end": 1230,
-          "start": 1211,
+          "end": 1266,
+          "start": 1247,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1859,7 +1880,7 @@ PhpDocument {
       },
       "name": "$staticTestProperty",
       "scope": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     Property {
@@ -1867,8 +1888,8 @@ PhpDocument {
 ",
       "location": Location {
         "range": Range {
-          "end": 1352,
-          "start": 1339,
+          "end": 1388,
+          "start": 1375,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1878,15 +1899,15 @@ PhpDocument {
       },
       "name": "$testProperty",
       "scope": TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     },
     Property {
       "description": "",
       "location": Location {
         "range": Range {
-          "end": 2167,
-          "start": 2148,
+          "end": 2203,
+          "start": 2184,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1901,8 +1922,8 @@ PhpDocument {
       "description": "",
       "location": Location {
         "range": Range {
-          "end": 2193,
-          "start": 2180,
+          "end": 2229,
+          "start": 2216,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1917,8 +1938,8 @@ PhpDocument {
       "description": "Neither this class nor its members are referenced anywhere",
       "location": Location {
         "range": Range {
-          "end": 2824,
-          "start": 2809,
+          "end": 2860,
+          "start": 2845,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -1928,14 +1949,14 @@ PhpDocument {
       },
       "name": "$unusedProperty",
       "scope": TypeName {
-        "name": "\\\\UnusedClass",
+        "name": "\\\\\\\\UnusedClass",
       },
     },
   ],
   "references": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST",
+        "name": "\\\\\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1944,7 +1965,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST1",
+        "name": "\\\\\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1953,7 +1974,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST2",
+        "name": "\\\\\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1962,7 +1983,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING",
+        "name": "\\\\\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1971,7 +1992,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING2",
+        "name": "\\\\\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -1980,7 +2001,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\TEST_CONST_STRING3",
+        "name": "\\\\\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -2002,11 +2023,58 @@ PhpDocument {
       },
       "value": "TEST_CONST_STRING",
     },
+    FunctionCall {
+      "location": Location {
+        "range": Range {
+          "end": 376,
+          "start": 343,
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
+      "realSymbol": DefineConstant {
+        "name": TypeName {
+          "name": "\\\\\\\\CONSTANT_SAMPLE1",
+        },
+        "type": TypeName {
+          "name": "boolean",
+        },
+        "value": "false",
+      },
+      "refKind": 1,
+      "scope": null,
+      "type": TypeName {
+        "name": "",
+      },
+    },
+    ConstantAccess {
+      "location": Location {
+        "range": Range {
+          "end": 375,
+          "start": 370,
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
+      "refKind": 6,
+      "scope": null,
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "false",
+    },
+    DefineConstant {
+      "name": TypeName {
+        "name": "\\\\\\\\CONSTANT_SAMPLE1",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "false",
+    },
     ClassRef {
       "location": Location {
         "range": Range {
-          "end": 1522,
-          "start": 1518,
+          "end": 1558,
+          "start": 1554,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2018,8 +2086,8 @@ PhpDocument {
     ClassConstRef {
       "location": Location {
         "range": Range {
-          "end": 1540,
-          "start": 1524,
+          "end": 1576,
+          "start": 1560,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2034,8 +2102,8 @@ PhpDocument {
     Parameter {
       "location": Location {
         "range": Range {
-          "end": 1799,
-          "start": 1785,
+          "end": 1835,
+          "start": 1821,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2066,8 +2134,8 @@ PhpDocument {
     Parameter {
       "location": Location {
         "range": Range {
-          "end": 2301,
-          "start": 2287,
+          "end": 2337,
+          "start": 2323,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2092,14 +2160,14 @@ PhpDocument {
     FunctionCall {
       "location": Location {
         "range": Range {
-          "end": 2476,
-          "start": 2439,
+          "end": 2512,
+          "start": 2475,
         },
         "relativeUri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\TEST_DEFINE_CONSTANT",
+          "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
         },
         "type": TypeName {
           "name": "boolean",
@@ -2115,8 +2183,8 @@ PhpDocument {
     ConstantAccess {
       "location": Location {
         "range": Range {
-          "end": 2475,
-          "start": 2470,
+          "end": 2511,
+          "start": 2506,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2129,7 +2197,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
       },
       "type": TypeName {
         "name": "boolean",
@@ -2139,14 +2207,14 @@ PhpDocument {
     FunctionCall {
       "location": Location {
         "range": Range {
-          "end": 2526,
-          "start": 2478,
+          "end": 2562,
+          "start": 2514,
         },
         "relativeUri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\TEST_STRING_CONSTANT1",
+          "name": "\\\\\\\\TEST_STRING_CONSTANT1",
         },
         "type": TypeName {
           "name": "string",
@@ -2161,7 +2229,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -2171,14 +2239,14 @@ PhpDocument {
     FunctionCall {
       "location": Location {
         "range": Range {
-          "end": 2588,
-          "start": 2528,
+          "end": 2624,
+          "start": 2564,
         },
         "relativeUri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\TEST_STRING_CONSTANT2",
+          "name": "\\\\\\\\TEST_STRING_CONSTANT2",
         },
         "type": TypeName {
           "name": "string",
@@ -2193,7 +2261,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -2203,14 +2271,14 @@ PhpDocument {
     FunctionCall {
       "location": Location {
         "range": Range {
-          "end": 2657,
-          "start": 2590,
+          "end": 2693,
+          "start": 2626,
         },
         "relativeUri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\TEST_STRING_CONSTANT3",
+          "name": "\\\\\\\\TEST_STRING_CONSTANT3",
         },
         "type": TypeName {
           "name": "string",
@@ -2226,8 +2294,8 @@ PhpDocument {
     ConstantAccess {
       "location": Location {
         "range": Range {
-          "end": 2656,
-          "start": 2635,
+          "end": 2692,
+          "start": 2671,
         },
         "relativeUri": "case/global_symbols.php",
       },
@@ -2240,7 +2308,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
@@ -2250,8 +2318,8 @@ PhpDocument {
     ConstantAccess {
       "location": Location {
         "range": Range {
-          "end": 2686,
-          "start": 2666,
+          "end": 2722,
+          "start": 2702,
         },
         "relativeUri": "case/global_symbols.php",
       },

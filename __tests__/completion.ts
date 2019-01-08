@@ -6,40 +6,57 @@ import { Indexer } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
 import { ReferenceTable } from "../src/storage/table/referenceTable";
+import { RefResolver } from "../src/handler/refResolver";
 
-beforeEach(() => {
+interface CompletionTestCase {
+    path: string;
+    offset: number;
+}
+
+beforeAll(() => {
     App.init(path.join(getDebugDir(), 'storage'));
 });
 
-afterEach(async () => {
+beforeEach(async () => {
     await App.clearCache();
 });
 
+afterAll(async() => {
+    await App.shutdown();
+});
+
 describe('completion', () => {
-    it('directly query function table', async () => {
+    it('query from RefResolver', async () => {
         const indexer = App.get<Indexer>(Indexer);
-        const funcTable = App.get<FunctionTable>(FunctionTable);
         const refTable = App.get<ReferenceTable>(ReferenceTable);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
-        const testFilePath = path.join(getCaseDir(), 'completion', 'function.php');
-        const testFileUri = pathToUri(testFilePath);
+        const testCases: CompletionTestCase[] = [
+            { path: path.join(getCaseDir(), 'completion', 'function.php'), offset: 18 },
+            { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 14 },
+            { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 29 },
+            { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 37 },
+        ];
 
         await indexer.syncFileSystem(path.join(getCaseDir(), 'global_symbols.php'));
         await indexer.syncFileSystem(path.join(getCaseDir(), 'function_declare.php'));
-        await indexer.syncFileSystem(testFilePath);
+        for (let testCase of testCases) {
+            await indexer.syncFileSystem(testCase.path);
 
-        let ref = await refTable.findAt(testFileUri, 18);
-        let phpDoc = await phpDocTable.get(testFileUri);
+            let uri = pathToUri(testCase.path);
+            let phpDoc = await phpDocTable.get(uri);
+            let ref = await refTable.findAt(uri, testCase.offset);
 
-        if (phpDoc === null || ref === null) {
-            return;
+            if (phpDoc === null || ref === null) {
+                continue;
+            }
+
+            let symbols = await RefResolver.searchSymbolsForReference(phpDoc, ref);
+            for (let i = 0; i < symbols.length; i++) {
+                symbols[i] = symbols[i].toObject();
+            }
+
+            expect(symbols).toMatchSnapshot();
         }
-
-        // console.log({
-        //     ref,
-        //     keyword: ref.type.toString()
-        // });
-        // console.log(await funcTable.search(phpDoc, ref.type.toString()));
     });
 });

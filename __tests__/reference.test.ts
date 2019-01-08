@@ -9,12 +9,15 @@ import { PhpDocumentTable } from '../src/storage/table/phpDoc';
 import { RefKind } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
 
-beforeEach(() => {
+beforeAll(() => {
     App.init(path.join(getDebugDir(), 'storage'));
 });
 
-afterEach(async () => {
+beforeEach(async () => {
     await App.clearCache();
+});
+
+afterAll(async() => {
     await App.shutdown();
 });
 

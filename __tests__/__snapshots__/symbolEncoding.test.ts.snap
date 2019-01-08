@@ -12,7 +12,7 @@ ClassConstant {
     "name": "CONST1",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithConst",
+    "name": "\\\\\\\\ClassWithConst",
   },
 }
 `;
@@ -29,7 +29,7 @@ ClassConstant {
     "name": "PI",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithConst",
+    "name": "\\\\\\\\ClassWithConst",
   },
 }
 `;
@@ -46,7 +46,7 @@ ClassConstant {
     "name": "STATUS_ACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithConst",
+    "name": "\\\\\\\\ClassWithConst",
   },
 }
 `;
@@ -63,7 +63,7 @@ ClassConstant {
     "name": "STATUS_INACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithConst",
+    "name": "\\\\\\\\ClassWithConst",
   },
 }
 `;
@@ -80,7 +80,7 @@ ClassConstant {
     "name": "IS_ACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithConst",
+    "name": "\\\\\\\\ClassWithConst",
   },
 }
 `;
@@ -96,7 +96,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST",
+    "name": "\\\\\\\\TEST_CONST",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -118,7 +118,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST1",
+    "name": "\\\\\\\\TEST_CONST1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -140,7 +140,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST2",
+    "name": "\\\\\\\\TEST_CONST2",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -162,7 +162,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST_STRING",
+    "name": "\\\\\\\\TEST_CONST_STRING",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -184,7 +184,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST_STRING2",
+    "name": "\\\\\\\\TEST_CONST_STRING2",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -206,7 +206,7 @@ Constant {
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_CONST_STRING3",
+    "name": "\\\\\\\\TEST_CONST_STRING3",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -223,12 +223,12 @@ DefineConstant {
   "hasEqual": false,
   "location": Location {
     "range": Range {
-      "end": 2476,
-      "start": 2439,
+      "end": 376,
+      "start": 343,
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_DEFINE_CONSTANT",
+    "name": "\\\\\\\\CONSTANT_SAMPLE1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -245,18 +245,18 @@ DefineConstant {
   "hasEqual": false,
   "location": Location {
     "range": Range {
-      "end": 2526,
-      "start": 2478,
+      "end": 2512,
+      "start": 2475,
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_STRING_CONSTANT1",
+    "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
   },
   "refKind": 5,
   "resolvedType": TypeName {
-    "name": "string",
+    "name": "boolean",
   },
-  "resolvedValue": "'simple string'",
+  "resolvedValue": "false",
   "scope": null,
 }
 `;
@@ -267,18 +267,18 @@ DefineConstant {
   "hasEqual": false,
   "location": Location {
     "range": Range {
-      "end": 2588,
-      "start": 2528,
+      "end": 2562,
+      "start": 2514,
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_STRING_CONSTANT2",
+    "name": "\\\\\\\\TEST_STRING_CONSTANT1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
     "name": "string",
   },
-  "resolvedValue": "'not so simple string'",
+  "resolvedValue": "'simple string'",
   "scope": null,
 }
 `;
@@ -289,12 +289,34 @@ DefineConstant {
   "hasEqual": false,
   "location": Location {
     "range": Range {
-      "end": 2657,
-      "start": 2590,
+      "end": 2624,
+      "start": 2564,
     },
   },
   "name": TypeName {
-    "name": "\\\\TEST_STRING_CONSTANT3",
+    "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+  },
+  "refKind": 5,
+  "resolvedType": TypeName {
+    "name": "string",
+  },
+  "resolvedValue": "'not so simple string'",
+  "scope": null,
+}
+`;
+
+exports[`symbolEncoding snapshot of constant symbols after encode and decode 11`] = `
+DefineConstant {
+  "acceptWhitespace": true,
+  "hasEqual": false,
+  "location": Location {
+    "range": Range {
+      "end": 2693,
+      "start": 2626,
+    },
+  },
+  "name": TypeName {
+    "name": "\\\\\\\\TEST_STRING_CONSTANT3",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -316,7 +338,7 @@ Function {
     },
   },
   "name": TypeName {
-    "name": "\\\\test_function1",
+    "name": "\\\\\\\\test_function1",
   },
   "parameters": Array [
     Parameter {
@@ -430,7 +452,7 @@ Function {
         "name": "float",
       },
       TypeName {
-        "name": "\\\\TestClass",
+        "name": "\\\\\\\\TestClass",
       },
     ],
   },
@@ -448,7 +470,7 @@ Function {
     },
   },
   "name": TypeName {
-    "name": "\\\\test_function2",
+    "name": "\\\\\\\\test_function2",
   },
   "parameters": Array [
     Parameter {
@@ -459,7 +481,7 @@ Function {
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\array|int",
+            "name": "\\\\\\\\array|int",
           },
         ],
       },
@@ -485,7 +507,7 @@ Function {
       "$param1": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\array|int",
+            "name": "\\\\\\\\array|int",
           },
         ],
       },
@@ -521,7 +543,7 @@ Method {
     "name": "__construct",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -543,7 +565,7 @@ Method {
     "name": "method1",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -565,7 +587,7 @@ Method {
     "name": "method2",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -587,7 +609,7 @@ Method {
     "name": "method3",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -609,7 +631,7 @@ Method {
     "name": "method4",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -631,7 +653,7 @@ Method {
     "name": "protectedMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -653,7 +675,7 @@ Method {
     "name": "privateMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -675,7 +697,7 @@ Method {
     "name": "staticMethod",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -697,7 +719,7 @@ Method {
     "name": "publicMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -710,6 +732,11 @@ PhpDocument {
   "functions": Array [],
   "importTable": ImportTable {
     "imports": Object {},
+    "namespace": NamespaceName {
+      "parts": Array [
+        "",
+      ],
+    },
   },
   "methods": Array [],
   "modifiedTime": -1,
@@ -734,7 +761,7 @@ Property {
   },
   "name": "$staticVariable",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -755,7 +782,7 @@ Property {
   },
   "name": "$property1",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -776,7 +803,7 @@ Property {
   },
   "name": "$property2",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -798,7 +825,7 @@ Property {
   },
   "name": "$protected1",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -820,7 +847,7 @@ Property {
   },
   "name": "$protected2",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -842,7 +869,7 @@ Property {
   },
   "name": "$protected3",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -863,7 +890,7 @@ Property {
   },
   "name": "$protectedProperty1",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;
@@ -885,7 +912,7 @@ Property {
   },
   "name": "$privateProperty1",
   "scope": TypeName {
-    "name": "\\\\ClassWithMethod",
+    "name": "\\\\\\\\ClassWithMethod",
   },
 }
 `;

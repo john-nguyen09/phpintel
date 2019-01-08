@@ -1,16 +1,16 @@
 export namespace WordSeparator {
     export function getTokens(name: string): string[] {
-        let tokens = underscore(name);
+        let lastSlash = name.lastIndexOf('\\');
 
-        for (let i = tokens.length - 1; i >= 0; i--) {
-            let casingTokens = casing(tokens[i]);
-
-            if (casingTokens.length > 1) {
-                tokens.splice(i, 1, ...casingTokens);
-            }
+        if (lastSlash >= 0) {
+            name = name.substr(lastSlash + 1);
         }
-
-        return tokens;
+        
+        if (name.indexOf('_') >= 0) {
+            return underscore(name);
+        } else {
+            return casing(name);
+        }
     }
 
     function underscore(name: string): string[] {

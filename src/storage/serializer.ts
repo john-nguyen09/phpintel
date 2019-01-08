@@ -3,6 +3,7 @@ import { Location } from "../symbol/meta/location";
 import { Range } from "../symbol/meta/range";
 import { SymbolModifier } from "../symbol/meta/modifier";
 import { TypeComposite } from "../type/composite";
+import { NamespaceName } from "../symbol/name/namespaceName";
 
 export class Serializer {
     public static readonly DEFAULT_SIZE = 1024;
@@ -161,6 +162,18 @@ export class Serializer {
 
     public readSymbolModifier(): SymbolModifier {
         return new SymbolModifier(this.readInt32(), this.readInt32());
+    }
+
+    public writeNamespaceName(namespace: NamespaceName) {
+        this.writeString(namespace.parts.join('\\'));
+    }
+
+    public readNamespaceName(): NamespaceName {
+        let namespace = new NamespaceName();
+
+        namespace.parts = this.readString().split('\\');
+
+        return namespace;
     }
 
     public getBuffer(): Buffer {

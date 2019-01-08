@@ -49,11 +49,8 @@ export class FunctionTable {
         return funcs;
     }
 
-    async search(phpDoc: PhpDocument, keyword: string): Promise<CompletionValue[]> {
-        let typeName = new TypeName(keyword);
-        typeName.resolveToFullyQualified(phpDoc.importTable);
-
-        return await this.completionIndex.search(typeName.name);
+    async search(keyword: string): Promise<CompletionValue[]> {
+        return await this.completionIndex.search(keyword);
     }
 
     async removeByDoc(uri: string) {
