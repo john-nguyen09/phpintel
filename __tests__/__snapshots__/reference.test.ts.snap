@@ -78,7 +78,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
@@ -92,7 +92,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
@@ -106,7 +106,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
@@ -120,7 +120,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -134,7 +134,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -148,7 +148,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
@@ -162,7 +162,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
@@ -176,7 +176,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
@@ -189,7 +189,7 @@ Array [
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "staticMethod",
@@ -205,7 +205,7 @@ Array [
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "staticMethod",
@@ -221,7 +221,7 @@ Array [
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "$staticVariable",
@@ -237,7 +237,7 @@ Array [
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "type": TypeName {
       "name": "$staticVariable",
@@ -253,7 +253,7 @@ Array [
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
     "type": TypeName {
       "name": "IS_ACTIVE",
@@ -269,7 +269,7 @@ Array [
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
     "type": TypeName {
       "name": "IS_ACTIVE",
@@ -286,7 +286,7 @@ Array [
     "refName": undefined,
     "scope": null,
     "type": TypeName {
-      "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+      "name": "\\\\TEST_DEFINE_CONSTANT",
     },
   },
 ]
@@ -312,7 +312,7 @@ Array [
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
@@ -334,7 +334,7 @@ Array [
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
@@ -356,7 +356,7 @@ Array [
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
@@ -370,7 +370,7 @@ Array [
       },
     },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
@@ -484,7 +484,7 @@ Array [
           "name": "float",
         },
         TypeName {
-          "name": "\\\\\\\\TestClass",
+          "name": "\\\\TestClass",
         },
       ],
     },
@@ -499,7 +499,7 @@ Array [
       },
     },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
@@ -613,7 +613,7 @@ Array [
           "name": "float",
         },
         TypeName {
-          "name": "\\\\\\\\TestClass",
+          "name": "\\\\TestClass",
         },
       ],
     },
@@ -628,7 +628,7 @@ Array [
       },
     },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
@@ -742,7 +742,7 @@ Array [
           "name": "float",
         },
         TypeName {
-          "name": "\\\\\\\\TestClass",
+          "name": "\\\\TestClass",
         },
       ],
     },
@@ -761,7 +761,7 @@ Array [
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "traits": Array [],
   },
@@ -779,7 +779,7 @@ Array [
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "traits": Array [],
   },
@@ -799,7 +799,7 @@ Array [
       "name": "staticMethod",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Method {
@@ -818,7 +818,7 @@ Array [
       "name": "staticMethod",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Property {
@@ -835,7 +835,7 @@ Array [
     },
     "name": "$staticVariable",
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Property {
@@ -852,7 +852,7 @@ Array [
     },
     "name": "$staticVariable",
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   ClassConstant {
@@ -866,7 +866,7 @@ Array [
       "name": "IS_ACTIVE",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
   },
   ClassConstant {
@@ -880,7 +880,7 @@ Array [
       "name": "IS_ACTIVE",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
   },
   DefineConstant {
@@ -893,7 +893,7 @@ Array [
       },
     },
     "name": TypeName {
-      "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+      "name": "\\\\TEST_DEFINE_CONSTANT",
     },
     "refKind": 5,
     "resolvedType": TypeName {

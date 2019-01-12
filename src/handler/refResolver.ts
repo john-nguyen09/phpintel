@@ -88,7 +88,7 @@ export namespace RefResolver {
             return [];
         }
 
-        ref.type.resolveToFullyQualified(phpDoc.importTable);
+        ref.type.resolveReferenceToFqn(phpDoc.importTable);
 
         return await funcTable.get(ref.type.name);
     }
@@ -103,11 +103,11 @@ export namespace RefResolver {
         let methodName: string = '';
 
         if (ref.refKind === RefKind.ClassTypeDesignator) {
-            ref.type.resolveToFullyQualified(phpDoc.importTable);
+            ref.type.resolveReferenceToFqn(phpDoc.importTable);
             className = ref.type.name;
             methodName = '__construct';
         } else if (ref.refKind === RefKind.Method && ref.scope !== null) {
-            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            ref.scope.resolveReferenceToFqn(phpDoc.importTable);
             className = ref.scope.name;
             methodName = ref.type.name;
         }
@@ -124,7 +124,7 @@ export namespace RefResolver {
         let className = '';
 
         if (ref.scope !== null) {
-            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            ref.scope.resolveReferenceToFqn(phpDoc.importTable);
             className = ref.scope.name;
         }
 
@@ -138,7 +138,7 @@ export namespace RefResolver {
             return [];
         }
 
-        ref.type.resolveToFullyQualified(phpDoc.importTable);
+        ref.type.resolveReferenceToFqn(phpDoc.importTable);
 
         return await classTable.get(ref.type.name);
     }
@@ -152,7 +152,7 @@ export namespace RefResolver {
         let className = '';
 
         if (ref.scope !== null) {
-            ref.scope.resolveToFullyQualified(phpDoc.importTable);
+            ref.scope.resolveReferenceToFqn(phpDoc.importTable);
             className = ref.scope.name;
         }
 
@@ -167,7 +167,7 @@ export namespace RefResolver {
             return [];
         }
 
-        ref.type.resolveToFullyQualified(phpDoc.importTable);
+        ref.type.resolveReferenceToFqn(phpDoc.importTable);
 
         const constTable = App.get<ConstantTable>(ConstantTable);
 

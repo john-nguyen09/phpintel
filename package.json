@@ -37,6 +37,7 @@
     "@types/node": "^10.5.2",
     "chai": "^4.1.2",
     "jest": "^23.4.2",
+    "jest-expect-message": "^1.0.2",
     "mocha": "^5.2.0",
     "ts-jest": "^23.1.2",
     "ts-node": "^7.0.0",

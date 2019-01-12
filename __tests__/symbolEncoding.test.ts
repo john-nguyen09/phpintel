@@ -1,4 +1,4 @@
-const symbolEncoding =  require('../src/storage/symbolEncoding');
+const symbolEncoding = require('../src/storage/symbolEncoding');
 import { indexFiles, getCaseDir } from "../src/testHelper";
 import * as path from 'path';
 import { Class } from "../src/symbol/class/class";
@@ -58,7 +58,7 @@ describe('symbolEncoding', () => {
         for (let phpDoc of phpDocs) {
             for (let func of phpDoc.functions) {
                 func.location.uri = toRelative(func.location.uri);
-                
+
                 let buffer = symbolEncoding.encode(func);
                 let decoded = symbolEncoding.decode(buffer) as Function;
 
@@ -75,7 +75,7 @@ describe('symbolEncoding', () => {
         for (let phpDoc of phpDocs) {
             for (let constant of phpDoc.constants) {
                 constant.location.uri = toRelative(constant.location.uri);
-                
+
                 let buffer = symbolEncoding.encode(constant);
                 let decoded = symbolEncoding.decode(buffer) as Constant;
 
@@ -92,7 +92,7 @@ describe('symbolEncoding', () => {
         for (let phpDoc of phpDocs) {
             for (let classConstant of phpDoc.classConstants) {
                 classConstant.location.uri = toRelative(classConstant.location.uri);
-                
+
                 let buffer = symbolEncoding.encode(classConstant);
                 let decoded = symbolEncoding.decode(buffer) as ClassConstant;
 
@@ -109,7 +109,7 @@ describe('symbolEncoding', () => {
         for (let phpDoc of phpDocs) {
             for (let method of phpDoc.methods) {
                 method.location.uri = toRelative(method.location.uri);
-                
+
                 let buffer = symbolEncoding.encode(method);
                 let decoded = symbolEncoding.decode(buffer) as Method;
 
@@ -126,7 +126,7 @@ describe('symbolEncoding', () => {
         for (let phpDoc of phpDocs) {
             for (let property of phpDoc.properties) {
                 property.location.uri = toRelative(property.location.uri);
-                
+
                 let buffer = symbolEncoding.encode(property);
                 let decoded = symbolEncoding.decode(buffer) as Property;
 

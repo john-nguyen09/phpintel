@@ -9,6 +9,7 @@ import { elapsed } from "./util/hrtime";
 import { HoverProvider } from "./handler/hover";
 import { DefinitionProvider } from "./handler/definition";
 import { ChangeNotification } from "./handler/changeNotification";
+import { CompletionProvider } from "./handler/completion";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -17,6 +18,7 @@ const hasher = new Hasher();
 
 connection.onHover(HoverProvider.provide);
 connection.onDefinition(DefinitionProvider.provide);
+connection.onCompletion(CompletionProvider.provide);
 connection.onDidChangeTextDocument(ChangeNotification.provide);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
@@ -52,6 +54,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
             textDocumentSync: TextDocumentSyncKind.Full,
             hoverProvider: true,
             definitionProvider: true,
+            completionProvider: true,
         }
     };
 });

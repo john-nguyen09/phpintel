@@ -14,8 +14,6 @@ import { Traverser } from "./traverser";
 import { ReferenceTable } from "./storage/table/referenceTable";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
-import * as fs from "fs";
-import { promisify } from "util";
 
 export interface AppOptions {
     storage: string;

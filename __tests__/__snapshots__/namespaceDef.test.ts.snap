@@ -32,7 +32,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+        "name": "\\\\NamespaceDefTestClassNamespace1",
       },
       "traits": Array [],
     },
@@ -61,7 +61,7 @@ PhpDocument {
   "constants": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\PI",
+        "name": "\\\\NamespaceDefPI",
       },
       "type": TypeName {
         "name": "float",
@@ -84,7 +84,7 @@ PhpDocument {
   "references": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\PI",
+        "name": "\\\\NamespaceDefPI",
       },
       "type": TypeName {
         "name": "float",
@@ -102,7 +102,7 @@ PhpDocument {
   "constants": Array [
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+        "name": "\\\\NamespaceDefDEFINE_CONST",
       },
       "type": TypeName {
         "name": "string",
@@ -133,7 +133,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+          "name": "\\\\NamespaceDefDEFINE_CONST",
         },
         "type": TypeName {
           "name": "string",
@@ -148,7 +148,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+        "name": "\\\\NamespaceDefDEFINE_CONST",
       },
       "type": TypeName {
         "name": "string",
@@ -168,7 +168,7 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\function_with_namespace",
+        "name": "\\\\NamespaceDeffunction_with_namespace",
       },
       "parameters": Array [
         Parameter {

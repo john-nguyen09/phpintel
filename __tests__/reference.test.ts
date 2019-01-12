@@ -1,5 +1,5 @@
 import { App } from '../src/app';
-import { Indexer } from '../src/index/indexer';
+import { Indexer, PhpFileInfo } from '../src/index/indexer';
 import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/referenceTable';
@@ -17,7 +17,7 @@ beforeEach(async () => {
     await App.clearCache();
 });
 
-afterAll(async() => {
+afterAll(async () => {
     await App.shutdown();
 });
 
@@ -30,11 +30,11 @@ describe('Testing functions around references', () => {
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
         const testFile2 = path.join(caseDir, 'class_methods.php');
 
-        await indexer.syncFileSystem(testFile2);
-        await indexer.syncFileSystem(path.join(caseDir, 'class_constants.php'));
-        await indexer.syncFileSystem(path.join(caseDir, 'global_symbols.php'));
-        await indexer.syncFileSystem(path.join(caseDir, 'function_declare.php'));
-        await indexer.syncFileSystem(refTestFile);
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testFile2));
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(path.join(caseDir, 'class_constants.php')));
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(path.join(caseDir, 'global_symbols.php')));
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(path.join(caseDir, 'function_declare.php')));
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(refTestFile));
 
         let refTestUri = pathToUri(refTestFile);
         let refs = [
@@ -114,8 +114,8 @@ describe('Testing functions around references', () => {
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
         let refTestUri = pathToUri(refTestFile);
 
-        await indexer.syncFileSystem(refTestFile);
-        
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(refTestFile));
+
         let variables = [
             await refTable.findAt(refTestUri, 376),
             await refTable.findAt(refTestUri, 418),

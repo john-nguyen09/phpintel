@@ -3,9 +3,12 @@ import { Serializer } from "../serializer";
 import { injectable } from "inversify";
 import { PhpDocument } from "../../symbol/phpDocument";
 import { ImportTable } from "../../type/importTable";
+import { Lock } from "../lock";
 
 @injectable()
 export class PhpDocumentTable {
+    public static lockPool: { [uri: string]: Lock } = {};
+
     private db: DbStore;
 
     constructor(level: LevelDatasource) {
@@ -50,6 +53,23 @@ export class PhpDocumentTable {
                 });
         });
     }
+
+    static async acquireLock(uri: string) {
+        if (!(uri in PhpDocumentTable.lockPool)) {
+            PhpDocumentTable.lockPool[uri] = new Lock();
+        }
+
+        return PhpDocumentTable.lockPool[uri].acquire();
+    }
+
+    static release(uri: string) {
+        if (!(uri in PhpDocumentTable.lockPool)) {
+            return;
+        }
+
+        PhpDocumentTable.lockPool[uri].release();
+        delete PhpDocumentTable.lockPool[uri];
+    }
 }
 
 export const PhpDocEncoding = {
@@ -60,7 +80,7 @@ export const PhpDocEncoding = {
         serializer.writeString(phpDoc.uri);
         serializer.writeString(phpDoc.text);
         serializer.writeInt32(phpDoc.modifiedTime);
-        
+
         serializer.writeNamespaceName(phpDoc.importTable.namespace);
 
         let keys = Object.keys(phpDoc.importTable.imports);

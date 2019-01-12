@@ -25,15 +25,23 @@ export class TypeName {
         }
     }
 
-    public resolveToFullyQualified(importTable: ImportTable) {
+    public resolveReferenceToFqn(importTable: ImportTable) {
         this.name = importTable.getFqn(this.name);
+    }
+
+    public resolveDefinitionToFqn(importTable: ImportTable) {
+        if (TypeName.isBuiltin(this.name) || TypeName.isFqn(this.name)) {
+            return;
+        }
+
+        this.name = importTable.namespace.fqn + this.name;
     }
 
     public static isBuiltin(typeName: string) {
         return TypeName.BUILT_INS.indexOf(typeName) >= 0;
     }
 
-    public static isFullyQualifiedName(typeName: string): boolean {
+    public static isFqn(typeName: string): boolean {
         if (typeName == '') {
             return true;
         }

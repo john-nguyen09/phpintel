@@ -10,6 +10,7 @@ export interface CompletionValue {
 
 export class CompletionIndex {
     public static readonly INFO_SEP = '#';
+    public static LIMIT = 100;
 
     private db: DbStore;
 
@@ -38,7 +39,7 @@ export class CompletionIndex {
         let completions: CompletionValue[] = [];
 
         return new Promise<CompletionValue[]>((resolve, reject) => {
-            db.prefixSearch(keyword)
+            db.prefixSearch(keyword, CompletionIndex.LIMIT)
                 .on('data', (data) => {
                     completions.push(data.value);
                 })

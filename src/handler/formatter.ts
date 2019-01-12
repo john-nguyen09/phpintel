@@ -1,4 +1,4 @@
-import { MarkedString } from "vscode-languageserver";
+import { MarkedString, CompletionItem, CompletionItemKind } from "vscode-languageserver";
 import { Function } from "../symbol/function/function";
 import { TypeName } from "../type/name";
 import { PhpDocument } from "../symbol/phpDocument";
@@ -153,6 +153,33 @@ export namespace Formatter {
         return {
             start: phpDoc.getPosition(range.start),
             end: phpDoc.getPosition(range.end)
+        };
+    }
+
+    export function getFunctionCompletion(phpDoc: PhpDocument, func: Function): CompletionItem {
+        return {
+            label: func.getName(),
+            kind: CompletionItemKind.Function,
+            documentation: func.description,
+            insertText: func.name.getQualified(phpDoc.importTable)
+        };
+    }
+
+    export function getClassCompletion(phpDoc: PhpDocument, theClass: Class): CompletionItem {
+        return {
+            label: theClass.getName(),
+            kind: CompletionItemKind.Class,
+            documentation: theClass.description,
+            insertText: theClass.name.getQualified(phpDoc.importTable)
+        };
+    }
+
+    export function getConstantCompletion(phpDoc: PhpDocument, constant: Constant): CompletionItem {
+        return {
+            label: constant.getName(),
+            kind: CompletionItemKind.Constant,
+            documentation: constant.description,
+            insertText: constant.name.getQualified(phpDoc.importTable)
         };
     }
 }

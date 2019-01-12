@@ -8,7 +8,7 @@ import { Parser } from "php7parser";
 import { Traverser } from "../src/traverser";
 import { App } from "../src/app";
 import { getDebugDir, getCaseDir } from "../src/testHelper";
-import { Indexer } from "../src/index/indexer";
+import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 
 beforeAll(() => {
@@ -19,7 +19,7 @@ beforeEach(async () => {
     await App.clearCache();
 });
 
-afterAll(async() => {
+afterAll(async () => {
     await App.shutdown();
 });
 
@@ -50,14 +50,14 @@ describe('namespaceDef', () => {
         }
     });
 
-    it('returns import table', async() => {
+    it('returns import table', async () => {
         const indexer = App.get<Indexer>(Indexer);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
         const filePath = path.join(getCaseDir(), 'namespaceDef', 'import_table.php');
         const fileUri = pathToUri(filePath);
 
-        await indexer.syncFileSystem(filePath);
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(filePath));
 
         let phpDoc = await phpDocTable.get(fileUri);
 

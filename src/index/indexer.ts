@@ -24,6 +24,15 @@ export interface PhpFileInfo {
     fstats: fs.Stats;
 }
 
+export namespace PhpFileInfo {
+    export async function createFileInfo(filePath: string): Promise<PhpFileInfo> {
+        return {
+            filePath: filePath,
+            fstats: await statAsync(filePath)
+        };
+    }
+}
+
 @injectable()
 export class Indexer {
     constructor(
@@ -73,7 +82,7 @@ export class Indexer {
             directory
         ];
         const promises: Promise<void>[] = [];
-        
+
         while (directories.length > 0) {
             let dir = directories.shift();
             if (dir === undefined) {
@@ -82,16 +91,12 @@ export class Indexer {
             let files = await readdirAsync(dir);
 
             for (let file of files) {
-                const filePath = path.join(dir, file);
-                const fstats = await statAsync(filePath);
+                const fileInfo = await PhpFileInfo.createFileInfo(path.join(dir, file));
 
                 if (file.endsWith('.php')) {
-                    const fileInfo: PhpFileInfo = {
-                        filePath, fstats
-                    }
                     promises.push(this.syncFileSystem(fileInfo));
-                } else if (fstats.isDirectory()) {
-                    directories.push(filePath);
+                } else if (fileInfo.fstats.isDirectory()) {
+                    directories.push(fileInfo.filePath);
                 }
             }
         }
@@ -101,21 +106,24 @@ export class Indexer {
 
     private async removeSymbolsByDoc(uri: string) {
         return Promise.all([
+            this.referenceTable.removeByDoc(uri),
             this.classTable.removeByDoc(uri),
             this.classConstantTable.removeByDoc(uri),
             this.constantTable.removeByDoc(uri),
             this.functionTable.removeByDoc(uri),
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
-            this.referenceTable.removeByDoc(uri),
-            this.phpDocTable.remove(uri)
         ]);
     }
 
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
-        
+
         const promises: Promise<void | void[]>[] = [];
+
+        for (let reference of doc.references) {
+            promises.push(this.referenceTable.put(reference));
+        }
 
         for (let theClass of doc.classes) {
             promises.push(this.classTable.put(doc, theClass));
@@ -141,10 +149,6 @@ export class Indexer {
             promises.push(this.propertyTable.put(doc, property));
         }
 
-        for (let reference of doc.references) {
-            promises.push(this.referenceTable.put(reference));
-        }
-        
         await Promise.all(promises);
         await this.phpDocTable.put(doc);
     }

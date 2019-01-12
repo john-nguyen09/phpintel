@@ -46,10 +46,15 @@ export class DbStore {
         return this.db.iterator<T>(options);
     }
 
-    prefixSearch(prefix: string): NodeJS.ReadableStream {
+    prefixSearch(prefix: string, limit?: number): NodeJS.ReadableStream {
+        if (typeof limit === 'undefined') {
+            limit = -1;
+        }
+
         return this.createReadStream({
             gte: prefix,
-            lte: prefix + '\xFF'
+            lte: prefix + '\xFF',
+            limit: limit
         });
     }
 }

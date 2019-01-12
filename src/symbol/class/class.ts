@@ -9,10 +9,10 @@ import { Property } from "../variable/property";
 import { ClassConstRef } from "../constant/classConstRef";
 import { PropertyRef } from "../variable/propertyRef";
 import { MethodCall } from "../function/methodCall";
-import { ClassRef } from "./classRef";
 
 export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
+    public description: string;
     public extend: TypeName | null;
     public location: Location = new Location();
     public implements: TypeName[] = [];
@@ -52,6 +52,6 @@ export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     }
 
     public resolveName(importTable: ImportTable): void {
-        this.name.resolveToFullyQualified(importTable);
+        this.name.resolveDefinitionToFqn(importTable);
     }
 }

@@ -108,14 +108,14 @@ export class Function extends Symbol implements
     public resolveName(importTable: ImportTable): void {
         for (let param of this.parameters) {
             for (let type of param.type.types) {
-                type.resolveToFullyQualified(importTable);
+                type.resolveReferenceToFqn(importTable);
             }
         }
 
-        this.name.resolveToFullyQualified(importTable);
+        this.name.resolveDefinitionToFqn(importTable);
 
         for (let type of this.typeAggregate.types) {
-            type.resolveToFullyQualified(importTable);
+            type.resolveReferenceToFqn(importTable);
         }
     }
 }

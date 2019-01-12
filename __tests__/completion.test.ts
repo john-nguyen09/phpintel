@@ -2,7 +2,7 @@ import { App } from "../src/app";
 import * as path from "path";
 import { getDebugDir, getCaseDir } from "../src/testHelper";
 import { FunctionTable } from "../src/storage/table/function";
-import { Indexer } from "../src/index/indexer";
+import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
 import { ReferenceTable } from "../src/storage/table/referenceTable";
@@ -38,10 +38,14 @@ describe('completion', () => {
             { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 37 },
         ];
 
-        await indexer.syncFileSystem(path.join(getCaseDir(), 'global_symbols.php'));
-        await indexer.syncFileSystem(path.join(getCaseDir(), 'function_declare.php'));
+        await indexer.syncFileSystem(
+            await PhpFileInfo.createFileInfo(path.join(getCaseDir(), 'global_symbols.php'))
+        );
+        await indexer.syncFileSystem(
+            await PhpFileInfo.createFileInfo(path.join(getCaseDir(), 'function_declare.php'))
+        );
         for (let testCase of testCases) {
-            await indexer.syncFileSystem(testCase.path);
+            await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testCase.path));
 
             let uri = pathToUri(testCase.path);
             let phpDoc = await phpDocTable.get(uri);

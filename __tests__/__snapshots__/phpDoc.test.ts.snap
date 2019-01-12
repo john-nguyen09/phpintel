@@ -15,7 +15,7 @@ PhpDocument {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -30,7 +30,7 @@ PhpDocument {
         "name": "PI",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -45,7 +45,7 @@ PhpDocument {
         "name": "STATUS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -60,7 +60,7 @@ PhpDocument {
         "name": "STATUS_INACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
@@ -75,7 +75,7 @@ PhpDocument {
         "name": "IS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
   ],
@@ -95,7 +95,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
       "traits": Array [],
     },
@@ -122,7 +122,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
       "type": TypeName {
         "name": "boolean",
@@ -148,7 +148,7 @@ PhpDocument {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
@@ -168,7 +168,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "traits": Array [],
     },
@@ -199,7 +199,7 @@ PhpDocument {
         "name": "__construct",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -219,7 +219,7 @@ PhpDocument {
         "name": "method1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -239,7 +239,7 @@ PhpDocument {
         "name": "method2",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -259,7 +259,7 @@ PhpDocument {
         "name": "method3",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -279,7 +279,7 @@ PhpDocument {
         "name": "method4",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -299,7 +299,7 @@ PhpDocument {
         "name": "protectedMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -319,7 +319,7 @@ PhpDocument {
         "name": "privateMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -339,7 +339,7 @@ PhpDocument {
         "name": "staticMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
@@ -359,7 +359,7 @@ PhpDocument {
         "name": "publicMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
@@ -380,7 +380,7 @@ PhpDocument {
       },
       "name": "$staticVariable",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -398,7 +398,7 @@ PhpDocument {
       },
       "name": "$property1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -416,7 +416,7 @@ PhpDocument {
       },
       "name": "$property2",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -435,7 +435,7 @@ PhpDocument {
       },
       "name": "$protected1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -454,7 +454,7 @@ PhpDocument {
       },
       "name": "$protected2",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -473,7 +473,7 @@ PhpDocument {
       },
       "name": "$protected3",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -491,7 +491,7 @@ PhpDocument {
       },
       "name": "$protectedProperty1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
@@ -510,7 +510,7 @@ PhpDocument {
       },
       "name": "$privateProperty1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
@@ -607,7 +607,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -741,7 +741,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "null",
@@ -790,7 +790,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -938,7 +938,7 @@ PhpDocument {
       },
       "refKind": 6,
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "boolean",
@@ -958,7 +958,7 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "name": "\\\\\\\\test_function1",
+        "name": "\\\\test_function1",
       },
       "parameters": Array [
         Parameter {
@@ -1091,14 +1091,14 @@ PhpDocument {
           "name": "float",
         },
         TypeName {
-          "name": "\\\\\\\\TestClass",
+          "name": "\\\\TestClass",
         },
       ],
     },
     Function {
       "description": "Test function 2",
       "name": TypeName {
-        "name": "\\\\\\\\test_function2",
+        "name": "\\\\test_function2",
       },
       "parameters": Array [
         Parameter {
@@ -1114,7 +1114,7 @@ PhpDocument {
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\\\\\array|int",
+                "name": "\\\\array|int",
               },
             ],
           },
@@ -1145,7 +1145,7 @@ PhpDocument {
           "$param1": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\\\\\array|int",
+                "name": "\\\\array|int",
               },
             ],
           },
@@ -1428,7 +1428,7 @@ PhpDocument {
       "refKind": 8,
       "scope": null,
       "type": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     FunctionCall {
@@ -1483,7 +1483,7 @@ PhpDocument {
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\\\\\array|int",
+            "name": "\\\\array|int",
           },
         ],
       },
@@ -1534,7 +1534,7 @@ PhpDocument {
         "name": "TEST_CLASS_CONST",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     ClassConstant {
@@ -1574,7 +1574,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\TestClass2",
+        "name": "\\\\TestClass2",
       },
       "traits": Array [],
     },
@@ -1597,7 +1597,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
       "traits": Array [],
     },
@@ -1618,7 +1618,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ChildClass",
+        "name": "\\\\ChildClass",
       },
       "traits": Array [],
     },
@@ -1637,7 +1637,7 @@ PhpDocument {
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
       "traits": Array [],
     },
@@ -1645,7 +1645,7 @@ PhpDocument {
   "constants": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST",
+        "name": "\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1654,7 +1654,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST1",
+        "name": "\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1663,7 +1663,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST2",
+        "name": "\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1672,7 +1672,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING",
+        "name": "\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1681,7 +1681,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING2",
+        "name": "\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -1690,7 +1690,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING3",
+        "name": "\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -1699,7 +1699,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\CONSTANT_SAMPLE1",
+        "name": "\\\\CONSTANT_SAMPLE1",
       },
       "type": TypeName {
         "name": "boolean",
@@ -1708,7 +1708,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\TEST_DEFINE_CONSTANT",
       },
       "type": TypeName {
         "name": "boolean",
@@ -1717,7 +1717,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -1726,7 +1726,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -1735,7 +1735,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
@@ -1748,7 +1748,7 @@ PhpDocument {
       "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
 ",
       "name": TypeName {
-        "name": "\\\\\\\\test_function",
+        "name": "\\\\test_function",
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
@@ -1781,7 +1781,7 @@ PhpDocument {
         "name": "staticTestMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Method {
@@ -1802,7 +1802,7 @@ PhpDocument {
         "name": "testMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Method {
@@ -1858,7 +1858,7 @@ PhpDocument {
         "name": "unusedMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
     },
   ],
@@ -1880,7 +1880,7 @@ PhpDocument {
       },
       "name": "$staticTestProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Property {
@@ -1899,7 +1899,7 @@ PhpDocument {
       },
       "name": "$testProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Property {
@@ -1949,14 +1949,14 @@ PhpDocument {
       },
       "name": "$unusedProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
     },
   ],
   "references": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST",
+        "name": "\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1965,7 +1965,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST1",
+        "name": "\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1974,7 +1974,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST2",
+        "name": "\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1983,7 +1983,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING",
+        "name": "\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1992,7 +1992,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING2",
+        "name": "\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -2001,7 +2001,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING3",
+        "name": "\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -2033,7 +2033,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\CONSTANT_SAMPLE1",
+          "name": "\\\\CONSTANT_SAMPLE1",
         },
         "type": TypeName {
           "name": "boolean",
@@ -2063,7 +2063,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\CONSTANT_SAMPLE1",
+        "name": "\\\\CONSTANT_SAMPLE1",
       },
       "type": TypeName {
         "name": "boolean",
@@ -2167,7 +2167,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+          "name": "\\\\TEST_DEFINE_CONSTANT",
         },
         "type": TypeName {
           "name": "boolean",
@@ -2197,7 +2197,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\TEST_DEFINE_CONSTANT",
       },
       "type": TypeName {
         "name": "boolean",
@@ -2214,7 +2214,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+          "name": "\\\\TEST_STRING_CONSTANT1",
         },
         "type": TypeName {
           "name": "string",
@@ -2229,7 +2229,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -2246,7 +2246,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+          "name": "\\\\TEST_STRING_CONSTANT2",
         },
         "type": TypeName {
           "name": "string",
@@ -2261,7 +2261,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -2278,7 +2278,7 @@ PhpDocument {
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+          "name": "\\\\TEST_STRING_CONSTANT3",
         },
         "type": TypeName {
           "name": "string",
@@ -2308,7 +2308,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
