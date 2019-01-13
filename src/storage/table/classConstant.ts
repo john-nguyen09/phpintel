@@ -4,6 +4,7 @@ import { ClassConstant } from "../../symbol/constant/classConstant";
 import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
+import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 
 @injectable()
 export class ClassConstantTable {
@@ -11,17 +12,19 @@ export class ClassConstantTable {
 
     private db: DbStore;
     private classIndex: DbStore;
+    private completionIndex: CompletionIndex;
 
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
-            name: 'class_constant',
+            name: 'classConstant',
             version: 1,
             valueEncoding: require('../symbolEncoding')
         });
         this.classIndex = new SubStore(level, {
-            name: 'class_constant_class_index',
+            name: 'classConstantClassIndex',
             version: 1
         });
+        this.completionIndex = new CompletionIndex(level, 'classConstantCompletionIndex');
     }
 
     async put(phpDoc: PhpDocument, symbol: ClassConstant) {
@@ -34,11 +37,12 @@ export class ClassConstantTable {
 
         return Promise.all([
             BelongsToDoc.put(this.db, phpDoc, key, symbol),
-            NameIndex.put(this.classIndex, phpDoc, key)
+            NameIndex.put(this.classIndex, phpDoc, key),
+            this.completionIndex.put(phpDoc, symbol.getName(), className)
         ]);
     }
 
-    async searchByClass(className: string, constName: string): Promise<ClassConstant[]> {
+    async getByClass(className: string, constName: string): Promise<ClassConstant[]> {
         let classConsts: ClassConstant[] = [];
         let key = ClassConstantTable.getKey(className, constName);
         let uris = await NameIndex.get(this.classIndex, key);
@@ -48,6 +52,23 @@ export class ClassConstantTable {
         }
 
         return classConsts;
+    }
+
+    async searchAllInClass(className: string): Promise<ClassConstant[]> {
+        let classConsts: ClassConstant[] = [];
+        let prefix = ClassConstantTable.getKey(className, '');
+        let datas = await NameIndex.prefixSearch(this.classIndex, prefix);
+
+        for (let data of datas) {
+            const classConst = await this.db.get(BelongsToDoc.getKey(data.uri, data.name)) as ClassConstant;
+            classConsts.push(classConst);
+        }
+
+        return classConsts;
+    }
+
+    async search(className: string, keyword: string): Promise<CompletionValue[]> {
+        return await this.completionIndex.search(keyword, className);
     }
 
     async removeByDoc(uri: string) {
@@ -64,6 +85,8 @@ export class ClassConstantTable {
                 uri,
                 ClassConstantTable.getKey(className, classConst.getName())
             );
+
+            await this.completionIndex.del(uri, classConst.getName(), className);
         }
     }
 

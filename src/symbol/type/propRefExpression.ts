@@ -5,6 +5,7 @@ import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 
 export class PropRefExpression extends CollectionSymbol implements Consumer {
+    public readonly isParentIncluded = true;
     public classRef: ClassRef = new ClassRef();
     public propRef: PropertyRef = new PropertyRef();
 

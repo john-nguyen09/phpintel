@@ -69,7 +69,8 @@ export class ReferenceTable {
             ]);
             let iterator = db.iterator<Reference>({
                 lte: key,
-                gte: uriBuffer
+                gte: uriBuffer,
+                reverse: true
             });
 
             const processRef = (
@@ -167,7 +168,7 @@ export const ReferenceEncoding = {
         let location = serializer.readLocation();
         let refKind = serializer.readInt32();
         let scope = serializer.readTypeName();
-        
+
         return {
             refName,
             type,

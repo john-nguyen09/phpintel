@@ -23,23 +23,42 @@ export class CompletionIndex {
         });
     }
 
-    async put(phpDoc: PhpDocument, name: string) {
+    async put(phpDoc: PhpDocument, name: string, prefix?: string) {
         let tokens = WordSeparator.getTokens(name);
 
         for (let token of tokens) {
-            await this.db.put(CompletionIndex.getKey(phpDoc.uri, token), {
+            let indexKey = CompletionIndex.getKey(phpDoc.uri, token);
+            if (typeof prefix !== 'undefined') {
+                indexKey = prefix + indexKey;
+            }
+
+            await this.db.put(indexKey, {
                 uri: phpDoc.uri,
                 name: name
             });
         }
     }
 
-    async search(keyword: string): Promise<CompletionValue[]> {
+    async search(keyword: string, prefix?: string): Promise<CompletionValue[]> {
         const db = this.db;
         let completions: CompletionValue[] = [];
 
+        if (typeof prefix !== 'undefined') {
+            keyword = prefix + keyword;
+        }
+
         return new Promise<CompletionValue[]>((resolve, reject) => {
-            db.prefixSearch(keyword, CompletionIndex.LIMIT)
+            let readStream: NodeJS.ReadableStream;
+
+            if (keyword.length === 0) {
+                readStream = db.createReadStream({
+                    limit: CompletionIndex.LIMIT
+                });
+            } else {
+                readStream = db.prefixSearch(keyword, CompletionIndex.LIMIT);
+            }
+
+            readStream
                 .on('data', (data) => {
                     completions.push(data.value);
                 })
@@ -54,10 +73,11 @@ export class CompletionIndex {
         });
     }
 
-    async del(uri:string, name: string) {
+    async del(uri: string, name: string, prefix?: string) {
         let tokens = WordSeparator.getTokens(name);
 
         for (let token of tokens) {
+            let key = CompletionIndex.getKey(uri, token);
             await this.db.del(CompletionIndex.getKey(uri, token));
         }
     }

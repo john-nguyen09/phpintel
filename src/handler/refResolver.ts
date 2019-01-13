@@ -15,6 +15,8 @@ import { ClassConstantTable } from "../storage/table/classConstant";
 import { Constant } from "../symbol/constant/constant";
 import { ConstantTable } from "../storage/table/constant";
 import { Symbol } from "../symbol/symbol";
+import { CompletionValue } from "../storage/table/index/completionIndex";
+import { SymbolModifier } from "../symbol/meta/modifier";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -55,12 +57,19 @@ export namespace RefResolver {
         const funcTable = App.get<FunctionTable>(FunctionTable);
         const classTable = App.get<ClassTable>(ClassTable);
         const constTable = App.get<ConstantTable>(ConstantTable);
+        const methodTable = App.get<MethodTable>(MethodTable);
+        const propTable = App.get<PropertyTable>(PropertyTable);
+        const classConstTable = App.get<ClassConstantTable>(ClassConstantTable);
+
         let symbols: Symbol[] = [];
+        let keyword: string;
+        let scopeName: string;
+        let completions: CompletionValue[];
 
         switch (ref.refKind) {
             case RefKind.ConstantAccess:
-                let keyword: string = ref.type.toString();
-                let completions = await funcTable.search(keyword);
+                keyword = ref.type.toString();
+                completions = await funcTable.search(keyword);
                 for (let completion of completions) {
                     symbols.push(...await funcTable.get(completion.name));
                 }
@@ -73,6 +82,58 @@ export namespace RefResolver {
                 completions = await constTable.search(keyword);
                 for (let completion of completions) {
                     symbols.push(...await constTable.get(completion.name));
+                }
+
+                break;
+            case RefKind.ClassConst:
+                keyword = ref.type.toString();
+                if (ref.scope === null) {
+                    break;
+                }
+                ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                scopeName = ref.scope.toString();
+
+                if (keyword.length > 0) {
+                    completions = await methodTable.search(scopeName, keyword);
+                    for (let completion of completions) {
+                        symbols.push(...await methodTable.getByClass(scopeName, completion.name));
+                    }
+
+                    completions = await classConstTable.search(scopeName, keyword);
+                    for (let completion of completions) {
+                        symbols.push(...await classConstTable.getByClass(scopeName, completion.name));
+                    }
+                } else {
+                    symbols.push(...await methodTable.searchAllInClass(scopeName, (method) => {
+                        return method.modifier.has(SymbolModifier.STATIC);
+                    }));
+                    symbols.push(...await propTable.searchAllInClass(scopeName, (prop) => {
+                        return prop.modifier.has(SymbolModifier.STATIC);
+                    }));
+                    symbols.push(...await classConstTable.searchAllInClass(scopeName));
+                }
+
+                break;
+            case RefKind.Property:
+                keyword = ref.type.toString();
+                if (ref.scope === null) {
+                    break;
+                }
+                ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                scopeName = ref.scope.toString();
+
+                completions = await propTable.search(scopeName, keyword);
+                let predicate: ((prop: Property) => boolean) | undefined = undefined;
+                if (typeof ref.refName === 'undefined') {
+                    predicate = (prop) => {
+                        return prop.modifier.has(SymbolModifier.STATIC);
+                    }
+                }
+                for (let completion of completions) {
+                    symbols.push(...(await propTable.getByClass(scopeName, completion.name))
+                        .filter((prop) => {
+                            return typeof predicate !== 'undefined' && predicate(prop);
+                        }));
                 }
 
                 break;
@@ -112,7 +173,7 @@ export namespace RefResolver {
             methodName = ref.type.name;
         }
 
-        return await methodTable.searchByClass(className, methodName);
+        return await methodTable.getByClass(className, methodName);
     }
 
     export async function getPropSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Property[]> {
@@ -128,7 +189,7 @@ export namespace RefResolver {
             className = ref.scope.name;
         }
 
-        return await propTable.searchByClass(className, ref.type.name);
+        return await propTable.getByClass(className, ref.type.name);
     }
 
     export async function getClassSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Class[]> {
@@ -156,7 +217,7 @@ export namespace RefResolver {
             className = ref.scope.name;
         }
 
-        return await classConstTable.searchByClass(className, ref.type.name);
+        return await classConstTable.getByClass(className, ref.type.name);
     }
 
     export async function getConstSymbols(

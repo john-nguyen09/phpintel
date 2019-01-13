@@ -4,6 +4,7 @@ import { Property } from "../../symbol/variable/property";
 import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
+import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 
 @injectable()
 export class PropertyTable {
@@ -11,6 +12,7 @@ export class PropertyTable {
 
     private db: DbStore;
     private classIndex: DbStore;
+    private completionIndex: CompletionIndex;
 
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
@@ -22,6 +24,7 @@ export class PropertyTable {
             name: 'propertyClassIndex',
             version: 1
         });
+        this.completionIndex = new CompletionIndex(level, 'propertyCompletionIndex');
     }
 
     async put(phpDoc: PhpDocument, symbol: Property) {
@@ -34,11 +37,12 @@ export class PropertyTable {
 
         return Promise.all([
             BelongsToDoc.put(this.db, phpDoc, key, symbol),
-            NameIndex.put(this.classIndex, phpDoc, key)
+            NameIndex.put(this.classIndex, phpDoc, key),
+            this.completionIndex.put(phpDoc, symbol.name, className),
         ]);
     }
 
-    async searchByClass(className: string, propName: string): Promise<Property[]> {
+    async getByClass(className: string, propName: string): Promise<Property[]> {
         let props: Property[] = [];
         let key = this.getKey(className, propName);
         let uris = await NameIndex.get(this.classIndex, key);
@@ -48,6 +52,28 @@ export class PropertyTable {
         }
 
         return props;
+    }
+
+    async searchAllInClass(className: string, predicate?: (prop: Property) => boolean): Promise<Property[]> {
+        const props: Property[] = [];
+        const prefix = this.getKey(className, '');
+        const datas = await NameIndex.prefixSearch(this.classIndex, prefix);
+
+        for (let data of datas) {
+            const prop = await this.db.get(BelongsToDoc.getKey(data.uri, data.name)) as Property;
+
+            if (typeof predicate !== 'undefined' && !predicate(prop)) {
+                continue;
+            }
+
+            props.push(prop);
+        }
+
+        return props;
+    }
+
+    async search(className: string, keyword: string): Promise<CompletionValue[]> {
+        return await this.completionIndex.search(keyword, className);
     }
 
     async removeByDoc(uri: string) {
@@ -60,6 +86,7 @@ export class PropertyTable {
             }
 
             await NameIndex.remove(this.classIndex, uri, this.getKey(className, prop.name));
+            await this.completionIndex.del(uri, prop.name, className);
         }
     }
 

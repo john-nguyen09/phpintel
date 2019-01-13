@@ -89,6 +89,7 @@ export abstract class TransformSymbol extends Symbol {
 
 export abstract class CollectionSymbol extends Symbol {
     abstract realSymbols: Symbol[];
+    abstract isParentIncluded: boolean;
 }
 
 export interface Consumer {
@@ -120,7 +121,7 @@ export function isTransform(symbol: Symbol): symbol is TransformSymbol {
 }
 
 export function isCollection(symbol: Symbol): symbol is CollectionSymbol {
-    return symbol != null && 'realSymbols' in symbol;
+    return symbol instanceof CollectionSymbol;
 }
 
 export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {

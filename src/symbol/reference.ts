@@ -14,7 +14,8 @@ export enum RefKind {
     Class = 9,
     Method = 10,
     Property = 11,
-    ClassConst = 12
+    ClassConst = 12,
+    ScopedAccess = 13,
 }
 
 export interface Reference {

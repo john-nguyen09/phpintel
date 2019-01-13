@@ -1,424 +1,144 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`completion query from RefResolver 1`] = `
+exports[`completion completion for scoped member references 1`] = `
 Array [
-  Function {
-    "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "location": Location {
+      "range": Range {
+        "end": 1583,
+        "start": 1493,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
-    "name": TypeName {
-      "name": "\\\\test_function",
+    "location": Location {
+      "range": Range {
+        "end": 1266,
+        "start": 1247,
+      },
+      "relativeUri": "case/global_symbols.php",
     },
-    "parameters": Array [],
-    "scopeVar": ScopeVar {
-      "variables": Object {},
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
     },
-    "types": Array [],
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
   },
-  Function {
-    "description": "",
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": 1120,
+        "start": 1098,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
     "name": TypeName {
-      "name": "\\\\test_function1",
+      "name": "TEST_CLASS_CONST",
     },
-    "parameters": Array [
-      Parameter {
-        "location": Location {},
-        "name": "$stringParam",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "string",
-            },
-          ],
-        },
-        "value": "",
-      },
-      Parameter {
-        "location": Location {},
-        "name": "$intParam",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "int",
-            },
-          ],
-        },
-        "value": "",
-      },
-      Parameter {
-        "location": Location {},
-        "name": "$boolParam",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "boolean",
-            },
-          ],
-        },
-        "value": "",
-      },
-      Parameter {
-        "location": Location {},
-        "name": "$floatParam",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "float",
-            },
-          ],
-        },
-        "value": "",
-      },
-    ],
-    "scopeVar": ScopeVar {
-      "variables": Object {
-        "$boolParam": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "boolean",
-            },
-          ],
-        },
-        "$floatParam": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "float",
-            },
-          ],
-        },
-        "$intParam": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "int",
-            },
-          ],
-        },
-        "$stringParam": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "string",
-            },
-          ],
-        },
-        "$test": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "int",
-            },
-          ],
-        },
-      },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
     },
-    "types": Array [
-      TypeName {
-        "name": "boolean",
-      },
-      TypeName {
-        "name": "string",
-      },
-      TypeName {
-        "name": "int",
-      },
-      TypeName {
-        "name": "float",
-      },
-      TypeName {
-        "name": "\\\\TestClass",
-      },
-    ],
-  },
-  Function {
-    "description": "Test function 2",
-    "name": TypeName {
-      "name": "\\\\test_function2",
-    },
-    "parameters": Array [
-      Parameter {
-        "location": Location {},
-        "name": "$param1",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "\\\\array|int",
-            },
-          ],
-        },
-        "value": "",
-      },
-      Parameter {
-        "location": Location {},
-        "name": "$param2",
-        "refKind": 3,
-        "scope": null,
-        "type": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "string",
-            },
-          ],
-        },
-        "value": "",
-      },
-    ],
-    "scopeVar": ScopeVar {
-      "variables": Object {
-        "$param1": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "\\\\array|int",
-            },
-          ],
-        },
-        "$param2": TypeComposite {
-          "_types": Array [
-            TypeName {
-              "name": "string",
-            },
-          ],
-        },
-      },
-    },
-    "types": Array [],
   },
 ]
 `;
 
-exports[`completion query from RefResolver 2`] = `
+exports[`completion completion for scoped member references 2`] = `
 Array [
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST",
+  Property {
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Location {
+      "range": Range {
+        "end": 1266,
+        "start": 1247,
+      },
+      "relativeUri": "case/global_symbols.php",
     },
-    "type": TypeName {
-      "name": "int",
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
     },
-    "value": "123",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST1",
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
     },
-    "type": TypeName {
-      "name": "int",
-    },
-    "value": "456",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST2",
-    },
-    "type": TypeName {
-      "name": "int",
-    },
-    "value": "789",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Simple string'",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING2",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Not so simple string'",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING3",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Quite complex ' . TEST_CONST_STRING",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_DEFINE_CONSTANT",
-    },
-    "type": TypeName {
-      "name": "boolean",
-    },
-    "value": "false",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT1",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'simple string'",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT2",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'not so simple string'",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT3",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'more of ' . TEST_STRING_CONSTANT2",
   },
 ]
 `;
 
-exports[`completion query from RefResolver 3`] = `
+exports[`completion completion for scoped member references 3`] = `
 Array [
-  Constant {
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "location": Location {
+      "range": Range {
+        "end": 1583,
+        "start": 1493,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
     "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING",
+      "name": "staticTestMethod",
     },
-    "type": TypeName {
-      "name": "string",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
     },
-    "value": "'Simple string'",
   },
-  Constant {
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": 1120,
+        "start": 1098,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
     "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING2",
+      "name": "TEST_CLASS_CONST",
     },
-    "type": TypeName {
-      "name": "string",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
     },
-    "value": "'Not so simple string'",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING3",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Quite complex ' . TEST_CONST_STRING",
   },
 ]
 `;
 
-exports[`completion query from RefResolver 4`] = `
+exports[`completion completion for scoped member references 4`] = `
 Array [
-  Constant {
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": 1120,
+        "start": 1098,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
     "name": TypeName {
-      "name": "\\\\TEST_CONST",
+      "name": "TEST_CLASS_CONST",
     },
-    "type": TypeName {
-      "name": "int",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
     },
-    "value": "123",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST1",
-    },
-    "type": TypeName {
-      "name": "int",
-    },
-    "value": "456",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST2",
-    },
-    "type": TypeName {
-      "name": "int",
-    },
-    "value": "789",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_DEFINE_CONSTANT",
-    },
-    "type": TypeName {
-      "name": "boolean",
-    },
-    "value": "false",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT1",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'simple string'",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT2",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'not so simple string'",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\TEST_STRING_CONSTANT3",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'more of ' . TEST_STRING_CONSTANT2",
-  },
-  DefineConstant {
-    "name": TypeName {
-      "name": "\\\\CONSTANT_SAMPLE1",
-    },
-    "type": TypeName {
-      "name": "boolean",
-    },
-    "value": "false",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Simple string'",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING2",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Not so simple string'",
-  },
-  Constant {
-    "name": TypeName {
-      "name": "\\\\TEST_CONST_STRING3",
-    },
-    "type": TypeName {
-      "name": "string",
-    },
-    "value": "'Quite complex ' . TEST_CONST_STRING",
   },
 ]
 `;

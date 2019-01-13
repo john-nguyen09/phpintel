@@ -310,6 +310,10 @@ export class SymbolParser implements Visitor {
 
     private forEachSymbol(symbol: Symbol, callback: (symbol: Symbol) => void) {
         if (isCollection(symbol)) {
+            if (symbol.isParentIncluded) {
+                callback(symbol);
+            }
+
             for (let realSymbol of symbol.realSymbols) {
                 callback(realSymbol);
             }
