@@ -858,6 +858,52 @@ PhpDocument {
         "name": "$staticVariable",
       },
     },
+    ClassConstRefExpression {
+      "classConstRef": ClassConstRef {
+        "location": Location {
+          "range": Range {
+            "end": 1332,
+            "start": 1326,
+          },
+          "relativeUri": "case/class_methods.php",
+        },
+        "refKind": 12,
+        "scope": TypeName {
+          "name": "ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "CONST1",
+        },
+      },
+      "classRef": ClassRef {
+        "location": Location {
+          "range": Range {
+            "end": 1324,
+            "start": 1320,
+          },
+          "relativeUri": "case/class_methods.php",
+        },
+        "refKind": 9,
+        "type": TypeName {
+          "name": "ClassWithMethod",
+        },
+      },
+      "isParentIncluded": true,
+      "location": Location {
+        "range": Range {
+          "end": 1332,
+          "start": 1320,
+        },
+        "relativeUri": "case/class_methods.php",
+      },
+      "refKind": 13,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
+      "type": TypeName {
+        "name": "CONST1",
+      },
+    },
     ClassRef {
       "location": Location {
         "range": Range {
@@ -2069,6 +2115,52 @@ PhpDocument {
         "name": "boolean",
       },
       "value": "false",
+    },
+    ClassConstRefExpression {
+      "classConstRef": ClassConstRef {
+        "location": Location {
+          "range": Range {
+            "end": 1576,
+            "start": 1560,
+          },
+          "relativeUri": "case/global_symbols.php",
+        },
+        "refKind": 12,
+        "scope": TypeName {
+          "name": "TestClass",
+        },
+        "type": TypeName {
+          "name": "TEST_CLASS_CONST",
+        },
+      },
+      "classRef": ClassRef {
+        "location": Location {
+          "range": Range {
+            "end": 1558,
+            "start": 1554,
+          },
+          "relativeUri": "case/global_symbols.php",
+        },
+        "refKind": 9,
+        "type": TypeName {
+          "name": "TestClass",
+        },
+      },
+      "isParentIncluded": true,
+      "location": Location {
+        "range": Range {
+          "end": 1576,
+          "start": 1554,
+        },
+        "relativeUri": "case/global_symbols.php",
+      },
+      "refKind": 13,
+      "scope": TypeName {
+        "name": "\\\\TestClass",
+      },
+      "type": TypeName {
+        "name": "TEST_CLASS_CONST",
+      },
     },
     ClassRef {
       "location": Location {
