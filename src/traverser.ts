@@ -8,19 +8,21 @@ export class Traverser {
 
     traverse(rootNode: TreeNode, visitors: Visitor[]): void {
         this.visitors = visitors;
-        this.realTraverse(rootNode);
+        this.realTraverse(rootNode, []);
         this.visitors = [];
     }
 
-    private realTraverse(node: TreeNode) {
+    private realTraverse(node: TreeNode, spine: TreeNode[]) {
         for (let visitor of this.visitors) {
-            visitor.preorder(node);
+            visitor.preorder(node, spine);
         }
 
         if (isPhrase(node)) {
+            spine.push(node);
             for (let child of node.children) {
-                this.realTraverse(child);
+                this.realTraverse(child, spine);
             }
+            spine.pop();
         }
 
         for (let visitor of this.visitors) {
@@ -32,6 +34,6 @@ export class Traverser {
 }
 
 export interface Visitor {
-    preorder(node: TreeNode): void;
+    preorder(node: TreeNode, spine: TreeNode[]): void;
     postorder?(node: TreeNode): void;
 }

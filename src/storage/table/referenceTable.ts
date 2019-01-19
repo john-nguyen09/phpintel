@@ -18,21 +18,21 @@ export class ReferenceTable {
         });
     }
 
-    async put(reference: Reference) {
-        if (reference.location.isEmpty) {
+    async put(ref: Reference) {
+        if (ref.location.isEmpty) {
             return;
         }
 
         let serializer = new Serializer();
-        serializer.writeInt32(reference.location.range.start);
-        serializer.writeInt32(reference.location.range.end);
+        serializer.writeInt32(ref.location.range.start);
+        serializer.writeInt32(ref.location.range.end);
 
         let key = Buffer.concat([
-            Buffer.from(reference.location.uri),
+            Buffer.from(ref.location.uri),
             serializer.getBuffer()
         ]);
 
-        return this.db.put(key, reference);
+        return this.db.put(key, ref);
     }
 
     async removeByDoc(uri: string) {
@@ -85,19 +85,18 @@ export class ReferenceTable {
                 }
 
                 // End of stream reached
-                if (key == undefined || ref == undefined) {
+                if (typeof key === 'undefined' || typeof ref === 'undefined') {
                     iterator.end(() => {
                         resolve(null);
                     });
                     return;
                 }
 
-                // logger.info(JSON.stringify(refObject(ref)));
-                // logger.info(ref.location.range.end.offset.toString());
-                // logger.info(offset.toString());
-                // logger.info(JSON.stringify(ref.location.range.end.offset >= offset));
-
-                if (ref.location.range.end >= offset) {
+                if (
+                    ref.location.uri === uri &&
+                    ref.location.range.start <= offset &&
+                    ref.location.range.end >= offset
+                ) {
                     iterator.end(() => {
                         resolve(ref);
                     });

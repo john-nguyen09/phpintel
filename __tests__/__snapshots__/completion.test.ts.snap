@@ -423,6 +423,139 @@ Array [
 ]
 `;
 
+exports[`completion completion for current scoped member references 1`] = `
+Array [
+  Property {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 106,
+        "start": 93,
+      },
+      "relativeUri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 2,
+    },
+    "name": "$NUM_CPUS",
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+]
+`;
+
+exports[`completion completion for current scoped member references 2`] = `
+Array [
+  Method {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 2290,
+        "start": 2236,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": null,
+  },
+  Property {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 2203,
+        "start": 2184,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": null,
+  },
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": 2164,
+        "start": 2142,
+      },
+      "relativeUri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": null,
+  },
+]
+`;
+
+exports[`completion completion for current scoped member references 3`] = `
+Array [
+  Method {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 184,
+        "start": 115,
+      },
+      "relativeUri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "GetNumCpus",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  Property {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 106,
+        "start": 93,
+      },
+      "relativeUri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 2,
+    },
+    "name": "$NUM_CPUS",
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  ClassConstant {
+    "location": Location {
+      "range": Range {
+        "end": 67,
+        "start": 48,
+      },
+      "relativeUri": "case/completion/currentScopedMember.php",
+    },
+    "name": TypeName {
+      "name": "SYSTEM_NUM_CPUS",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+]
+`;
+
 exports[`completion completion for scoped member references 1`] = `
 Array [
   Method {
@@ -565,3 +698,5 @@ Array [
   },
 ]
 `;
+
+exports[`completion completion for scoped member references 5`] = `Array []`;

@@ -44,7 +44,6 @@ import { ScopedMemberName } from "./name/scopedMemberName";
 import { PropRefExpression } from "./type/propRefExpression";
 import { ClassConstRefExpression } from "./type/classConstRefExpression";
 import { ScopeVar } from "./variable/scopeVar";
-import { Variable } from "./variable/variable";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -88,7 +87,7 @@ export class SymbolParser implements Visitor {
         return this.scopeVarStack.pop();
     }
 
-    preorder(node: TreeNode) {
+    preorder(node: TreeNode, spine: TreeNode[]) {
         let parentSymbol = this.getParentSymbol();
 
         if (isToken(node)) {
@@ -200,6 +199,9 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new VariableAssignment());
                     break;
                 case PhraseKind.SimpleVariable:
+                    if (this.isParentOf(spine, PhraseKind.ScopedMemberName)) {
+                        break;
+                    }
                     let variable = new SimpleVariable();
 
                     variable.scopeVar = this.getScopeVar();
@@ -230,6 +232,7 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new PropRefExpression());
                     break;
                 case PhraseKind.ClassConstantAccessExpression:
+                case PhraseKind.ErrorScopedAccessExpression:
                     this.pushSymbol(new ClassConstRefExpression());
                     break;
 
@@ -322,5 +325,25 @@ export class SymbolParser implements Visitor {
         }
 
         callback(symbol);
+    }
+
+    private isParentOf(spine: TreeNode[], phraseKind: PhraseKind | PhraseKind[]): boolean {
+        if (spine.length === 0) {
+            return false;
+        }
+
+        const parent = spine[spine.length - 1];
+
+        if (!isPhrase(parent)) {
+            return false;
+        }
+
+        const parentPhraseKind: number = <number>parent.phraseType;
+
+        if (Array.isArray(phraseKind)) {
+            return phraseKind.indexOf(parentPhraseKind) >= 0;
+        } else {
+            return phraseKind === parentPhraseKind;
+        }
     }
 }

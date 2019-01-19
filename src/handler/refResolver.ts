@@ -86,6 +86,7 @@ export namespace RefResolver {
 
                 break;
             case RefKind.ClassConst:
+            case RefKind.ScopedAccess:
                 keyword = ref.type.toString();
                 if (ref.scope === null) {
                     break;
@@ -122,18 +123,22 @@ export namespace RefResolver {
                 ref.scope.resolveReferenceToFqn(phpDoc.importTable);
                 scopeName = ref.scope.toString();
 
-                completions = await propTable.search(scopeName, keyword);
                 let predicate: ((prop: Property) => boolean) | undefined = undefined;
                 if (typeof ref.refName === 'undefined') {
                     predicate = (prop) => {
                         return prop.modifier.has(SymbolModifier.STATIC);
                     }
                 }
-                for (let completion of completions) {
-                    symbols.push(...(await propTable.getByClass(scopeName, completion.name))
-                        .filter((prop) => {
-                            return typeof predicate !== 'undefined' && predicate(prop);
-                        }));
+                if (keyword.length > 0) {
+                    completions = await propTable.search(scopeName, keyword);
+                    for (let completion of completions) {
+                        symbols.push(...(await propTable.getByClass(scopeName, completion.name))
+                            .filter((prop) => {
+                                return typeof predicate !== 'undefined' && predicate(prop);
+                            }));
+                    }
+                } else {
+                    symbols.push(...await propTable.searchAllInClass(scopeName, predicate));
                 }
 
                 break;

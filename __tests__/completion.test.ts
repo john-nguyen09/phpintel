@@ -77,4 +77,12 @@ describe('completion', () => {
             { path: path.join(getCaseDir(), 'completion', 'scopedMember.php'), offset: 78 },
         ]);
     });
+
+    it('completion for current scoped member references', async () => {
+        await testCompletions(['global_symbols.php'], [
+            { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 176 },
+            { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 244 },
+            { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 309 },
+        ]);
+    });
 });
