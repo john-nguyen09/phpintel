@@ -329,14 +329,14 @@ DefineConstant {
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 1`] = `
 Function {
-  "description": "",
-  "docParamTypes": Object {},
-  "location": Location {
+  "_location": Location {
     "range": Range {
       "end": 582,
       "start": 7,
     },
   },
+  "description": "",
+  "docParamTypes": Object {},
   "name": TypeName {
     "name": "\\\\test_function1",
   },
@@ -399,6 +399,12 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
+    "location": Location {
+      "range": Range {
+        "end": 582,
+        "start": 7,
+      },
+    },
     "variables": Object {
       "$boolParam": TypeComposite {
         "_types": Array [
@@ -461,14 +467,14 @@ Function {
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 2`] = `
 Function {
-  "description": "Test function 2",
-  "docParamTypes": Object {},
-  "location": Location {
+  "_location": Location {
     "range": Range {
       "end": 754,
       "start": 708,
     },
   },
+  "description": "Test function 2",
+  "docParamTypes": Object {},
   "name": TypeName {
     "name": "\\\\test_function2",
   },
@@ -503,6 +509,12 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
+    "location": Location {
+      "range": Range {
+        "end": 754,
+        "start": 708,
+      },
+    },
     "variables": Object {
       "$param1": TypeComposite {
         "_types": Array [

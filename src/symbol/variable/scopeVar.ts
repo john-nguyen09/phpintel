@@ -2,8 +2,10 @@ import { Symbol, Consumer } from "../symbol";
 import { Variable } from "./variable";
 import { Parameter } from "./parameter";
 import { TypeComposite } from "../../type/composite";
+import { Location } from "../meta/location";
 
 export class ScopeVar extends Symbol implements Consumer {
+    public location: Location = new Location();
     public variables: { [name: string]: TypeComposite } = {};
 
     consume(other: Symbol) {
@@ -34,7 +36,7 @@ export class ScopeVar extends Symbol implements Consumer {
             for (let type of this.variables[variableName].types) {
                 returnType.push(type);
             }
-            
+
             return returnType;
         }
 

@@ -2,7 +2,7 @@ import { CompletionParams, CompletionItem, CompletionList } from "vscode-languag
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
 import { Function } from "../symbol/function/function";
 import { Formatter } from "./formatter";
 import { Class } from "../symbol/class/class";

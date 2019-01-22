@@ -1,11 +1,10 @@
 import { App } from "../src/app";
 import * as path from "path";
-import { getDebugDir, getCaseDir, dumpAstToDebug } from "../src/testHelper";
-import { FunctionTable } from "../src/storage/table/function";
+import { getDebugDir, getCaseDir } from "../src/testHelper";
 import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
-import { ReferenceTable } from "../src/storage/table/referenceTable";
+import { ReferenceTable } from "../src/storage/table/reference";
 import { RefResolver } from "../src/handler/refResolver";
 
 interface CompletionTestCase {
@@ -83,6 +82,13 @@ describe('completion', () => {
             { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 176 },
             { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 244 },
             { path: path.join(getCaseDir(), 'completion', 'currentScopedMember.php'), offset: 309 },
+        ]);
+    });
+
+    it('completion for variables', async() => {
+        await testCompletions(['global_symbols.php'], [
+            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
+            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
         ]);
     });
 });

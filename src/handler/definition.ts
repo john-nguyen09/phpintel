@@ -1,5 +1,5 @@
 import { TextDocumentPositionParams, Location as LspLocation } from "vscode-languageserver";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";

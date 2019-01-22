@@ -13,7 +13,8 @@ import { FunctionTable } from "../storage/table/function";
 import { MethodTable } from "../storage/table/method";
 import { PropertyTable } from "../storage/table/property";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
+import { ScopeVarTable } from "../storage/table/scopeVar";
 
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -44,7 +45,8 @@ export class Indexer {
         private functionTable: FunctionTable,
         private methodTable: MethodTable,
         private propertyTable: PropertyTable,
-        private referenceTable: ReferenceTable
+        private referenceTable: ReferenceTable,
+        private scopeVarTable: ScopeVarTable
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
@@ -72,9 +74,8 @@ export class Indexer {
     async indexFile(phpDoc: PhpDocument): Promise<void> {
         let symbolParser = new SymbolParser(phpDoc);
 
-        phpDoc.refresh();
         this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
-        await this.indexPhpDocument(phpDoc);
+        await this.indexPhpDocument(symbolParser.getPhpDoc());
     }
 
     async indexWorkspace(directory: string): Promise<void> {
@@ -106,6 +107,7 @@ export class Indexer {
 
     private async removeSymbolsByDoc(uri: string) {
         return Promise.all([
+            this.scopeVarTable.removeByDoc(uri),
             this.referenceTable.removeByDoc(uri),
             this.classTable.removeByDoc(uri),
             this.classConstantTable.removeByDoc(uri),
@@ -120,6 +122,10 @@ export class Indexer {
         await this.removeSymbolsByDoc(doc.uri);
 
         const promises: Promise<void | void[]>[] = [];
+
+        for (let scopeVar of doc.scopeVarStack) {
+            promises.push(this.scopeVarTable.put(scopeVar));
+        }
 
         for (let reference of doc.references) {
             promises.push(this.referenceTable.put(reference));

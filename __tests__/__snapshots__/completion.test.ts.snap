@@ -10,6 +10,12 @@ Array [
     },
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 2118,
+          "start": 2089,
+        },
+      },
       "variables": Object {},
     },
     "types": Array [],
@@ -78,6 +84,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 582,
+          "start": 7,
+        },
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -170,6 +182,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 754,
+          "start": 708,
+        },
+      },
       "variables": Object {
         "$param1": TypeComposite {
           "_types": Array [
@@ -700,3 +718,64 @@ Array [
 `;
 
 exports[`completion completion for scoped member references 5`] = `Array []`;
+
+exports[`completion completion for variables 1`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Location {
+      "range": undefined,
+      "relativeUri": "",
+    },
+    "name": "$var1",
+    "refKind": 2,
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`completion completion for variables 2`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Location {
+      "range": undefined,
+      "relativeUri": "",
+    },
+    "name": "$var2",
+    "refKind": 2,
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+  },
+  Variable {
+    "expression": Expression {},
+    "location": Location {
+      "range": undefined,
+      "relativeUri": "",
+    },
+    "name": "$var3",
+    "refKind": 2,
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "int",
+        },
+      ],
+    },
+  },
+]
+`;

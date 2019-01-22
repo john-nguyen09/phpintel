@@ -230,6 +230,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Location {
+          "range": Range {
+            "end": 579,
+            "start": 175,
+          },
+        },
         "variables": Object {
           "$param1": TypeComposite {
             "_types": Array [

@@ -2,8 +2,10 @@ import { DbStore, LevelDatasource, SubStore } from "../db";
 import { Serializer } from "../serializer";
 import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
-import { injectable } from "inversify";
+import { injectable, traverseAncerstors } from "inversify";
 import { Reference } from "../../symbol/reference";
+import { Location } from "../../symbol/meta/location";
+import { Range } from "../../symbol/meta/range";
 
 @injectable()
 export class ReferenceTable {
@@ -107,6 +109,45 @@ export class ReferenceTable {
                 iterator.next(processRef);
             }
 
+            iterator.next(processRef);
+        });
+    }
+
+    async findWithin(uri:string, range: Range, predicate?: (ref: Reference) => boolean): Promise<Reference[]> {
+        const db = this.db;
+
+        return new Promise<Reference[]>((resolve, reject) => {
+            const startSerializer = new Serializer();
+            startSerializer.writeInt32(range.start);
+            const endSerializer = new Serializer();
+            endSerializer.writeInt32(range.end);
+
+            const uriBuffer = Buffer.from(uri);
+            const iterator = db.iterator<Reference>({
+                gte: Buffer.concat([uriBuffer, startSerializer.getBuffer()]),
+                lte: Buffer.concat([uriBuffer, endSerializer.getBuffer()]),
+            });
+            let refs: Reference[] = [];
+            const processRef = (err: Error | null, key?: string | Buffer, ref?: Reference): void => {
+                if (err !== null) {
+                    iterator.end(() => { reject(err); });
+                    return;
+                }
+                if (typeof key === 'undefined' || typeof ref === 'undefined') {
+                    iterator.end(() => { resolve(refs); });
+                    return;
+                }
+
+                if (
+                    ref.location.uri === uri &&
+                    ref.location.range.end <= range.end &&
+                    (typeof predicate === 'undefined' || predicate(ref))
+                ) {
+                    refs.push(ref);
+                }
+
+                iterator.next(processRef);
+            }
             iterator.next(processRef);
         });
     }

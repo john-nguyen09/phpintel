@@ -2,7 +2,7 @@ import { App } from '../src/app';
 import { Indexer, PhpFileInfo } from '../src/index/indexer';
 import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
-import { ReferenceTable } from '../src/storage/table/referenceTable';
+import { ReferenceTable } from '../src/storage/table/reference';
 import { pathToUri } from '../src/util/uri';
 import { RefResolver } from "../src/handler/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';

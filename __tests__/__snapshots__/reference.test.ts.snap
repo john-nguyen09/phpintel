@@ -361,14 +361,14 @@ Array [
     "traits": Array [],
   },
   Function {
-    "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
+    "_location": Location {
       "range": Range {
         "end": 582,
         "start": 7,
       },
     },
+    "description": "",
+    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -431,6 +431,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 582,
+          "start": 7,
+        },
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -490,14 +496,14 @@ Array [
     },
   },
   Function {
-    "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
+    "_location": Location {
       "range": Range {
         "end": 582,
         "start": 7,
       },
     },
+    "description": "",
+    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -560,6 +566,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 582,
+          "start": 7,
+        },
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -619,14 +631,14 @@ Array [
     },
   },
   Function {
-    "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
+    "_location": Location {
       "range": Range {
         "end": 582,
         "start": 7,
       },
     },
+    "description": "",
+    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -689,6 +701,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Location {
+        "range": Range {
+          "end": 582,
+          "start": 7,
+        },
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [

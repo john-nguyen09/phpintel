@@ -54,7 +54,15 @@ export class SymbolParser implements Visitor {
     constructor(doc: PhpDocument) {
         this.doc = doc;
         this.pushSymbol(this.doc);
-        this.pushScopeVar(new ScopeVar());
+
+        const docScopeVar = new ScopeVar();
+        docScopeVar.location.uri = doc.uri;
+        docScopeVar.location.range = {
+            start: 0,
+            end: doc.text.length
+        };
+
+        this.pushScopeVar(docScopeVar);
     }
 
     public getPhpDoc(): PhpDocument {
@@ -77,6 +85,7 @@ export class SymbolParser implements Visitor {
 
     pushScopeVar(scopeVar: ScopeVar) {
         this.scopeVarStack.push(scopeVar);
+        this.doc.pushScopeVar(scopeVar);
     }
 
     getScopeVar(): ScopeVar {

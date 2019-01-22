@@ -11,9 +11,10 @@ import { FunctionTable } from "./storage/table/function";
 import { MethodTable } from "./storage/table/method";
 import { PropertyTable } from "./storage/table/property";
 import { Traverser } from "./traverser";
-import { ReferenceTable } from "./storage/table/referenceTable";
+import { ReferenceTable } from "./storage/table/reference";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
+import { ScopeVarTable } from "./storage/table/scopeVar";
 
 export interface AppOptions {
     storage: string;
@@ -72,6 +73,7 @@ export class Application {
         this.container.bind<PropertyTable>(PropertyTable).toSelf();
         this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf();
         this.container.bind<ReferenceTable>(ReferenceTable).toSelf();
+        this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf();
     }
 
     protected initBind() {

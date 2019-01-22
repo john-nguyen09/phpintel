@@ -17,6 +17,10 @@ import { ConstantTable } from "../storage/table/constant";
 import { Symbol } from "../symbol/symbol";
 import { CompletionValue } from "../storage/table/index/completionIndex";
 import { SymbolModifier } from "../symbol/meta/modifier";
+import { ScopeVarTable } from "../storage/table/scopeVar";
+import { ReferenceTable } from "../storage/table/reference";
+import { Variable } from "../symbol/variable/variable";
+import { TypeName } from "../type/name";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -60,6 +64,8 @@ export namespace RefResolver {
         const methodTable = App.get<MethodTable>(MethodTable);
         const propTable = App.get<PropertyTable>(PropertyTable);
         const classConstTable = App.get<ClassConstantTable>(ClassConstantTable);
+        const scopeVarTable = App.get<ScopeVarTable>(ScopeVarTable);
+        const refTable = App.get<ReferenceTable>(ReferenceTable);
 
         let symbols: Symbol[] = [];
         let keyword: string;
@@ -123,22 +129,52 @@ export namespace RefResolver {
                 ref.scope.resolveReferenceToFqn(phpDoc.importTable);
                 scopeName = ref.scope.toString();
 
-                let predicate: ((prop: Property) => boolean) | undefined = undefined;
-                if (typeof ref.refName === 'undefined') {
-                    predicate = (prop) => {
-                        return prop.modifier.has(SymbolModifier.STATIC);
-                    }
-                }
+                const isRefStatic = typeof ref.refName === 'undefined';
                 if (keyword.length > 0) {
                     completions = await propTable.search(scopeName, keyword);
                     for (let completion of completions) {
                         symbols.push(...(await propTable.getByClass(scopeName, completion.name))
                             .filter((prop) => {
-                                return typeof predicate !== 'undefined' && predicate(prop);
+                                return !isRefStatic || prop.modifier.has(SymbolModifier.STATIC);
                             }));
                     }
                 } else {
-                    symbols.push(...await propTable.searchAllInClass(scopeName, predicate));
+                    symbols.push(...await propTable.searchAllInClass(scopeName, (prop) => {
+                        return !isRefStatic || prop.modifier.has(SymbolModifier.STATIC);
+                    }));
+                }
+
+                break;
+            case RefKind.Variable:
+                keyword = '';
+                if (typeof ref.refName !== 'undefined') {
+                    keyword = ref.refName;
+                }
+                const range = await scopeVarTable.findAt(ref.location.uri, ref.location.range.start);
+                console.log(range);
+
+                if (range === null) {
+                    break;
+                }
+
+                let refVars: Reference[] = [];
+                if (keyword.length > 0) {
+
+                } else {
+                    refVars = await refTable.findWithin(phpDoc.uri, range, (foundRef) => {
+                        return foundRef.refKind === RefKind.Variable &&
+                            typeof foundRef.refName !== 'undefined' &&
+                            foundRef.refName.length > 0;
+                    });
+                }
+                if (refVars.length > 0) {
+                    for (let refVar of refVars) {
+                        if (typeof refVar.refName == 'undefined' || refVar.type instanceof TypeName) {
+                            continue;
+                        }
+
+                        symbols.push(new Variable(refVar.refName, refVar.type));
+                    }
                 }
 
                 break;

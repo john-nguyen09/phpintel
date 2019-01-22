@@ -13,6 +13,7 @@ import { Property } from "./variable/property";
 import { isReference, Reference } from "./reference";
 import { Position } from "vscode-languageserver";
 import { substr_count } from "../util/string";
+import { ScopeVar } from "./variable/scopeVar";
 
 export class PhpDocument extends Symbol implements Consumer {
     @nonenumerable
@@ -32,18 +33,21 @@ export class PhpDocument extends Symbol implements Consumer {
     public properties: Property[];
     public references: Reference[];
 
+    @nonenumerable
+    public scopeVarStack: ScopeVar[];
+
     constructor(uri: string, text: string) {
         super();
 
         this.uri = uri;
         this.text = text;
-        
+
         this.refresh();
     }
 
     refresh() {
         this.importTable = new ImportTable();;
-    
+
         this.classes = [];
         this.functions = [];
         this.constants = [];
@@ -51,6 +55,7 @@ export class PhpDocument extends Symbol implements Consumer {
         this.methods = [];
         this.properties = [];
         this.references = [];
+        this.scopeVarStack = [];
     }
 
     getTree(): Phrase {
@@ -117,9 +122,13 @@ export class PhpDocument extends Symbol implements Consumer {
         } else if (symbol instanceof Property) {
             this.properties.push(symbol);
         }
-        
+
         if (isReference(symbol)) {
             this.references.push(symbol);
         }
+    }
+
+    pushScopeVar(scopeVar: ScopeVar): void {
+        this.scopeVarStack.push(scopeVar);
     }
 }

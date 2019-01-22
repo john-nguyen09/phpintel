@@ -16,6 +16,10 @@ export function uriToPath(uri: string) {
 }
 
 export function toRelative(uri: string) {
+    if (typeof uri === 'undefined') {
+        return '';
+    }
+
     let baseUri = pathToUri(path.resolve(__dirname, '..' , '..'));
 
     if (uri.indexOf(baseUri) === 0) {

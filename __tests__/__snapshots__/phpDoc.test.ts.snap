@@ -1085,6 +1085,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Location {
+          "range": Range {
+            "end": 582,
+            "start": 7,
+          },
+        },
         "variables": Object {
           "$boolParam": TypeComposite {
             "_types": Array [
@@ -1187,6 +1193,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Location {
+          "range": Range {
+            "end": 754,
+            "start": 708,
+          },
+        },
         "variables": Object {
           "$param1": TypeComposite {
             "_types": Array [
@@ -1798,6 +1810,12 @@ PhpDocument {
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "location": Location {
+          "range": Range {
+            "end": 2118,
+            "start": 2089,
+          },
+        },
         "variables": Object {},
       },
       "types": Array [],
