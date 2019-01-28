@@ -13,6 +13,10 @@ Array [
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
+    "scopeRange": Object {
+      "end": 458,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -32,6 +36,10 @@ Array [
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
+    "scopeRange": Object {
+      "end": 458,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -54,6 +62,10 @@ Array [
     "refKind": 2,
     "refName": "$refVar2",
     "scope": null,
+    "scopeRange": Object {
+      "end": 458,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -81,6 +93,7 @@ Array [
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\TestClass",
     },
@@ -96,6 +109,7 @@ Array [
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\TestClass",
     },
@@ -111,6 +125,7 @@ Array [
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\TestClass",
     },
@@ -126,6 +141,7 @@ Array [
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\test_function1",
     },
@@ -141,6 +157,7 @@ Array [
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\test_function1",
     },
@@ -156,6 +173,7 @@ Array [
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\test_function1",
     },
@@ -171,6 +189,7 @@ Array [
     "refKind": 9,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -186,6 +205,7 @@ Array [
     "refKind": 9,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\ClassWithMethod",
     },
@@ -203,6 +223,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "staticMethod",
     },
@@ -220,6 +241,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "staticMethod",
     },
@@ -237,6 +259,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "$staticVariable",
     },
@@ -254,6 +277,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "$staticVariable",
     },
@@ -271,6 +295,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithConst",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "IS_ACTIVE",
     },
@@ -288,6 +313,7 @@ Array [
     "scope": TypeName {
       "name": "\\\\ClassWithConst",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "IS_ACTIVE",
     },
@@ -303,6 +329,7 @@ Array [
     "refKind": 6,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "\\\\TEST_DEFINE_CONSTANT",
     },
