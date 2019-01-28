@@ -745,7 +745,7 @@ Array [
   Variable {
     "expression": Expression {},
     "location": Object {},
-    "name": "$var2",
+    "name": "$var1",
     "refKind": 2,
     "scope": null,
     "scopeRange": undefined,
@@ -753,21 +753,6 @@ Array [
       "_types": Array [
         TypeName {
           "name": "boolean",
-        },
-      ],
-    },
-  },
-  Variable {
-    "expression": Expression {},
-    "location": Object {},
-    "name": "$var3",
-    "refKind": 2,
-    "scope": null,
-    "scopeRange": undefined,
-    "type": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "int",
         },
       ],
     },

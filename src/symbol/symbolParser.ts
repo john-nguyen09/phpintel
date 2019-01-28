@@ -182,6 +182,10 @@ export class SymbolParser implements Visitor {
                 case PhraseKind.FunctionDeclaration:
                     let funcSymbol = new Function();
 
+                    funcSymbol.scopeVar.location = {
+                        uri: this.doc.uri,
+                        range: nodeRange(node, this.doc.text)
+                    };
                     this.pushScopeVar(funcSymbol.scopeVar);
                     this.pushSymbol(funcSymbol);
                     break;
@@ -208,6 +212,7 @@ export class SymbolParser implements Visitor {
                     break;
                 case PhraseKind.SimpleVariable:
                     if (this.isParentOf(spine, PhraseKind.ScopedMemberName)) {
+                        this.pushSymbol(null);
                         break;
                     }
                     let variable = new SimpleVariable();

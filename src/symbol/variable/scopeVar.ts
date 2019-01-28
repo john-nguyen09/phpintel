@@ -19,6 +19,8 @@ export class ScopeVar extends Symbol implements Consumer {
     }
 
     set(variable: Variable) {
+        variable.scopeRange = this.location.range;
+
         if (!(variable.name in this.variables)) {
             this.variables[variable.name] = variable.type.clone();
             return;

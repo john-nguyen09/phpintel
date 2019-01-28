@@ -3,7 +3,7 @@ import { Serializer, Deserializer } from "../serializer";
 import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
-import { Reference } from "../../symbol/reference";
+import { Reference, RefKind } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
 
 @injectable()
@@ -140,6 +140,9 @@ export class ReferenceTable {
                     ref.location.uri === uri &&
                     ref.location.range !== undefined &&
                     ref.location.range.end <= range.end &&
+                    ref.scopeRange !== undefined &&
+                    ref.scopeRange.start === range.start &&
+                    ref.scopeRange.end === range.end &&
                     (typeof predicate === 'undefined' || predicate(ref))
                 ) {
                     refs.push(ref);
@@ -180,6 +183,13 @@ export const ReferenceEncoding = {
         serializer.setInt32(ref.refKind);
         serializer.setTypeName(ref.scope);
 
+        if (ref.scopeRange === undefined) {
+            serializer.setBool(false);
+        } else {
+            serializer.setBool(true);
+            serializer.setRange(ref.scopeRange);
+        }
+
         return serializer.getBuffer();
     },
     decode(buffer: Buffer): Reference | null {
@@ -187,16 +197,16 @@ export const ReferenceEncoding = {
             return null;
         }
 
-        let deserializer = new Deserializer(buffer);
+        const deserializer = new Deserializer(buffer);
         let type: TypeName | TypeComposite = new TypeName('');
-        let hasName = deserializer.readBool();
+        const hasName = deserializer.readBool();
         let refName: string | undefined = undefined;
 
         if (hasName) {
             refName = deserializer.readString();
         }
 
-        let typeKind: TypeKind = deserializer.readInt32();
+        const typeKind: TypeKind = deserializer.readInt32();
 
         if (typeKind == TypeKind.TYPE_NAME) {
             type = deserializer.readTypeName() || new TypeName('');
@@ -204,16 +214,23 @@ export const ReferenceEncoding = {
             type = deserializer.readTypeComposite();
         }
 
-        let location = deserializer.readLocation();
-        let refKind = deserializer.readInt32();
-        let scope = deserializer.readTypeName();
+        const location = deserializer.readLocation();
+        const refKind = deserializer.readInt32();
+        const scope = deserializer.readTypeName();
+        const hasScopeRange = deserializer.readBool();
+        let scopeRange: Range | undefined = undefined;
+
+        if (hasScopeRange) {
+            scopeRange = deserializer.readRange();
+        }
 
         return {
             refName,
             type,
             location,
             refKind,
-            scope
+            scope,
+            scopeRange
         } as Reference;
     }
 } as Level.Encoding;

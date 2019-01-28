@@ -28,8 +28,8 @@ export class ScopeVarTable {
         }
 
         const serializer = new Serializer();
-        serializer.setInt32(scopeVar.location.range.start);
         serializer.setInt32(scopeVar.location.range.end);
+        serializer.setInt32(scopeVar.location.range.start);
         const key = Buffer.concat([
             Buffer.from(scopeVar.location.uri),
             serializer.getBuffer()
@@ -56,23 +56,21 @@ export class ScopeVarTable {
         });
     }
 
-    async findBefore(uri: string, offset: number): Promise<ScopeVar | null> {
+    async findAt(uri: string, offset: number): Promise<Range | null> {
         const db = this.db;
 
-        return new Promise<ScopeVar | null>((resolve, reject) => {
-            const serializer = new Serializer();
+        return new Promise<Range | null>((resolve, reject) => {
+            const serializer = new Serializer(4);
             serializer.setInt32(offset);
             const uriBuffer = Buffer.from(uri);
             const key = Buffer.concat([
                 uriBuffer,
-                serializer.getBuffer(),
-                Buffer.from('\xFF')
+                serializer.getBuffer()
             ]);
 
             const iterator = db.iterator<ScopeVar>({
-                lte: key,
-                gte: uriBuffer,
-                reverse: true
+                gte: key,
+                lte: Buffer.concat([uriBuffer, Buffer.from('\xFF')]),
             });
             const processScopeVar = (
                 err: Error | null,
@@ -89,72 +87,21 @@ export class ScopeVarTable {
                     return;
                 }
 
-                iterator.end(() => {
-                    resolve(scopeVar);
-                });
-            }
-            iterator.next(processScopeVar);
-        });
-    }
-
-    async findAfter(uri: string, offset: number): Promise<ScopeVar | null> {
-        const db = this.db;
-
-        return new Promise<ScopeVar | null>((resolve, reject) => {
-            const serializer = new Serializer();
-            serializer.setInt32(offset);
-            const uriBuffer = Buffer.from(uri);
-
-            const iterator = db.iterator<ScopeVar>({
-                gte: Buffer.concat([uriBuffer, serializer.getBuffer()]),
-                lte: Buffer.concat([uriBuffer, Buffer.from('\xFF')])
-            });
-            const processScopeVar = (
-                err: Error | null,
-                key?: string | Buffer,
-                scopeVar?: ScopeVar
-            ) => {
-                if (err !== null) {
-                    iterator.end(() => {});
-                    return reject(err);
-                }
-
-                if (typeof key === 'undefined' || typeof scopeVar === 'undefined') {
-                    iterator.end(() => { resolve(null) });
+                if (
+                    scopeVar.location.range !== undefined &&
+                    scopeVar.location.range.start <= offset &&
+                    scopeVar.location.range.end >= offset
+                ) {
+                    iterator.end(() => {
+                        resolve(scopeVar.location.range);
+                    });
                     return;
                 }
 
-                iterator.end(() => {
-                    resolve(scopeVar);
-                });
+                iterator.next(processScopeVar);
             }
             iterator.next(processScopeVar);
         });
-    }
-
-    async findAt(uri: string, offset: number): Promise<Range> {
-        const results = await Promise.all([
-            this.findBefore(uri, offset),
-            this.findAfter(uri, offset)
-        ]);
-        const before = results[0];
-        const after = results[1];
-
-        if (before === null) {
-            throw new Error(`[Impossble case]: Cannot find any scope before ${offset}`);
-        }
-        if (after === null) {
-            return before.location.range || { start: -1, end: -1 };
-        }
-
-        if (before.location.range === undefined || after.location.range === undefined) {
-            return { start: -1, end: -1 };
-        }
-
-        return {
-            start: before.location.range.start,
-            end: after.location.range.start
-        };
     }
 }
 
