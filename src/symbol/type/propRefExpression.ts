@@ -6,7 +6,6 @@ import { TokenKind } from "../../util/parser";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
-import { ScopedMemberName } from "../name/scopedMemberName";
 
 export class PropRefExpression extends CollectionSymbol implements Consumer, Reference {
     public readonly isParentIncluded = true;
@@ -14,7 +13,7 @@ export class PropRefExpression extends CollectionSymbol implements Consumer, Ref
     public propRef: PropertyRef = new PropertyRef();
 
     public type = new TypeName('');
-    public location = new Location();
+    public location: Location = {};
     public scope = new TypeName('');
 
     @nonenumerable
@@ -23,10 +22,15 @@ export class PropRefExpression extends CollectionSymbol implements Consumer, Ref
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol && other.type == TokenKind.ColonColon) {
             this.hasColonColon = true;
-            this.propRef.location = new Location(this.location.uri, {
-                start: this.location.range.start,
-                end: other.node.offset
-            });
+            if (this.location.range !== undefined) {
+                this.propRef.location = {
+                    uri: this.location.uri,
+                    range: {
+                        start: this.location.range.start,
+                        end: other.node.offset
+                    }
+                };
+            }
             this.propRef.scope = this.classRef.type;
             this.scope = this.classRef.type;
         }

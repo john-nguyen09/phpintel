@@ -4,12 +4,12 @@ exports[`phpDoc snapshot of phpDocs 1`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 59,
           "start": 48,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "CONST1",
@@ -19,12 +19,12 @@ PhpDocument {
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 80,
           "start": 71,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "PI",
@@ -34,12 +34,12 @@ PhpDocument {
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 116,
           "start": 92,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "STATUS_ACTIVE",
@@ -49,12 +49,12 @@ PhpDocument {
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 156,
           "start": 128,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "STATUS_INACTIVE",
@@ -64,12 +64,12 @@ PhpDocument {
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 184,
           "start": 168,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "IS_ACTIVE",
@@ -83,12 +83,12 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 187,
           "start": 6,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "modifier": SymbolModifier {
         "modifier": 16,
@@ -113,12 +113,12 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 184,
           "start": 180,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "refKind": 6,
       "scope": TypeName {
@@ -137,12 +137,12 @@ exports[`phpDoc snapshot of phpDocs 2`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 51,
           "start": 41,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": TypeName {
         "name": "CONST1",
@@ -156,12 +156,12 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1433,
           "start": 7,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -184,12 +184,12 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 674,
           "start": 627,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -204,12 +204,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 734,
           "start": 680,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -224,12 +224,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 840,
           "start": 740,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -244,12 +244,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 897,
           "start": 846,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -264,12 +264,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 957,
           "start": 903,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -284,12 +284,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1020,
           "start": 963,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -304,12 +304,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1139,
           "start": 1026,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -324,12 +324,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1227,
           "start": 1145,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -344,12 +344,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1431,
           "start": 1233,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -367,12 +367,12 @@ PhpDocument {
   "properties": Array [
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 95,
           "start": 72,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -385,12 +385,12 @@ PhpDocument {
     },
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 127,
           "start": 109,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -403,12 +403,12 @@ PhpDocument {
     },
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 150,
           "start": 140,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -422,12 +422,12 @@ PhpDocument {
     Property {
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 393,
           "start": 382,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -441,12 +441,12 @@ PhpDocument {
     Property {
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 406,
           "start": 395,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -460,12 +460,12 @@ PhpDocument {
     Property {
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 419,
           "start": 408,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -478,12 +478,12 @@ PhpDocument {
     },
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 455,
           "start": 436,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -497,12 +497,12 @@ PhpDocument {
     Property {
       "description": "A private proterty which is only used by this class
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 620,
           "start": 603,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -516,12 +516,12 @@ PhpDocument {
   ],
   "references": Array [
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 95,
           "start": 90,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -531,12 +531,12 @@ PhpDocument {
       "value": "false",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 127,
           "start": 122,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -548,12 +548,12 @@ PhpDocument {
     Parameter {
       "expression": Expression {
         "currentSymbol": ConstantAccess {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 664,
               "start": 660,
             },
-            "relativeUri": "case/class_methods.php",
+            "uri": "case/class_methods.php",
           },
           "refKind": 6,
           "scope": null,
@@ -563,12 +563,12 @@ PhpDocument {
           "value": "null",
         },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 664,
           "start": 648,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional",
       "refKind": 3,
@@ -583,12 +583,12 @@ PhpDocument {
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 664,
           "start": 660,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -598,12 +598,12 @@ PhpDocument {
       "value": "null",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 727,
           "start": 723,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": TypeName {
@@ -615,12 +615,12 @@ PhpDocument {
       "value": "true",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1010,
           "start": 999,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$firstParam",
       "refKind": 3,
@@ -631,12 +631,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1064,
           "start": 1058,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$first",
       "refKind": 3,
@@ -647,12 +647,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1073,
           "start": 1066,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$second",
       "refKind": 3,
@@ -665,12 +665,12 @@ PhpDocument {
     Parameter {
       "expression": Expression {
         "currentSymbol": ConstantAccess {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 1092,
               "start": 1088,
             },
-            "relativeUri": "case/class_methods.php",
+            "uri": "case/class_methods.php",
           },
           "refKind": 6,
           "scope": null,
@@ -680,12 +680,12 @@ PhpDocument {
           "value": "null",
         },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1092,
           "start": 1075,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional1",
       "refKind": 3,
@@ -700,12 +700,12 @@ PhpDocument {
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1092,
           "start": 1088,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -716,12 +716,12 @@ PhpDocument {
     },
     Parameter {
       "expression": Expression {},
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1109,
           "start": 1094,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional2",
       "refKind": 3,
@@ -732,12 +732,12 @@ PhpDocument {
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1132,
           "start": 1128,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": TypeName {
@@ -749,12 +749,12 @@ PhpDocument {
       "value": "null",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1188,
           "start": 1181,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -765,12 +765,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1197,
           "start": 1190,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -781,12 +781,12 @@ PhpDocument {
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1220,
           "start": 1216,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": TypeName {
@@ -798,12 +798,12 @@ PhpDocument {
       "value": "true",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1270,
           "start": 1263,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -814,12 +814,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1279,
           "start": 1272,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -831,12 +831,12 @@ PhpDocument {
     },
     PropRefExpression {
       "classRef": ClassRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1299,
             "start": 1295,
           },
-          "relativeUri": "case/class_methods.php",
+          "uri": "case/class_methods.php",
         },
         "refKind": 9,
         "type": TypeName {
@@ -844,20 +844,20 @@ PhpDocument {
         },
       },
       "isParentIncluded": true,
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1316,
           "start": 1295,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "propRef": PropertyRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1316,
             "start": 1301,
           },
-          "relativeUri": "case/class_methods.php",
+          "uri": "case/class_methods.php",
         },
         "refKind": 11,
         "scope": TypeName {
@@ -875,12 +875,12 @@ PhpDocument {
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1299,
           "start": 1295,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 9,
       "type": TypeName {
@@ -889,12 +889,12 @@ PhpDocument {
     },
     ClassConstRefExpression {
       "classConstRef": ClassConstRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1332,
             "start": 1326,
           },
-          "relativeUri": "case/class_methods.php",
+          "uri": "case/class_methods.php",
         },
         "refKind": 12,
         "scope": TypeName {
@@ -905,12 +905,12 @@ PhpDocument {
         },
       },
       "classRef": ClassRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1324,
             "start": 1320,
           },
-          "relativeUri": "case/class_methods.php",
+          "uri": "case/class_methods.php",
         },
         "refKind": 9,
         "type": TypeName {
@@ -918,12 +918,12 @@ PhpDocument {
         },
       },
       "isParentIncluded": true,
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1332,
           "start": 1320,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 12,
       "scope": TypeName {
@@ -934,12 +934,12 @@ PhpDocument {
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1324,
           "start": 1320,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 9,
       "type": TypeName {
@@ -947,12 +947,12 @@ PhpDocument {
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1359,
           "start": 1355,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 9,
       "type": TypeName {
@@ -960,12 +960,12 @@ PhpDocument {
       },
     },
     MethodCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1373,
           "start": 1361,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 10,
       "scope": TypeName {
@@ -988,12 +988,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1424,
           "start": 1419,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": TypeName {
@@ -1021,11 +1021,12 @@ PhpDocument {
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 50,
               "start": 31,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$stringParam",
           "refKind": 3,
@@ -1040,11 +1041,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 65,
               "start": 52,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$intParam",
           "refKind": 3,
@@ -1059,11 +1061,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 82,
               "start": 67,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$boolParam",
           "refKind": 3,
@@ -1078,11 +1081,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 101,
               "start": 84,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$floatParam",
           "refKind": 3,
@@ -1098,11 +1102,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 582,
             "start": 7,
           },
+          "uri": "case/function_declare.php",
         },
         "variables": Object {
           "$boolParam": TypeComposite {
@@ -1167,11 +1172,12 @@ PhpDocument {
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 739,
               "start": 732,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$param1",
           "refKind": 3,
@@ -1186,11 +1192,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 748,
               "start": 741,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$param2",
           "refKind": 3,
@@ -1206,11 +1213,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 754,
             "start": 708,
           },
+          "uri": "case/function_declare.php",
         },
         "variables": Object {
           "$param1": TypeComposite {
@@ -1243,12 +1251,12 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 50,
           "start": 31,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$stringParam",
       "refKind": 3,
@@ -1263,12 +1271,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 65,
           "start": 52,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$intParam",
       "refKind": 3,
@@ -1283,12 +1291,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 82,
           "start": 67,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$boolParam",
       "refKind": 3,
@@ -1303,12 +1311,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 101,
           "start": 84,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$floatParam",
       "refKind": 3,
@@ -1347,12 +1355,12 @@ PhpDocument {
           },
         ],
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 138,
           "start": 129,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 1,
       "scope": null,
@@ -1371,12 +1379,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 168,
           "start": 164,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 6,
       "scope": null,
@@ -1436,12 +1444,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 429,
           "start": 424,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 6,
       "scope": null,
@@ -1465,12 +1473,12 @@ PhpDocument {
           },
         ],
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 455,
           "start": 446,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 1,
       "scope": null,
@@ -1489,12 +1497,12 @@ PhpDocument {
       },
     },
     ClassTypeDesignator {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 494,
           "start": 485,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 8,
       "scope": null,
@@ -1517,12 +1525,12 @@ PhpDocument {
           },
         ],
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 523,
           "start": 513,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 1,
       "scope": null,
@@ -1541,12 +1549,12 @@ PhpDocument {
       },
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 739,
           "start": 732,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -1561,12 +1569,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 748,
           "start": 741,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -1594,12 +1602,12 @@ exports[`phpDoc snapshot of phpDocs 4`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1120,
           "start": 1098,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": TypeName {
         "name": "TEST_CLASS_CONST",
@@ -1609,12 +1617,12 @@ PhpDocument {
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2164,
           "start": 2142,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": TypeName {
         "name": "TEST_CLASS_CONST",
@@ -1633,12 +1641,12 @@ PhpDocument {
           "name": "TestInterface2",
         },
       ],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 445,
           "start": 379,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1656,12 +1664,12 @@ PhpDocument {
           "name": "TestInterface",
         },
       ],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1911,
           "start": 924,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1677,12 +1685,12 @@ PhpDocument {
         "name": "TestClass",
       },
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2421,
           "start": 2384,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1696,12 +1704,12 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2919,
           "start": 2814,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1823,11 +1831,12 @@ PhpDocument {
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 2118,
             "start": 2089,
           },
+          "uri": "case/global_symbols.php",
         },
         "variables": Object {},
       },
@@ -1843,12 +1852,12 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1583,
           "start": 1493,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1864,12 +1873,12 @@ PhpDocument {
     Method {
       "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1909,
           "start": 1794,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1884,12 +1893,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2290,
           "start": 2236,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1902,12 +1911,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2379,
           "start": 2296,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1920,12 +1929,12 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2917,
           "start": 2867,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1944,12 +1953,12 @@ PhpDocument {
     Property {
       "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1266,
           "start": 1247,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1963,12 +1972,12 @@ PhpDocument {
     Property {
       "description": "Reprehenderit magna velit mollit ipsum do.
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1388,
           "start": 1375,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1981,12 +1990,12 @@ PhpDocument {
     },
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2203,
           "start": 2184,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1997,12 +2006,12 @@ PhpDocument {
     },
     Property {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2229,
           "start": 2216,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -2013,12 +2022,12 @@ PhpDocument {
     },
     Property {
       "description": "Neither this class nor its members are referenced anywhere",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2860,
           "start": 2845,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -2086,12 +2095,12 @@ PhpDocument {
       "value": "'Quite complex ' . TEST_CONST_STRING",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 340,
           "start": 323,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2101,12 +2110,12 @@ PhpDocument {
       "value": "TEST_CONST_STRING",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 376,
           "start": 343,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -2124,12 +2133,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 375,
           "start": 370,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2149,12 +2158,12 @@ PhpDocument {
     },
     ClassConstRefExpression {
       "classConstRef": ClassConstRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1576,
             "start": 1560,
           },
-          "relativeUri": "case/global_symbols.php",
+          "uri": "case/global_symbols.php",
         },
         "refKind": 12,
         "scope": TypeName {
@@ -2165,12 +2174,12 @@ PhpDocument {
         },
       },
       "classRef": ClassRef {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 1558,
             "start": 1554,
           },
-          "relativeUri": "case/global_symbols.php",
+          "uri": "case/global_symbols.php",
         },
         "refKind": 9,
         "type": TypeName {
@@ -2178,12 +2187,12 @@ PhpDocument {
         },
       },
       "isParentIncluded": true,
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1576,
           "start": 1554,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 12,
       "scope": TypeName {
@@ -2194,12 +2203,12 @@ PhpDocument {
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1558,
           "start": 1554,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 9,
       "type": TypeName {
@@ -2207,12 +2216,12 @@ PhpDocument {
       },
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1835,
           "start": 1821,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": "$testParameter",
       "refKind": 3,
@@ -2239,12 +2248,12 @@ PhpDocument {
       },
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2337,
           "start": 2323,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": "$testParameter",
       "refKind": 3,
@@ -2265,12 +2274,12 @@ PhpDocument {
       },
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2512,
           "start": 2475,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -2288,12 +2297,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2511,
           "start": 2506,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2312,12 +2321,12 @@ PhpDocument {
       "value": "false",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2562,
           "start": 2514,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -2344,12 +2353,12 @@ PhpDocument {
       "value": "'simple string'",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2624,
           "start": 2564,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -2376,12 +2385,12 @@ PhpDocument {
       "value": "'not so simple string'",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2693,
           "start": 2626,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -2399,12 +2408,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2692,
           "start": 2671,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2423,12 +2432,12 @@ PhpDocument {
       "value": "'more of ' . TEST_STRING_CONSTANT2",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2722,
           "start": 2702,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,

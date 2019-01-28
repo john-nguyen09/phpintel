@@ -7,7 +7,7 @@ import { Reference, RefKind } from "../reference";
 export class ClassTypeDesignator extends Symbol implements Reference, Locatable, Consumer {
     public readonly refKind = RefKind.ClassTypeDesignator;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
     consume(other: Symbol) {

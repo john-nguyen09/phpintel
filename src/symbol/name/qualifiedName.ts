@@ -4,7 +4,7 @@ import { Location } from "../meta/location";
 
 export class QualifiedName extends Symbol implements Consumer, Locatable {
     public name: string = '';
-    public location: Location = new Location();
+    public location: Location = {};
 
     consume(other: Symbol) {
         if (other instanceof NamespaceName) {

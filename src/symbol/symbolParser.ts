@@ -259,7 +259,10 @@ export class SymbolParser implements Visitor {
                     }
 
                     if (isLocatable(symbol)) {
-                        symbol.location = new Location(this.doc.uri, nodeRange(node, this.doc.text));
+                        symbol.location = {
+                            uri: this.doc.uri,
+                            range: nodeRange(node, this.doc.text)
+                        };
                     }
                 });
             }

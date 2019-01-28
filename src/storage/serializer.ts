@@ -80,7 +80,7 @@ export class Serializer {
     }
 
     public setLocation(location: Location) {
-        if (location.isEmpty) {
+        if (location.uri === undefined || location.range === undefined) {
             this.setBool(false);
         } else {
             this.setBool(true);
@@ -167,14 +167,17 @@ export class Deserializer {
         let hasLocation = this.readBool();
 
         if (!hasLocation) {
-            return new Location();
+            return {};
         }
 
-        return new Location(this.readString(), this.readRange());
+        return { uri: this.readString(), range: this.readRange() };
     }
 
     public readRange(): Range {
-        return new Range(this.readInt32(), this.readInt32());
+        return {
+            start: this.readInt32(),
+            end: this.readInt32()
+        }
     }
 
     public readSymbolModifier(): SymbolModifier {

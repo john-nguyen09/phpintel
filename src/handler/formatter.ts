@@ -145,8 +145,8 @@ export namespace Formatter {
 
     export function toLspLocation(phpDoc: PhpDocument, loc: Location): LspLocation {
         return {
-            uri: loc.uri,
-            range: toLspRange(phpDoc, loc.range)
+            uri: loc.uri || '',
+            range: toLspRange(phpDoc, loc.range || { start: -1, end: -1 })
         }
     }
 

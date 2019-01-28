@@ -2,6 +2,7 @@ import { TypeName } from "../type/name";
 import { TypeComposite } from "../type/composite";
 import { Symbol } from "./symbol";
 import { Location } from "./meta/location";
+import { Range } from "./meta/range";
 
 export enum RefKind {
     Function = 1,
@@ -24,6 +25,7 @@ export interface Reference {
     type: TypeName | TypeComposite;
     location: Location;
     scope: TypeName | null;
+    scopeRange?: Range;
 }
 
 export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {

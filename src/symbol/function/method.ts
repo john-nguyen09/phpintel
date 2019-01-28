@@ -11,7 +11,7 @@ import { Variable } from "../variable/variable";
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
     public name: TypeName;
-    public location: Location = new Location();
+    public location: Location = {};
     public description: string = '';
     public scope: TypeName | null = null;
 

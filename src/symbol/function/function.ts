@@ -22,7 +22,7 @@ export class Function extends Symbol implements
     NamedSymbol,
     Locatable,
     NameResolvable {
-    private _location: Location = new Location();
+    private _location: Location = {};
 
     public name: TypeName;
     public parameters: Parameter[] = [];

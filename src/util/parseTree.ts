@@ -22,10 +22,7 @@ export function nodeRange(node: TreeNode, text: string): Range {
         }
     }
 
-    return new Range(
-        start,
-        end
-    );
+    return { start, end };
 }
 
 export function nodeText(node: TreeNode, text: string): string {

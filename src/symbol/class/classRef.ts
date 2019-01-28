@@ -9,7 +9,7 @@ import { ClassConstRefExpression } from "../type/classConstRefExpression";
 export class ClassRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Class;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
 
     @nonenumerable
     private _scope: TypeName | null = null;

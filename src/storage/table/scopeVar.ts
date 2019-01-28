@@ -20,6 +20,13 @@ export class ScopeVarTable {
     }
 
     async put(scopeVar: ScopeVar) {
+        if (
+            scopeVar.location.range === undefined ||
+            scopeVar.location.uri === undefined
+        ) {
+            return;
+        }
+
         const serializer = new Serializer();
         serializer.setInt32(scopeVar.location.range.start);
         serializer.setInt32(scopeVar.location.range.end);
@@ -137,7 +144,11 @@ export class ScopeVarTable {
             throw new Error(`[Impossble case]: Cannot find any scope before ${offset}`);
         }
         if (after === null) {
-            return before.location.range;
+            return before.location.range || { start: -1, end: -1 };
+        }
+
+        if (before.location.range === undefined || after.location.range === undefined) {
+            return { start: -1, end: -1 };
         }
 
         return {
@@ -151,13 +162,13 @@ const ValueEncoding = {
     encode: (scopeVar: ScopeVar): Buffer => {
         const serializer = new Serializer();
 
-        serializer.setString(scopeVar.location.uri);
-        if (typeof scopeVar.location.range !== 'undefined') {
+        if (scopeVar.location.uri === undefined || scopeVar.location.range === undefined) {
+            serializer.setBool(false);
+        } else {
             serializer.setBool(true);
+            serializer.setString(scopeVar.location.uri);
             serializer.setInt32(scopeVar.location.range.start);
             serializer.setInt32(scopeVar.location.range.end);
-        } else {
-            serializer.setBool(false);
         }
 
         return serializer.getBuffer();
@@ -166,8 +177,8 @@ const ValueEncoding = {
         const scopeVar = new ScopeVar();
         const deserializer = new Deserializer(buffer);
 
-        scopeVar.location.uri = deserializer.readString();
         if (deserializer.readBool()) {
+            scopeVar.location.uri = deserializer.readString();
             scopeVar.location.range =  {
                 start: deserializer.readInt32(),
                 end: deserializer.readInt32(),

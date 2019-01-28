@@ -10,11 +10,12 @@ Array [
     },
     "parameters": Array [],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2118,
           "start": 2089,
         },
+        "uri": "case/global_symbols.php",
       },
       "variables": Object {},
     },
@@ -27,7 +28,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -41,7 +42,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -55,7 +56,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -69,7 +70,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -84,11 +85,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 582,
           "start": 7,
         },
+        "uri": "case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -153,7 +155,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$param1",
         "refKind": 3,
         "scope": null,
@@ -167,7 +169,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$param2",
         "refKind": 3,
         "scope": null,
@@ -182,11 +184,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 754,
           "start": 708,
         },
+        "uri": "case/function_declare.php",
       },
       "variables": Object {
         "$param1": TypeComposite {
@@ -445,12 +448,12 @@ exports[`completion completion for current scoped member references 1`] = `
 Array [
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 115,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -465,12 +468,12 @@ Array [
   },
   Property {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 106,
         "start": 93,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -482,12 +485,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 67,
         "start": 48,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "name": TypeName {
       "name": "SYSTEM_NUM_CPUS",
@@ -505,12 +508,12 @@ exports[`completion completion for current scoped member references 3`] = `
 Array [
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 115,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -525,12 +528,12 @@ Array [
   },
   Property {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 106,
         "start": 93,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -542,12 +545,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 67,
         "start": 48,
       },
-      "relativeUri": "case/completion/currentScopedMember.php",
+      "uri": "case/completion/currentScopedMember.php",
     },
     "name": TypeName {
       "name": "SYSTEM_NUM_CPUS",
@@ -563,12 +566,12 @@ exports[`completion completion for scoped member references 1`] = `
 Array [
   Method {
     "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1583,
         "start": 1493,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -584,12 +587,12 @@ Array [
   Property {
     "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1266,
         "start": 1247,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -601,12 +604,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1120,
         "start": 1098,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "name": TypeName {
       "name": "TEST_CLASS_CONST",
@@ -624,12 +627,12 @@ exports[`completion completion for scoped member references 3`] = `
 Array [
   Method {
     "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1583,
         "start": 1493,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -643,12 +646,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1120,
         "start": 1098,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "name": TypeName {
       "name": "TEST_CLASS_CONST",
@@ -663,12 +666,12 @@ Array [
 exports[`completion completion for scoped member references 4`] = `
 Array [
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1120,
         "start": 1098,
       },
-      "relativeUri": "case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "name": TypeName {
       "name": "TEST_CLASS_CONST",
@@ -686,13 +689,11 @@ exports[`completion completion for variables 1`] = `
 Array [
   Variable {
     "expression": Expression {},
-    "location": Location {
-      "range": undefined,
-      "relativeUri": "",
-    },
+    "location": Object {},
     "name": "$var1",
     "refKind": 2,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -708,13 +709,11 @@ exports[`completion completion for variables 2`] = `
 Array [
   Variable {
     "expression": Expression {},
-    "location": Location {
-      "range": undefined,
-      "relativeUri": "",
-    },
+    "location": Object {},
     "name": "$var2",
     "refKind": 2,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -725,13 +724,11 @@ Array [
   },
   Variable {
     "expression": Expression {},
-    "location": Location {
-      "range": undefined,
-      "relativeUri": "",
-    },
+    "location": Object {},
     "name": "$var3",
     "refKind": 2,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -747,13 +744,11 @@ exports[`completion completion for variables 3`] = `
 Array [
   Variable {
     "expression": Expression {},
-    "location": Location {
-      "range": undefined,
-      "relativeUri": "",
-    },
+    "location": Object {},
     "name": "$var2",
     "refKind": 2,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -764,13 +759,11 @@ Array [
   },
   Variable {
     "expression": Expression {},
-    "location": Location {
-      "range": undefined,
-      "relativeUri": "",
-    },
+    "location": Object {},
     "name": "$var3",
     "refKind": 2,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeComposite {
       "_types": Array [
         TypeName {

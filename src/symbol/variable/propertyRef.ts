@@ -9,7 +9,7 @@ import { TokenKind } from "../../util/parser";
 export class PropertyRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Property;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName = new TypeName('');
 
     @nonenumerable

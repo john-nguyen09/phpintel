@@ -11,7 +11,7 @@ export class FunctionCall extends TransformSymbol implements Consumer, Reference
     public realSymbol: (Symbol & Consumer);
     public type: TypeName = new TypeName('');
     public argumentList: ArgumentExpressionList;
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
     consume(other: Symbol) {

@@ -20,12 +20,12 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 61,
           "start": 31,
         },
-        "relativeUri": "case/namespaceDef/class.php",
+        "uri": "case/namespaceDef/class.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -124,12 +124,12 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 71,
           "start": 31,
         },
-        "relativeUri": "case/namespaceDef/defineConst.php",
+        "uri": "case/namespaceDef/defineConst.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
@@ -172,11 +172,12 @@ PhpDocument {
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 215,
               "start": 208,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param1",
           "refKind": 3,
@@ -191,11 +192,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 224,
               "start": 217,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param2",
           "refKind": 3,
@@ -210,11 +212,12 @@ PhpDocument {
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 238,
               "start": 226,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param3",
           "refKind": 3,
@@ -230,11 +233,12 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
-        "location": Location {
-          "range": Range {
+        "location": Object {
+          "range": Object {
             "end": 579,
             "start": 175,
           },
+          "uri": "case/namespaceDef/function.php",
         },
         "variables": Object {
           "$param1": TypeComposite {
@@ -313,12 +317,12 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 215,
           "start": 208,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -333,12 +337,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 224,
           "start": 217,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -353,12 +357,12 @@ PhpDocument {
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 238,
           "start": 226,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param3",
       "refKind": 3,
@@ -383,12 +387,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 259,
           "start": 254,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "refKind": 6,
       "scope": null,
@@ -418,12 +422,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 313,
           "start": 292,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "refKind": 6,
       "scope": null,

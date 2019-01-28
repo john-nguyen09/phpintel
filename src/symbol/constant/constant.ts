@@ -12,7 +12,7 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
     public name: TypeName = new TypeName('');
     public description: string;
     public expression: Expression;
-    public location: Location = new Location();
+    public location: Location = {};
     public resolvedType: TypeName | null = null;
     public resolvedValue: string | null = null;
     public scope: TypeName | null = null;

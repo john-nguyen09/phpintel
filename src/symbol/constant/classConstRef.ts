@@ -9,7 +9,7 @@ import { TokenKind } from "../../util/parser";
 export class ClassConstRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.ClassConst;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName = new TypeName('');
 
     @nonenumerable

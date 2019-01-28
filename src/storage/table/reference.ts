@@ -20,7 +20,7 @@ export class ReferenceTable {
     }
 
     async put(ref: Reference) {
-        if (ref.location.isEmpty) {
+        if (ref.location.uri === undefined || ref.location.range === undefined) {
             return;
         }
 
@@ -93,6 +93,7 @@ export class ReferenceTable {
 
                 if (
                     ref.location.uri === uri &&
+                    ref.location.range !== undefined &&
                     ref.location.range.start <= offset &&
                     ref.location.range.end >= offset
                 ) {
@@ -137,6 +138,7 @@ export class ReferenceTable {
 
                 if (
                     ref.location.uri === uri &&
+                    ref.location.range !== undefined &&
                     ref.location.range.end <= range.end &&
                     (typeof predicate === 'undefined' || predicate(ref))
                 ) {

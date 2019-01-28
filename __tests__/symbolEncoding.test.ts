@@ -40,6 +40,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let theClass of phpDoc.classes) {
+                if (theClass.location.uri === undefined) {
+                    continue;
+                }
+
                 theClass.location.uri = toRelative(theClass.location.uri);
 
                 let buffer = symbolEncoding.encode(theClass);
@@ -57,6 +61,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let func of phpDoc.functions) {
+                if (func.location.uri === undefined) {
+                    continue;
+                }
+
                 func.location.uri = toRelative(func.location.uri);
 
                 let buffer = symbolEncoding.encode(func);
@@ -74,6 +82,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let constant of phpDoc.constants) {
+                if (constant.location.uri === undefined) {
+                    continue;
+                }
+
                 constant.location.uri = toRelative(constant.location.uri);
 
                 let buffer = symbolEncoding.encode(constant);
@@ -91,6 +103,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let classConstant of phpDoc.classConstants) {
+                if (classConstant.location.uri === undefined) {
+                    continue;
+                }
+
                 classConstant.location.uri = toRelative(classConstant.location.uri);
 
                 let buffer = symbolEncoding.encode(classConstant);
@@ -108,6 +124,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let method of phpDoc.methods) {
+                if (method.location.uri === undefined) {
+                    continue;
+                }
+
                 method.location.uri = toRelative(method.location.uri);
 
                 let buffer = symbolEncoding.encode(method);
@@ -125,6 +145,10 @@ describe('symbolEncoding', () => {
 
         for (let phpDoc of phpDocs) {
             for (let property of phpDoc.properties) {
+                if (property.location.uri === undefined) {
+                    continue;
+                }
+
                 property.location.uri = toRelative(property.location.uri);
 
                 let buffer = symbolEncoding.encode(property);

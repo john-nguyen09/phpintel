@@ -2,11 +2,12 @@
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 1`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 59,
       "start": 48,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "CONST1",
@@ -19,11 +20,12 @@ ClassConstant {
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 2`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 80,
       "start": 71,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "PI",
@@ -36,11 +38,12 @@ ClassConstant {
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 3`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 116,
       "start": 92,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_ACTIVE",
@@ -53,11 +56,12 @@ ClassConstant {
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 4`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 156,
       "start": 128,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_INACTIVE",
@@ -70,11 +74,12 @@ ClassConstant {
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 5`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 184,
       "start": 168,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "IS_ACTIVE",
@@ -89,11 +94,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 1`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 130,
       "start": 114,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST",
@@ -111,11 +117,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 2`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 156,
       "start": 139,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST1",
@@ -133,11 +140,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 3`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 175,
       "start": 158,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST2",
@@ -155,11 +163,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 4`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 219,
       "start": 184,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING",
@@ -177,11 +186,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 5`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 275,
       "start": 227,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING2",
@@ -199,11 +209,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 6`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 340,
       "start": 283,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_CONST_STRING3",
@@ -221,11 +232,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 7`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 376,
       "start": 343,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\CONSTANT_SAMPLE1",
@@ -243,11 +255,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 8`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2512,
       "start": 2475,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_DEFINE_CONSTANT",
@@ -265,11 +278,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 9`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2562,
       "start": 2514,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT1",
@@ -287,11 +301,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 10`
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2624,
       "start": 2564,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT2",
@@ -309,11 +324,12 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 11`
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2693,
       "start": 2626,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
     "name": "\\\\TEST_STRING_CONSTANT3",
@@ -329,11 +345,12 @@ DefineConstant {
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 1`] = `
 Function {
-  "_location": Location {
-    "range": Range {
+  "_location": Object {
+    "range": Object {
       "end": 582,
       "start": 7,
     },
+    "uri": "case/function_declare.php",
   },
   "description": "",
   "docParamTypes": Object {},
@@ -342,7 +359,7 @@ Function {
   },
   "parameters": Array [
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$stringParam",
       "refKind": 3,
       "scope": null,
@@ -356,7 +373,7 @@ Function {
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$intParam",
       "refKind": 3,
       "scope": null,
@@ -370,7 +387,7 @@ Function {
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$boolParam",
       "refKind": 3,
       "scope": null,
@@ -384,7 +401,7 @@ Function {
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$floatParam",
       "refKind": 3,
       "scope": null,
@@ -399,11 +416,12 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 582,
         "start": 7,
       },
+      "uri": "case/function_declare.php",
     },
     "variables": Object {
       "$boolParam": TypeComposite {
@@ -467,11 +485,12 @@ Function {
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 2`] = `
 Function {
-  "_location": Location {
-    "range": Range {
+  "_location": Object {
+    "range": Object {
       "end": 754,
       "start": 708,
     },
+    "uri": "case/function_declare.php",
   },
   "description": "Test function 2",
   "docParamTypes": Object {},
@@ -480,7 +499,7 @@ Function {
   },
   "parameters": Array [
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$param1",
       "refKind": 3,
       "scope": null,
@@ -494,7 +513,7 @@ Function {
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "location": Object {},
       "name": "$param2",
       "refKind": 3,
       "scope": null,
@@ -509,11 +528,12 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 754,
         "start": 708,
       },
+      "uri": "case/function_declare.php",
     },
     "variables": Object {
       "$param1": TypeComposite {
@@ -541,11 +561,12 @@ Function {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 1`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 674,
       "start": 627,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -563,11 +584,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 2`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 734,
       "start": 680,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -585,11 +607,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 3`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 840,
       "start": 740,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -607,11 +630,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 4`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 897,
       "start": 846,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -629,11 +653,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 5`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 957,
       "start": 903,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -651,11 +676,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 6`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 1020,
       "start": 963,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -673,11 +699,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 7`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 1139,
       "start": 1026,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -695,11 +722,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 8`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 1227,
       "start": 1145,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 32,
@@ -717,11 +745,12 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 9`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 1431,
       "start": 1233,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -760,12 +789,12 @@ PhpDocument {
 exports[`symbolEncoding snapshot of property symbols after encode and decode 1`] = `
 Property {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 95,
       "start": 72,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 32,
@@ -781,12 +810,12 @@ Property {
 exports[`symbolEncoding snapshot of property symbols after encode and decode 2`] = `
 Property {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 127,
       "start": 109,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -802,12 +831,12 @@ Property {
 exports[`symbolEncoding snapshot of property symbols after encode and decode 3`] = `
 Property {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 150,
       "start": 140,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -824,12 +853,12 @@ exports[`symbolEncoding snapshot of property symbols after encode and decode 4`]
 Property {
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 393,
       "start": 382,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -846,12 +875,12 @@ exports[`symbolEncoding snapshot of property symbols after encode and decode 5`]
 Property {
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 406,
       "start": 395,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -868,12 +897,12 @@ exports[`symbolEncoding snapshot of property symbols after encode and decode 6`]
 Property {
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 419,
       "start": 408,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -889,12 +918,12 @@ Property {
 exports[`symbolEncoding snapshot of property symbols after encode and decode 7`] = `
 Property {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 455,
       "start": 436,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -911,12 +940,12 @@ exports[`symbolEncoding snapshot of property symbols after encode and decode 8`]
 Property {
   "description": "A private proterty which is only used by this class
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 620,
       "start": 603,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,

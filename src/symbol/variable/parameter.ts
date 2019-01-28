@@ -11,7 +11,7 @@ export class Parameter extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Parameter;
     public name: string = '';
     public type: TypeComposite = new TypeComposite();
-    public location: Location = new Location();
+    public location: Location = {};
     public value: string = '';
     public scope: TypeName | null = null;
 

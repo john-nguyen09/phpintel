@@ -10,7 +10,7 @@ import { ArgumentExpressionList } from "../argumentExpressionList";
 export class MethodCall extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Method;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName = new TypeName('');
 
     @nonenumerable

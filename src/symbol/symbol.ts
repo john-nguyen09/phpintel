@@ -9,6 +9,7 @@ import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';
 import { Location } from './meta/location';
 import { ImportTable } from '../type/importTable';
+import { toRelative } from '../util/uri';
 
 export abstract class Symbol {
     toObject(): any {
@@ -42,7 +43,8 @@ export abstract class Symbol {
         let fields = fieldGetter.getFields();
 
         for (let key of fields) {
-            object[key] = (<any>fieldGetter)[key];
+            let value: any = (<any>fieldGetter)[key];
+            object[key] = this.createNewObject(value);
         }
     }
 
@@ -56,6 +58,10 @@ export abstract class Symbol {
                 newObj = createObject(currObj.constructor);
                 this.assignFieldGetter(newObj, currObj);
             } else {
+                if ('uri' in currObj) {
+                    currObj.uri = toRelative(currObj.uri);
+                }
+
                 newObj = currObj;
             }
 

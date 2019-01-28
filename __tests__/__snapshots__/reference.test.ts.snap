@@ -3,11 +3,12 @@
 exports[`Testing functions around references reference variable 1`] = `
 Array [
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 383,
         "start": 376,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
     "refName": "$refVar",
@@ -21,11 +22,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 425,
         "start": 418,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
     "refName": "$refVar",
@@ -42,11 +44,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 445,
         "start": 437,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 2,
     "refName": "$refVar2",
@@ -68,11 +71,12 @@ Array [
 exports[`Testing functions around references should return the reference at the cursor 1`] = `
 Array [
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
     "refName": undefined,
@@ -82,11 +86,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
     "refName": undefined,
@@ -96,11 +101,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 8,
     "refName": undefined,
@@ -110,11 +116,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
     "refName": undefined,
@@ -124,11 +131,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
     "refName": undefined,
@@ -138,11 +146,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 1,
     "refName": undefined,
@@ -152,11 +161,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 241,
         "start": 226,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 9,
     "refName": undefined,
@@ -166,11 +176,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 241,
         "start": 226,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 9,
     "refName": undefined,
@@ -180,11 +191,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 255,
         "start": 243,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 10,
     "refName": undefined,
@@ -196,11 +208,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 255,
         "start": 243,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 10,
     "refName": undefined,
@@ -212,11 +225,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 304,
         "start": 272,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 11,
     "refName": undefined,
@@ -228,11 +242,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 304,
         "start": 272,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 11,
     "refName": undefined,
@@ -244,11 +259,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 340,
         "start": 315,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 12,
     "refName": undefined,
@@ -260,11 +276,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 340,
         "start": 315,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 12,
     "refName": undefined,
@@ -276,11 +293,12 @@ Array [
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 371,
         "start": 351,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
     },
     "refKind": 6,
     "refName": undefined,
@@ -301,11 +319,12 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -323,11 +342,12 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -345,11 +365,12 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -361,11 +382,12 @@ Array [
     "traits": Array [],
   },
   Function {
-    "_location": Location {
-      "range": Range {
+    "_location": Object {
+      "range": Object {
         "end": 582,
         "start": 7,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
     "description": "",
     "docParamTypes": Object {},
@@ -374,7 +396,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -388,7 +410,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -402,7 +424,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -416,7 +438,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -431,11 +453,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 582,
           "start": 7,
         },
+        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -496,11 +519,12 @@ Array [
     },
   },
   Function {
-    "_location": Location {
-      "range": Range {
+    "_location": Object {
+      "range": Object {
         "end": 582,
         "start": 7,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
     "description": "",
     "docParamTypes": Object {},
@@ -509,7 +533,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -523,7 +547,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -537,7 +561,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -551,7 +575,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -566,11 +590,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 582,
           "start": 7,
         },
+        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -631,11 +656,12 @@ Array [
     },
   },
   Function {
-    "_location": Location {
-      "range": Range {
+    "_location": Object {
+      "range": Object {
         "end": 582,
         "start": 7,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
     },
     "description": "",
     "docParamTypes": Object {},
@@ -644,7 +670,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -658,7 +684,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -672,7 +698,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -686,7 +712,7 @@ Array [
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -701,11 +727,12 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 582,
           "start": 7,
         },
+        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -768,11 +795,12 @@ Array [
   Class {
     "extend": null,
     "implements": Array [],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1433,
         "start": 7,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -786,11 +814,12 @@ Array [
   Class {
     "extend": null,
     "implements": Array [],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1433,
         "start": 7,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -803,11 +832,12 @@ Array [
   },
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1227,
         "start": 1145,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -822,11 +852,12 @@ Array [
   },
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1227,
         "start": 1145,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -841,11 +872,12 @@ Array [
   },
   Property {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 95,
         "start": 72,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -858,11 +890,12 @@ Array [
   },
   Property {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 95,
         "start": 72,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -874,11 +907,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 168,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
@@ -888,11 +922,12 @@ Array [
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 168,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
@@ -904,11 +939,12 @@ Array [
   DefineConstant {
     "acceptWhitespace": true,
     "hasEqual": false,
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 2512,
         "start": 2475,
       },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
     },
     "name": TypeName {
       "name": "\\\\TEST_DEFINE_CONSTANT",

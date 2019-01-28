@@ -14,7 +14,7 @@ export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
     public name: TypeName;
     public description: string;
     public extend: TypeName | null;
-    public location: Location = new Location();
+    public location: Location = {};
     public implements: TypeName[] = [];
     public modifier: SymbolModifier = new SymbolModifier();
     public traits: TypeName[] = [];

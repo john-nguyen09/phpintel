@@ -7,7 +7,7 @@ import { Location } from "../meta/location";
 
 export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, Locatable {
     public name: TypeName;
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
     @nonenumerable

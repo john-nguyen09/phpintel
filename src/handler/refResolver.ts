@@ -151,6 +151,9 @@ export namespace RefResolver {
                 if (typeof ref.refName !== 'undefined') {
                     keyword = ref.refName;
                 }
+                if (ref.location.uri === undefined || ref.location.range === undefined) {
+                    break;
+                }
                 const range = await scopeVarTable.findAt(ref.location.uri, ref.location.range.start);
 
                 if (range === null) {
