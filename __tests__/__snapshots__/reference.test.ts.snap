@@ -215,7 +215,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": 304,
-        "start": 289,
+        "start": 272,
       },
     },
     "refKind": 11,
@@ -231,7 +231,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": 304,
-        "start": 289,
+        "start": 272,
       },
     },
     "refKind": 11,
@@ -247,7 +247,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": 340,
-        "start": 331,
+        "start": 315,
       },
     },
     "refKind": 12,
@@ -263,7 +263,7 @@ Array [
     "location": Location {
       "range": Range {
         "end": 340,
-        "start": 331,
+        "start": 315,
       },
     },
     "refKind": 12,

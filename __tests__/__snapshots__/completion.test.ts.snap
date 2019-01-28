@@ -443,6 +443,26 @@ Array [
 
 exports[`completion completion for current scoped member references 1`] = `
 Array [
+  Method {
+    "description": "",
+    "location": Location {
+      "range": Range {
+        "end": 184,
+        "start": 115,
+      },
+      "relativeUri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "GetNumCpus",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
   Property {
     "description": "",
     "location": Location {
@@ -461,60 +481,25 @@ Array [
       "name": "\\\\CurrentScopedMember",
     },
   },
-]
-`;
-
-exports[`completion completion for current scoped member references 2`] = `
-Array [
-  Method {
-    "description": "",
-    "location": Location {
-      "range": Range {
-        "end": 2290,
-        "start": 2236,
-      },
-      "relativeUri": "case/global_symbols.php",
-    },
-    "modifier": SymbolModifier {
-      "modifier": 32,
-      "visibility": 1,
-    },
-    "name": TypeName {
-      "name": "staticTestMethod",
-    },
-    "scope": null,
-  },
-  Property {
-    "description": "",
-    "location": Location {
-      "range": Range {
-        "end": 2203,
-        "start": 2184,
-      },
-      "relativeUri": "case/global_symbols.php",
-    },
-    "modifier": SymbolModifier {
-      "modifier": 32,
-      "visibility": 1,
-    },
-    "name": "$staticTestProperty",
-    "scope": null,
-  },
   ClassConstant {
     "location": Location {
       "range": Range {
-        "end": 2164,
-        "start": 2142,
+        "end": 67,
+        "start": 48,
       },
-      "relativeUri": "case/global_symbols.php",
+      "relativeUri": "case/completion/currentScopedMember.php",
     },
     "name": TypeName {
-      "name": "TEST_CLASS_CONST",
+      "name": "SYSTEM_NUM_CPUS",
     },
-    "scope": null,
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
   },
 ]
 `;
+
+exports[`completion completion for current scoped member references 2`] = `Array []`;
 
 exports[`completion completion for current scoped member references 3`] = `
 Array [
@@ -633,29 +618,7 @@ Array [
 ]
 `;
 
-exports[`completion completion for scoped member references 2`] = `
-Array [
-  Property {
-    "description": "Lorem excepteur officia sit anim velit veniam enim.
-",
-    "location": Location {
-      "range": Range {
-        "end": 1266,
-        "start": 1247,
-      },
-      "relativeUri": "case/global_symbols.php",
-    },
-    "modifier": SymbolModifier {
-      "modifier": 32,
-      "visibility": 1,
-    },
-    "name": "$staticTestProperty",
-    "scope": TypeName {
-      "name": "\\\\TestClass",
-    },
-  },
-]
-`;
+exports[`completion completion for scoped member references 2`] = `Array []`;
 
 exports[`completion completion for scoped member references 3`] = `
 Array [
@@ -742,6 +705,45 @@ Array [
 `;
 
 exports[`completion completion for variables 2`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Location {
+      "range": undefined,
+      "relativeUri": "",
+    },
+    "name": "$var2",
+    "refKind": 2,
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+  },
+  Variable {
+    "expression": Expression {},
+    "location": Location {
+      "range": undefined,
+      "relativeUri": "",
+    },
+    "name": "$var3",
+    "refKind": 2,
+    "scope": null,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "int",
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`completion completion for variables 3`] = `
 Array [
   Variable {
     "expression": Expression {},

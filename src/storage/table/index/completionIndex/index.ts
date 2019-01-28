@@ -1,7 +1,8 @@
 import { WordSeparator } from "./wordSeparator";
 import { DbStore, LevelDatasource, SubStore } from "../../../db";
 import { PhpDocument } from "../../../../symbol/phpDocument";
-import { Serializer } from "../../../serializer";
+import { Serializer, Deserializer } from "../../../serializer";
+import { inspect } from "util";
 
 export interface CompletionValue {
     uri: string;
@@ -18,12 +19,16 @@ export class CompletionIndex {
         this.db = new SubStore(datasource, {
             name: name,
             version: 1,
-            keyEncoding: 'binary',
             valueEncoding: CompletionEncoding
         });
     }
 
     async put(phpDoc: PhpDocument, name: string, prefix?: string) {
+        if (typeof name !== 'string') {
+            console.trace(`${phpDoc.uri} invalid put, name is not string ${inspect(name)}`);
+            return;
+        }
+
         let tokens = WordSeparator.getTokens(name);
 
         for (let token of tokens) {
@@ -74,11 +79,18 @@ export class CompletionIndex {
     }
 
     async del(uri: string, name: string, prefix?: string) {
+        if (typeof name !== 'string') {
+            return;
+        }
+
         let tokens = WordSeparator.getTokens(name);
 
+        if (typeof prefix === 'undefined') {
+            prefix = '';
+        }
+
         for (let token of tokens) {
-            let key = CompletionIndex.getKey(uri, token);
-            await this.db.del(CompletionIndex.getKey(uri, token));
+            await this.db.del(prefix + CompletionIndex.getKey(uri, token));
         }
     }
 
@@ -92,17 +104,17 @@ const CompletionEncoding = {
     encode: (value: CompletionValue): Buffer => {
         let serializer = new Serializer();
 
-        serializer.writeString(value.uri);
-        serializer.writeString(value.name);
+        serializer.setString(value.uri);
+        serializer.setString(value.name);
 
         return serializer.getBuffer();
     },
     decode: (buffer: Buffer): CompletionValue => {
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
 
         return {
-            uri: serializer.readString(),
-            name: serializer.readString()
+            uri: deserializer.readString(),
+            name: deserializer.readString()
         };
     }
 } as Level.Encoding;

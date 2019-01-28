@@ -4,6 +4,7 @@ import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { QualifiedName } from "../name/qualifiedName";
 import { nonenumerable } from "../../util/decorator";
+import { ClassConstRefExpression } from "../type/classConstRefExpression";
 
 export class ClassRef extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Class;
@@ -17,9 +18,11 @@ export class ClassRef extends Symbol implements Consumer, Reference {
         if (other instanceof QualifiedName) {
             this.type = new TypeName(other.name);
             this.location = other.location;
+        } else if (other instanceof ClassConstRefExpression) {
+            this.type = other.scope;
         }
 
-        return false;
+        return true;
     }
 
     get scope(): TypeName | null {

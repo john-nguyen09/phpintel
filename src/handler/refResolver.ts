@@ -21,6 +21,7 @@ import { ScopeVarTable } from "../storage/table/scopeVar";
 import { ReferenceTable } from "../storage/table/reference";
 import { Variable } from "../symbol/variable/variable";
 import { TypeName } from "../type/name";
+import { ScopeVar } from "../symbol/variable/scopeVar";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -151,15 +152,20 @@ export namespace RefResolver {
                     keyword = ref.refName;
                 }
                 const range = await scopeVarTable.findAt(ref.location.uri, ref.location.range.start);
-                console.log(range);
 
                 if (range === null) {
                     break;
                 }
 
                 let refVars: Reference[] = [];
+                const scopeVar = new ScopeVar();
                 if (keyword.length > 0) {
-
+                    refVars = await refTable.findWithin(phpDoc.uri, range, (foundRef) => {
+                        return foundRef.refKind === RefKind.Variable &&
+                            typeof foundRef.refName !== 'undefined' &&
+                            foundRef.refName.length > 0 &&
+                            foundRef.refName.indexOf(keyword) >= 0;
+                    });
                 } else {
                     refVars = await refTable.findWithin(phpDoc.uri, range, (foundRef) => {
                         return foundRef.refKind === RefKind.Variable &&
@@ -173,7 +179,11 @@ export namespace RefResolver {
                             continue;
                         }
 
-                        symbols.push(new Variable(refVar.refName, refVar.type));
+                        scopeVar.set(new Variable(refVar.refName, refVar.type));
+                    }
+
+                    for (let varName in scopeVar.variables) {
+                        symbols.push(new Variable(varName, scopeVar.variables[varName]));
                     }
                 }
 

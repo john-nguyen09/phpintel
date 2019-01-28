@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { LevelDatasource, DbStore, SubStore } from "../db";
 import { ScopeVar } from "../../symbol/variable/scopeVar";
-import { Serializer } from "../serializer";
+import { Serializer, Deserializer } from "../serializer";
 import { Range } from "../../symbol/meta/range";
 
 @injectable()
@@ -21,8 +21,8 @@ export class ScopeVarTable {
 
     async put(scopeVar: ScopeVar) {
         const serializer = new Serializer();
-        serializer.writeInt32(scopeVar.location.range.start);
-        serializer.writeInt32(scopeVar.location.range.end);
+        serializer.setInt32(scopeVar.location.range.start);
+        serializer.setInt32(scopeVar.location.range.end);
         const key = Buffer.concat([
             Buffer.from(scopeVar.location.uri),
             serializer.getBuffer()
@@ -54,7 +54,7 @@ export class ScopeVarTable {
 
         return new Promise<ScopeVar | null>((resolve, reject) => {
             const serializer = new Serializer();
-            serializer.writeInt32(offset);
+            serializer.setInt32(offset);
             const uriBuffer = Buffer.from(uri);
             const key = Buffer.concat([
                 uriBuffer,
@@ -95,7 +95,7 @@ export class ScopeVarTable {
 
         return new Promise<ScopeVar | null>((resolve, reject) => {
             const serializer = new Serializer();
-            serializer.writeInt32(offset);
+            serializer.setInt32(offset);
             const uriBuffer = Buffer.from(uri);
 
             const iterator = db.iterator<ScopeVar>({
@@ -132,9 +132,6 @@ export class ScopeVarTable {
         ]);
         const before = results[0];
         const after = results[1];
-        console.log({
-            before, after
-        });
 
         if (before === null) {
             throw new Error(`[Impossble case]: Cannot find any scope before ${offset}`);
@@ -154,26 +151,26 @@ const ValueEncoding = {
     encode: (scopeVar: ScopeVar): Buffer => {
         const serializer = new Serializer();
 
-        serializer.writeString(scopeVar.location.uri);
+        serializer.setString(scopeVar.location.uri);
         if (typeof scopeVar.location.range !== 'undefined') {
-            serializer.writeBool(true);
-            serializer.writeInt32(scopeVar.location.range.start);
-            serializer.writeInt32(scopeVar.location.range.end);
+            serializer.setBool(true);
+            serializer.setInt32(scopeVar.location.range.start);
+            serializer.setInt32(scopeVar.location.range.end);
         } else {
-            serializer.writeBool(false);
+            serializer.setBool(false);
         }
 
         return serializer.getBuffer();
     },
     decode: (buffer: Buffer): ScopeVar => {
         const scopeVar = new ScopeVar();
-        const serializer = new Serializer(buffer);
+        const deserializer = new Deserializer(buffer);
 
-        scopeVar.location.uri = serializer.readString();
-        if (serializer.readBool()) {
+        scopeVar.location.uri = deserializer.readString();
+        if (deserializer.readBool()) {
             scopeVar.location.range =  {
-                start: serializer.readInt32(),
-                end: serializer.readInt32(),
+                start: deserializer.readInt32(),
+                end: deserializer.readInt32(),
             }
         }
 

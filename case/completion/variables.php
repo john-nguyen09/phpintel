@@ -10,3 +10,5 @@ function func1() {
 
     $
 }
+
+$v

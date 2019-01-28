@@ -9,19 +9,20 @@ export class TypeName {
         'string'
     ];
 
-    public static readonly ALIASES: {[alias: string]: string} = {
-        'bool': 'boolean',
-        'double': 'float',
-        'integer': 'int'
-    };
+    public static readonly ALIASES: Map<string, string> = new Map<string, string>([
+        ['bool', 'boolean'],
+        ['double', 'float'],
+        ['integer', 'int'],
+    ]);
 
     public name: string;
 
     constructor(name: string) {
         this.name = name.trim();
 
-        if (this.name in TypeName.ALIASES) {
-            this.name = TypeName.ALIASES[this.name];
+        const alias = TypeName.ALIASES.get(this.name);
+        if (alias !== undefined) {
+            this.name = alias;
         }
     }
 

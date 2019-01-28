@@ -104,11 +104,7 @@ export class PhpDocument extends Symbol implements Consumer {
         return true;
     }
 
-    pushSymbol(symbol: Symbol | null): void {
-        if (symbol === null) {
-            return;
-        }
-
+    pushSymbol(symbol: Symbol): void {
         if (symbol instanceof Class) {
             this.classes.push(symbol);
         } else if (symbol instanceof Function) {

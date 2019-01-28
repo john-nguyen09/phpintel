@@ -1,10 +1,9 @@
 import { DbStore, LevelDatasource, SubStore } from "../db";
-import { Serializer } from "../serializer";
+import { Serializer, Deserializer } from "../serializer";
 import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
-import { injectable, traverseAncerstors } from "inversify";
+import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
-import { Location } from "../../symbol/meta/location";
 import { Range } from "../../symbol/meta/range";
 
 @injectable()
@@ -25,9 +24,9 @@ export class ReferenceTable {
             return;
         }
 
-        let serializer = new Serializer();
-        serializer.writeInt32(ref.location.range.start);
-        serializer.writeInt32(ref.location.range.end);
+        let serializer = new Serializer(8);
+        serializer.setInt32(ref.location.range.end);
+        serializer.setInt32(ref.location.range.start);
 
         let key = Buffer.concat([
             Buffer.from(ref.location.uri),
@@ -59,20 +58,18 @@ export class ReferenceTable {
         // const logger = App.get<LogWriter>(LogWriter);
 
         return new Promise<Reference | null>((resolve, reject) => {
-            let serializer = new Serializer();
-            serializer.writeInt32(offset);
+            let serializer = new Serializer(4);
+            serializer.setInt32(offset);
 
             let uriBuffer = Buffer.from(uri);
 
             let key = Buffer.concat([
                 uriBuffer,
-                serializer.getBuffer(),
-                Buffer.from('\xFF')
+                serializer.getBuffer()
             ]);
             let iterator = db.iterator<Reference>({
-                lte: key,
-                gte: uriBuffer,
-                reverse: true
+                gte: key,
+                lte: Buffer.concat([uriBuffer, Buffer.from('\xFF')])
             });
 
             const processRef = (
@@ -117,10 +114,10 @@ export class ReferenceTable {
         const db = this.db;
 
         return new Promise<Reference[]>((resolve, reject) => {
-            const startSerializer = new Serializer();
-            startSerializer.writeInt32(range.start);
-            const endSerializer = new Serializer();
-            endSerializer.writeInt32(range.end);
+            const startSerializer = new Serializer(4);
+            startSerializer.setInt32(range.start);
+            const endSerializer = new Serializer(4);
+            endSerializer.setInt32(range.end);
 
             const uriBuffer = Buffer.from(uri);
             const iterator = db.iterator<Reference>({
@@ -161,25 +158,25 @@ enum TypeKind {
 export const ReferenceEncoding = {
     type: 'reference-encoding',
     encode(ref: Reference): Buffer {
-        let serializer = new Serializer();
+        let serializer = new Serializer(128);
         let hasName = ref.refName !== undefined;
 
-        serializer.writeBool(hasName);
+        serializer.setBool(hasName);
         if (ref.refName !== undefined) {
-            serializer.writeString(ref.refName);
+            serializer.setString(ref.refName);
         }
 
         if (ref.type instanceof TypeName) {
-            serializer.writeInt32(TypeKind.TYPE_NAME);
-            serializer.writeTypeName(ref.type);
+            serializer.setInt32(TypeKind.TYPE_NAME);
+            serializer.setTypeName(ref.type);
         } else if (ref.type instanceof TypeComposite) {
-            serializer.writeInt32(TypeKind.TYPE_COMPOSITE);
-            serializer.writeTypeComposite(ref.type);
+            serializer.setInt32(TypeKind.TYPE_COMPOSITE);
+            serializer.setTypeComposite(ref.type);
         }
 
-        serializer.writeLocation(ref.location);
-        serializer.writeInt32(ref.refKind);
-        serializer.writeTypeName(ref.scope);
+        serializer.setLocation(ref.location);
+        serializer.setInt32(ref.refKind);
+        serializer.setTypeName(ref.scope);
 
         return serializer.getBuffer();
     },
@@ -188,26 +185,26 @@ export const ReferenceEncoding = {
             return null;
         }
 
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
         let type: TypeName | TypeComposite = new TypeName('');
-        let hasName = serializer.readBool();
+        let hasName = deserializer.readBool();
         let refName: string | undefined = undefined;
 
         if (hasName) {
-            refName = serializer.readString();
+            refName = deserializer.readString();
         }
 
-        let typeKind: TypeKind = serializer.readInt32();
+        let typeKind: TypeKind = deserializer.readInt32();
 
         if (typeKind == TypeKind.TYPE_NAME) {
-            type = serializer.readTypeName() || new TypeName('');
+            type = deserializer.readTypeName() || new TypeName('');
         } else if (typeKind === TypeKind.TYPE_COMPOSITE) {
-            type = serializer.readTypeComposite();
+            type = deserializer.readTypeComposite();
         }
 
-        let location = serializer.readLocation();
-        let refKind = serializer.readInt32();
-        let scope = serializer.readTypeName();
+        let location = deserializer.readLocation();
+        let refKind = deserializer.readInt32();
+        let scope = deserializer.readTypeName();
 
         return {
             refName,

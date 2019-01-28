@@ -14,6 +14,7 @@ import { Location as LspLocation, Range as LspRange } from "vscode-languageserve
 import { Range } from "../symbol/meta/range";
 import { Constant } from "../symbol/constant/constant";
 import { DefineConstant } from "../symbol/constant/defineConstant";
+import { Variable } from "../symbol/variable/variable";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -181,5 +182,56 @@ export namespace Formatter {
             documentation: constant.description,
             insertText: constant.name.getQualified(phpDoc.importTable)
         };
+    }
+
+    export function getVariableCompletion(variable: Variable): CompletionItem {
+        return {
+            label: variable.name,
+            kind: CompletionItemKind.Variable,
+            documentation: '',
+            insertText: variable.name
+        };
+    }
+
+    export function getPropertyCompletion(prop: Property): CompletionItem {
+        let scopeName = '';
+        if (prop.scope !== null) {
+            scopeName = prop.scope.name;
+        }
+
+        return {
+            label: `${scopeName}::${prop.name}`,
+            kind: CompletionItemKind.Property,
+            documentation: prop.description,
+            insertText: prop.name
+        };
+    }
+
+    export function getMethodCompletion(method: Method): CompletionItem {
+        let scopeName = '';
+        if (method.scope !== null) {
+            scopeName = method.scope.name;
+        }
+
+        return {
+            label: `${scopeName}::${method.getName()}`,
+            kind: CompletionItemKind.Method,
+            documentation: method.description,
+            insertText: method.getName()
+        }
+    }
+
+    export function getClassConstantCompletion(classConst: ClassConstant): CompletionItem {
+        let scopeName = '';
+        if (classConst.scope !== null) {
+            scopeName = classConst.scope.name;
+        }
+
+        return {
+            label: `${scopeName}::${classConst.getName()}`,
+            kind: CompletionItemKind.Constant,
+            documentation: '',
+            insertText: classConst.getName()
+        }
     }
 }

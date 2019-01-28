@@ -2,7 +2,7 @@ const symbolEncoding = require('../src/storage/symbolEncoding');
 import { indexFiles, getCaseDir } from "../src/testHelper";
 import * as path from 'path';
 import { Class } from "../src/symbol/class/class";
-import { Serializer } from "../src/storage/serializer";
+import { Serializer, Deserializer } from "../src/storage/serializer";
 import { Constant } from "../src/symbol/constant/constant";
 import { Method } from "../src/symbol/function/method";
 import { ClassConstant } from "../src/symbol/constant/classConstant";
@@ -14,15 +14,15 @@ import { PhpDocEncoding } from "../src/storage/table/phpDoc";
 describe('symbolEncoding', () => {
     it('serializer test', () => {
         let serializer = new Serializer();
-        serializer.writeInt32(5);
-        serializer.writeInt32(7);
-        serializer.writeInt32(2);
-        serializer.writeString('hello world');
-        serializer.writeBool(true);
-        serializer.writeInt32(255);
-        serializer.writeString('hello world 2');
+        serializer.setInt32(5);
+        serializer.setInt32(7);
+        serializer.setInt32(2);
+        serializer.setString('hello world');
+        serializer.setBool(true);
+        serializer.setInt32(255);
+        serializer.setString('hello world 2');
 
-        let reader = new Serializer(serializer.getBuffer());
+        let reader = new Deserializer(serializer.getBuffer());
 
         expect(reader.readInt32()).toBe(5);
         expect(reader.readInt32()).toBe(7);

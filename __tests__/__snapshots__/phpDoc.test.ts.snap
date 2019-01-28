@@ -829,6 +829,51 @@ PhpDocument {
       },
       "value": "",
     },
+    PropRefExpression {
+      "classRef": ClassRef {
+        "location": Location {
+          "range": Range {
+            "end": 1299,
+            "start": 1295,
+          },
+          "relativeUri": "case/class_methods.php",
+        },
+        "refKind": 9,
+        "type": TypeName {
+          "name": "ClassWithMethod",
+        },
+      },
+      "isParentIncluded": true,
+      "location": Location {
+        "range": Range {
+          "end": 1316,
+          "start": 1295,
+        },
+        "relativeUri": "case/class_methods.php",
+      },
+      "propRef": PropertyRef {
+        "location": Location {
+          "range": Range {
+            "end": 1316,
+            "start": 1301,
+          },
+          "relativeUri": "case/class_methods.php",
+        },
+        "refKind": 11,
+        "scope": TypeName {
+          "name": "ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "$staticVariable",
+        },
+      },
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
+      "type": TypeName {
+        "name": "$staticVariable",
+      },
+    },
     ClassRef {
       "location": Location {
         "range": Range {
@@ -840,22 +885,6 @@ PhpDocument {
       "refKind": 9,
       "type": TypeName {
         "name": "ClassWithMethod",
-      },
-    },
-    PropertyRef {
-      "location": Location {
-        "range": Range {
-          "end": 1316,
-          "start": 1301,
-        },
-        "relativeUri": "case/class_methods.php",
-      },
-      "refKind": 11,
-      "scope": TypeName {
-        "name": "ClassWithMethod",
-      },
-      "type": TypeName {
-        "name": "$staticVariable",
       },
     },
     ClassConstRefExpression {
@@ -896,7 +925,7 @@ PhpDocument {
         },
         "relativeUri": "case/class_methods.php",
       },
-      "refKind": 13,
+      "refKind": 12,
       "scope": TypeName {
         "name": "\\\\ClassWithMethod",
       },
@@ -915,22 +944,6 @@ PhpDocument {
       "refKind": 9,
       "type": TypeName {
         "name": "ClassWithMethod",
-      },
-    },
-    ClassConstRef {
-      "location": Location {
-        "range": Range {
-          "end": 1332,
-          "start": 1326,
-        },
-        "relativeUri": "case/class_methods.php",
-      },
-      "refKind": 12,
-      "scope": TypeName {
-        "name": "ClassWithMethod",
-      },
-      "type": TypeName {
-        "name": "CONST1",
       },
     },
     ClassRef {
@@ -2172,7 +2185,7 @@ PhpDocument {
         },
         "relativeUri": "case/global_symbols.php",
       },
-      "refKind": 13,
+      "refKind": 12,
       "scope": TypeName {
         "name": "\\\\TestClass",
       },
@@ -2191,22 +2204,6 @@ PhpDocument {
       "refKind": 9,
       "type": TypeName {
         "name": "TestClass",
-      },
-    },
-    ClassConstRef {
-      "location": Location {
-        "range": Range {
-          "end": 1576,
-          "start": 1560,
-        },
-        "relativeUri": "case/global_symbols.php",
-      },
-      "refKind": 12,
-      "scope": TypeName {
-        "name": "TestClass",
-      },
-      "type": TypeName {
-        "name": "TEST_CLASS_CONST",
       },
     },
     Parameter {

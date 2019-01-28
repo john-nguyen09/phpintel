@@ -96,24 +96,23 @@ export class SymbolParser implements Visitor {
         return this.scopeVarStack.pop();
     }
 
-    preorder(node: TreeNode, spine: TreeNode[]) {
-        let parentSymbol = this.getParentSymbol();
+    preorder(node: TreeNode, spine: Phrase[]) {
+        const parentSymbol = this.getParentSymbol();
 
         if (isToken(node)) {
-            let tokenType: number = <number>node.tokenType;
+            const tokenType: number = <number>node.tokenType;
 
             if (tokenType == TokenKind.DocumentComment) {
                 this.lastDocBlock = new DocBlock(node, this.doc);
             } else {
-                let symbol = new TokenSymbol(node, this.doc);
+                const symbol = new TokenSymbol(node, this.doc);
 
                 if (parentSymbol && isConsumer(parentSymbol)) {
                     parentSymbol.consume(symbol);
                 }
             }
         } else if (isPhrase(node)) {
-            const p = <Phrase>node;
-            const phraseType: number = <number>p.phraseType;
+            const phraseType: number = <number>node.phraseType;
 
             switch (phraseType) {
                 case PhraseKind.NamespaceDefinition:

@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { injectable } from "inversify";
 import { TreeNode, isPhrase } from "./util/parseTree";
+import { Phrase } from "php7parser";
 
 @injectable()
 export class Traverser {
@@ -12,7 +13,7 @@ export class Traverser {
         this.visitors = [];
     }
 
-    private realTraverse(node: TreeNode, spine: TreeNode[]) {
+    private realTraverse(node: TreeNode, spine: Phrase[]) {
         for (let visitor of this.visitors) {
             visitor.preorder(node, spine);
         }

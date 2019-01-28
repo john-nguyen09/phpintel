@@ -78,6 +78,7 @@ export class TokenSymbol extends Symbol {
     constructor(token: Token, doc: PhpDocument) {
         super();
 
+        this.node = token;
         this.type = <number>token.tokenType;
         this.text = nodeText(token, doc.text);
     }

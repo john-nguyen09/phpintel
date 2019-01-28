@@ -1,6 +1,6 @@
 import { App } from '../src/app';
 import { Indexer, PhpFileInfo } from '../src/index/indexer';
-import { getCaseDir, getDebugDir } from "../src/testHelper";
+import { getCaseDir, getDebugDir, dumpAstToDebug } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/reference';
 import { pathToUri } from '../src/util/uri';
@@ -110,7 +110,6 @@ describe('Testing functions around references', () => {
         const indexer = App.get<Indexer>(Indexer);
         const caseDir = getCaseDir();
         const refTable = App.get<ReferenceTable>(ReferenceTable);
-        const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
         const refTestFile = path.join(caseDir, 'reference', 'references.php');
         let refTestUri = pathToUri(refTestFile);
 
@@ -130,5 +129,19 @@ describe('Testing functions around references', () => {
         //         colors: true,
         //     }));
         // }
+    });
+
+    it('returns class constant ref before variable', async() => {
+        const indexer = App.get<Indexer>(Indexer);
+        const caseDir = getCaseDir();
+        const refTable = App.get<ReferenceTable>(ReferenceTable);
+        const refTestFile = path.join(caseDir, 'reference', 'scopedMemberBeforeVariable.php');
+        const refTestUri = pathToUri(refTestFile);
+        const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
+
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(refTestFile));
+
+        let phpDoc = await phpDocTable.get(refTestUri);
+        let ref = await refTable.findAt(refTestUri, 20);
     });
 });

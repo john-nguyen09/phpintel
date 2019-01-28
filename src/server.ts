@@ -54,7 +54,12 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
             textDocumentSync: TextDocumentSyncKind.Full,
             hoverProvider: true,
             definitionProvider: true,
-            completionProvider: true,
+            completionProvider: {
+                triggerCharacters: [
+                    '$', '>', ':', //php
+                    '.', '<', '/' //html/js
+                ]
+            },
         }
     };
 });

@@ -89,6 +89,7 @@ describe('completion', () => {
         await testCompletions(['global_symbols.php'], [
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
+            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 103 },
         ]);
     });
 });

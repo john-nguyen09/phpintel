@@ -16,7 +16,7 @@ const TEST_CASES: TypeNameTestCase[] = [
 describe('', () => {
     it('returns whether a name is FQN', () => {
         for (let testCase of TEST_CASES) {
-            expect(TypeName.isFqn(testCase.name), `${testCase.name} is failing`)
+            expect(TypeName.isFqn(testCase.name))
                 .toEqual(testCase.isFqn);
         }
     });

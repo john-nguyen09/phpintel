@@ -1,4 +1,4 @@
-import { CollectionSymbol, Consumer, Symbol, TokenSymbol } from "../symbol";
+import { Consumer, Symbol, TokenSymbol, CollectionSymbol } from "../symbol";
 import { ClassRef } from "../class/classRef";
 import { ClassConstRef } from "../constant/classConstRef";
 import { nonenumerable } from "../../util/decorator";
@@ -9,7 +9,7 @@ import { Location } from "../meta/location";
 
 export class ClassConstRefExpression extends CollectionSymbol implements Consumer, Reference {
     public isParentIncluded = true;
-    public readonly refKind = RefKind.ScopedAccess;
+    public readonly refKind = RefKind.ClassConst;
     public type: TypeName = new TypeName('');
     public location: Location = new Location();
     public scope: TypeName = new TypeName('');
@@ -21,30 +21,29 @@ export class ClassConstRefExpression extends CollectionSymbol implements Consume
     private hasColonColon: boolean = false;
 
     consume(other: Symbol): boolean {
-        let results = false;
-
         if (other instanceof TokenSymbol && other.type === TokenKind.ColonColon) {
             this.hasColonColon = true;
             this.classConstRef.scope = this.classRef.type;
-
-            return true;
+            this.classConstRef.location = new Location(this.location.uri, {
+                start: this.location.range.start,
+                end: other.node.offset
+            });
         }
 
         if (!this.hasColonColon) {
-            results = this.classRef.consume(other);
+            this.classRef.consume(other);
             this.scope = this.classRef.type;
         } else {
-            results = this.classConstRef.consume(other);
+            this.classConstRef.consume(other);
             this.type = this.classConstRef.type;
         }
 
-        return results;
+        return true;
     }
 
-    get realSymbols(): Symbol[] {
+    get realSymbols() {
         return [
-            this.classRef,
-            this.classConstRef
-        ]
+            this.classRef
+        ];
     }
 }

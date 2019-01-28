@@ -5,7 +5,7 @@ export namespace WordSeparator {
         if (lastSlash >= 0) {
             name = name.substr(lastSlash + 1);
         }
-        
+
         if (name.indexOf('_') >= 0) {
             return underscore(name);
         } else {
@@ -36,7 +36,7 @@ export namespace WordSeparator {
 
         return tokens;
     }
-    
+
     function casing(name: string): string[] {
         let tokens: string[] = [];
         let isPrevUpper = false;
@@ -66,12 +66,12 @@ export namespace WordSeparator {
 
                     start = -1;
                 }
-                
+
             }
 
             isPrevUpper = isCurrUpper;
         }
-        
+
         return tokens;
     }
 
