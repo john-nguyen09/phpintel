@@ -31,7 +31,7 @@ export namespace CompletionProvider {
                 return;
             }
 
-            const symbols = await RefResolver.searchSymbolsForReference(phpDoc, ref);
+            const symbols = await RefResolver.searchSymbolsForReference(phpDoc, ref, offset);
 
             for (let symbol of symbols) {
                 if (symbol instanceof Function) {

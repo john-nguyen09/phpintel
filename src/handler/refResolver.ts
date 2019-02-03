@@ -60,7 +60,9 @@ export namespace RefResolver {
         return symbols;
     }
 
-    export async function searchSymbolsForReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
+    export async function searchSymbolsForReference(
+        phpDoc: PhpDocument, ref: Reference, offset: number
+    ): Promise<Symbol[]> {
         const funcTable = App.get<FunctionTable>(FunctionTable);
         const classTable = App.get<ClassTable>(ClassTable);
         const constTable = App.get<ConstantTable>(ConstantTable);
@@ -194,6 +196,51 @@ export namespace RefResolver {
                     for (let varName in scopeVar.variables) {
                         symbols.push(new Variable(varName, scopeVar.variables[varName]));
                     }
+                }
+
+                break;
+            case RefKind.PropertyAccess:
+                if (ref.scope === null) {
+                    break;
+                }
+
+                keyword = getReferenceKeyword(ref, offset);
+                const scopeNames: string[] = [];
+
+                ResolveType.forType(ref.scope, (scope) => {
+                    scope.resolveReferenceToFqn(phpDoc.importTable);
+                    scopeNames.push(scope.name);
+                });
+
+                if (keyword.length > 0) {
+                    const promises: Promise<Symbol[]>[] = [];
+                    for (const scopeName of scopeNames) {
+                        if (!keyword.startsWith('$')) {
+                            completions = await propTable.search(scopeName, '$' + keyword);
+                            for (const completion of completions) {
+                                promises.push(propTable.getByClass(scopeName, completion.name));
+                            }
+                        }
+
+                        completions = await methodTable.search(scopeName, keyword);
+                        for (const completion of completions) {
+                            promises.push(methodTable.getByClass(scopeName, completion.name));
+                        }
+                    }
+
+                    (await Promise.all(promises)).map((results) => {
+                        symbols.push(...results);
+                    });
+                } else {
+                    const promises: Promise<Symbol[]>[] = [];
+                    for (const scopeName of scopeNames) {
+                        promises.push(propTable.searchAllInClass(scopeName));
+                        promises.push(methodTable.searchAllInClass(scopeName));
+                    }
+
+                    (await Promise.all(promises)).map((results) => {
+                        symbols.push(...results);
+                    });
                 }
 
                 break;
@@ -334,5 +381,25 @@ export namespace RefResolver {
         const constTable = App.get<ConstantTable>(ConstantTable);
 
         return constTable.get(ref.type.name);
+    }
+
+    export function getReferenceKeyword(ref: Reference, offset: number): string {
+        if (ref.type instanceof TypeComposite) {
+            return '';
+        }
+
+        let keyword = ref.type.name;
+        if (
+            ref.memberLocation !== undefined &&
+            ref.memberLocation.range !== undefined &&
+            (
+                ref.memberLocation.range.start > offset ||
+                ref.memberLocation.range.end < offset
+            )
+        ) {
+            keyword = '';
+        }
+
+        return keyword;
     }
 }

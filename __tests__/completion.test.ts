@@ -1,6 +1,6 @@
 import { App } from "../src/app";
 import * as path from "path";
-import { getDebugDir, getCaseDir } from "../src/testHelper";
+import { getDebugDir, getCaseDir, dumpAstToDebug } from "../src/testHelper";
 import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
@@ -34,7 +34,7 @@ async function testCompletions(definitionFiles: string[], testCases: CompletionT
             continue;
         }
 
-        let symbols = await RefResolver.searchSymbolsForReference(phpDoc, ref);
+        let symbols = await RefResolver.searchSymbolsForReference(phpDoc, ref, testCase.offset);
         for (let i = 0; i < symbols.length; i++) {
             symbols[i] = symbols[i].toObject();
         }
@@ -90,6 +90,12 @@ describe('completion', () => {
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 103 },
+        ]);
+    });
+
+    it('variable arrow completion', async() => {
+        await testCompletions(['global_symbols.php'], [
+            { path: path.join(getCaseDir(), 'completion', 'arrow1.php'), offset: 44 },
         ]);
     });
 });

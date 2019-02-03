@@ -759,3 +759,87 @@ Array [
   },
 ]
 `;
+
+exports[`completion variable arrow completion 1`] = `
+Array [
+  Property {
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1266,
+        "start": 1247,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;

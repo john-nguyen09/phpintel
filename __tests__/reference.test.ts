@@ -6,7 +6,7 @@ import { ReferenceTable } from '../src/storage/table/reference';
 import { pathToUri } from '../src/util/uri';
 import { RefResolver } from "../src/handler/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';
-import { RefKind } from '../src/symbol/reference';
+import { RefKind, Reference } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
 
 beforeAll(() => {
@@ -106,8 +106,16 @@ describe('Testing functions around references', () => {
             }
         }
 
-        expect(refs).toMatchSnapshot();
-        expect(defs).toMatchSnapshot();
+        expect(refs.map((ref) => {
+            if (ref === null) {
+                return ref;
+            }
+
+            return Reference.convertToTest(ref);
+        })).toMatchSnapshot();
+        expect(defs.map((def) => {
+            return def.toObject();
+        })).toMatchSnapshot();
     });
 
     it('reference variable', async () => {
@@ -125,7 +133,13 @@ describe('Testing functions around references', () => {
             await refTable.findAt(refTestUri, 437),
         ];
 
-        expect(variables).toMatchSnapshot();
+        expect(variables.map((variable) => {
+            if (variable === null) {
+                return variable;
+            }
+
+            return Reference.convertToTest(variable);
+        })).toMatchSnapshot();
 
         // for (let variable of variables) {
         //     console.log(inspect(variable, {

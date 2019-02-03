@@ -5,7 +5,6 @@ import { Location } from "../meta/location";
 import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 import { TypeComposite } from "../../type/composite";
-import { ScopedMemberName } from "../name/scopedMemberName";
 import { MemberName } from "../name/memberName";
 
 export class PropertyAccessExpression extends Symbol implements Consumer, Reference {
@@ -14,6 +13,7 @@ export class PropertyAccessExpression extends Symbol implements Consumer, Refere
     public type = new TypeName('');
     public location: Location = {};
     public scope: TypeComposite | TypeName = new TypeName('');
+    public memberLocation: Location = {};
 
     @nonenumerable
     private hasArrow = false;
@@ -32,6 +32,7 @@ export class PropertyAccessExpression extends Symbol implements Consumer, Refere
         } else {
             if (other instanceof MemberName) {
                 this.type = other.name;
+                this.memberLocation = other.location;
             }
         }
 

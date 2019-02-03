@@ -198,12 +198,16 @@ export namespace Formatter {
         if (prop.scope !== null) {
             scopeName = prop.scope.name;
         }
+        let propName = prop.name;
+        if (!prop.modifier.has(SymbolModifier.STATIC)) {
+            propName = propName.substr(1);
+        }
 
         return {
-            label: `${scopeName}::${prop.name}`,
+            label: `${scopeName}::${propName}`,
             kind: CompletionItemKind.Property,
             documentation: prop.description,
-            insertText: prop.name
+            insertText: propName
         };
     }
 

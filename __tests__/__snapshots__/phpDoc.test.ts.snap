@@ -2235,6 +2235,29 @@ PhpDocument {
       },
       "value": "",
     },
+    PropertyAccessExpression {
+      "location": Object {
+        "range": Object {
+          "end": 1885,
+          "start": 1866,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "memberLocation": Object {
+        "range": Object {
+          "end": 1885,
+          "start": 1873,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "refKind": 14,
+      "scope": TypeComposite {
+        "_types": Array [],
+      },
+      "type": TypeName {
+        "name": "testProperty",
+      },
+    },
     SimpleVariable {
       "name": "$this",
       "type": TypeComposite {

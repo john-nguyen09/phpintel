@@ -5,6 +5,7 @@ import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
+import { Location } from "../../symbol/meta/location";
 
 @injectable()
 export class ReferenceTable {
@@ -202,6 +203,13 @@ export const ReferenceEncoding = {
             serializer.setRange(ref.scopeRange);
         }
 
+        if (ref.memberLocation === undefined) {
+            serializer.setBool(false);
+        } else {
+            serializer.setBool(true);
+            serializer.setLocation(ref.memberLocation);
+        }
+
         return serializer.getBuffer();
     },
     decode(buffer: Buffer): Reference | null {
@@ -242,9 +250,14 @@ export const ReferenceEncoding = {
 
         const hasScopeRange = deserializer.readBool();
         let scopeRange: Range | undefined = undefined;
-
         if (hasScopeRange) {
             scopeRange = deserializer.readRange();
+        }
+
+        const hasMemberLocation = deserializer.readBool();
+        let memberLocation: Location | undefined = undefined;
+        if (hasMemberLocation) {
+            memberLocation = deserializer.readLocation();
         }
 
         return {
@@ -253,7 +266,8 @@ export const ReferenceEncoding = {
             location,
             refKind,
             scope,
-            scopeRange
+            scopeRange,
+            memberLocation
         } as Reference;
     },
     buffer: true

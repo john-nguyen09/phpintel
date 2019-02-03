@@ -3,6 +3,7 @@ import { TypeComposite } from "../type/composite";
 import { Symbol } from "./symbol";
 import { Location } from "./meta/location";
 import { Range } from "./meta/range";
+import { toRelative } from "../util/uri";
 
 export enum RefKind {
     Function = 1,
@@ -28,6 +29,7 @@ export interface Reference {
     location: Location;
     scope: TypeName | TypeComposite | null;
     scopeRange?: Range;
+    memberLocation?: Location;
 }
 
 export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {
@@ -53,4 +55,23 @@ export function refKindToString(refKind: RefKind): string {
     }
 
     return '';
+}
+
+export namespace Reference {
+    export function convertToTest(ref: Reference): Reference {
+        const testRef = Object.assign({}, ref);
+
+        if (ref.location.uri !== undefined) {
+            testRef.location.uri = toRelative(ref.location.uri);
+        }
+        if (
+            ref.memberLocation !== undefined &&
+            ref.memberLocation.uri !== undefined &&
+            testRef.memberLocation !== undefined
+        ) {
+            testRef.memberLocation.uri = toRelative(ref.memberLocation.uri);
+        }
+
+        return testRef;
+    }
 }

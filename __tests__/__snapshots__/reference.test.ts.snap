@@ -8,13 +8,14 @@ Array [
         "end": 383,
         "start": 376,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
     "scopeRange": Object {
-      "end": 458,
+      "end": 567,
       "start": 0,
     },
     "type": TypeComposite {
@@ -31,13 +32,14 @@ Array [
         "end": 425,
         "start": 418,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
     "scopeRange": Object {
-      "end": 458,
+      "end": 567,
       "start": 0,
     },
     "type": TypeComposite {
@@ -57,13 +59,14 @@ Array [
         "end": 445,
         "start": 437,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 2,
     "refName": "$refVar2",
     "scope": null,
     "scopeRange": Object {
-      "end": 458,
+      "end": 567,
       "start": 0,
     },
     "type": TypeComposite {
@@ -88,8 +91,9 @@ Array [
         "end": 30,
         "start": 21,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -104,8 +108,9 @@ Array [
         "end": 30,
         "start": 21,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -120,8 +125,9 @@ Array [
         "end": 30,
         "start": 21,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -136,8 +142,9 @@ Array [
         "end": 51,
         "start": 37,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -152,8 +159,9 @@ Array [
         "end": 51,
         "start": 37,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -168,8 +176,9 @@ Array [
         "end": 51,
         "start": 37,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -184,8 +193,9 @@ Array [
         "end": 241,
         "start": 226,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
@@ -200,8 +210,9 @@ Array [
         "end": 241,
         "start": 226,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
@@ -216,8 +227,9 @@ Array [
         "end": 255,
         "start": 243,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
@@ -234,8 +246,9 @@ Array [
         "end": 255,
         "start": 243,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
@@ -252,8 +265,9 @@ Array [
         "end": 304,
         "start": 272,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
@@ -270,8 +284,9 @@ Array [
         "end": 304,
         "start": 272,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
@@ -288,8 +303,9 @@ Array [
         "end": 340,
         "start": 315,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
@@ -306,8 +322,9 @@ Array [
         "end": 340,
         "start": 315,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
@@ -324,8 +341,9 @@ Array [
         "end": 371,
         "start": 351,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 6,
     "refName": undefined,
     "scope": null,
@@ -340,7 +358,14 @@ Array [
         "end": 481,
         "start": 460,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": Object {
+      "range": Object {
+        "end": 481,
+        "start": 469,
+      },
+      "uri": "case/reference/references.php",
     },
     "refKind": 14,
     "refName": undefined,
@@ -362,7 +387,14 @@ Array [
         "end": 481,
         "start": 460,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": Object {
+      "range": Object {
+        "end": 481,
+        "start": 469,
+      },
+      "uri": "case/reference/references.php",
     },
     "refKind": 14,
     "refName": undefined,
@@ -384,8 +416,9 @@ Array [
         "end": 505,
         "start": 484,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 15,
     "refName": undefined,
     "scope": TypeComposite {
@@ -406,8 +439,9 @@ Array [
         "end": 505,
         "start": 484,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
     "refKind": 15,
     "refName": undefined,
     "scope": TypeComposite {
@@ -439,7 +473,7 @@ Array [
         "end": 1911,
         "start": 924,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -462,7 +496,7 @@ Array [
         "end": 1911,
         "start": 924,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -485,7 +519,7 @@ Array [
         "end": 1911,
         "start": 924,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -497,15 +531,7 @@ Array [
     "traits": Array [],
   },
   Function {
-    "_location": Object {
-      "range": Object {
-        "end": 582,
-        "start": 7,
-      },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
-    },
     "description": "",
-    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -573,7 +599,7 @@ Array [
           "end": 582,
           "start": 7,
         },
-        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -613,36 +639,26 @@ Array [
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Function {
-    "_location": Object {
-      "range": Object {
-        "end": 582,
-        "start": 7,
-      },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
-    },
     "description": "",
-    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -710,7 +726,7 @@ Array [
           "end": 582,
           "start": 7,
         },
-        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -750,36 +766,26 @@ Array [
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Function {
-    "_location": Object {
-      "range": Object {
-        "end": 582,
-        "start": 7,
-      },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
-    },
     "description": "",
-    "docParamTypes": Object {},
     "name": TypeName {
       "name": "\\\\test_function1",
     },
@@ -847,7 +853,7 @@ Array [
           "end": 582,
           "start": 7,
         },
-        "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "variables": Object {
         "$boolParam": TypeComposite {
@@ -887,25 +893,23 @@ Array [
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Class {
     "extend": null,
@@ -915,7 +919,7 @@ Array [
         "end": 1433,
         "start": 7,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -934,7 +938,7 @@ Array [
         "end": 1433,
         "start": 7,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -952,7 +956,7 @@ Array [
         "end": 1227,
         "start": 1145,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -972,7 +976,7 @@ Array [
         "end": 1227,
         "start": 1145,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -992,7 +996,7 @@ Array [
         "end": 95,
         "start": 72,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -1010,7 +1014,7 @@ Array [
         "end": 95,
         "start": 72,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -1027,7 +1031,7 @@ Array [
         "end": 184,
         "start": 168,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
+      "uri": "case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
@@ -1042,7 +1046,7 @@ Array [
         "end": 184,
         "start": 168,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
+      "uri": "case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
@@ -1052,24 +1056,13 @@ Array [
     },
   },
   DefineConstant {
-    "acceptWhitespace": true,
-    "hasEqual": false,
-    "location": Object {
-      "range": Object {
-        "end": 2512,
-        "start": 2475,
-      },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
-    },
     "name": TypeName {
       "name": "\\\\TEST_DEFINE_CONSTANT",
     },
-    "refKind": 5,
-    "resolvedType": TypeName {
+    "type": TypeName {
       "name": "boolean",
     },
-    "resolvedValue": "false",
-    "scope": null,
+    "value": "false",
   },
 ]
 `;
