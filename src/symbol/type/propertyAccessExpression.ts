@@ -1,26 +1,31 @@
-import { Symbol, Consumer, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Reference, RefKind, isReference } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
-import { TypeComposite } from "../../type/composite";
 import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
+import { TypeComposite } from "../../type/composite";
+import { ScopedMemberName } from "../name/scopedMemberName";
 import { MemberName } from "../name/memberName";
 
-export class MethodCallExpression extends Symbol implements Consumer, Reference {
-    public readonly refKind = RefKind.MethodCall;
+export class PropertyAccessExpression extends Symbol implements Consumer, Reference {
+    public readonly refKind = RefKind.PropertyAccess;
 
     public type = new TypeName('');
     public location: Location = {};
-    public scope: TypeName | TypeComposite = new TypeName('');
+    public scope: TypeComposite | TypeName = new TypeName('');
 
     @nonenumerable
-    private hasArrow: boolean = false;
+    private hasArrow = false;
 
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol && other.type === TokenKind.Arrow) {
             this.hasArrow = true;
-        } else if (!this.hasArrow) {
+
+            return true;
+        }
+
+        if (!this.hasArrow) {
             if (isReference(other)) {
                 this.scope = other.type;
             }

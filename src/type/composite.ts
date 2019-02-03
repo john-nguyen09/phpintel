@@ -6,8 +6,8 @@ export class TypeComposite {
     protected existingTypes: { [key: string]: boolean } = {};
     protected _types: TypeName[] = [];
 
-    push(type: TypeName) {
-        if (type == undefined || type.name in this.existingTypes) {
+    push(type: TypeName | null) {
+        if (type == null || type.name in this.existingTypes) {
             return;
         }
 
@@ -27,5 +27,17 @@ export class TypeComposite {
 
     get types(): TypeName[] {
         return this._types;
+    }
+}
+
+export namespace ResolveType {
+    export function forType(types: TypeComposite | TypeName, callback: (type: TypeName) => void) {
+        if (types instanceof TypeComposite) {
+            for (const type of types.types) {
+                callback(type);
+            }
+        } else {
+            callback(types);
+        }
     }
 }

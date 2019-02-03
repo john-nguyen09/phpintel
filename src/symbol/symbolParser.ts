@@ -38,12 +38,14 @@ import { NamespaceAliasClause } from "./namespace/aliasClause";
 import { PhraseKind, TokenKind } from "../util/parser";
 import { VariableAssignment } from "./variable/varibleAssignment";
 import { Visitor } from "../traverser";
-import { Location } from "./meta/location";
-import { MethodCallExpression } from "./type/methodCallExpression";
+import { MethodRefExpression } from "./type/methodRefExpression";
 import { ScopedMemberName } from "./name/scopedMemberName";
 import { PropRefExpression } from "./type/propRefExpression";
 import { ClassConstRefExpression } from "./type/classConstRefExpression";
 import { ScopeVar } from "./variable/scopeVar";
+import { PropertyAccessExpression } from "./type/propertyAccessExpression";
+import { MemberName } from "./name/memberName";
+import { MethodCallExpression } from "./type/methodCallExpression";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -236,7 +238,7 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new PropertyDeclaration());
                     break;
                 case PhraseKind.ScopedCallExpression:
-                    this.pushSymbol(new MethodCallExpression());
+                    this.pushSymbol(new MethodRefExpression());
                     break;
                 case PhraseKind.ScopedMemberName:
                     this.pushSymbol(new ScopedMemberName());
@@ -247,6 +249,15 @@ export class SymbolParser implements Visitor {
                 case PhraseKind.ClassConstantAccessExpression:
                 case PhraseKind.ErrorScopedAccessExpression:
                     this.pushSymbol(new ClassConstRefExpression());
+                    break;
+                case PhraseKind.MemberName:
+                    this.pushSymbol(new MemberName());
+                    break;
+                case PhraseKind.PropertyAccessExpression:
+                    this.pushSymbol(new PropertyAccessExpression());
+                    break;
+                case PhraseKind.MethodCallExpression:
+                    this.pushSymbol(new MethodCallExpression());
                     break;
 
                 default:

@@ -53,6 +53,10 @@ describe('Testing functions around references', () => {
             await refTable.findAt(refTestUri, 331),
             await refTable.findAt(refTestUri, 340),
             await refTable.findAt(refTestUri, 351),
+            await refTable.findAt(refTestUri, 469),
+            await refTable.findAt(refTestUri, 481),
+            await refTable.findAt(refTestUri, 493),
+            await refTable.findAt(refTestUri, 505),
         ];
 
         let refTestDoc = await phpDocTable.get(refTestUri);

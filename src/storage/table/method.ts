@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 
+export type MethodPredicate = (method: Method) => boolean;
+
 @injectable()
 export class MethodTable {
     public static readonly CLASS_SEP = '@';
@@ -43,20 +45,24 @@ export class MethodTable {
         ]);
     }
 
-    async getByClass(className: string, methodName: string): Promise<Method[]> {
+    async getByClass(className: string, methodName: string, predicate?: MethodPredicate): Promise<Method[]> {
         let methods: Method[] = [];
         let key = this.getKey(className, methodName);
 
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            methods.push(await this.db.get(BelongsToDoc.getKey(uri, key)) as Method);
+            const method = await this.db.get(BelongsToDoc.getKey(uri, key)) as Method;
+
+            if (predicate === undefined || predicate(method)) {
+                methods.push(method);
+            }
         }
 
         return methods;
     }
 
-    async searchAllInClass(className: string, predicate?: (method: Method) => boolean): Promise<Method[]> {
+    async searchAllInClass(className: string, predicate?: MethodPredicate): Promise<Method[]> {
         const methods: Method[] = [];
         const prefix = this.getKey(className, '');
 

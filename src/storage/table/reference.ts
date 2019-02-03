@@ -3,7 +3,7 @@ import { Serializer, Deserializer } from "../serializer";
 import { TypeName } from "../../type/name";
 import { TypeComposite } from "../../type/composite";
 import { injectable } from "inversify";
-import { Reference, RefKind } from "../../symbol/reference";
+import { Reference } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
 
 @injectable()
@@ -181,7 +181,19 @@ export const ReferenceEncoding = {
 
         serializer.setLocation(ref.location);
         serializer.setInt32(ref.refKind);
-        serializer.setTypeName(ref.scope);
+
+        const hasScope = ref.scope !== null;
+
+        serializer.setBool(hasScope);
+        if (hasScope) {
+            if(ref.scope instanceof TypeName) {
+                serializer.setInt32(TypeKind.TYPE_NAME);
+                serializer.setTypeName(ref.scope);
+            } else if (ref.scope instanceof TypeComposite) {
+                serializer.setInt32(TypeKind.TYPE_COMPOSITE);
+                serializer.setTypeComposite(ref.scope);
+            }
+        }
 
         if (ref.scopeRange === undefined) {
             serializer.setBool(false);
@@ -199,6 +211,7 @@ export const ReferenceEncoding = {
 
         const deserializer = new Deserializer(buffer);
         let type: TypeName | TypeComposite = new TypeName('');
+        let scope: TypeName | TypeComposite | null = null;
         const hasName = deserializer.readBool();
         let refName: string | undefined = undefined;
 
@@ -208,7 +221,7 @@ export const ReferenceEncoding = {
 
         const typeKind: TypeKind = deserializer.readInt32();
 
-        if (typeKind == TypeKind.TYPE_NAME) {
+        if (typeKind === TypeKind.TYPE_NAME) {
             type = deserializer.readTypeName() || new TypeName('');
         } else if (typeKind === TypeKind.TYPE_COMPOSITE) {
             type = deserializer.readTypeComposite();
@@ -216,7 +229,17 @@ export const ReferenceEncoding = {
 
         const location = deserializer.readLocation();
         const refKind = deserializer.readInt32();
-        const scope = deserializer.readTypeName();
+
+        const hasScope = deserializer.readBool();
+        if (hasScope) {
+            const typeKind = deserializer.readInt32();
+            if (typeKind === TypeKind.TYPE_NAME) {
+                scope = deserializer.readTypeName();
+            } else if (typeKind === TypeKind.TYPE_COMPOSITE) {
+                scope = deserializer.readTypeComposite();
+            }
+        }
+
         const hasScopeRange = deserializer.readBool();
         let scopeRange: Range | undefined = undefined;
 
@@ -232,5 +255,6 @@ export const ReferenceEncoding = {
             scope,
             scopeRange
         } as Reference;
-    }
-} as Level.Encoding;
+    },
+    buffer: true
+};

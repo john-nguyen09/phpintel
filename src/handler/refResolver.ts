@@ -1,7 +1,7 @@
 import { Reference, RefKind } from "../symbol/reference";
 import { App } from "../app";
 import { FunctionTable } from "../storage/table/function";
-import { TypeComposite } from "../type/composite";
+import { TypeComposite, ResolveType } from "../type/composite";
 import { Function } from "../symbol/function/function";
 import { PhpDocument } from "../symbol/phpDocument";
 import { Class } from "../symbol/class/class";
@@ -42,9 +42,11 @@ export namespace RefResolver {
                 symbols = await RefResolver.getClassSymbols(phpDoc, ref);
                 break;
             case RefKind.Method:
+            case RefKind.MethodCall:
                 symbols = await RefResolver.getMethodSymbols(phpDoc, ref);
                 break;
             case RefKind.Property:
+            case RefKind.PropertyAccess:
                 symbols = await RefResolver.getPropSymbols(phpDoc, ref);
                 break;
             case RefKind.ClassConst:
@@ -98,7 +100,9 @@ export namespace RefResolver {
                 if (ref.scope === null) {
                     break;
                 }
-                ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                if (ref.scope instanceof TypeName) {
+                    ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                }
                 scopeName = ref.scope.toString();
 
                 if (keyword.length > 0) {
@@ -127,7 +131,9 @@ export namespace RefResolver {
                 if (ref.scope === null) {
                     break;
                 }
-                ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                if (ref.scope instanceof TypeName) {
+                    ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                }
                 scopeName = ref.scope.toString();
 
                 const isRefStatic = typeof ref.refName === 'undefined';
@@ -209,25 +215,46 @@ export namespace RefResolver {
     }
 
     export async function getMethodSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Method[]> {
-        if (ref.type instanceof TypeComposite) {
-            return [];
-        }
-
         const methodTable = App.get<MethodTable>(MethodTable);
-        let className: string = '';
-        let methodName: string = '';
+        const methodInfos: { class: string, method: string }[] = [];
 
         if (ref.refKind === RefKind.ClassTypeDesignator) {
-            ref.type.resolveReferenceToFqn(phpDoc.importTable);
-            className = ref.type.name;
-            methodName = '__construct';
-        } else if (ref.refKind === RefKind.Method && ref.scope !== null) {
-            ref.scope.resolveReferenceToFqn(phpDoc.importTable);
-            className = ref.scope.name;
-            methodName = ref.type.name;
+            const methodName = '__construct';
+
+            ResolveType.forType(ref.type, (type) => {
+                methodInfos.push({ class: type.name, method: methodName });
+            });
+        } else if (
+            (ref.refKind === RefKind.Method || ref.refKind === RefKind.MethodCall) &&
+            ref.scope !== null
+        ) {
+            ResolveType.forType(ref.scope, (scope) => {
+                ResolveType.forType(ref.type, (type) => {
+                    scope.resolveReferenceToFqn(phpDoc.importTable);
+
+                    methodInfos.push({ class: scope.name, method: type.name });
+                });
+            });
         }
 
-        return await methodTable.getByClass(className, methodName);
+        const methods: Method[] = [];
+        const promises: Promise<Method[]>[] = [];
+
+        for (const methodInfo of methodInfos) {
+            if (ref.refKind === RefKind.MethodCall) {
+                promises.push(methodTable.getByClass(methodInfo.class, methodInfo.method));
+            } else if (ref.refKind === RefKind.Method) {
+                promises.push(methodTable.getByClass(methodInfo.class, methodInfo.method, (prop) => {
+                    return prop.modifier.has(SymbolModifier.STATIC);
+                }));
+            }
+        }
+
+        (await Promise.all(promises)).map((results) => {
+            methods.push(...results);
+        });
+
+        return methods;
     }
 
     export async function getPropSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Property[]> {
@@ -236,14 +263,34 @@ export namespace RefResolver {
         }
 
         const propTable = App.get<PropertyTable>(PropertyTable);
-        let className = '';
+        let classNames: string[] = [];
 
         if (ref.scope !== null) {
-            ref.scope.resolveReferenceToFqn(phpDoc.importTable);
-            className = ref.scope.name;
+            ResolveType.forType(ref.scope, (type) => {
+                type.resolveReferenceToFqn(phpDoc.importTable);
+
+                classNames.push(type.name);
+            });
         }
 
-        return await propTable.getByClass(className, ref.type.name);
+        const properties: Property[] = [];
+        const promises: Promise<Property[]>[] = [];
+
+        for (const className of classNames) {
+            if (ref.refKind === RefKind.PropertyAccess) {
+                promises.push(propTable.getByClass(className, '$' + ref.type.name));
+            } else if (ref.refKind === RefKind.Property) {
+                promises.push(propTable.getByClass(className, ref.type.name, (prop) => {
+                    return prop.modifier.has(SymbolModifier.STATIC);
+                }));
+            }
+        }
+
+        (await Promise.all(promises)).map((results) => {
+            properties.push(...results);
+        });
+
+        return properties;
     }
 
     export async function getClassSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Class[]> {
@@ -266,7 +313,7 @@ export namespace RefResolver {
         const classConstTable = App.get<ClassConstantTable>(ClassConstantTable);
         let className = '';
 
-        if (ref.scope !== null) {
+        if (ref.scope !== null && ref.scope instanceof TypeName) {
             ref.scope.resolveReferenceToFqn(phpDoc.importTable);
             className = ref.scope.name;
         }

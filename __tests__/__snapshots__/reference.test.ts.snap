@@ -334,6 +334,94 @@ Array [
       "name": "\\\\TEST_DEFINE_CONSTANT",
     },
   },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 481,
+        "start": 460,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 14,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testProperty",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 481,
+        "start": 460,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 14,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testProperty",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 505,
+        "start": 484,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 15,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testMethod",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 505,
+        "start": 484,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/references.php",
+    },
+    "refKind": 15,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "TestClass",
+        },
+      ],
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testMethod",
+    },
+  },
 ]
 `;
 

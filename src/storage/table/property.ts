@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 
+export type PropertyPredicate = (prop: Property) => boolean;
+
 @injectable()
 export class PropertyTable {
     public static readonly CLASS_SEP = '@';
@@ -42,19 +44,22 @@ export class PropertyTable {
         ]);
     }
 
-    async getByClass(className: string, propName: string): Promise<Property[]> {
+    async getByClass(className: string, propName: string, predicate?: PropertyPredicate): Promise<Property[]> {
         let props: Property[] = [];
         let key = this.getKey(className, propName);
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            props.push(await this.db.get(BelongsToDoc.getKey(uri, key)) as Property);
+            const prop = await this.db.get(BelongsToDoc.getKey(uri, key)) as Property;
+            if (predicate === undefined || predicate(prop)) {
+                props.push(prop);
+            }
         }
 
         return props;
     }
 
-    async searchAllInClass(className: string, predicate?: (prop: Property) => boolean): Promise<Property[]> {
+    async searchAllInClass(className: string, predicate?: PropertyPredicate): Promise<Property[]> {
         const props: Property[] = [];
         const prefix = this.getKey(className, '');
         const datas = await NameIndex.prefixSearch(this.classIndex, prefix);

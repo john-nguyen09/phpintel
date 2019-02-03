@@ -17,6 +17,8 @@ export enum RefKind {
     Property = 11,
     ClassConst = 12,
     ScopedAccess = 13,
+    PropertyAccess = 14,
+    MethodCall = 15,
 }
 
 export interface Reference {
@@ -24,7 +26,7 @@ export interface Reference {
     refKind: RefKind;
     type: TypeName | TypeComposite;
     location: Location;
-    scope: TypeName | null;
+    scope: TypeName | TypeComposite | null;
     scopeRange?: Range;
 }
 

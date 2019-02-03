@@ -39,14 +39,15 @@ export class Application {
 
     public async clearCache() {
         const db = this.container.get<LevelDatasource>(LevelDatasource).getDb();
+        let promises: Promise<void>[] = [];
 
         return new Promise<void>((resolve, reject) => {
             db.createKeyStream()
-                .on('data', async (key) => {
-                    await db.del(key);
+                .on('data', (key) => {
+                    promises.push(db.del(key));
                 })
                 .on('end', () => {
-                    resolve();
+                    Promise.all(promises).then( () => { resolve() });
                 })
                 .on('error', (err: Error) => {
                     reject(err);
