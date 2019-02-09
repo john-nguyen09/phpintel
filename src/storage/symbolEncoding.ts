@@ -12,12 +12,12 @@ import { Property } from "../symbol/variable/property";
 import { DefineConstant } from "../symbol/constant/defineConstant";
 
 interface SymbolEncoding {
-    encode(symbol: Symbol): Buffer;
-    decode(buffer: Buffer): Symbol;
+    encode(symbol: Symbol): string;
+    decode(buffer: string): Symbol;
 }
 
 const classEncoding =  {
-    encode: (symbol: Class): Buffer => {
+    encode: (symbol: Class): string => {
         let serializer = new Serializer();
 
         serializer.setTypeName(symbol.name);
@@ -37,7 +37,7 @@ const classEncoding =  {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Class => {
+    decode: (buffer: string): Class => {
         let deserializer = new Deserializer(buffer);
         let theClass = new Class();
 
@@ -45,12 +45,12 @@ const classEncoding =  {
         theClass.extend = deserializer.readTypeName();
         theClass.location = deserializer.readLocation();
         theClass.modifier = deserializer.readSymbolModifier();
-        
+
         let noImplements = deserializer.readInt32();
         for (let i = 0; i < noImplements; i++) {
             theClass.implements.push(deserializer.readTypeName() || new TypeName(''));
         }
-        
+
         let noTraits = deserializer.readInt32();
         for (let i = 0; i < noTraits; i++) {
             theClass.traits.push(deserializer.readTypeName() || new TypeName(''));
@@ -61,7 +61,7 @@ const classEncoding =  {
 }
 
 const functionEncoding = {
-    encode: (symbol: Function): Buffer => {
+    encode: (symbol: Function): string => {
         let serializer = new Serializer();
 
         serializer.setTypeName(symbol.name);
@@ -89,7 +89,7 @@ const functionEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Function => {
+    decode: (buffer: string): Function => {
         let func = new Function();
         let deserializer = new Deserializer(buffer);
 
@@ -123,7 +123,7 @@ const functionEncoding = {
 const constEncoding = {
     DEFINE_CONSTANT: 1,
     CONSTANT: 2,
-    encode: (symbol: Constant): Buffer => {
+    encode: (symbol: Constant): string => {
         let serializer = new Serializer();
 
         serializer.setInt32(symbol instanceof DefineConstant ?
@@ -135,7 +135,7 @@ const constEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Constant => {
+    decode: (buffer: string): Constant => {
         let constant: Constant;
         let deserializer = new Deserializer(buffer);
         let constType = deserializer.readInt32();
@@ -156,7 +156,7 @@ const constEncoding = {
 };
 
 const classConstEncoding = {
-    encode: (symbol: ClassConstant): Buffer => {
+    encode: (symbol: ClassConstant): string => {
         let serializer = new Serializer();
 
         serializer.setTypeName(symbol.name);
@@ -167,7 +167,7 @@ const classConstEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): ClassConstant => {
+    decode: (buffer: string): ClassConstant => {
         let classConst = new ClassConstant();
         let deserializer = new Deserializer(buffer);
 
@@ -182,7 +182,7 @@ const classConstEncoding = {
 };
 
 const methodEncoding = {
-    encode: (symbol: Method): Buffer => {
+    encode: (symbol: Method): string => {
         let serializer = new Serializer();
 
         serializer.setTypeName(symbol.name);
@@ -204,7 +204,7 @@ const methodEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Method => {
+    decode: (buffer: string): Method => {
         let method = new Method();
         let deserializer = new Deserializer(buffer);
 
@@ -229,7 +229,7 @@ const methodEncoding = {
 };
 
 const propertyEncoding = {
-    encode: (symbol: Property): Buffer => {
+    encode: (symbol: Property): string => {
         let serializer = new Serializer();
 
         serializer.setString(symbol.name);
@@ -241,7 +241,7 @@ const propertyEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Property => {
+    decode: (buffer: string): Property => {
         let property = new Property();
         let deserializer = new Deserializer(buffer);
 
@@ -276,7 +276,7 @@ const symbolEncodingMap: {[key: number]: SymbolEncoding} = {
 
 export = {
     type: 'symbol-encoding',
-    encode: (symbol: Symbol): Buffer => {
+    encode: (symbol: Symbol): string => {
         let serializer = new Serializer();
         let symbolType: Type | null = null;
 
@@ -303,8 +303,8 @@ export = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Symbol => {
-        if (buffer.byteLength == 0) {
+    decode: (buffer: string): Symbol => {
+        if (typeof buffer !== 'string' || buffer.length == 0) {
             throw new Error(`Invalid buffer`);
         }
 
@@ -318,5 +318,5 @@ export = {
 
         throw new Error(`Invalid buffer`);
     },
-    buffer: true
+    buffer: false
 } as Level.Encoding;

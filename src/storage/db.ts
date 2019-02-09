@@ -19,22 +19,22 @@ export class LevelDatasource {
 @injectable()
 export class DbStore {
     public static readonly URI_SEP = '#';
-    
+
     protected static readonly separator = '!';
     protected static readonly versionPrefix = '@';
 
     protected storeKey: string;
     protected db: Level.LevelUp;
 
-    async put(key: string | Buffer, value: any): Promise<void> {
+    async put(key: any, value: any): Promise<void> {
         return this.db.put(key, value);
     }
 
-    async get(key: string | Buffer): Promise<any> {
+    async get(key: any): Promise<any> {
         return this.db.get(key);
     }
 
-    async del(key: string | Buffer): Promise<void> {
+    async del(key: any): Promise<void> {
         return this.db.del(key);
     }
 

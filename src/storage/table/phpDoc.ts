@@ -59,9 +59,9 @@ export class PhpDocumentTable {
     }
 }
 
-export const PhpDocEncoding = {
+export const PhpDocEncoding: Level.Encoding = {
     type: 'php-doc-encoding',
-    encode(phpDoc: PhpDocument): Buffer {
+    encode(phpDoc: PhpDocument): string {
         let serializer = new Serializer();
 
         serializer.setString(phpDoc.uri);
@@ -79,7 +79,7 @@ export const PhpDocEncoding = {
 
         return serializer.getBuffer();
     },
-    decode(buffer: Buffer): PhpDocument {
+    decode(buffer: string): PhpDocument {
         let deserializer = new Deserializer(buffer);
         let phpDoc = new PhpDocument(deserializer.readString(), deserializer.readString());
         phpDoc.modifiedTime = deserializer.readInt32();
@@ -96,5 +96,5 @@ export const PhpDocEncoding = {
 
         return phpDoc;
     },
-    buffer: true
-} as Level.Encoding;
+    buffer: false
+};

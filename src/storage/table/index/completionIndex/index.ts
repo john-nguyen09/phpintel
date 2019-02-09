@@ -99,9 +99,9 @@ export class CompletionIndex {
     }
 }
 
-const CompletionEncoding = {
+const CompletionEncoding: Level.Encoding = {
     type: 'completion-encoding',
-    encode: (value: CompletionValue): Buffer => {
+    encode: (value: CompletionValue): string => {
         let serializer = new Serializer();
 
         serializer.setString(value.uri);
@@ -109,12 +109,13 @@ const CompletionEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): CompletionValue => {
+    decode: (buffer: string): CompletionValue => {
         let deserializer = new Deserializer(buffer);
 
         return {
             uri: deserializer.readString(),
             name: deserializer.readString()
         };
-    }
-} as Level.Encoding;
+    },
+    buffer: false
+};

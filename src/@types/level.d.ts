@@ -22,15 +22,15 @@ declare namespace Level {
     
     export interface BatchOperation {
         type: string;
-        key: string | Buffer;
+        key: any;
         value?: any;
     }
     
     export interface ReadStreamOptions {
-        gt?: string | Buffer;
-        gte?: string | Buffer;
-        lt?: string | Buffer;
-        lte?: string | Buffer;
+        gt?: any;
+        gte?: any;
+        lt?: any;
+        lte?: any;
         reverse?: boolean;
         limit?: number;
         keys?: boolean;
@@ -51,8 +51,8 @@ declare namespace Level {
 
     export interface Encoding {
         type: string;
-        encode: (obj: any) => Buffer;
-        decode: (buffer: Buffer) => any;
+        encode: (obj: any) => Buffer | string;
+        decode: (buffer: Buffer | string) => any;
         buffer: boolean;
     }
 }

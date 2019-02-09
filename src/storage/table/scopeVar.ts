@@ -3,6 +3,7 @@ import { LevelDatasource, DbStore, SubStore } from "../db";
 import { ScopeVar } from "../../symbol/variable/scopeVar";
 import { Serializer, Deserializer } from "../serializer";
 import { Range } from "../../symbol/meta/range";
+import * as charwise from "charwise";
 
 @injectable()
 export class ScopeVarTable {
@@ -14,7 +15,7 @@ export class ScopeVarTable {
         this.db = new SubStore(level, {
             name: 'scopeVar',
             version: 1,
-            keyEncoding: 'binary',
+            keyEncoding: charwise,
             valueEncoding: ValueEncoding,
         });
     }
@@ -27,15 +28,11 @@ export class ScopeVarTable {
             return;
         }
 
-        const serializer = new Serializer();
-        serializer.setInt32(scopeVar.location.range.end);
-        serializer.setInt32(scopeVar.location.range.start);
-        const key = Buffer.concat([
-            Buffer.from(scopeVar.location.uri),
-            serializer.getBuffer()
-        ]);
-
-        return await this.db.put(key, scopeVar);
+        return await this.db.put([
+            scopeVar.location.uri,
+            scopeVar.location.range.end,
+            scopeVar.location.range.start
+        ], scopeVar);
     }
 
     async removeByDoc(uri: string) {
@@ -60,17 +57,9 @@ export class ScopeVarTable {
         const db = this.db;
 
         return new Promise<Range | null>((resolve, reject) => {
-            const serializer = new Serializer(4);
-            serializer.setInt32(offset);
-            const uriBuffer = Buffer.from(uri);
-            const key = Buffer.concat([
-                uriBuffer,
-                serializer.getBuffer()
-            ]);
-
             const iterator = db.iterator<ScopeVar>({
-                gte: key,
-                lte: Buffer.concat([uriBuffer, Buffer.from('\xFF')]),
+                gte: [uri, offset],
+                lte: [uri, '\xFF'],
             });
             const processScopeVar = (
                 err: Error | null,
@@ -105,8 +94,9 @@ export class ScopeVarTable {
     }
 }
 
-const ValueEncoding = {
-    encode: (scopeVar: ScopeVar): Buffer => {
+const ValueEncoding: Level.Encoding = {
+    type: 'scope-var-encoding',
+    encode: (scopeVar: ScopeVar): string => {
         const serializer = new Serializer();
 
         if (scopeVar.location.uri === undefined || scopeVar.location.range === undefined) {
@@ -120,7 +110,7 @@ const ValueEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): ScopeVar => {
+    decode: (buffer: string): ScopeVar => {
         const scopeVar = new ScopeVar();
         const deserializer = new Deserializer(buffer);
 
@@ -133,5 +123,6 @@ const ValueEncoding = {
         }
 
         return scopeVar;
-    }
-} as Level.Encoding;
+    },
+    buffer: false,
+}

@@ -6,6 +6,7 @@ import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
 import { Location } from "../../symbol/meta/location";
+import * as charwise from "charwise";
 
 @injectable()
 export class ReferenceTable {
@@ -15,7 +16,7 @@ export class ReferenceTable {
         this.db = new SubStore(level, {
             name: 'reference',
             version: 1,
-            keyEncoding: 'binary',
+            keyEncoding: charwise,
             valueEncoding: ReferenceEncoding
         });
     }
@@ -25,16 +26,11 @@ export class ReferenceTable {
             return;
         }
 
-        let serializer = new Serializer(8);
-        serializer.setInt32(ref.location.range.end);
-        serializer.setInt32(ref.location.range.start);
-
-        let key = Buffer.concat([
-            Buffer.from(ref.location.uri),
-            serializer.getBuffer()
-        ]);
-
-        return this.db.put(key, ref);
+        return this.db.put([
+            ref.location.uri,
+            ref.location.range.end,
+            ref.location.range.start
+        ], ref);
     }
 
     async removeByDoc(uri: string) {
@@ -59,18 +55,9 @@ export class ReferenceTable {
         // const logger = App.get<LogWriter>(LogWriter);
 
         return new Promise<Reference | null>((resolve, reject) => {
-            let serializer = new Serializer(4);
-            serializer.setInt32(offset);
-
-            let uriBuffer = Buffer.from(uri);
-
-            let key = Buffer.concat([
-                uriBuffer,
-                serializer.getBuffer()
-            ]);
             let iterator = db.iterator<Reference>({
-                gte: key,
-                lte: Buffer.concat([uriBuffer, Buffer.from('\xFF')])
+                gte: [uri, offset],
+                lte: [uri, '\xFF'],
             });
 
             const processRef = (
@@ -116,15 +103,9 @@ export class ReferenceTable {
         const db = this.db;
 
         return new Promise<Reference[]>((resolve, reject) => {
-            const startSerializer = new Serializer(4);
-            startSerializer.setInt32(range.start);
-            const endSerializer = new Serializer(4);
-            endSerializer.setInt32(range.end);
-
-            const uriBuffer = Buffer.from(uri);
             const iterator = db.iterator<Reference>({
-                gte: Buffer.concat([uriBuffer, startSerializer.getBuffer()]),
-                lte: Buffer.concat([uriBuffer, endSerializer.getBuffer()]),
+                gte: [uri, range.start],
+                lte: [uri, range.end],
             });
             let refs: Reference[] = [];
             const processRef = (err: Error | null, key?: string | Buffer, ref?: Reference): void => {
@@ -163,8 +144,8 @@ enum TypeKind {
 
 export const ReferenceEncoding = {
     type: 'reference-encoding',
-    encode(ref: Reference): Buffer {
-        let serializer = new Serializer(128);
+    encode(ref: Reference): string {
+        let serializer = new Serializer();
         let hasName = ref.refName !== undefined;
 
         serializer.setBool(hasName);
@@ -212,7 +193,7 @@ export const ReferenceEncoding = {
 
         return serializer.getBuffer();
     },
-    decode(buffer: Buffer): Reference | null {
+    decode(buffer: string): Reference | null {
         if (buffer.length === 0) {
             return null;
         }
@@ -270,5 +251,5 @@ export const ReferenceEncoding = {
             memberLocation
         } as Reference;
     },
-    buffer: true
+    buffer: false
 };

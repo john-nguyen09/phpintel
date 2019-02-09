@@ -5,7 +5,7 @@
         "declaration": true,
         "outDir": "./lib",
         "alwaysStrict": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noEmitOnError": true,

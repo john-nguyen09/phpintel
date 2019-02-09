@@ -6,61 +6,30 @@ import { TypeComposite } from "../type/composite";
 import { NamespaceName } from "../symbol/name/namespaceName";
 
 export class Serializer {
-    public static readonly DEFAULT_SIZE = 512;
+    private buffer: string;
 
-    private buffer: Buffer;
-    private offset: number;
-    private length: number;
-
-    constructor(initialSize?: number) {
-        if (initialSize === undefined) {
-            initialSize = Serializer.DEFAULT_SIZE;
-        }
-
-        this.buffer = Buffer.alloc(initialSize);
-        this.length = 0;
-        this.offset = 0;
+    constructor() {
+        this.buffer = '';
     }
 
-    private growHeap(proposedSize: number) {
-        let newSize = Math.max(this.length + Serializer.DEFAULT_SIZE, proposedSize);
-        let newBuffer = Buffer.alloc(newSize);
-        this.buffer.copy(newBuffer);
-        this.buffer = newBuffer;
-    }
-
-    private needs(noBytes: number) {
-        if ((this.offset + noBytes) > this.buffer.length) {
-            this.growHeap(this.offset + noBytes);
-        }
-    }
-
-    public setBuffer(buffer: Buffer) {
-        this.needs(buffer.length);
-        buffer.copy(this.buffer, this.offset);
-        this.offset += buffer.length;
-        this.length += buffer.length;
+    public setBuffer(buffer: string) {
+        this.buffer += buffer;
     }
 
     public setString(str: string) {
-        let strBuffer = Buffer.from(str, 'utf8');
-
-        this.setInt32(strBuffer.length);
-        this.setBuffer(strBuffer);
+        this.setInt32(str.length);
+        this.setBuffer(str);
     }
 
     public setInt32(value: number) {
-        this.needs(4);
-        this.buffer.writeInt32BE(value, this.offset);
-        this.offset += 4;
-        this.length += 4;
+        this.buffer += String.fromCharCode((value >> 24 & 255)) +
+            String.fromCharCode((value >> 16 & 255)) +
+            String.fromCharCode((value >> 8 & 255)) +
+            String.fromCharCode((value & 255));
     }
 
     public setBool(value: boolean) {
-        this.needs(1);
-        this.buffer.writeUInt8(value ? 1 : 0, this.offset);
-        this.offset += 1;
-        this.length += 1;
+        this.buffer += value ? String.fromCharCode(1) : String.fromCharCode(0);
     }
 
     public setTypeComposite(types: TypeComposite) {
@@ -103,41 +72,44 @@ export class Serializer {
         this.setString(namespace.parts.join('\\'));
     }
 
-    public getBuffer(): Buffer {
-        return this.buffer.slice(0, this.length);
+    public getBuffer(): string {
+        return this.buffer;
     }
 }
 
 export class Deserializer {
-    private buffer: Buffer;
+    private buffer: string;
     private offset: number;
 
-    constructor(buffer: Buffer) {
+    constructor(buffer: string) {
         this.buffer = buffer;
         this.offset = 0;
     }
 
-    public readBuffer(): Buffer {
+    public readBuffer(): string {
         return this.buffer.slice(this.offset);
     }
 
     public readString(): string {
-        let length = this.readInt32();
-        let strBuffer = this.buffer.slice(this.offset, this.offset + length);
+        const length = this.readInt32();
+        const str = this.buffer.slice(this.offset, this.offset + length);
         this.offset += length;
 
-        return strBuffer.toString('utf8');
+        return str;
     }
 
     public readInt32(): number {
-        let value = this.buffer.readInt32BE(this.offset);
+        const value = this.buffer.charCodeAt(this.offset + 0) << 24 |
+            this.buffer.charCodeAt(this.offset + 1) << 16 |
+            this.buffer.charCodeAt(this.offset + 2) << 8 |
+            this.buffer.charCodeAt(this.offset + 3);
         this.offset += 4;
 
         return value;
     }
 
     public readBool(): boolean {
-        let value = this.buffer.readUInt8(this.offset) == 1 ? true : false;
+        let value = this.buffer.charCodeAt(this.offset) == 1 ? true : false;
         this.offset += 1;
 
         return value;
