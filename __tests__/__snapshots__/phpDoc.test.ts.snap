@@ -193,7 +193,7 @@ abstract class ClassWithConst {
     const STATUS_INACTIVE = 'inactive';
     const IS_ACTIVE = true;
 }",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
+  "uri": "case/class_constants.php",
 }
 `;
 
@@ -1725,7 +1725,7 @@ class ClassWithMethod
         return false;
     }
 }",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+  "uri": "case/class_methods.php",
 }
 `;
 
@@ -2564,7 +2564,7 @@ function test_function2($param1, $param2) {
 $callback = function() {
     
 };",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
+  "uri": "case/function_declare.php",
 }
 `;
 
@@ -3853,6 +3853,6 @@ class UnusedClass
     {        
     }
 }",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
+  "uri": "case/global_symbols.php",
 }
 `;

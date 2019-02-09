@@ -62,6 +62,6 @@ PhpDocument {
   ],
   "text": "<?php
 $varName = 'field_' . $fieldName;",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/variable/simpleVariable.php",
+  "uri": "case/variable/simpleVariable.php",
 }
 `;

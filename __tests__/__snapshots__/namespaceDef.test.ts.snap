@@ -69,7 +69,7 @@ namespace NamespaceDef;
 class TestClassNamespace1 {
 
 }",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/class.php",
+  "uri": "case/namespaceDef/class.php",
 }
 `;
 
@@ -127,7 +127,7 @@ PhpDocument {
 namespace NamespaceDef;
 
 const PI = 3.14;",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/constant.php",
+  "uri": "case/namespaceDef/constant.php",
 }
 `;
 
@@ -208,7 +208,7 @@ PhpDocument {
 namespace NamespaceDef;
 
 define('DEFINE_CONST', 'Hello world!!!');",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/defineConst.php",
+  "uri": "case/namespaceDef/defineConst.php",
 }
 `;
 
@@ -822,7 +822,7 @@ function function_with_namespace($param1, $param2, bool $param3) {
         return $param3;
     }
 }",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/function.php",
+  "uri": "case/namespaceDef/function.php",
 }
 `;
 
@@ -867,6 +867,6 @@ use NamespaceDef\\\\{
 };
 use NamespaceDef\\\\TestClassNamespace1;
 ",
-  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/import_table.php",
+  "uri": "case/namespaceDef/import_table.php",
 }
 `;

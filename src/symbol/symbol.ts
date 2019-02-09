@@ -31,6 +31,8 @@ export abstract class Symbol {
                 for (let child of value) {
                     object[key].push(this.createNewObject(child));
                 }
+            } else if (key === 'uri') {
+                object[key] = toRelative(value);
             } else {
                 object[key] = this.createNewObject(value);
             }
