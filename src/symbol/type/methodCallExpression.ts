@@ -3,7 +3,6 @@ import { Reference, RefKind, isReference } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { TypeComposite } from "../../type/composite";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 import { MemberName } from "../name/memberName";
 
@@ -14,7 +13,6 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
     public location: Location = {};
     public scope: TypeName | TypeComposite = new TypeName('');
 
-    @nonenumerable
     private hasArrow: boolean = false;
 
     consume(other: Symbol): boolean {

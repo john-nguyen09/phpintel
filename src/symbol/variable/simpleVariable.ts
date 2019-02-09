@@ -1,16 +1,17 @@
 import { Variable } from "./variable";
-import { Symbol, TokenSymbol } from "../symbol";
+import { Symbol, TokenSymbol, ScopeMember } from "../symbol";
 import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
 import { Location } from "../meta/location";
-import { nonenumerable } from "../../util/decorator";
 import { ScopeVar } from "./scopeVar";
+import { Class } from "../class/class";
 
-export class SimpleVariable extends Variable implements FieldGetter {
+export class SimpleVariable extends Variable implements FieldGetter, ScopeMember {
     public location: Location;
 
-    @nonenumerable
     public scopeVar: ScopeVar | null = null;
+
+    private scopeClass: Class | null = null;
 
     constructor() {
         super('');
@@ -22,6 +23,10 @@ export class SimpleVariable extends Variable implements FieldGetter {
 
             if (this.scopeVar !== null) {
                 this.type = this.scopeVar.getType(this.name);
+            }
+
+            if (this.name == '$this' && this.scopeClass !== null) {
+                this.type.push(this.scopeClass.name);
             }
         } else if (other instanceof SimpleVariable) {
             for (let type of other.type.types) {
@@ -36,5 +41,9 @@ export class SimpleVariable extends Variable implements FieldGetter {
 
     getFields(): string[] {
         return ['name', 'type'];
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.scopeClass = scopeClass;
     }
 }

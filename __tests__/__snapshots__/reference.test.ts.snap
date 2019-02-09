@@ -24,6 +24,9 @@ Array [
           "name": "boolean",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
     },
   },
   Object {
@@ -51,6 +54,10 @@ Array [
           "name": "int",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+        "int": true,
+      },
     },
   },
   Object {
@@ -78,6 +85,10 @@ Array [
           "name": "int",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+        "int": true,
+      },
     },
   },
 ]
@@ -375,6 +386,9 @@ Array [
           "name": "TestClass",
         },
       ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
     },
     "scopeRange": undefined,
     "type": TypeName {
@@ -404,6 +418,9 @@ Array [
           "name": "TestClass",
         },
       ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
     },
     "scopeRange": undefined,
     "type": TypeName {
@@ -427,6 +444,9 @@ Array [
           "name": "TestClass",
         },
       ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
     },
     "scopeRange": undefined,
     "type": TypeName {
@@ -450,6 +470,9 @@ Array [
           "name": "TestClass",
         },
       ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
     },
     "scopeRange": undefined,
     "type": TypeName {
@@ -547,6 +570,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
@@ -561,6 +587,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
@@ -575,6 +604,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
@@ -589,6 +621,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
@@ -608,6 +643,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -615,6 +653,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -622,6 +663,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -629,6 +673,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -636,6 +683,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
@@ -674,6 +724,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
@@ -688,6 +741,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
@@ -702,6 +758,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
@@ -716,6 +775,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
@@ -735,6 +797,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -742,6 +807,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -749,6 +817,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -756,6 +827,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -763,6 +837,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
@@ -801,6 +878,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
@@ -815,6 +895,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
@@ -829,6 +912,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
@@ -843,6 +929,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
@@ -862,6 +951,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -869,6 +961,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -876,6 +971,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -883,6 +981,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -890,6 +991,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
@@ -951,6 +1055,29 @@ Array [
   },
   Method {
     "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
     "location": Object {
       "range": Object {
         "end": 1227,
@@ -971,6 +1098,29 @@ Array [
   },
   Method {
     "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
     "location": Object {
       "range": Object {
         "end": 1227,
@@ -990,6 +1140,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
     "description": "",
     "location": Object {
       "range": Object {
@@ -1008,6 +1176,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
     "description": "",
     "location": Object {
       "range": Object {
@@ -1026,6 +1212,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "true",
+    },
     "location": Object {
       "range": Object {
         "end": 184,
@@ -1041,6 +1236,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "true",
+    },
     "location": Object {
       "range": Object {
         "end": 184,

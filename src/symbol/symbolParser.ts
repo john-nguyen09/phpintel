@@ -1,6 +1,6 @@
 import { TreeNode, isToken, isPhrase, nodeRange } from "../util/parseTree";
 import { Phrase } from "php7parser";
-import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer, isLocatable, needsNameResolve } from "./symbol";
+import { Symbol, TokenSymbol, isConsumer, isTransform, isCollection, isDocBlockConsumer, isLocatable, needsNameResolve, isScopeMember } from "./symbol";
 import { PhpDocument } from "./phpDocument";
 import { Class } from "./class/class";
 import { ClassHeader } from "./class/header";
@@ -52,6 +52,7 @@ export class SymbolParser implements Visitor {
     protected scopeVarStack: ScopeVar[] = [];
     protected doc: PhpDocument;
     protected lastDocBlock: DocBlock | null = null;
+    protected scopeClass: Class | null = null;
 
     constructor(doc: PhpDocument) {
         this.doc = doc;
@@ -147,7 +148,9 @@ export class SymbolParser implements Visitor {
                     break;
 
                 case PhraseKind.ClassDeclaration:
-                    this.pushSymbol(new Class());
+                    const theClass = new Class();
+                    this.scopeClass = theClass;
+                    this.pushSymbol(theClass);
                     break;
                 case PhraseKind.ClassDeclarationHeader:
                     this.pushSymbol(new ClassHeader());
@@ -281,6 +284,13 @@ export class SymbolParser implements Visitor {
                         };
                     }
                 });
+
+                if (
+                    isScopeMember(symbol) &&
+                    this.scopeClass !== null
+                ) {
+                    symbol.setScopeClass(this.scopeClass);
+                }
             }
         }
     }
@@ -335,6 +345,8 @@ export class SymbolParser implements Visitor {
             this.getScopeVar().set(symbol.variable);
         } else if (symbol instanceof Function) {
             this.popScopeVar();
+        } else if (symbol instanceof Class) {
+            this.scopeClass = null;
         }
     }
 

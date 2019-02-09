@@ -85,7 +85,7 @@ describe('completion', () => {
         ]);
     });
 
-    it('completion for variables', async() => {
+    it('completion for variables', async () => {
         await testCompletions(['global_symbols.php'], [
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
             { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
@@ -93,9 +93,15 @@ describe('completion', () => {
         ]);
     });
 
-    it('variable arrow completion', async() => {
+    it('variable arrow completion', async () => {
         await testCompletions(['global_symbols.php'], [
             { path: path.join(getCaseDir(), 'completion', 'arrow1.php'), offset: 44 },
+        ]);
+    });
+
+    it('this arrow completion', async () => {
+        await testCompletions([], [
+            { path: path.join(getCaseDir(), 'completion', 'this.php'), offset: 352 },
         ]);
     });
 });

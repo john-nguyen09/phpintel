@@ -4,6 +4,15 @@ exports[`phpDoc snapshot of phpDocs 1`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "50",
+      },
       "location": Object {
         "range": Object {
           "end": 59,
@@ -19,6 +28,15 @@ PhpDocument {
       },
     },
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "float",
+        },
+        "value": "3.14",
+      },
       "location": Object {
         "range": Object {
           "end": 80,
@@ -34,6 +52,15 @@ PhpDocument {
       },
     },
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "string",
+        },
+        "value": "'active'",
+      },
       "location": Object {
         "range": Object {
           "end": 116,
@@ -49,6 +76,15 @@ PhpDocument {
       },
     },
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "string",
+        },
+        "value": "'inactive'",
+      },
       "location": Object {
         "range": Object {
           "end": 156,
@@ -64,6 +100,15 @@ PhpDocument {
       },
     },
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "boolean",
+        },
+        "value": "true",
+      },
       "location": Object {
         "range": Object {
           "end": 184,
@@ -121,15 +166,34 @@ PhpDocument {
         "uri": "case/class_constants.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\ClassWithConst",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "true",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 187,
+          "start": 0,
+        },
+        "uri": "case/class_constants.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+abstract class ClassWithConst {
+    const CONST1 = 50;
+    const PI = 3.14;
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const IS_ACTIVE = true;
+}",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_constants.php",
 }
 `;
 
@@ -137,6 +201,15 @@ exports[`phpDoc snapshot of phpDocs 2`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "1",
+      },
       "location": Object {
         "range": Object {
           "end": 51,
@@ -184,6 +257,68 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "location": Object {
+                  "range": Object {
+                    "end": 664,
+                    "start": 660,
+                  },
+                  "uri": "case/class_methods.php",
+                },
+                "refKind": 6,
+                "scope": null,
+                "type": TypeName {
+                  "name": "null",
+                },
+                "value": "null",
+              },
+            },
+            "location": Object {
+              "range": Object {
+                "end": 664,
+                "start": 648,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$optional": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 674,
@@ -204,6 +339,20 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 734,
@@ -224,6 +373,16 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 840,
@@ -244,6 +403,20 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 897,
@@ -264,6 +437,20 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "float",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 957,
@@ -284,6 +471,39 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1010,
+                "start": 999,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$firstParam",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$firstParam": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 1020,
@@ -304,6 +524,136 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1064,
+                "start": 1058,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$first",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1073,
+                "start": 1066,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$second",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "location": Object {
+                  "range": Object {
+                    "end": 1092,
+                    "start": 1088,
+                  },
+                  "uri": "case/class_methods.php",
+                },
+                "refKind": 6,
+                "scope": null,
+                "type": TypeName {
+                  "name": "null",
+                },
+                "value": "null",
+              },
+            },
+            "location": Object {
+              "range": Object {
+                "end": 1092,
+                "start": 1075,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "value": "",
+          },
+          Parameter {
+            "expression": Expression {},
+            "location": Object {
+              "range": Object {
+                "end": 1109,
+                "start": 1094,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$first": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$optional1": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "$optional2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$second": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "null",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 1139,
@@ -324,6 +674,64 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1188,
+                "start": 1181,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1197,
+                "start": 1190,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$param1": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$param2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 1227,
@@ -344,6 +752,67 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1270,
+                "start": 1263,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1279,
+                "start": 1272,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$param1": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$param2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "",
+          },
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
       "location": Object {
         "range": Object {
           "end": 1431,
@@ -366,6 +835,24 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -384,6 +871,24 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -402,6 +907,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -420,6 +937,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
       "location": Object {
@@ -439,6 +968,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
       "location": Object {
@@ -458,6 +999,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
       "location": Object {
@@ -477,6 +1030,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -495,6 +1060,24 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "ClassWithMethod",
+            },
+          ],
+          "existingTypes": Object {
+            "ClassWithMethod": true,
+          },
+        },
+      },
       "description": "A private proterty which is only used by this class
 ",
       "location": Object {
@@ -579,6 +1162,9 @@ PhpDocument {
             "name": "null",
           },
         ],
+        "existingTypes": Object {
+          "null": true,
+        },
       },
       "value": "",
     },
@@ -606,9 +1192,7 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
@@ -627,6 +1211,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -643,6 +1228,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -659,6 +1245,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -696,6 +1283,9 @@ PhpDocument {
             "name": "null",
           },
         ],
+        "existingTypes": Object {
+          "null": true,
+        },
       },
       "value": "",
     },
@@ -728,6 +1318,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -740,9 +1331,7 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "null",
       },
@@ -761,6 +1350,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -777,6 +1367,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -789,9 +1380,7 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
@@ -810,6 +1399,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -826,6 +1416,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -839,10 +1430,14 @@ PhpDocument {
           "uri": "case/class_methods.php",
         },
         "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
         "type": TypeName {
-          "name": "ClassWithMethod",
+          "name": "\\\\ClassWithMethod",
         },
       },
+      "hasColonColon": true,
       "isParentIncluded": true,
       "location": Object {
         "range": Object {
@@ -852,6 +1447,7 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "propRef": PropertyRef {
+        "hasWhitespace": false,
         "location": Object {
           "range": Object {
             "end": 1316,
@@ -861,7 +1457,7 @@ PhpDocument {
         },
         "refKind": 11,
         "scope": TypeName {
-          "name": "ClassWithMethod",
+          "name": "\\\\ClassWithMethod",
         },
         "type": TypeName {
           "name": "$staticVariable",
@@ -883,12 +1479,16 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
       "type": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     ClassConstRefExpression {
       "classConstRef": ClassConstRef {
+        "hasWhitespace": false,
         "location": Object {
           "range": Object {
             "end": 1332,
@@ -898,7 +1498,7 @@ PhpDocument {
         },
         "refKind": 12,
         "scope": TypeName {
-          "name": "ClassWithMethod",
+          "name": "\\\\ClassWithMethod",
         },
         "type": TypeName {
           "name": "CONST1",
@@ -913,10 +1513,14 @@ PhpDocument {
           "uri": "case/class_methods.php",
         },
         "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
         "type": TypeName {
-          "name": "ClassWithMethod",
+          "name": "\\\\ClassWithMethod",
         },
       },
+      "hasColonColon": true,
       "isParentIncluded": true,
       "location": Object {
         "range": Object {
@@ -942,8 +1546,11 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
       "type": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     ClassRef {
@@ -955,11 +1562,40 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
       "type": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     MethodCall {
+      "funcCall": FunctionCall {
+        "argumentList": ArgumentExpressionList {
+          "arguments": Array [
+            SimpleVariable {
+              "name": "$param1",
+              "type": TypeComposite {
+                "_types": Array [],
+                "existingTypes": Object {},
+              },
+            },
+            SimpleVariable {
+              "name": "$param2",
+              "type": TypeComposite {
+                "_types": Array [],
+                "existingTypes": Object {},
+              },
+            },
+          ],
+        },
+        "location": Object {},
+        "refKind": 1,
+        "scope": null,
+        "type": TypeName {
+          "name": "",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 1373,
@@ -969,7 +1605,7 @@ PhpDocument {
       },
       "refKind": 10,
       "scope": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "staticMethod",
@@ -979,12 +1615,14 @@ PhpDocument {
       "name": "$param1",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
     SimpleVariable {
       "name": "$param2",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
     ConstantAccess {
@@ -996,15 +1634,98 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "false",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1433,
+          "start": 0,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+
+class ClassWithMethod
+{
+    const CONST1 = 1;
+
+    public static $staticVariable = false;
+
+    public $property1 = false;
+    public $property2;
+
+    /**
+     * Defines protected properties
+     * 
+     * @var boolean $protected1 Description of boolean
+     * @var string $protected2 Description of string
+     * @var int $protected3 Description of int
+     */
+    protected $protected1, $protected2, $protected3;
+
+    protected $protectedProperty1;
+
+    /**
+     * A private proterty which is only used by this class
+     * 
+     * @var ClassWithMethod This is a description
+     */
+    private $privateProperty1;
+
+    function __construct($optional = null) {
+
+    }
+
+    public function method1() {
+        return true;
+    }
+
+    public function method2() {
+        return [
+            'abc1',
+            'abc2'
+        ];
+    }
+
+    public function method3() {
+        return 5;
+    }
+
+    public function method4() {
+        return 3.14;
+    }
+
+    protected function protectedMethod1($firstParam) {
+
+    }
+
+    private function privateMethod1($first, $second, $optional1 = null, $optional2 = '') {
+        return null;
+    }
+
+    public static function staticMethod($param1, $param2) {
+        return true;
+    }
+
+    public function publicMethod1($param1, $param2) {
+        if (self::$staticVariable && self::CONST1) {
+            return self::staticMethod($param1, $param2);
+        }
+
+        return false;
+    }
+}",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
 }
 `;
 
@@ -1037,6 +1758,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "value": "",
         },
@@ -1057,6 +1781,9 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
           "value": "",
         },
@@ -1077,6 +1804,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "value": "",
         },
@@ -1097,6 +1827,9 @@ PhpDocument {
                 "name": "float",
               },
             ],
+            "existingTypes": Object {
+              "float": true,
+            },
           },
           "value": "",
         },
@@ -1116,6 +1849,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$floatParam": TypeComposite {
             "_types": Array [
@@ -1123,6 +1859,9 @@ PhpDocument {
                 "name": "float",
               },
             ],
+            "existingTypes": Object {
+              "float": true,
+            },
           },
           "$intParam": TypeComposite {
             "_types": Array [
@@ -1130,6 +1869,9 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
           "$stringParam": TypeComposite {
             "_types": Array [
@@ -1137,6 +1879,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "$test": TypeComposite {
             "_types": Array [
@@ -1144,6 +1889,9 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
         },
       },
@@ -1188,6 +1936,9 @@ PhpDocument {
                 "name": "\\\\array|int",
               },
             ],
+            "existingTypes": Object {
+              "array|int": true,
+            },
           },
           "value": "",
         },
@@ -1208,6 +1959,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "value": "",
         },
@@ -1227,6 +1981,9 @@ PhpDocument {
                 "name": "\\\\array|int",
               },
             ],
+            "existingTypes": Object {
+              "array|int": true,
+            },
           },
           "$param2": TypeComposite {
             "_types": Array [
@@ -1234,6 +1991,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
         },
       },
@@ -1267,6 +2027,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
@@ -1287,6 +2050,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
       "value": "",
     },
@@ -1307,6 +2073,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "value": "",
     },
@@ -1327,6 +2096,9 @@ PhpDocument {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
       "value": "",
     },
@@ -1338,6 +2110,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     FunctionCall {
@@ -1351,6 +2126,9 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
@@ -1376,6 +2154,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     ConstantAccess {
@@ -1401,6 +2182,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     SimpleVariable {
@@ -1411,6 +2195,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -1421,6 +2208,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     SimpleVariable {
@@ -1431,6 +2221,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -1441,6 +2234,9 @@ PhpDocument {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
     },
     ConstantAccess {
@@ -1469,6 +2265,9 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
@@ -1494,6 +2293,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     ClassTypeDesignator {
@@ -1521,6 +2323,9 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
@@ -1546,6 +2351,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     Parameter {
@@ -1565,6 +2373,9 @@ PhpDocument {
             "name": "\\\\array|int",
           },
         ],
+        "existingTypes": Object {
+          "array|int": true,
+        },
       },
       "value": "",
     },
@@ -1585,6 +2396,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
@@ -1592,9 +2406,165 @@ PhpDocument {
       "name": "$callback",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 788,
+          "start": 0,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$callback": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+          "existingTypes": Object {
+            "float": true,
+          },
+        },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 754,
+          "start": 708,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\array|int",
+            },
+          ],
+          "existingTypes": Object {
+            "array|int": true,
+          },
+        },
+        "$param2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+      },
+    },
+  ],
+  "text": "<?php
+
+function test_function1(string $stringParam, int $intParam, bool $boolParam, float $floatParam) {
+    $test = 1;
+
+    if (is_string($test)) {
+        return true;
+    }
+
+    switch ($test) {
+        case 1:
+            return $stringParam;
+        case 2:
+            return $intParam;
+        case 3:
+            return $boolParam;
+        case 4:
+            return $floatParam;
+        default:
+            return false;
+    }
+
+    if (is_object($test)) {
+        return new TestClass();
+    }
+
+    if (is_numeric($test)) {
+        return 20;
+    }
+
+    return 'string';
+}
+
+/**
+ * Test function 2
+ * @param array|int $param1 array of something or int
+ * @param string[] $param2 array of string
+ */
+function test_function2($param1, $param2) {
+
+}
+
+$callback = function() {
+    
+};",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/function_declare.php",
 }
 `;
 
@@ -1602,6 +2572,15 @@ exports[`phpDoc snapshot of phpDocs 4`] = `
 PhpDocument {
   "classConstants": Array [
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "123",
+      },
       "location": Object {
         "range": Object {
           "end": 1120,
@@ -1617,6 +2596,15 @@ PhpDocument {
       },
     },
     ClassConstant {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "123",
+      },
       "location": Object {
         "range": Object {
           "end": 2164,
@@ -1852,6 +2840,16 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+      "func": Function {
+        "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 1583,
@@ -1873,6 +2871,52 @@ PhpDocument {
     Method {
       "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
 ",
+      "func": Function {
+        "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 1835,
+                "start": 1821,
+              },
+              "uri": "case/global_symbols.php",
+            },
+            "name": "$testParameter",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "TestClass",
+                },
+              ],
+              "existingTypes": Object {
+                "TestClass": true,
+              },
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$testParameter": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "TestClass",
+                },
+              ],
+              "existingTypes": Object {
+                "TestClass": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 1909,
@@ -1893,6 +2937,16 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 2290,
@@ -1911,6 +2965,49 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "location": Object {
+              "range": Object {
+                "end": 2337,
+                "start": 2323,
+              },
+              "uri": "case/global_symbols.php",
+            },
+            "name": "$testParameter",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {
+            "$testParameter": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$testVariable": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "int",
+                },
+              ],
+              "existingTypes": Object {
+                "int": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 2379,
@@ -1929,6 +3026,16 @@ PhpDocument {
     },
     Method {
       "description": "",
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {},
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
       "location": Object {
         "range": Object {
           "end": 2917,
@@ -1951,6 +3058,24 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
       "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
       "location": Object {
@@ -1970,6 +3095,24 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
       "description": "Reprehenderit magna velit mollit ipsum do.
 ",
       "location": Object {
@@ -1989,6 +3132,18 @@ PhpDocument {
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -2005,6 +3160,18 @@ PhpDocument {
       "scope": null,
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
       "location": Object {
         "range": Object {
@@ -2021,6 +3188,18 @@ PhpDocument {
       "scope": null,
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Neither this class nor its members are referenced anywhere",
       "location": Object {
         "range": Object {
@@ -2158,6 +3337,7 @@ PhpDocument {
     },
     ClassConstRefExpression {
       "classConstRef": ClassConstRef {
+        "hasWhitespace": false,
         "location": Object {
           "range": Object {
             "end": 1576,
@@ -2167,7 +3347,7 @@ PhpDocument {
         },
         "refKind": 12,
         "scope": TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
         "type": TypeName {
           "name": "TEST_CLASS_CONST",
@@ -2182,10 +3362,14 @@ PhpDocument {
           "uri": "case/global_symbols.php",
         },
         "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\TestClass",
+        },
         "type": TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
       },
+      "hasColonColon": true,
       "isParentIncluded": true,
       "location": Object {
         "range": Object {
@@ -2211,8 +3395,11 @@ PhpDocument {
         "uri": "case/global_symbols.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\TestClass",
+      },
       "type": TypeName {
-        "name": "TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Parameter {
@@ -2232,10 +3419,14 @@ PhpDocument {
             "name": "TestClass",
           },
         ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
       "value": "",
     },
     PropertyAccessExpression {
+      "hasArrow": true,
       "location": Object {
         "range": Object {
           "end": 1885,
@@ -2252,7 +3443,14 @@ PhpDocument {
       },
       "refKind": 14,
       "scope": TypeComposite {
-        "_types": Array [],
+        "_types": Array [
+          TypeName {
+            "name": "\\\\TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
       "type": TypeName {
         "name": "testProperty",
@@ -2261,13 +3459,21 @@ PhpDocument {
     SimpleVariable {
       "name": "$this",
       "type": TypeComposite {
-        "_types": Array [],
+        "_types": Array [
+          TypeName {
+            "name": "\\\\TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
     },
     SimpleVariable {
       "name": "$testParameter",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
     Parameter {
@@ -2283,6 +3489,7 @@ PhpDocument {
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -2294,6 +3501,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     FunctionCall {
@@ -2470,5 +3680,179 @@ PhpDocument {
       "value": "TEST_DEFINE_CONSTANT",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2919,
+          "start": 0,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {
+        "$testVariable": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2118,
+          "start": 2089,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+
+
+
+/**
+ * Esse commodo excepteur pariatur Lorem est aute incididunt reprehenderit.
+ *
+ * @var int
+ */
+const TEST_CONST = 123;
+
+const TEST_CONST1 = 456, TEST_CONST2 = 789;
+
+const TEST_CONST_STRING = 'Simple string';
+const TEST_CONST_STRING2 = 'Not so ' . 'simple string';
+const TEST_CONST_STRING3 = 'Quite complex ' . TEST_CONST_STRING;
+
+define('CONSTANT_SAMPLE1', false);
+
+class TestClass2 implements TestInterface, TestInterface2
+{
+    
+}
+
+/**
+ * Pariatur ut laborum tempor voluptate consequat ea deserunt.
+ *
+ * Deserunt enim minim sunt sint ea nisi. Deserunt excepteur tempor id nostrud
+ * laboris commodo ad commodo velit mollit qui non officia id. Nulla duis veniam
+ * veniam officia deserunt et non dolore mollit ea quis eiusmod sit non. Occaecat
+ * consequat sunt culpa exercitation pariatur id reprehenderit nisi incididunt Lorem
+ * sint. Officia culpa pariatur laborum nostrud cupidatat consequat mollit.
+ */
+class TestClass implements TestInterface
+{
+    /**
+     * Anim labore veniam consectetur laboris minim quis aute aute esse nulla ad.
+     *
+     * @var int
+     */
+    const TEST_CLASS_CONST = 123;
+
+    /**
+     * Lorem excepteur officia sit anim velit veniam enim.
+     *
+     * @var TestClass[]
+     */
+    public static $staticTestProperty;
+
+    /**
+     * Reprehenderit magna velit mollit ipsum do.
+     *
+     * @var TestClass
+     */
+    public $testProperty;
+
+    /**
+     * Do magna consequat veniam minim proident eiusmod incididunt aute proident.
+     */
+    public static function staticTestMethod()
+    {
+        echo self::TEST_CLASS_CONST;
+    }
+
+    /**
+     * Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+     *
+     * @param TestClass $testParameter Lorem sunt velit incididunt mollit
+     * @return TestClass
+     */
+    public function testMethod($testParameter): TestInterface
+    {
+        $this->testProperty = $testParameter;
+    }
+}
+
+trait TestTrait
+{
+
+}
+
+interface TestInterface
+{
+
+}
+
+interface TestInterface2
+{
+
+}
+
+/**
+ * Officia aliquip adipisicing et nulla et laboris dolore labore.
+ *
+ * @return void
+ */
+function test_function()
+{
+
+}
+
+new class {
+    const TEST_CLASS_CONST = 123;
+    public static $staticTestProperty;
+    public $testProperty;
+
+    public static function staticTestMethod()
+    {
+
+    }
+
+    public function testMethod($testParameter)
+    {
+        $testVariable = 123;
+    }
+};
+
+class ChildClass extends TestClass {}
+
+/**
+ * Lorem ipsum dolor sit amet, consectetur.
+ */
+define('TEST_DEFINE_CONSTANT', false);
+define('TEST_STRING_CONSTANT1', 'simple string');
+define('TEST_STRING_CONSTANT2', 'not so ' . 'simple string');
+define('TEST_STRING_CONSTANT3', 'more of ' . TEST_STRING_CONSTANT2);
+
+print TEST_DEFINE_CONSTANT ? 'true' : 'false';
+
+/**
+ * Neither this class nor its members are referenced anywhere
+ */
+class UnusedClass
+{
+    public $unusedProperty;
+
+    public function unusedMethod()
+    {        
+    }
+}",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/global_symbols.php",
 }
 `;

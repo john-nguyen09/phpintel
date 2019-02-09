@@ -4,7 +4,6 @@ import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { ScopedMemberName } from "../name/scopedMemberName";
 import { FunctionCall } from "./functionCall";
-import { nonenumerable } from "../../util/decorator";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 
 export class MethodCall extends Symbol implements Consumer, Reference {
@@ -13,7 +12,6 @@ export class MethodCall extends Symbol implements Consumer, Reference {
     public location: Location = {};
     public scope: TypeName = new TypeName('');
 
-    @nonenumerable
     private funcCall: FunctionCall = new FunctionCall();
 
     consume(other: Symbol): boolean {

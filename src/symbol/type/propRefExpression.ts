@@ -1,13 +1,13 @@
-import { Consumer, Symbol, TokenSymbol, CollectionSymbol } from "../symbol";
+import { Consumer, Symbol, TokenSymbol, CollectionSymbol, ScopeMember } from "../symbol";
 import { ClassRef } from "../class/classRef";
 import { PropertyRef } from "../variable/propertyRef";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
+import { Class } from "../class/class";
 
-export class PropRefExpression extends CollectionSymbol implements Consumer, Reference {
+export class PropRefExpression extends CollectionSymbol implements Consumer, Reference, ScopeMember {
     public readonly isParentIncluded = true;
     public classRef: ClassRef = new ClassRef();
     public propRef: PropertyRef = new PropertyRef();
@@ -16,7 +16,6 @@ export class PropRefExpression extends CollectionSymbol implements Consumer, Ref
     public location: Location = {};
     public scope = new TypeName('');
 
-    @nonenumerable
     private hasColonColon = false;
 
     consume(other: Symbol): boolean {
@@ -57,5 +56,9 @@ export class PropRefExpression extends CollectionSymbol implements Consumer, Ref
         return [
             this.classRef
         ];
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.classRef.setScopeClass(scopeClass);
     }
 }

@@ -1,4 +1,4 @@
-import { Symbol, Consumer, isScopeMember, NamedSymbol, Locatable } from "../symbol";
+import { Symbol, Consumer, NamedSymbol, Locatable } from "../symbol";
 import { Location } from "../meta/location";
 import { SymbolModifier } from "../meta/modifier";
 import { ClassTraitUse } from "./traitUse";
@@ -33,15 +33,6 @@ export class Class extends Symbol implements Consumer, NamedSymbol, Locatable {
             }
 
             return true;
-        } else if (
-            isScopeMember(other) &&
-            !(
-                other instanceof ClassConstRef ||
-                other instanceof PropertyRef ||
-                other instanceof MethodCall
-            )
-        ) {
-            other.scope = this.name;
         }
 
         return false;

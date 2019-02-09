@@ -3,7 +3,6 @@ import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { ScopedMemberName } from "../name/scopedMemberName";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 
 export class ClassConstRef extends Symbol implements Consumer, Reference {
@@ -12,7 +11,6 @@ export class ClassConstRef extends Symbol implements Consumer, Reference {
     public location: Location = {};
     public scope: TypeName = new TypeName('');
 
-    @nonenumerable
     private hasWhitespace: boolean = false;
 
     consume(other: Symbol): boolean {

@@ -24,14 +24,44 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
       "name": "$fieldName",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 39,
+          "start": 0,
+        },
+        "uri": "case/variable/simpleVariable.php",
+      },
+      "variables": Object {
+        "$varName": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+      },
+    },
+  ],
+  "text": "<?php
+$varName = 'field_' . $fieldName;",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/variable/simpleVariable.php",
 }
 `;

@@ -3,11 +3,11 @@ import { Variable } from "./variable";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
 import { TokenKind } from "../../util/parser";
-import { nonenumerable } from "../../util/decorator";
 import { TypeComposite } from "../../type/composite";
 import { Location } from "../meta/location";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
+import { Class } from "../class/class";
 
 export class Property extends Symbol implements DocBlockConsumer, ScopeMember, Locatable {
     public name: string;
@@ -16,7 +16,6 @@ export class Property extends Symbol implements DocBlockConsumer, ScopeMember, L
     public description: string = '';
     public scope: TypeName | null = null;
 
-    @nonenumerable
     private _variable: Variable = new Variable('');
 
     consume(other: Symbol): boolean {
@@ -47,5 +46,9 @@ export class Property extends Symbol implements DocBlockConsumer, ScopeMember, L
 
     set type(val: TypeComposite) {
         this._variable.type = val;
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.scope = scopeClass.name;
     }
 }

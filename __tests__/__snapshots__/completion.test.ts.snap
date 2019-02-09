@@ -38,6 +38,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
@@ -52,6 +55,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
@@ -66,6 +72,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
@@ -80,6 +89,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
@@ -99,6 +111,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -106,6 +121,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -113,6 +131,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -120,6 +141,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -127,6 +151,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
@@ -165,6 +192,9 @@ Array [
               "name": "\\\\array|int",
             },
           ],
+          "existingTypes": Object {
+            "\\\\array|int": true,
+          },
         },
         "value": "",
       },
@@ -179,6 +209,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
@@ -198,6 +231,9 @@ Array [
               "name": "\\\\array|int",
             },
           ],
+          "existingTypes": Object {
+            "\\\\array|int": true,
+          },
         },
         "$param2": TypeComposite {
           "_types": Array [
@@ -205,6 +241,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
       },
     },
@@ -448,6 +487,20 @@ exports[`completion completion for current scoped member references 1`] = `
 Array [
   Method {
     "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "",
+        },
+      ],
+    },
     "location": Object {
       "range": Object {
         "end": 184,
@@ -467,6 +520,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+        "existingTypes": Object {
+          "int": true,
+        },
+      },
+    },
     "description": "",
     "location": Object {
       "range": Object {
@@ -485,6 +556,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "4",
+    },
     "location": Object {
       "range": Object {
         "end": 67,
@@ -508,6 +588,20 @@ exports[`completion completion for current scoped member references 3`] = `
 Array [
   Method {
     "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "",
+        },
+      ],
+    },
     "location": Object {
       "range": Object {
         "end": 184,
@@ -527,6 +621,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+        "existingTypes": Object {
+          "int": true,
+        },
+      },
+    },
     "description": "",
     "location": Object {
       "range": Object {
@@ -545,6 +657,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "4",
+    },
     "location": Object {
       "range": Object {
         "end": 67,
@@ -566,6 +687,16 @@ exports[`completion completion for scoped member references 1`] = `
 Array [
   Method {
     "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
     "location": Object {
       "range": Object {
         "end": 1583,
@@ -585,6 +716,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
     "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
     "location": Object {
@@ -604,6 +753,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
     "location": Object {
       "range": Object {
         "end": 1120,
@@ -627,6 +785,16 @@ exports[`completion completion for scoped member references 3`] = `
 Array [
   Method {
     "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
     "location": Object {
       "range": Object {
         "end": 1583,
@@ -646,6 +814,15 @@ Array [
     },
   },
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
     "location": Object {
       "range": Object {
         "end": 1120,
@@ -666,6 +843,15 @@ Array [
 exports[`completion completion for scoped member references 4`] = `
 Array [
   ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
     "location": Object {
       "range": Object {
         "end": 1120,
@@ -700,6 +886,9 @@ Array [
           "name": "boolean",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
     },
   },
 ]
@@ -720,6 +909,9 @@ Array [
           "name": "boolean",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
     },
   },
   Variable {
@@ -735,6 +927,9 @@ Array [
           "name": "int",
         },
       ],
+      "existingTypes": Object {
+        "int": true,
+      },
     },
   },
 ]
@@ -755,6 +950,254 @@ Array [
           "name": "boolean",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+]
+`;
+
+exports[`completion this arrow completion 1`] = `
+Array [
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 98,
+        "start": 88,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": "$property1",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 125,
+        "start": 115,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$property2",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 149,
+        "start": 139,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$property3",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 71,
+        "start": 55,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticProperty1",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 194,
+        "start": 158,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method1",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 241,
+        "start": 202,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": TypeName {
+      "name": "method2",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 286,
+        "start": 249,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": TypeName {
+      "name": "method3",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 359,
+        "start": 294,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "methodNeedsCompletion",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
     },
   },
 ]
@@ -763,6 +1206,24 @@ Array [
 exports[`completion variable arrow completion 1`] = `
 Array [
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
     "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
     "location": Object {
@@ -782,6 +1243,24 @@ Array [
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
     "description": "Reprehenderit magna velit mollit ipsum do.
 ",
     "location": Object {
@@ -802,6 +1281,16 @@ Array [
   },
   Method {
     "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
     "location": Object {
       "range": Object {
         "end": 1583,
@@ -823,6 +1312,27 @@ Array [
   Method {
     "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
 ",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
     "location": Object {
       "range": Object {
         "end": 1909,

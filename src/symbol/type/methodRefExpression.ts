@@ -1,15 +1,14 @@
-import { CollectionSymbol, Symbol, Consumer, TokenSymbol } from "../symbol";
+import { CollectionSymbol, Symbol, Consumer, TokenSymbol, ScopeMember } from "../symbol";
 import { ClassRef } from "../class/classRef";
 import { MethodCall } from "../function/methodCall";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
+import { Class } from "../class/class";
 
-export class MethodRefExpression extends CollectionSymbol implements Consumer {
+export class MethodRefExpression extends CollectionSymbol implements Consumer, ScopeMember {
     public isParentIncluded = true;
     public classRef: ClassRef = new ClassRef();
     public methodCall: MethodCall = new MethodCall();
 
-    @nonenumerable
     private hasColonColon: boolean = false;
 
     consume(other: Symbol): boolean {
@@ -32,5 +31,9 @@ export class MethodRefExpression extends CollectionSymbol implements Consumer {
             this.classRef,
             this.methodCall
         ]
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.classRef.setScopeClass(scopeClass);
     }
 }

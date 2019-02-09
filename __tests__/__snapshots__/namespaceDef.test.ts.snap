@@ -51,6 +51,25 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 61,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/class.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+class TestClassNamespace1 {
+
+}",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/class.php",
 }
 `;
 
@@ -92,6 +111,23 @@ PhpDocument {
       "value": "3.14",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 47,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/constant.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+const PI = 3.14;",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/constant.php",
 }
 `;
 
@@ -156,6 +192,23 @@ PhpDocument {
       "value": "'Hello world!!!'",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 72,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/defineConst.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+define('DEFINE_CONST', 'Hello world!!!');",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/defineConst.php",
 }
 `;
 
@@ -188,6 +241,9 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
+            "existingTypes": Object {
+              "TestClassNamespace1": true,
+            },
           },
           "value": "",
         },
@@ -208,6 +264,9 @@ PhpDocument {
                 "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
+            "existingTypes": Object {
+              "\\\\FullyQualified\\\\Name\\\\Class": true,
+            },
           },
           "value": "",
         },
@@ -228,6 +287,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "value": "",
         },
@@ -247,6 +309,9 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
+            "existingTypes": Object {
+              "TestClassNamespace1": true,
+            },
           },
           "$param2": TypeComposite {
             "_types": Array [
@@ -254,6 +319,9 @@ PhpDocument {
                 "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
+            "existingTypes": Object {
+              "\\\\FullyQualified\\\\Name\\\\Class": true,
+            },
           },
           "$param3": TypeComposite {
             "_types": Array [
@@ -261,6 +329,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$var1": TypeComposite {
             "_types": Array [
@@ -268,6 +339,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$var2": TypeComposite {
             "_types": Array [
@@ -275,6 +349,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "$var3": TypeComposite {
             "_types": Array [
@@ -282,6 +359,9 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
               },
             ],
+            "existingTypes": Object {
+              "CONSTANT_IN_NAMESPACE": true,
+            },
           },
         },
       },
@@ -333,6 +413,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
           },
         ],
+        "existingTypes": Object {
+          "TestClassNamespace1": true,
+        },
       },
       "value": "",
     },
@@ -353,6 +436,9 @@ PhpDocument {
             "name": "\\\\FullyQualified\\\\Name\\\\Class",
           },
         ],
+        "existingTypes": Object {
+          "\\\\FullyQualified\\\\Name\\\\Class": true,
+        },
       },
       "value": "",
     },
@@ -373,6 +459,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "value": "",
     },
@@ -384,6 +473,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     ConstantAccess {
@@ -409,6 +501,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -419,6 +514,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     ConstantAccess {
@@ -444,6 +542,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -454,6 +555,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -464,6 +568,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -474,6 +581,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -484,6 +594,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -494,6 +607,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -504,6 +620,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -514,6 +633,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -524,6 +646,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
           },
         ],
+        "existingTypes": Object {
+          "TestClassNamespace1": true,
+        },
       },
     },
     SimpleVariable {
@@ -534,6 +659,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -544,6 +672,9 @@ PhpDocument {
             "name": "\\\\FullyQualified\\\\Name\\\\Class",
           },
         ],
+        "existingTypes": Object {
+          "\\\\FullyQualified\\\\Name\\\\Class": true,
+        },
       },
     },
     SimpleVariable {
@@ -554,6 +685,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -564,9 +698,131 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 579,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/function.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 579,
+          "start": 175,
+        },
+        "uri": "case/namespaceDef/function.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClassNamespace1": true,
+          },
+        },
+        "$param2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\FullyQualified\\\\Name\\\\Class",
+            },
+          ],
+          "existingTypes": Object {
+            "\\\\FullyQualified\\\\Name\\\\Class": true,
+          },
+        },
+        "$param3": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$var1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$var2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "$var3": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+            },
+          ],
+          "existingTypes": Object {
+            "CONSTANT_IN_NAMESPACE": true,
+          },
+        },
+      },
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+/**
+ * @param TestClassNamespace1 $param1
+ * @param \\\\FullyQualified\\\\Name\\\\Class $param2
+ * @param boolean
+ * 
+ * @return TestClassNamespace2
+ */
+function function_with_namespace($param1, $param2, bool $param3) {
+    $var1 = false;
+    $var2 = 'abc';
+    $var3 = CONSTANT_IN_NAMESPACE;
+
+    if ($var1 && $var2 && $var3) {
+        return $var3;
+    }
+
+    if ($var1 && $var2) {
+        return $var2;
+    }
+
+    if ($var1) {
+        return $param1;
+    }
+
+    if ($var2) {
+        return $param2;
+    }
+
+    if ($var3) {
+        return $param3;
+    }
+}",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/function.php",
 }
 `;
 
@@ -590,5 +846,27 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 149,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/import_table.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace ImportTable;
+
+use NamespaceDef\\\\{
+    const PI,
+    function function_with_namespace
+};
+use NamespaceDef\\\\TestClassNamespace1;
+",
+  "uri": "file:///C:/Users/johnn/Development/phpintel/case/namespaceDef/import_table.php",
 }
 `;

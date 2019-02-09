@@ -1,7 +1,6 @@
 import { nodeText } from '../util/parseTree';
 import { Token } from 'php7parser';
 import { PhpDocument } from './phpDocument';
-import { nonenumerable } from '../util/decorator';
 import { DocBlock } from './docBlock';
 import { TypeName } from '../type/name';
 import { TokenKind } from '../util/parser';
@@ -10,6 +9,7 @@ import { createObject } from '../util/genericObject';
 import { Location } from './meta/location';
 import { ImportTable } from '../type/importTable';
 import { toRelative } from '../util/uri';
+import { Class } from './class/class';
 
 export abstract class Symbol {
     toObject(): any {
@@ -73,12 +73,10 @@ export abstract class Symbol {
 }
 
 export class TokenSymbol extends Symbol {
-    @nonenumerable
     public node: Token;
 
     public text: string;
 
-    @nonenumerable
     public type: TokenKind;
 
     constructor(token: Token, doc: PhpDocument) {
@@ -108,6 +106,10 @@ export interface DocBlockConsumer {
 }
 
 export interface ScopeMember {
+    setScopeClass(scopeClass: Class): void;
+}
+
+export interface HasScope {
     scope: TypeName | null;
 }
 
@@ -140,7 +142,7 @@ export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlock
 }
 
 export function isScopeMember(symbol: Symbol): symbol is (Symbol & ScopeMember) {
-    return 'scope' in symbol;
+    return 'setScopeClass' in symbol;
 }
 
 export function isNamedSymbol(symbol: Symbol): symbol is (Symbol & NamedSymbol) {

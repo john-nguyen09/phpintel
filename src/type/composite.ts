@@ -1,8 +1,6 @@
 import { TypeName } from "./name";
-import { nonenumerable } from "../util/decorator";
 
 export class TypeComposite {
-    @nonenumerable
     protected existingTypes: { [key: string]: boolean } = {};
     protected _types: TypeName[] = [];
 

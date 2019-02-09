@@ -2,7 +2,6 @@ import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Reference, RefKind, isReference } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 import { TypeComposite } from "../../type/composite";
 import { MemberName } from "../name/memberName";
@@ -15,7 +14,6 @@ export class PropertyAccessExpression extends Symbol implements Consumer, Refere
     public scope: TypeComposite | TypeName = new TypeName('');
     public memberLocation: Location = {};
 
-    @nonenumerable
     private hasArrow = false;
 
     consume(other: Symbol): boolean {

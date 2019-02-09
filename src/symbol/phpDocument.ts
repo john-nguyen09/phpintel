@@ -1,9 +1,8 @@
 import { Phrase, Parser } from "php7parser";
-import { Consumer, Symbol, needsNameResolve } from "./symbol";
+import { Consumer, Symbol } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/use";
-import { nonenumerable } from "../util/decorator";
 import { Class } from "./class/class";
 import { Constant } from "./constant/constant";
 import { Function } from "./function/function";
@@ -16,10 +15,8 @@ import { substr_count } from "../util/string";
 import { ScopeVar } from "./variable/scopeVar";
 
 export class PhpDocument extends Symbol implements Consumer {
-    @nonenumerable
     public text: string;
 
-    @nonenumerable
     public uri: string;
 
     public modifiedTime: number = -1;
@@ -33,7 +30,6 @@ export class PhpDocument extends Symbol implements Consumer {
     public properties: Property[];
     public references: Reference[];
 
-    @nonenumerable
     public scopeVarStack: ScopeVar[];
 
     constructor(uri: string, text: string) {
