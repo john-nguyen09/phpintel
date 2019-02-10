@@ -6,7 +6,7 @@ import { injectable } from "inversify";
 import { Reference } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
 import { Location } from "../../symbol/meta/location";
-import * as charwise from "charwise";
+import * as bytewise from "bytewise";
 
 @injectable()
 export class ReferenceTable {
@@ -16,7 +16,7 @@ export class ReferenceTable {
         this.db = new SubStore(level, {
             name: 'reference',
             version: 1,
-            keyEncoding: charwise,
+            keyEncoding: bytewise,
             valueEncoding: ReferenceEncoding
         });
     }

@@ -3,7 +3,7 @@ import { LevelDatasource, DbStore, SubStore } from "../db";
 import { ScopeVar } from "../../symbol/variable/scopeVar";
 import { Serializer, Deserializer } from "../serializer";
 import { Range } from "../../symbol/meta/range";
-import * as charwise from "charwise";
+import * as bytewise from "bytewise";
 
 @injectable()
 export class ScopeVarTable {
@@ -15,7 +15,7 @@ export class ScopeVarTable {
         this.db = new SubStore(level, {
             name: 'scopeVar',
             version: 1,
-            keyEncoding: charwise,
+            keyEncoding: bytewise,
             valueEncoding: ValueEncoding,
         });
     }

@@ -9,6 +9,65 @@ import { PhpDocumentTable } from '../src/storage/table/phpDoc';
 import { RefKind, Reference } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
 
+interface ReferenceTestCase {
+    definitionFiles: string[];
+    testFile: string;
+    startOffset: number;
+    endOffset: number;
+}
+
+async function testRefAndDef(testCases: ReferenceTestCase[]) {
+    const indexer = App.get<Indexer>(Indexer);
+    const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
+    const refTable = App.get<ReferenceTable>(ReferenceTable);
+
+    for (const testCase of testCases) {
+        await App.clearCache();
+
+        for (const definitionFile of testCase.definitionFiles) {
+            await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(definitionFile));
+        }
+
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testCase.testFile));
+        const testFileUri = pathToUri(testCase.testFile);
+
+        const phpDoc = await phpDocTable.get(testFileUri);
+
+        if (phpDoc === null) {
+            continue;
+        }
+
+        let prevRef: Reference | null = null;
+        let prevDefs: Symbol[] | null = null;
+        for (let i = testCase.startOffset; i <= testCase.endOffset; i++) {
+            const ref = await refTable.findAt(testFileUri, i);
+
+            console.log({
+                offset: i,
+                ref
+            });
+
+            expect(ref).not.toEqual(null);
+            if (ref === null) {
+                break;
+            }
+            const thisDefs: Symbol[] = await RefResolver.getSymbolsByReference(phpDoc, ref);
+
+            if (prevRef === null) {
+                prevRef = ref;
+            } else {
+                expect(ref).toEqual(prevRef);
+            }
+
+            if (prevDefs === null) {
+                prevDefs = thisDefs;
+            } else {
+                expect(thisDefs).toEqual(prevDefs);
+            }
+        }
+    }
+}
+
 beforeAll(() => {
     App.init(path.join(getDebugDir(), 'storage'));
 });
@@ -161,5 +220,16 @@ describe('Testing functions around references', () => {
 
         let phpDoc = await phpDocTable.get(refTestUri);
         let ref = await refTable.findAt(refTestUri, 20);
+    });
+
+    it('temp ref test', async () => {
+        await testRefAndDef([
+            {
+                definitionFiles: [path.join(getCaseDir(), 'moodleTestFile2.php')],
+                testFile: path.join(getCaseDir(), 'moodleTestFile1.php'),
+                startOffset: 425,
+                endOffset: 444,
+            }
+        ]);
     });
 });
