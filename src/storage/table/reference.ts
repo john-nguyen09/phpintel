@@ -191,6 +191,16 @@ export const ReferenceEncoding = {
             serializer.setLocation(ref.memberLocation);
         }
 
+        if (ref.ranges === undefined) {
+            serializer.setBool(false);
+        } else {
+            serializer.setBool(true);
+            serializer.setInt32(ref.ranges.length);
+            for (const range of ref.ranges) {
+                serializer.setRange(range);
+            }
+        }
+
         return serializer.getBuffer();
     },
     decode(buffer: string): Reference | null {
@@ -241,6 +251,16 @@ export const ReferenceEncoding = {
             memberLocation = deserializer.readLocation();
         }
 
+        const hasRanges = deserializer.readBool();
+        let ranges: Range[] | undefined = undefined;
+        if (hasRanges) {
+            ranges = [];
+            const noRanges = deserializer.readInt32();
+            for (let i = 0; i < noRanges; i++) {
+                ranges.push(deserializer.readRange());
+            }
+        }
+
         return {
             refName,
             type,
@@ -248,7 +268,8 @@ export const ReferenceEncoding = {
             refKind,
             scope,
             scopeRange,
-            memberLocation
+            memberLocation,
+            ranges
         } as Reference;
     },
     buffer: false

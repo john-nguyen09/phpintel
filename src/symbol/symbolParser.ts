@@ -76,10 +76,14 @@ export class SymbolParser implements Visitor {
         return this.symbolStack[this.symbolStack.length - 1];
     }
 
-    pushSymbol(symbol: Symbol | null) {
+    pushSymbol(symbol: Symbol | null, doesPushDoc?: boolean) {
         this.symbolStack.push(symbol);
 
-        if (symbol !== null) {
+        if (doesPushDoc === undefined) {
+            doesPushDoc = true;
+        }
+
+        if (symbol !== null && doesPushDoc) {
             this.forEachSymbol(symbol, (symbol) => {
                 this.doc.pushSymbol(symbol);
             });
@@ -169,13 +173,22 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new Constant());
                     break;
                 case PhraseKind.FunctionCallExpression:
-                    this.pushSymbol(new FunctionCall());
+                    const functionCall = new FunctionCall();
+                    this.doc.pushSymbol(functionCall.argumentList);
+
+                    this.pushSymbol(functionCall);
                     break;
                 case PhraseKind.ClassConstElement:
                     this.pushSymbol(new ClassConstant());
                     break;
                 case PhraseKind.ArgumentExpressionList:
-                    this.pushSymbol(new ArgumentExpressionList());
+                    const parent = spine[spine.length - 1];
+                    const parentKind: number = parent !== undefined ?
+                        parent.phraseType : PhraseKind.Unknown;
+                    this.pushSymbol(
+                        new ArgumentExpressionList(),
+                        parentKind !== PhraseKind.FunctionCallExpression
+                    );
                     break;
                 case PhraseKind.ConstantAccessExpression:
                     this.pushSymbol(new ConstantAccess());

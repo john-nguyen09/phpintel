@@ -123,35 +123,35 @@ export class Indexer {
 
         const promises: Promise<void | void[]>[] = [];
 
-        for (let scopeVar of doc.scopeVarStack) {
+        for (const scopeVar of doc.scopeVarStack) {
             promises.push(this.scopeVarTable.put(scopeVar));
         }
 
-        for (let reference of doc.references) {
+        for (const reference of doc.references) {
             promises.push(this.referenceTable.put(reference));
         }
 
-        for (let theClass of doc.classes) {
+        for (const theClass of doc.classes) {
             promises.push(this.classTable.put(doc, theClass));
         }
 
-        for (let classConstant of doc.classConstants) {
+        for (const classConstant of doc.classConstants) {
             promises.push(this.classConstantTable.put(doc, classConstant));
         }
 
-        for (let constant of doc.constants) {
+        for (const constant of doc.constants) {
             promises.push(this.constantTable.put(doc, constant));
         }
 
-        for (let func of doc.functions) {
+        for (const func of doc.functions) {
             promises.push(this.functionTable.put(doc, func));
         }
 
-        for (let method of doc.methods) {
+        for (const method of doc.methods) {
             promises.push(this.methodTable.put(doc, method));
         }
 
-        for (let property of doc.properties) {
+        for (const property of doc.properties) {
             promises.push(this.propertyTable.put(doc, property));
         }
 

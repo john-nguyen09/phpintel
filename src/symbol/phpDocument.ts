@@ -13,6 +13,7 @@ import { isReference, Reference } from "./reference";
 import { Position } from "vscode-languageserver";
 import { substr_count } from "../util/string";
 import { ScopeVar } from "./variable/scopeVar";
+import { ArgumentExpressionList } from "./argumentExpressionList";
 
 export class PhpDocument extends Symbol implements Consumer {
     public text: string;

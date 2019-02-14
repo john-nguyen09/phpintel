@@ -22,6 +22,8 @@ import { ReferenceTable } from "../storage/table/reference";
 import { Variable } from "../symbol/variable/variable";
 import { TypeName } from "../type/name";
 import { ScopeVar } from "../symbol/variable/scopeVar";
+import { SignatureHelp, SignatureInformation } from "vscode-languageserver";
+import { Formatter } from "./formatter";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -247,6 +249,45 @@ export namespace RefResolver {
         }
 
         return symbols;
+    }
+
+    export async function getSignatureHelp(
+        phpDoc: PhpDocument, ref: Reference, offset: number
+    ): Promise<SignatureHelp | null> {
+        const funcTable = App.get<FunctionTable>(FunctionTable);
+
+        const signatures: SignatureInformation[] = [];
+        let activeParameter = 0;
+        let func: Function | undefined = undefined;
+
+        if (ref.scope === null && ref.type instanceof TypeName) {
+            ref.type.resolveReferenceToFqn(phpDoc.importTable);
+
+            func = (await funcTable.get(ref.type.name)).shift();
+        }
+
+        if (
+            ref.refKind !== RefKind.ArgumentList ||
+            ref.ranges === undefined ||
+            func === undefined
+        ) {
+            return null;
+        }
+
+        signatures.push(Formatter.getFunctionSignature(func));
+
+        for (let i = 0; i < ref.ranges.length; i++) {
+            if (ref.ranges[i].start <= offset && ref.ranges[i].end >= offset) {
+                activeParameter = i;
+                break;
+            }
+        }
+
+        return {
+            signatures,
+            activeSignature: 0,
+            activeParameter,
+        };
     }
 
     export async function getFuncSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Function[]> {

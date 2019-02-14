@@ -1,4 +1,4 @@
-import { MarkedString, CompletionItem, CompletionItemKind } from "vscode-languageserver";
+import { MarkedString, CompletionItem, CompletionItemKind, SignatureInformation, ParameterInformation } from "vscode-languageserver";
 import { Function } from "../symbol/function/function";
 import { TypeName } from "../type/name";
 import { PhpDocument } from "../symbol/phpDocument";
@@ -237,5 +237,23 @@ export namespace Formatter {
             documentation: '',
             insertText: classConst.getName()
         }
+    }
+
+    export function getFunctionSignature(func: Function): SignatureInformation {
+        const label = `function ${func.name.name}(` + func.parameters.map((param) => {
+            return param.name;
+        }).join(', ') + ')';
+        const parameters: ParameterInformation[] = func.parameters.map((param) => {
+            return {
+                label: param.name,
+                documentation: param.description,
+            }
+        });
+
+        return {
+            label,
+            parameters,
+            documentation: func.description,
+        };
     }
 }

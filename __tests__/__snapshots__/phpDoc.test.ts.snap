@@ -1588,8 +1588,16 @@ PhpDocument {
               },
             },
           ],
+          "location": Object {
+            "range": Object {
+              "end": 1390,
+              "start": 1374,
+            },
+            "uri": "",
+          },
         },
         "location": Object {},
+        "realSymbol": undefined,
         "refKind": 1,
         "scope": null,
         "type": TypeName {
@@ -2132,6 +2140,13 @@ PhpDocument {
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 144,
+            "start": 139,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
       "location": Object {
         "range": Object {
@@ -2140,6 +2155,7 @@ PhpDocument {
         },
         "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -2271,6 +2287,13 @@ PhpDocument {
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 461,
+            "start": 456,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
       "location": Object {
         "range": Object {
@@ -2279,6 +2302,7 @@ PhpDocument {
         },
         "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -2329,6 +2353,13 @@ PhpDocument {
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 529,
+            "start": 524,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
       "location": Object {
         "range": Object {
@@ -2337,6 +2368,7 @@ PhpDocument {
         },
         "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -3289,6 +3321,16 @@ PhpDocument {
       "value": "TEST_CONST_STRING",
     },
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 375,
+            "start": 350,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 376,
@@ -3507,6 +3549,16 @@ PhpDocument {
       },
     },
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2511,
+            "start": 2482,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 2512,
@@ -3554,6 +3606,16 @@ PhpDocument {
       "value": "false",
     },
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2561,
+            "start": 2521,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 2562,
@@ -3586,6 +3648,16 @@ PhpDocument {
       "value": "'simple string'",
     },
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2623,
+            "start": 2571,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 2624,
@@ -3618,6 +3690,16 @@ PhpDocument {
       "value": "'not so simple string'",
     },
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2692,
+            "start": 2633,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 2693,

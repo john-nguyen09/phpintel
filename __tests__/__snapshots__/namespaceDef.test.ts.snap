@@ -160,6 +160,16 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     FunctionCall {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 70,
+            "start": 38,
+          },
+          "uri": "case/namespaceDef/defineConst.php",
+        },
+      },
       "location": Object {
         "range": Object {
           "end": 71,

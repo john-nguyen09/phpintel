@@ -5,6 +5,7 @@ import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { ReferenceTable } from "../src/storage/table/reference";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
+import { SignatureHelpProvider } from "../src/handler/signatureHelp";
 
 beforeAll(() => {
     App.init(path.join(getDebugDir(), 'storage'));
@@ -21,10 +22,9 @@ afterAll(async () => {
 describe('provide signature help', () => {
     it('shows list of parameters', async () => {
         const indexer = App.get<Indexer>(Indexer);
-        const refTable = App.get<ReferenceTable>(ReferenceTable);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
         const definitionFiles = [
-            'global_symbols.php',
+            'function_declare.php',
         ];
 
         for (let definitionFile of definitionFiles) {
@@ -38,15 +38,21 @@ describe('provide signature help', () => {
 
         await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testFile));
 
-        const ref = await refTable.findAt(testFileUri, 24);
         const phpDoc = await phpDocTable.get(testFileUri);
 
         if (phpDoc === null) {
             return;
         }
 
-        dumpAstToDebug(path.basename(testFile) + '.ast.json', phpDoc.getTree());
+        // dumpAstToDebug(path.basename(testFile) + '.ast.json', phpDoc.getTree());
 
-        console.log(ref);
+        const signatureHelp = await SignatureHelpProvider.provide({
+            position: { line: 2, character: 21 },
+            textDocument: {
+                uri: testFileUri,
+            },
+        });
+
+        console.log(signatureHelp);
     });
 });

@@ -10,6 +10,7 @@ import { HoverProvider } from "./handler/hover";
 import { DefinitionProvider } from "./handler/definition";
 import { ChangeNotification } from "./handler/changeNotification";
 import { CompletionProvider } from "./handler/completion";
+import { SignatureHelpProvider } from "./handler/signatureHelp";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -20,6 +21,7 @@ connection.onHover(HoverProvider.provide);
 connection.onDefinition(DefinitionProvider.provide);
 connection.onCompletion(CompletionProvider.provide);
 connection.onDidChangeTextDocument(ChangeNotification.provide);
+connection.onSignatureHelp(SignatureHelpProvider.provide);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
     let rootPath: string = '';
@@ -60,6 +62,11 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
                     '.', '<', '/' //html/js
                 ]
             },
+            signatureHelpProvider: {
+                triggerCharacters: [
+                    '(', ')', ','
+                ],
+            }
         }
     };
 });

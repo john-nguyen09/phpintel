@@ -1,3 +1,3 @@
 <?php
 
-test_function1();
+test_function1('ada',);

@@ -20,6 +20,7 @@ export enum RefKind {
     ScopedAccess = 13,
     PropertyAccess = 14,
     MethodCall = 15,
+    ArgumentList = 16,
 }
 
 export interface Reference {
@@ -30,6 +31,7 @@ export interface Reference {
     scope: TypeName | TypeComposite | null;
     scopeRange?: Range;
     memberLocation?: Location;
+    ranges?: Range[];
 }
 
 export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {

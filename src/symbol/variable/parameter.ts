@@ -10,6 +10,7 @@ import { TypeName } from "../../type/name";
 export class Parameter extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.Parameter;
     public name: string = '';
+    public description: string = '';
     public type: TypeComposite = new TypeComposite();
     public location: Location = {};
     public value: string = '';

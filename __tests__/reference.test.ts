@@ -222,14 +222,14 @@ describe('Testing functions around references', () => {
         let ref = await refTable.findAt(refTestUri, 20);
     });
 
-    it('temp ref test', async () => {
-        await testRefAndDef([
-            {
-                definitionFiles: [path.join(getCaseDir(), 'moodleTestFile2.php')],
-                testFile: path.join(getCaseDir(), 'moodleTestFile1.php'),
-                startOffset: 425,
-                endOffset: 444,
-            }
-        ]);
-    });
+    // it('temp ref test', async () => {
+    //     await testRefAndDef([
+    //         {
+    //             definitionFiles: [path.join(getCaseDir(), 'moodleTestFile2.php')],
+    //             testFile: path.join(getCaseDir(), 'moodleTestFile1.php'),
+    //             startOffset: 425,
+    //             endOffset: 444,
+    //         }
+    //     ]);
+    // });
 });
