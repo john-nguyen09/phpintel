@@ -246,6 +246,21 @@ export namespace RefResolver {
                 }
 
                 break;
+            case RefKind.ClassTypeDesignator:
+                if (ref.type instanceof TypeComposite) {
+                    break;
+                }
+
+                keyword = ref.type.name;
+
+                if (keyword.length > 0) {
+                    const completions = await classTable.search(keyword);
+                    for (const completion of completions) {
+                        symbols.push(...await classTable.get(completion.name));
+                    }
+                }
+
+                break;
         }
 
         return symbols;
