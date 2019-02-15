@@ -7,6 +7,7 @@ import { DocBlock } from "../docBlock";
 import { Location } from "../meta/location";
 import { Variable } from "../variable/variable";
 import { Class } from "../class/class";
+import { ScopeVar } from "../variable/scopeVar";
 
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
@@ -64,5 +65,9 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember, Nam
 
     setScopeClass(scopeClass: Class) {
         this.scope = scopeClass.name;
+    }
+
+    get scopeVar(): ScopeVar {
+        return this.func.scopeVar;
     }
 }

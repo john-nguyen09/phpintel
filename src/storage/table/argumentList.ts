@@ -33,7 +33,10 @@ export class ArgumentListTable {
     }
 
     async removeByDoc(uri: string) {
-        return await DbHelper.deleteInStream<void>(this.db, this.db.prefixSearch(uri));
+        return await DbHelper.deleteInStream<void>(this.db, this.db.createReadStream({
+            gte: [uri],
+            lte: [uri, '\xFF'],
+        }));
     }
 
     async findAt(uri: string, offset: number): Promise<ArgumentExpressionList | null> {

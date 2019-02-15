@@ -211,7 +211,14 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new FunctionHeader());
                     break;
                 case PhraseKind.MethodDeclaration:
-                    this.pushSymbol(new Method());
+                    const method = new Method();
+
+                    method.scopeVar.location = {
+                        uri: this.doc.uri,
+                        range: nodeRange(node, this.doc.text)
+                    };
+                    this.pushScopeVar(method.scopeVar);
+                    this.pushSymbol(method);
                     break;
                 case PhraseKind.MethodDeclarationHeader:
                     this.pushSymbol(new MethodHeader());

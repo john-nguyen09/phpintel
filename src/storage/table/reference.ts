@@ -90,7 +90,7 @@ export class ReferenceTable {
         });
     }
 
-    async findWithin(uri:string, range: Range, predicate?: (ref: Reference) => boolean): Promise<Reference[]> {
+    async findWithin(uri: string, range: Range, predicate?: (ref: Reference) => boolean): Promise<Reference[]> {
         const db = this.db;
 
         return new Promise<Reference[]>((resolve, reject) => {

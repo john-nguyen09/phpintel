@@ -37,7 +37,10 @@ export class ScopeVarTable {
     }
 
     async removeByDoc(uri: string) {
-        return DbHelper.deleteInStream<void>(this.db, this.db.prefixSearch(uri));
+        return DbHelper.deleteInStream<void>(this.db, this.db.createReadStream({
+            gte: [uri],
+            lte: [uri, '\xFF']
+        }));
     }
 
     async findAt(uri: string, offset: number): Promise<Range | null> {

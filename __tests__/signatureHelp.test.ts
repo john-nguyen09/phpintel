@@ -52,5 +52,7 @@ describe('provide signature help', () => {
                 uri: testFileUri,
             },
         });
+
+        console.log(signatureHelp);
     });
 });
