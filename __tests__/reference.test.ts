@@ -129,39 +129,7 @@ describe('Testing functions around references', () => {
             let def: Symbol | undefined = undefined;
 
             if (ref !== null) {
-                switch (ref.refKind) {
-                    case RefKind.Class:
-                        def = (await RefResolver.getClassSymbols(refTestDoc, ref)).shift();
-                        break;
-                    case RefKind.Function:
-                        def = (await RefResolver.getFuncSymbols(refTestDoc, ref)).shift();
-                        break;
-                    case RefKind.Method:
-                        def = (await RefResolver.getMethodSymbols(refTestDoc, ref)).shift();
-                        break;
-                    case RefKind.Property:
-                        def = (await RefResolver.getPropSymbols(refTestDoc, ref)).shift();
-                        break;
-                    case RefKind.ClassConst:
-                        def = (await RefResolver.getClassConstSymbols(refTestDoc, ref)).shift();
-                        break;
-                    case RefKind.ClassTypeDesignator:
-                        let constructors = (await RefResolver.getMethodSymbols(refTestDoc, ref));
-
-                        if (constructors.length === 0) {
-                            def = (await RefResolver.getClassSymbols(refTestDoc, ref)).shift();
-                        } else {
-                            def = constructors.shift();
-                        }
-                        break;
-                    case RefKind.ConstantAccess:
-                        def = (await RefResolver.getConstSymbols(refTestDoc, ref)).shift();
-                        break;
-                }
-            }
-
-            if (def !== undefined) {
-                defs.push(def);
+                defs.push(...await RefResolver.getSymbolsByReference(refTestDoc, ref));
             }
         }
 

@@ -48,7 +48,7 @@ export class ClassConstantTable {
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            classConsts.push(await this.db.get(BelongsToDoc.getKey(uri, key)) as ClassConstant);
+            classConsts.push(await BelongsToDoc.get<ClassConstant>(this.db, uri, key));
         }
 
         return classConsts;
@@ -60,7 +60,7 @@ export class ClassConstantTable {
         let datas = await NameIndex.prefixSearch(this.classIndex, prefix);
 
         for (let data of datas) {
-            const classConst = await this.db.get(BelongsToDoc.getKey(data.uri, data.name)) as ClassConstant;
+            const classConst = await BelongsToDoc.get<ClassConstant>(this.db, data.uri, data.name);
             classConsts.push(classConst);
         }
 

@@ -50,7 +50,7 @@ export class PropertyTable {
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            const prop = await this.db.get(BelongsToDoc.getKey(uri, key)) as Property;
+            const prop = await BelongsToDoc.get<Property>(this.db, uri, key);
             if (predicate === undefined || predicate(prop)) {
                 props.push(prop);
             }
@@ -65,7 +65,7 @@ export class PropertyTable {
         const datas = await NameIndex.prefixSearch(this.classIndex, prefix);
 
         for (let data of datas) {
-            const prop = await this.db.get(BelongsToDoc.getKey(data.uri, data.name)) as Property;
+            const prop = await BelongsToDoc.get<Property>(this.db, data.uri, data.name);
 
             if (typeof predicate !== 'undefined' && !predicate(prop)) {
                 continue;

@@ -159,6 +159,16 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 70,
+          "start": 38,
+        },
+        "uri": "case/namespaceDef/defineConst.php",
+      },
+    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -235,6 +245,7 @@ PhpDocument {
       },
       "parameters": Array [
         Parameter {
+          "description": "",
           "location": Object {
             "range": Object {
               "end": 215,
@@ -258,6 +269,7 @@ PhpDocument {
           "value": "",
         },
         Parameter {
+          "description": "",
           "location": Object {
             "range": Object {
               "end": 224,
@@ -281,6 +293,7 @@ PhpDocument {
           "value": "",
         },
         Parameter {
+          "description": "",
           "location": Object {
             "range": Object {
               "end": 238,
@@ -407,6 +420,7 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     Parameter {
+      "description": "",
       "location": Object {
         "range": Object {
           "end": 215,
@@ -430,6 +444,7 @@ PhpDocument {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {
         "range": Object {
           "end": 224,
@@ -453,6 +468,7 @@ PhpDocument {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {
         "range": Object {
           "end": 238,

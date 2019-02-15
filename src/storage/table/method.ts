@@ -52,7 +52,7 @@ export class MethodTable {
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            const method = await this.db.get(BelongsToDoc.getKey(uri, key)) as Method;
+            const method = await BelongsToDoc.get<Method>(this.db, uri, key);
 
             if (predicate === undefined || predicate(method)) {
                 methods.push(method);
@@ -69,7 +69,7 @@ export class MethodTable {
         const datas = await NameIndex.prefixSearch(this.classIndex, prefix);
 
         for (let data of datas) {
-            const method = await this.db.get(BelongsToDoc.getKey(data.uri, data.name)) as Method;
+            const method = await BelongsToDoc.get<Method>(this.db, data.uri, data.name);
 
             if (typeof predicate !== 'undefined' && !predicate(method)) {
                 continue;

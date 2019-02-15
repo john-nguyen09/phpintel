@@ -46,12 +46,17 @@ export abstract class Symbol {
 
         for (let key of fields) {
             let value: any = (<any>fieldGetter)[key];
-            object[key] = this.createNewObject(value);
+
+            if (key === 'uri') {
+                object[key] = toRelative(value);
+            } else {
+                object[key] = this.createNewObject(value);
+            }
         }
     }
 
     private createNewObject(currObj: any): any {
-        if (currObj instanceof Object) {
+        if (currObj !== null && typeof currObj == 'object') {
             let newObj: any;
 
             if ('toObject' in currObj && typeof currObj.toObject == 'function') {
@@ -59,6 +64,10 @@ export abstract class Symbol {
             } else if (isFieldGetter(currObj)) {
                 newObj = createObject(currObj.constructor);
                 this.assignFieldGetter(newObj, currObj);
+            } else if (Array.isArray(currObj)) {
+                return currObj.map((obj) => {
+                    return this.createNewObject(obj);
+                });
             } else {
                 if ('uri' in currObj) {
                     currObj.uri = toRelative(currObj.uri);

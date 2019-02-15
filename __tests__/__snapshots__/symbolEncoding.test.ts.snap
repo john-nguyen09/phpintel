@@ -429,6 +429,7 @@ Function {
   },
   "parameters": Array [
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$stringParam",
       "refKind": 3,
@@ -446,6 +447,7 @@ Function {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$intParam",
       "refKind": 3,
@@ -463,6 +465,7 @@ Function {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$boolParam",
       "refKind": 3,
@@ -480,6 +483,7 @@ Function {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$floatParam",
       "refKind": 3,
@@ -603,6 +607,7 @@ Function {
   },
   "parameters": Array [
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$param1",
       "refKind": 3,
@@ -620,6 +625,7 @@ Function {
       "value": "",
     },
     Parameter {
+      "description": "",
       "location": Object {},
       "name": "$param2",
       "refKind": 3,

@@ -4,6 +4,7 @@ import { ArgumentExpressionList } from "../../symbol/argumentExpressionList";
 import * as bytewise from "bytewise";
 import { PhpDocument } from "../../symbol/phpDocument";
 import { Range } from "../../symbol/meta/range";
+import { DbHelper } from "../dbHelper";
 
 @injectable()
 export class ArgumentListTable {
@@ -32,18 +33,7 @@ export class ArgumentListTable {
     }
 
     async removeByDoc(uri: string) {
-        return new Promise<void>((resolve, reject) => {
-            this.db.prefixSearch(uri)
-                .on('data', (data) => {
-                    this.db.del(data.key);
-                })
-                .on('error', (err) => {
-                    if (err) {
-                        reject(err);
-                    }
-                })
-                .on('end', () => { resolve(); });
-        });
+        return await DbHelper.deleteInStream<void>(this.db, this.db.prefixSearch(uri));
     }
 
     async findAt(uri: string, offset: number): Promise<ArgumentExpressionList | null> {

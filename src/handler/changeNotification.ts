@@ -2,7 +2,6 @@ import { DidChangeTextDocumentParams } from "vscode-languageserver";
 import { Indexer } from "../index/indexer";
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
-import * as util from "util";
 
 export namespace ChangeNotification {
     export async function provide(params: DidChangeTextDocumentParams) {

@@ -47,7 +47,7 @@ export class Application {
                     promises.push(db.del(key));
                 })
                 .on('end', () => {
-                    Promise.all(promises).then( () => { resolve() });
+                    Promise.all(promises).then(() => { resolve() });
                 })
                 .on('error', (err: Error) => {
                     reject(err);
@@ -66,15 +66,15 @@ export class Application {
         this.container.bind<LevelDatasource>(LevelDatasource).toConstantValue(datasource);
 
         // Tables
-        this.container.bind<ClassTable>(ClassTable).toSelf();
-        this.container.bind<ClassConstantTable>(ClassConstantTable).toSelf();
-        this.container.bind<ConstantTable>(ConstantTable).toSelf();
-        this.container.bind<FunctionTable>(FunctionTable).toSelf();
-        this.container.bind<MethodTable>(MethodTable).toSelf();
-        this.container.bind<PropertyTable>(PropertyTable).toSelf();
-        this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf();
-        this.container.bind<ReferenceTable>(ReferenceTable).toSelf();
-        this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf();
+        this.container.bind<ClassTable>(ClassTable).toSelf().inSingletonScope();
+        this.container.bind<ClassConstantTable>(ClassConstantTable).toSelf().inSingletonScope();
+        this.container.bind<ConstantTable>(ConstantTable).toSelf().inSingletonScope();
+        this.container.bind<FunctionTable>(FunctionTable).toSelf().inSingletonScope();
+        this.container.bind<MethodTable>(MethodTable).toSelf().inSingletonScope();
+        this.container.bind<PropertyTable>(PropertyTable).toSelf().inSingletonScope();
+        this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf().inSingletonScope();
+        this.container.bind<ReferenceTable>(ReferenceTable).toSelf().inSingletonScope();
+        this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf().inSingletonScope();
     }
 
     protected initBind() {

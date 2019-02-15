@@ -11,6 +11,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
@@ -38,6 +39,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
@@ -69,6 +71,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar2",
     "scope": null,
@@ -105,6 +108,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -122,6 +126,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -139,6 +144,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
@@ -156,6 +162,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -173,6 +180,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -190,6 +198,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
@@ -207,6 +216,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
@@ -224,6 +234,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
@@ -241,6 +252,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
@@ -260,6 +272,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
@@ -279,6 +292,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
@@ -298,6 +312,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
@@ -317,6 +332,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
@@ -336,6 +352,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
@@ -355,6 +372,7 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 6,
     "refName": undefined,
     "scope": null,
@@ -378,12 +396,13 @@ Array [
       },
       "uri": "case/reference/references.php",
     },
+    "ranges": undefined,
     "refKind": 14,
     "refName": undefined,
     "scope": TypeComposite {
       "_types": Array [
         TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
       ],
       "existingTypes": Object {
@@ -410,12 +429,13 @@ Array [
       },
       "uri": "case/reference/references.php",
     },
+    "ranges": undefined,
     "refKind": 14,
     "refName": undefined,
     "scope": TypeComposite {
       "_types": Array [
         TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
       ],
       "existingTypes": Object {
@@ -436,12 +456,13 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 15,
     "refName": undefined,
     "scope": TypeComposite {
       "_types": Array [
         TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
       ],
       "existingTypes": Object {
@@ -462,12 +483,13 @@ Array [
       "uri": "case/reference/references.php",
     },
     "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 15,
     "refName": undefined,
     "scope": TypeComposite {
       "_types": Array [
         TypeName {
-          "name": "TestClass",
+          "name": "\\\\TestClass",
         },
       ],
       "existingTypes": Object {
@@ -560,6 +582,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
@@ -577,6 +600,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$intParam",
         "refKind": 3,
@@ -594,6 +618,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
@@ -611,6 +636,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
@@ -714,6 +740,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
@@ -731,6 +758,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$intParam",
         "refKind": 3,
@@ -748,6 +776,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
@@ -765,6 +794,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
@@ -868,6 +898,7 @@ Array [
     },
     "parameters": Array [
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
@@ -885,6 +916,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$intParam",
         "refKind": 3,
@@ -902,6 +934,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
@@ -919,6 +952,7 @@ Array [
         "value": "",
       },
       Parameter {
+        "description": "",
         "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
@@ -1267,6 +1301,164 @@ Array [
       "name": "boolean",
     },
     "value": "false",
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
   },
 ]
 `;

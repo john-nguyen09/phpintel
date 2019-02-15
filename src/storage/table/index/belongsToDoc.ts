@@ -1,6 +1,7 @@
 import { PhpDocument } from "../../../symbol/phpDocument";
 import { Symbol } from "../../../symbol/symbol";
 import { DbStore } from "../../db";
+import { DbHelper } from "../../dbHelper";
 
 export namespace BelongsToDoc {
     export async function put(db: DbStore, phpDoc: PhpDocument, name: string, symbol: Symbol) {
@@ -10,43 +11,21 @@ export namespace BelongsToDoc {
     export async function removeByDocGetSymbols(db: DbStore, uri: string): Promise<Symbol[]> {
         let prefix = uri + DbStore.URI_SEP;
 
-        return new Promise<Symbol[]>((resolve, reject) => {
-            let symbols: Symbol[] = [];
-
-            db.prefixSearch(prefix)
-                .on('data', (data) => {
-                    symbols.push(data.value);
-
-                    db.del(data.key);
-                })
-                .on('error', (err) => {
-                    reject(err);
-                })
-                .on('end', () => {
-                    resolve(symbols);
-                });
+        return await DbHelper.deleteInStream<Symbol>(db, db.prefixSearch(prefix), (data) => {
+            return data.value;
         });
     }
 
     export async function removeByDoc(db: DbStore, uri: string): Promise<string[]> {
         let prefix = uri + DbStore.URI_SEP;
 
-        return new Promise<string[]>((resolve, reject) => {
-            let names: string[] = [];
-
-            db.prefixSearch(prefix)
-                .on('data', (data) => {
-                    names.push(data.key.substr(data.key.indexOf(DbStore.URI_SEP)));
-
-                    db.del(data.key);
-                })
-                .on('error', (err) => {
-                    reject(err);
-                })
-                .on('end', () => {
-                    resolve(names);
-                });
+        return await DbHelper.deleteInStream<string>(db, db.prefixSearch(prefix), (data) => {
+            return data.key.substr(data.key.indexOf(DbStore.URI_SEP));
         });
+    }
+
+    export async function get<T>(db: DbStore, uri: string, name: string): Promise<T> {
+        return await db.get(getKey(uri, name)) as T;
     }
 
     export function getKey(uri: string, name: string) {

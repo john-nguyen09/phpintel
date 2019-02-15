@@ -7,10 +7,11 @@ import { Reference } from "../../symbol/reference";
 import { Range } from "../../symbol/meta/range";
 import { Location } from "../../symbol/meta/location";
 import * as bytewise from "bytewise";
+import { DbHelper } from "../dbHelper";
 
 @injectable()
 export class ReferenceTable {
-    private db: DbStore;
+    public db: DbStore;
 
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
@@ -34,20 +35,10 @@ export class ReferenceTable {
     }
 
     async removeByDoc(uri: string) {
-        const db = this.db;
-
-        return new Promise<void>((resolve, reject) => {
-            db.prefixSearch(uri)
-                .on('data', (data) => {
-                    db.del(data.key);
-                })
-                .on('error', (err) => {
-                    reject(err);
-                })
-                .on('end', () => {
-                    resolve();
-                });
-        });
+        return DbHelper.deleteInStream<void>(this.db, this.db.createReadStream({
+            gte: [uri],
+            lte: [uri, '\xFF'],
+        }));
     }
 
     async findAt(uri: string, offset: number): Promise<Reference | null> {

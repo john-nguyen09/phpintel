@@ -4,6 +4,7 @@ import { ScopeVar } from "../../symbol/variable/scopeVar";
 import { Serializer, Deserializer } from "../serializer";
 import { Range } from "../../symbol/meta/range";
 import * as bytewise from "bytewise";
+import { DbHelper } from "../dbHelper";
 
 @injectable()
 export class ScopeVarTable {
@@ -36,21 +37,7 @@ export class ScopeVarTable {
     }
 
     async removeByDoc(uri: string) {
-        const db = this.db;
-
-        return new Promise<void>((resolve, reject) => {
-            db.prefixSearch(uri)
-                .on('data', (data) => {
-                    db.del(data.key);
-                })
-                .on('error', (err) => {
-                    if (err) {
-                        reject(err);
-                    }
-                }).on('end', () => {
-                    resolve();
-                });
-        });
+        return DbHelper.deleteInStream<void>(this.db, this.db.prefixSearch(uri));
     }
 
     async findAt(uri: string, offset: number): Promise<Range | null> {
