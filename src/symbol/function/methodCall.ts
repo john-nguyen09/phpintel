@@ -26,6 +26,9 @@ export class MethodCall extends Symbol implements Consumer, Reference {
     }
 
     get argumentList(): ArgumentExpressionList {
+        this.funcCall.argumentList.type = this.type;
+        this.funcCall.argumentList.scope = this.scope;
+
         return this.funcCall.argumentList;
     }
 }

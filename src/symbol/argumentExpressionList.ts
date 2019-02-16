@@ -5,13 +5,14 @@ import { Range } from "./meta/range";
 import { FieldGetter } from "./fieldGetter";
 import { Reference, RefKind } from "./reference";
 import { TypeName } from "../type/name";
+import { TypeComposite } from "../type/composite";
 
 export class ArgumentExpressionList extends Symbol implements Consumer, FieldGetter, Reference {
     public readonly refKind = RefKind.ArgumentList;
     public arguments: Symbol[] = [];
     public location: Location = {};
     public type: TypeName = new TypeName('');
-    public scope = null;
+    public scope: TypeName | TypeComposite | null = null;
 
     public commaOffsets: number[] = [];
 

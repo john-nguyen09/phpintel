@@ -23,8 +23,18 @@ export class TypeComposite {
         return result;
     }
 
+    toString(): string {
+        return this.types.map((type) => {
+            return type.name;
+        }).join('|');
+    }
+
     get types(): TypeName[] {
         return this._types;
+    }
+
+    get isEmpty(): boolean {
+        return this.types.length === 0;
     }
 }
 

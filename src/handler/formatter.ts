@@ -15,6 +15,7 @@ import { Range } from "../symbol/meta/range";
 import { Constant } from "../symbol/constant/constant";
 import { DefineConstant } from "../symbol/constant/defineConstant";
 import { Variable } from "../symbol/variable/variable";
+import { Parameter } from "../symbol/variable/parameter";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -239,15 +240,23 @@ export namespace Formatter {
         }
     }
 
+    export function getParametersLabel(params: Parameter[]): string[] {
+        return params.map((param) => {
+            const type = param.type.isEmpty ? '' : param.type.toString() + ' ';
+            const value = param.value.length === 0 ? '' : `: ${param.value}`;
+
+            return `${type}${param.name}${value}`;
+        });
+    }
+
     export function getFunctionSignature(func: Function): SignatureInformation {
-        const label = `function ${func.name.name}(` + func.parameters.map((param) => {
-            return param.name;
-        }).join(', ') + ')';
+        const label = `function ${func.name.name}(` +
+            getParametersLabel(func.parameters).join(', ') + ')';
         const parameters: ParameterInformation[] = func.parameters.map((param) => {
             return {
                 label: param.name,
                 documentation: param.description,
-            }
+            };
         });
 
         return {
@@ -255,5 +264,22 @@ export namespace Formatter {
             parameters,
             documentation: func.description,
         };
+    }
+
+    export function getMethodSignature(method: Method): SignatureInformation {
+        const label = `function ${method.name.name}(` +
+            getParametersLabel(method.parameters).join(', ') + ')';
+        const parameters: ParameterInformation[] = method.parameters.map((param) => {
+            return {
+                label: param.name,
+                documentation: param.description
+            };
+        });
+
+        return {
+            label,
+            parameters,
+            documentation: method.description
+        }
     }
 }

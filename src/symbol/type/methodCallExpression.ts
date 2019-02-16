@@ -5,6 +5,8 @@ import { Location } from "../meta/location";
 import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
 import { MemberName } from "../name/memberName";
+import { FunctionCall } from "../function/functionCall";
+import { ArgumentExpressionList } from "../argumentExpressionList";
 
 export class MethodCallExpression extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.MethodCall;
@@ -12,8 +14,11 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
     public type = new TypeName('');
     public location: Location = {};
     public scope: TypeName | TypeComposite = new TypeName('');
+    public argumentList: ArgumentExpressionList = new ArgumentExpressionList();
 
     private hasArrow: boolean = false;
+    private noOpenParenthesis = 0;
+    private startParenthesisOffset = 0;
 
     consume(other: Symbol): boolean {
         if (other instanceof TokenSymbol && other.type === TokenKind.Arrow) {
@@ -22,9 +27,35 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
             if (isReference(other)) {
                 this.scope = other.type;
             }
+        } else if (other instanceof MemberName) {
+            this.type = other.name;
         } else {
-            if (other instanceof MemberName) {
-                this.type = other.name;
+            if (other instanceof TokenSymbol) {
+                if (other.type === TokenKind.OpenParenthesis) {
+                    this.noOpenParenthesis++;
+
+                    if (this.noOpenParenthesis === 1) {
+                        this.startParenthesisOffset = other.node.offset + other.node.length;
+                    }
+                } else if (other.type === TokenKind.CloseParenthesis) {
+                    this.noOpenParenthesis--;
+
+                    if (this.noOpenParenthesis === 0) {
+                        this.argumentList.location = {
+                            uri: this.location.uri,
+                            range: {
+                                start: this.startParenthesisOffset,
+                                end: other.node.offset
+                            }
+                        };
+                        this.argumentList.type.name = this.type.name;
+                        this.argumentList.scope = this.scope;
+                    }
+                }
+            } else if (other instanceof ArgumentExpressionList) {
+                this.argumentList.arguments = other.arguments;
+                this.argumentList.type.name = this.type.name;
+                this.argumentList.commaOffsets = other.commaOffsets;
             }
         }
 

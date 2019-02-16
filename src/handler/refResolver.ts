@@ -270,26 +270,49 @@ export namespace RefResolver {
         phpDoc: PhpDocument, ref: Reference, offset: number
     ): Promise<SignatureHelp | null> {
         const funcTable = App.get<FunctionTable>(FunctionTable);
+        const methodTable = App.get<MethodTable>(MethodTable);
 
         const signatures: SignatureInformation[] = [];
         let activeParameter = 0;
-        let func: Function | undefined = undefined;
+        const symbols: (Function | Method)[] = [];
 
-        if (ref.scope === null && ref.type instanceof TypeName) {
-            ref.type.resolveReferenceToFqn(phpDoc.importTable);
+        if (ref.type instanceof TypeName) {
+            if (ref.scope === null) {
+                ref.type.resolveReferenceToFqn(phpDoc.importTable);
+                symbols.push(...await funcTable.get(ref.type.name));
+            } else {
+                const classNames: string[] = [];
+                if (ref.scope instanceof TypeComposite) {
+                    for (const scope of ref.scope.types) {
+                        scope.resolveReferenceToFqn(phpDoc.importTable);
 
-            func = (await funcTable.get(ref.type.name)).shift();
+                        classNames.push(scope.name);
+                    }
+                } else {
+                    ref.scope.resolveReferenceToFqn(phpDoc.importTable);
+                    classNames.push(ref.scope.name);
+                }
+                for (const className of classNames) {
+                    symbols.push(...await methodTable.getByClass(className, ref.type.name));
+                }
+            }
         }
 
         if (
             ref.refKind !== RefKind.ArgumentList ||
             ref.ranges === undefined ||
-            func === undefined
+            symbols.length === 0
         ) {
             return null;
         }
 
-        signatures.push(Formatter.getFunctionSignature(func));
+        for (const symbol of symbols) {
+            if (symbol instanceof Method) {
+                signatures.push(Formatter.getMethodSignature(symbol));
+            } else if (symbol instanceof Function) {
+                signatures.push(Formatter.getFunctionSignature(symbol));
+            }
+        }
 
         for (let i = 0; i < ref.ranges.length; i++) {
             if (ref.ranges[i].start <= offset && ref.ranges[i].end >= offset) {

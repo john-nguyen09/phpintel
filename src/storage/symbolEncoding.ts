@@ -202,6 +202,12 @@ const methodEncoding = {
             serializer.setTypeComposite(symbol.variables[varName]);
         }
 
+        serializer.setInt32(symbol.parameters.length);
+        for (let param of symbol.parameters) {
+            serializer.setString(param.name);
+            serializer.setTypeComposite(param.type);
+        }
+
         return serializer.getBuffer();
     },
     decode: (buffer: string): Method => {
@@ -222,6 +228,14 @@ const methodEncoding = {
         let noVariables = deserializer.readInt32();
         for (let i = 0; i < noVariables; i++) {
             method.setVariable(new Variable(deserializer.readString(), deserializer.readTypeComposite()));
+        }
+
+        const noParams = deserializer.readInt32();
+        for (let i = 0; i < noParams; i++) {
+            const param = new Parameter();
+            param.name = deserializer.readString();
+            param.type = deserializer.readTypeComposite();
+            method.pushParam(param);
         }
 
         return method;

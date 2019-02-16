@@ -24,7 +24,7 @@ describe('provide signature help', () => {
         const indexer = App.get<Indexer>(Indexer);
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
         const definitionFiles = [
-            'function_declare.php',
+            // 'function_declare.php',
         ];
 
         for (let definitionFile of definitionFiles) {
@@ -33,7 +33,7 @@ describe('provide signature help', () => {
             );
         }
 
-        const testFile = path.join(getCaseDir(), 'signatureHelp', 'function.php');
+        const testFile = path.join(getCaseDir(), 'signatureHelp', 'method.php');
         const testFileUri = pathToUri(testFile);
 
         await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testFile));
@@ -44,10 +44,10 @@ describe('provide signature help', () => {
             return;
         }
 
-        // dumpAstToDebug(path.basename(testFile) + '.ast.json', phpDoc.getTree());
+        dumpAstToDebug(path.basename(testFile) + '.ast.json', phpDoc.getTree());
 
         const signatureHelp = await SignatureHelpProvider.provide({
-            position: { line: 2, character: 21 },
+            position: { line: 4, character: 23 },
             textDocument: {
                 uri: testFileUri,
             },
