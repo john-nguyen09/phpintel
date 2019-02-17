@@ -5,7 +5,6 @@ import { Location } from "../meta/location";
 import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
 import { MemberName } from "../name/memberName";
-import { FunctionCall } from "../function/functionCall";
 import { ArgumentExpressionList } from "../argumentExpressionList";
 
 export class MethodCallExpression extends Symbol implements Consumer, Reference {
@@ -14,7 +13,7 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
     public type = new TypeName('');
     public location: Location = {};
     public scope: TypeName | TypeComposite = new TypeName('');
-    public argumentList: ArgumentExpressionList = new ArgumentExpressionList();
+    public argumentList: ArgumentExpressionList = new ArgumentExpressionList(this);
 
     private hasArrow: boolean = false;
     private noOpenParenthesis = 0;
@@ -48,13 +47,10 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
                                 end: other.node.offset
                             }
                         };
-                        this.argumentList.type.name = this.type.name;
-                        this.argumentList.scope = this.scope;
                     }
                 }
             } else if (other instanceof ArgumentExpressionList) {
                 this.argumentList.arguments = other.arguments;
-                this.argumentList.type.name = this.type.name;
                 this.argumentList.commaOffsets = other.commaOffsets;
             }
         }

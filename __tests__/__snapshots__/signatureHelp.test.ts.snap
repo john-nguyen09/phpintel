@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`provide signature help shows list of parameters 1`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function \\\\test_function1(string $stringParam, int $intParam, boolean $boolParam, float $floatParam)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$stringParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$intParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$boolParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$floatParam",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help shows list of parameters 2`] = `
+Object {
+  "activeParameter": 1,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function \\\\test_function1(string $stringParam, int $intParam, boolean $boolParam, float $floatParam)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$stringParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$intParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$boolParam",
+        },
+        Object {
+          "documentation": "",
+          "label": "$floatParam",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help shows list of parameters 3`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function method1($param1, $param2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$param1",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help shows list of parameters 4`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function method2($param1, $param2, boolean $param3)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$param1",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param2",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param3",
+        },
+      ],
+    },
+  ],
+}
+`;

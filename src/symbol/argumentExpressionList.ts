@@ -5,16 +5,28 @@ import { Range } from "./meta/range";
 import { FieldGetter } from "./fieldGetter";
 import { Reference, RefKind } from "./reference";
 import { TypeName } from "../type/name";
+import { MethodCall } from "./function/methodCall";
+import { FunctionCall } from "./function/functionCall";
+import { MethodCallExpression } from "./type/methodCallExpression";
 import { TypeComposite } from "../type/composite";
+
+export type CallExpression = MethodCall | FunctionCall | MethodCallExpression;
 
 export class ArgumentExpressionList extends Symbol implements Consumer, FieldGetter, Reference {
     public readonly refKind = RefKind.ArgumentList;
     public arguments: Symbol[] = [];
     public location: Location = {};
-    public type: TypeName = new TypeName('');
-    public scope: TypeName | TypeComposite | null = null;
 
     public commaOffsets: number[] = [];
+
+    private _callExpression: CallExpression | null = null;
+
+    constructor(callExpression?: CallExpression) {
+        super();
+        if (callExpression !== undefined) {
+            this._callExpression = callExpression;
+        }
+    }
 
     consume(other: Symbol) {
         let isCommaOrWhitespace = false;
@@ -56,6 +68,26 @@ export class ArgumentExpressionList extends Symbol implements Consumer, FieldGet
         });
 
         return ranges;
+    }
+
+    get type(): TypeName {
+        if (this._callExpression === null) {
+            return new TypeName('');
+        }
+
+        return this._callExpression.type;
+    }
+
+    get scope(): TypeComposite | TypeName | null {
+        if (this._callExpression === null) {
+            return null;
+        }
+
+        if (this._callExpression instanceof FunctionCall) {
+            return null;
+        }
+
+        return this._callExpression.scope;
     }
 
     getFields() {

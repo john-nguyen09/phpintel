@@ -12,7 +12,7 @@ import { Parameter } from "../variable/parameter";
 
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
-    public name: TypeName;
+    public name: TypeName = new TypeName('');
     public location: Location = {};
     public description: string = '';
     public scope: TypeName | null = null;

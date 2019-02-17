@@ -1,4 +1,4 @@
-import { Symbol, Consumer } from "../symbol";
+import { Symbol, Consumer, TokenSymbol } from "../symbol";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
@@ -12,12 +12,20 @@ export class MethodCall extends Symbol implements Consumer, Reference {
     public location: Location = {};
     public scope: TypeName = new TypeName('');
 
-    private funcCall: FunctionCall = new FunctionCall();
+    private funcCall: FunctionCall;
+
+    constructor() {
+        super();
+        this.funcCall = new FunctionCall();
+        this.funcCall.argumentList = new ArgumentExpressionList(this);
+    }
 
     consume(other: Symbol): boolean {
         if (other instanceof ScopedMemberName) {
             this.type = other.name;
             this.location = other.location;
+
+            this.funcCall.location = this.location;
 
             return true;
         } else {
@@ -26,9 +34,6 @@ export class MethodCall extends Symbol implements Consumer, Reference {
     }
 
     get argumentList(): ArgumentExpressionList {
-        this.funcCall.argumentList.type = this.type;
-        this.funcCall.argumentList.scope = this.scope;
-
         return this.funcCall.argumentList;
     }
 }

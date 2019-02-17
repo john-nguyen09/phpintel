@@ -2,10 +2,47 @@ import { App } from "../src/app";
 import * as path from "path";
 import { getDebugDir, getCaseDir, dumpAstToDebug } from "../src/testHelper";
 import { Indexer, PhpFileInfo } from "../src/index/indexer";
-import { ReferenceTable } from "../src/storage/table/reference";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
 import { SignatureHelpProvider } from "../src/handler/signatureHelp";
+
+interface SignatureHelpTestCase {
+    testFile: string;
+    line: number;
+    character: number;
+}
+
+async function testSignatureHelp(definitionFiles: string[], testCases: SignatureHelpTestCase[]) {
+    const indexer = App.get<Indexer>(Indexer);
+    const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
+
+    for (let definitionFile of definitionFiles) {
+        await indexer.syncFileSystem(
+            await PhpFileInfo.createFileInfo(path.join(getCaseDir(), definitionFile))
+        );
+    }
+
+    for (const testCase of testCases) {
+        const testFileUri = pathToUri(testCase.testFile);
+
+        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testCase.testFile));
+
+        const phpDoc = await phpDocTable.get(testFileUri);
+
+        if (phpDoc === null) {
+            return;
+        }
+
+        const signatureHelp = await SignatureHelpProvider.provide({
+            position: { line: testCase.line, character: testCase.character },
+            textDocument: {
+                uri: testFileUri
+            }
+        });
+
+        expect(signatureHelp).toMatchSnapshot();
+    }
+}
 
 beforeAll(() => {
     App.init(path.join(getDebugDir(), 'storage'));
@@ -21,38 +58,13 @@ afterAll(async () => {
 
 describe('provide signature help', () => {
     it('shows list of parameters', async () => {
-        const indexer = App.get<Indexer>(Indexer);
-        const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
-        const definitionFiles = [
-            // 'function_declare.php',
-        ];
-
-        for (let definitionFile of definitionFiles) {
-            await indexer.syncFileSystem(
-                await PhpFileInfo.createFileInfo(path.join(getCaseDir(), definitionFile))
-            );
-        }
-
-        const testFile = path.join(getCaseDir(), 'signatureHelp', 'method.php');
-        const testFileUri = pathToUri(testFile);
-
-        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testFile));
-
-        const phpDoc = await phpDocTable.get(testFileUri);
-
-        if (phpDoc === null) {
-            return;
-        }
-
-        dumpAstToDebug(path.basename(testFile) + '.ast.json', phpDoc.getTree());
-
-        const signatureHelp = await SignatureHelpProvider.provide({
-            position: { line: 4, character: 23 },
-            textDocument: {
-                uri: testFileUri,
-            },
-        });
-
-        console.log(signatureHelp);
+        await testSignatureHelp([
+            'function_declare.php',
+        ], [
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'function.php'), line: 2, character: 16 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'function.php'), line: 2, character: 21 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'method.php'), line: 4, character: 23 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'method.php'), line: 12, character: 26 },
+        ]);
     });
 });

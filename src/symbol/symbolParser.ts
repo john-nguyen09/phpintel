@@ -188,7 +188,8 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(
                         new ArgumentExpressionList(),
                         parentKind !== PhraseKind.FunctionCallExpression &&
-                        parentKind !== PhraseKind.MethodCallExpression
+                        parentKind !== PhraseKind.MethodCallExpression &&
+                        parentKind !== PhraseKind.ScopedCallExpression
                     );
                     break;
                 case PhraseKind.ConstantAccessExpression:
@@ -262,7 +263,10 @@ export class SymbolParser implements Visitor {
                     this.pushSymbol(new PropertyDeclaration());
                     break;
                 case PhraseKind.ScopedCallExpression:
-                    this.pushSymbol(new MethodRefExpression());
+                    const methodRef = new MethodRefExpression();
+
+                    this.doc.pushSymbol(methodRef.methodCall.argumentList);
+                    this.pushSymbol(methodRef);
                     break;
                 case PhraseKind.ScopedMemberName:
                     this.pushSymbol(new ScopedMemberName());
