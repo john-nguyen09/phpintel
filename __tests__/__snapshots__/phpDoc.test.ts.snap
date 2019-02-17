@@ -304,7 +304,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 674,
+              "start": 627,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {
             "$optional": TypeComposite {
               "_types": Array [
@@ -345,7 +351,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 734,
+              "start": 680,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {},
         },
         "types": Array [
@@ -379,7 +391,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 840,
+              "start": 740,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {},
         },
         "types": Array [],
@@ -409,7 +427,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 897,
+              "start": 846,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {},
         },
         "types": Array [
@@ -443,7 +467,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 957,
+              "start": 903,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {},
         },
         "types": Array [
@@ -496,7 +526,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1020,
+              "start": 963,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {
             "$firstParam": TypeComposite {
               "_types": Array [],
@@ -628,7 +664,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1139,
+              "start": 1026,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {
             "$first": TypeComposite {
               "_types": Array [],
@@ -722,7 +764,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1227,
+              "start": 1145,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {
             "$param1": TypeComposite {
               "_types": Array [],
@@ -802,7 +850,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1431,
+              "start": 1233,
+            },
+            "uri": "case/class_methods.php",
+          },
           "variables": Object {
             "$param1": TypeComposite {
               "_types": Array [],
@@ -1573,6 +1627,31 @@ PhpDocument {
         "name": "\\\\ClassWithMethod",
       },
     },
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$param1",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+        SimpleVariable {
+          "name": "$param2",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 1390,
+          "start": 1374,
+        },
+        "uri": "case/class_methods.php",
+      },
+    },
     ClassRef {
       "location": Object {
         "range": Object {
@@ -1613,10 +1692,16 @@ PhpDocument {
               "end": 1390,
               "start": 1374,
             },
-            "uri": "",
+            "uri": "case/class_methods.php",
           },
         },
-        "location": Object {},
+        "location": Object {
+          "range": Object {
+            "end": 1373,
+            "start": 1361,
+          },
+          "uri": "case/class_methods.php",
+        },
         "realSymbol": undefined,
         "refKind": 1,
         "scope": null,
@@ -1637,31 +1722,6 @@ PhpDocument {
       },
       "type": TypeName {
         "name": "staticMethod",
-      },
-    },
-    ArgumentExpressionList {
-      "arguments": Array [
-        SimpleVariable {
-          "name": "$param1",
-          "type": TypeComposite {
-            "_types": Array [],
-            "existingTypes": Object {},
-          },
-        },
-        SimpleVariable {
-          "name": "$param2",
-          "type": TypeComposite {
-            "_types": Array [],
-            "existingTypes": Object {},
-          },
-        },
-      ],
-      "location": Object {
-        "range": Object {
-          "end": 1390,
-          "start": 1374,
-        },
-        "uri": "case/class_methods.php",
       },
     },
     SimpleVariable {
@@ -1704,6 +1764,153 @@ PhpDocument {
         "uri": "case/class_methods.php",
       },
       "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 674,
+          "start": 627,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$optional": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 734,
+          "start": 680,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 840,
+          "start": 740,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 897,
+          "start": 846,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 957,
+          "start": 903,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1020,
+          "start": 963,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$firstParam": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1139,
+          "start": 1026,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$first": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$optional1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "$optional2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$second": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1227,
+          "start": 1145,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1431,
+          "start": 1233,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
     },
   ],
   "text": "<?php
@@ -3006,7 +3213,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1583,
+              "start": 1493,
+            },
+            "uri": "case/global_symbols.php",
+          },
           "variables": Object {},
         },
         "types": Array [],
@@ -3063,7 +3276,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 1909,
+              "start": 1794,
+            },
+            "uri": "case/global_symbols.php",
+          },
           "variables": Object {
             "$testParameter": TypeComposite {
               "_types": Array [
@@ -3104,7 +3323,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 2290,
+              "start": 2236,
+            },
+            "uri": "case/global_symbols.php",
+          },
           "variables": Object {},
         },
         "types": Array [],
@@ -3151,7 +3376,13 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 2379,
+              "start": 2296,
+            },
+            "uri": "case/global_symbols.php",
+          },
           "variables": Object {
             "$testParameter": TypeComposite {
               "_types": Array [],
@@ -3194,7 +3425,13 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
-          "location": Object {},
+          "location": Object {
+            "range": Object {
+              "end": 2917,
+              "start": 2867,
+            },
+            "uri": "case/global_symbols.php",
+          },
           "variables": Object {},
         },
         "types": Array [],
@@ -3656,8 +3893,14 @@ PhpDocument {
     SimpleVariable {
       "name": "$testParameter",
       "type": TypeComposite {
-        "_types": Array [],
-        "existingTypes": Object {},
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
     },
     Parameter {
@@ -3954,7 +4197,72 @@ PhpDocument {
         },
         "uri": "case/global_symbols.php",
       },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1583,
+          "start": 1493,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1909,
+          "start": 1794,
+        },
+        "uri": "case/global_symbols.php",
+      },
       "variables": Object {
+        "$testParameter": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2118,
+          "start": 2089,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2290,
+          "start": 2236,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2379,
+          "start": 2296,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {
+        "$testParameter": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
         "$testVariable": TypeComposite {
           "_types": Array [
             TypeName {
@@ -3970,8 +4278,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 2118,
-          "start": 2089,
+          "end": 2917,
+          "start": 2867,
         },
         "uri": "case/global_symbols.php",
       },

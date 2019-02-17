@@ -1092,7 +1092,32 @@ Array [
     "func": Function {
       "description": "",
       "name": undefined,
-      "parameters": Array [],
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
       "scopeVar": ScopeVar {
         "location": Object {},
         "variables": Object {
@@ -1135,7 +1160,32 @@ Array [
     "func": Function {
       "description": "",
       "name": undefined,
-      "parameters": Array [],
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
       "scopeVar": ScopeVar {
         "location": Object {},
         "variables": Object {
@@ -1382,7 +1432,26 @@ Array [
     "func": Function {
       "description": "",
       "name": undefined,
-      "parameters": Array [],
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$testParameter",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+          "value": "",
+        },
+      ],
       "scopeVar": ScopeVar {
         "location": Object {},
         "variables": Object {
@@ -1424,7 +1493,26 @@ Array [
     "func": Function {
       "description": "",
       "name": undefined,
-      "parameters": Array [],
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$testParameter",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+          "value": "",
+        },
+      ],
       "scopeVar": ScopeVar {
         "location": Object {},
         "variables": Object {

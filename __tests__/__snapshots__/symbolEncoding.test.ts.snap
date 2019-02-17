@@ -688,7 +688,26 @@ Method {
     "_location": Object {},
     "description": "",
     "docParamTypes": Object {},
-    "parameters": Array [],
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "value": "",
+      },
+    ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
@@ -902,7 +921,20 @@ Method {
     "_location": Object {},
     "description": "",
     "docParamTypes": Object {},
-    "parameters": Array [],
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$firstParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
@@ -944,7 +976,62 @@ Method {
     "_location": Object {},
     "description": "",
     "docParamTypes": Object {},
-    "parameters": Array [],
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$first",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$second",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
@@ -1010,7 +1097,32 @@ Method {
     "_location": Object {},
     "description": "",
     "docParamTypes": Object {},
-    "parameters": Array [],
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
@@ -1062,7 +1174,32 @@ Method {
     "_location": Object {},
     "description": "",
     "docParamTypes": Object {},
-    "parameters": Array [],
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
