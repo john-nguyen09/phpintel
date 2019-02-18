@@ -182,16 +182,6 @@ export const ReferenceEncoding = {
             serializer.setLocation(ref.memberLocation);
         }
 
-        if (ref.ranges === undefined) {
-            serializer.setBool(false);
-        } else {
-            serializer.setBool(true);
-            serializer.setInt32(ref.ranges.length);
-            for (const range of ref.ranges) {
-                serializer.setRange(range);
-            }
-        }
-
         return serializer.getBuffer();
     },
     decode(buffer: string): Reference | null {
