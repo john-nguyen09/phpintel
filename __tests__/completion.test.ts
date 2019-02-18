@@ -104,4 +104,10 @@ describe('completion', () => {
             { path: path.join(getCaseDir(), 'completion', 'this.php'), offset: 352 },
         ]);
     });
+
+    it('provides completion for class reference inside function call', async () => {
+        await testCompletions(['global_symbols.php'], [
+            { path: path.join(getCaseDir(), 'completion', 'classRefAsParam.php'), offset: 48 },
+        ]);
+    });
 });

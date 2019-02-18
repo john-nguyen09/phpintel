@@ -1250,6 +1250,7 @@ Method {
 
 exports[`symbolEncoding snapshot of phpDoc symbols after encode and decode 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],

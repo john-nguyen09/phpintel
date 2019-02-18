@@ -128,7 +128,7 @@ export class ReferenceTable {
     }
 }
 
-enum TypeKind {
+export enum TypeKind {
     TYPE_NAME = 1,
     TYPE_COMPOSITE = 2
 };

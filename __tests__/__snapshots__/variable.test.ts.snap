@@ -2,6 +2,7 @@
 
 exports[`variable simple variable 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],

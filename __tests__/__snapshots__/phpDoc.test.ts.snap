@@ -2,6 +2,7 @@
 
 exports[`phpDoc snapshot of phpDocs 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [
     ClassConstant {
       "constant": Constant {
@@ -199,6 +200,33 @@ abstract class ClassWithConst {
 
 exports[`phpDoc snapshot of phpDocs 2`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$param1",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+        SimpleVariable {
+          "name": "$param2",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 1390,
+          "start": 1374,
+        },
+        "uri": "case/class_methods.php",
+      },
+    },
+  ],
   "classConstants": Array [
     ClassConstant {
       "constant": Constant {
@@ -1627,31 +1655,6 @@ PhpDocument {
         "name": "\\\\ClassWithMethod",
       },
     },
-    ArgumentExpressionList {
-      "arguments": Array [
-        SimpleVariable {
-          "name": "$param1",
-          "type": TypeComposite {
-            "_types": Array [],
-            "existingTypes": Object {},
-          },
-        },
-        SimpleVariable {
-          "name": "$param2",
-          "type": TypeComposite {
-            "_types": Array [],
-            "existingTypes": Object {},
-          },
-        },
-      ],
-      "location": Object {
-        "range": Object {
-          "end": 1390,
-          "start": 1374,
-        },
-        "uri": "case/class_methods.php",
-      },
-    },
     ClassRef {
       "location": Object {
         "range": Object {
@@ -1991,6 +1994,80 @@ class ClassWithMethod
 
 exports[`phpDoc snapshot of phpDocs 3`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 144,
+          "start": 139,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 461,
+          "start": 456,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 529,
+          "start": 524,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+  ],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -2385,30 +2462,6 @@ PhpDocument {
         },
       },
     },
-    ArgumentExpressionList {
-      "arguments": Array [
-        SimpleVariable {
-          "name": "$test",
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-            "existingTypes": Object {
-              "int": true,
-            },
-          },
-        },
-      ],
-      "location": Object {
-        "range": Object {
-          "end": 144,
-          "start": 139,
-        },
-        "uri": "case/function_declare.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [
@@ -2556,30 +2609,6 @@ PhpDocument {
       },
       "value": "false",
     },
-    ArgumentExpressionList {
-      "arguments": Array [
-        SimpleVariable {
-          "name": "$test",
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-            "existingTypes": Object {
-              "int": true,
-            },
-          },
-        },
-      ],
-      "location": Object {
-        "range": Object {
-          "end": 461,
-          "start": 456,
-        },
-        "uri": "case/function_declare.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [
@@ -2644,30 +2673,6 @@ PhpDocument {
       "scope": null,
       "type": TypeName {
         "name": "\\\\TestClass",
-      },
-    },
-    ArgumentExpressionList {
-      "arguments": Array [
-        SimpleVariable {
-          "name": "$test",
-          "type": TypeComposite {
-            "_types": Array [
-              TypeName {
-                "name": "int",
-              },
-            ],
-            "existingTypes": Object {
-              "int": true,
-            },
-          },
-        },
-      ],
-      "location": Object {
-        "range": Object {
-          "end": 529,
-          "start": 524,
-        },
-        "uri": "case/function_declare.php",
       },
     },
     FunctionCall {
@@ -2938,6 +2943,58 @@ $callback = function() {
 
 exports[`phpDoc snapshot of phpDocs 4`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 375,
+          "start": 350,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2511,
+          "start": 2482,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2561,
+          "start": 2521,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2623,
+          "start": 2571,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2692,
+          "start": 2633,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+  ],
   "classConstants": Array [
     ClassConstant {
       "constant": Constant {
@@ -3688,16 +3745,6 @@ PhpDocument {
       },
       "value": "TEST_CONST_STRING",
     },
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 375,
-          "start": 350,
-        },
-        "uri": "case/global_symbols.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -3934,16 +3981,6 @@ PhpDocument {
         },
       },
     },
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 2511,
-          "start": 2482,
-        },
-        "uri": "case/global_symbols.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -4001,16 +4038,6 @@ PhpDocument {
       },
       "value": "false",
     },
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 2561,
-          "start": 2521,
-        },
-        "uri": "case/global_symbols.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -4053,16 +4080,6 @@ PhpDocument {
       },
       "value": "'simple string'",
     },
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 2623,
-          "start": 2571,
-        },
-        "uri": "case/global_symbols.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -4104,16 +4121,6 @@ PhpDocument {
         "name": "string",
       },
       "value": "'not so simple string'",
-    },
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 2692,
-          "start": 2633,
-        },
-        "uri": "case/global_symbols.php",
-      },
     },
     FunctionCall {
       "argumentList": ArgumentExpressionList {

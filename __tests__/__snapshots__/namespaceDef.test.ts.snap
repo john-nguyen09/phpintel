@@ -15,6 +15,7 @@ ImportTable {
 
 exports[`namespaceDef should assign namespace to phpDocument 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [
     Class {
@@ -75,6 +76,7 @@ class TestClassNamespace1 {
 
 exports[`namespaceDef should assign namespace to phpDocument 2`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [
@@ -133,6 +135,18 @@ const PI = 3.14;",
 
 exports[`namespaceDef should assign namespace to phpDocument 3`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 70,
+          "start": 38,
+        },
+        "uri": "case/namespaceDef/defineConst.php",
+      },
+    },
+  ],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [
@@ -159,16 +173,6 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [
-    ArgumentExpressionList {
-      "arguments": Array [],
-      "location": Object {
-        "range": Object {
-          "end": 70,
-          "start": 38,
-        },
-        "uri": "case/namespaceDef/defineConst.php",
-      },
-    },
     FunctionCall {
       "argumentList": ArgumentExpressionList {
         "arguments": Array [],
@@ -234,6 +238,7 @@ define('DEFINE_CONST', 'Hello world!!!');",
 
 exports[`namespaceDef should assign namespace to phpDocument 4`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -854,6 +859,7 @@ function function_with_namespace($param1, $param2, bool $param3) {
 
 exports[`namespaceDef should assign namespace to phpDocument 5`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],

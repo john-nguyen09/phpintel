@@ -24,6 +24,7 @@ import { TypeName } from "../type/name";
 import { ScopeVar } from "../symbol/variable/scopeVar";
 import { SignatureHelp, SignatureInformation } from "vscode-languageserver";
 import { Formatter } from "./formatter";
+import { ArgumentExpressionList } from "../symbol/argumentExpressionList";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -267,7 +268,7 @@ export namespace RefResolver {
     }
 
     export async function getSignatureHelp(
-        phpDoc: PhpDocument, ref: Reference, offset: number
+        phpDoc: PhpDocument, argumentList: ArgumentExpressionList, offset: number
     ): Promise<SignatureHelp | null> {
         const funcTable = App.get<FunctionTable>(FunctionTable);
         const methodTable = App.get<MethodTable>(MethodTable);
@@ -276,31 +277,30 @@ export namespace RefResolver {
         let activeParameter = 0;
         const symbols: (Function | Method)[] = [];
 
-        if (ref.type instanceof TypeName) {
-            if (ref.scope === null) {
-                ref.type.resolveReferenceToFqn(phpDoc.importTable);
-                symbols.push(...await funcTable.get(ref.type.name));
+        if (argumentList.type instanceof TypeName) {
+            if (argumentList.scope === null) {
+                argumentList.type.resolveReferenceToFqn(phpDoc.importTable);
+                symbols.push(...await funcTable.get(argumentList.type.name));
             } else {
                 const classNames: string[] = [];
-                if (ref.scope instanceof TypeComposite) {
-                    for (const scope of ref.scope.types) {
+                if (argumentList.scope instanceof TypeComposite) {
+                    for (const scope of argumentList.scope.types) {
                         scope.resolveReferenceToFqn(phpDoc.importTable);
 
                         classNames.push(scope.name);
                     }
                 } else {
-                    ref.scope.resolveReferenceToFqn(phpDoc.importTable);
-                    classNames.push(ref.scope.name);
+                    argumentList.scope.resolveReferenceToFqn(phpDoc.importTable);
+                    classNames.push(argumentList.scope.name);
                 }
                 for (const className of classNames) {
-                    symbols.push(...await methodTable.getByClass(className, ref.type.name));
+                    symbols.push(...await methodTable.getByClass(className, argumentList.type.name));
                 }
             }
         }
 
         if (
-            ref.refKind !== RefKind.ArgumentList ||
-            ref.ranges === undefined ||
+            argumentList.ranges === undefined ||
             symbols.length === 0
         ) {
             return null;
@@ -314,8 +314,8 @@ export namespace RefResolver {
             }
         }
 
-        for (let i = 0; i < ref.ranges.length; i++) {
-            if (ref.ranges[i].start <= offset && ref.ranges[i].end >= offset) {
+        for (let i = 0; i < argumentList.ranges.length; i++) {
+            if (argumentList.ranges[i].start <= offset && argumentList.ranges[i].end >= offset) {
                 activeParameter = i;
                 break;
             }

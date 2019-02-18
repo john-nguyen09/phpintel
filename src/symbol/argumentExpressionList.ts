@@ -12,14 +12,15 @@ import { TypeComposite } from "../type/composite";
 
 export type CallExpression = MethodCall | FunctionCall | MethodCallExpression;
 
-export class ArgumentExpressionList extends Symbol implements Consumer, FieldGetter, Reference {
-    public readonly refKind = RefKind.ArgumentList;
+export class ArgumentExpressionList extends Symbol implements Consumer, FieldGetter {
     public arguments: Symbol[] = [];
     public location: Location = {};
 
     public commaOffsets: number[] = [];
 
     private _callExpression: CallExpression | null = null;
+    private _type: TypeName | null = null;
+    private _scope: TypeComposite | TypeName | null = null;
 
     constructor(callExpression?: CallExpression) {
         super();
@@ -72,15 +73,27 @@ export class ArgumentExpressionList extends Symbol implements Consumer, FieldGet
 
     get type(): TypeName {
         if (this._callExpression === null) {
-            return new TypeName('');
+            if (this._type === null) {
+                return new TypeName('');
+            }
+
+            return this._type;
         }
 
         return this._callExpression.type;
     }
 
+    set type(value: TypeName) {
+        this._type = value;
+    }
+
     get scope(): TypeComposite | TypeName | null {
         if (this._callExpression === null) {
-            return null;
+            if (this._scope === null) {
+                return null;
+            }
+
+            return this._scope;
         }
 
         if (this._callExpression instanceof FunctionCall) {
@@ -88,6 +101,10 @@ export class ArgumentExpressionList extends Symbol implements Consumer, FieldGet
         }
 
         return this._callExpression.scope;
+    }
+
+    set scope(value: TypeComposite | TypeName | null) {
+        this._scope = value;
     }
 
     getFields() {

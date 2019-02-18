@@ -964,6 +964,102 @@ Array [
 ]
 `;
 
+exports[`completion provides completion for class reference inside function call 1`] = `
+Array [
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1266,
+        "start": 1247,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1120,
+        "start": 1098,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
 exports[`completion this arrow completion 1`] = `
 Array [
   Property {

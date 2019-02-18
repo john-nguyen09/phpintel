@@ -15,6 +15,7 @@ import { PropertyTable } from "../storage/table/property";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { ReferenceTable } from "../storage/table/reference";
 import { ScopeVarTable } from "../storage/table/scopeVar";
+import { ArgumentListTable } from "../storage/table/argumentList";
 
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -46,7 +47,8 @@ export class Indexer {
         private methodTable: MethodTable,
         private propertyTable: PropertyTable,
         private referenceTable: ReferenceTable,
-        private scopeVarTable: ScopeVarTable
+        private scopeVarTable: ScopeVarTable,
+        private argumentListTable: ArgumentListTable
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
@@ -115,6 +117,7 @@ export class Indexer {
             this.functionTable.removeByDoc(uri),
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
+            this.argumentListTable.removeByDoc(uri),
         ]);
     }
 
@@ -153,6 +156,10 @@ export class Indexer {
 
         for (const property of doc.properties) {
             promises.push(this.propertyTable.put(doc, property));
+        }
+
+        for (const argumentList of doc.argumentLists) {
+            promises.push(this.argumentListTable.put(doc, argumentList));
         }
 
         await Promise.all(promises);

@@ -30,6 +30,7 @@ export class PhpDocument extends Symbol implements Consumer {
     public methods: Method[];
     public properties: Property[];
     public references: Reference[];
+    public argumentLists: ArgumentExpressionList[];
 
     public scopeVarStack: ScopeVar[];
 
@@ -52,6 +53,7 @@ export class PhpDocument extends Symbol implements Consumer {
         this.methods = [];
         this.properties = [];
         this.references = [];
+        this.argumentLists = [];
         this.scopeVarStack = [];
     }
 
@@ -114,6 +116,8 @@ export class PhpDocument extends Symbol implements Consumer {
             this.methods.push(symbol);
         } else if (symbol instanceof Property) {
             this.properties.push(symbol);
+        } else if (symbol instanceof ArgumentExpressionList) {
+            this.argumentLists.push(symbol);
         }
 
         if (isReference(symbol)) {
