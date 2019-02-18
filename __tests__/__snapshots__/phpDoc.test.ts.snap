@@ -2,80 +2,126 @@
 
 exports[`phpDoc snapshot of phpDocs 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "50",
+      },
+      "location": Object {
+        "range": Object {
           "end": 59,
           "start": 48,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "float",
+        },
+        "value": "3.14",
+      },
+      "location": Object {
+        "range": Object {
           "end": 80,
           "start": 71,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "PI",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "string",
+        },
+        "value": "'active'",
+      },
+      "location": Object {
+        "range": Object {
           "end": 116,
           "start": 92,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "STATUS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "string",
+        },
+        "value": "'inactive'",
+      },
+      "location": Object {
+        "range": Object {
           "end": 156,
           "start": 128,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "STATUS_INACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "boolean",
+        },
+        "value": "true",
+      },
+      "location": Object {
+        "range": Object {
           "end": 184,
           "start": 168,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "name": TypeName {
         "name": "IS_ACTIVE",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
     },
   ],
@@ -83,19 +129,19 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 187,
           "start": 6,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "modifier": SymbolModifier {
         "modifier": 16,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
+        "name": "\\\\ClassWithConst",
       },
       "traits": Array [],
     },
@@ -113,42 +159,97 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 184,
           "start": 180,
         },
-        "relativeUri": "case/class_constants.php",
+        "uri": "case/class_constants.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\\\\\ClassWithConst",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "true",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 187,
+          "start": 0,
+        },
+        "uri": "case/class_constants.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+abstract class ClassWithConst {
+    const CONST1 = 50;
+    const PI = 3.14;
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const IS_ACTIVE = true;
+}",
+  "uri": "case/class_constants.php",
 }
 `;
 
 exports[`phpDoc snapshot of phpDocs 2`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$param1",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+        SimpleVariable {
+          "name": "$param2",
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 1390,
+          "start": 1374,
+        },
+        "uri": "case/class_methods.php",
+      },
+    },
+  ],
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "1",
+      },
+      "location": Object {
+        "range": Object {
           "end": 51,
           "start": 41,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": TypeName {
         "name": "CONST1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
@@ -156,19 +257,19 @@ PhpDocument {
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1433,
           "start": 7,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "traits": Array [],
     },
@@ -184,12 +285,81 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "location": Object {
+                  "range": Object {
+                    "end": 664,
+                    "start": 660,
+                  },
+                  "uri": "case/class_methods.php",
+                },
+                "refKind": 6,
+                "scope": null,
+                "type": TypeName {
+                  "name": "null",
+                },
+                "value": "null",
+              },
+            },
+            "location": Object {
+              "range": Object {
+                "end": 664,
+                "start": 648,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 674,
+              "start": 627,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {
+            "$optional": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 674,
           "start": 627,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -199,17 +369,37 @@ PhpDocument {
         "name": "__construct",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 734,
+              "start": 680,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 734,
           "start": 680,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -219,17 +409,33 @@ PhpDocument {
         "name": "method1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 840,
+              "start": 740,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 840,
           "start": 740,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -239,17 +445,37 @@ PhpDocument {
         "name": "method2",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 897,
+              "start": 846,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 897,
           "start": 846,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -259,17 +485,37 @@ PhpDocument {
         "name": "method3",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 957,
+              "start": 903,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [
+          TypeName {
+            "name": "float",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 957,
           "start": 903,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -279,17 +525,57 @@ PhpDocument {
         "name": "method4",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1010,
+                "start": 999,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$firstParam",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1020,
+              "start": 963,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {
+            "$firstParam": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1020,
           "start": 963,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -299,17 +585,157 @@ PhpDocument {
         "name": "protectedMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1064,
+                "start": 1058,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$first",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1073,
+                "start": 1066,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$second",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "description": "",
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "location": Object {
+                  "range": Object {
+                    "end": 1092,
+                    "start": 1088,
+                  },
+                  "uri": "case/class_methods.php",
+                },
+                "refKind": 6,
+                "scope": null,
+                "type": TypeName {
+                  "name": "null",
+                },
+                "value": "null",
+              },
+            },
+            "location": Object {
+              "range": Object {
+                "end": 1092,
+                "start": 1075,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "value": "",
+          },
+          Parameter {
+            "description": "",
+            "expression": Expression {},
+            "location": Object {
+              "range": Object {
+                "end": 1109,
+                "start": 1094,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1139,
+              "start": 1026,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {
+            "$first": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$optional1": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "$optional2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$second": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "null",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1139,
           "start": 1026,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -319,17 +745,83 @@ PhpDocument {
         "name": "privateMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1188,
+                "start": 1181,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1197,
+                "start": 1190,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1227,
+              "start": 1145,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {
+            "$param1": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$param2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1227,
           "start": 1145,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -339,17 +831,86 @@ PhpDocument {
         "name": "staticMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1270,
+                "start": 1263,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param1",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1279,
+                "start": 1272,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$param2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1431,
+              "start": 1233,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "variables": Object {
+            "$param1": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$param2": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+          },
+        },
+        "types": Array [
+          TypeName {
+            "name": "",
+          },
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1431,
           "start": 1233,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -359,20 +920,38 @@ PhpDocument {
         "name": "publicMethod1",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
   "modifiedTime": -1,
   "properties": Array [
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 95,
           "start": 72,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -380,17 +959,35 @@ PhpDocument {
       },
       "name": "$staticVariable",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 127,
           "start": 109,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -398,17 +995,29 @@ PhpDocument {
       },
       "name": "$property1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 150,
           "start": 140,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -416,18 +1025,30 @@ PhpDocument {
       },
       "name": "$property2",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 393,
           "start": 382,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -435,18 +1056,30 @@ PhpDocument {
       },
       "name": "$protected1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 406,
           "start": 395,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -454,18 +1087,30 @@ PhpDocument {
       },
       "name": "$protected2",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Defines protected properties
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 419,
           "start": 408,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -473,17 +1118,29 @@ PhpDocument {
       },
       "name": "$protected3",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 455,
           "start": 436,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -491,18 +1148,36 @@ PhpDocument {
       },
       "name": "$protectedProperty1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "ClassWithMethod",
+            },
+          ],
+          "existingTypes": Object {
+            "ClassWithMethod": true,
+          },
+        },
+      },
       "description": "A private proterty which is only used by this class
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 620,
           "start": 603,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -510,18 +1185,18 @@ PhpDocument {
       },
       "name": "$privateProperty1",
       "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
   ],
   "references": Array [
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 95,
           "start": 90,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -531,12 +1206,12 @@ PhpDocument {
       "value": "false",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 127,
           "start": 122,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -546,14 +1221,15 @@ PhpDocument {
       "value": "false",
     },
     Parameter {
+      "description": "",
       "expression": Expression {
         "currentSymbol": ConstantAccess {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 664,
               "start": 660,
             },
-            "relativeUri": "case/class_methods.php",
+            "uri": "case/class_methods.php",
           },
           "refKind": 6,
           "scope": null,
@@ -563,12 +1239,12 @@ PhpDocument {
           "value": "null",
         },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 664,
           "start": 648,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional",
       "refKind": 3,
@@ -579,16 +1255,19 @@ PhpDocument {
             "name": "null",
           },
         ],
+        "existingTypes": Object {
+          "null": true,
+        },
       },
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 664,
           "start": 660,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -598,79 +1277,84 @@ PhpDocument {
       "value": "null",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 727,
           "start": 723,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "true",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1010,
           "start": 999,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$firstParam",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1064,
           "start": 1058,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$first",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1073,
           "start": 1066,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$second",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     Parameter {
+      "description": "",
       "expression": Expression {
         "currentSymbol": ConstantAccess {
-          "location": Location {
-            "range": Range {
+          "location": Object {
+            "range": Object {
               "end": 1092,
               "start": 1088,
             },
-            "relativeUri": "case/class_methods.php",
+            "uri": "case/class_methods.php",
           },
           "refKind": 6,
           "scope": null,
@@ -680,12 +1364,12 @@ PhpDocument {
           "value": "null",
         },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1092,
           "start": 1075,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional1",
       "refKind": 3,
@@ -696,16 +1380,19 @@ PhpDocument {
             "name": "null",
           },
         ],
+        "existingTypes": Object {
+          "null": true,
+        },
       },
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1092,
           "start": 1088,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
       "scope": null,
@@ -715,202 +1402,326 @@ PhpDocument {
       "value": "null",
     },
     Parameter {
+      "description": "",
       "expression": Expression {},
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1109,
           "start": 1094,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$optional2",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1132,
           "start": 1128,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "null",
       },
       "value": "null",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1188,
           "start": 1181,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param1",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1197,
           "start": 1190,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param2",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1220,
           "start": 1216,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "true",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1270,
           "start": 1263,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param1",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1279,
           "start": 1272,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "name": "$param2",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
-    ClassRef {
-      "location": Location {
-        "range": Range {
-          "end": 1299,
+    PropRefExpression {
+      "classRef": ClassRef {
+        "location": Object {
+          "range": Object {
+            "end": 1299,
+            "start": 1295,
+          },
+          "uri": "case/class_methods.php",
+        },
+        "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+      },
+      "hasColonColon": true,
+      "isParentIncluded": true,
+      "location": Object {
+        "range": Object {
+          "end": 1316,
           "start": 1295,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
-      "refKind": 9,
-      "type": TypeName {
-        "name": "ClassWithMethod",
-      },
-    },
-    PropertyRef {
-      "location": Location {
-        "range": Range {
-          "end": 1316,
-          "start": 1301,
+      "propRef": PropertyRef {
+        "hasWhitespace": false,
+        "location": Object {
+          "range": Object {
+            "end": 1316,
+            "start": 1301,
+          },
+          "uri": "case/class_methods.php",
         },
-        "relativeUri": "case/class_methods.php",
+        "refKind": 11,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "$staticVariable",
+        },
       },
-      "refKind": 11,
       "scope": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "$staticVariable",
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
-          "end": 1324,
-          "start": 1320,
+      "location": Object {
+        "range": Object {
+          "end": 1299,
+          "start": 1295,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
       "type": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
-    ClassConstRef {
-      "location": Location {
-        "range": Range {
-          "end": 1332,
-          "start": 1326,
+    ClassConstRefExpression {
+      "classConstRef": ClassConstRef {
+        "hasWhitespace": false,
+        "location": Object {
+          "range": Object {
+            "end": 1332,
+            "start": 1326,
+          },
+          "uri": "case/class_methods.php",
         },
-        "relativeUri": "case/class_methods.php",
+        "refKind": 12,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "CONST1",
+        },
+      },
+      "classRef": ClassRef {
+        "location": Object {
+          "range": Object {
+            "end": 1324,
+            "start": 1320,
+          },
+          "uri": "case/class_methods.php",
+        },
+        "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+        "type": TypeName {
+          "name": "\\\\ClassWithMethod",
+        },
+      },
+      "hasColonColon": true,
+      "isParentIncluded": true,
+      "location": Object {
+        "range": Object {
+          "end": 1332,
+          "start": 1320,
+        },
+        "uri": "case/class_methods.php",
       },
       "refKind": 12,
       "scope": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "CONST1",
       },
     },
     ClassRef {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
+          "end": 1324,
+          "start": 1320,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
+      "type": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
+    },
+    ClassRef {
+      "location": Object {
+        "range": Object {
           "end": 1359,
           "start": 1355,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\ClassWithMethod",
+      },
       "type": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
     },
     MethodCall {
-      "location": Location {
-        "range": Range {
+      "funcCall": FunctionCall {
+        "argumentList": ArgumentExpressionList {
+          "arguments": Array [
+            SimpleVariable {
+              "name": "$param1",
+              "type": TypeComposite {
+                "_types": Array [],
+                "existingTypes": Object {},
+              },
+            },
+            SimpleVariable {
+              "name": "$param2",
+              "type": TypeComposite {
+                "_types": Array [],
+                "existingTypes": Object {},
+              },
+            },
+          ],
+          "location": Object {
+            "range": Object {
+              "end": 1390,
+              "start": 1374,
+            },
+            "uri": "case/class_methods.php",
+          },
+        },
+        "location": Object {
+          "range": Object {
+            "end": 1373,
+            "start": 1361,
+          },
+          "uri": "case/class_methods.php",
+        },
+        "realSymbol": undefined,
+        "refKind": 1,
+        "scope": null,
+        "type": TypeName {
+          "name": "",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 1373,
           "start": 1361,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 10,
       "scope": TypeName {
-        "name": "ClassWithMethod",
+        "name": "\\\\ClassWithMethod",
       },
       "type": TypeName {
         "name": "staticMethod",
@@ -920,37 +1731,343 @@ PhpDocument {
       "name": "$param1",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
     SimpleVariable {
       "name": "$param2",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1424,
           "start": 1419,
         },
-        "relativeUri": "case/class_methods.php",
+        "uri": "case/class_methods.php",
       },
       "refKind": 6,
-      "scope": TypeName {
-        "name": "\\\\\\\\ClassWithMethod",
-      },
+      "scope": null,
       "type": TypeName {
         "name": "boolean",
       },
       "value": "false",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1433,
+          "start": 0,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 674,
+          "start": 627,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$optional": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 734,
+          "start": 680,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 840,
+          "start": 740,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 897,
+          "start": 846,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 957,
+          "start": 903,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1020,
+          "start": 963,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$firstParam": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1139,
+          "start": 1026,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$first": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$optional1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "$optional2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$second": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1227,
+          "start": 1145,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1431,
+          "start": 1233,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+  ],
+  "text": "<?php
+
+class ClassWithMethod
+{
+    const CONST1 = 1;
+
+    public static $staticVariable = false;
+
+    public $property1 = false;
+    public $property2;
+
+    /**
+     * Defines protected properties
+     * 
+     * @var boolean $protected1 Description of boolean
+     * @var string $protected2 Description of string
+     * @var int $protected3 Description of int
+     */
+    protected $protected1, $protected2, $protected3;
+
+    protected $protectedProperty1;
+
+    /**
+     * A private proterty which is only used by this class
+     * 
+     * @var ClassWithMethod This is a description
+     */
+    private $privateProperty1;
+
+    function __construct($optional = null) {
+
+    }
+
+    public function method1() {
+        return true;
+    }
+
+    public function method2() {
+        return [
+            'abc1',
+            'abc2'
+        ];
+    }
+
+    public function method3() {
+        return 5;
+    }
+
+    public function method4() {
+        return 3.14;
+    }
+
+    protected function protectedMethod1($firstParam) {
+
+    }
+
+    private function privateMethod1($first, $second, $optional1 = null, $optional2 = '') {
+        return null;
+    }
+
+    public static function staticMethod($param1, $param2) {
+        return true;
+    }
+
+    public function publicMethod1($param1, $param2) {
+        if (self::$staticVariable && self::CONST1) {
+            return self::staticMethod($param1, $param2);
+        }
+
+        return false;
+    }
+}",
+  "uri": "case/class_methods.php",
 }
 `;
 
 exports[`phpDoc snapshot of phpDocs 3`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 144,
+          "start": 139,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 461,
+          "start": 456,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [
+        SimpleVariable {
+          "name": "$test",
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "int",
+              },
+            ],
+            "existingTypes": Object {
+              "int": true,
+            },
+          },
+        },
+      ],
+      "location": Object {
+        "range": Object {
+          "end": 529,
+          "start": 524,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+  ],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -958,15 +2075,17 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "name": "\\\\\\\\test_function1",
+        "name": "\\\\test_function1",
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 50,
               "start": 31,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$stringParam",
           "refKind": 3,
@@ -977,15 +2096,20 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 65,
               "start": 52,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$intParam",
           "refKind": 3,
@@ -996,15 +2120,20 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 82,
               "start": 67,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$boolParam",
           "refKind": 3,
@@ -1015,15 +2144,20 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 101,
               "start": 84,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$floatParam",
           "refKind": 3,
@@ -1034,11 +2168,21 @@ PhpDocument {
                 "name": "float",
               },
             ],
+            "existingTypes": Object {
+              "float": true,
+            },
           },
           "value": "",
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Object {
+          "range": Object {
+            "end": 582,
+            "start": 7,
+          },
+          "uri": "case/function_declare.php",
+        },
         "variables": Object {
           "$boolParam": TypeComposite {
             "_types": Array [
@@ -1046,6 +2190,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$floatParam": TypeComposite {
             "_types": Array [
@@ -1053,6 +2200,9 @@ PhpDocument {
                 "name": "float",
               },
             ],
+            "existingTypes": Object {
+              "float": true,
+            },
           },
           "$intParam": TypeComposite {
             "_types": Array [
@@ -1060,6 +2210,9 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
           "$stringParam": TypeComposite {
             "_types": Array [
@@ -1067,6 +2220,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "$test": TypeComposite {
             "_types": Array [
@@ -1074,6 +2230,9 @@ PhpDocument {
                 "name": "int",
               },
             ],
+            "existingTypes": Object {
+              "int": true,
+            },
           },
         },
       },
@@ -1091,22 +2250,24 @@ PhpDocument {
           "name": "float",
         },
         TypeName {
-          "name": "\\\\\\\\TestClass",
+          "name": "\\\\TestClass",
         },
       ],
     },
     Function {
       "description": "Test function 2",
       "name": TypeName {
-        "name": "\\\\\\\\test_function2",
+        "name": "\\\\test_function2",
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 739,
               "start": 732,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$param1",
           "refKind": 3,
@@ -1114,18 +2275,23 @@ PhpDocument {
           "type": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\\\\\array|int",
+                "name": "\\\\array|int",
               },
             ],
+            "existingTypes": Object {
+              "array|int": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 748,
               "start": 741,
             },
+            "uri": "case/function_declare.php",
           },
           "name": "$param2",
           "refKind": 3,
@@ -1136,18 +2302,31 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "value": "",
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Object {
+          "range": Object {
+            "end": 754,
+            "start": 708,
+          },
+          "uri": "case/function_declare.php",
+        },
         "variables": Object {
           "$param1": TypeComposite {
             "_types": Array [
               TypeName {
-                "name": "\\\\\\\\array|int",
+                "name": "\\\\array|int",
               },
             ],
+            "existingTypes": Object {
+              "array|int": true,
+            },
           },
           "$param2": TypeComposite {
             "_types": Array [
@@ -1155,6 +2334,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
         },
       },
@@ -1172,12 +2354,13 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 50,
           "start": 31,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$stringParam",
       "refKind": 3,
@@ -1188,16 +2371,20 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 65,
           "start": 52,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$intParam",
       "refKind": 3,
@@ -1208,16 +2395,20 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 82,
           "start": 67,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$boolParam",
       "refKind": 3,
@@ -1228,16 +2419,20 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 101,
           "start": 84,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$floatParam",
       "refKind": 3,
@@ -1248,6 +2443,9 @@ PhpDocument {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
       "value": "",
     },
@@ -1259,6 +2457,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     FunctionCall {
@@ -1272,17 +2473,28 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 144,
+            "start": 139,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 138,
           "start": 129,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -1297,15 +2509,18 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 168,
           "start": 164,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 6,
       "scope": null,
@@ -1322,6 +2537,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     SimpleVariable {
@@ -1332,6 +2550,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -1342,6 +2563,9 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     SimpleVariable {
@@ -1352,6 +2576,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -1362,15 +2589,18 @@ PhpDocument {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 429,
           "start": 424,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 6,
       "scope": null,
@@ -1390,17 +2620,28 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 461,
+            "start": 456,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 455,
           "start": 446,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -1415,20 +2656,23 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     ClassTypeDesignator {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 494,
           "start": 485,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "refKind": 8,
       "scope": null,
       "type": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     FunctionCall {
@@ -1442,17 +2686,28 @@ PhpDocument {
                   "name": "int",
                 },
               ],
+              "existingTypes": Object {
+                "int": true,
+              },
             },
           },
         ],
+        "location": Object {
+          "range": Object {
+            "end": 529,
+            "start": 524,
+          },
+          "uri": "case/function_declare.php",
+        },
       },
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 523,
           "start": 513,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
+      "realSymbol": undefined,
       "refKind": 1,
       "scope": null,
       "type": TypeName {
@@ -1467,15 +2722,19 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 739,
           "start": 732,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -1483,19 +2742,23 @@ PhpDocument {
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\\\\\array|int",
+            "name": "\\\\array|int",
           },
         ],
+        "existingTypes": Object {
+          "array|int": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 748,
           "start": 741,
         },
-        "relativeUri": "case/function_declare.php",
+        "uri": "case/function_declare.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -1506,6 +2769,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
@@ -1513,37 +2779,263 @@ PhpDocument {
       "name": "$callback",
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 788,
+          "start": 0,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$callback": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+          "existingTypes": Object {
+            "float": true,
+          },
+        },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 754,
+          "start": 708,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\array|int",
+            },
+          ],
+          "existingTypes": Object {
+            "array|int": true,
+          },
+        },
+        "$param2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+      },
+    },
+  ],
+  "text": "<?php
+
+function test_function1(string $stringParam, int $intParam, bool $boolParam, float $floatParam) {
+    $test = 1;
+
+    if (is_string($test)) {
+        return true;
+    }
+
+    switch ($test) {
+        case 1:
+            return $stringParam;
+        case 2:
+            return $intParam;
+        case 3:
+            return $boolParam;
+        case 4:
+            return $floatParam;
+        default:
+            return false;
+    }
+
+    if (is_object($test)) {
+        return new TestClass();
+    }
+
+    if (is_numeric($test)) {
+        return 20;
+    }
+
+    return 'string';
+}
+
+/**
+ * Test function 2
+ * @param array|int $param1 array of something or int
+ * @param string[] $param2 array of string
+ */
+function test_function2($param1, $param2) {
+
+}
+
+$callback = function() {
+    
+};",
+  "uri": "case/function_declare.php",
 }
 `;
 
 exports[`phpDoc snapshot of phpDocs 4`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 375,
+          "start": 350,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2511,
+          "start": 2482,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2561,
+          "start": 2521,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2623,
+          "start": 2571,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 2692,
+          "start": 2633,
+        },
+        "uri": "case/global_symbols.php",
+      },
+    },
+  ],
   "classConstants": Array [
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "123",
+      },
+      "location": Object {
+        "range": Object {
           "end": 1120,
           "start": 1098,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": TypeName {
         "name": "TEST_CLASS_CONST",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     ClassConstant {
-      "location": Location {
-        "range": Range {
+      "constant": Constant {
+        "name": TypeName {
+          "name": "",
+        },
+        "type": TypeName {
+          "name": "int",
+        },
+        "value": "123",
+      },
+      "location": Object {
+        "range": Object {
           "end": 2164,
           "start": 2142,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": TypeName {
         "name": "TEST_CLASS_CONST",
@@ -1562,19 +3054,19 @@ PhpDocument {
           "name": "TestInterface2",
         },
       ],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 445,
           "start": 379,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\TestClass2",
+        "name": "\\\\TestClass2",
       },
       "traits": Array [],
     },
@@ -1585,19 +3077,19 @@ PhpDocument {
           "name": "TestInterface",
         },
       ],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1911,
           "start": 924,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
       "traits": Array [],
     },
@@ -1606,38 +3098,38 @@ PhpDocument {
         "name": "TestClass",
       },
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2421,
           "start": 2384,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\ChildClass",
+        "name": "\\\\ChildClass",
       },
       "traits": Array [],
     },
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2919,
           "start": 2814,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
       "traits": Array [],
     },
@@ -1645,7 +3137,7 @@ PhpDocument {
   "constants": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST",
+        "name": "\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1654,7 +3146,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST1",
+        "name": "\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1663,7 +3155,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST2",
+        "name": "\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1672,7 +3164,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING",
+        "name": "\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1681,7 +3173,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING2",
+        "name": "\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -1690,7 +3182,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING3",
+        "name": "\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -1699,7 +3191,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\CONSTANT_SAMPLE1",
+        "name": "\\\\CONSTANT_SAMPLE1",
       },
       "type": TypeName {
         "name": "boolean",
@@ -1708,7 +3200,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\TEST_DEFINE_CONSTANT",
       },
       "type": TypeName {
         "name": "boolean",
@@ -1717,7 +3209,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -1726,7 +3218,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -1735,7 +3227,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
@@ -1748,10 +3240,17 @@ PhpDocument {
       "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
 ",
       "name": TypeName {
-        "name": "\\\\\\\\test_function",
+        "name": "\\\\test_function",
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "location": Object {
+          "range": Object {
+            "end": 2118,
+            "start": 2089,
+          },
+          "uri": "case/global_symbols.php",
+        },
         "variables": Object {},
       },
       "types": Array [],
@@ -1766,12 +3265,28 @@ PhpDocument {
   "methods": Array [
     Method {
       "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1583,
+              "start": 1493,
+            },
+            "uri": "case/global_symbols.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1583,
           "start": 1493,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1781,18 +3296,71 @@ PhpDocument {
         "name": "staticTestMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Method {
       "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
 ",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 1835,
+                "start": 1821,
+              },
+              "uri": "case/global_symbols.php",
+            },
+            "name": "$testParameter",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "TestClass",
+                },
+              ],
+              "existingTypes": Object {
+                "TestClass": true,
+              },
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 1909,
+              "start": 1794,
+            },
+            "uri": "case/global_symbols.php",
+          },
+          "variables": Object {
+            "$testParameter": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "TestClass",
+                },
+              ],
+              "existingTypes": Object {
+                "TestClass": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 1909,
           "start": 1794,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1802,17 +3370,33 @@ PhpDocument {
         "name": "testMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 2290,
+              "start": 2236,
+            },
+            "uri": "case/global_symbols.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 2290,
           "start": 2236,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1825,12 +3409,62 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [
+          Parameter {
+            "description": "",
+            "location": Object {
+              "range": Object {
+                "end": 2337,
+                "start": 2323,
+              },
+              "uri": "case/global_symbols.php",
+            },
+            "name": "$testParameter",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "value": "",
+          },
+        ],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 2379,
+              "start": 2296,
+            },
+            "uri": "case/global_symbols.php",
+          },
+          "variables": Object {
+            "$testParameter": TypeComposite {
+              "_types": Array [],
+              "existingTypes": Object {},
+            },
+            "$testVariable": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "int",
+                },
+              ],
+              "existingTypes": Object {
+                "int": true,
+              },
+            },
+          },
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 2379,
           "start": 2296,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1843,12 +3477,28 @@ PhpDocument {
     },
     Method {
       "description": "",
-      "location": Location {
-        "range": Range {
+      "func": Function {
+        "description": "",
+        "name": undefined,
+        "parameters": Array [],
+        "scopeVar": ScopeVar {
+          "location": Object {
+            "range": Object {
+              "end": 2917,
+              "start": 2867,
+            },
+            "uri": "case/global_symbols.php",
+          },
+          "variables": Object {},
+        },
+        "types": Array [],
+      },
+      "location": Object {
+        "range": Object {
           "end": 2917,
           "start": 2867,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1858,21 +3508,39 @@ PhpDocument {
         "name": "unusedMethod",
       },
       "scope": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
     },
   ],
   "modifiedTime": -1,
   "properties": Array [
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
       "description": "Lorem excepteur officia sit anim velit veniam enim.
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1266,
           "start": 1247,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1880,18 +3548,36 @@ PhpDocument {
       },
       "name": "$staticTestProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
       "description": "Reprehenderit magna velit mollit ipsum do.
 ",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 1388,
           "start": 1375,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1899,17 +3585,29 @@ PhpDocument {
       },
       "name": "$testProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2203,
           "start": 2184,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 32,
@@ -1919,13 +3617,25 @@ PhpDocument {
       "scope": null,
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2229,
           "start": 2216,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1935,13 +3645,25 @@ PhpDocument {
       "scope": null,
     },
     Property {
+      "_variable": Variable {
+        "expression": Expression {},
+        "location": Object {},
+        "name": "",
+        "refKind": 2,
+        "scope": null,
+        "scopeRange": undefined,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
       "description": "Neither this class nor its members are referenced anywhere",
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2860,
           "start": 2845,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
@@ -1949,14 +3671,14 @@ PhpDocument {
       },
       "name": "$unusedProperty",
       "scope": TypeName {
-        "name": "\\\\\\\\UnusedClass",
+        "name": "\\\\UnusedClass",
       },
     },
   ],
   "references": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST",
+        "name": "\\\\TEST_CONST",
       },
       "type": TypeName {
         "name": "int",
@@ -1965,7 +3687,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST1",
+        "name": "\\\\TEST_CONST1",
       },
       "type": TypeName {
         "name": "int",
@@ -1974,7 +3696,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST2",
+        "name": "\\\\TEST_CONST2",
       },
       "type": TypeName {
         "name": "int",
@@ -1983,7 +3705,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING",
+        "name": "\\\\TEST_CONST_STRING",
       },
       "type": TypeName {
         "name": "string",
@@ -1992,7 +3714,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING2",
+        "name": "\\\\TEST_CONST_STRING2",
       },
       "type": TypeName {
         "name": "string",
@@ -2001,7 +3723,7 @@ PhpDocument {
     },
     Constant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_CONST_STRING3",
+        "name": "\\\\TEST_CONST_STRING3",
       },
       "type": TypeName {
         "name": "string",
@@ -2009,12 +3731,12 @@ PhpDocument {
       "value": "'Quite complex ' . TEST_CONST_STRING",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 340,
           "start": 323,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2024,16 +3746,26 @@ PhpDocument {
       "value": "TEST_CONST_STRING",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 375,
+            "start": 350,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 376,
           "start": 343,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\CONSTANT_SAMPLE1",
+          "name": "\\\\CONSTANT_SAMPLE1",
         },
         "type": TypeName {
           "name": "boolean",
@@ -2047,12 +3779,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 375,
           "start": 370,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2063,49 +3795,88 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\CONSTANT_SAMPLE1",
+        "name": "\\\\CONSTANT_SAMPLE1",
       },
       "type": TypeName {
         "name": "boolean",
       },
       "value": "false",
     },
-    ClassRef {
-      "location": Location {
-        "range": Range {
-          "end": 1558,
+    ClassConstRefExpression {
+      "classConstRef": ClassConstRef {
+        "hasWhitespace": false,
+        "location": Object {
+          "range": Object {
+            "end": 1576,
+            "start": 1560,
+          },
+          "uri": "case/global_symbols.php",
+        },
+        "refKind": 12,
+        "scope": TypeName {
+          "name": "\\\\TestClass",
+        },
+        "type": TypeName {
+          "name": "TEST_CLASS_CONST",
+        },
+      },
+      "classRef": ClassRef {
+        "location": Object {
+          "range": Object {
+            "end": 1558,
+            "start": 1554,
+          },
+          "uri": "case/global_symbols.php",
+        },
+        "refKind": 9,
+        "scope": TypeName {
+          "name": "\\\\TestClass",
+        },
+        "type": TypeName {
+          "name": "\\\\TestClass",
+        },
+      },
+      "hasColonColon": true,
+      "isParentIncluded": true,
+      "location": Object {
+        "range": Object {
+          "end": 1576,
           "start": 1554,
         },
-        "relativeUri": "case/global_symbols.php",
-      },
-      "refKind": 9,
-      "type": TypeName {
-        "name": "TestClass",
-      },
-    },
-    ClassConstRef {
-      "location": Location {
-        "range": Range {
-          "end": 1576,
-          "start": 1560,
-        },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 12,
       "scope": TypeName {
-        "name": "TestClass",
+        "name": "\\\\TestClass",
       },
       "type": TypeName {
         "name": "TEST_CLASS_CONST",
       },
     },
+    ClassRef {
+      "location": Object {
+        "range": Object {
+          "end": 1558,
+          "start": 1554,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "refKind": 9,
+      "scope": TypeName {
+        "name": "\\\\TestClass",
+      },
+      "type": TypeName {
+        "name": "\\\\TestClass",
+      },
+    },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 1835,
           "start": 1821,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": "$testParameter",
       "refKind": 3,
@@ -2116,34 +3887,84 @@ PhpDocument {
             "name": "TestClass",
           },
         ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
       "value": "",
+    },
+    PropertyAccessExpression {
+      "hasArrow": true,
+      "location": Object {
+        "range": Object {
+          "end": 1885,
+          "start": 1866,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "memberLocation": Object {
+        "range": Object {
+          "end": 1885,
+          "start": 1873,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "refKind": 14,
+      "scope": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "\\\\TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+      "type": TypeName {
+        "name": "testProperty",
+      },
     },
     SimpleVariable {
       "name": "$this",
       "type": TypeComposite {
-        "_types": Array [],
+        "_types": Array [
+          TypeName {
+            "name": "\\\\TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
     },
     SimpleVariable {
       "name": "$testParameter",
       "type": TypeComposite {
-        "_types": Array [],
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
       },
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 2337,
           "start": 2323,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "name": "$testParameter",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [],
+        "existingTypes": Object {},
       },
       "value": "",
     },
@@ -2155,19 +3976,32 @@ PhpDocument {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2511,
+            "start": 2482,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 2512,
           "start": 2475,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+          "name": "\\\\TEST_DEFINE_CONSTANT",
         },
         "type": TypeName {
           "name": "boolean",
@@ -2181,12 +4015,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2511,
           "start": 2506,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2197,7 +4031,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+        "name": "\\\\TEST_DEFINE_CONSTANT",
       },
       "type": TypeName {
         "name": "boolean",
@@ -2205,16 +4039,26 @@ PhpDocument {
       "value": "false",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2561,
+            "start": 2521,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 2562,
           "start": 2514,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+          "name": "\\\\TEST_STRING_CONSTANT1",
         },
         "type": TypeName {
           "name": "string",
@@ -2229,7 +4073,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+        "name": "\\\\TEST_STRING_CONSTANT1",
       },
       "type": TypeName {
         "name": "string",
@@ -2237,16 +4081,26 @@ PhpDocument {
       "value": "'simple string'",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2623,
+            "start": 2571,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 2624,
           "start": 2564,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+          "name": "\\\\TEST_STRING_CONSTANT2",
         },
         "type": TypeName {
           "name": "string",
@@ -2261,7 +4115,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+        "name": "\\\\TEST_STRING_CONSTANT2",
       },
       "type": TypeName {
         "name": "string",
@@ -2269,16 +4123,26 @@ PhpDocument {
       "value": "'not so simple string'",
     },
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 2692,
+            "start": 2633,
+          },
+          "uri": "case/global_symbols.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 2693,
           "start": 2626,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+          "name": "\\\\TEST_STRING_CONSTANT3",
         },
         "type": TypeName {
           "name": "string",
@@ -2292,12 +4156,12 @@ PhpDocument {
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2692,
           "start": 2671,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2308,7 +4172,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+        "name": "\\\\TEST_STRING_CONSTANT3",
       },
       "type": TypeName {
         "name": "string",
@@ -2316,12 +4180,12 @@ PhpDocument {
       "value": "'more of ' . TEST_STRING_CONSTANT2",
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 2722,
           "start": 2702,
         },
-        "relativeUri": "case/global_symbols.php",
+        "uri": "case/global_symbols.php",
       },
       "refKind": 6,
       "scope": null,
@@ -2331,5 +4195,244 @@ PhpDocument {
       "value": "TEST_DEFINE_CONSTANT",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2919,
+          "start": 0,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1583,
+          "start": 1493,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 1909,
+          "start": 1794,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {
+        "$testParameter": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "TestClass",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClass": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2118,
+          "start": 2089,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2290,
+          "start": 2236,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2379,
+          "start": 2296,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {
+        "$testParameter": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$testVariable": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+      },
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2917,
+          "start": 2867,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+
+
+
+/**
+ * Esse commodo excepteur pariatur Lorem est aute incididunt reprehenderit.
+ *
+ * @var int
+ */
+const TEST_CONST = 123;
+
+const TEST_CONST1 = 456, TEST_CONST2 = 789;
+
+const TEST_CONST_STRING = 'Simple string';
+const TEST_CONST_STRING2 = 'Not so ' . 'simple string';
+const TEST_CONST_STRING3 = 'Quite complex ' . TEST_CONST_STRING;
+
+define('CONSTANT_SAMPLE1', false);
+
+class TestClass2 implements TestInterface, TestInterface2
+{
+    
+}
+
+/**
+ * Pariatur ut laborum tempor voluptate consequat ea deserunt.
+ *
+ * Deserunt enim minim sunt sint ea nisi. Deserunt excepteur tempor id nostrud
+ * laboris commodo ad commodo velit mollit qui non officia id. Nulla duis veniam
+ * veniam officia deserunt et non dolore mollit ea quis eiusmod sit non. Occaecat
+ * consequat sunt culpa exercitation pariatur id reprehenderit nisi incididunt Lorem
+ * sint. Officia culpa pariatur laborum nostrud cupidatat consequat mollit.
+ */
+class TestClass implements TestInterface
+{
+    /**
+     * Anim labore veniam consectetur laboris minim quis aute aute esse nulla ad.
+     *
+     * @var int
+     */
+    const TEST_CLASS_CONST = 123;
+
+    /**
+     * Lorem excepteur officia sit anim velit veniam enim.
+     *
+     * @var TestClass[]
+     */
+    public static $staticTestProperty;
+
+    /**
+     * Reprehenderit magna velit mollit ipsum do.
+     *
+     * @var TestClass
+     */
+    public $testProperty;
+
+    /**
+     * Do magna consequat veniam minim proident eiusmod incididunt aute proident.
+     */
+    public static function staticTestMethod()
+    {
+        echo self::TEST_CLASS_CONST;
+    }
+
+    /**
+     * Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+     *
+     * @param TestClass $testParameter Lorem sunt velit incididunt mollit
+     * @return TestClass
+     */
+    public function testMethod($testParameter): TestInterface
+    {
+        $this->testProperty = $testParameter;
+    }
+}
+
+trait TestTrait
+{
+
+}
+
+interface TestInterface
+{
+
+}
+
+interface TestInterface2
+{
+
+}
+
+/**
+ * Officia aliquip adipisicing et nulla et laboris dolore labore.
+ *
+ * @return void
+ */
+function test_function()
+{
+
+}
+
+new class {
+    const TEST_CLASS_CONST = 123;
+    public static $staticTestProperty;
+    public $testProperty;
+
+    public static function staticTestMethod()
+    {
+
+    }
+
+    public function testMethod($testParameter)
+    {
+        $testVariable = 123;
+    }
+};
+
+class ChildClass extends TestClass {}
+
+/**
+ * Lorem ipsum dolor sit amet, consectetur.
+ */
+define('TEST_DEFINE_CONSTANT', false);
+define('TEST_STRING_CONSTANT1', 'simple string');
+define('TEST_STRING_CONSTANT2', 'not so ' . 'simple string');
+define('TEST_STRING_CONSTANT3', 'more of ' . TEST_STRING_CONSTANT2);
+
+print TEST_DEFINE_CONSTANT ? 'true' : 'false';
+
+/**
+ * Neither this class nor its members are referenced anywhere
+ */
+class UnusedClass
+{
+    public $unusedProperty;
+
+    public function unusedMethod()
+    {        
+    }
+}",
+  "uri": "case/global_symbols.php",
 }
 `;

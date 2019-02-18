@@ -1,3 +1,4 @@
-export class Range {
-    constructor(public start: number, public end: number) { }
+export interface Range {
+    start: number;
+    end: number;
 }

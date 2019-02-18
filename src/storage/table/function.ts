@@ -43,7 +43,7 @@ export class FunctionTable {
         let uris = await NameIndex.get(this.nameIndex, name);
 
         for (let uri of uris) {
-            funcs.push(await this.db.get(BelongsToDoc.getKey(uri, name)) as Function);
+            funcs.push(await BelongsToDoc.get<Function>(this.db, uri, name));
         }
 
         return funcs;

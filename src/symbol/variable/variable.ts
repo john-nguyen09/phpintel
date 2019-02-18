@@ -6,12 +6,14 @@ import { DocNodeKind, toTypeName, VarDocNode } from "../../util/docParser";
 import { Location } from "../meta/location";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
+import { Range } from "../meta/range";
 
 export class Variable extends Symbol implements Consumer, DocBlockConsumer, Reference {
     public readonly refKind = RefKind.Variable;
     public type: TypeComposite = new TypeComposite();
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
+    public scopeRange: Range | undefined = undefined;
 
     protected expression: Expression;
 

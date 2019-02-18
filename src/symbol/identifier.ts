@@ -3,7 +3,7 @@ import { TypeName } from "../type/name";
 import { TokenKind } from "../util/parser";
 
 export class Identifier extends Symbol implements Consumer {
-    public name: TypeName;
+    public name: TypeName = new TypeName('');
 
     consume(other: Symbol) {
         if (other instanceof TokenSymbol) {

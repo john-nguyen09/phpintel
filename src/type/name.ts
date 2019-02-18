@@ -9,31 +9,40 @@ export class TypeName {
         'string'
     ];
 
-    public static readonly ALIASES: {[alias: string]: string} = {
-        'bool': 'boolean',
-        'double': 'float',
-        'integer': 'int'
-    };
+    public static readonly ALIASES: Map<string, string> = new Map<string, string>([
+        ['bool', 'boolean'],
+        ['double', 'float'],
+        ['integer', 'int'],
+    ]);
 
     public name: string;
 
     constructor(name: string) {
         this.name = name.trim();
 
-        if (this.name in TypeName.ALIASES) {
-            this.name = TypeName.ALIASES[this.name];
+        const alias = TypeName.ALIASES.get(this.name);
+        if (alias !== undefined) {
+            this.name = alias;
         }
     }
 
-    public resolveToFullyQualified(importTable: ImportTable) {
+    public resolveReferenceToFqn(importTable: ImportTable) {
         this.name = importTable.getFqn(this.name);
+    }
+
+    public resolveDefinitionToFqn(importTable: ImportTable) {
+        if (TypeName.isBuiltin(this.name) || TypeName.isFqn(this.name)) {
+            return;
+        }
+
+        this.name = importTable.namespace.fqn + this.name;
     }
 
     public static isBuiltin(typeName: string) {
         return TypeName.BUILT_INS.indexOf(typeName) >= 0;
     }
 
-    public static isFullyQualifiedName(typeName: string): boolean {
+    public static isFqn(typeName: string): boolean {
         if (typeName == '') {
             return true;
         }

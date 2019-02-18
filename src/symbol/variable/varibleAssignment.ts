@@ -1,12 +1,10 @@
 import { Consumer, Symbol, TokenSymbol } from "../symbol";
 import { SimpleVariable } from "./simpleVariable";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
 
 export class VariableAssignment extends Symbol implements Consumer {
     public variable: SimpleVariable;
 
-    @nonenumerable
     private hasEqual = false;
 
     consume(other: Symbol): boolean {

@@ -1,6 +1,6 @@
 import { TextDocumentPositionParams, Hover, MarkedString } from "vscode-languageserver";
 import { App } from "../app";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
 import { Range as LspRange } from "vscode-languageserver";
 import { Formatter } from "./formatter";
 import { PhpDocumentTable } from "../storage/table/phpDoc";

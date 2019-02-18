@@ -14,7 +14,7 @@ export class ConstantAccess extends Symbol implements Consumer, Reference {
 
     public value: string = '';
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
     consume(other: Symbol) {

@@ -11,11 +11,11 @@ import { FunctionTable } from "./storage/table/function";
 import { MethodTable } from "./storage/table/method";
 import { PropertyTable } from "./storage/table/property";
 import { Traverser } from "./traverser";
-import { ReferenceTable } from "./storage/table/referenceTable";
+import { ReferenceTable } from "./storage/table/reference";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
-import * as fs from "fs";
-import { promisify } from "util";
+import { ScopeVarTable } from "./storage/table/scopeVar";
+import { ArgumentListTable } from "./storage/table/argumentList";
 
 export interface AppOptions {
     storage: string;
@@ -40,14 +40,15 @@ export class Application {
 
     public async clearCache() {
         const db = this.container.get<LevelDatasource>(LevelDatasource).getDb();
+        let promises: Promise<void>[] = [];
 
         return new Promise<void>((resolve, reject) => {
             db.createKeyStream()
-                .on('data', async (key) => {
-                    await db.del(key);
+                .on('data', (key) => {
+                    promises.push(db.del(key));
                 })
                 .on('end', () => {
-                    resolve();
+                    Promise.all(promises).then(() => { resolve() });
                 })
                 .on('error', (err: Error) => {
                     reject(err);
@@ -66,14 +67,16 @@ export class Application {
         this.container.bind<LevelDatasource>(LevelDatasource).toConstantValue(datasource);
 
         // Tables
-        this.container.bind<ClassTable>(ClassTable).toSelf();
-        this.container.bind<ClassConstantTable>(ClassConstantTable).toSelf();
-        this.container.bind<ConstantTable>(ConstantTable).toSelf();
-        this.container.bind<FunctionTable>(FunctionTable).toSelf();
-        this.container.bind<MethodTable>(MethodTable).toSelf();
-        this.container.bind<PropertyTable>(PropertyTable).toSelf();
-        this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf();
-        this.container.bind<ReferenceTable>(ReferenceTable).toSelf();
+        this.container.bind<ClassTable>(ClassTable).toSelf().inSingletonScope();
+        this.container.bind<ClassConstantTable>(ClassConstantTable).toSelf().inSingletonScope();
+        this.container.bind<ConstantTable>(ConstantTable).toSelf().inSingletonScope();
+        this.container.bind<FunctionTable>(FunctionTable).toSelf().inSingletonScope();
+        this.container.bind<MethodTable>(MethodTable).toSelf().inSingletonScope();
+        this.container.bind<PropertyTable>(PropertyTable).toSelf().inSingletonScope();
+        this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf().inSingletonScope();
+        this.container.bind<ReferenceTable>(ReferenceTable).toSelf().inSingletonScope();
+        this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf().inSingletonScope();
+        this.container.bind<ArgumentListTable>(ArgumentListTable).toSelf().inSingletonScope();
     }
 
     protected initBind() {

@@ -1,36 +1,60 @@
-import { CollectionSymbol, Symbol, Consumer, TokenSymbol } from "../symbol";
-import { ClassRef } from "../class/classRef";
-import { MethodCall } from "../function/methodCall";
-import { nonenumerable } from "../../util/decorator";
+import { Symbol, Consumer, TokenSymbol } from "../symbol";
+import { Reference, RefKind, isReference } from "../reference";
+import { TypeName } from "../../type/name";
+import { Location } from "../meta/location";
+import { TypeComposite } from "../../type/composite";
 import { TokenKind } from "../../util/parser";
-import { App } from "../../app";
+import { MemberName } from "../name/memberName";
+import { ArgumentExpressionList } from "../argumentExpressionList";
 
-export class MethodCallExpression extends CollectionSymbol implements Consumer {
-    public classRef: ClassRef = new ClassRef();
-    public methodCall: MethodCall = new MethodCall();
+export class MethodCallExpression extends Symbol implements Consumer, Reference {
+    public readonly refKind = RefKind.MethodCall;
 
-    @nonenumerable
-    private hasColonColon: boolean = false;
+    public type = new TypeName('');
+    public location: Location = {};
+    public scope: TypeName | TypeComposite = new TypeName('');
+    public argumentList: ArgumentExpressionList = new ArgumentExpressionList(this);
+
+    private hasArrow: boolean = false;
+    private noOpenParenthesis = 0;
+    private startParenthesisOffset = 0;
 
     consume(other: Symbol): boolean {
-        if (other instanceof TokenSymbol && other.type == TokenKind.ColonColon) {
-            this.hasColonColon = true;
-            this.methodCall.scope = this.classRef.type;
-
-            return true;
-        }
-
-        if (!this.hasColonColon) {
-            return this.classRef.consume(other);
+        if (other instanceof TokenSymbol && other.type === TokenKind.Arrow) {
+            this.hasArrow = true;
+        } else if (!this.hasArrow) {
+            if (isReference(other)) {
+                this.scope = other.type;
+            }
+        } else if (other instanceof MemberName) {
+            this.type = other.name;
         } else {
-            return this.methodCall.consume(other);
-        }
-    }
+            if (other instanceof TokenSymbol) {
+                if (other.type === TokenKind.OpenParenthesis) {
+                    this.noOpenParenthesis++;
 
-    get realSymbols(): Symbol[] {
-        return [
-            this.classRef,
-            this.methodCall
-        ]
+                    if (this.noOpenParenthesis === 1) {
+                        this.startParenthesisOffset = other.node.offset + other.node.length;
+                    }
+                } else if (other.type === TokenKind.CloseParenthesis) {
+                    this.noOpenParenthesis--;
+
+                    if (this.noOpenParenthesis === 0) {
+                        this.argumentList.location = {
+                            uri: this.location.uri,
+                            range: {
+                                start: this.startParenthesisOffset,
+                                end: other.node.offset
+                            }
+                        };
+                    }
+                }
+            } else if (other instanceof ArgumentExpressionList) {
+                this.argumentList.arguments = other.arguments;
+                this.argumentList.commaOffsets = other.commaOffsets;
+            }
+        }
+
+        return true;
     }
 }

@@ -21,3 +21,8 @@ if ($something) {
 }
 
 $refVar2 = $refVar;
+
+$class1->testProperty;
+$class1->testMethod();
+$class1->$staticTestProperty;
+$class1->TEST_CLASS_CONST;

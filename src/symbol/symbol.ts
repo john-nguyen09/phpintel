@@ -1,7 +1,6 @@
 import { nodeText } from '../util/parseTree';
 import { Token } from 'php7parser';
 import { PhpDocument } from './phpDocument';
-import { nonenumerable } from '../util/decorator';
 import { DocBlock } from './docBlock';
 import { TypeName } from '../type/name';
 import { TokenKind } from '../util/parser';
@@ -9,6 +8,8 @@ import { isFieldGetter, FieldGetter } from './fieldGetter';
 import { createObject } from '../util/genericObject';
 import { Location } from './meta/location';
 import { ImportTable } from '../type/importTable';
+import { toRelative } from '../util/uri';
+import { Class } from './class/class';
 
 export abstract class Symbol {
     toObject(): any {
@@ -30,6 +31,8 @@ export abstract class Symbol {
                 for (let child of value) {
                     object[key].push(this.createNewObject(child));
                 }
+            } else if (key === 'uri') {
+                object[key] = toRelative(value);
             } else {
                 object[key] = this.createNewObject(value);
             }
@@ -42,12 +45,18 @@ export abstract class Symbol {
         let fields = fieldGetter.getFields();
 
         for (let key of fields) {
-            object[key] = (<any>fieldGetter)[key];
+            let value: any = (<any>fieldGetter)[key];
+
+            if (key === 'uri') {
+                object[key] = toRelative(value);
+            } else {
+                object[key] = this.createNewObject(value);
+            }
         }
     }
 
     private createNewObject(currObj: any): any {
-        if (currObj instanceof Object) {
+        if (currObj !== null && typeof currObj == 'object') {
             let newObj: any;
 
             if ('toObject' in currObj && typeof currObj.toObject == 'function') {
@@ -55,7 +64,15 @@ export abstract class Symbol {
             } else if (isFieldGetter(currObj)) {
                 newObj = createObject(currObj.constructor);
                 this.assignFieldGetter(newObj, currObj);
+            } else if (Array.isArray(currObj)) {
+                return currObj.map((obj) => {
+                    return this.createNewObject(obj);
+                });
             } else {
+                if ('uri' in currObj) {
+                    currObj.uri = toRelative(currObj.uri);
+                }
+
                 newObj = currObj;
             }
 
@@ -67,17 +84,16 @@ export abstract class Symbol {
 }
 
 export class TokenSymbol extends Symbol {
-    @nonenumerable
     public node: Token;
 
     public text: string;
 
-    @nonenumerable
     public type: TokenKind;
 
     constructor(token: Token, doc: PhpDocument) {
         super();
 
+        this.node = token;
         this.type = <number>token.tokenType;
         this.text = nodeText(token, doc.text);
     }
@@ -89,6 +105,7 @@ export abstract class TransformSymbol extends Symbol {
 
 export abstract class CollectionSymbol extends Symbol {
     abstract realSymbols: Symbol[];
+    abstract isParentIncluded: boolean;
 }
 
 export interface Consumer {
@@ -100,6 +117,10 @@ export interface DocBlockConsumer {
 }
 
 export interface ScopeMember {
+    setScopeClass(scopeClass: Class): void;
+}
+
+export interface HasScope {
     scope: TypeName | null;
 }
 
@@ -120,7 +141,7 @@ export function isTransform(symbol: Symbol): symbol is TransformSymbol {
 }
 
 export function isCollection(symbol: Symbol): symbol is CollectionSymbol {
-    return symbol != null && 'realSymbols' in symbol;
+    return symbol instanceof CollectionSymbol;
 }
 
 export function isConsumer(symbol: Symbol): symbol is (Symbol & Consumer) {
@@ -132,7 +153,7 @@ export function isDocBlockConsumer(symbol: Symbol): symbol is (Symbol & DocBlock
 }
 
 export function isScopeMember(symbol: Symbol): symbol is (Symbol & ScopeMember) {
-    return 'scope' in symbol;
+    return 'setScopeClass' in symbol;
 }
 
 export function isNamedSymbol(symbol: Symbol): symbol is (Symbol & NamedSymbol) {

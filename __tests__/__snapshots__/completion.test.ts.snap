@@ -1,0 +1,1476 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`completion completion for constant access references 1`] = `
+Array [
+  Function {
+    "description": "Officia aliquip adipisicing et nulla et laboris dolore labore.
+",
+    "name": TypeName {
+      "name": "\\\\test_function",
+    },
+    "parameters": Array [],
+    "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 2118,
+          "start": 2089,
+        },
+        "uri": "case/global_symbols.php",
+      },
+      "variables": Object {},
+    },
+    "types": Array [],
+  },
+  Function {
+    "description": "",
+    "name": TypeName {
+      "name": "\\\\test_function1",
+    },
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$stringParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$intParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$boolParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$floatParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+          "existingTypes": Object {
+            "float": true,
+          },
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$boolParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$floatParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "float",
+            },
+          ],
+          "existingTypes": Object {
+            "float": true,
+          },
+        },
+        "$intParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+        "$stringParam": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "$test": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "int",
+            },
+          ],
+          "existingTypes": Object {
+            "int": true,
+          },
+        },
+      },
+    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
+  },
+  Function {
+    "description": "Test function 2",
+    "name": TypeName {
+      "name": "\\\\test_function2",
+    },
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\array|int",
+            },
+          ],
+          "existingTypes": Object {
+            "\\\\array|int": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 754,
+          "start": 708,
+        },
+        "uri": "case/function_declare.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\array|int",
+            },
+          ],
+          "existingTypes": Object {
+            "\\\\array|int": true,
+          },
+        },
+        "$param2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+      },
+    },
+    "types": Array [],
+  },
+]
+`;
+
+exports[`completion completion for constant access references 2`] = `
+Array [
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "123",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST1",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "456",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST2",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "789",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING2",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Not so simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING3",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Quite complex ' . TEST_CONST_STRING",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_DEFINE_CONSTANT",
+    },
+    "type": TypeName {
+      "name": "boolean",
+    },
+    "value": "false",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT1",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'simple string'",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT2",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'not so simple string'",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT3",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'more of ' . TEST_STRING_CONSTANT2",
+  },
+]
+`;
+
+exports[`completion completion for constant access references 3`] = `
+Array [
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING2",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Not so simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING3",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Quite complex ' . TEST_CONST_STRING",
+  },
+]
+`;
+
+exports[`completion completion for constant access references 4`] = `
+Array [
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "123",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST1",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "456",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST2",
+    },
+    "type": TypeName {
+      "name": "int",
+    },
+    "value": "789",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_DEFINE_CONSTANT",
+    },
+    "type": TypeName {
+      "name": "boolean",
+    },
+    "value": "false",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT1",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'simple string'",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT2",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'not so simple string'",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\TEST_STRING_CONSTANT3",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'more of ' . TEST_STRING_CONSTANT2",
+  },
+  DefineConstant {
+    "name": TypeName {
+      "name": "\\\\CONSTANT_SAMPLE1",
+    },
+    "type": TypeName {
+      "name": "boolean",
+    },
+    "value": "false",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING2",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Not so simple string'",
+  },
+  Constant {
+    "name": TypeName {
+      "name": "\\\\TEST_CONST_STRING3",
+    },
+    "type": TypeName {
+      "name": "string",
+    },
+    "value": "'Quite complex ' . TEST_CONST_STRING",
+  },
+]
+`;
+
+exports[`completion completion for current scoped member references 1`] = `
+Array [
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 184,
+        "start": 115,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "GetNumCpus",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+        "existingTypes": Object {
+          "int": true,
+        },
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 106,
+        "start": 93,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 2,
+    },
+    "name": "$NUM_CPUS",
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "4",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 67,
+        "start": 48,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "name": TypeName {
+      "name": "SYSTEM_NUM_CPUS",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+]
+`;
+
+exports[`completion completion for current scoped member references 2`] = `Array []`;
+
+exports[`completion completion for current scoped member references 3`] = `
+Array [
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 184,
+        "start": 115,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "GetNumCpus",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "int",
+          },
+        ],
+        "existingTypes": Object {
+          "int": true,
+        },
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 106,
+        "start": 93,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 2,
+    },
+    "name": "$NUM_CPUS",
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "4",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 67,
+        "start": 48,
+      },
+      "uri": "case/completion/currentScopedMember.php",
+    },
+    "name": TypeName {
+      "name": "SYSTEM_NUM_CPUS",
+    },
+    "scope": TypeName {
+      "name": "\\\\CurrentScopedMember",
+    },
+  },
+]
+`;
+
+exports[`completion completion for scoped member references 1`] = `
+Array [
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1266,
+        "start": 1247,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1120,
+        "start": 1098,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
+exports[`completion completion for scoped member references 2`] = `Array []`;
+
+exports[`completion completion for scoped member references 3`] = `
+Array [
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1120,
+        "start": 1098,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
+exports[`completion completion for scoped member references 4`] = `
+Array [
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1120,
+        "start": 1098,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
+exports[`completion completion for scoped member references 5`] = `Array []`;
+
+exports[`completion completion for variables 1`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "$var1",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+]
+`;
+
+exports[`completion completion for variables 2`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "$var2",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+  Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "$var3",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "int",
+        },
+      ],
+      "existingTypes": Object {
+        "int": true,
+      },
+    },
+  },
+]
+`;
+
+exports[`completion completion for variables 3`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "$var1",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+]
+`;
+
+exports[`completion provides completion for class reference inside function call 1`] = `
+Array [
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1266,
+        "start": 1247,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  ClassConstant {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "int",
+      },
+      "value": "123",
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1120,
+        "start": 1098,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "name": TypeName {
+      "name": "TEST_CLASS_CONST",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
+exports[`completion this arrow completion 1`] = `
+Array [
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 98,
+        "start": 88,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": "$property1",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 125,
+        "start": 115,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$property2",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 149,
+        "start": 139,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$property3",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 71,
+        "start": 55,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticProperty1",
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 194,
+        "start": 158,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method1",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 241,
+        "start": 202,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": TypeName {
+      "name": "method2",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 286,
+        "start": 249,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": TypeName {
+      "name": "method3",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 359,
+        "start": 294,
+      },
+      "uri": "case/completion/this.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "methodNeedsCompletion",
+    },
+    "scope": TypeName {
+      "name": "\\\\CompletionWithThis",
+    },
+  },
+]
+`;
+
+exports[`completion variable arrow completion 1`] = `
+Array [
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Lorem excepteur officia sit anim velit veniam enim.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1266,
+        "start": 1247,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticTestProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Do magna consequat veniam minim proident eiusmod incididunt aute proident.",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1583,
+        "start": 1493,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticTestMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$testParameter",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+]
+`;

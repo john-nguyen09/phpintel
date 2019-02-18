@@ -1,36 +1,33 @@
-import { Symbol, Consumer } from "../symbol";
+import { Symbol, Consumer, ScopeMember } from "../symbol";
 import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { QualifiedName } from "../name/qualifiedName";
-import { nonenumerable } from "../../util/decorator";
+import { ClassConstRefExpression } from "../type/classConstRefExpression";
+import { Class } from "./class";
 
-export class ClassRef extends Symbol implements Consumer, Reference {
+export class ClassRef extends Symbol implements Consumer, Reference, ScopeMember {
     public readonly refKind = RefKind.Class;
     public type: TypeName = new TypeName('');
-    public location: Location = new Location();
-
-    @nonenumerable
-    private _scope: TypeName | null = null;
+    public location: Location = {};
+    public scope: TypeName | null = null;
 
     consume(other: Symbol): boolean {
         if (other instanceof QualifiedName) {
             this.type = new TypeName(other.name);
             this.location = other.location;
+
+            if (this.type.name === 'self' && this.scope !== null) {
+                this.type = this.scope;
+            }
+        } else if (other instanceof ClassConstRefExpression) {
+            this.type = other.scope;
         }
 
-        return false;
+        return true;
     }
 
-    get scope(): TypeName | null {
-        return this._scope;
-    }
-
-    set scope(value: TypeName | null) {
-        this._scope = value;
-
-        if (value !== null && this.type.name === 'self') {
-            this.type.name = value.name;
-        }
+    setScopeClass(scopeClass: Class) {
+        this.scope = scopeClass.name;
     }
 }

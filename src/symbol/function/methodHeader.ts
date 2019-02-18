@@ -5,7 +5,7 @@ import { MemberModifierList } from "../class/memberModifierList";
 import { TypeName } from "../../type/name";
 
 export class MethodHeader extends Symbol {
-    public name: TypeName;
+    public name: TypeName = new TypeName('');
     public modifier: SymbolModifier = new SymbolModifier();
 
     consume(other: Symbol): boolean {

@@ -2,8 +2,10 @@ import { Symbol, Consumer } from "../symbol";
 import { Variable } from "./variable";
 import { Parameter } from "./parameter";
 import { TypeComposite } from "../../type/composite";
+import { Location } from "../meta/location";
 
 export class ScopeVar extends Symbol implements Consumer {
+    public location: Location = {};
     public variables: { [name: string]: TypeComposite } = {};
 
     consume(other: Symbol) {
@@ -17,6 +19,8 @@ export class ScopeVar extends Symbol implements Consumer {
     }
 
     set(variable: Variable) {
+        variable.scopeRange = this.location.range;
+
         if (!(variable.name in this.variables)) {
             this.variables[variable.name] = variable.type.clone();
             return;
@@ -34,7 +38,7 @@ export class ScopeVar extends Symbol implements Consumer {
             for (let type of this.variables[variableName].types) {
                 returnType.push(type);
             }
-            
+
             return returnType;
         }
 

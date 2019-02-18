@@ -7,7 +7,7 @@ import { Reference, RefKind } from "../reference";
 export class TypeDeclaration extends Symbol implements Consumer, Reference {
     public readonly refKind = RefKind.TypeDeclaration;
     public type: TypeName;
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
     consume(other: Symbol) {

@@ -41,7 +41,7 @@ export class ClassTable {
         let uris = await NameIndex.get(this.nameIndex, name);
 
         for (let uri of uris) {
-            classes.push(await this.db.get(BelongsToDoc.getKey(uri, name)) as Class);
+            classes.push(await BelongsToDoc.get<Class>(this.db, uri, name));
         }
 
         return classes;

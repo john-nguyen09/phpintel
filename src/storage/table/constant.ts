@@ -41,7 +41,7 @@ export class ConstantTable {
         let constSymbols: Constant[] = [];
 
         for (let uri of uris) {
-            constSymbols.push(await this.db.get(BelongsToDoc.getKey(uri, name)));
+            constSymbols.push(await BelongsToDoc.get<Constant>(this.db, uri, name));
         }
 
         return constSymbols;

@@ -6,95 +6,113 @@ import { TypeComposite } from "../type/composite";
 import { NamespaceName } from "../symbol/name/namespaceName";
 
 export class Serializer {
-    public static readonly DEFAULT_SIZE = 1024;
+    private buffer: string;
 
-    private buffer: Buffer;
-    private offset: number;
-    private length: number;
+    constructor() {
+        this.buffer = '';
+    }
 
-    constructor(buffer?: Buffer) {
-        if (buffer !== undefined) {
-            this.buffer = buffer;
-            this.length = buffer.length;
-        } else {
-            this.buffer = Buffer.alloc(Serializer.DEFAULT_SIZE);
-            this.length = 0;
+    public setBuffer(buffer: string) {
+        this.buffer += buffer;
+    }
+
+    public setString(str: string) {
+        this.setInt32(str.length);
+        this.setBuffer(str);
+    }
+
+    public setInt32(value: number) {
+        this.buffer += String.fromCharCode((value >> 24 & 255)) +
+            String.fromCharCode((value >> 16 & 255)) +
+            String.fromCharCode((value >> 8 & 255)) +
+            String.fromCharCode((value & 255));
+    }
+
+    public setBool(value: boolean) {
+        this.buffer += value ? String.fromCharCode(1) : String.fromCharCode(0);
+    }
+
+    public setTypeComposite(types: TypeComposite) {
+        this.setInt32(types.types.length);
+        for (let type of types.types) {
+            this.setTypeName(type);
         }
+    }
+
+    public setTypeName(name: TypeName | null) {
+        if (name == null) {
+            this.setBool(false);
+        } else {
+            this.setBool(true);
+            this.setString(name.name);
+        }
+    }
+
+    public setLocation(location: Location) {
+        if (location.uri === undefined || location.range === undefined) {
+            this.setBool(false);
+        } else {
+            this.setBool(true);
+            this.setString(location.uri);
+            this.setRange(location.range);
+        }
+    }
+
+    public setRange(range: Range) {
+        this.setInt32(range.start);
+        this.setInt32(range.end);
+    }
+
+    public setSymbolModifier(modifier: SymbolModifier) {
+        this.setInt32(modifier.getModifier());
+        this.setInt32(modifier.getVisibility());
+    }
+
+    public setNamespaceName(namespace: NamespaceName) {
+        this.setString(namespace.parts.join('\\'));
+    }
+
+    public getBuffer(): string {
+        return this.buffer;
+    }
+}
+
+export class Deserializer {
+    private buffer: string;
+    private offset: number;
+
+    constructor(buffer: string) {
+        this.buffer = buffer;
         this.offset = 0;
     }
 
-    private growHeap(proposedSize: number) {
-        let newSize = Math.max(this.length + Serializer.DEFAULT_SIZE, proposedSize);
-        let newBuffer = Buffer.alloc(newSize);
-        this.buffer.copy(newBuffer);
-        this.buffer = newBuffer;
-    }
-
-    private needs(noBytes: number) {
-        if ((this.offset + noBytes) > this.buffer.length) {
-            this.growHeap(this.offset + noBytes);
-        }
-    }
-
-    public writeBuffer(buffer: Buffer) {
-        this.needs(buffer.length);
-        buffer.copy(this.buffer, this.offset);
-        this.offset += buffer.length;
-        this.length += buffer.length;
-    }
-
-    public readBuffer(): Buffer {
+    public readBuffer(): string {
         return this.buffer.slice(this.offset);
     }
 
-    public writeString(str: string) {
-        let strBuffer = Buffer.from(str, 'utf8');
-
-        this.writeInt32(strBuffer.length);
-        this.writeBuffer(strBuffer);
-    }
-
     public readString(): string {
-        let length = this.readInt32();
-        let strBuffer = this.buffer.slice(this.offset, this.offset + length);
+        const length = this.readInt32();
+        const str = this.buffer.slice(this.offset, this.offset + length);
         this.offset += length;
 
-        return strBuffer.toString('utf8');
-    }
-
-    public writeInt32(value: number) {
-        this.needs(4);
-        this.buffer.writeInt32BE(value, this.offset);
-        this.offset += 4;
-        this.length += 4;
+        return str;
     }
 
     public readInt32(): number {
-        let value = this.buffer.readInt32BE(this.offset);
+        const value = this.buffer.charCodeAt(this.offset + 0) << 24 |
+            this.buffer.charCodeAt(this.offset + 1) << 16 |
+            this.buffer.charCodeAt(this.offset + 2) << 8 |
+            this.buffer.charCodeAt(this.offset + 3);
         this.offset += 4;
 
         return value;
     }
 
-    public writeBool(value: boolean) {
-        this.needs(1);
-        this.buffer.writeUInt8(value ? 1 : 0, this.offset);
-        this.offset += 1;
-        this.length += 1;
-    }
-
     public readBool(): boolean {
-        let value = this.buffer.readUInt8(this.offset) == 1 ? true : false;
+        let value = this.buffer.charCodeAt(this.offset) == 1 ? true : false;
         this.offset += 1;
 
         return value;
-    }
-
-    public writeTypeComposite(types: TypeComposite) {
-        this.writeInt32(types.types.length);
-        for (let type of types.types) {
-            this.writeTypeName(type);
-        }
     }
 
     public readTypeComposite(): TypeComposite {
@@ -107,15 +125,6 @@ export class Serializer {
         return types;
     }
 
-    public writeTypeName(name: TypeName | null) {
-        if (name == null) {
-            this.writeBool(false);
-        } else {
-            this.writeBool(true);
-            this.writeString(name.name);
-        }
-    }
-
     public readTypeName(): TypeName | null {
         let hasTypeName = this.readBool();
 
@@ -126,46 +135,25 @@ export class Serializer {
         return new TypeName(this.readString());
     }
 
-    public writeLocation(location: Location) {
-        if (location.isEmpty) {
-            this.writeBool(false);
-        } else {
-            this.writeBool(true);
-            this.writeString(location.uri);
-            this.writeRange(location.range);
-        }
-    }
-
     public readLocation(): Location {
         let hasLocation = this.readBool();
-        
+
         if (!hasLocation) {
-            return new Location();
+            return {};
         }
 
-        return new Location(this.readString(), this.readRange());
-    }
-
-    public writeRange(range: Range) {
-        this.writeInt32(range.start);
-        this.writeInt32(range.end);
+        return { uri: this.readString(), range: this.readRange() };
     }
 
     public readRange(): Range {
-        return new Range(this.readInt32(), this.readInt32());
-    }
-
-    public writeSymbolModifier(modifier: SymbolModifier) {
-        this.writeInt32(modifier.getModifier());
-        this.writeInt32(modifier.getVisibility());
+        return {
+            start: this.readInt32(),
+            end: this.readInt32()
+        }
     }
 
     public readSymbolModifier(): SymbolModifier {
         return new SymbolModifier(this.readInt32(), this.readInt32());
-    }
-
-    public writeNamespaceName(namespace: NamespaceName) {
-        this.writeString(namespace.parts.join('\\'));
     }
 
     public readNamespaceName(): NamespaceName {
@@ -174,9 +162,5 @@ export class Serializer {
         namespace.parts = this.readString().split('\\');
 
         return namespace;
-    }
-
-    public getBuffer(): Buffer {
-        return this.buffer.slice(0, this.length);
     }
 }

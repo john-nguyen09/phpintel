@@ -1,14 +1,22 @@
-import { CollectionSymbol, Consumer, Symbol, TokenSymbol } from "../symbol";
+import { Consumer, Symbol, TokenSymbol, CollectionSymbol, ScopeMember } from "../symbol";
 import { ClassRef } from "../class/classRef";
 import { ClassConstRef } from "../constant/classConstRef";
-import { nonenumerable } from "../../util/decorator";
 import { TokenKind } from "../../util/parser";
+import { Reference, RefKind } from "../reference";
+import { TypeName } from "../../type/name";
+import { Location } from "../meta/location";
+import { Class } from "../class/class";
 
-export class ClassConstRefExpression extends CollectionSymbol implements Consumer {
+export class ClassConstRefExpression extends CollectionSymbol implements Consumer, Reference, ScopeMember {
+    public isParentIncluded = true;
+    public readonly refKind = RefKind.ClassConst;
+    public type: TypeName = new TypeName('');
+    public location: Location = {};
+    public scope: TypeName = new TypeName('');
+
     public classRef: ClassRef = new ClassRef();
     public classConstRef: ClassConstRef = new ClassConstRef();
 
-    @nonenumerable
     private hasColonColon: boolean = false;
 
     consume(other: Symbol): boolean {
@@ -16,20 +24,35 @@ export class ClassConstRefExpression extends CollectionSymbol implements Consume
             this.hasColonColon = true;
             this.classConstRef.scope = this.classRef.type;
 
-            return true;
+            if (this.location.range !== undefined) {
+                this.classConstRef.location = {
+                    uri: this.location.uri,
+                    range: {
+                        start: this.location.range.start,
+                        end: other.node.offset
+                    }
+                };
+            }
         }
 
         if (!this.hasColonColon) {
-            return this.classRef.consume(other);
+            this.classRef.consume(other);
+            this.scope = this.classRef.type;
         } else {
-            return this.classConstRef.consume(other);
+            this.classConstRef.consume(other);
+            this.type = this.classConstRef.type;
         }
+
+        return true;
     }
 
-    get realSymbols(): Symbol[] {
+    get realSymbols() {
         return [
-            this.classRef,
-            this.classConstRef
-        ]
+            this.classRef
+        ];
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.classRef.setScopeClass(scopeClass);
     }
 }

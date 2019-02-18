@@ -26,7 +26,7 @@ export class ImportTable {
     }
 
     public getFqn(name: string) {
-        if (TypeName.isBuiltin(name) || TypeName.isFullyQualifiedName(name)) {
+        if (TypeName.isBuiltin(name) || TypeName.isFqn(name)) {
             return name;
         }
 
@@ -36,15 +36,17 @@ export class ImportTable {
 
         if (alias != undefined && alias in this.imports) {
             namespace = this.imports[alias];
+        } else if (this.namespace.isRoot) {
+            namespace = '';
         } else {
-            namespace = this.namespace != null ? this.namespace.fqn : '';
+            namespace = this.namespace.fqn;
         }
 
-        return namespace + (parts.length > 0 ? '\\' + parts.join('\\') : '');
+        return namespace + '\\' + name;
     }
 
     public getQualified(fqn: string) {
-        if (TypeName.isBuiltin(fqn) || !TypeName.isFullyQualifiedName(fqn)) {
+        if (TypeName.isBuiltin(fqn) || !TypeName.isFqn(fqn)) {
             return fqn;
         }
 

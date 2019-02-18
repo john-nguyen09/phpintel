@@ -1,4 +1,4 @@
-import { MarkedString } from "vscode-languageserver";
+import { MarkedString, CompletionItem, CompletionItemKind, SignatureInformation, ParameterInformation } from "vscode-languageserver";
 import { Function } from "../symbol/function/function";
 import { TypeName } from "../type/name";
 import { PhpDocument } from "../symbol/phpDocument";
@@ -14,6 +14,8 @@ import { Location as LspLocation, Range as LspRange } from "vscode-languageserve
 import { Range } from "../symbol/meta/range";
 import { Constant } from "../symbol/constant/constant";
 import { DefineConstant } from "../symbol/constant/defineConstant";
+import { Variable } from "../symbol/variable/variable";
+import { Parameter } from "../symbol/variable/parameter";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -144,8 +146,8 @@ export namespace Formatter {
 
     export function toLspLocation(phpDoc: PhpDocument, loc: Location): LspLocation {
         return {
-            uri: loc.uri,
-            range: toLspRange(phpDoc, loc.range)
+            uri: loc.uri || '',
+            range: toLspRange(phpDoc, loc.range || { start: -1, end: -1 })
         }
     }
 
@@ -154,5 +156,130 @@ export namespace Formatter {
             start: phpDoc.getPosition(range.start),
             end: phpDoc.getPosition(range.end)
         };
+    }
+
+    export function getFunctionCompletion(phpDoc: PhpDocument, func: Function): CompletionItem {
+        return {
+            label: func.getName(),
+            kind: CompletionItemKind.Function,
+            documentation: func.description,
+            insertText: func.name.getQualified(phpDoc.importTable)
+        };
+    }
+
+    export function getClassCompletion(phpDoc: PhpDocument, theClass: Class): CompletionItem {
+        return {
+            label: theClass.getName(),
+            kind: CompletionItemKind.Class,
+            documentation: theClass.description,
+            insertText: theClass.name.getQualified(phpDoc.importTable)
+        };
+    }
+
+    export function getConstantCompletion(phpDoc: PhpDocument, constant: Constant): CompletionItem {
+        return {
+            label: constant.getName(),
+            kind: CompletionItemKind.Constant,
+            documentation: constant.description,
+            insertText: constant.name.getQualified(phpDoc.importTable)
+        };
+    }
+
+    export function getVariableCompletion(variable: Variable): CompletionItem {
+        return {
+            label: variable.name,
+            kind: CompletionItemKind.Variable,
+            documentation: '',
+            insertText: variable.name
+        };
+    }
+
+    export function getPropertyCompletion(prop: Property): CompletionItem {
+        let scopeName = '';
+        if (prop.scope !== null) {
+            scopeName = prop.scope.name;
+        }
+        let propName = prop.name;
+        if (!prop.modifier.has(SymbolModifier.STATIC)) {
+            propName = propName.substr(1);
+        }
+
+        return {
+            label: `${scopeName}::${propName}`,
+            kind: CompletionItemKind.Property,
+            documentation: prop.description,
+            insertText: propName
+        };
+    }
+
+    export function getMethodCompletion(method: Method): CompletionItem {
+        let scopeName = '';
+        if (method.scope !== null) {
+            scopeName = method.scope.name;
+        }
+
+        return {
+            label: `${scopeName}::${method.getName()}`,
+            kind: CompletionItemKind.Method,
+            documentation: method.description,
+            insertText: method.getName()
+        }
+    }
+
+    export function getClassConstantCompletion(classConst: ClassConstant): CompletionItem {
+        let scopeName = '';
+        if (classConst.scope !== null) {
+            scopeName = classConst.scope.name;
+        }
+
+        return {
+            label: `${scopeName}::${classConst.getName()}`,
+            kind: CompletionItemKind.Constant,
+            documentation: '',
+            insertText: classConst.getName()
+        }
+    }
+
+    export function getParametersLabel(params: Parameter[]): string[] {
+        return params.map((param) => {
+            const type = param.type.isEmpty ? '' : param.type.toString() + ' ';
+            const value = param.value.length === 0 ? '' : `: ${param.value}`;
+
+            return `${type}${param.name}${value}`;
+        });
+    }
+
+    export function getFunctionSignature(func: Function): SignatureInformation {
+        const label = `function ${func.name.name}(` +
+            getParametersLabel(func.parameters).join(', ') + ')';
+        const parameters: ParameterInformation[] = func.parameters.map((param) => {
+            return {
+                label: param.name,
+                documentation: param.description,
+            };
+        });
+
+        return {
+            label,
+            parameters,
+            documentation: func.description,
+        };
+    }
+
+    export function getMethodSignature(method: Method): SignatureInformation {
+        const label = `function ${method.name.name}(` +
+            getParametersLabel(method.parameters).join(', ') + ')';
+        const parameters: ParameterInformation[] = method.parameters.map((param) => {
+            return {
+                label: param.name,
+                documentation: param.description
+            };
+        });
+
+        return {
+            label,
+            parameters,
+            documentation: method.description
+        }
     }
 }

@@ -2,15 +2,14 @@ import { Symbol, ScopeMember, NamedSymbol, Locatable } from "../symbol";
 import { Identifier } from "../identifier";
 import { Constant } from "./constant";
 import { TypeName } from "../../type/name";
-import { nonenumerable } from "../../util/decorator";
 import { Location } from "../meta/location";
+import { Class } from "../class/class";
 
 export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, Locatable {
     public name: TypeName;
-    public location: Location = new Location();
+    public location: Location = {};
     public scope: TypeName | null = null;
 
-    @nonenumerable
     private constant: Constant = new Constant();
 
     consume(other: Symbol) {
@@ -41,7 +40,11 @@ export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, L
         this.constant.resolvedType = val;
     }
 
-    public getName(): string {
+    getName(): string {
         return this.name.toString();
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.scope = scopeClass.name;
     }
 }

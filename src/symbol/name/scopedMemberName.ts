@@ -6,7 +6,7 @@ import { TokenKind } from "../../util/parser";
 
 export class ScopedMemberName extends Symbol implements Consumer {
     public name: TypeName = new TypeName('');
-    public location: Location = new Location();
+    public location: Location = {};
 
     consume(other: Symbol): boolean {
         if (other instanceof Identifier) {

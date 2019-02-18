@@ -13,7 +13,9 @@ import { FunctionTable } from "../storage/table/function";
 import { MethodTable } from "../storage/table/method";
 import { PropertyTable } from "../storage/table/property";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
+import { ScopeVarTable } from "../storage/table/scopeVar";
+import { ArgumentListTable } from "../storage/table/argumentList";
 
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -22,6 +24,15 @@ const statAsync = promisify(fs.stat);
 export interface PhpFileInfo {
     filePath: string;
     fstats: fs.Stats;
+}
+
+export namespace PhpFileInfo {
+    export async function createFileInfo(filePath: string): Promise<PhpFileInfo> {
+        return {
+            filePath: filePath,
+            fstats: await statAsync(filePath)
+        };
+    }
 }
 
 @injectable()
@@ -35,7 +46,9 @@ export class Indexer {
         private functionTable: FunctionTable,
         private methodTable: MethodTable,
         private propertyTable: PropertyTable,
-        private referenceTable: ReferenceTable
+        private referenceTable: ReferenceTable,
+        private scopeVarTable: ScopeVarTable,
+        private argumentListTable: ArgumentListTable
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
@@ -63,9 +76,8 @@ export class Indexer {
     async indexFile(phpDoc: PhpDocument): Promise<void> {
         let symbolParser = new SymbolParser(phpDoc);
 
-        phpDoc.refresh();
         this.treeTraverser.traverse(phpDoc.getTree(), [symbolParser]);
-        await this.indexPhpDocument(phpDoc);
+        await this.indexPhpDocument(symbolParser.getPhpDoc());
     }
 
     async indexWorkspace(directory: string): Promise<void> {
@@ -73,7 +85,7 @@ export class Indexer {
             directory
         ];
         const promises: Promise<void>[] = [];
-        
+
         while (directories.length > 0) {
             let dir = directories.shift();
             if (dir === undefined) {
@@ -82,16 +94,12 @@ export class Indexer {
             let files = await readdirAsync(dir);
 
             for (let file of files) {
-                const filePath = path.join(dir, file);
-                const fstats = await statAsync(filePath);
+                const fileInfo = await PhpFileInfo.createFileInfo(path.join(dir, file));
 
                 if (file.endsWith('.php')) {
-                    const fileInfo: PhpFileInfo = {
-                        filePath, fstats
-                    }
                     promises.push(this.syncFileSystem(fileInfo));
-                } else if (fstats.isDirectory()) {
-                    directories.push(filePath);
+                } else if (fileInfo.fstats.isDirectory()) {
+                    directories.push(fileInfo.filePath);
                 }
             }
         }
@@ -101,50 +109,59 @@ export class Indexer {
 
     private async removeSymbolsByDoc(uri: string) {
         return Promise.all([
+            this.scopeVarTable.removeByDoc(uri),
+            this.referenceTable.removeByDoc(uri),
             this.classTable.removeByDoc(uri),
             this.classConstantTable.removeByDoc(uri),
             this.constantTable.removeByDoc(uri),
             this.functionTable.removeByDoc(uri),
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
-            this.referenceTable.removeByDoc(uri),
-            this.phpDocTable.remove(uri)
+            this.argumentListTable.removeByDoc(uri),
         ]);
     }
 
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
-        
+
         const promises: Promise<void | void[]>[] = [];
 
-        for (let theClass of doc.classes) {
+        for (const scopeVar of doc.scopeVarStack) {
+            promises.push(this.scopeVarTable.put(scopeVar));
+        }
+
+        for (const reference of doc.references) {
+            promises.push(this.referenceTable.put(reference));
+        }
+
+        for (const theClass of doc.classes) {
             promises.push(this.classTable.put(doc, theClass));
         }
 
-        for (let classConstant of doc.classConstants) {
+        for (const classConstant of doc.classConstants) {
             promises.push(this.classConstantTable.put(doc, classConstant));
         }
 
-        for (let constant of doc.constants) {
+        for (const constant of doc.constants) {
             promises.push(this.constantTable.put(doc, constant));
         }
 
-        for (let func of doc.functions) {
+        for (const func of doc.functions) {
             promises.push(this.functionTable.put(doc, func));
         }
 
-        for (let method of doc.methods) {
+        for (const method of doc.methods) {
             promises.push(this.methodTable.put(doc, method));
         }
 
-        for (let property of doc.properties) {
+        for (const property of doc.properties) {
             promises.push(this.propertyTable.put(doc, property));
         }
 
-        for (let reference of doc.references) {
-            promises.push(this.referenceTable.put(reference));
+        for (const argumentList of doc.argumentLists) {
+            promises.push(this.argumentListTable.put(doc, argumentList));
         }
-        
+
         await Promise.all(promises);
         await this.phpDocTable.put(doc);
     }

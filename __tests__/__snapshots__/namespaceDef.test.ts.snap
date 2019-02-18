@@ -15,24 +15,25 @@ ImportTable {
 
 exports[`namespaceDef should assign namespace to phpDocument 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [
     Class {
       "extend": null,
       "implements": Array [],
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 61,
           "start": 31,
         },
-        "relativeUri": "case/namespaceDef/class.php",
+        "uri": "case/namespaceDef/class.php",
       },
       "modifier": SymbolModifier {
         "modifier": 0,
         "visibility": 0,
       },
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+        "name": "\\\\NamespaceDefTestClassNamespace1",
       },
       "traits": Array [],
     },
@@ -51,17 +52,37 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 61,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/class.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+class TestClassNamespace1 {
+
+}",
+  "uri": "case/namespaceDef/class.php",
 }
 `;
 
 exports[`namespaceDef should assign namespace to phpDocument 2`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\PI",
+        "name": "\\\\NamespaceDefPI",
       },
       "type": TypeName {
         "name": "float",
@@ -84,7 +105,7 @@ PhpDocument {
   "references": Array [
     Constant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\PI",
+        "name": "\\\\NamespaceDefPI",
       },
       "type": TypeName {
         "name": "float",
@@ -92,17 +113,46 @@ PhpDocument {
       "value": "3.14",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 47,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/constant.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+const PI = 3.14;",
+  "uri": "case/namespaceDef/constant.php",
 }
 `;
 
 exports[`namespaceDef should assign namespace to phpDocument 3`] = `
 PhpDocument {
+  "argumentLists": Array [
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 70,
+          "start": 38,
+        },
+        "uri": "case/namespaceDef/defineConst.php",
+      },
+    },
+  ],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+        "name": "\\\\NamespaceDefDEFINE_CONST",
       },
       "type": TypeName {
         "name": "string",
@@ -124,16 +174,26 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     FunctionCall {
-      "location": Location {
-        "range": Range {
+      "argumentList": ArgumentExpressionList {
+        "arguments": Array [],
+        "location": Object {
+          "range": Object {
+            "end": 70,
+            "start": 38,
+          },
+          "uri": "case/namespaceDef/defineConst.php",
+        },
+      },
+      "location": Object {
+        "range": Object {
           "end": 71,
           "start": 31,
         },
-        "relativeUri": "case/namespaceDef/defineConst.php",
+        "uri": "case/namespaceDef/defineConst.php",
       },
       "realSymbol": DefineConstant {
         "name": TypeName {
-          "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+          "name": "\\\\NamespaceDefDEFINE_CONST",
         },
         "type": TypeName {
           "name": "string",
@@ -148,7 +208,7 @@ PhpDocument {
     },
     DefineConstant {
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\DEFINE_CONST",
+        "name": "\\\\NamespaceDefDEFINE_CONST",
       },
       "type": TypeName {
         "name": "string",
@@ -156,11 +216,29 @@ PhpDocument {
       "value": "'Hello world!!!'",
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 72,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/defineConst.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+define('DEFINE_CONST', 'Hello world!!!');",
+  "uri": "case/namespaceDef/defineConst.php",
 }
 `;
 
 exports[`namespaceDef should assign namespace to phpDocument 4`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -168,15 +246,17 @@ PhpDocument {
     Function {
       "description": "",
       "name": TypeName {
-        "name": "\\\\NamespaceDef\\\\function_with_namespace",
+        "name": "\\\\NamespaceDeffunction_with_namespace",
       },
       "parameters": Array [
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 215,
               "start": 208,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param1",
           "refKind": 3,
@@ -187,15 +267,20 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
+            "existingTypes": Object {
+              "TestClassNamespace1": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 224,
               "start": 217,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param2",
           "refKind": 3,
@@ -206,15 +291,20 @@ PhpDocument {
                 "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
+            "existingTypes": Object {
+              "\\\\FullyQualified\\\\Name\\\\Class": true,
+            },
           },
           "value": "",
         },
         Parameter {
-          "location": Location {
-            "range": Range {
+          "description": "",
+          "location": Object {
+            "range": Object {
               "end": 238,
               "start": 226,
             },
+            "uri": "case/namespaceDef/function.php",
           },
           "name": "$param3",
           "refKind": 3,
@@ -225,11 +315,21 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "value": "",
         },
       ],
       "scopeVar": ScopeVar {
+        "location": Object {
+          "range": Object {
+            "end": 579,
+            "start": 175,
+          },
+          "uri": "case/namespaceDef/function.php",
+        },
         "variables": Object {
           "$param1": TypeComposite {
             "_types": Array [
@@ -237,6 +337,9 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
               },
             ],
+            "existingTypes": Object {
+              "TestClassNamespace1": true,
+            },
           },
           "$param2": TypeComposite {
             "_types": Array [
@@ -244,6 +347,9 @@ PhpDocument {
                 "name": "\\\\FullyQualified\\\\Name\\\\Class",
               },
             ],
+            "existingTypes": Object {
+              "\\\\FullyQualified\\\\Name\\\\Class": true,
+            },
           },
           "$param3": TypeComposite {
             "_types": Array [
@@ -251,6 +357,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$var1": TypeComposite {
             "_types": Array [
@@ -258,6 +367,9 @@ PhpDocument {
                 "name": "boolean",
               },
             ],
+            "existingTypes": Object {
+              "boolean": true,
+            },
           },
           "$var2": TypeComposite {
             "_types": Array [
@@ -265,6 +377,9 @@ PhpDocument {
                 "name": "string",
               },
             ],
+            "existingTypes": Object {
+              "string": true,
+            },
           },
           "$var3": TypeComposite {
             "_types": Array [
@@ -272,6 +387,9 @@ PhpDocument {
                 "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
               },
             ],
+            "existingTypes": Object {
+              "CONSTANT_IN_NAMESPACE": true,
+            },
           },
         },
       },
@@ -307,12 +425,13 @@ PhpDocument {
   "properties": Array [],
   "references": Array [
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 215,
           "start": 208,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param1",
       "refKind": 3,
@@ -323,16 +442,20 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
           },
         ],
+        "existingTypes": Object {
+          "TestClassNamespace1": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 224,
           "start": 217,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param2",
       "refKind": 3,
@@ -343,16 +466,20 @@ PhpDocument {
             "name": "\\\\FullyQualified\\\\Name\\\\Class",
           },
         ],
+        "existingTypes": Object {
+          "\\\\FullyQualified\\\\Name\\\\Class": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {
-        "range": Range {
+      "description": "",
+      "location": Object {
+        "range": Object {
           "end": 238,
           "start": 226,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "name": "$param3",
       "refKind": 3,
@@ -363,6 +490,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "value": "",
     },
@@ -374,15 +504,18 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 259,
           "start": 254,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "refKind": 6,
       "scope": null,
@@ -399,6 +532,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -409,15 +545,18 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     ConstantAccess {
-      "location": Location {
-        "range": Range {
+      "location": Object {
+        "range": Object {
           "end": 313,
           "start": 292,
         },
-        "relativeUri": "case/namespaceDef/function.php",
+        "uri": "case/namespaceDef/function.php",
       },
       "refKind": 6,
       "scope": null,
@@ -434,6 +573,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -444,6 +586,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -454,6 +599,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -464,6 +612,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -474,6 +625,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -484,6 +638,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -494,6 +651,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -504,6 +664,9 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
     SimpleVariable {
@@ -514,6 +677,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
           },
         ],
+        "existingTypes": Object {
+          "TestClassNamespace1": true,
+        },
       },
     },
     SimpleVariable {
@@ -524,6 +690,9 @@ PhpDocument {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
     SimpleVariable {
@@ -534,6 +703,9 @@ PhpDocument {
             "name": "\\\\FullyQualified\\\\Name\\\\Class",
           },
         ],
+        "existingTypes": Object {
+          "\\\\FullyQualified\\\\Name\\\\Class": true,
+        },
       },
     },
     SimpleVariable {
@@ -544,6 +716,9 @@ PhpDocument {
             "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
           },
         ],
+        "existingTypes": Object {
+          "CONSTANT_IN_NAMESPACE": true,
+        },
       },
     },
     SimpleVariable {
@@ -554,14 +729,137 @@ PhpDocument {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
     },
   ],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 579,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/function.php",
+      },
+      "variables": Object {},
+    },
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 579,
+          "start": 175,
+        },
+        "uri": "case/namespaceDef/function.php",
+      },
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\NamespaceDef\\\\TestClassNamespace1",
+            },
+          ],
+          "existingTypes": Object {
+            "TestClassNamespace1": true,
+          },
+        },
+        "$param2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\FullyQualified\\\\Name\\\\Class",
+            },
+          ],
+          "existingTypes": Object {
+            "\\\\FullyQualified\\\\Name\\\\Class": true,
+          },
+        },
+        "$param3": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$var1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "boolean",
+            },
+          ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
+        },
+        "$var2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "string",
+            },
+          ],
+          "existingTypes": Object {
+            "string": true,
+          },
+        },
+        "$var3": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "\\\\NamespaceDef\\\\CONSTANT_IN_NAMESPACE",
+            },
+          ],
+          "existingTypes": Object {
+            "CONSTANT_IN_NAMESPACE": true,
+          },
+        },
+      },
+    },
+  ],
+  "text": "<?php
+namespace NamespaceDef;
+
+/**
+ * @param TestClassNamespace1 $param1
+ * @param \\\\FullyQualified\\\\Name\\\\Class $param2
+ * @param boolean
+ * 
+ * @return TestClassNamespace2
+ */
+function function_with_namespace($param1, $param2, bool $param3) {
+    $var1 = false;
+    $var2 = 'abc';
+    $var3 = CONSTANT_IN_NAMESPACE;
+
+    if ($var1 && $var2 && $var3) {
+        return $var3;
+    }
+
+    if ($var1 && $var2) {
+        return $var2;
+    }
+
+    if ($var1) {
+        return $param1;
+    }
+
+    if ($var2) {
+        return $param2;
+    }
+
+    if ($var3) {
+        return $param3;
+    }
+}",
+  "uri": "case/namespaceDef/function.php",
 }
 `;
 
 exports[`namespaceDef should assign namespace to phpDocument 5`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -580,5 +878,27 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [],
+  "scopeVarStack": Array [
+    ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 149,
+          "start": 0,
+        },
+        "uri": "case/namespaceDef/import_table.php",
+      },
+      "variables": Object {},
+    },
+  ],
+  "text": "<?php
+namespace ImportTable;
+
+use NamespaceDef\\\\{
+    const PI,
+    function function_with_namespace
+};
+use NamespaceDef\\\\TestClassNamespace1;
+",
+  "uri": "case/namespaceDef/import_table.php",
 }
 `;

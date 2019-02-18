@@ -2,85 +2,160 @@
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 1`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "int",
+    },
+    "resolvedValue": "50",
+    "scope": null,
+  },
+  "location": Object {
+    "range": Object {
       "end": 59,
       "start": 48,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "CONST1",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithConst",
+    "name": "\\\\ClassWithConst",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 2`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "float",
+    },
+    "resolvedValue": "3.14",
+    "scope": null,
+  },
+  "location": Object {
+    "range": Object {
       "end": 80,
       "start": 71,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "PI",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithConst",
+    "name": "\\\\ClassWithConst",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 3`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "string",
+    },
+    "resolvedValue": "'active'",
+    "scope": null,
+  },
+  "location": Object {
+    "range": Object {
       "end": 116,
       "start": 92,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_ACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithConst",
+    "name": "\\\\ClassWithConst",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 4`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "string",
+    },
+    "resolvedValue": "'inactive'",
+    "scope": null,
+  },
+  "location": Object {
+    "range": Object {
       "end": 156,
       "start": 128,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "STATUS_INACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithConst",
+    "name": "\\\\ClassWithConst",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of class constant symbols after encode and decode 5`] = `
 ClassConstant {
-  "location": Location {
-    "range": Range {
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "boolean",
+    },
+    "resolvedValue": "true",
+    "scope": null,
+  },
+  "location": Object {
+    "range": Object {
       "end": 184,
       "start": 168,
     },
+    "uri": "case/class_constants.php",
   },
   "name": TypeName {
     "name": "IS_ACTIVE",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithConst",
+    "name": "\\\\ClassWithConst",
   },
 }
 `;
@@ -89,14 +164,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 1`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 130,
       "start": 114,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST",
+    "name": "\\\\TEST_CONST",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -111,14 +187,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 2`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 156,
       "start": 139,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST1",
+    "name": "\\\\TEST_CONST1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -133,14 +210,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 3`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 175,
       "start": 158,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST2",
+    "name": "\\\\TEST_CONST2",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -155,14 +233,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 4`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 219,
       "start": 184,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST_STRING",
+    "name": "\\\\TEST_CONST_STRING",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -177,14 +256,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 5`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 275,
       "start": 227,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST_STRING2",
+    "name": "\\\\TEST_CONST_STRING2",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -199,14 +279,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 6`]
 Constant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 340,
       "start": 283,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_CONST_STRING3",
+    "name": "\\\\TEST_CONST_STRING3",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -221,14 +302,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 7`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 376,
       "start": 343,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\CONSTANT_SAMPLE1",
+    "name": "\\\\CONSTANT_SAMPLE1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -243,14 +325,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 8`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2512,
       "start": 2475,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+    "name": "\\\\TEST_DEFINE_CONSTANT",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -265,14 +348,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 9`]
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2562,
       "start": 2514,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_STRING_CONSTANT1",
+    "name": "\\\\TEST_STRING_CONSTANT1",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -287,14 +371,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 10`
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2624,
       "start": 2564,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_STRING_CONSTANT2",
+    "name": "\\\\TEST_STRING_CONSTANT2",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -309,14 +394,15 @@ exports[`symbolEncoding snapshot of constant symbols after encode and decode 11`
 DefineConstant {
   "acceptWhitespace": true,
   "hasEqual": false,
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 2693,
       "start": 2626,
     },
+    "uri": "case/global_symbols.php",
   },
   "name": TypeName {
-    "name": "\\\\\\\\TEST_STRING_CONSTANT3",
+    "name": "\\\\TEST_STRING_CONSTANT3",
   },
   "refKind": 5,
   "resolvedType": TypeName {
@@ -329,20 +415,22 @@ DefineConstant {
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 1`] = `
 Function {
-  "description": "",
-  "docParamTypes": Object {},
-  "location": Location {
-    "range": Range {
+  "_location": Object {
+    "range": Object {
       "end": 582,
       "start": 7,
     },
+    "uri": "case/function_declare.php",
   },
+  "description": "",
+  "docParamTypes": Object {},
   "name": TypeName {
-    "name": "\\\\\\\\test_function1",
+    "name": "\\\\test_function1",
   },
   "parameters": Array [
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$stringParam",
       "refKind": 3,
       "scope": null,
@@ -352,11 +440,15 @@ Function {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$intParam",
       "refKind": 3,
       "scope": null,
@@ -366,11 +458,15 @@ Function {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$boolParam",
       "refKind": 3,
       "scope": null,
@@ -380,11 +476,15 @@ Function {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$floatParam",
       "refKind": 3,
       "scope": null,
@@ -394,11 +494,21 @@ Function {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
       "value": "",
     },
   ],
   "scopeVar": ScopeVar {
+    "location": Object {
+      "range": Object {
+        "end": 582,
+        "start": 7,
+      },
+      "uri": "case/function_declare.php",
+    },
     "variables": Object {
       "$boolParam": TypeComposite {
         "_types": Array [
@@ -406,6 +516,9 @@ Function {
             "name": "boolean",
           },
         ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
       },
       "$floatParam": TypeComposite {
         "_types": Array [
@@ -413,6 +526,9 @@ Function {
             "name": "float",
           },
         ],
+        "existingTypes": Object {
+          "float": true,
+        },
       },
       "$intParam": TypeComposite {
         "_types": Array [
@@ -420,6 +536,9 @@ Function {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
       "$stringParam": TypeComposite {
         "_types": Array [
@@ -427,6 +546,9 @@ Function {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "$test": TypeComposite {
         "_types": Array [
@@ -434,6 +556,9 @@ Function {
             "name": "int",
           },
         ],
+        "existingTypes": Object {
+          "int": true,
+        },
       },
     },
   },
@@ -452,43 +577,56 @@ Function {
         "name": "float",
       },
       TypeName {
-        "name": "\\\\\\\\TestClass",
+        "name": "\\\\TestClass",
       },
     ],
+    "existingTypes": Object {
+      "\\\\TestClass": true,
+      "boolean": true,
+      "float": true,
+      "int": true,
+      "string": true,
+    },
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of function symbols after encode and decode 2`] = `
 Function {
-  "description": "Test function 2",
-  "docParamTypes": Object {},
-  "location": Location {
-    "range": Range {
+  "_location": Object {
+    "range": Object {
       "end": 754,
       "start": 708,
     },
+    "uri": "case/function_declare.php",
   },
+  "description": "Test function 2",
+  "docParamTypes": Object {},
   "name": TypeName {
-    "name": "\\\\\\\\test_function2",
+    "name": "\\\\test_function2",
   },
   "parameters": Array [
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$param1",
       "refKind": 3,
       "scope": null,
       "type": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\\\\\array|int",
+            "name": "\\\\array|int",
           },
         ],
+        "existingTypes": Object {
+          "\\\\array|int": true,
+        },
       },
       "value": "",
     },
     Parameter {
-      "location": Location {},
+      "description": "",
+      "location": Object {},
       "name": "$param2",
       "refKind": 3,
       "scope": null,
@@ -498,18 +636,31 @@ Function {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
       "value": "",
     },
   ],
   "scopeVar": ScopeVar {
+    "location": Object {
+      "range": Object {
+        "end": 754,
+        "start": 708,
+      },
+      "uri": "case/function_declare.php",
+    },
     "variables": Object {
       "$param1": TypeComposite {
         "_types": Array [
           TypeName {
-            "name": "\\\\\\\\array|int",
+            "name": "\\\\array|int",
           },
         ],
+        "existingTypes": Object {
+          "\\\\array|int": true,
+        },
       },
       "$param2": TypeComposite {
         "_types": Array [
@@ -517,11 +668,15 @@ Function {
             "name": "string",
           },
         ],
+        "existingTypes": Object {
+          "string": true,
+        },
       },
     },
   },
   "typeAggregate": TypeComposite {
     "_types": Array [],
+    "existingTypes": Object {},
   },
 }
 `;
@@ -529,11 +684,56 @@ Function {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 1`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {
+        "$optional": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 674,
       "start": 627,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -543,7 +743,7 @@ Method {
     "name": "__construct",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -551,11 +751,32 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 2`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {},
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 734,
       "start": 680,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -565,7 +786,7 @@ Method {
     "name": "method1",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -573,11 +794,26 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 3`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {},
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 840,
       "start": 740,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -587,7 +823,7 @@ Method {
     "name": "method2",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -595,11 +831,32 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 4`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {},
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "int",
+        },
+      ],
+      "existingTypes": Object {
+        "int": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 897,
       "start": 846,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -609,7 +866,7 @@ Method {
     "name": "method3",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -617,11 +874,32 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 5`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {},
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "float",
+        },
+      ],
+      "existingTypes": Object {
+        "float": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 957,
       "start": 903,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -631,7 +909,7 @@ Method {
     "name": "method4",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -639,11 +917,44 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 6`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$firstParam",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {
+        "$firstParam": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 1020,
       "start": 963,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -653,7 +964,7 @@ Method {
     "name": "protectedMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -661,11 +972,110 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 7`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$first",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$second",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {
+        "$first": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$optional1": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "$optional2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$second": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "null",
+        },
+      ],
+      "existingTypes": Object {
+        "null": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 1139,
       "start": 1026,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -675,7 +1085,7 @@ Method {
     "name": "privateMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -683,11 +1093,66 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 8`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 1227,
       "start": 1145,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 32,
@@ -697,7 +1162,7 @@ Method {
     "name": "staticMethod",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
@@ -705,11 +1170,70 @@ Method {
 exports[`symbolEncoding snapshot of method symbols after encode and decode 9`] = `
 Method {
   "description": "",
-  "location": Location {
-    "range": Range {
+  "func": Function {
+    "_location": Object {},
+    "description": "",
+    "docParamTypes": Object {},
+    "parameters": Array [
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param1",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$param2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "value": "",
+      },
+    ],
+    "scopeVar": ScopeVar {
+      "location": Object {},
+      "variables": Object {
+        "$param1": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+        "$param2": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    "typeAggregate": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "",
+        },
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "": true,
+        "boolean": true,
+      },
+    },
+  },
+  "location": Object {
+    "range": Object {
       "end": 1431,
       "start": 1233,
     },
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -719,13 +1243,14 @@ Method {
     "name": "publicMethod1",
   },
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of phpDoc symbols after encode and decode 1`] = `
 PhpDocument {
+  "argumentLists": Array [],
   "classConstants": Array [],
   "classes": Array [],
   "constants": Array [],
@@ -742,18 +1267,151 @@ PhpDocument {
   "modifiedTime": -1,
   "properties": Array [],
   "references": Array [],
+  "scopeVarStack": Array [],
+  "text": "<?php
+require_once('../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+include(\\"lib.php\\");
+require_once($CFG->dirroot . '/blocks/coach/lib.php');
+if (!isset($userid)) $userid = $USER->id;
+require_login(0, false);
+$context_system = context_system::instance();
+$PAGE->set_context($context_system);
+
+$PAGE->set_pagelayout('admin');
+$PAGE->set_title($SITE->fullname);
+$PAGE->set_heading(get_string('assign:addnewinstructor', 'tool_instructor'));
+$PAGE->set_url($CFG->wwwroot . '/admin/tool/instructor/assign_instructor_add.php');
+admin_externalpage_setup('tool_expertise_assign');
+
+require_capability('tool/instructor:manage_instructors', $context_system);
+
+$id = \\"\\";
+$html = \\"\\";
+if (isset($_POST['sub'])) {
+    $id = $_POST['id'];
+    if ($id == \\"\\") $id = $_POST['instructor'];
+	// echo \\"<pre>\\".print_r($_POST,TRUE).\\"</pre>\\";
+	// die();
+    if (isset($_POST['areas'])) {
+        $update = $_POST['areas'];
+        $old = $DB->get_records('instructor_assign_expertise', array('userid' => $id));
+        $existing = array();
+        if (!empty($old)) {
+            foreach ($old as $row) {
+                if (!in_array($row->expertiseid, $update)) {
+                    $DB->delete_records('instructor_assign_expertise', array('userid' => $id, 'expertiseid' => $row->expertiseid));
+                } else {
+                    $existing[] = $row->expertiseid;
+                }
+            }
+        }
+        if (!empty($update)) {
+            foreach ($update as $key => $val) {
+                if (in_array($val, $existing)) continue;
+                $new = new stdClass();
+                $new->expertiseid = $val;
+                $new->userid = $id;
+                $new->timemodified = time();
+                $DB->insert_record('instructor_assign_expertise', $new);
+            }
+        }
+        update_profile_field_value('IsInstructor', $id, MDL_CHECKBOX_CHECK);
+        echo \\"<script type='text/javascript'>window.location='assign_instructor.php?u=1'</script>\\";
+    } else $html .= get_string('expertise:errorempty', 'tool_instructor');
+}
+
+$add = \\"Add new\\";
+
+$lock = \\"\\";
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $add = \\"Edit\\";
+    $lock = \\"readOnly\\";
+}
+$instructors_options = get_instructors_options($id);
+$area_options = get_expertise_area_options($id);
+
+require_capability('tool/instructor:manage_instructors', $context_system);
+
+$html_lib = \\"<script src='js/jquery-1.12.2.min.js'></script>
+  <script src='js/jquery.tablesorter.js'></script>
+  <script src='resource/chosen.jquery.js' type='text/javascript'></script>
+  <link rel='stylesheet' href='resource/chosen.css'>
+  <link rel='stylesheet' href='js/style.css'>\\";
+
+$html .= get_string('assign:addnewinstructor:title', 'tool_instructor', $add);
+
+$html .= \\"<form action='assign_instructor_add.php' method='POST'>\\";
+$html .= \\"<table class='tablestyle10'>\\";
+$html .= \\"<tr>\\";
+$html .= \\"<td>\\" . get_string('assign:name', 'tool_instructor') . \\"</td>\\";
+$html .= \\"<td><select name='instructor' class='chosen-select' $lock>\\" . $instructors_options . \\"</select></td>\\";
+$html .= \\"</tr>\\";
+$html .= \\"<tr>\\";
+$html .= \\"<td>\\" . get_string('assign:expertise', 'tool_instructor') . \\"</td>\\";
+$html .= \\"<td><select name='areas[]' class='chosen-select' multiple data-placeholder='Enter name'>\\" . $area_options . \\"</select></td>\\";
+$html .= \\"</tr>\\";
+$html .= \\"<tr>\\";
+$html .= \\"<tr><td colspan='2'>\\";
+$html .= \\"<input type='submit' name='sub' value='Save changes' style='margin-bottom: 0px;'>\\";
+$html .= \\" <a href='assign_instructor.php' class='btn'> Cancel </a>\\";
+
+$html .= \\"<input type='hidden' name='id' value='\\" . $id . \\"'>\\";
+
+$html .= \\"</td></tr>\\";
+$html .= \\"</table>\\";
+$html .= \\"</form>\\";
+$html .= \\"<br><br>\\";
+
+echo $OUTPUT->header();
+echo $html;
+echo $OUTPUT->footer();
+echo $html_lib;
+?>
+<script type=\\"text/javascript\\">
+var config = {
+    '.chosen-select'           : {},
+    '.chosen-select-deselect'  : {allow_single_deselect:true},
+    '.chosen-select-no-single' : {disable_search_threshold:10},
+    '.chosen-select-no-results': {no_results_text:'Could not find any!'},
+    '.chosen-select-width'     : {width:\\"95%\\"}
+}
+for (var selector in config) {
+    $(selector).chosen(config[selector]);
+}
+</script>",
+  "uri": "case/bigFile.php",
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 1`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 95,
       "start": 72,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 32,
@@ -761,20 +1419,38 @@ Property {
   },
   "name": "$staticVariable",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 2`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
+    },
+  },
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 127,
       "start": 109,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -782,20 +1458,32 @@ Property {
   },
   "name": "$property1",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 3`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 150,
       "start": 140,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -803,21 +1491,33 @@ Property {
   },
   "name": "$property2",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 4`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 393,
       "start": 382,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -825,21 +1525,33 @@ Property {
   },
   "name": "$protected1",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 5`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 406,
       "start": 395,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -847,21 +1559,33 @@ Property {
   },
   "name": "$protected2",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 6`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
   "description": "Defines protected properties
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 419,
       "start": 408,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -869,20 +1593,32 @@ Property {
   },
   "name": "$protected3",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 7`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+  },
   "description": "",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 455,
       "start": 436,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -890,21 +1626,39 @@ Property {
   },
   "name": "$protectedProperty1",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;
 
 exports[`symbolEncoding snapshot of property symbols after encode and decode 8`] = `
 Property {
+  "_variable": Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "ClassWithMethod",
+        },
+      ],
+      "existingTypes": Object {
+        "ClassWithMethod": true,
+      },
+    },
+  },
   "description": "A private proterty which is only used by this class
 ",
-  "location": Location {
-    "range": Range {
+  "location": Object {
+    "range": Object {
       "end": 620,
       "start": 603,
     },
-    "relativeUri": "case/class_methods.php",
+    "uri": "case/class_methods.php",
   },
   "modifier": SymbolModifier {
     "modifier": 0,
@@ -912,7 +1666,7 @@ Property {
   },
   "name": "$privateProperty1",
   "scope": TypeName {
-    "name": "\\\\\\\\ClassWithMethod",
+    "name": "\\\\ClassWithMethod",
   },
 }
 `;

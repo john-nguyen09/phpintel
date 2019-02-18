@@ -1,7 +1,8 @@
 import { WordSeparator } from "./wordSeparator";
 import { DbStore, LevelDatasource, SubStore } from "../../../db";
 import { PhpDocument } from "../../../../symbol/phpDocument";
-import { Serializer } from "../../../serializer";
+import { Serializer, Deserializer } from "../../../serializer";
+import { inspect } from "util";
 
 export interface CompletionValue {
     uri: string;
@@ -10,6 +11,7 @@ export interface CompletionValue {
 
 export class CompletionIndex {
     public static readonly INFO_SEP = '#';
+    public static LIMIT = 100;
 
     private db: DbStore;
 
@@ -17,28 +19,51 @@ export class CompletionIndex {
         this.db = new SubStore(datasource, {
             name: name,
             version: 1,
-            keyEncoding: 'binary',
             valueEncoding: CompletionEncoding
         });
     }
 
-    async put(phpDoc: PhpDocument, name: string) {
+    async put(phpDoc: PhpDocument, name: string, prefix?: string) {
+        if (typeof name !== 'string') {
+            console.trace(`${phpDoc.uri} invalid put, name is not string ${inspect(name)}`);
+            return;
+        }
+
         let tokens = WordSeparator.getTokens(name);
 
         for (let token of tokens) {
-            await this.db.put(CompletionIndex.getKey(phpDoc.uri, token), {
+            let indexKey = CompletionIndex.getKey(phpDoc.uri, token);
+            if (typeof prefix !== 'undefined') {
+                indexKey = prefix + indexKey;
+            }
+
+            await this.db.put(indexKey, {
                 uri: phpDoc.uri,
                 name: name
             });
         }
     }
 
-    async search(keyword: string): Promise<CompletionValue[]> {
+    async search(keyword: string, prefix?: string): Promise<CompletionValue[]> {
         const db = this.db;
         let completions: CompletionValue[] = [];
 
+        if (typeof prefix !== 'undefined') {
+            keyword = prefix + keyword;
+        }
+
         return new Promise<CompletionValue[]>((resolve, reject) => {
-            db.prefixSearch(keyword)
+            let readStream: NodeJS.ReadableStream;
+
+            if (keyword.length === 0) {
+                readStream = db.createReadStream({
+                    limit: CompletionIndex.LIMIT
+                });
+            } else {
+                readStream = db.prefixSearch(keyword, CompletionIndex.LIMIT);
+            }
+
+            readStream
                 .on('data', (data) => {
                     completions.push(data.value);
                 })
@@ -53,11 +78,19 @@ export class CompletionIndex {
         });
     }
 
-    async del(uri:string, name: string) {
+    async del(uri: string, name: string, prefix?: string) {
+        if (typeof name !== 'string') {
+            return;
+        }
+
         let tokens = WordSeparator.getTokens(name);
 
+        if (typeof prefix === 'undefined') {
+            prefix = '';
+        }
+
         for (let token of tokens) {
-            await this.db.del(CompletionIndex.getKey(uri, token));
+            await this.db.del(prefix + CompletionIndex.getKey(uri, token));
         }
     }
 
@@ -66,22 +99,23 @@ export class CompletionIndex {
     }
 }
 
-const CompletionEncoding = {
+const CompletionEncoding: Level.Encoding = {
     type: 'completion-encoding',
-    encode: (value: CompletionValue): Buffer => {
+    encode: (value: CompletionValue): string => {
         let serializer = new Serializer();
 
-        serializer.writeString(value.uri);
-        serializer.writeString(value.name);
+        serializer.setString(value.uri);
+        serializer.setString(value.name);
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): CompletionValue => {
-        let serializer = new Serializer(buffer);
+    decode: (buffer: string): CompletionValue => {
+        let deserializer = new Deserializer(buffer);
 
         return {
-            uri: serializer.readString(),
-            name: serializer.readString()
+            uri: deserializer.readString(),
+            name: deserializer.readString()
         };
-    }
-} as Level.Encoding;
+    },
+    buffer: false
+};

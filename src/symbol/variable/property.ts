@@ -2,21 +2,20 @@ import { Symbol, TokenSymbol, ScopeMember, Locatable, DocBlockConsumer } from ".
 import { Variable } from "./variable";
 import { PropertyInitialiser } from "./propertyInitialiser";
 import { SymbolModifier } from "../meta/modifier";
-import { TokenKind, PhraseKind } from "../../util/parser";
-import { nonenumerable } from "../../util/decorator";
+import { TokenKind } from "../../util/parser";
 import { TypeComposite } from "../../type/composite";
 import { Location } from "../meta/location";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
+import { Class } from "../class/class";
 
 export class Property extends Symbol implements DocBlockConsumer, ScopeMember, Locatable {
     public name: string;
-    public location: Location = new Location();
+    public location: Location = {};
     public modifier: SymbolModifier = new SymbolModifier();
     public description: string = '';
     public scope: TypeName | null = null;
 
-    @nonenumerable
     private _variable: Variable = new Variable('');
 
     consume(other: Symbol): boolean {
@@ -47,5 +46,9 @@ export class Property extends Symbol implements DocBlockConsumer, ScopeMember, L
 
     set type(val: TypeComposite) {
         this._variable.type = val;
+    }
+
+    setScopeClass(scopeClass: Class) {
+        this.scope = scopeClass.name;
     }
 }

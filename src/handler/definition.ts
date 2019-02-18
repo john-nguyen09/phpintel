@@ -1,5 +1,5 @@
 import { TextDocumentPositionParams, Location as LspLocation } from "vscode-languageserver";
-import { ReferenceTable } from "../storage/table/referenceTable";
+import { ReferenceTable } from "../storage/table/reference";
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
@@ -38,6 +38,10 @@ export namespace DefinitionProvider {
         if (result.length === 0) {
             return null;
         } else if (result.length === 1) {
+            if (result[0].uri === undefined) {
+                return null;
+            }
+
             let defDoc = await phpDocTable.get(result[0].uri);
 
             if (defDoc === null) {
@@ -49,6 +53,10 @@ export namespace DefinitionProvider {
             let lspLocs: LspLocation[] = [];
 
             for (let loc of result) {
+                if (loc.uri === undefined) {
+                    continue;
+                }
+
                 let defDoc = await phpDocTable.get(loc.uri);
                 if (defDoc === null) {
                     continue;

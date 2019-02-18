@@ -22,8 +22,9 @@ export class Function extends Symbol implements
     NamedSymbol,
     Locatable,
     NameResolvable {
+    private _location: Location = {};
+
     public name: TypeName;
-    public location: Location = new Location();
     public parameters: Parameter[] = [];
     public scopeVar: ScopeVar = new ScopeVar();
     public typeAggregate: TypeComposite = new TypeComposite();
@@ -91,6 +92,15 @@ export class Function extends Symbol implements
         }
     }
 
+    get location(): Location {
+        return this._location;
+    }
+
+    set location(value: Location) {
+        this._location = value;
+        this.scopeVar.location = value;
+    }
+
     get types(): TypeName[] {
         return this.typeAggregate.types;
     }
@@ -108,14 +118,14 @@ export class Function extends Symbol implements
     public resolveName(importTable: ImportTable): void {
         for (let param of this.parameters) {
             for (let type of param.type.types) {
-                type.resolveToFullyQualified(importTable);
+                type.resolveReferenceToFqn(importTable);
             }
         }
 
-        this.name.resolveToFullyQualified(importTable);
+        this.name.resolveDefinitionToFqn(importTable);
 
         for (let type of this.typeAggregate.types) {
-            type.resolveToFullyQualified(importTable);
+            type.resolveReferenceToFqn(importTable);
         }
     }
 }

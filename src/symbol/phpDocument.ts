@@ -1,9 +1,8 @@
 import { Phrase, Parser } from "php7parser";
-import { Consumer, Symbol, needsNameResolve } from "./symbol";
+import { Consumer, Symbol } from "./symbol";
 import { NamespaceDefinition } from "./namespace/definition";
 import { ImportTable } from "../type/importTable";
 import { NamespaceUse } from "./namespace/use";
-import { nonenumerable } from "../util/decorator";
 import { Class } from "./class/class";
 import { Constant } from "./constant/constant";
 import { Function } from "./function/function";
@@ -13,12 +12,12 @@ import { Property } from "./variable/property";
 import { isReference, Reference } from "./reference";
 import { Position } from "vscode-languageserver";
 import { substr_count } from "../util/string";
+import { ScopeVar } from "./variable/scopeVar";
+import { ArgumentExpressionList } from "./argumentExpressionList";
 
 export class PhpDocument extends Symbol implements Consumer {
-    @nonenumerable
     public text: string;
 
-    @nonenumerable
     public uri: string;
 
     public modifiedTime: number = -1;
@@ -31,19 +30,22 @@ export class PhpDocument extends Symbol implements Consumer {
     public methods: Method[];
     public properties: Property[];
     public references: Reference[];
+    public argumentLists: ArgumentExpressionList[];
+
+    public scopeVarStack: ScopeVar[];
 
     constructor(uri: string, text: string) {
         super();
 
         this.uri = uri;
         this.text = text;
-        
+
         this.refresh();
     }
 
     refresh() {
         this.importTable = new ImportTable();;
-    
+
         this.classes = [];
         this.functions = [];
         this.constants = [];
@@ -51,6 +53,8 @@ export class PhpDocument extends Symbol implements Consumer {
         this.methods = [];
         this.properties = [];
         this.references = [];
+        this.argumentLists = [];
+        this.scopeVarStack = [];
     }
 
     getTree(): Phrase {
@@ -99,11 +103,7 @@ export class PhpDocument extends Symbol implements Consumer {
         return true;
     }
 
-    pushSymbol(symbol: Symbol | null): void {
-        if (symbol === null) {
-            return;
-        }
-
+    pushSymbol(symbol: Symbol): void {
         if (symbol instanceof Class) {
             this.classes.push(symbol);
         } else if (symbol instanceof Function) {
@@ -116,10 +116,16 @@ export class PhpDocument extends Symbol implements Consumer {
             this.methods.push(symbol);
         } else if (symbol instanceof Property) {
             this.properties.push(symbol);
+        } else if (symbol instanceof ArgumentExpressionList) {
+            this.argumentLists.push(symbol);
         }
-        
+
         if (isReference(symbol)) {
             this.references.push(symbol);
         }
+    }
+
+    pushScopeVar(scopeVar: ScopeVar): void {
+        this.scopeVarStack.push(scopeVar);
     }
 }

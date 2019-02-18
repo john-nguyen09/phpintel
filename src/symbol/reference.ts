@@ -2,6 +2,8 @@ import { TypeName } from "../type/name";
 import { TypeComposite } from "../type/composite";
 import { Symbol } from "./symbol";
 import { Location } from "./meta/location";
+import { Range } from "./meta/range";
+import { toRelative } from "../util/uri";
 
 export enum RefKind {
     Function = 1,
@@ -14,7 +16,10 @@ export enum RefKind {
     Class = 9,
     Method = 10,
     Property = 11,
-    ClassConst = 12
+    ClassConst = 12,
+    ScopedAccess = 13,
+    PropertyAccess = 14,
+    MethodCall = 15,
 }
 
 export interface Reference {
@@ -22,7 +27,9 @@ export interface Reference {
     refKind: RefKind;
     type: TypeName | TypeComposite;
     location: Location;
-    scope: TypeName | null;
+    scope: TypeName | TypeComposite | null;
+    scopeRange?: Range;
+    memberLocation?: Location;
 }
 
 export function isReference(symbol: Symbol): symbol is (Symbol & Reference) {
@@ -48,4 +55,23 @@ export function refKindToString(refKind: RefKind): string {
     }
 
     return '';
+}
+
+export namespace Reference {
+    export function convertToTest(ref: Reference): Reference {
+        const testRef = Object.assign({}, ref);
+
+        if (ref.location.uri !== undefined) {
+            testRef.location.uri = toRelative(ref.location.uri);
+        }
+        if (
+            ref.memberLocation !== undefined &&
+            ref.memberLocation.uri !== undefined &&
+            testRef.memberLocation !== undefined
+        ) {
+            testRef.memberLocation.uri = toRelative(ref.memberLocation.uri);
+        }
+
+        return testRef;
+    }
 }

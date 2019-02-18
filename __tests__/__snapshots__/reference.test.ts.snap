@@ -3,33 +3,50 @@
 exports[`Testing functions around references reference variable 1`] = `
 Array [
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 383,
         "start": 376,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
+    "scopeRange": Object {
+      "end": 567,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
           "name": "boolean",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+      },
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 425,
         "start": 418,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar",
     "scope": null,
+    "scopeRange": Object {
+      "end": 567,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -39,18 +56,29 @@ Array [
           "name": "int",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+        "int": true,
+      },
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 445,
         "start": 437,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 2,
     "refName": "$refVar2",
     "scope": null,
+    "scopeRange": Object {
+      "end": 567,
+      "start": 0,
+    },
     "type": TypeComposite {
       "_types": Array [
         TypeName {
@@ -60,6 +88,10 @@ Array [
           "name": "int",
         },
       ],
+      "existingTypes": Object {
+        "boolean": true,
+        "int": true,
+      },
     },
   },
 ]
@@ -68,225 +100,405 @@ Array [
 exports[`Testing functions around references should return the reference at the cursor 1`] = `
 Array [
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 30,
         "start": 21,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 8,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 51,
         "start": 37,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 1,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 241,
         "start": 226,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 241,
         "start": 226,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 9,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 255,
         "start": 243,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "staticMethod",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 255,
         "start": 243,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 10,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "staticMethod",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 304,
-        "start": 289,
+        "start": 272,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "$staticVariable",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 304,
-        "start": 289,
+        "start": 272,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 11,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "$staticVariable",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 340,
-        "start": 331,
+        "start": 315,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "IS_ACTIVE",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 340,
-        "start": 331,
+        "start": 315,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 12,
     "refName": undefined,
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
+    "scopeRange": undefined,
     "type": TypeName {
       "name": "IS_ACTIVE",
     },
   },
   Object {
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 371,
         "start": 351,
       },
+      "uri": "case/reference/references.php",
     },
+    "memberLocation": undefined,
+    "ranges": undefined,
     "refKind": 6,
     "refName": undefined,
     "scope": null,
+    "scopeRange": undefined,
     "type": TypeName {
-      "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+      "name": "\\\\TEST_DEFINE_CONSTANT",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 481,
+        "start": 460,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": Object {
+      "range": Object {
+        "end": 481,
+        "start": 469,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "ranges": undefined,
+    "refKind": 14,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testProperty",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 481,
+        "start": 460,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": Object {
+      "range": Object {
+        "end": 481,
+        "start": 469,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "ranges": undefined,
+    "refKind": 14,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testProperty",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 505,
+        "start": 484,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": undefined,
+    "ranges": undefined,
+    "refKind": 15,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testMethod",
+    },
+  },
+  Object {
+    "location": Object {
+      "range": Object {
+        "end": 505,
+        "start": 484,
+      },
+      "uri": "case/reference/references.php",
+    },
+    "memberLocation": undefined,
+    "ranges": undefined,
+    "refKind": 15,
+    "refName": undefined,
+    "scope": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "\\\\TestClass",
+        },
+      ],
+      "existingTypes": Object {
+        "TestClass": true,
+      },
+    },
+    "scopeRange": undefined,
+    "type": TypeName {
+      "name": "testMethod",
     },
   },
 ]
@@ -301,18 +513,19 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
@@ -323,18 +536,19 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
@@ -345,36 +559,31 @@ Array [
         "name": "TestInterface",
       },
     ],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1911,
         "start": 924,
       },
+      "uri": "case/global_symbols.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\TestClass",
+      "name": "\\\\TestClass",
     },
     "traits": Array [],
   },
   Function {
     "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
-      "range": Range {
-        "end": 582,
-        "start": 7,
-      },
-    },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -384,11 +593,15 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -398,11 +611,15 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -412,11 +629,15 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -426,11 +647,21 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -438,6 +669,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -445,6 +679,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -452,6 +689,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -459,6 +699,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -466,44 +709,39 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Function {
     "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
-      "range": Range {
-        "end": 582,
-        "start": 7,
-      },
-    },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -513,11 +751,15 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -527,11 +769,15 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -541,11 +787,15 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -555,11 +805,21 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -567,6 +827,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -574,6 +837,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -581,6 +847,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -588,6 +857,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -595,44 +867,39 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Function {
     "description": "",
-    "docParamTypes": Object {},
-    "location": Location {
-      "range": Range {
-        "end": 582,
-        "start": 7,
-      },
-    },
     "name": TypeName {
-      "name": "\\\\\\\\test_function1",
+      "name": "\\\\test_function1",
     },
     "parameters": Array [
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$stringParam",
         "refKind": 3,
         "scope": null,
@@ -642,11 +909,15 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$intParam",
         "refKind": 3,
         "scope": null,
@@ -656,11 +927,15 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$boolParam",
         "refKind": 3,
         "scope": null,
@@ -670,11 +945,15 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "value": "",
       },
       Parameter {
-        "location": Location {},
+        "description": "",
+        "location": Object {},
         "name": "$floatParam",
         "refKind": 3,
         "scope": null,
@@ -684,11 +963,21 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "value": "",
       },
     ],
     "scopeVar": ScopeVar {
+      "location": Object {
+        "range": Object {
+          "end": 582,
+          "start": 7,
+        },
+        "uri": "case/function_declare.php",
+      },
       "variables": Object {
         "$boolParam": TypeComposite {
           "_types": Array [
@@ -696,6 +985,9 @@ Array [
               "name": "boolean",
             },
           ],
+          "existingTypes": Object {
+            "boolean": true,
+          },
         },
         "$floatParam": TypeComposite {
           "_types": Array [
@@ -703,6 +995,9 @@ Array [
               "name": "float",
             },
           ],
+          "existingTypes": Object {
+            "float": true,
+          },
         },
         "$intParam": TypeComposite {
           "_types": Array [
@@ -710,6 +1005,9 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
         "$stringParam": TypeComposite {
           "_types": Array [
@@ -717,6 +1015,9 @@ Array [
               "name": "string",
             },
           ],
+          "existingTypes": Object {
+            "string": true,
+          },
         },
         "$test": TypeComposite {
           "_types": Array [
@@ -724,72 +1025,124 @@ Array [
               "name": "int",
             },
           ],
+          "existingTypes": Object {
+            "int": true,
+          },
         },
       },
     },
-    "typeAggregate": TypeComposite {
-      "_types": Array [
-        TypeName {
-          "name": "boolean",
-        },
-        TypeName {
-          "name": "string",
-        },
-        TypeName {
-          "name": "int",
-        },
-        TypeName {
-          "name": "float",
-        },
-        TypeName {
-          "name": "\\\\\\\\TestClass",
-        },
-      ],
-    },
+    "types": Array [
+      TypeName {
+        "name": "boolean",
+      },
+      TypeName {
+        "name": "string",
+      },
+      TypeName {
+        "name": "int",
+      },
+      TypeName {
+        "name": "float",
+      },
+      TypeName {
+        "name": "\\\\TestClass",
+      },
+    ],
   },
   Class {
     "extend": null,
     "implements": Array [],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1433,
         "start": 7,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "traits": Array [],
   },
   Class {
     "extend": null,
     "implements": Array [],
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 1433,
         "start": 7,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
       "visibility": 0,
     },
     "name": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
     "traits": Array [],
   },
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
         "end": 1227,
         "start": 1145,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -799,16 +1152,65 @@ Array [
       "name": "staticMethod",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Method {
     "description": "",
-    "location": Location {
-      "range": Range {
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
         "end": 1227,
         "start": 1145,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -818,16 +1220,35 @@ Array [
       "name": "staticMethod",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 95,
         "start": 72,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -835,16 +1256,35 @@ Array [
     },
     "name": "$staticVariable",
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
     "description": "",
-    "location": Location {
-      "range": Range {
+    "location": Object {
+      "range": Object {
         "end": 95,
         "start": 72,
       },
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 32,
@@ -852,55 +1292,261 @@ Array [
     },
     "name": "$staticVariable",
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithMethod",
+      "name": "\\\\ClassWithMethod",
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "true",
+    },
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 168,
       },
+      "uri": "case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
   },
   ClassConstant {
-    "location": Location {
-      "range": Range {
+    "constant": Constant {
+      "name": TypeName {
+        "name": "",
+      },
+      "type": TypeName {
+        "name": "boolean",
+      },
+      "value": "true",
+    },
+    "location": Object {
+      "range": Object {
         "end": 184,
         "start": 168,
       },
+      "uri": "case/class_constants.php",
     },
     "name": TypeName {
       "name": "IS_ACTIVE",
     },
     "scope": TypeName {
-      "name": "\\\\\\\\ClassWithConst",
+      "name": "\\\\ClassWithConst",
     },
   },
   DefineConstant {
-    "acceptWhitespace": true,
-    "hasEqual": false,
-    "location": Location {
-      "range": Range {
-        "end": 2512,
-        "start": 2475,
-      },
-    },
     "name": TypeName {
-      "name": "\\\\\\\\TEST_DEFINE_CONSTANT",
+      "name": "\\\\TEST_DEFINE_CONSTANT",
     },
-    "refKind": 5,
-    "resolvedType": TypeName {
+    "type": TypeName {
       "name": "boolean",
     },
-    "resolvedValue": "false",
-    "scope": null,
+    "value": "false",
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "TestClass",
+          },
+        ],
+        "existingTypes": Object {
+          "TestClass": true,
+        },
+      },
+    },
+    "description": "Reprehenderit magna velit mollit ipsum do.
+",
+    "location": Object {
+      "range": Object {
+        "end": 1388,
+        "start": 1375,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$testProperty",
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$testParameter",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
+  },
+  Method {
+    "description": "Non culpa nostrud mollit esse sunt laboris in irure ullamco cupidatat amet.
+",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$testParameter",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "location": Object {},
+        "variables": Object {
+          "$testParameter": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "TestClass",
+              },
+            ],
+            "existingTypes": Object {
+              "TestClass": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1909,
+        "start": 1794,
+      },
+      "uri": "case/global_symbols.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "testMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\TestClass",
+    },
   },
 ]
 `;

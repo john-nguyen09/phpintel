@@ -1,5 +1,5 @@
 export function intToBytes(value: number): string {
-    let bytes = [];
+    let bytes = [4];
     let i = 4;
 
     do {

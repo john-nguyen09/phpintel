@@ -1,6 +1,6 @@
 import { Class } from "../symbol/class/class";
 import { TypeName } from "../type/name";
-import { Serializer } from "./serializer";
+import { Serializer, Deserializer } from "./serializer";
 import { Symbol } from "../symbol/symbol";
 import { Function } from "../symbol/function/function";
 import { Variable } from "../symbol/variable/variable";
@@ -12,48 +12,48 @@ import { Property } from "../symbol/variable/property";
 import { DefineConstant } from "../symbol/constant/defineConstant";
 
 interface SymbolEncoding {
-    encode(symbol: Symbol): Buffer;
-    decode(buffer: Buffer): Symbol;
+    encode(symbol: Symbol): string;
+    decode(buffer: string): Symbol;
 }
 
 const classEncoding =  {
-    encode: (symbol: Class): Buffer => {
+    encode: (symbol: Class): string => {
         let serializer = new Serializer();
 
-        serializer.writeTypeName(symbol.name);
-        serializer.writeTypeName(symbol.extend);
-        serializer.writeLocation(symbol.location);
-        serializer.writeSymbolModifier(symbol.modifier);
+        serializer.setTypeName(symbol.name);
+        serializer.setTypeName(symbol.extend);
+        serializer.setLocation(symbol.location);
+        serializer.setSymbolModifier(symbol.modifier);
 
-        serializer.writeInt32(symbol.implements.length);
+        serializer.setInt32(symbol.implements.length);
         for (let name of symbol.implements) {
-            serializer.writeTypeName(name);
+            serializer.setTypeName(name);
         }
 
-        serializer.writeInt32(symbol.traits.length);
+        serializer.setInt32(symbol.traits.length);
         for (let name of symbol.traits) {
-            serializer.writeTypeName(name);
+            serializer.setTypeName(name);
         }
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Class => {
-        let serializer = new Serializer(buffer);
+    decode: (buffer: string): Class => {
+        let deserializer = new Deserializer(buffer);
         let theClass = new Class();
 
-        theClass.name = serializer.readTypeName() || new TypeName('');
-        theClass.extend = serializer.readTypeName();
-        theClass.location = serializer.readLocation();
-        theClass.modifier = serializer.readSymbolModifier();
-        
-        let noImplements = serializer.readInt32();
+        theClass.name = deserializer.readTypeName() || new TypeName('');
+        theClass.extend = deserializer.readTypeName();
+        theClass.location = deserializer.readLocation();
+        theClass.modifier = deserializer.readSymbolModifier();
+
+        let noImplements = deserializer.readInt32();
         for (let i = 0; i < noImplements; i++) {
-            theClass.implements.push(serializer.readTypeName() || new TypeName(''));
+            theClass.implements.push(deserializer.readTypeName() || new TypeName(''));
         }
-        
-        let noTraits = serializer.readInt32();
+
+        let noTraits = deserializer.readInt32();
         for (let i = 0; i < noTraits; i++) {
-            theClass.traits.push(serializer.readTypeName() || new TypeName(''));
+            theClass.traits.push(deserializer.readTypeName() || new TypeName(''));
         }
 
         return theClass;
@@ -61,58 +61,58 @@ const classEncoding =  {
 }
 
 const functionEncoding = {
-    encode: (symbol: Function): Buffer => {
+    encode: (symbol: Function): string => {
         let serializer = new Serializer();
 
-        serializer.writeTypeName(symbol.name);
-        serializer.writeLocation(symbol.location);
-        serializer.writeString(symbol.description);
+        serializer.setTypeName(symbol.name);
+        serializer.setLocation(symbol.location);
+        serializer.setString(symbol.description);
 
-        serializer.writeInt32(symbol.types.length);
+        serializer.setInt32(symbol.types.length);
         for (let type of symbol.types) {
-            serializer.writeTypeName(type);
+            serializer.setTypeName(type);
         }
 
-        serializer.writeInt32(Object.keys(symbol.scopeVar.variables).length);
+        serializer.setInt32(Object.keys(symbol.scopeVar.variables).length);
         for (let varName in symbol.scopeVar.variables) {
             let variable = symbol.scopeVar.variables[varName];
 
-            serializer.writeString(varName);
-            serializer.writeTypeComposite(variable);
+            serializer.setString(varName);
+            serializer.setTypeComposite(variable);
         }
 
-        serializer.writeInt32(symbol.parameters.length);
+        serializer.setInt32(symbol.parameters.length);
         for (let param of symbol.parameters) {
-            serializer.writeString(param.name);
-            serializer.writeTypeComposite(param.type);
+            serializer.setString(param.name);
+            serializer.setTypeComposite(param.type);
         }
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Function => {
+    decode: (buffer: string): Function => {
         let func = new Function();
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
 
-        func.name = serializer.readTypeName() || new TypeName('');
-        func.location = serializer.readLocation();
-        func.description = serializer.readString();
+        func.name = deserializer.readTypeName() || new TypeName('');
+        func.location = deserializer.readLocation();
+        func.description = deserializer.readString();
 
-        let noTypes = serializer.readInt32();
+        let noTypes = deserializer.readInt32();
         for (let i = 0; i < noTypes; i++) {
-            func.typeAggregate.push(serializer.readTypeName() || new TypeName(''));
+            func.typeAggregate.push(deserializer.readTypeName() || new TypeName(''));
         }
 
-        let noVariables = serializer.readInt32();
+        let noVariables = deserializer.readInt32();
         for (let i = 0; i < noVariables; i++) {
-            func.scopeVar.set(new Variable(serializer.readString(), serializer.readTypeComposite()));
+            func.scopeVar.set(new Variable(deserializer.readString(), deserializer.readTypeComposite()));
         }
 
-        let noParams = serializer.readInt32();
+        let noParams = deserializer.readInt32();
         for (let i = 0; i < noParams; i++) {
             let param = new Parameter();
 
-            param.name = serializer.readString();
-            param.type = serializer.readTypeComposite();
+            param.name = deserializer.readString();
+            param.type = deserializer.readTypeComposite();
             func.parameters.push(param);
         }
 
@@ -123,22 +123,22 @@ const functionEncoding = {
 const constEncoding = {
     DEFINE_CONSTANT: 1,
     CONSTANT: 2,
-    encode: (symbol: Constant): Buffer => {
+    encode: (symbol: Constant): string => {
         let serializer = new Serializer();
 
-        serializer.writeInt32(symbol instanceof DefineConstant ?
+        serializer.setInt32(symbol instanceof DefineConstant ?
             constEncoding.DEFINE_CONSTANT : constEncoding.CONSTANT);
-        serializer.writeTypeName(symbol.name);
-        serializer.writeLocation(symbol.location);
-        serializer.writeTypeName(symbol.type);
-        serializer.writeString(symbol.value);
+        serializer.setTypeName(symbol.name);
+        serializer.setLocation(symbol.location);
+        serializer.setTypeName(symbol.type);
+        serializer.setString(symbol.value);
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Constant => {
+    decode: (buffer: string): Constant => {
         let constant: Constant;
-        let serializer = new Serializer(buffer);
-        let constType = serializer.readInt32();
+        let deserializer = new Deserializer(buffer);
+        let constType = deserializer.readInt32();
 
         if (constType == constEncoding.DEFINE_CONSTANT) {
             constant = new DefineConstant();
@@ -146,82 +146,96 @@ const constEncoding = {
             constant = new Constant();
         }
 
-        constant.name = serializer.readTypeName() || new TypeName('');
-        constant.location = serializer.readLocation();
-        constant.resolvedType = serializer.readTypeName();
-        constant.resolvedValue = serializer.readString();
+        constant.name = deserializer.readTypeName() || new TypeName('');
+        constant.location = deserializer.readLocation();
+        constant.resolvedType = deserializer.readTypeName();
+        constant.resolvedValue = deserializer.readString();
 
         return constant;
     }
 };
 
 const classConstEncoding = {
-    encode: (symbol: ClassConstant): Buffer => {
+    encode: (symbol: ClassConstant): string => {
         let serializer = new Serializer();
 
-        serializer.writeTypeName(symbol.name);
-        serializer.writeLocation(symbol.location);
-        serializer.writeTypeName(symbol.type);
-        serializer.writeTypeName(symbol.scope);
-        serializer.writeString(symbol.value);
+        serializer.setTypeName(symbol.name);
+        serializer.setLocation(symbol.location);
+        serializer.setTypeName(symbol.type);
+        serializer.setTypeName(symbol.scope);
+        serializer.setString(symbol.value);
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): ClassConstant => {
+    decode: (buffer: string): ClassConstant => {
         let classConst = new ClassConstant();
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
 
-        classConst.name = serializer.readTypeName() || new TypeName('');
-        classConst.location = serializer.readLocation();
-        classConst.type = serializer.readTypeName() || new TypeName('');
-        classConst.scope = serializer.readTypeName();
-        classConst.value = serializer.readString();
+        classConst.name = deserializer.readTypeName() || new TypeName('');
+        classConst.location = deserializer.readLocation();
+        classConst.type = deserializer.readTypeName() || new TypeName('');
+        classConst.scope = deserializer.readTypeName();
+        classConst.value = deserializer.readString();
 
         return classConst;
     }
 };
 
 const methodEncoding = {
-    encode: (symbol: Method): Buffer => {
+    encode: (symbol: Method): string => {
         let serializer = new Serializer();
 
-        serializer.writeTypeName(symbol.name);
-        serializer.writeLocation(symbol.location);
-        serializer.writeString(symbol.description);
-        serializer.writeSymbolModifier(symbol.modifier);
-        serializer.writeTypeName(symbol.scope);
+        serializer.setTypeName(symbol.name);
+        serializer.setLocation(symbol.location);
+        serializer.setString(symbol.description);
+        serializer.setSymbolModifier(symbol.modifier);
+        serializer.setTypeName(symbol.scope);
 
-        serializer.writeInt32(symbol.types.length);
+        serializer.setInt32(symbol.types.length);
         for (let type of symbol.types) {
-            serializer.writeTypeName(type);
+            serializer.setTypeName(type);
         }
 
-        serializer.writeInt32(Object.keys(symbol.variables).length);
+        serializer.setInt32(Object.keys(symbol.variables).length);
         for (let varName in symbol.variables) {
-            serializer.writeString(varName);
-            serializer.writeTypeComposite(symbol.variables[varName]);
+            serializer.setString(varName);
+            serializer.setTypeComposite(symbol.variables[varName]);
+        }
+
+        serializer.setInt32(symbol.parameters.length);
+        for (let param of symbol.parameters) {
+            serializer.setString(param.name);
+            serializer.setTypeComposite(param.type);
         }
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Method => {
+    decode: (buffer: string): Method => {
         let method = new Method();
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
 
-        method.name = serializer.readTypeName() || new TypeName('');
-        method.location = serializer.readLocation();
-        method.description = serializer.readString();
-        method.modifier = serializer.readSymbolModifier();
-        method.scope = serializer.readTypeName();
+        method.name = deserializer.readTypeName() || new TypeName('');
+        method.location = deserializer.readLocation();
+        method.description = deserializer.readString();
+        method.modifier = deserializer.readSymbolModifier();
+        method.scope = deserializer.readTypeName();
 
-        let noTypes = serializer.readInt32();
+        let noTypes = deserializer.readInt32();
         for (let i = 0; i < noTypes; i++) {
-            method.pushType(serializer.readTypeName());
+            method.pushType(deserializer.readTypeName());
         }
 
-        let noVariables = serializer.readInt32();
+        let noVariables = deserializer.readInt32();
         for (let i = 0; i < noVariables; i++) {
-            method.setVariable(new Variable(serializer.readString(), serializer.readTypeComposite()));
+            method.setVariable(new Variable(deserializer.readString(), deserializer.readTypeComposite()));
+        }
+
+        const noParams = deserializer.readInt32();
+        for (let i = 0; i < noParams; i++) {
+            const param = new Parameter();
+            param.name = deserializer.readString();
+            param.type = deserializer.readTypeComposite();
+            method.pushParam(param);
         }
 
         return method;
@@ -229,28 +243,28 @@ const methodEncoding = {
 };
 
 const propertyEncoding = {
-    encode: (symbol: Property): Buffer => {
+    encode: (symbol: Property): string => {
         let serializer = new Serializer();
 
-        serializer.writeString(symbol.name);
-        serializer.writeLocation(symbol.location);
-        serializer.writeString(symbol.description);
-        serializer.writeSymbolModifier(symbol.modifier);
-        serializer.writeTypeName(symbol.scope);
-        serializer.writeTypeComposite(symbol.type);
+        serializer.setString(symbol.name);
+        serializer.setLocation(symbol.location);
+        serializer.setString(symbol.description);
+        serializer.setSymbolModifier(symbol.modifier);
+        serializer.setTypeName(symbol.scope);
+        serializer.setTypeComposite(symbol.type);
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Property => {
+    decode: (buffer: string): Property => {
         let property = new Property();
-        let serializer = new Serializer(buffer);
+        let deserializer = new Deserializer(buffer);
 
-        property.name = serializer.readString();
-        property.location = serializer.readLocation();
-        property.description = serializer.readString();
-        property.modifier = serializer.readSymbolModifier();
-        property.scope = serializer.readTypeName();
-        property.type = serializer.readTypeComposite();
+        property.name = deserializer.readString();
+        property.location = deserializer.readLocation();
+        property.description = deserializer.readString();
+        property.modifier = deserializer.readSymbolModifier();
+        property.scope = deserializer.readTypeName();
+        property.type = deserializer.readTypeComposite();
 
         return property;
     }
@@ -276,7 +290,7 @@ const symbolEncodingMap: {[key: number]: SymbolEncoding} = {
 
 export = {
     type: 'symbol-encoding',
-    encode: (symbol: Symbol): Buffer => {
+    encode: (symbol: Symbol): string => {
         let serializer = new Serializer();
         let symbolType: Type | null = null;
 
@@ -295,22 +309,22 @@ export = {
         }
 
         if (symbolType !== null) {
-            serializer.writeInt32(symbolType);
+            serializer.setInt32(symbolType);
 
             let encoding = symbolEncodingMap[symbolType];
-            serializer.writeBuffer(encoding.encode(symbol));
+            serializer.setBuffer(encoding.encode(symbol));
         }
 
         return serializer.getBuffer();
     },
-    decode: (buffer: Buffer): Symbol => {
-        if (buffer.byteLength == 0) {
-            throw new Error(`Invalid buffer`);            
+    decode: (buffer: string): Symbol => {
+        if (typeof buffer !== 'string' || buffer.length == 0) {
+            throw new Error(`Invalid buffer`);
         }
 
-        let serializer = new Serializer(buffer);
-        let type = serializer.readInt32();
-        buffer = serializer.readBuffer();
+        let deserializer = new Deserializer(buffer);
+        let type = deserializer.readInt32();
+        buffer = deserializer.readBuffer();
 
         if (type in symbolEncodingMap) {
             return symbolEncodingMap[type].decode(buffer);
@@ -318,5 +332,5 @@ export = {
 
         throw new Error(`Invalid buffer`);
     },
-    buffer: true
+    buffer: false
 } as Level.Encoding;
