@@ -27,7 +27,7 @@ class ClassWithMethod
      */
     private $privateProperty1;
 
-    function __construct($optional = null) {
+    function __construct($optional = null, $optional2 = null) {
 
     }
 
