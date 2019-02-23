@@ -281,6 +281,7 @@ export namespace RefResolver {
             if (argumentList.scope === null) {
                 argumentList.type.resolveReferenceToFqn(phpDoc.importTable);
                 symbols.push(...await funcTable.get(argumentList.type.name));
+                symbols.push(...await methodTable.getByClass(argumentList.type.name, '__construct'));
             } else {
                 const classNames: string[] = [];
                 if (argumentList.scope instanceof TypeComposite) {

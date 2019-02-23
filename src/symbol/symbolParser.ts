@@ -46,6 +46,7 @@ import { ScopeVar } from "./variable/scopeVar";
 import { PropertyAccessExpression } from "./type/propertyAccessExpression";
 import { MemberName } from "./name/memberName";
 import { MethodCallExpression } from "./type/methodCallExpression";
+import { ObjectCreationExpression } from "./type/objectCreationExpression";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -189,7 +190,8 @@ export class SymbolParser implements Visitor {
                         new ArgumentExpressionList(),
                         parentKind !== PhraseKind.FunctionCallExpression &&
                         parentKind !== PhraseKind.MethodCallExpression &&
-                        parentKind !== PhraseKind.ScopedCallExpression
+                        parentKind !== PhraseKind.ScopedCallExpression &&
+                        parentKind !== PhraseKind.ObjectCreationExpression
                     );
                     break;
                 case PhraseKind.ConstantAccessExpression:
@@ -246,6 +248,12 @@ export class SymbolParser implements Visitor {
 
                     variable.scopeVar = this.getScopeVar();
                     this.pushSymbol(variable);
+                    break;
+                case PhraseKind.ObjectCreationExpression:
+                    const objCreationExpr = new ObjectCreationExpression();
+
+                    this.doc.pushSymbol(objCreationExpr.argumentList);
+                    this.pushSymbol(objCreationExpr);
                     break;
                 case PhraseKind.ClassTypeDesignator:
                     this.pushSymbol(new ClassTypeDesignator());

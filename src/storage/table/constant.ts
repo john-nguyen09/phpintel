@@ -5,7 +5,9 @@ import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
-import { TypeName } from "../../type/name";
+import { DefineConstant } from "../../symbol/constant/defineConstant";
+
+type GeneralConstant = Constant | DefineConstant;
 
 @injectable()
 export class ConstantTable {
@@ -26,8 +28,8 @@ export class ConstantTable {
         this.completionIndex = new CompletionIndex(level, 'constantCompletionIndex');
     }
 
-    async put(phpDoc: PhpDocument, symbol: Constant) {
-        let name = symbol.getName();
+    async put(phpDoc: PhpDocument, symbol: GeneralConstant) {
+        let name = symbol.name.toString();
 
         return Promise.all([
             BelongsToDoc.put(this.db, phpDoc, name, symbol),
@@ -36,12 +38,12 @@ export class ConstantTable {
         ]);
     }
 
-    async get(name: string): Promise<Constant[]> {
+    async get(name: string): Promise<GeneralConstant[]> {
         let uris = await NameIndex.get(this.nameIndex, name);
-        let constSymbols: Constant[] = [];
+        let constSymbols: GeneralConstant[] = [];
 
         for (let uri of uris) {
-            constSymbols.push(await BelongsToDoc.get<Constant>(this.db, uri, name));
+            constSymbols.push(await BelongsToDoc.get<GeneralConstant>(this.db, uri, name));
         }
 
         return constSymbols;

@@ -220,8 +220,8 @@ PhpDocument {
       ],
       "location": Object {
         "range": Object {
-          "end": 1390,
-          "start": 1374,
+          "end": 1409,
+          "start": 1393,
         },
         "uri": "case/class_methods.php",
       },
@@ -259,7 +259,7 @@ PhpDocument {
       "implements": Array [],
       "location": Object {
         "range": Object {
-          "end": 1433,
+          "end": 1452,
           "start": 7,
         },
         "uri": "case/class_methods.php",
@@ -330,11 +330,52 @@ PhpDocument {
             },
             "value": "",
           },
+          Parameter {
+            "description": "",
+            "expression": Expression {
+              "currentSymbol": ConstantAccess {
+                "location": Object {
+                  "range": Object {
+                    "end": 683,
+                    "start": 679,
+                  },
+                  "uri": "case/class_methods.php",
+                },
+                "refKind": 6,
+                "scope": null,
+                "type": TypeName {
+                  "name": "null",
+                },
+                "value": "null",
+              },
+            },
+            "location": Object {
+              "range": Object {
+                "end": 683,
+                "start": 666,
+              },
+              "uri": "case/class_methods.php",
+            },
+            "name": "$optional2",
+            "refKind": 3,
+            "scope": null,
+            "type": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
+            "value": "",
+          },
         ],
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 674,
+              "end": 693,
               "start": 627,
             },
             "uri": "case/class_methods.php",
@@ -350,13 +391,23 @@ PhpDocument {
                 "null": true,
               },
             },
+            "$optional2": TypeComposite {
+              "_types": Array [
+                TypeName {
+                  "name": "null",
+                },
+              ],
+              "existingTypes": Object {
+                "null": true,
+              },
+            },
           },
         },
         "types": Array [],
       },
       "location": Object {
         "range": Object {
-          "end": 674,
+          "end": 693,
           "start": 627,
         },
         "uri": "case/class_methods.php",
@@ -381,8 +432,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 734,
-              "start": 680,
+              "end": 753,
+              "start": 699,
             },
             "uri": "case/class_methods.php",
           },
@@ -396,8 +447,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 734,
-          "start": 680,
+          "end": 753,
+          "start": 699,
         },
         "uri": "case/class_methods.php",
       },
@@ -421,8 +472,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 840,
-              "start": 740,
+              "end": 859,
+              "start": 759,
             },
             "uri": "case/class_methods.php",
           },
@@ -432,8 +483,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 840,
-          "start": 740,
+          "end": 859,
+          "start": 759,
         },
         "uri": "case/class_methods.php",
       },
@@ -457,8 +508,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 897,
-              "start": 846,
+              "end": 916,
+              "start": 865,
             },
             "uri": "case/class_methods.php",
           },
@@ -472,8 +523,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 897,
-          "start": 846,
+          "end": 916,
+          "start": 865,
         },
         "uri": "case/class_methods.php",
       },
@@ -497,8 +548,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 957,
-              "start": 903,
+              "end": 976,
+              "start": 922,
             },
             "uri": "case/class_methods.php",
           },
@@ -512,8 +563,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 957,
-          "start": 903,
+          "end": 976,
+          "start": 922,
         },
         "uri": "case/class_methods.php",
       },
@@ -538,8 +589,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1010,
-                "start": 999,
+                "end": 1029,
+                "start": 1018,
               },
               "uri": "case/class_methods.php",
             },
@@ -556,8 +607,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 1020,
-              "start": 963,
+              "end": 1039,
+              "start": 982,
             },
             "uri": "case/class_methods.php",
           },
@@ -572,8 +623,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1020,
-          "start": 963,
+          "end": 1039,
+          "start": 982,
         },
         "uri": "case/class_methods.php",
       },
@@ -598,8 +649,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1064,
-                "start": 1058,
+                "end": 1083,
+                "start": 1077,
               },
               "uri": "case/class_methods.php",
             },
@@ -616,8 +667,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1073,
-                "start": 1066,
+                "end": 1092,
+                "start": 1085,
               },
               "uri": "case/class_methods.php",
             },
@@ -636,8 +687,8 @@ PhpDocument {
               "currentSymbol": ConstantAccess {
                 "location": Object {
                   "range": Object {
-                    "end": 1092,
-                    "start": 1088,
+                    "end": 1111,
+                    "start": 1107,
                   },
                   "uri": "case/class_methods.php",
                 },
@@ -651,8 +702,8 @@ PhpDocument {
             },
             "location": Object {
               "range": Object {
-                "end": 1092,
-                "start": 1075,
+                "end": 1111,
+                "start": 1094,
               },
               "uri": "case/class_methods.php",
             },
@@ -676,8 +727,8 @@ PhpDocument {
             "expression": Expression {},
             "location": Object {
               "range": Object {
-                "end": 1109,
-                "start": 1094,
+                "end": 1128,
+                "start": 1113,
               },
               "uri": "case/class_methods.php",
             },
@@ -694,8 +745,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 1139,
-              "start": 1026,
+              "end": 1158,
+              "start": 1045,
             },
             "uri": "case/class_methods.php",
           },
@@ -732,8 +783,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1139,
-          "start": 1026,
+          "end": 1158,
+          "start": 1045,
         },
         "uri": "case/class_methods.php",
       },
@@ -758,8 +809,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1188,
-                "start": 1181,
+                "end": 1207,
+                "start": 1200,
               },
               "uri": "case/class_methods.php",
             },
@@ -776,8 +827,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1197,
-                "start": 1190,
+                "end": 1216,
+                "start": 1209,
               },
               "uri": "case/class_methods.php",
             },
@@ -794,8 +845,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 1227,
-              "start": 1145,
+              "end": 1246,
+              "start": 1164,
             },
             "uri": "case/class_methods.php",
           },
@@ -818,8 +869,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1227,
-          "start": 1145,
+          "end": 1246,
+          "start": 1164,
         },
         "uri": "case/class_methods.php",
       },
@@ -844,8 +895,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1270,
-                "start": 1263,
+                "end": 1289,
+                "start": 1282,
               },
               "uri": "case/class_methods.php",
             },
@@ -862,8 +913,8 @@ PhpDocument {
             "description": "",
             "location": Object {
               "range": Object {
-                "end": 1279,
-                "start": 1272,
+                "end": 1298,
+                "start": 1291,
               },
               "uri": "case/class_methods.php",
             },
@@ -880,8 +931,8 @@ PhpDocument {
         "scopeVar": ScopeVar {
           "location": Object {
             "range": Object {
-              "end": 1431,
-              "start": 1233,
+              "end": 1450,
+              "start": 1252,
             },
             "uri": "case/class_methods.php",
           },
@@ -907,8 +958,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1431,
-          "start": 1233,
+          "end": 1450,
+          "start": 1252,
         },
         "uri": "case/class_methods.php",
       },
@@ -1276,11 +1327,67 @@ PhpDocument {
       },
       "value": "null",
     },
+    Parameter {
+      "description": "",
+      "expression": Expression {
+        "currentSymbol": ConstantAccess {
+          "location": Object {
+            "range": Object {
+              "end": 683,
+              "start": 679,
+            },
+            "uri": "case/class_methods.php",
+          },
+          "refKind": 6,
+          "scope": null,
+          "type": TypeName {
+            "name": "null",
+          },
+          "value": "null",
+        },
+      },
+      "location": Object {
+        "range": Object {
+          "end": 683,
+          "start": 666,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "name": "$optional2",
+      "refKind": 3,
+      "scope": null,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "null",
+          },
+        ],
+        "existingTypes": Object {
+          "null": true,
+        },
+      },
+      "value": "",
+    },
     ConstantAccess {
       "location": Object {
         "range": Object {
-          "end": 727,
-          "start": 723,
+          "end": 683,
+          "start": 679,
+        },
+        "uri": "case/class_methods.php",
+      },
+      "refKind": 6,
+      "scope": null,
+      "type": TypeName {
+        "name": "null",
+      },
+      "value": "null",
+    },
+    ConstantAccess {
+      "location": Object {
+        "range": Object {
+          "end": 746,
+          "start": 742,
         },
         "uri": "case/class_methods.php",
       },
@@ -1295,8 +1402,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1010,
-          "start": 999,
+          "end": 1029,
+          "start": 1018,
         },
         "uri": "case/class_methods.php",
       },
@@ -1313,8 +1420,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1064,
-          "start": 1058,
+          "end": 1083,
+          "start": 1077,
         },
         "uri": "case/class_methods.php",
       },
@@ -1331,8 +1438,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1073,
-          "start": 1066,
+          "end": 1092,
+          "start": 1085,
         },
         "uri": "case/class_methods.php",
       },
@@ -1351,8 +1458,8 @@ PhpDocument {
         "currentSymbol": ConstantAccess {
           "location": Object {
             "range": Object {
-              "end": 1092,
-              "start": 1088,
+              "end": 1111,
+              "start": 1107,
             },
             "uri": "case/class_methods.php",
           },
@@ -1366,8 +1473,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1092,
-          "start": 1075,
+          "end": 1111,
+          "start": 1094,
         },
         "uri": "case/class_methods.php",
       },
@@ -1389,8 +1496,8 @@ PhpDocument {
     ConstantAccess {
       "location": Object {
         "range": Object {
-          "end": 1092,
-          "start": 1088,
+          "end": 1111,
+          "start": 1107,
         },
         "uri": "case/class_methods.php",
       },
@@ -1406,8 +1513,8 @@ PhpDocument {
       "expression": Expression {},
       "location": Object {
         "range": Object {
-          "end": 1109,
-          "start": 1094,
+          "end": 1128,
+          "start": 1113,
         },
         "uri": "case/class_methods.php",
       },
@@ -1423,8 +1530,8 @@ PhpDocument {
     ConstantAccess {
       "location": Object {
         "range": Object {
-          "end": 1132,
-          "start": 1128,
+          "end": 1151,
+          "start": 1147,
         },
         "uri": "case/class_methods.php",
       },
@@ -1439,8 +1546,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1188,
-          "start": 1181,
+          "end": 1207,
+          "start": 1200,
         },
         "uri": "case/class_methods.php",
       },
@@ -1457,8 +1564,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1197,
-          "start": 1190,
+          "end": 1216,
+          "start": 1209,
         },
         "uri": "case/class_methods.php",
       },
@@ -1474,8 +1581,8 @@ PhpDocument {
     ConstantAccess {
       "location": Object {
         "range": Object {
-          "end": 1220,
-          "start": 1216,
+          "end": 1239,
+          "start": 1235,
         },
         "uri": "case/class_methods.php",
       },
@@ -1490,8 +1597,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1270,
-          "start": 1263,
+          "end": 1289,
+          "start": 1282,
         },
         "uri": "case/class_methods.php",
       },
@@ -1508,8 +1615,8 @@ PhpDocument {
       "description": "",
       "location": Object {
         "range": Object {
-          "end": 1279,
-          "start": 1272,
+          "end": 1298,
+          "start": 1291,
         },
         "uri": "case/class_methods.php",
       },
@@ -1526,8 +1633,8 @@ PhpDocument {
       "classRef": ClassRef {
         "location": Object {
           "range": Object {
-            "end": 1299,
-            "start": 1295,
+            "end": 1318,
+            "start": 1314,
           },
           "uri": "case/class_methods.php",
         },
@@ -1543,8 +1650,8 @@ PhpDocument {
       "isParentIncluded": true,
       "location": Object {
         "range": Object {
-          "end": 1316,
-          "start": 1295,
+          "end": 1335,
+          "start": 1314,
         },
         "uri": "case/class_methods.php",
       },
@@ -1552,8 +1659,8 @@ PhpDocument {
         "hasWhitespace": false,
         "location": Object {
           "range": Object {
-            "end": 1316,
-            "start": 1301,
+            "end": 1335,
+            "start": 1320,
           },
           "uri": "case/class_methods.php",
         },
@@ -1575,8 +1682,8 @@ PhpDocument {
     ClassRef {
       "location": Object {
         "range": Object {
-          "end": 1299,
-          "start": 1295,
+          "end": 1318,
+          "start": 1314,
         },
         "uri": "case/class_methods.php",
       },
@@ -1593,8 +1700,8 @@ PhpDocument {
         "hasWhitespace": false,
         "location": Object {
           "range": Object {
-            "end": 1332,
-            "start": 1326,
+            "end": 1351,
+            "start": 1345,
           },
           "uri": "case/class_methods.php",
         },
@@ -1609,8 +1716,8 @@ PhpDocument {
       "classRef": ClassRef {
         "location": Object {
           "range": Object {
-            "end": 1324,
-            "start": 1320,
+            "end": 1343,
+            "start": 1339,
           },
           "uri": "case/class_methods.php",
         },
@@ -1626,8 +1733,8 @@ PhpDocument {
       "isParentIncluded": true,
       "location": Object {
         "range": Object {
-          "end": 1332,
-          "start": 1320,
+          "end": 1351,
+          "start": 1339,
         },
         "uri": "case/class_methods.php",
       },
@@ -1642,8 +1749,8 @@ PhpDocument {
     ClassRef {
       "location": Object {
         "range": Object {
-          "end": 1324,
-          "start": 1320,
+          "end": 1343,
+          "start": 1339,
         },
         "uri": "case/class_methods.php",
       },
@@ -1658,8 +1765,8 @@ PhpDocument {
     ClassRef {
       "location": Object {
         "range": Object {
-          "end": 1359,
-          "start": 1355,
+          "end": 1378,
+          "start": 1374,
         },
         "uri": "case/class_methods.php",
       },
@@ -1692,16 +1799,16 @@ PhpDocument {
           ],
           "location": Object {
             "range": Object {
-              "end": 1390,
-              "start": 1374,
+              "end": 1409,
+              "start": 1393,
             },
             "uri": "case/class_methods.php",
           },
         },
         "location": Object {
           "range": Object {
-            "end": 1373,
-            "start": 1361,
+            "end": 1392,
+            "start": 1380,
           },
           "uri": "case/class_methods.php",
         },
@@ -1714,8 +1821,8 @@ PhpDocument {
       },
       "location": Object {
         "range": Object {
-          "end": 1373,
-          "start": 1361,
+          "end": 1392,
+          "start": 1380,
         },
         "uri": "case/class_methods.php",
       },
@@ -1744,8 +1851,8 @@ PhpDocument {
     ConstantAccess {
       "location": Object {
         "range": Object {
-          "end": 1424,
-          "start": 1419,
+          "end": 1443,
+          "start": 1438,
         },
         "uri": "case/class_methods.php",
       },
@@ -1761,7 +1868,7 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 1433,
+          "end": 1452,
           "start": 0,
         },
         "uri": "case/class_methods.php",
@@ -1771,7 +1878,7 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 674,
+          "end": 693,
           "start": 627,
         },
         "uri": "case/class_methods.php",
@@ -1787,13 +1894,23 @@ PhpDocument {
             "null": true,
           },
         },
+        "$optional2": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
       },
     },
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 734,
-          "start": 680,
+          "end": 753,
+          "start": 699,
         },
         "uri": "case/class_methods.php",
       },
@@ -1802,8 +1919,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 840,
-          "start": 740,
+          "end": 859,
+          "start": 759,
         },
         "uri": "case/class_methods.php",
       },
@@ -1812,8 +1929,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 897,
-          "start": 846,
+          "end": 916,
+          "start": 865,
         },
         "uri": "case/class_methods.php",
       },
@@ -1822,8 +1939,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 957,
-          "start": 903,
+          "end": 976,
+          "start": 922,
         },
         "uri": "case/class_methods.php",
       },
@@ -1832,8 +1949,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 1020,
-          "start": 963,
+          "end": 1039,
+          "start": 982,
         },
         "uri": "case/class_methods.php",
       },
@@ -1847,8 +1964,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 1139,
-          "start": 1026,
+          "end": 1158,
+          "start": 1045,
         },
         "uri": "case/class_methods.php",
       },
@@ -1880,8 +1997,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 1227,
-          "start": 1145,
+          "end": 1246,
+          "start": 1164,
         },
         "uri": "case/class_methods.php",
       },
@@ -1899,8 +2016,8 @@ PhpDocument {
     ScopeVar {
       "location": Object {
         "range": Object {
-          "end": 1431,
-          "start": 1233,
+          "end": 1450,
+          "start": 1252,
         },
         "uri": "case/class_methods.php",
       },
@@ -1945,7 +2062,7 @@ class ClassWithMethod
      */
     private $privateProperty1;
 
-    function __construct($optional = null) {
+    function __construct($optional = null, $optional2 = null) {
 
     }
 
@@ -2039,6 +2156,16 @@ PhpDocument {
         "range": Object {
           "end": 461,
           "start": 456,
+        },
+        "uri": "case/function_declare.php",
+      },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {
+        "range": Object {
+          "end": 495,
+          "start": 495,
         },
         "uri": "case/function_declare.php",
       },
@@ -2672,7 +2799,7 @@ PhpDocument {
       "refKind": 8,
       "scope": null,
       "type": TypeName {
-        "name": "\\\\TestClass",
+        "name": "TestClass",
       },
     },
     FunctionCall {
@@ -2953,6 +3080,10 @@ PhpDocument {
         },
         "uri": "case/global_symbols.php",
       },
+    },
+    ArgumentExpressionList {
+      "arguments": Array [],
+      "location": Object {},
     },
     ArgumentExpressionList {
       "arguments": Array [],

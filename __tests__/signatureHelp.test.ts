@@ -67,4 +67,13 @@ describe('provide signature help', () => {
             { testFile: path.join(getCaseDir(), 'signatureHelp', 'method.php'), line: 12, character: 26 },
         ]);
     });
+
+    it('parameters for type designator', async () => {
+        await testSignatureHelp([
+            'class_methods.php',
+        ], [
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'type_designator.php'), line: 2, character: 20 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'type_designator.php'), line: 4, character: 23 },
+        ]);
+    });
 });

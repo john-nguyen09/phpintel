@@ -3,6 +3,7 @@ import { ConstantAccess } from "../constant/constantAccess";
 import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
+import { ObjectCreationExpression } from "./objectCreationExpression";
 
 export class Expression extends TransformSymbol implements Consumer {
     public realSymbol: Expression;
@@ -67,7 +68,8 @@ export class Expression extends TransformSymbol implements Consumer {
     protected getType(symbol: Symbol): TypeName {
         if (
             symbol instanceof ConstantAccess ||
-            symbol instanceof ClassTypeDesignator
+            symbol instanceof ClassTypeDesignator ||
+            symbol instanceof ObjectCreationExpression
         ) {
             return symbol.type;
         } else if (symbol instanceof TokenSymbol) {

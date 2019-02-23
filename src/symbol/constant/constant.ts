@@ -1,4 +1,4 @@
-import { Symbol, TokenSymbol, Consumer, NamedSymbol, Locatable } from "../symbol";
+import { Symbol, TokenSymbol, Consumer, Locatable } from "../symbol";
 import { Expression } from "../type/expression";
 import { Location } from "../meta/location";
 import { TypeName } from "../../type/name";
@@ -7,7 +7,7 @@ import { FieldGetter } from "../fieldGetter";
 import { ImportTable } from "../../type/importTable";
 import { Reference, RefKind } from "../reference";
 
-export class Constant extends Symbol implements Consumer, Reference, FieldGetter, NamedSymbol, Locatable {
+export class Constant extends Symbol implements Consumer, Reference, FieldGetter, Locatable {
     public readonly refKind = RefKind.Constant;
     public name: TypeName = new TypeName('');
     public description: string;
@@ -82,10 +82,6 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
 
     getFields(): string[] {
         return ['name', 'value', 'type'];
-    }
-
-    public getName(): string {
-        return this.name.toString();
     }
 
     public resolveName(importTable: ImportTable): void {

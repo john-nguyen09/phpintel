@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`provide signature help parameters for type designator 1`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function __construct(null $optional, null $optional2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$optional",
+        },
+        Object {
+          "documentation": "",
+          "label": "$optional2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help parameters for type designator 2`] = `
+Object {
+  "activeParameter": 1,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function __construct(null $optional, null $optional2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$optional",
+        },
+        Object {
+          "documentation": "",
+          "label": "$optional2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`provide signature help shows list of parameters 1`] = `
 Object {
   "activeParameter": 0,

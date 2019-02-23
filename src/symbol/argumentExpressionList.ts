@@ -3,14 +3,14 @@ import { TokenKind } from "../util/parser";
 import { Location } from "./meta/location";
 import { Range } from "./meta/range";
 import { FieldGetter } from "./fieldGetter";
-import { Reference, RefKind } from "./reference";
 import { TypeName } from "../type/name";
 import { MethodCall } from "./function/methodCall";
 import { FunctionCall } from "./function/functionCall";
 import { MethodCallExpression } from "./type/methodCallExpression";
 import { TypeComposite } from "../type/composite";
+import { ObjectCreationExpression } from "./type/objectCreationExpression";
 
-export type CallExpression = MethodCall | FunctionCall | MethodCallExpression;
+export type CallExpression = MethodCall | FunctionCall | MethodCallExpression | ObjectCreationExpression;
 
 export class ArgumentExpressionList extends Symbol implements Consumer, FieldGetter {
     public arguments: Symbol[] = [];
