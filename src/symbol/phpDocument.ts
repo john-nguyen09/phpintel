@@ -14,6 +14,7 @@ import { Position } from "vscode-languageserver";
 import { substr_count } from "../util/string";
 import { ScopeVar } from "./variable/scopeVar";
 import { ArgumentExpressionList } from "./argumentExpressionList";
+import { DefineConstant } from "./constant/defineConstant";
 
 export class PhpDocument extends Symbol implements Consumer {
     public text: string;
@@ -25,7 +26,7 @@ export class PhpDocument extends Symbol implements Consumer {
 
     public classes: Class[];
     public functions: Function[];
-    public constants: Constant[];
+    public constants: (Constant | DefineConstant)[];
     public classConstants: ClassConstant[];
     public methods: Method[];
     public properties: Property[];
@@ -108,7 +109,7 @@ export class PhpDocument extends Symbol implements Consumer {
             this.classes.push(symbol);
         } else if (symbol instanceof Function) {
             this.functions.push(symbol);
-        } else if (symbol instanceof Constant) {
+        } else if (symbol instanceof Constant || symbol instanceof DefineConstant) {
             this.constants.push(symbol);
         } else if (symbol instanceof ClassConstant) {
             this.classConstants.push(symbol);

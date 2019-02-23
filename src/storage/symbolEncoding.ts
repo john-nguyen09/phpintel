@@ -135,8 +135,8 @@ const constEncoding = {
 
         return serializer.getBuffer();
     },
-    decode: (buffer: string): Constant => {
-        let constant: Constant;
+    decode: (buffer: string): Constant | DefineConstant => {
+        let constant: Constant | DefineConstant;
         let deserializer = new Deserializer(buffer);
         let constType = deserializer.readInt32();
 
@@ -298,7 +298,7 @@ export = {
             symbolType = Type.Class;
         } else if (symbol instanceof Function) {
             symbolType = Type.Function;
-        } else if (symbol instanceof Constant) {
+        } else if (symbol instanceof Constant || symbol instanceof DefineConstant) {
             symbolType = Type.Constant;
         } else if (symbol instanceof ClassConstant) {
             symbolType = Type.ClassConstant;

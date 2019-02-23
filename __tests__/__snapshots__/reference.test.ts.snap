@@ -1054,7 +1054,7 @@ Array [
     "implements": Array [],
     "location": Object {
       "range": Object {
-        "end": 1433,
+        "end": 1452,
         "start": 7,
       },
       "uri": "case/class_methods.php",
@@ -1073,7 +1073,7 @@ Array [
     "implements": Array [],
     "location": Object {
       "range": Object {
-        "end": 1433,
+        "end": 1452,
         "start": 7,
       },
       "uri": "case/class_methods.php",
@@ -1139,8 +1139,8 @@ Array [
     },
     "location": Object {
       "range": Object {
-        "end": 1227,
-        "start": 1145,
+        "end": 1246,
+        "start": 1164,
       },
       "uri": "case/class_methods.php",
     },
@@ -1207,8 +1207,8 @@ Array [
     },
     "location": Object {
       "range": Object {
-        "end": 1227,
-        "start": 1145,
+        "end": 1246,
+        "start": 1164,
       },
       "uri": "case/class_methods.php",
     },

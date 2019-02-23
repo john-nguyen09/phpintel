@@ -300,8 +300,20 @@ Constant {
 
 exports[`symbolEncoding snapshot of constant symbols after encode and decode 7`] = `
 DefineConstant {
-  "acceptWhitespace": true,
-  "hasEqual": false,
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "boolean",
+    },
+    "resolvedValue": "false",
+    "scope": null,
+  },
   "location": Object {
     "range": Object {
       "end": 376,
@@ -313,18 +325,25 @@ DefineConstant {
     "name": "\\\\CONSTANT_SAMPLE1",
   },
   "refKind": 5,
-  "resolvedType": TypeName {
-    "name": "boolean",
-  },
-  "resolvedValue": "false",
-  "scope": null,
 }
 `;
 
 exports[`symbolEncoding snapshot of constant symbols after encode and decode 8`] = `
 DefineConstant {
-  "acceptWhitespace": true,
-  "hasEqual": false,
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "boolean",
+    },
+    "resolvedValue": "false",
+    "scope": null,
+  },
   "location": Object {
     "range": Object {
       "end": 2512,
@@ -336,18 +355,25 @@ DefineConstant {
     "name": "\\\\TEST_DEFINE_CONSTANT",
   },
   "refKind": 5,
-  "resolvedType": TypeName {
-    "name": "boolean",
-  },
-  "resolvedValue": "false",
-  "scope": null,
 }
 `;
 
 exports[`symbolEncoding snapshot of constant symbols after encode and decode 9`] = `
 DefineConstant {
-  "acceptWhitespace": true,
-  "hasEqual": false,
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "string",
+    },
+    "resolvedValue": "'simple string'",
+    "scope": null,
+  },
   "location": Object {
     "range": Object {
       "end": 2562,
@@ -359,18 +385,25 @@ DefineConstant {
     "name": "\\\\TEST_STRING_CONSTANT1",
   },
   "refKind": 5,
-  "resolvedType": TypeName {
-    "name": "string",
-  },
-  "resolvedValue": "'simple string'",
-  "scope": null,
 }
 `;
 
 exports[`symbolEncoding snapshot of constant symbols after encode and decode 10`] = `
 DefineConstant {
-  "acceptWhitespace": true,
-  "hasEqual": false,
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "string",
+    },
+    "resolvedValue": "'not so simple string'",
+    "scope": null,
+  },
   "location": Object {
     "range": Object {
       "end": 2624,
@@ -382,18 +415,25 @@ DefineConstant {
     "name": "\\\\TEST_STRING_CONSTANT2",
   },
   "refKind": 5,
-  "resolvedType": TypeName {
-    "name": "string",
-  },
-  "resolvedValue": "'not so simple string'",
-  "scope": null,
 }
 `;
 
 exports[`symbolEncoding snapshot of constant symbols after encode and decode 11`] = `
 DefineConstant {
-  "acceptWhitespace": true,
-  "hasEqual": false,
+  "constant": Constant {
+    "acceptWhitespace": true,
+    "hasEqual": false,
+    "location": Object {},
+    "name": TypeName {
+      "name": "",
+    },
+    "refKind": 5,
+    "resolvedType": TypeName {
+      "name": "string",
+    },
+    "resolvedValue": "'more of ' . TEST_STRING_CONSTANT2",
+    "scope": null,
+  },
   "location": Object {
     "range": Object {
       "end": 2693,
@@ -405,11 +445,6 @@ DefineConstant {
     "name": "\\\\TEST_STRING_CONSTANT3",
   },
   "refKind": 5,
-  "resolvedType": TypeName {
-    "name": "string",
-  },
-  "resolvedValue": "'more of ' . TEST_STRING_CONSTANT2",
-  "scope": null,
 }
 `;
 
@@ -707,11 +742,39 @@ Method {
         },
         "value": "",
       },
+      Parameter {
+        "description": "",
+        "location": Object {},
+        "name": "$optional2",
+        "refKind": 3,
+        "scope": null,
+        "type": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "value": "",
+      },
     ],
     "scopeVar": ScopeVar {
       "location": Object {},
       "variables": Object {
         "$optional": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "null",
+            },
+          ],
+          "existingTypes": Object {
+            "null": true,
+          },
+        },
+        "$optional2": TypeComposite {
           "_types": Array [
             TypeName {
               "name": "null",
@@ -730,7 +793,7 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 674,
+      "end": 693,
       "start": 627,
     },
     "uri": "case/class_methods.php",
@@ -773,8 +836,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 734,
-      "start": 680,
+      "end": 753,
+      "start": 699,
     },
     "uri": "case/class_methods.php",
   },
@@ -810,8 +873,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 840,
-      "start": 740,
+      "end": 859,
+      "start": 759,
     },
     "uri": "case/class_methods.php",
   },
@@ -853,8 +916,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 897,
-      "start": 846,
+      "end": 916,
+      "start": 865,
     },
     "uri": "case/class_methods.php",
   },
@@ -896,8 +959,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 957,
-      "start": 903,
+      "end": 976,
+      "start": 922,
     },
     "uri": "case/class_methods.php",
   },
@@ -951,8 +1014,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 1020,
-      "start": 963,
+      "end": 1039,
+      "start": 982,
     },
     "uri": "case/class_methods.php",
   },
@@ -1072,8 +1135,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 1139,
-      "start": 1026,
+      "end": 1158,
+      "start": 1045,
     },
     "uri": "case/class_methods.php",
   },
@@ -1149,8 +1212,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 1227,
-      "start": 1145,
+      "end": 1246,
+      "start": 1164,
     },
     "uri": "case/class_methods.php",
   },
@@ -1230,8 +1293,8 @@ Method {
   },
   "location": Object {
     "range": Object {
-      "end": 1431,
-      "start": 1233,
+      "end": 1450,
+      "start": 1252,
     },
     "uri": "case/class_methods.php",
   },
