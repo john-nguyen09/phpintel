@@ -113,6 +113,226 @@ Array [
 ]
 `;
 
+exports[`Testing functions around references references for global variables 1`] = `
+Array [
+  Method {
+    "description": "",
+    "func": Function {
+      "_location": Object {},
+      "description": "",
+      "docParamTypes": Object {},
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "typeAggregate": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
+    "location": Object {
+      "range": Object {
+        "end": 753,
+        "start": 699,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+]
+`;
+
+exports[`Testing functions around references references for global variables 2`] = `
+Array [
+  Method {
+    "description": "",
+    "func": Function {
+      "_location": Object {},
+      "description": "",
+      "docParamTypes": Object {},
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "typeAggregate": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "float",
+          },
+        ],
+        "existingTypes": Object {
+          "float": true,
+        },
+      },
+    },
+    "location": Object {
+      "range": Object {
+        "end": 976,
+        "start": 922,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method4",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+]
+`;
+
+exports[`Testing functions around references references for global variables 3`] = `
+Array [
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 127,
+        "start": 109,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$property1",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+]
+`;
+
+exports[`Testing functions around references references for global variables 4`] = `
+Array [
+  Method {
+    "description": "",
+    "func": Function {
+      "_location": Object {},
+      "description": "",
+      "docParamTypes": Object {},
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "typeAggregate": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "",
+          },
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "": true,
+          "boolean": true,
+        },
+      },
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1450,
+        "start": 1252,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "publicMethod1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+]
+`;
+
 exports[`Testing functions around references should return the reference at the cursor 1`] = `
 Array [
   Object {

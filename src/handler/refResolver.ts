@@ -368,13 +368,24 @@ export namespace RefResolver {
             (ref.refKind === RefKind.Method || ref.refKind === RefKind.MethodCall) &&
             ref.scope !== null
         ) {
-            ResolveType.forType(ref.scope, (scope) => {
-                ResolveType.forType(ref.type, (type) => {
-                    scope.resolveReferenceToFqn(phpDoc.importTable);
+            let scopeNames: string[] = [];
+            const typeNames: string[] = [];
 
-                    methodInfos.push({ class: scope.name, method: type.name });
-                });
+            ResolveType.forType(ref.scope, (scope) => {
+                scope.resolveReferenceToFqn(phpDoc.importTable);
+                scopeNames.push(scope.name);
             });
+            ResolveType.forType(ref.type, (type) => {
+                typeNames.push(type.name);
+            });
+
+            scopeNames = await resolveVariableNames(phpDoc, scopeNames);
+
+            for (const scopeName of scopeNames) {
+                for (const typeName of typeNames) {
+                    methodInfos.push({ class: scopeName, method: typeName });
+                }
+            }
         }
 
         const methods: Method[] = [];
@@ -398,20 +409,20 @@ export namespace RefResolver {
     }
 
     export async function getPropSymbols(phpDoc: PhpDocument, ref: Reference): Promise<Property[]> {
-        if (ref.type instanceof TypeComposite) {
+        if (ref.type instanceof TypeComposite || ref.scope === null) {
             return [];
         }
 
         const propTable = App.get<PropertyTable>(PropertyTable);
         let classNames: string[] = [];
 
-        if (ref.scope !== null) {
-            ResolveType.forType(ref.scope, (type) => {
-                type.resolveReferenceToFqn(phpDoc.importTable);
+        ResolveType.forType(ref.scope, (type) => {
+            type.resolveReferenceToFqn(phpDoc.importTable);
 
-                classNames.push(type.name);
-            });
-        }
+            classNames.push(type.name);
+        });
+
+        classNames = await resolveVariableNames(phpDoc, classNames);
 
         const properties: Property[] = [];
         const promises: Promise<Property[]>[] = [];
