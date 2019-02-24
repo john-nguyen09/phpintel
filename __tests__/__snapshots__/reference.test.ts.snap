@@ -118,9 +118,8 @@ Array [
   Method {
     "description": "",
     "func": Function {
-      "_location": Object {},
       "description": "",
-      "docParamTypes": Object {},
+      "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
         "globalVariables": Map {},
@@ -128,23 +127,18 @@ Array [
         "location": Object {},
         "variables": Object {},
       },
-      "typeAggregate": TypeComposite {
-        "_types": Array [
-          TypeName {
-            "name": "boolean",
-          },
-        ],
-        "existingTypes": Object {
-          "boolean": true,
+      "types": Array [
+        TypeName {
+          "name": "boolean",
         },
-      },
+      ],
     },
     "location": Object {
       "range": Object {
         "end": 753,
         "start": 699,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -165,9 +159,8 @@ Array [
   Method {
     "description": "",
     "func": Function {
-      "_location": Object {},
       "description": "",
-      "docParamTypes": Object {},
+      "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
         "globalVariables": Map {},
@@ -175,23 +168,18 @@ Array [
         "location": Object {},
         "variables": Object {},
       },
-      "typeAggregate": TypeComposite {
-        "_types": Array [
-          TypeName {
-            "name": "float",
-          },
-        ],
-        "existingTypes": Object {
-          "float": true,
+      "types": Array [
+        TypeName {
+          "name": "float",
         },
-      },
+      ],
     },
     "location": Object {
       "range": Object {
         "end": 976,
         "start": 922,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -234,7 +222,7 @@ Array [
         "end": 127,
         "start": 109,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,
@@ -253,9 +241,8 @@ Array [
   Method {
     "description": "",
     "func": Function {
-      "_location": Object {},
       "description": "",
-      "docParamTypes": Object {},
+      "name": undefined,
       "parameters": Array [
         Parameter {
           "description": "",
@@ -297,27 +284,21 @@ Array [
           },
         },
       },
-      "typeAggregate": TypeComposite {
-        "_types": Array [
-          TypeName {
-            "name": "",
-          },
-          TypeName {
-            "name": "boolean",
-          },
-        ],
-        "existingTypes": Object {
-          "": true,
-          "boolean": true,
+      "types": Array [
+        TypeName {
+          "name": "",
         },
-      },
+        TypeName {
+          "name": "boolean",
+        },
+      ],
     },
     "location": Object {
       "range": Object {
         "end": 1450,
         "start": 1252,
       },
-      "uri": "file:///C:/Users/johnn/Development/phpintel/case/class_methods.php",
+      "uri": "case/class_methods.php",
     },
     "modifier": SymbolModifier {
       "modifier": 0,

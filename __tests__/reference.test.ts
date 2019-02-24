@@ -61,7 +61,13 @@ async function testRefAndDef(testCases: ReferenceTestCase[]) {
             }
         }
 
-        expect(prevDefs).toMatchSnapshot();
+        if (prevDefs === null) {
+            return;
+        }
+
+        expect(prevDefs.map((def) => {
+            return def.toObject();
+        })).toMatchSnapshot();
     }
 }
 
