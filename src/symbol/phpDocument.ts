@@ -15,6 +15,7 @@ import { substr_count } from "../util/string";
 import { ScopeVar } from "./variable/scopeVar";
 import { ArgumentExpressionList } from "./argumentExpressionList";
 import { DefineConstant } from "./constant/defineConstant";
+import { GlobalVariable } from "./variable/globalVariable";
 
 export class PhpDocument extends Symbol implements Consumer {
     public text: string;
@@ -32,6 +33,7 @@ export class PhpDocument extends Symbol implements Consumer {
     public properties: Property[];
     public references: Reference[];
     public argumentLists: ArgumentExpressionList[];
+    public globalVariables: GlobalVariable[];
 
     public scopeVarStack: ScopeVar[];
 
@@ -56,6 +58,7 @@ export class PhpDocument extends Symbol implements Consumer {
         this.references = [];
         this.argumentLists = [];
         this.scopeVarStack = [];
+        this.globalVariables = [];
     }
 
     getTree(): Phrase {
@@ -119,6 +122,8 @@ export class PhpDocument extends Symbol implements Consumer {
             this.properties.push(symbol);
         } else if (symbol instanceof ArgumentExpressionList) {
             this.argumentLists.push(symbol);
+        } else if (symbol instanceof GlobalVariable) {
+            this.globalVariables.push(symbol);
         }
 
         if (isReference(symbol)) {

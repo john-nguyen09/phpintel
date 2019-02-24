@@ -40,6 +40,7 @@ PhpDocument {
   ],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -54,6 +55,8 @@ PhpDocument {
   "references": Array [],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 61,
@@ -91,6 +94,7 @@ PhpDocument {
     },
   ],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -115,6 +119,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 47,
@@ -161,6 +167,7 @@ PhpDocument {
     },
   ],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -218,6 +225,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 72,
@@ -323,6 +332,8 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {
           "range": Object {
             "end": 579,
@@ -412,6 +423,7 @@ PhpDocument {
       ],
     },
   ],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -737,6 +749,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 579,
@@ -747,6 +761,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 579,
@@ -864,6 +880,7 @@ PhpDocument {
   "classes": Array [],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {
       "": "\\\\NamespaceDef\\\\TestClassNamespace1",
@@ -880,6 +897,8 @@ PhpDocument {
   "references": Array [],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 149,

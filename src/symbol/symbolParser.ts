@@ -47,6 +47,7 @@ import { PropertyAccessExpression } from "./type/propertyAccessExpression";
 import { MemberName } from "./name/memberName";
 import { MethodCallExpression } from "./type/methodCallExpression";
 import { ObjectCreationExpression } from "./type/objectCreationExpression";
+import { GlobalVariable } from "./variable/globalVariable";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
@@ -65,6 +66,7 @@ export class SymbolParser implements Visitor {
             start: 0,
             end: doc.text.length
         };
+        docScopeVar.isTop = true;
 
         this.pushScopeVar(docScopeVar);
     }
@@ -297,6 +299,12 @@ export class SymbolParser implements Visitor {
 
                     this.doc.pushSymbol(methodCallExpr.argumentList);
                     this.pushSymbol(methodCallExpr);
+                    break;
+                case PhraseKind.GlobalDeclaration:
+                    const globalVariable = new GlobalVariable();
+                    globalVariable.setScopeVar(this.getScopeVar());
+
+                    this.pushSymbol(globalVariable);
                     break;
 
                 default:

@@ -10,6 +10,8 @@ Array [
     },
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 2118,
@@ -101,6 +103,8 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 582,
@@ -223,6 +227,8 @@ Array [
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 754,
@@ -498,6 +504,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -599,6 +607,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -698,6 +708,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -796,6 +808,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -889,10 +903,14 @@ Array [
     "type": TypeComposite {
       "_types": Array [
         TypeName {
+          "name": "$var1",
+        },
+        TypeName {
           "name": "boolean",
         },
       ],
       "existingTypes": Object {
+        "$var1": true,
         "boolean": true,
       },
     },
@@ -953,10 +971,14 @@ Array [
     "type": TypeComposite {
       "_types": Array [
         TypeName {
+          "name": "$var1",
+        },
+        TypeName {
           "name": "boolean",
         },
       ],
       "existingTypes": Object {
+        "$var1": true,
         "boolean": true,
       },
     },
@@ -973,6 +995,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1055,6 +1079,810 @@ Array [
     },
     "scope": TypeName {
       "name": "\\\\TestClass",
+    },
+  },
+]
+`;
+
+exports[`completion provides completion for global variables 1`] = `
+Array [
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "ClassWithMethod",
+          },
+        ],
+        "existingTypes": Object {
+          "ClassWithMethod": true,
+        },
+      },
+    },
+    "description": "A private proterty which is only used by this class
+",
+    "location": Object {
+      "range": Object {
+        "end": 620,
+        "start": 603,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": "$privateProperty1",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 127,
+        "start": 109,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$property1",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 150,
+        "start": 140,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": "$property2",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "Defines protected properties
+",
+    "location": Object {
+      "range": Object {
+        "end": 393,
+        "start": 382,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$protected1",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "Defines protected properties
+",
+    "location": Object {
+      "range": Object {
+        "end": 406,
+        "start": 395,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$protected2",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "Defines protected properties
+",
+    "location": Object {
+      "range": Object {
+        "end": 419,
+        "start": 408,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$protected3",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 455,
+        "start": 436,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": "$protectedProperty1",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Property {
+    "_variable": Variable {
+      "expression": Expression {},
+      "location": Object {},
+      "name": "",
+      "refKind": 2,
+      "scope": null,
+      "scopeRange": undefined,
+      "type": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "boolean",
+          },
+        ],
+        "existingTypes": Object {
+          "boolean": true,
+        },
+      },
+    },
+    "description": "",
+    "location": Object {
+      "range": Object {
+        "end": 95,
+        "start": 72,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": "$staticVariable",
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$optional",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$optional2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$optional": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+          "$optional2": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 693,
+        "start": 627,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 0,
+    },
+    "name": TypeName {
+      "name": "__construct",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 753,
+        "start": 699,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 859,
+        "start": 759,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method2",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "int",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 916,
+        "start": 865,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method3",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {},
+      },
+      "types": Array [
+        TypeName {
+          "name": "float",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 976,
+        "start": 922,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "method4",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$first",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$second",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$optional1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$optional2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$first": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$optional1": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "null",
+              },
+            ],
+            "existingTypes": Object {
+              "null": true,
+            },
+          },
+          "$optional2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$second": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "null",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1158,
+        "start": 1045,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 4,
+    },
+    "name": TypeName {
+      "name": "privateMethod1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$firstParam",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$firstParam": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1039,
+        "start": 982,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 2,
+    },
+    "name": TypeName {
+      "name": "protectedMethod1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "",
+        },
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1450,
+        "start": 1252,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "publicMethod1",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
+    },
+  },
+  Method {
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param1",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+        Parameter {
+          "description": "",
+          "location": Object {},
+          "name": "$param2",
+          "refKind": 3,
+          "scope": null,
+          "type": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "value": "",
+        },
+      ],
+      "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
+        "location": Object {},
+        "variables": Object {
+          "$param1": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+          "$param2": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [
+        TypeName {
+          "name": "boolean",
+        },
+      ],
+    },
+    "location": Object {
+      "range": Object {
+        "end": 1246,
+        "start": 1164,
+      },
+      "uri": "case/class_methods.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 32,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "staticMethod",
+    },
+    "scope": TypeName {
+      "name": "\\\\ClassWithMethod",
     },
   },
 ]
@@ -1189,6 +2017,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1219,6 +2049,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1249,6 +2081,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1279,6 +2113,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1388,6 +2224,8 @@ Array [
       "name": undefined,
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {},
       },
@@ -1438,6 +2276,8 @@ Array [
         },
       ],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {},
         "variables": Object {
           "$testParameter": TypeComposite {

@@ -537,6 +537,8 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
+    "globalVariables": Map {},
+    "isTop": false,
     "location": Object {
       "range": Object {
         "end": 582,
@@ -679,6 +681,8 @@ Function {
     },
   ],
   "scopeVar": ScopeVar {
+    "globalVariables": Map {},
+    "isTop": false,
     "location": Object {
       "range": Object {
         "end": 754,
@@ -762,6 +766,8 @@ Method {
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {
         "$optional": TypeComposite {
@@ -820,6 +826,8 @@ Method {
     "docParamTypes": Object {},
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {},
     },
@@ -863,6 +871,8 @@ Method {
     "docParamTypes": Object {},
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {},
     },
@@ -900,6 +910,8 @@ Method {
     "docParamTypes": Object {},
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {},
     },
@@ -943,6 +955,8 @@ Method {
     "docParamTypes": Object {},
     "parameters": Array [],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {},
     },
@@ -999,6 +1013,8 @@ Method {
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {
         "$firstParam": TypeComposite {
@@ -1096,6 +1112,8 @@ Method {
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {
         "$first": TypeComposite {
@@ -1187,6 +1205,8 @@ Method {
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {
         "$param1": TypeComposite {
@@ -1264,6 +1284,8 @@ Method {
       },
     ],
     "scopeVar": ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {},
       "variables": Object {
         "$param1": TypeComposite {
@@ -1318,6 +1340,7 @@ PhpDocument {
   "classes": Array [],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {

@@ -148,6 +148,7 @@ PhpDocument {
   ],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -176,6 +177,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 187,
@@ -276,6 +279,7 @@ PhpDocument {
   ],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -373,6 +377,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 693,
@@ -430,6 +436,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 753,
@@ -470,6 +478,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 859,
@@ -506,6 +516,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 916,
@@ -546,6 +558,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 976,
@@ -605,6 +619,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1039,
@@ -743,6 +759,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1158,
@@ -843,6 +861,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1246,
@@ -929,6 +949,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1450,
@@ -1866,6 +1888,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 1452,
@@ -1876,6 +1900,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 693,
@@ -1907,6 +1933,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 753,
@@ -1917,6 +1945,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 859,
@@ -1927,6 +1957,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 916,
@@ -1937,6 +1969,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 976,
@@ -1947,6 +1981,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1039,
@@ -1962,6 +1998,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1158,
@@ -1995,6 +2033,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1246,
@@ -2014,6 +2054,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1450,
@@ -2303,6 +2345,8 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {
           "range": Object {
             "end": 582,
@@ -2437,6 +2481,8 @@ PhpDocument {
         },
       ],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {
           "range": Object {
             "end": 754,
@@ -2470,6 +2516,7 @@ PhpDocument {
       "types": Array [],
     },
   ],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -2905,13 +2952,21 @@ PhpDocument {
     SimpleVariable {
       "name": "$callback",
       "type": TypeComposite {
-        "_types": Array [],
-        "existingTypes": Object {},
+        "_types": Array [
+          TypeName {
+            "name": "$callback",
+          },
+        ],
+        "existingTypes": Object {
+          "$callback": true,
+        },
       },
     },
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 788,
@@ -2921,12 +2976,20 @@ PhpDocument {
       },
       "variables": Object {
         "$callback": TypeComposite {
-          "_types": Array [],
-          "existingTypes": Object {},
+          "_types": Array [
+            TypeName {
+              "name": "$callback",
+            },
+          ],
+          "existingTypes": Object {
+            "$callback": true,
+          },
         },
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 582,
@@ -2988,6 +3051,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 754,
@@ -3375,6 +3440,8 @@ PhpDocument {
       },
       "parameters": Array [],
       "scopeVar": ScopeVar {
+        "globalVariables": Map {},
+        "isTop": false,
         "location": Object {
           "range": Object {
             "end": 2118,
@@ -3387,6 +3454,7 @@ PhpDocument {
       "types": Array [],
     },
   ],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -3401,6 +3469,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1583,
@@ -3464,6 +3534,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 1909,
@@ -3511,6 +3583,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 2290,
@@ -3564,6 +3638,8 @@ PhpDocument {
           },
         ],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 2379,
@@ -3613,6 +3689,8 @@ PhpDocument {
         "name": undefined,
         "parameters": Array [],
         "scopeVar": ScopeVar {
+          "globalVariables": Map {},
+          "isTop": false,
           "location": Object {
             "range": Object {
               "end": 2917,
@@ -4328,6 +4406,8 @@ PhpDocument {
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 2919,
@@ -4338,6 +4418,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1583,
@@ -4348,6 +4430,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 1909,
@@ -4369,6 +4453,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 2118,
@@ -4379,6 +4465,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 2290,
@@ -4389,6 +4477,8 @@ PhpDocument {
       "variables": Object {},
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 2379,
@@ -4414,6 +4504,8 @@ PhpDocument {
       },
     },
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": false,
       "location": Object {
         "range": Object {
           "end": 2917,

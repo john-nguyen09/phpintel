@@ -25,6 +25,8 @@ import { ScopeVar } from "../symbol/variable/scopeVar";
 import { SignatureHelp, SignatureInformation } from "vscode-languageserver";
 import { Formatter } from "./formatter";
 import { ArgumentExpressionList } from "../symbol/argumentExpressionList";
+import { DefineConstant } from "../symbol/constant/defineConstant";
+import { GlobalVariableTable } from "../storage/table/globalVariable";
 
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
@@ -79,6 +81,7 @@ export namespace RefResolver {
         let keyword: string;
         let scopeName: string;
         let completions: CompletionValue[];
+        let scopeNames: string[] = [];
 
         switch (ref.refKind) {
             case RefKind.ConstantAccess:
@@ -105,29 +108,38 @@ export namespace RefResolver {
                 if (ref.scope === null) {
                     break;
                 }
-                if (ref.scope instanceof TypeName) {
-                    ref.scope.resolveReferenceToFqn(phpDoc.importTable);
-                }
-                scopeName = ref.scope.toString();
 
-                if (keyword.length > 0) {
-                    completions = await methodTable.search(scopeName, keyword);
-                    for (let completion of completions) {
-                        symbols.push(...await methodTable.getByClass(scopeName, completion.name));
+                scopeNames = [];
+                ResolveType.forType(ref.scope, (scope) => {
+                    scope.resolveReferenceToFqn(phpDoc.importTable);
+
+                    if (scope.isEmptyName()) {
+                        return;
                     }
 
-                    completions = await classConstTable.search(scopeName, keyword);
-                    for (let completion of completions) {
-                        symbols.push(...await classConstTable.getByClass(scopeName, completion.name));
+                    scopeNames.push(scope.name);
+                });
+
+                for (const scopeName of scopeNames) {
+                    if (keyword.length > 0) {
+                        completions = await methodTable.search(scopeName, keyword);
+                        for (let completion of completions) {
+                            symbols.push(...await methodTable.getByClass(scopeName, completion.name));
+                        }
+
+                        completions = await classConstTable.search(scopeName, keyword);
+                        for (let completion of completions) {
+                            symbols.push(...await classConstTable.getByClass(scopeName, completion.name));
+                        }
+                    } else {
+                        symbols.push(...await methodTable.searchAllInClass(scopeName, (method) => {
+                            return method.modifier.has(SymbolModifier.STATIC);
+                        }));
+                        symbols.push(...await propTable.searchAllInClass(scopeName, (prop) => {
+                            return prop.modifier.has(SymbolModifier.STATIC);
+                        }));
+                        symbols.push(...await classConstTable.searchAllInClass(scopeName));
                     }
-                } else {
-                    symbols.push(...await methodTable.searchAllInClass(scopeName, (method) => {
-                        return method.modifier.has(SymbolModifier.STATIC);
-                    }));
-                    symbols.push(...await propTable.searchAllInClass(scopeName, (prop) => {
-                        return prop.modifier.has(SymbolModifier.STATIC);
-                    }));
-                    symbols.push(...await classConstTable.searchAllInClass(scopeName));
                 }
 
                 break;
@@ -208,12 +220,13 @@ export namespace RefResolver {
                 }
 
                 keyword = getReferenceKeyword(ref, offset);
-                const scopeNames: string[] = [];
-
+                scopeNames = [];
                 ResolveType.forType(ref.scope, (scope) => {
                     scope.resolveReferenceToFqn(phpDoc.importTable);
                     scopeNames.push(scope.name);
                 });
+
+                scopeNames = await resolveVariableNames(phpDoc, scopeNames);
 
                 if (keyword.length > 0) {
                     const promises: Promise<Symbol[]>[] = [];
@@ -451,7 +464,7 @@ export namespace RefResolver {
     export async function getConstSymbols(
         phpDoc: PhpDocument,
         ref: Reference
-    ): Promise<Constant[]> {
+    ): Promise<(Constant | DefineConstant)[]> {
         if (ref.type instanceof TypeComposite) {
             return [];
         }
@@ -481,5 +494,31 @@ export namespace RefResolver {
         }
 
         return keyword;
+    }
+
+    export async function resolveVariableNames(phpDoc: PhpDocument, names: string[]): Promise<string[]> {
+        const globalVariableTable = App.get<GlobalVariableTable>(GlobalVariableTable);
+        const newNames: string[] = [];
+
+        for (let i = 0; i < names.length; i++) {
+            if (names[i].startsWith('$')) {
+                const globalVariables = await globalVariableTable.get(names[i]);
+
+                for (const globalVariable of globalVariables) {
+                    for (const type of globalVariable.type.types) {
+                        if (type.isVariable()) {
+                            continue;
+                        }
+
+                        type.resolveReferenceToFqn(phpDoc.importTable);
+                        newNames.push(type.name);
+                    }
+                }
+            } else {
+                newNames.push(names[i]);
+            }
+        }
+
+        return newNames;
     }
 }

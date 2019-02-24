@@ -17,10 +17,16 @@ async function testCompletions(definitionFiles: string[], testCases: CompletionT
     const refTable = App.get<ReferenceTable>(ReferenceTable);
     const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
-    for(let definitionFile of definitionFiles) {
-        await indexer.syncFileSystem(
-            await PhpFileInfo.createFileInfo(path.join(getCaseDir(), definitionFile))
-        );
+    for (let definitionFile of definitionFiles) {
+        const phpFileInfo = await PhpFileInfo.createFileInfo(path.join(getCaseDir(), definitionFile));
+
+        await indexer.syncFileSystem(phpFileInfo);
+
+        const phpDoc = await phpDocTable.get(pathToUri(phpFileInfo.filePath));
+
+        if (phpDoc !== null) {
+            dumpAstToDebug(path.basename(phpFileInfo.filePath) + '.ast.json', phpDoc.getTree());
+        }
     }
 
     for (let testCase of testCases) {
@@ -108,6 +114,18 @@ describe('completion', () => {
     it('provides completion for class reference inside function call', async () => {
         await testCompletions(['global_symbols.php'], [
             { path: path.join(getCaseDir(), 'completion', 'classRefAsParam.php'), offset: 48 },
+        ]);
+    });
+
+    it('provides completion for global variables', async () => {
+        await testCompletions([
+            'global_variables.php',
+            'class_methods.php',
+        ], [
+            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 14 },
+            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 28 },
+            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 100 },
+            { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 190 },
         ]);
     });
 });
