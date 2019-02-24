@@ -296,17 +296,15 @@ export namespace RefResolver {
                 symbols.push(...await funcTable.get(argumentList.type.name));
                 symbols.push(...await methodTable.getByClass(argumentList.type.name, '__construct'));
             } else {
-                const classNames: string[] = [];
-                if (argumentList.scope instanceof TypeComposite) {
-                    for (const scope of argumentList.scope.types) {
-                        scope.resolveReferenceToFqn(phpDoc.importTable);
+                let classNames: string[] = [];
 
-                        classNames.push(scope.name);
-                    }
-                } else {
-                    argumentList.scope.resolveReferenceToFqn(phpDoc.importTable);
-                    classNames.push(argumentList.scope.name);
-                }
+                ResolveType.forType(argumentList.scope, (scope) => {
+                    scope.resolveReferenceToFqn(phpDoc.importTable);
+                    classNames.push(scope.name);
+                });
+
+                classNames = await resolveVariableNames(phpDoc, classNames);
+
                 for (const className of classNames) {
                     symbols.push(...await methodTable.getByClass(className, argumentList.type.name));
                 }
