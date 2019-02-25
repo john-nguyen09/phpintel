@@ -27,6 +27,10 @@ export class TypeName {
     }
 
     public resolveReferenceToFqn(importTable: ImportTable) {
+        if (this.isVariable()) {
+            return;
+        }
+
         this.name = importTable.getFqn(this.name);
     }
 
@@ -60,5 +64,9 @@ export class TypeName {
 
     public isEmptyName(): boolean {
         return this.name == '';
+    }
+
+    public isVariable(): boolean {
+        return this.name.startsWith('$');
     }
 }

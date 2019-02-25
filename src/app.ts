@@ -16,6 +16,7 @@ import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
 import { ScopeVarTable } from "./storage/table/scopeVar";
 import { ArgumentListTable } from "./storage/table/argumentList";
+import { GlobalVariableTable } from "./storage/table/globalVariable";
 
 export interface AppOptions {
     storage: string;
@@ -77,6 +78,7 @@ export class Application {
         this.container.bind<ReferenceTable>(ReferenceTable).toSelf().inSingletonScope();
         this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf().inSingletonScope();
         this.container.bind<ArgumentListTable>(ArgumentListTable).toSelf().inSingletonScope();
+        this.container.bind<GlobalVariableTable>(GlobalVariableTable).toSelf().inSingletonScope();
     }
 
     protected initBind() {

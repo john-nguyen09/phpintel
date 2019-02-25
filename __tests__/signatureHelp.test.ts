@@ -76,4 +76,15 @@ describe('provide signature help', () => {
             { testFile: path.join(getCaseDir(), 'signatureHelp', 'type_designator.php'), line: 4, character: 23 },
         ]);
     });
+
+    it('parameters for global variables', async () => {
+        await testSignatureHelp([
+            'class_methods.php',
+            'global_variables.php',
+        ], [
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'global_variables.php'), line: 2, character: 19 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'global_variables.php'), line: 3, character: 25 },
+            { testFile: path.join(getCaseDir(), 'signatureHelp', 'global_variables.php'), line: 5, character: 23 },
+        ]);
+    });
 });

@@ -5,6 +5,7 @@ import { FieldGetter } from "../fieldGetter";
 import { Location } from "../meta/location";
 import { ScopeVar } from "./scopeVar";
 import { Class } from "../class/class";
+import { TypeName } from "../../type/name";
 
 export class SimpleVariable extends Variable implements FieldGetter, ScopeMember {
     public location: Location;
@@ -23,6 +24,10 @@ export class SimpleVariable extends Variable implements FieldGetter, ScopeMember
 
             if (this.scopeVar !== null) {
                 this.type = this.scopeVar.getType(this.name);
+
+                if (this.scopeVar.isGlobal(this.name)) {
+                    this.type.push(new TypeName(this.name));
+                }
             }
 
             if (this.name == '$this' && this.scopeClass !== null) {

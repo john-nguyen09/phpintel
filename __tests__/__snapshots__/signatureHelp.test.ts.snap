@@ -1,5 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`provide signature help parameters for global variables 1`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function publicMethod1($param1, $param2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$param1",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help parameters for global variables 2`] = `
+Object {
+  "activeParameter": 1,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function publicMethod1($param1, $param2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$param1",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`provide signature help parameters for global variables 3`] = `
+Object {
+  "activeParameter": 0,
+  "activeSignature": 0,
+  "signatures": Array [
+    Object {
+      "documentation": "",
+      "label": "function publicMethod1($param1, $param2)",
+      "parameters": Array [
+        Object {
+          "documentation": "",
+          "label": "$param1",
+        },
+        Object {
+          "documentation": "",
+          "label": "$param2",
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`provide signature help parameters for type designator 1`] = `
 Object {
   "activeParameter": 0,

@@ -176,9 +176,9 @@ export namespace Formatter {
         };
     }
 
-    export function getConstantCompletion(phpDoc: PhpDocument, constant: Constant): CompletionItem {
+    export function getConstantCompletion(phpDoc: PhpDocument, constant: Constant | DefineConstant): CompletionItem {
         return {
-            label: constant.getName(),
+            label: constant.name.name,
             kind: CompletionItemKind.Constant,
             documentation: constant.description,
             insertText: constant.name.getQualified(phpDoc.importTable)

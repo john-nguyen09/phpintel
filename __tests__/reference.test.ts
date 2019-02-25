@@ -1,12 +1,12 @@
 import { App } from '../src/app';
 import { Indexer, PhpFileInfo } from '../src/index/indexer';
-import { getCaseDir, getDebugDir, dumpAstToDebug } from "../src/testHelper";
+import { getCaseDir, getDebugDir } from "../src/testHelper";
 import * as path from "path";
 import { ReferenceTable } from '../src/storage/table/reference';
 import { pathToUri } from '../src/util/uri';
 import { RefResolver } from "../src/handler/refResolver";
 import { PhpDocumentTable } from '../src/storage/table/phpDoc';
-import { RefKind, Reference } from '../src/symbol/reference';
+import { Reference } from '../src/symbol/reference';
 import { Symbol } from '../src/symbol/symbol';
 
 interface ReferenceTestCase {
@@ -42,11 +42,6 @@ async function testRefAndDef(testCases: ReferenceTestCase[]) {
         for (let i = testCase.startOffset; i <= testCase.endOffset; i++) {
             const ref = await refTable.findAt(testFileUri, i);
 
-            console.log({
-                offset: i,
-                ref
-            });
-
             expect(ref).not.toEqual(null);
             if (ref === null) {
                 break;
@@ -65,6 +60,14 @@ async function testRefAndDef(testCases: ReferenceTestCase[]) {
                 expect(thisDefs).toEqual(prevDefs);
             }
         }
+
+        if (prevDefs === null) {
+            return;
+        }
+
+        expect(prevDefs.map((def) => {
+            return def.toObject();
+        })).toMatchSnapshot();
     }
 }
 
@@ -188,6 +191,47 @@ describe('Testing functions around references', () => {
 
         let phpDoc = await phpDocTable.get(refTestUri);
         let ref = await refTable.findAt(refTestUri, 20);
+    });
+
+    it('references for global variables', async () => {
+        await testRefAndDef([
+            {
+                definitionFiles: [
+                    path.join(getCaseDir(), 'global_variables.php'),
+                    path.join(getCaseDir(), 'class_methods.php'),
+                ],
+                testFile: path.join(getCaseDir(), 'reference', 'global_variables.php'),
+                startOffset: 14,
+                endOffset: 23,
+            },
+            {
+                definitionFiles: [
+                    path.join(getCaseDir(), 'global_variables.php'),
+                    path.join(getCaseDir(), 'class_methods.php'),
+                ],
+                testFile: path.join(getCaseDir(), 'reference', 'global_variables.php'),
+                startOffset: 31,
+                endOffset: 40,
+            },
+            {
+                definitionFiles: [
+                    path.join(getCaseDir(), 'global_variables.php'),
+                    path.join(getCaseDir(), 'class_methods.php'),
+                ],
+                testFile: path.join(getCaseDir(), 'reference', 'global_variables.php'),
+                startOffset: 52,
+                endOffset: 61,
+            },
+            {
+                definitionFiles: [
+                    path.join(getCaseDir(), 'global_variables.php'),
+                    path.join(getCaseDir(), 'class_methods.php'),
+                ],
+                testFile: path.join(getCaseDir(), 'reference', 'global_variables.php'),
+                startOffset: 73,
+                endOffset: 86,
+            },
+        ]);
     });
 
     // it('temp ref test', async () => {

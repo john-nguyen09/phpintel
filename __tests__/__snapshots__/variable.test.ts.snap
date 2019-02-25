@@ -7,6 +7,7 @@ PhpDocument {
   "classes": Array [],
   "constants": Array [],
   "functions": Array [],
+  "globalVariables": Array [],
   "importTable": ImportTable {
     "imports": Object {},
     "namespace": NamespaceName {
@@ -22,10 +23,14 @@ PhpDocument {
       "type": TypeComposite {
         "_types": Array [
           TypeName {
+            "name": "$varName",
+          },
+          TypeName {
             "name": "string",
           },
         ],
         "existingTypes": Object {
+          "$varName": true,
           "string": true,
         },
       },
@@ -33,13 +38,21 @@ PhpDocument {
     SimpleVariable {
       "name": "$fieldName",
       "type": TypeComposite {
-        "_types": Array [],
-        "existingTypes": Object {},
+        "_types": Array [
+          TypeName {
+            "name": "$fieldName",
+          },
+        ],
+        "existingTypes": Object {
+          "$fieldName": true,
+        },
       },
     },
   ],
   "scopeVarStack": Array [
     ScopeVar {
+      "globalVariables": Map {},
+      "isTop": true,
       "location": Object {
         "range": Object {
           "end": 39,
@@ -51,10 +64,14 @@ PhpDocument {
         "$varName": TypeComposite {
           "_types": Array [
             TypeName {
+              "name": "$varName",
+            },
+            TypeName {
               "name": "string",
             },
           ],
           "existingTypes": Object {
+            "$varName": true,
             "string": true,
           },
         },

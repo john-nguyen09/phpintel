@@ -7,6 +7,9 @@ import { Location } from "../meta/location";
 export class ScopeVar extends Symbol implements Consumer {
     public location: Location = {};
     public variables: { [name: string]: TypeComposite } = {};
+    public isTop: boolean = false;
+
+    private globalVariables: Map<string, boolean> = new Map<string, boolean>();
 
     consume(other: Symbol) {
         if (other instanceof Parameter) {
@@ -43,5 +46,17 @@ export class ScopeVar extends Symbol implements Consumer {
         }
 
         return new TypeComposite();
+    }
+
+    addGlobalVariableName(name: string) {
+        this.globalVariables.set(name, true);
+    }
+
+    isGlobal(variableName: string): boolean {
+        if (this.isTop) {
+            return true;
+        }
+
+        return this.globalVariables.has(variableName);
     }
 }

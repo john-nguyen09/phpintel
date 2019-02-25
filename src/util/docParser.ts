@@ -3,7 +3,8 @@ const _DocParser = require("doc-parser");
 
 export enum DocNodeKind {
     Var = 'var',
-    Param = 'param'
+    Param = 'param',
+    Global = 'global',
 }
 
 export enum DocTypeKind {
@@ -62,7 +63,7 @@ export interface DocAst {
     body: DocNode[]
 }
 
-export type DocNode = VarDocNode | ParamDocNode;
+export type DocNode = VarDocNode | ParamDocNode | GlobalDocNode;
 export type DocTypeNode = DocType | DocTypeCollection;
 
 export interface VarDocNode {
@@ -76,6 +77,13 @@ export interface ParamDocNode {
     kind: DocNodeKind.Param;
     type: DocTypeNode;
     name: string;
+}
+
+export interface GlobalDocNode {
+    kind: DocNodeKind.Global;
+    type: DocTypeNode;
+    variable: string;
+    description: string;
 }
 
 export interface DocType {

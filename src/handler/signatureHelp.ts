@@ -3,6 +3,7 @@ import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
 import { ArgumentListTable } from "../storage/table/argumentList";
+import { inspect } from "util";
 
 export namespace SignatureHelpProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<SignatureHelp | null> {

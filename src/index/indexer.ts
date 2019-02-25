@@ -16,6 +16,7 @@ import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { ReferenceTable } from "../storage/table/reference";
 import { ScopeVarTable } from "../storage/table/scopeVar";
 import { ArgumentListTable } from "../storage/table/argumentList";
+import { GlobalVariableTable } from "../storage/table/globalVariable";
 
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -48,7 +49,8 @@ export class Indexer {
         private propertyTable: PropertyTable,
         private referenceTable: ReferenceTable,
         private scopeVarTable: ScopeVarTable,
-        private argumentListTable: ArgumentListTable
+        private argumentListTable: ArgumentListTable,
+        private globalVariableTable: GlobalVariableTable
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
@@ -118,13 +120,14 @@ export class Indexer {
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
             this.argumentListTable.removeByDoc(uri),
+            this.globalVariableTable.removeByDoc(uri),
         ]);
     }
 
     private async indexPhpDocument(doc: PhpDocument): Promise<void> {
         await this.removeSymbolsByDoc(doc.uri);
 
-        const promises: Promise<void | void[]>[] = [];
+        const promises: Promise<void | void[] | void[][]>[] = [];
 
         for (const scopeVar of doc.scopeVarStack) {
             promises.push(this.scopeVarTable.put(scopeVar));
@@ -160,6 +163,11 @@ export class Indexer {
 
         for (const argumentList of doc.argumentLists) {
             promises.push(this.argumentListTable.put(doc, argumentList));
+        }
+
+        for (const globalVariable of doc.globalVariables) {
+            globalVariable.assignExtraTypeForVariables();
+            promises.push(this.globalVariableTable.put(doc, globalVariable));
         }
 
         await Promise.all(promises);
