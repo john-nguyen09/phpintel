@@ -1,5 +1,5 @@
 import URI from 'vscode-uri/lib/umd';
-import * as path from 'path';
+import * as path from "path";
 
 export function pathToUri(filePath: string): string {
     filePath = path.resolve(filePath).replace(/\\/g, '/');
@@ -7,7 +7,7 @@ export function pathToUri(filePath: string): string {
     if (filePath[0] != '/') {
         filePath = '/' + filePath;
     }
-    
+
     return encodeURI('file://' + filePath);
 }
 
