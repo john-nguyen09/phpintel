@@ -16,7 +16,7 @@ export class Method extends Function {
 
     public scope: string | undefined = undefined;
 
-    public extendsFromFunction(theFunction: Function) {
+    public extends(theFunction: Function) {
         this.name = theFunction.name;
         this.returnType = theFunction.returnType;
         this.parameters = theFunction.parameters;

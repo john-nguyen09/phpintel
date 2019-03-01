@@ -10,6 +10,7 @@ import { Constant } from "./constant";
 import { Interface } from "./interface";
 import { ScopeClass } from "./scope";
 import { Method } from "./method";
+import { Trait } from "./trait";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -27,6 +28,7 @@ export class PhpFile {
     public classes: Class[] = [];
     public constants: Constant[] = [];
     public interfaces: Interface[] = [];
+    public traits: Trait[] = [];
 
     public static getParser(): Parser {
         if (PhpFile.parser === null) {
@@ -82,6 +84,14 @@ export class PhpFile {
 
     public pushClass(theClass: Class) {
         this.classes.push(theClass);
+    }
+
+    public pushTrait(trait: Trait) {
+        this.traits.push(trait);
+    }
+
+    public pushInterface(theInterface: Interface) {
+        this.interfaces.push(theInterface);
     }
 
     public pushScopeClass(scopeClass: ScopeClass) {

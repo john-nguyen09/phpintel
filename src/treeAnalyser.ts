@@ -11,12 +11,16 @@ import { Location } from "./meta";
 import { Method } from "./method";
 import { StaticModifier, VisibilityModifier } from "./modifier";
 import { inspect } from "util";
+import { Trait } from "./trait";
+import { Interface } from "./interface";
+import { ClassConstant } from "./classConstant";
+import { Property } from "./property";
 
 export namespace TreeAnalyser {
     const SCOPE_CLASS_TYPES = new Map<string, boolean>([
         ['class_declaration', true],
-        // ['interface_declaration', true],
-        // ['trait_declaration', true],
+        ['interface_declaration', true],
+        ['trait_declaration', true],
     ]);
 
     const VISIBILITY_MODIFIER_TYPES = new Map<string, VisibilityModifier>([
@@ -38,7 +42,7 @@ export namespace TreeAnalyser {
 
         traverse(phpFile, tree.rootNode);
 
-        console.log(inspect(phpFile.classes, {depth: 5}));
+        console.log(inspect(phpFile, {depth: 7}));
 
         return phpFile;
     }
@@ -59,13 +63,17 @@ export namespace TreeAnalyser {
 
     function collectDefinitions(phpFile: PhpFile, node: Parser.SyntaxNode): boolean {
         if (node.type === 'function_definition') {
-            onFunction(phpFile, node);
+            const theFunction = onFunction(phpFile, node);
+            phpFile.pushFunction(theFunction);
 
             return false;
         }
 
         if (node.type === 'const_declaration') {
-            onConstant(phpFile, node);
+            const constants = onConstant(phpFile, node);
+            constants.forEach((constant) => {
+                phpFile.pushConstant(constant);
+            });
 
             return false;
         }
@@ -74,22 +82,75 @@ export namespace TreeAnalyser {
             const firstChild = node.firstChild;
 
             if (firstChild !== null && firstChild.type == 'qualified_name' && firstChild.text == 'define') {
-                onDefineConstant(phpFile, node);
+                const defineConstant = onDefineConstant(phpFile, node);
+                phpFile.pushConstant(defineConstant);
 
                 return false;
             }
         }
 
         if (node.type === 'class_declaration') {
-            onClass(phpFile, node);
+            const theClass = onClass(phpFile, node);
+
+            phpFile.pushClass(theClass);
+            phpFile.pushScopeClass(theClass);
 
             return true; // There will symbols inside classes so keep descending
         }
 
-        if (node.type === 'method_declaration') {
-            onMethod(phpFile, node);
+        if (node.type === 'class_const_declaration') {
+            const classConstants = onClassConstant(phpFile, node);
+            const scopeClass = phpFile.scopeClass;
+
+            if (scopeClass instanceof Class || scopeClass instanceof Interface) {
+                classConstants.forEach((classConstant) => {
+                    scopeClass.constants.push(classConstant);
+                });
+            }
 
             return false;
+        }
+
+        if (node.type === 'property_declaration') {
+            const properties = onProperty(phpFile, node);
+            const scopeClass = phpFile.scopeClass;
+
+            if (scopeClass instanceof Class || scopeClass instanceof Trait) {
+                properties.forEach((property) => {
+                    scopeClass.properties.push(property);
+                })
+            }
+
+            return false;
+        }
+
+        if (node.type === 'method_declaration') {
+            const method = onMethod(phpFile, node);
+            const scopeClass = phpFile.scopeClass;
+
+            if (scopeClass !== undefined) {
+                scopeClass.methods.push(method);
+            }
+
+            return false;
+        }
+
+        if (node.type === 'trait_declaration') {
+            const trait = onTrait(phpFile, node);
+
+            phpFile.pushTrait(trait);
+            phpFile.pushScopeClass(trait);
+
+            return true;
+        }
+
+        if (node.type === 'interface_declaration') {
+            const theInterface = onInterface(phpFile, node);
+
+            phpFile.pushInterface(theInterface);
+            phpFile.pushScopeClass(theInterface);
+
+            return true;
         }
 
         return true;
@@ -115,44 +176,49 @@ export namespace TreeAnalyser {
             theFunction.name = nameNode.text;
         }
 
-        phpFile.pushFunction(theFunction);
-
         return theFunction;
     }
 
-    function onConstant(phpFile: PhpFile, node: Parser.SyntaxNode) {
+    function onConstant(phpFile: PhpFile, node: Parser.SyntaxNode): Constant[] {
+        const constants: Constant[] = [];
+
         for (const constElement of node.children) {
             if (constElement.type == 'const_element') {
-                const theConst = new Constant();
-                let value: string = '';
-                let hasEqual: boolean = false;
-
-                theConst.location = getLocation(phpFile, constElement);
-
-                for (const child of constElement.children) {
-
-                    if (child.type == 'name') {
-                        theConst.name = child.text;
-                        continue;
-                    }
-                    if (child.type == '=') {
-                        hasEqual = true;
-                        continue;
-                    }
-
-                    if (hasEqual) {
-                        value += child.text;
-                    }
-                }
-
-                theConst.value = value;
-
-                phpFile.pushConstant(theConst);
+                constants.push(onConstantElement(phpFile, constElement));
             }
         }
+
+        return constants;
     }
 
-    function onDefineConstant(phpFile: PhpFile, node: Parser.SyntaxNode) {
+    function onConstantElement(phpFile: PhpFile, node: Parser.SyntaxNode): Constant {
+        const theConst = new Constant();
+        let value: string = '';
+        let hasEqual: boolean = false;
+
+        theConst.location = getLocation(phpFile, node);
+
+        for (const child of node.children) {
+            if (child.type == 'name') {
+                theConst.name = child.text;
+                continue;
+            }
+            if (child.type == '=') {
+                hasEqual = true;
+                continue;
+            }
+
+            if (hasEqual) {
+                value += child.text;
+            }
+        }
+
+        theConst.value = value;
+
+        return theConst;
+    }
+
+    function onDefineConstant(phpFile: PhpFile, node: Parser.SyntaxNode): DefineConstant {
         const defineConstant = new DefineConstant();
 
         defineConstant.location = getLocation(phpFile, node);
@@ -182,10 +248,10 @@ export namespace TreeAnalyser {
             }
         }
 
-        phpFile.pushConstant(defineConstant);
+        return defineConstant;
     }
 
-    function onClass(phpFile: PhpFile, node: Parser.SyntaxNode) {
+    function onClass(phpFile: PhpFile, node: Parser.SyntaxNode): Class {
         const nameNode = node.firstNamedChild;
         const theClass = new Class();
 
@@ -211,11 +277,36 @@ export namespace TreeAnalyser {
             }
         }
 
-        phpFile.pushClass(theClass);
-        phpFile.pushScopeClass(theClass);
+        return theClass;
     }
 
-    function onMethod(phpFile: PhpFile, node: Parser.SyntaxNode) {
+    function onTrait(phpFile: PhpFile, node: Parser.SyntaxNode): Trait {
+        const nameNode = node.firstNamedChild;
+        const trait = new Trait();
+
+        trait.location = getLocation(phpFile, node);
+
+        if (nameNode !== null) {
+            trait.name = nameNode.text;
+        }
+
+        return trait;
+    }
+
+    function onInterface(phpFile: PhpFile, node: Parser.SyntaxNode): Interface {
+        const nameNode = node.firstNamedChild;
+        const theInterface = new Interface();
+
+        theInterface.location = getLocation(phpFile, node);
+
+        if (nameNode !== null) {
+            theInterface.name = nameNode.text;
+        }
+
+        return theInterface;
+    }
+
+    function onMethod(phpFile: PhpFile, node: Parser.SyntaxNode): Method {
         const method = new Method();
         method.location = getLocation(phpFile, node);
 
@@ -237,7 +328,7 @@ export namespace TreeAnalyser {
             } else if (child.type === 'function_definition') {
                 const theFunction = onFunction(phpFile, child);
 
-                method.extendsFromFunction(theFunction);
+                method.extends(theFunction);
             }
         }
 
@@ -246,6 +337,71 @@ export namespace TreeAnalyser {
             method.scope = scopeClass.name;
         }
 
-        phpFile.pushMethod(method);
+        return method;
+    }
+
+    function onClassConstant(phpFile: PhpFile, node: Parser.SyntaxNode): ClassConstant[] {
+        const classConstants: ClassConstant[] = [];
+        const scopeClass = phpFile.scopeClass;
+
+        for (const child of node.children) {
+            if (child.type == 'const_element') {
+                const classConstant = new ClassConstant();
+
+                classConstant.extends(onConstantElement(phpFile, child));
+
+                if (scopeClass !== undefined) {
+                    classConstant.scope = scopeClass.name;
+                }
+
+                classConstants.push(classConstant);
+            }
+        }
+
+        return classConstants;
+    }
+
+    function onProperty(phpFile: PhpFile, node: Parser.SyntaxNode): Property[] {
+        const properties: Property[] = [];
+        let propertyVisibility = VisibilityModifier.Public;
+        let isStatic: boolean = false;
+        const scopeClass = phpFile.scopeClass;
+
+        for (const child of node.children) {
+            if (child.type === 'property_modifier') {
+                for (const modifier of child.children) {
+                    if (modifier.type === 'visibility_modifier') {
+                        const visibility = VISIBILITY_MODIFIER_TYPES.get(child.text);
+
+                        if (visibility !== undefined) {
+                            propertyVisibility = visibility;
+                        }
+                    } else if (modifier.type === 'static_modifier') {
+                        isStatic = true;
+                    }
+                }
+            } else if (child.type === 'property_element') {
+                const property = new Property();
+                const nameNode = child.firstNamedChild;
+
+                property.location = getLocation(phpFile, child);
+                property.modifier = {
+                    visibility: propertyVisibility,
+                    static: isStatic,
+                };
+
+                if (nameNode !== null) {
+                    property.name = nameNode.text;
+                }
+
+                if (scopeClass !== undefined) {
+                    property.scope = scopeClass.name;
+                }
+
+                properties.push(property);
+            }
+        }
+
+        return properties;
     }
 }

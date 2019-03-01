@@ -1,9 +1,8 @@
 import { Location } from "./meta";
-import { Interface } from "./interface";
-import { Constant } from "./constant";
 import { Property } from "./property";
 import { Method } from "./method";
 import { ClassModifier } from "./modifier";
+import { ClassConstant } from "./classConstant";
 
 export class Class {
     public modifier: ClassModifier = ClassModifier.None;
@@ -15,7 +14,7 @@ export class Class {
     public extends: string[] = [];
     public implements: string[] = [];
 
-    public constants: Constant[] = [];
+    public constants: ClassConstant[] = [];
     public properties: Property[] = [];
     public methods: Method[] = [];
 }

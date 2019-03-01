@@ -1,6 +1,6 @@
 import { Location } from "./meta";
-import { Constant } from "./constant";
 import { Method } from "./method";
+import { ClassConstant } from "./classConstant";
 
 export class Interface {
     public name: string = '';
@@ -9,6 +9,6 @@ export class Interface {
 
     public extends: Interface[] = [];
 
-    public constants: Constant[] = [];
+    public constants: ClassConstant[] = [];
     public methods: Method[] = [];
 }
