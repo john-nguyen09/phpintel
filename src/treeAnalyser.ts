@@ -15,6 +15,7 @@ import { Trait } from "./trait";
 import { Interface } from "./interface";
 import { ClassConstant } from "./classConstant";
 import { Property } from "./property";
+import { ParserUtils } from "./util/parser";
 
 export namespace TreeAnalyser {
     const SCOPE_CLASS_TYPES = new Map<string, boolean>([
@@ -30,19 +31,19 @@ export namespace TreeAnalyser {
     ]);
 
     export function analyse(phpFile: PhpFile) {
-        const tree = phpFile.parse();
+        const tree = phpFile.getTree();
 
-        const astString = Formatter.treeSitterOutput(tree.rootNode.toString());
-        const debugDir = path.join(__dirname, '..', 'debug');
-        fs.writeFile(path.join(debugDir, path.basename(phpFile.path) + '.ast'), astString, (err) => {
-            if (err) {
-                console.log(err);
-            }
-        });
+        // const astString = Formatter.treeSitterOutput(tree.rootNode.toString());
+        // const debugDir = path.join(__dirname, '..', 'debug');
+        // fs.writeFile(path.join(debugDir, path.basename(phpFile.path) + '.ast'), astString, (err) => {
+        //     if (err) {
+        //         console.log(err);
+        //     }
+        // });
 
         traverse(phpFile, tree.rootNode);
 
-        console.log(inspect(phpFile, {depth: 7}));
+        // console.log(inspect(phpFile, {depth: 7}));
 
         return phpFile;
     }
@@ -159,10 +160,7 @@ export namespace TreeAnalyser {
     function getLocation(phpFile: PhpFile, node: Parser.SyntaxNode): Location {
         return {
             uri: phpFile.uri,
-            range: {
-                start: node.startPosition,
-                end: node.endPosition,
-            }
+            range: ParserUtils.getRange(node),
         };
     }
 

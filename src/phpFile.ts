@@ -1,4 +1,4 @@
-import { readFile, stat } from "fs";
+import { readFile, stat, FSWatcher, Stats } from "fs";
 import { promisify } from "util";
 import * as Parser from "tree-sitter";
 import * as PhpGrammar from "tree-sitter-php";
@@ -11,12 +11,14 @@ import { Interface } from "./interface";
 import { ScopeClass } from "./scope";
 import { Method } from "./method";
 import { Trait } from "./trait";
+import { FileInfo } from "./indexer";
 
 const readFileAsync = promisify(readFile);
-const statAsync = promisify(stat);
 
 export class PhpFile {
     private static parser: Parser | null = null;
+
+    private astTree: Parser.Tree | null = null;
 
     public path: string = '';
     public timeModified: number = 0;
@@ -70,8 +72,12 @@ export class PhpFile {
         return text;
     }
 
-    public parse(): Parser.Tree {
-        return PhpFile.getParser().parse(this.text);
+    public getTree(): Parser.Tree {
+        if (this.astTree === null) {
+            this.astTree = PhpFile.getParser().parse(this.text);
+        }
+
+        return this.astTree;
     }
 
     public pushFunction(func: Function) {
@@ -157,12 +163,11 @@ export class PhpFile {
 }
 
 export namespace PhpFile {
-    export async function create(filePath: string) {
-        const stats = await statAsync(filePath);
+    export async function create(fileInfo: FileInfo) {
         const phpFile = new PhpFile();
-        phpFile.path = filePath;
-        phpFile.timeModified = stats.mtimeMs;
-        phpFile.text = (await readFileAsync(filePath)).toString('utf-8');
+        phpFile.path = fileInfo.filePath.toString();
+        phpFile.timeModified = fileInfo.stats.mtimeMs;
+        phpFile.text = (await readFileAsync(fileInfo.filePath)).toString('utf-8');
 
         return phpFile;
     }
