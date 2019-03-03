@@ -2,20 +2,17 @@ import { PhpFile } from "./phpFile";
 import * as Parser from "tree-sitter";
 import { Function } from "./function";
 import { Constant } from "./constant";
-import { Formatter } from "./util/formatter";
-import * as path from "path";
-import * as fs from "fs";
 import { DefineConstant } from "./defineConstant";
 import { Class } from "./class";
 import { Location } from "./meta";
 import { Method } from "./method";
 import { StaticModifier, VisibilityModifier } from "./modifier";
-import { inspect } from "util";
 import { Trait } from "./trait";
 import { Interface } from "./interface";
 import { ClassConstant } from "./classConstant";
 import { Property } from "./property";
 import { ParserUtils } from "./util/parser";
+import { TypeResolver } from "./typeResolver";
 
 export namespace TreeAnalyser {
     const SCOPE_CLASS_TYPES = new Map<string, boolean>([
@@ -49,12 +46,10 @@ export namespace TreeAnalyser {
     }
 
     function traverse(phpFile: PhpFile, node: Parser.SyntaxNode): void {
-        const shouldDescend = collectDefinitions(phpFile, node);
+        collectDefinitions(phpFile, node);
 
-        if (shouldDescend) {
-            for (const child of node.children) {
-                traverse(phpFile, child);
-            }
+        for (const child of node.children) {
+            traverse(phpFile, child);
         }
 
         if (SCOPE_CLASS_TYPES.has(node.type)) {
@@ -62,7 +57,7 @@ export namespace TreeAnalyser {
         }
     }
 
-    function collectDefinitions(phpFile: PhpFile, node: Parser.SyntaxNode): boolean {
+    function collectDefinitions(phpFile: PhpFile, node: Parser.SyntaxNode) {
         if (node.type === 'function_definition') {
             const theFunction = onFunction(phpFile, node);
             phpFile.pushFunction(theFunction);
@@ -198,7 +193,7 @@ export namespace TreeAnalyser {
 
         for (const child of node.children) {
             if (child.type == 'name') {
-                theConst.name = child.text;
+                theConst.name = TypeResolver.toType(child.text);
                 continue;
             }
             if (child.type == '=') {
@@ -234,7 +229,7 @@ export namespace TreeAnalyser {
 
                     if (arg.type === 'string' && !hasComma) {
                         const value = arg.text;
-                        defineConstant.name = value.substr(1, value.length - 2);
+                        defineConstant.name = TypeResolver.toType(value.substr(1, value.length - 2));
 
                         continue;
                     }
@@ -256,20 +251,20 @@ export namespace TreeAnalyser {
         theClass.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            theClass.name = nameNode.text;
+            theClass.name = TypeResolver.toType(nameNode.text);
         }
 
         for (const child of node.children) {
             if (child.type == 'class_base_clause') {
                 for (const baseClassNode of child.children) {
                     if (baseClassNode.type == 'qualified_name') {
-                        theClass.extends.push(baseClassNode.text);
+                        theClass.extends.push(TypeResolver.toType(baseClassNode.text));
                     }
                 }
             } else if (child.type == 'class_interface_clause') {
                 for (const interfaceNode of child.children) {
                     if (interfaceNode.type == 'qualified_name') {
-                        theClass.implements.push(interfaceNode.text);
+                        theClass.implements.push(TypeResolver.toType(interfaceNode.text));
                     }
                 }
             }
@@ -285,7 +280,7 @@ export namespace TreeAnalyser {
         trait.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            trait.name = nameNode.text;
+            trait.name = TypeResolver.toType(nameNode.text);
         }
 
         return trait;
@@ -298,7 +293,7 @@ export namespace TreeAnalyser {
         theInterface.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            theInterface.name = nameNode.text;
+            theInterface.name = TypeResolver.toType(nameNode.text);
         }
 
         return theInterface;
@@ -389,7 +384,7 @@ export namespace TreeAnalyser {
                 };
 
                 if (nameNode !== null) {
-                    property.name = nameNode.text;
+                    property.name = TypeResolver.toType(nameNode.text);
                 }
 
                 if (scopeClass !== undefined) {

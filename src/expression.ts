@@ -3,13 +3,15 @@ import { Position, Range } from "./meta";
 import { TreeTraverser } from "./treeTraverser";
 import { ParserUtils } from "./util/parser";
 import * as Parser from "tree-sitter";
+import { Type, TypeComposite } from "./typeResolver/type";
+import { TypeResolver } from "./typeResolver";
 
 export class Expression {
     private _type: string | null = null;
 
-    private _name: string = '';
+    private _name: Type | undefined = undefined;
     private _nameRange: Range | undefined = undefined;
-    private _scope: string | undefined = undefined;
+    private _scope: TypeComposite = new TypeComposite();
     private _scopeRange: Range | undefined = undefined;
 
     constructor(phpFile: PhpFile, pos: Position) {
@@ -75,7 +77,7 @@ export class Expression {
         return this._type;
     }
 
-    get name(): string {
+    get name(): Type | undefined {
         return this._name;
     }
 
@@ -83,7 +85,7 @@ export class Expression {
         return this._nameRange;
     }
 
-    get scope(): string | undefined {
+    get scope(): TypeComposite {
         return this._scope;
     }
 
@@ -100,7 +102,7 @@ export class Expression {
 
         if (nameNode !== null) {
             this._type = 'type_designator';
-            this._name = nameNode.text;
+            this._name = TypeResolver.toType(nameNode.text);
         }
 
         this._nameRange = ParserUtils.getRange(node);
@@ -111,7 +113,7 @@ export class Expression {
 
         if (nameNode !== null) {
             this._type = 'function_call';
-            this._name = nameNode.text;
+            this._name = TypeResolver.toType(nameNode.text);
         }
 
         this._nameRange = ParserUtils.getRange(node);
@@ -120,17 +122,17 @@ export class Expression {
     private onConstant(node: Parser.SyntaxNode) {
         this._type = 'constant';
 
-        this._name = node.text;
+        this._name = TypeResolver.toType(node.text);
         this._nameRange = ParserUtils.getRange(node);
     }
 
     private onScopedClass(node: Parser.SyntaxNode) {
-        this._scope = node.text;
+        this._scope.pushType(TypeResolver.toType(node.text));
         this._scopeRange = ParserUtils.getRange(node);
     }
 
     private onScopedName(node: Parser.SyntaxNode) {
-        this._name = node.text;
+        this._name = TypeResolver.toType(node.text);
         this._nameRange = ParserUtils.getRange(node);
     }
 

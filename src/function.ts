@@ -1,5 +1,6 @@
 import { Location } from "./meta";
 import { Variable } from "./variable";
+import { TypeComposite } from "./typeResolver/type";
 
 export class Function {
     public name: string = '';
@@ -8,5 +9,5 @@ export class Function {
 
     public parameters: Variable[] = [];
 
-    public returnType: string = '';
+    public returnType: TypeComposite = new TypeComposite();
 }

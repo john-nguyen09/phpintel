@@ -1,5 +1,6 @@
 import { Location } from "./meta";
 import { VisibilityModifier } from "./modifier";
+import { Type, TypeComposite } from "./typeResolver/type";
 
 export interface PropertyModifier {
     visibility: VisibilityModifier;
@@ -11,8 +12,8 @@ export class Property {
         visibility: VisibilityModifier.Public,
         static: false,
     };
-    public name: string = '';
+    public name: Type | undefined = undefined;
     public location: Location | undefined = undefined;
-    public type: string = '';
-    public scope: string | undefined = undefined;
+    public type: TypeComposite = new TypeComposite();
+    public scope: Type | undefined = undefined;
 }

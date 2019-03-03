@@ -1,5 +1,6 @@
 import { VisibilityModifier, StaticModifier, ClassModifier } from "./modifier";
 import { Function } from "./function";
+import { Type } from "./typeResolver/type";
 
 export interface MethodModifier {
     visibility: VisibilityModifier;
@@ -14,7 +15,7 @@ export class Method extends Function {
         class: ClassModifier.None
     };
 
-    public scope: string | undefined = undefined;
+    public scope: Type | undefined = undefined;
 
     public extends(theFunction: Function) {
         this.name = theFunction.name;
