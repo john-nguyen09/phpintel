@@ -8,7 +8,7 @@ import { Function } from "./function";
 import { Class } from "./class";
 import { Constant } from "./constant";
 import { Interface } from "./interface";
-import { ScopeClass } from "./scope";
+import { ScopeClass, ScopeVar } from "./scope";
 import { Method } from "./method";
 import { Trait } from "./trait";
 import { FileInfo } from "./indexer";
@@ -25,6 +25,7 @@ export class PhpFile {
     public lines: string[] = [];
 
     public scopeClassStack: ScopeClass[] = [];
+    public scopeVarStack: ScopeVar[] = [];
 
     public functions: Function[] = [];
     public classes: Class[] = [];
@@ -114,6 +115,21 @@ export class PhpFile {
         return scopeClass;
     }
 
+    public pushScopeVar() {
+        const scopeVar = new ScopeVar();
+        this.scopeVarStack.push(scopeVar);
+    }
+
+    public popScopeVar(): ScopeVar | undefined {
+        const scopeVar = this.scopeVarStack.pop();
+
+        if (scopeVar === undefined) {
+            console.log('Invalid states: trying to pop an empty scope var stack');
+        }
+
+        return scopeVar;
+    }
+
     public pushMethod(method: Method) {
         const scopeClass = this.scopeClass;
 
@@ -136,6 +152,14 @@ export class PhpFile {
         }
 
         return this.scopeClassStack[this.scopeClassStack.length - 1];
+    }
+
+    get scopeVar(): ScopeVar | undefined {
+        if (this.scopeVarStack.length === 0) {
+            return undefined;
+        }
+
+        return this.scopeVarStack[this.scopeVarStack.length - 1];
     }
 
     set text(value: string) {
@@ -166,7 +190,8 @@ export namespace PhpFile {
     export async function create(fileInfo: FileInfo) {
         const phpFile = new PhpFile();
         phpFile.path = fileInfo.filePath.toString();
-        phpFile.timeModified = fileInfo.stats.mtimeMs;
+        // Getting number of seconds only, so that it can be stored in 32-bit int
+        phpFile.timeModified = Math.floor(fileInfo.stats.mtime.getTime() / 1000);
         phpFile.text = (await readFileAsync(fileInfo.filePath)).toString('utf-8');
 
         return phpFile;

@@ -13,12 +13,20 @@ import { ClassConstant } from "./classConstant";
 import { Property } from "./property";
 import { ParserUtils } from "./util/parser";
 import { TypeResolver } from "./typeResolver";
+import { Variable } from "./variable";
+import { ScopeVar } from "./scope";
+import { TreeTraverser } from "./treeTraverser";
+import { AssignmentExpression } from "./assignmentExpression";
 
 export namespace TreeAnalyser {
     const SCOPE_CLASS_TYPES = new Map<string, boolean>([
         ['class_declaration', true],
         ['interface_declaration', true],
         ['trait_declaration', true],
+    ]);
+
+    const SCOPE_VAR_TYPES = new Map<string, boolean>([
+        ['function_definition', true],
     ]);
 
     const VISIBILITY_MODIFIER_TYPES = new Map<string, VisibilityModifier>([
@@ -38,6 +46,7 @@ export namespace TreeAnalyser {
         //     }
         // });
 
+        phpFile.pushScopeVar();
         traverse(phpFile, tree.rootNode);
 
         // console.log(inspect(phpFile, {depth: 7}));
@@ -55,10 +64,15 @@ export namespace TreeAnalyser {
         if (SCOPE_CLASS_TYPES.has(node.type)) {
             phpFile.popScopeClass();
         }
+
+        if (SCOPE_VAR_TYPES.has(node.type)) {
+            phpFile.popScopeVar();
+        }
     }
 
     function collectDefinitions(phpFile: PhpFile, node: Parser.SyntaxNode) {
         if (node.type === 'function_definition') {
+            phpFile.pushScopeVar();
             const theFunction = onFunction(phpFile, node);
             phpFile.pushFunction(theFunction);
 
@@ -159,11 +173,84 @@ export namespace TreeAnalyser {
         };
     }
 
+    function onParameter(phpFile: PhpFile, node: Parser.SyntaxNode): Variable {
+        const parameter = new Variable();
+
+        parameter.location = getLocation(phpFile, node);
+
+        for (const child of node.children) {
+            if (child.type === 'type_declaration') {
+                parameter.type.push(TypeResolver.stringToType(child.text));
+
+                continue;
+            }
+
+            if (child.type === 'variable_name') {
+                parameter.name = child.text;
+            }
+        }
+
+        return parameter;
+    }
+
+    function onFunctionBody(phpFile: PhpFile, theFunction: Function, node: Parser.SyntaxNode) {
+        const traverser = new TreeTraverser(node);
+        const scopeVar = phpFile.scopeVar;
+
+        traverser.traverse((node: Parser.SyntaxNode) => {
+            if (node.type === 'assignment_expression') {
+                const expression = new AssignmentExpression(node);
+
+                if (expression.isVariable) {
+                    if (scopeVar !== undefined) {
+                        scopeVar.setVariable(expression.variable);
+                    }
+                }
+
+                return;
+            }
+
+            if (node.type === 'return_statement') {
+                for (const child of node.children) {
+                    if (child.type === 'variable_name') {
+                        if (scopeVar !== undefined) {
+                            const variable = scopeVar.getVariable(child.text);
+
+                            if (variable !== undefined) {
+                                theFunction.returnType.push(variable.type);
+                            }
+                        }
+
+                        return;
+                    }
+                }
+            }
+        });
+    }
+
     function onFunction(phpFile: PhpFile, node: Parser.SyntaxNode): Function {
         const nameNode = node.firstNamedChild;
         const theFunction = new Function();
 
         theFunction.location = getLocation(phpFile, node);
+
+        for (const child of node.children) {
+            if (child.type == 'formal_parameters') {
+                for (const parameterNode of child.children) {
+                    if (parameterNode.type === 'simple_parameter') {
+                        const parameter = onParameter(phpFile, parameterNode);
+                        const scopeVar = phpFile.scopeVar;
+
+                        if (scopeVar !== undefined) {
+                            scopeVar.setVariable(parameter);
+                        }
+                        theFunction.parameters.push(parameter);
+                    }
+                }
+            } else if (child.type === 'compound_statement') {
+                onFunctionBody(phpFile, theFunction, child);
+            }
+        }
 
         if (nameNode !== null) {
             theFunction.name = nameNode.text;
@@ -193,7 +280,7 @@ export namespace TreeAnalyser {
 
         for (const child of node.children) {
             if (child.type == 'name') {
-                theConst.name = TypeResolver.toType(child.text);
+                theConst.name = TypeResolver.stringToType(child.text);
                 continue;
             }
             if (child.type == '=') {
@@ -229,7 +316,7 @@ export namespace TreeAnalyser {
 
                     if (arg.type === 'string' && !hasComma) {
                         const value = arg.text;
-                        defineConstant.name = TypeResolver.toType(value.substr(1, value.length - 2));
+                        defineConstant.name = TypeResolver.stringToType(value.substr(1, value.length - 2));
 
                         continue;
                     }
@@ -251,20 +338,20 @@ export namespace TreeAnalyser {
         theClass.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            theClass.name = TypeResolver.toType(nameNode.text);
+            theClass.name = TypeResolver.stringToType(nameNode.text);
         }
 
         for (const child of node.children) {
             if (child.type == 'class_base_clause') {
                 for (const baseClassNode of child.children) {
                     if (baseClassNode.type == 'qualified_name') {
-                        theClass.extends.push(TypeResolver.toType(baseClassNode.text));
+                        theClass.extends.push(TypeResolver.stringToType(baseClassNode.text));
                     }
                 }
             } else if (child.type == 'class_interface_clause') {
                 for (const interfaceNode of child.children) {
                     if (interfaceNode.type == 'qualified_name') {
-                        theClass.implements.push(TypeResolver.toType(interfaceNode.text));
+                        theClass.implements.push(TypeResolver.stringToType(interfaceNode.text));
                     }
                 }
             }
@@ -280,7 +367,7 @@ export namespace TreeAnalyser {
         trait.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            trait.name = TypeResolver.toType(nameNode.text);
+            trait.name = TypeResolver.stringToType(nameNode.text);
         }
 
         return trait;
@@ -293,7 +380,7 @@ export namespace TreeAnalyser {
         theInterface.location = getLocation(phpFile, node);
 
         if (nameNode !== null) {
-            theInterface.name = TypeResolver.toType(nameNode.text);
+            theInterface.name = TypeResolver.stringToType(nameNode.text);
         }
 
         return theInterface;
@@ -384,7 +471,7 @@ export namespace TreeAnalyser {
                 };
 
                 if (nameNode !== null) {
-                    property.name = TypeResolver.toType(nameNode.text);
+                    property.name = TypeResolver.stringToType(nameNode.text);
                 }
 
                 if (scopeClass !== undefined) {

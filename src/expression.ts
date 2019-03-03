@@ -102,7 +102,7 @@ export class Expression {
 
         if (nameNode !== null) {
             this._type = 'type_designator';
-            this._name = TypeResolver.toType(nameNode.text);
+            this._name = TypeResolver.stringToType(nameNode.text);
         }
 
         this._nameRange = ParserUtils.getRange(node);
@@ -113,7 +113,7 @@ export class Expression {
 
         if (nameNode !== null) {
             this._type = 'function_call';
-            this._name = TypeResolver.toType(nameNode.text);
+            this._name = TypeResolver.stringToType(nameNode.text);
         }
 
         this._nameRange = ParserUtils.getRange(node);
@@ -122,17 +122,17 @@ export class Expression {
     private onConstant(node: Parser.SyntaxNode) {
         this._type = 'constant';
 
-        this._name = TypeResolver.toType(node.text);
+        this._name = TypeResolver.stringToType(node.text);
         this._nameRange = ParserUtils.getRange(node);
     }
 
     private onScopedClass(node: Parser.SyntaxNode) {
-        this._scope.pushType(TypeResolver.toType(node.text));
+        this._scope.push(TypeResolver.stringToType(node.text));
         this._scopeRange = ParserUtils.getRange(node);
     }
 
     private onScopedName(node: Parser.SyntaxNode) {
-        this._name = TypeResolver.toType(node.text);
+        this._name = TypeResolver.stringToType(node.text);
         this._nameRange = ParserUtils.getRange(node);
     }
 
