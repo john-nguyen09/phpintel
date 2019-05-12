@@ -4,7 +4,6 @@ import { getDebugDir, getCaseDir, dumpAstToDebug } from "../src/testHelper";
 import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
-import { ReferenceTable } from "../src/storage/table/reference";
 import { RefResolver } from "../src/handler/refResolver";
 
 interface CompletionTestCase {
@@ -14,7 +13,6 @@ interface CompletionTestCase {
 
 async function testCompletions(definitionFiles: string[], testCases: CompletionTestCase[]) {
     const indexer = App.get<Indexer>(Indexer);
-    const refTable = App.get<ReferenceTable>(ReferenceTable);
     const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
     for (let definitionFile of definitionFiles) {
@@ -30,13 +28,19 @@ async function testCompletions(definitionFiles: string[], testCases: CompletionT
     }
 
     for (let testCase of testCases) {
-        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testCase.path));
-
         const uri = pathToUri(testCase.path);
-        const phpDoc = await phpDocTable.get(uri);
-        const ref = await refTable.findAt(uri, testCase.offset);
+        await indexer.open(uri);
 
-        if (phpDoc === null || ref === null) {
+        const phpDoc = await phpDocTable.get(uri);
+
+        if (phpDoc === null) {
+            continue;
+        }
+        dumpAstToDebug(path.basename(phpDoc.uri) + '.ast.json', phpDoc.getTree());
+
+        const ref = await phpDoc.findRefAt(testCase.offset);
+        expect(ref).not.toEqual(null);
+        if (ref === null) {
             continue;
         }
 

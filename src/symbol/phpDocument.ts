@@ -16,6 +16,7 @@ import { ScopeVar } from "./variable/scopeVar";
 import { ArgumentExpressionList } from "./argumentExpressionList";
 import { DefineConstant } from "./constant/defineConstant";
 import { GlobalVariable } from "./variable/globalVariable";
+import { Range } from "./meta/range";
 
 export class PhpDocument extends Symbol implements Consumer {
     public text: string;
@@ -133,5 +134,79 @@ export class PhpDocument extends Symbol implements Consumer {
 
     pushScopeVar(scopeVar: ScopeVar): void {
         this.scopeVarStack.push(scopeVar);
+    }
+
+    findRefAt(offset: number): Reference | null {
+        let minRef : Reference | null = null;
+        let minEnd: number = 0;
+
+        for (const ref of this.references) {
+            if (typeof ref.location.range === 'undefined') {
+                continue;
+            }
+            if (ref.location.range.end < offset || ref.location.range.start > offset) {
+                continue;
+            }
+
+            if (minRef === null) {
+                minRef = ref;
+                minEnd = ref.location.range.end;
+                continue;
+            }
+
+            if (ref.location.range.end < minEnd) {
+                minRef = ref;
+                minEnd = ref.location.range.end;
+            }
+        }
+
+        return minRef;
+    }
+
+    findRefWithin(range: Range, predicate?: (ref: Reference) => boolean): Reference[] {
+        const refs: Reference[] = [];
+
+        for (const ref of this.references) {
+            if (
+                ref.location.range !== undefined &&
+                ref.location.range.end <= range.end &&
+                ref.scopeRange !== undefined &&
+                ref.scopeRange.start === range.start &&
+                ref.scopeRange.end === range.end &&
+                (typeof predicate === 'undefined' || predicate(ref))
+            ) {
+                refs.push(ref);
+            }
+        }
+
+        return refs;
+    }
+
+    findScopeVarAt(offset: number): Range | null {
+        for (const scopeVar of this.scopeVarStack) {
+            if (
+                scopeVar.location.range !== undefined &&
+                scopeVar.location.range.start <= offset &&
+                scopeVar.location.range.end >= offset
+            ) {
+                return scopeVar.location.range;
+            }
+        }
+
+        return null;
+    }
+
+    findArgumentListAt(offset: number): ArgumentExpressionList | null {
+        for (const argumentList of this.argumentLists) {
+            if (
+                argumentList.location.range !== undefined &&
+                argumentList.location.range.start <= offset &&
+                argumentList.location.range.end >= offset
+            ) {
+                return argumentList;
+            }
+        }
+
+        return null;
     }
 }

@@ -11,11 +11,8 @@ import { FunctionTable } from "./storage/table/function";
 import { MethodTable } from "./storage/table/method";
 import { PropertyTable } from "./storage/table/property";
 import { Traverser } from "./traverser";
-import { ReferenceTable } from "./storage/table/reference";
 import { PhpDocumentTable } from "./storage/table/phpDoc";
 import { IConnection } from "vscode-languageserver";
-import { ScopeVarTable } from "./storage/table/scopeVar";
-import { ArgumentListTable } from "./storage/table/argumentList";
 import { GlobalVariableTable } from "./storage/table/globalVariable";
 
 export interface AppOptions {
@@ -75,9 +72,6 @@ export class Application {
         this.container.bind<MethodTable>(MethodTable).toSelf().inSingletonScope();
         this.container.bind<PropertyTable>(PropertyTable).toSelf().inSingletonScope();
         this.container.bind<PhpDocumentTable>(PhpDocumentTable).toSelf().inSingletonScope();
-        this.container.bind<ReferenceTable>(ReferenceTable).toSelf().inSingletonScope();
-        this.container.bind<ScopeVarTable>(ScopeVarTable).toSelf().inSingletonScope();
-        this.container.bind<ArgumentListTable>(ArgumentListTable).toSelf().inSingletonScope();
         this.container.bind<GlobalVariableTable>(GlobalVariableTable).toSelf().inSingletonScope();
     }
 

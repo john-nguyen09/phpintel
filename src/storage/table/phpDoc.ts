@@ -10,6 +10,7 @@ export class PhpDocumentTable {
     private static lock = new AsyncLock();
 
     private db: DbStore;
+    private openedDocs: Map<string, PhpDocument> = new Map<string, PhpDocument>();
 
     constructor(level: LevelDatasource) {
         this.db = new SubStore(level, {
@@ -19,24 +20,44 @@ export class PhpDocumentTable {
         });
     }
 
-    async put(phpDoc: PhpDocument) {
+    async put(phpDoc: PhpDocument, isOpen: boolean) {
+        if (isOpen) {
+            this.openedDocs.set(phpDoc.uri, phpDoc);
+            return;
+        }
+
         return this.db.put(phpDoc.uri, phpDoc);
     }
 
     async get(uri: string): Promise<PhpDocument | null> {
         try {
+            const phpDoc = this.openedDocs.get(uri);
+
+            if (typeof phpDoc !== 'undefined') {
+                return phpDoc;
+            }
+
             return await this.db.get(uri);
         } catch {
             return null;
         }
     }
 
-    async remove(uri: string) {
+    async remove(uri: string): Promise<void> {
+        if (this.openedDocs.has(uri)) {
+            this.openedDocs.delete(uri);
+            return;
+        }
+
         return this.db.del(uri);
     }
 
-    async getAllStream<T>(callback: (phpDoc: PhpDocument) => void) {
+    async getAllStream<T>(callback: (phpDoc: PhpDocument) => void): Promise<void> {
         const db = this.db;
+
+        for (const doc of this.openedDocs) {
+            callback(doc[1]);
+        }
 
         return await new Promise<void>((resolve, reject) => {
             db.createReadStream()

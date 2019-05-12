@@ -1,6 +1,6 @@
 import { App } from "../src/app";
 import * as path from "path";
-import { getDebugDir, getCaseDir, dumpAstToDebug } from "../src/testHelper";
+import { getDebugDir, getCaseDir } from "../src/testHelper";
 import { Indexer, PhpFileInfo } from "../src/index/indexer";
 import { PhpDocumentTable } from "../src/storage/table/phpDoc";
 import { pathToUri } from "../src/util/uri";
@@ -25,7 +25,7 @@ async function testSignatureHelp(definitionFiles: string[], testCases: Signature
     for (const testCase of testCases) {
         const testFileUri = pathToUri(testCase.testFile);
 
-        await indexer.syncFileSystem(await PhpFileInfo.createFileInfo(testCase.testFile));
+        await indexer.open(testFileUri);
 
         const phpDoc = await phpDocTable.get(testFileUri);
 

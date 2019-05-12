@@ -2314,3 +2314,30 @@ Array [
   },
 ]
 `;
+
+exports[`completion variable arrow completion 2 1`] = `
+Array [
+  Variable {
+    "expression": Expression {},
+    "location": Object {},
+    "name": "$mform",
+    "refKind": 2,
+    "scope": null,
+    "scopeRange": undefined,
+    "type": TypeComposite {
+      "_types": Array [
+        TypeName {
+          "name": "$mform",
+        },
+        TypeName {
+          "name": "mod_facetoface_session_form",
+        },
+      ],
+      "existingTypes": Object {
+        "$mform": true,
+        "mod_facetoface_session_form": true,
+      },
+    },
+  },
+]
+`;

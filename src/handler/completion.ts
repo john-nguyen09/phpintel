@@ -2,7 +2,6 @@ import { CompletionParams, CompletionItem, CompletionList } from "vscode-languag
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
-import { ReferenceTable } from "../storage/table/reference";
 import { Function } from "../symbol/function/function";
 import { Formatter } from "./formatter";
 import { Class } from "../symbol/class/class";
@@ -16,7 +15,6 @@ export namespace CompletionProvider {
     export async function provide(params: CompletionParams):
         Promise<CompletionItem[] | CompletionList | null | undefined> {
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
-        const refTable = App.get<ReferenceTable>(ReferenceTable);
         let items: CompletionItem[] = [];
 
         await PhpDocumentTable.acquireLock(params.textDocument.uri, async () => {
@@ -26,7 +24,7 @@ export namespace CompletionProvider {
             }
 
             const offset = phpDoc.getOffset(params.position.line, params.position.character);
-            const ref = await refTable.findAt(params.textDocument.uri, offset);
+            const ref = await phpDoc.findRefAt(offset);
             if (ref === null) {
                 return;
             }

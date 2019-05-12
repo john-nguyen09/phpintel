@@ -1,5 +1,4 @@
 import { TextDocumentPositionParams, Location as LspLocation } from "vscode-languageserver";
-import { ReferenceTable } from "../storage/table/reference";
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
@@ -9,7 +8,6 @@ import { isLocatable } from "../symbol/symbol";
 
 export namespace DefinitionProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<LspLocation | LspLocation[] | null> {
-        const refTable: ReferenceTable = App.get<ReferenceTable>(ReferenceTable);
         const phpDocTable: PhpDocumentTable = App.get<PhpDocumentTable>(PhpDocumentTable);
 
         let phpDoc = await phpDocTable.get(params.textDocument.uri);
@@ -19,10 +17,7 @@ export namespace DefinitionProvider {
             return null;
         }
 
-        let ref = await refTable.findAt(
-            phpDoc.uri,
-            phpDoc.getOffset(params.position.line, params.position.character)
-        );
+        let ref = await phpDoc.findRefAt(phpDoc.getOffset(params.position.line, params.position.character));
 
         if (ref === null) {
             return null;

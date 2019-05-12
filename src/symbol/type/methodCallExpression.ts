@@ -14,6 +14,7 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
     public location: Location = {};
     public scope: TypeName | TypeComposite = new TypeName('');
     public argumentList: ArgumentExpressionList = new ArgumentExpressionList(this);
+    public memberLocation: Location = {};
 
     private hasArrow: boolean = false;
     private noOpenParenthesis = 0;
@@ -28,6 +29,7 @@ export class MethodCallExpression extends Symbol implements Consumer, Reference 
             }
         } else if (other instanceof MemberName) {
             this.type = other.name;
+            this.memberLocation = other.location;
         } else {
             if (other instanceof TokenSymbol) {
                 if (other.type === TokenKind.OpenParenthesis) {

@@ -2,13 +2,10 @@ import { TextDocumentPositionParams, SignatureHelp } from "vscode-languageserver
 import { App } from "../app";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { RefResolver } from "./refResolver";
-import { ArgumentListTable } from "../storage/table/argumentList";
-import { inspect } from "util";
 
 export namespace SignatureHelpProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<SignatureHelp | null> {
         const phpDocTable = App.get<PhpDocumentTable>(PhpDocumentTable);
-        const argumentListTable = App.get<ArgumentListTable>(ArgumentListTable);
         let signatureHelp: SignatureHelp | null = null;
 
 
@@ -20,7 +17,7 @@ export namespace SignatureHelpProvider {
             }
 
             const offset = phpDoc.getOffset(params.position.line, params.position.character);
-            const argumentList = await argumentListTable.findAt(phpDoc.uri, offset);
+            const argumentList = await phpDoc.findArgumentListAt(offset);
 
             if (argumentList === null) {
                 return;

@@ -314,6 +314,42 @@ Array [
 ]
 `;
 
+exports[`Testing functions around references returns class constant ref before variable 1`] = `
+MethodCallExpression {
+  "argumentList": ArgumentExpressionList {
+    "_callExpression": [Circular],
+    "_scope": null,
+    "_type": null,
+    "arguments": Array [],
+    "commaOffsets": Array [],
+    "location": Object {
+      "range": Object {
+        "end": 44,
+        "start": 44,
+      },
+      "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/scopedMemberBeforeVariable.php",
+    },
+  },
+  "hasArrow": true,
+  "location": Object {
+    "range": Object {
+      "end": 45,
+      "start": 9,
+    },
+    "uri": "file:///C:/Users/johnn/Development/phpintel/case/reference/scopedMemberBeforeVariable.php",
+  },
+  "noOpenParenthesis": 0,
+  "refKind": 15,
+  "scope": TypeName {
+    "name": "requires",
+  },
+  "startParenthesisOffset": 44,
+  "type": TypeName {
+    "name": "js",
+  },
+}
+`;
+
 exports[`Testing functions around references should return the reference at the cursor 1`] = `
 Array [
   Object {

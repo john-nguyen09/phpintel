@@ -17,8 +17,6 @@ import { ConstantTable } from "../storage/table/constant";
 import { Symbol } from "../symbol/symbol";
 import { CompletionValue } from "../storage/table/index/completionIndex";
 import { SymbolModifier } from "../symbol/meta/modifier";
-import { ScopeVarTable } from "../storage/table/scopeVar";
-import { ReferenceTable } from "../storage/table/reference";
 import { Variable } from "../symbol/variable/variable";
 import { TypeName } from "../type/name";
 import { ScopeVar } from "../symbol/variable/scopeVar";
@@ -74,8 +72,6 @@ export namespace RefResolver {
         const methodTable = App.get<MethodTable>(MethodTable);
         const propTable = App.get<PropertyTable>(PropertyTable);
         const classConstTable = App.get<ClassConstantTable>(ClassConstantTable);
-        const scopeVarTable = App.get<ScopeVarTable>(ScopeVarTable);
-        const refTable = App.get<ReferenceTable>(ReferenceTable);
 
         let symbols: Symbol[] = [];
         let keyword: string;
@@ -177,7 +173,7 @@ export namespace RefResolver {
                 if (ref.location.uri === undefined || ref.location.range === undefined) {
                     break;
                 }
-                const range = await scopeVarTable.findAt(ref.location.uri, ref.location.range.start);
+                const range = await phpDoc.findScopeVarAt(ref.location.range.start);
 
                 if (range === null) {
                     break;
@@ -186,14 +182,14 @@ export namespace RefResolver {
                 let refVars: Reference[] = [];
                 const scopeVar = new ScopeVar();
                 if (keyword.length > 0) {
-                    refVars = await refTable.findWithin(phpDoc.uri, range, (foundRef) => {
+                    refVars = phpDoc.findRefWithin(range, (foundRef) => {
                         return foundRef.refKind === RefKind.Variable &&
                             typeof foundRef.refName !== 'undefined' &&
                             foundRef.refName.length > 0 &&
                             foundRef.refName.indexOf(keyword) >= 0;
                     });
                 } else {
-                    refVars = await refTable.findWithin(phpDoc.uri, range, (foundRef) => {
+                    refVars = phpDoc.findRefWithin(range, (foundRef) => {
                         return foundRef.refKind === RefKind.Variable &&
                             typeof foundRef.refName !== 'undefined' &&
                             foundRef.refName.length > 0;
@@ -214,6 +210,7 @@ export namespace RefResolver {
                 }
 
                 break;
+            case RefKind.MethodCall:
             case RefKind.PropertyAccess:
                 if (ref.scope === null) {
                     break;

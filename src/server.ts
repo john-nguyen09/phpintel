@@ -8,9 +8,9 @@ import { Indexer } from "./index/indexer";
 import { elapsed } from "./util/hrtime";
 import { HoverProvider } from "./handler/hover";
 import { DefinitionProvider } from "./handler/definition";
-import { ChangeNotification } from "./handler/changeNotification";
 import { CompletionProvider } from "./handler/completion";
 import { SignatureHelpProvider } from "./handler/signatureHelp";
+import { NotificationHandler } from "./handler/notificationHandler";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -20,8 +20,11 @@ const hasher = new Hasher();
 connection.onHover(HoverProvider.provide);
 connection.onDefinition(DefinitionProvider.provide);
 connection.onCompletion(CompletionProvider.provide);
-connection.onDidChangeTextDocument(ChangeNotification.provide);
 connection.onSignatureHelp(SignatureHelpProvider.provide);
+
+connection.onDidChangeTextDocument(NotificationHandler.change);
+connection.onDidOpenTextDocument(NotificationHandler.open);
+connection.onDidCloseTextDocument(NotificationHandler.close);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
     let rootPath: string = '';

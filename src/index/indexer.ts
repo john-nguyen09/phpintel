@@ -13,9 +13,6 @@ import { FunctionTable } from "../storage/table/function";
 import { MethodTable } from "../storage/table/method";
 import { PropertyTable } from "../storage/table/property";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
-import { ReferenceTable } from "../storage/table/reference";
-import { ScopeVarTable } from "../storage/table/scopeVar";
-import { ArgumentListTable } from "../storage/table/argumentList";
 import { GlobalVariableTable } from "../storage/table/globalVariable";
 
 const readdirAsync = promisify(fs.readdir);
@@ -38,6 +35,8 @@ export namespace PhpFileInfo {
 
 @injectable()
 export class Indexer {
+    private openedUri: Set<string> = new Set<string>();
+
     constructor(
         private treeTraverser: Traverser,
         private phpDocTable: PhpDocumentTable,
@@ -47,9 +46,6 @@ export class Indexer {
         private functionTable: FunctionTable,
         private methodTable: MethodTable,
         private propertyTable: PropertyTable,
-        private referenceTable: ReferenceTable,
-        private scopeVarTable: ScopeVarTable,
-        private argumentListTable: ArgumentListTable,
         private globalVariableTable: GlobalVariableTable
     ) { }
 
@@ -109,17 +105,24 @@ export class Indexer {
         await Promise.all(promises);
     }
 
+    public async open(uri: string): Promise<void> {
+        this.openedUri.add(uri);
+        const phpDoc = await this.getOrCreatePhpDoc(uri);
+        await this.indexFile(phpDoc);
+    }
+
+    public close(uri: string): void {
+        this.openedUri.delete(uri);
+    }
+
     private async removeSymbolsByDoc(uri: string) {
         return Promise.all([
-            this.scopeVarTable.removeByDoc(uri),
-            this.referenceTable.removeByDoc(uri),
             this.classTable.removeByDoc(uri),
             this.classConstantTable.removeByDoc(uri),
             this.constantTable.removeByDoc(uri),
             this.functionTable.removeByDoc(uri),
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
-            this.argumentListTable.removeByDoc(uri),
             this.globalVariableTable.removeByDoc(uri),
         ]);
     }
@@ -128,14 +131,6 @@ export class Indexer {
         await this.removeSymbolsByDoc(doc.uri);
 
         const promises: Promise<void | void[] | void[][]>[] = [];
-
-        for (const scopeVar of doc.scopeVarStack) {
-            promises.push(this.scopeVarTable.put(scopeVar));
-        }
-
-        for (const reference of doc.references) {
-            promises.push(this.referenceTable.put(reference));
-        }
 
         for (const theClass of doc.classes) {
             promises.push(this.classTable.put(doc, theClass));
@@ -161,16 +156,12 @@ export class Indexer {
             promises.push(this.propertyTable.put(doc, property));
         }
 
-        for (const argumentList of doc.argumentLists) {
-            promises.push(this.argumentListTable.put(doc, argumentList));
-        }
-
         for (const globalVariable of doc.globalVariables) {
             globalVariable.assignExtraTypeForVariables();
             promises.push(this.globalVariableTable.put(doc, globalVariable));
         }
 
         await Promise.all(promises);
-        await this.phpDocTable.put(doc);
+        await this.phpDocTable.put(doc, this.openedUri.has(doc.uri));
     }
 }
