@@ -36,7 +36,7 @@ import { NamespaceUse } from "./namespace/use";
 import { NamespaceUseClause } from "./namespace/useClause";
 import { NamespaceAliasClause } from "./namespace/aliasClause";
 import { PhraseKind, TokenKind } from "../util/parser";
-import { VariableAssignment } from "./variable/varibleAssignment";
+import { VariableAssignment } from "./variable/variableAssignment";
 import { Visitor } from "../traverser";
 import { MethodRefExpression } from "./type/methodRefExpression";
 import { ScopedMemberName } from "./name/scopedMemberName";

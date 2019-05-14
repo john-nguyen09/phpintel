@@ -243,14 +243,14 @@ describe('Testing functions around references', () => {
         ]);
     });
 
-    // it('temp ref test', async () => {
-    //     await testRefAndDef([
-    //         {
-    //             definitionFiles: [path.join(getCaseDir(), 'moodleTestFile2.php')],
-    //             testFile: path.join(getCaseDir(), 'moodleTestFile1.php'),
-    //             startOffset: 425,
-    //             endOffset: 444,
-    //         }
-    //     ]);
-    // });
+    it('temp ref test', async () => {
+        await testRefAndDef([
+            {
+                definitionFiles: [],
+                testFile: path.join(getCaseDir(), 'moodle_database.php'),
+                startOffset: 482,
+                endOffset: 482,
+            }
+        ]);
+    });
 });

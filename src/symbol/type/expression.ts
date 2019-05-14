@@ -4,6 +4,8 @@ import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 import { ObjectCreationExpression } from "./objectCreationExpression";
+import { Reference, isReference } from "../reference";
+import { TypeComposite } from "../../type/composite";
 
 export class Expression extends TransformSymbol implements Consumer {
     public realSymbol: Expression;
@@ -39,8 +41,8 @@ export class Expression extends TransformSymbol implements Consumer {
         return this.getValue(this.currentSymbol);
     }
 
-    get type(): TypeName {
-        let type: TypeName;
+    get type(): TypeComposite {
+        let type: TypeComposite;
 
         if (this.realSymbol) {
             type = this.realSymbol.type;
@@ -49,7 +51,7 @@ export class Expression extends TransformSymbol implements Consumer {
         }
 
         if (typeof type === 'undefined') {
-            type = new TypeName('');
+            type = new TypeComposite();
         }
 
         return type;
@@ -65,22 +67,29 @@ export class Expression extends TransformSymbol implements Consumer {
         return '';
     }
 
-    protected getType(symbol: Symbol): TypeName {
+    protected getType(symbol: Symbol): TypeComposite {
+        if (symbol === undefined) {
+            return new TypeComposite();
+        }
+
+        const type = new TypeComposite();
+
         if (
             symbol instanceof ConstantAccess ||
             symbol instanceof ClassTypeDesignator ||
-            symbol instanceof ObjectCreationExpression
+            symbol instanceof ObjectCreationExpression ||
+            isReference(symbol)
         ) {
-            return symbol.type;
+            type.push(symbol.type);
         } else if (symbol instanceof TokenSymbol) {
-            let type = Expression.getTypeOfToken(symbol.type);
+            let tokenType = Expression.getTypeOfToken(symbol.type);
 
-            if (type) {
-                return new TypeName(type);
+            if (tokenType) {
+                type.push(new TypeName(tokenType));
             }
         }
 
-        return new TypeName('');
+        return type;
     }
 
     static tokenHasType(tokenType: TokenKind): boolean {

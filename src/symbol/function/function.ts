@@ -10,7 +10,7 @@ import { TypeComposite } from "../../type/composite";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
 import { DocNodeKind, toTypeName } from "../../util/docParser";
-import { VariableAssignment } from "../variable/varibleAssignment";
+import { VariableAssignment } from "../variable/variableAssignment";
 import { FieldGetter } from "../fieldGetter";
 import { ImportTable } from "../../type/importTable";
 import { Location } from "../meta/location";
@@ -88,6 +88,9 @@ export class Function extends Symbol implements
                 if (typeName != null) {
                     this.docParamTypes['$' + docNode.name] = typeName;
                 }
+            } else if (docNode.kind === DocNodeKind.Return) {
+                let typeName = toTypeName(docNode.type);
+                this.typeAggregate.push(typeName);
             }
         }
     }

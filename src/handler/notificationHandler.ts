@@ -7,7 +7,7 @@ export namespace NotificationHandler {
     export async function change(params: DidChangeTextDocumentParams) {
         const indexer = App.get<Indexer>(Indexer);
 
-        PhpDocumentTable.acquireLock(params.textDocument.uri, async () => {
+        await PhpDocumentTable.acquireLock(params.textDocument.uri, async () => {
             const phpDoc = await indexer.getOrCreatePhpDoc(params.textDocument.uri);
             phpDoc.text = params.contentChanges[0].text;
             phpDoc.refresh();
@@ -18,7 +18,9 @@ export namespace NotificationHandler {
     export async function open(params: DidOpenTextDocumentParams) {
         const indexer = App.get<Indexer>(Indexer);
 
-        await indexer.open(params.textDocument.uri);
+        await PhpDocumentTable.acquireLock(params.textDocument.uri, async () => {
+            await indexer.open(params.textDocument.uri);
+        });
     }
 
     export async function close(params: DidCloseTextDocumentParams) {

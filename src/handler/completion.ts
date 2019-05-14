@@ -10,6 +10,7 @@ import { Variable } from "../symbol/variable/variable";
 import { Property } from "../symbol/variable/property";
 import { Method } from "../symbol/function/method";
 import { ClassConstant } from "../symbol/constant/classConstant";
+import { DefineConstant } from "../symbol/constant/defineConstant";
 
 export namespace CompletionProvider {
     export async function provide(params: CompletionParams):
@@ -36,7 +37,7 @@ export namespace CompletionProvider {
                     items.push(Formatter.getFunctionCompletion(phpDoc, symbol));
                 } else if (symbol instanceof Class) {
                     items.push(Formatter.getClassCompletion(phpDoc, symbol));
-                } else if (symbol instanceof Constant) {
+                } else if (symbol instanceof Constant || symbol instanceof DefineConstant) {
                     items.push(Formatter.getConstantCompletion(phpDoc, symbol));
                 } else if (symbol instanceof Variable) {
                     items.push(Formatter.getVariableCompletion(symbol));

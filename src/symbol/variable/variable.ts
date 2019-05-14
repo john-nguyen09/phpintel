@@ -30,7 +30,7 @@ export class Variable extends Symbol implements Consumer, DocBlockConsumer, Refe
     consume(other: Symbol) {
         let result = this.expression.consume(other);
 
-        if (!this.expression.type.isEmptyName()) {
+        if (!this.expression.type.isEmpty) {
             this.type.push(this.expression.type);
         }
 

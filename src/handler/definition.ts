@@ -9,44 +9,33 @@ import { isLocatable } from "../symbol/symbol";
 export namespace DefinitionProvider {
     export async function provide(params: TextDocumentPositionParams): Promise<LspLocation | LspLocation[] | null> {
         const phpDocTable: PhpDocumentTable = App.get<PhpDocumentTable>(PhpDocumentTable);
+        const lspLocs: LspLocation[] = [];
 
-        let phpDoc = await phpDocTable.get(params.textDocument.uri);
-        let result: Location[] = [];
-
-        if (phpDoc === null) {
-            return null;
-        }
-
-        let ref = await phpDoc.findRefAt(phpDoc.getOffset(params.position.line, params.position.character));
-
-        if (ref === null) {
-            return null;
-        }
-
-        let symbols = await RefResolver.getSymbolsByReference(phpDoc, ref);
-        for (let symbol of symbols) {
-            if (isLocatable(symbol)) {
-                result.push(symbol.location);
+        await PhpDocumentTable.acquireLock(params.textDocument.uri, async () => {
+            let phpDoc = await phpDocTable.get(params.textDocument.uri);
+            let result: Location[] = [];
+    
+            if (phpDoc === null) {
+                return;
             }
-        }
-
-        if (result.length === 0) {
-            return null;
-        } else if (result.length === 1) {
-            if (result[0].uri === undefined) {
-                return null;
+    
+            let ref = phpDoc.findRefAt(phpDoc.getOffset(params.position.line, params.position.character));
+    
+            if (ref === null) {
+                return;
             }
-
-            let defDoc = await phpDocTable.get(result[0].uri);
-
-            if (defDoc === null) {
-                return null;
+    
+            let symbols = await RefResolver.getSymbolsByReference(phpDoc, ref);
+            for (let symbol of symbols) {
+                if (isLocatable(symbol)) {
+                    result.push(symbol.location);
+                }
             }
-
-            return Formatter.toLspLocation(defDoc, result[0]);
-        } else {
-            let lspLocs: LspLocation[] = [];
-
+    
+            if (result.length === 0) {
+                return;
+            }
+    
             for (let loc of result) {
                 if (loc.uri === undefined) {
                     continue;
@@ -59,7 +48,13 @@ export namespace DefinitionProvider {
 
                 lspLocs.push(Formatter.toLspLocation(defDoc, loc));
             }
+        });
 
+        if (lspLocs.length === 0) {
+            return null;
+        } else if (lspLocs.length === 1) {
+            return lspLocs[0];
+        } else {
             return lspLocs;
         }
     }

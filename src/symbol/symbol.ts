@@ -125,7 +125,7 @@ export interface HasScope {
 }
 
 export interface NamedSymbol {
-    getName(): string;
+    name: TypeName;
 }
 
 export interface Locatable {
@@ -157,7 +157,7 @@ export function isScopeMember(symbol: Symbol): symbol is (Symbol & ScopeMember) 
 }
 
 export function isNamedSymbol(symbol: Symbol): symbol is (Symbol & NamedSymbol) {
-    return 'getName' in symbol && typeof (<any>symbol).getName == 'function';
+    return 'name' in symbol && (<any>symbol).name instanceof TypeName;
 }
 
 export function needsNameResolve(symbol: Symbol): symbol is (Symbol & NameResolvable) {

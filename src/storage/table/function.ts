@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 import { TypeName } from "../../type/name";
+import { Indexer } from "../../index/indexer";
+import { App } from "../../app";
 
 @injectable()
 export class FunctionTable {
@@ -51,6 +53,16 @@ export class FunctionTable {
 
     async search(keyword: string): Promise<CompletionValue[]> {
         return await this.completionIndex.search(keyword);
+    }
+
+    async getByDoc(phpDoc: PhpDocument): Promise<Function[]> {
+        const indexer: Indexer = App.get<Indexer>(Indexer);
+
+        if (indexer.isOpen(phpDoc.uri)) {
+            return phpDoc.functions;
+        }
+
+        return BelongsToDoc.getByDoc<Function>(this.db, phpDoc.uri);
     }
 
     async removeByDoc(uri: string) {

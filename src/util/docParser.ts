@@ -5,6 +5,7 @@ export enum DocNodeKind {
     Var = 'var',
     Param = 'param',
     Global = 'global',
+    Return = 'return',
 }
 
 export enum DocTypeKind {
@@ -48,6 +49,18 @@ export namespace DocParser {
                 parser: 'text',
                 optional: true
             }
+        ],
+        return: [
+            {
+                property: 'type',
+                parser: 'type',
+                optional: false,
+            },
+            {
+                property: 'description',
+                parser: 'text',
+                optional: true
+            }
         ]
     };
     const docParser = new _DocParser(customDocBlocks);
@@ -63,7 +76,7 @@ export interface DocAst {
     body: DocNode[]
 }
 
-export type DocNode = VarDocNode | ParamDocNode | GlobalDocNode;
+export type DocNode = VarDocNode | ParamDocNode | GlobalDocNode | ReturnDocNode;
 export type DocTypeNode = DocType | DocTypeCollection;
 
 export interface VarDocNode {
@@ -83,6 +96,12 @@ export interface GlobalDocNode {
     kind: DocNodeKind.Global;
     type: DocTypeNode;
     variable: string;
+    description: string;
+}
+
+export interface ReturnDocNode {
+    kind: DocNodeKind.Return;
+    type: DocTypeNode;
     description: string;
 }
 

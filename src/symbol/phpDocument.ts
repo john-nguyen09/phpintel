@@ -182,18 +182,31 @@ export class PhpDocument extends Symbol implements Consumer {
         return refs;
     }
 
-    findScopeVarAt(offset: number): Range | null {
+    findScopeVarAt(offset: number): ScopeVar | null {
+        let minScopeVar: ScopeVar | null = null;
+        let minRange : Range | null = null;
+
         for (const scopeVar of this.scopeVarStack) {
-            if (
-                scopeVar.location.range !== undefined &&
-                scopeVar.location.range.start <= offset &&
-                scopeVar.location.range.end >= offset
-            ) {
-                return scopeVar.location.range;
+            if (typeof scopeVar.location.range === 'undefined') {
+                continue;
+            }
+            if (scopeVar.location.range.end < offset || scopeVar.location.range.start > offset) {
+                continue;
+            }
+            
+            if (minRange === null) {
+                minScopeVar = scopeVar;
+                minRange = scopeVar.location.range;
+                continue;
+            }
+
+            if (scopeVar.location.range.end < minRange.end) {
+                minScopeVar = scopeVar;
+                minRange = scopeVar.location.range;
             }
         }
 
-        return null;
+        return minScopeVar;
     }
 
     findArgumentListAt(offset: number): ArgumentExpressionList | null {

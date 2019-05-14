@@ -5,6 +5,8 @@ import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
+import { Indexer } from "../../index/indexer";
+import { App } from "../../app";
 
 export type PropertyPredicate = (prop: Property) => boolean;
 
@@ -79,6 +81,16 @@ export class PropertyTable {
 
     async search(className: string, keyword: string): Promise<CompletionValue[]> {
         return await this.completionIndex.search(keyword, className);
+    }
+
+    async getByDoc(phpDoc: PhpDocument): Promise<Property[]> {
+        const indexer: Indexer = App.get<Indexer>(Indexer);
+
+        if (indexer.isOpen(phpDoc.uri)) {
+            return phpDoc.properties;
+        }
+
+        return BelongsToDoc.getByDoc<Property>(this.db, phpDoc.uri);
     }
 
     async removeByDoc(uri: string) {

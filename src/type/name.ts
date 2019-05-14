@@ -62,7 +62,7 @@ export class TypeName {
         return this.name;
     }
 
-    public isEmptyName(): boolean {
+    public isEmpty(): boolean {
         return this.name == '';
     }
 

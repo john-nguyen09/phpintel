@@ -109,7 +109,7 @@ export namespace RefResolver {
                 ResolveType.forType(ref.scope, (scope) => {
                     scope.resolveReferenceToFqn(phpDoc.importTable);
 
-                    if (scope.isEmptyName()) {
+                    if (scope.isEmpty()) {
                         return;
                     }
 
@@ -173,41 +173,16 @@ export namespace RefResolver {
                 if (ref.location.uri === undefined || ref.location.range === undefined) {
                     break;
                 }
-                const range = await phpDoc.findScopeVarAt(ref.location.range.start);
+                const scopeVar = await phpDoc.findScopeVarAt(ref.location.range.start);
 
-                if (range === null) {
+                if (scopeVar === null) {
                     break;
                 }
 
-                let refVars: Reference[] = [];
-                const scopeVar = new ScopeVar();
-                if (keyword.length > 0) {
-                    refVars = phpDoc.findRefWithin(range, (foundRef) => {
-                        return foundRef.refKind === RefKind.Variable &&
-                            typeof foundRef.refName !== 'undefined' &&
-                            foundRef.refName.length > 0 &&
-                            foundRef.refName.indexOf(keyword) >= 0;
-                    });
-                } else {
-                    refVars = phpDoc.findRefWithin(range, (foundRef) => {
-                        return foundRef.refKind === RefKind.Variable &&
-                            typeof foundRef.refName !== 'undefined' &&
-                            foundRef.refName.length > 0;
-                    });
+                for (let varName in scopeVar.variables) {
+                    symbols.push(new Variable(varName, scopeVar.variables[varName]));
                 }
-                if (refVars.length > 0) {
-                    for (let refVar of refVars) {
-                        if (typeof refVar.refName == 'undefined' || refVar.type instanceof TypeName) {
-                            continue;
-                        }
-
-                        scopeVar.set(new Variable(refVar.refName, refVar.type));
-                    }
-
-                    for (let varName in scopeVar.variables) {
-                        symbols.push(new Variable(varName, scopeVar.variables[varName]));
-                    }
-                }
+                // TODO: Global variables
 
                 break;
             case RefKind.MethodCall:

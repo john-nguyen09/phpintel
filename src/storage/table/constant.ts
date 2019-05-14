@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
 import { DefineConstant } from "../../symbol/constant/defineConstant";
+import { Indexer } from "../../index/indexer";
+import { App } from "../../app";
 
 type GeneralConstant = Constant | DefineConstant;
 
@@ -51,6 +53,16 @@ export class ConstantTable {
 
     async search(keyword: string): Promise<CompletionValue[]> {
         return await this.completionIndex.search(keyword);
+    }
+
+    async getByDoc(phpDoc: PhpDocument): Promise<(Constant | DefineConstant)[]> {
+        const indexer: Indexer = App.get<Indexer>(Indexer);
+
+        if (indexer.isOpen(phpDoc.uri)) {
+            return phpDoc.constants;
+        }
+
+        return BelongsToDoc.getByDoc<Constant>(this.db, phpDoc.uri);
     }
 
     async removeByDoc(uri: string) {

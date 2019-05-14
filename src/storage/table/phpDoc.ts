@@ -55,8 +55,8 @@ export class PhpDocumentTable {
     async getAllStream<T>(callback: (phpDoc: PhpDocument) => void): Promise<void> {
         const db = this.db;
 
-        for (const doc of this.openedDocs) {
-            callback(doc[1]);
+        for (const uri in this.openedDocs) {
+            callback(this.openedDocs[uri]);
         }
 
         return await new Promise<void>((resolve, reject) => {

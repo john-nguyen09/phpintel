@@ -1,5 +1,5 @@
 import { App } from "./app";
-import { createConnection, InitializeParams, InitializeResult, TextDocumentSyncKind } from "vscode-languageserver";
+import { createConnection, InitializeParams, InitializeResult, TextDocumentSyncKind, DocumentSymbol } from "vscode-languageserver";
 import { LogWriter } from "./service/logWriter";
 import { Hasher } from "./service/hasher";
 import { uriToPath } from "./util/uri";
@@ -11,6 +11,7 @@ import { DefinitionProvider } from "./handler/definition";
 import { CompletionProvider } from "./handler/completion";
 import { SignatureHelpProvider } from "./handler/signatureHelp";
 import { NotificationHandler } from "./handler/notificationHandler";
+import { DocumentSymbolProvider } from "./handler/documentSymbol";
 const pjson = require("../package.json");
 const homedir = require('os').homedir();
 
@@ -21,6 +22,7 @@ connection.onHover(HoverProvider.provide);
 connection.onDefinition(DefinitionProvider.provide);
 connection.onCompletion(CompletionProvider.provide);
 connection.onSignatureHelp(SignatureHelpProvider.provide);
+connection.onDocumentSymbol(DocumentSymbolProvider.provide);
 
 connection.onDidChangeTextDocument(NotificationHandler.change);
 connection.onDidOpenTextDocument(NotificationHandler.open);
@@ -69,7 +71,8 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
                 triggerCharacters: [
                     '(', ')', ','
                 ],
-            }
+            },
+            documentSymbolProvider: true,
         }
     };
 });

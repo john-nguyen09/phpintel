@@ -4,6 +4,7 @@ import { Constant } from "./constant";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { Class } from "../class/class";
+import { TypeComposite } from "../../type/composite";
 
 export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, Locatable {
     public name: TypeName;
@@ -32,11 +33,11 @@ export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, L
         this.constant.resolvedValue = val;
     }
 
-    get type(): TypeName {
+    get type(): TypeComposite {
         return this.constant.type;
     }
 
-    set type(val: TypeName) {
+    set type(val: TypeComposite) {
         this.constant.resolvedType = val;
     }
 

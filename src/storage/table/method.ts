@@ -5,6 +5,8 @@ import { BelongsToDoc } from "./index/belongsToDoc";
 import { injectable } from "inversify";
 import { NameIndex } from "./index/nameIndex";
 import { CompletionIndex, CompletionValue } from "./index/completionIndex";
+import { Indexer } from "../../index/indexer";
+import { App } from "../../app";
 
 export type MethodPredicate = (method: Method) => boolean;
 
@@ -83,6 +85,16 @@ export class MethodTable {
 
     async search(className: string, keyword: string): Promise<CompletionValue[]> {
         return await this.completionIndex.search(keyword, className);
+    }
+
+    async getByDoc(phpDoc: PhpDocument): Promise<Method[]> {
+        const indexer: Indexer = App.get<Indexer>(Indexer);
+
+        if (indexer.isOpen(phpDoc.uri)) {
+            return phpDoc.methods;
+        }
+
+        return BelongsToDoc.getByDoc<Method>(this.db, phpDoc.uri);
     }
 
     async removeByDoc(uri: string) {

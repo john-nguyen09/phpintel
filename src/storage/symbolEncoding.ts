@@ -130,7 +130,7 @@ const constEncoding = {
             constEncoding.DEFINE_CONSTANT : constEncoding.CONSTANT);
         serializer.setTypeName(symbol.name);
         serializer.setLocation(symbol.location);
-        serializer.setTypeName(symbol.type);
+        serializer.setTypeComposite(symbol.type);
         serializer.setString(symbol.value);
 
         return serializer.getBuffer();
@@ -148,7 +148,7 @@ const constEncoding = {
 
         constant.name = deserializer.readTypeName() || new TypeName('');
         constant.location = deserializer.readLocation();
-        constant.resolvedType = deserializer.readTypeName();
+        constant.resolvedType = deserializer.readTypeComposite();
         constant.resolvedValue = deserializer.readString();
 
         return constant;
@@ -161,7 +161,7 @@ const classConstEncoding = {
 
         serializer.setTypeName(symbol.name);
         serializer.setLocation(symbol.location);
-        serializer.setTypeName(symbol.type);
+        serializer.setTypeComposite(symbol.type);
         serializer.setTypeName(symbol.scope);
         serializer.setString(symbol.value);
 
@@ -173,7 +173,7 @@ const classConstEncoding = {
 
         classConst.name = deserializer.readTypeName() || new TypeName('');
         classConst.location = deserializer.readLocation();
-        classConst.type = deserializer.readTypeName() || new TypeName('');
+        classConst.type = deserializer.readTypeComposite();
         classConst.scope = deserializer.readTypeName();
         classConst.value = deserializer.readString();
 

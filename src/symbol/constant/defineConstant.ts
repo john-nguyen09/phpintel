@@ -7,8 +7,9 @@ import { FieldGetter } from "../fieldGetter";
 import { Reference, RefKind } from "../reference";
 import { Location } from "../meta/location";
 import { ImportTable } from "../../type/importTable";
+import { TypeComposite } from "../../type/composite";
 
-export class DefineConstant extends Symbol implements Reference, FieldGetter, Locatable {
+export class DefineConstant extends Symbol implements FieldGetter, Locatable {
     public readonly refKind = RefKind.Constant;
     public name: TypeName = new TypeName('');
     public description: string;
@@ -50,7 +51,7 @@ export class DefineConstant extends Symbol implements Reference, FieldGetter, Lo
         return this.constant.scope;
     }
 
-    set resolvedType(value: TypeName | null) {
+    set resolvedType(value: TypeComposite | null) {
         this.constant.resolvedType = value;
     }
 

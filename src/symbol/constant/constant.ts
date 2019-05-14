@@ -6,6 +6,7 @@ import { TokenKind } from "../../util/parser";
 import { FieldGetter } from "../fieldGetter";
 import { ImportTable } from "../../type/importTable";
 import { Reference, RefKind } from "../reference";
+import { TypeComposite } from "../../type/composite";
 
 export class Constant extends Symbol implements Consumer, Reference, FieldGetter, Locatable {
     public readonly refKind = RefKind.Constant;
@@ -13,7 +14,7 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
     public description: string;
     public expression: Expression;
     public location: Location = {};
-    public resolvedType: TypeName | null = null;
+    public resolvedType: TypeComposite | null = null;
     public resolvedValue: string | null = null;
     public scope: TypeName | null = null;
 
@@ -68,10 +69,10 @@ export class Constant extends Symbol implements Consumer, Reference, FieldGetter
         return this.resolvedValue;
     }
 
-    get type() {
+    get type(): TypeComposite {
         if (this.resolvedType === null) {
             if (typeof this.expression === 'undefined') {
-                this.resolvedType = new TypeName('');
+                this.resolvedType = new TypeComposite();
             } else {
                 this.resolvedType = this.expression.type;
             }

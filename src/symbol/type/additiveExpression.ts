@@ -2,6 +2,7 @@ import { Symbol, TokenSymbol, Consumer } from "../symbol";
 import { Expression } from "./expression";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
+import { TypeComposite } from "../../type/composite";
 
 export class AdditiveExpression extends Expression implements Consumer {
     protected valueSymbols: Symbol[] = [];
@@ -51,14 +52,18 @@ export class AdditiveExpression extends Expression implements Consumer {
         return values.join('');
     }
 
-    get type(): TypeName {
+    get type(): TypeComposite {
         if (this.valueSymbols.length >= 1) {
             let firstValue = this.valueSymbols[0];
 
-            return this.getType(firstValue);
+            const type = this.getType(firstValue);
+
+            if (type instanceof TypeName) {
+                return type;
+            }
         }
 
-        return new TypeName('');
+        return new TypeComposite();
     }
 
     private concatStrings(stringValues: TokenSymbol[]): string {

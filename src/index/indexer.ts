@@ -115,6 +115,10 @@ export class Indexer {
         this.openedUri.delete(uri);
     }
 
+    public isOpen(uri: string): boolean {
+        return this.openedUri.has(uri);
+    }
+
     private async removeSymbolsByDoc(uri: string) {
         return Promise.all([
             this.classTable.removeByDoc(uri),

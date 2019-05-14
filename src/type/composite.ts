@@ -4,13 +4,27 @@ export class TypeComposite {
     protected existingTypes: { [key: string]: boolean } = {};
     protected _types: TypeName[] = [];
 
-    push(type: TypeName | null) {
-        if (type == null || type.name in this.existingTypes) {
+    push(type: TypeName | TypeComposite | null) {
+        if (type == null) {
             return;
         }
 
-        this._types.push(type);
-        this.existingTypes[type.name] = true;
+        const types: TypeName[] = [];
+
+        if (type instanceof TypeName) {
+            types.push(type);
+        } else {
+            types.push(...type.types.filter(type => !type.isEmpty()));
+        }
+
+        for (const type of types) {
+            if (type.name in this.existingTypes) {
+                return;
+            }
+    
+            this._types.push(type);
+            this.existingTypes[type.name] = true;
+        }
     }
 
     clone(): TypeComposite {

@@ -68,12 +68,13 @@ afterAll(async () => {
 describe('completion', () => {
     it('completion for constant access references', async () => {
         await testCompletions([
-            'global_symbols.php', 'function_declare.php'
+            'global_symbols.php', 'function_declare.php', 'completionlib.php'
         ], [
             { path: path.join(getCaseDir(), 'completion', 'function.php'), offset: 18 },
             { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 14 },
             { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 29 },
             { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 37 },
+            { path: path.join(getCaseDir(), 'completion', 'constant.php'), offset: 49 },
         ]);
     });
 
@@ -97,9 +98,10 @@ describe('completion', () => {
 
     it('completion for variables', async () => {
         await testCompletions(['global_symbols.php'], [
-            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
-            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
-            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 103 },
+            // { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 27 },
+            // { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 94 },
+            // { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 103 },
+            { path: path.join(getCaseDir(), 'completion', 'variables.php'), offset: 316 },
         ]);
     });
 

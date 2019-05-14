@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "module": "commonjs",
         "declaration": true,
         "outDir": "./lib",
@@ -13,6 +13,7 @@
         "experimentalDecorators": true,
         "noResolve": false,
         "types": ["reflect-metadata", "jest"],
+        "lib": [ "es2015" ],
         "emitDecoratorMetadata": true
     },
     "include": [

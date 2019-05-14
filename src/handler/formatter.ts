@@ -1,4 +1,4 @@
-import { MarkedString, CompletionItem, CompletionItemKind, SignatureInformation, ParameterInformation } from "vscode-languageserver";
+import { MarkedString, CompletionItem, CompletionItemKind, SignatureInformation, ParameterInformation, SymbolInformation, SymbolKind } from "vscode-languageserver";
 import { Function } from "../symbol/function/function";
 import { TypeName } from "../type/name";
 import { PhpDocument } from "../symbol/phpDocument";
@@ -16,6 +16,7 @@ import { Constant } from "../symbol/constant/constant";
 import { DefineConstant } from "../symbol/constant/defineConstant";
 import { Variable } from "../symbol/variable/variable";
 import { Parameter } from "../symbol/variable/parameter";
+import { isNamedSymbol, Symbol, isLocatable } from "../symbol/symbol";
 
 export namespace Formatter {
     export function highlightPhp(content: string): MarkedString {
@@ -27,7 +28,7 @@ export namespace Formatter {
 
     export function types(types: TypeName[]): string {
         return types.map((type): string | null => {
-            if (type.isEmptyName()) {
+            if (type.isEmpty()) {
                 return null;
             }
 
@@ -93,12 +94,19 @@ export namespace Formatter {
         let qualifiedName = symbol.name.getQualified(phpDoc.importTable);
         let className = '';
         let modifiers = modifierDef(symbol.modifier);
+        const type = symbol.types
+            .filter(type => !type.isEmpty())
+            .map((type) => {
+                return type.toString();
+            })
+            .join('|');
 
         if (symbol.scope !== null) {
             className = symbol.scope.getQualified(phpDoc.importTable);
         }
 
-        return highlightPhp(`${modifiers} function ${className}::${qualifiedName}(${params})`);
+        return highlightPhp(`${modifiers} function ${className}::${qualifiedName}(${params})` +
+            (type.length > 0 ? ` : ${type}` : ''));
     }
 
     export function propDef(phpDoc: PhpDocument, symbol: Property): MarkedString {
@@ -136,9 +144,9 @@ export namespace Formatter {
         return highlightPhp(`${Formatter.types(types)} ${ref.refName}`);
     }
 
-    export function constDef(phpDoc: PhpDocument, constant: Constant): MarkedString {
+    export function constDef(phpDoc: PhpDocument, constant: Constant | DefineConstant): MarkedString {
         if (constant instanceof DefineConstant) {
-            return highlightPhp(`define(${constant.name.getQualified(phpDoc.importTable)}, ${constant.value})`);
+            return highlightPhp(`define('${constant.name.getQualified(phpDoc.importTable)}', ${constant.value})`);
         } else {
             return highlightPhp(`const ${constant.name.getQualified(phpDoc.importTable)} = ${constant.value}`);
         }
@@ -159,11 +167,13 @@ export namespace Formatter {
     }
 
     export function getFunctionCompletion(phpDoc: PhpDocument, func: Function): CompletionItem {
+        const qualifiedName = func.name.getQualified(phpDoc.importTable);
+
         return {
-            label: func.getName(),
+            label: qualifiedName,
             kind: CompletionItemKind.Function,
             documentation: func.description,
-            insertText: func.name.getQualified(phpDoc.importTable)
+            insertText: qualifiedName,
         };
     }
 
@@ -219,8 +229,9 @@ export namespace Formatter {
         }
 
         return {
-            label: `${scopeName}::${method.getName()}`,
+            label: `${method.getName()}`,
             kind: CompletionItemKind.Method,
+            detail: `${scopeName}`,
             documentation: method.description,
             insertText: method.getName()
         }
@@ -280,6 +291,24 @@ export namespace Formatter {
             label,
             parameters,
             documentation: method.description
+        }
+    }
+
+    export function getSymbolInfo(phpDoc: PhpDocument, symbol: Symbol): SymbolInformation | null {
+        if (!isNamedSymbol(symbol)) {
+            return null;
+        }
+        if (!isLocatable(symbol)) {
+            return null;
+        }
+
+        const location = toLspLocation(phpDoc, symbol.location);
+        const qualifiedName = symbol.name.getQualified(phpDoc.importTable);
+
+        return {
+            name: qualifiedName,
+            kind: SymbolKind.Class,
+            location: location
         }
     }
 }
