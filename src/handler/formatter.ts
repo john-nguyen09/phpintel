@@ -304,10 +304,30 @@ export namespace Formatter {
 
         const location = toLspLocation(phpDoc, symbol.location);
         const qualifiedName = symbol.name.getQualified(phpDoc.importTable);
+        let symbolKind: SymbolKind | null = null;
+
+        if (symbol instanceof Class) {
+            symbolKind = SymbolKind.Class;
+        } else if (
+            symbol instanceof Function ||
+            symbol instanceof Method
+        ) {
+            symbolKind = SymbolKind.Function;
+        } else if (
+            symbol instanceof Constant ||
+            symbol instanceof ClassConstant || 
+            symbol instanceof DefineConstant
+        ) {
+            symbolKind = SymbolKind.Constant;
+        }
+
+        if (symbolKind === null) {
+            return null;
+        }
 
         return {
             name: qualifiedName,
-            kind: SymbolKind.Class,
+            kind: symbolKind,
             location: location
         }
     }
