@@ -128,9 +128,9 @@ describe('completion', () => {
             'global_variables.php',
             'class_methods.php',
         ], [
-            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 14 },
-            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 28 },
-            // { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 100 },
+            { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 14 },
+            { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 28 },
+            { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 100 },
             { path: path.join(getCaseDir(), 'completion', 'global_variables.php'), offset: 190 },
         ]);
     });

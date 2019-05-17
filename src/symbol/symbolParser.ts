@@ -13,7 +13,7 @@ import { NamespaceName } from "./name/namespaceName";
 import { FunctionCall } from "./function/functionCall";
 import { ArgumentExpressionList } from "./argumentExpressionList";
 import { ConstantAccess } from "./constant/constantAccess";
-import { AdditiveExpression } from "./type/additiveExpression";
+// import { AdditiveExpression } from "./type/additiveExpression";
 import { Constant } from "./constant/constant";
 import { Identifier } from "./identifier";
 import { ClassConstant } from "./constant/classConstant";
@@ -199,9 +199,9 @@ export class SymbolParser implements Visitor {
                 case PhraseKind.ConstantAccessExpression:
                     this.pushSymbol(new ConstantAccess());
                     break;
-                case PhraseKind.AdditiveExpression:
-                    this.pushSymbol(new AdditiveExpression());
-                    break;
+                // case PhraseKind.AdditiveExpression:
+                //     this.pushSymbol(new AdditiveExpression());
+                //     break;
 
                 case PhraseKind.FunctionDeclaration:
                     let funcSymbol = new Function();

@@ -1,7 +1,7 @@
 import { Reference, RefKind } from "../symbol/reference";
 import { App } from "../app";
 import { FunctionTable } from "../storage/table/function";
-import { TypeComposite, ResolveType } from "../type/composite";
+import { TypeComposite, ResolveType, ExpressedType } from "../type/composite";
 import { Function } from "../symbol/function/function";
 import { PhpDocument } from "../symbol/phpDocument";
 import { Class } from "../symbol/class/class";
@@ -29,6 +29,14 @@ import { GlobalVariableTable } from "../storage/table/globalVariable";
 export namespace RefResolver {
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
         let symbols: Symbol[] = [];
+
+        if (typeof ref === 'undefined') {
+            return symbols;
+        }
+
+        if (ref.scope instanceof ExpressedType) {
+            await ref.scope.resolve(phpDoc);
+        }
 
         switch (ref.refKind) {
             case RefKind.Function:

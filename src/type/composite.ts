@@ -1,4 +1,10 @@
 import { TypeName } from "./name";
+import { Reference } from "../symbol/reference";
+import { PhpDocument } from "../symbol/phpDocument";
+import { RefResolver } from "../handler/refResolver";
+import { isNamedSymbol } from "../symbol/symbol";
+import { Method } from "../symbol/function/method";
+import { Function } from "../symbol/function/function";
 
 export class TypeComposite {
     protected existingTypes: { [key: string]: boolean } = {};
@@ -60,6 +66,40 @@ export namespace ResolveType {
             }
         } else {
             callback(types);
+        }
+    }
+}
+
+export class ExpressedType extends TypeComposite {
+    private ref: Reference;
+
+    public setReference(ref: Reference) {
+        this.ref = ref;
+    }
+
+    public clone(): TypeComposite {
+        const clone = new ExpressedType();
+        clone.setReference(this.ref);
+
+        for (const type of this.types) {
+            clone.push(type);
+        }
+
+        return clone;
+    }
+
+    public async resolve(phpDoc: PhpDocument) {
+        const symbols = await RefResolver.getSymbolsByReference(phpDoc, this.ref);
+
+        for (const symbol of symbols) {
+            if (
+                symbol instanceof Method ||
+                symbol instanceof Function
+            ) {
+                for (const type of symbol.types) {
+                    this.push(type);
+                }
+            }
         }
     }
 }

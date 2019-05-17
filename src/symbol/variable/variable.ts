@@ -1,6 +1,6 @@
 import { Symbol, Consumer, DocBlockConsumer } from "../symbol";
 import { Expression } from "../type/expression";
-import { TypeComposite } from "../../type/composite";
+import { TypeComposite, ExpressedType } from "../../type/composite";
 import { DocBlock } from "../docBlock";
 import { DocNodeKind, toTypeName, VarDocNode } from "../../util/docParser";
 import { Location } from "../meta/location";
@@ -10,7 +10,7 @@ import { Range } from "../meta/range";
 
 export class Variable extends Symbol implements Consumer, DocBlockConsumer, Reference {
     public readonly refKind = RefKind.Variable;
-    public type: TypeComposite = new TypeComposite();
+    public type: TypeComposite | ExpressedType = new TypeComposite();
     public location: Location = {};
     public scope: TypeName | null = null;
     public scopeRange: Range | undefined = undefined;
@@ -30,7 +30,9 @@ export class Variable extends Symbol implements Consumer, DocBlockConsumer, Refe
     consume(other: Symbol) {
         let result = this.expression.consume(other);
 
-        if (!this.expression.type.isEmpty) {
+        if (this.expression.type instanceof ExpressedType) {
+            this.type = this.expression.type;
+        } else if (!this.expression.type.isEmpty) {
             this.type.push(this.expression.type);
         }
 

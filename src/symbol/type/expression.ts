@@ -4,8 +4,8 @@ import { ClassTypeDesignator } from "../class/typeDesignator";
 import { TypeName } from "../../type/name";
 import { TokenKind } from "../../util/parser";
 import { ObjectCreationExpression } from "./objectCreationExpression";
-import { Reference, isReference } from "../reference";
-import { TypeComposite } from "../../type/composite";
+import { isReference } from "../reference";
+import { TypeComposite, ExpressedType } from "../../type/composite";
 
 export class Expression extends TransformSymbol implements Consumer {
     public realSymbol: Expression;
@@ -72,13 +72,12 @@ export class Expression extends TransformSymbol implements Consumer {
             return new TypeComposite();
         }
 
-        const type = new TypeComposite();
+        let type = new TypeComposite();
 
         if (
             symbol instanceof ConstantAccess ||
             symbol instanceof ClassTypeDesignator ||
-            symbol instanceof ObjectCreationExpression ||
-            isReference(symbol)
+            symbol instanceof ObjectCreationExpression
         ) {
             type.push(symbol.type);
         } else if (symbol instanceof TokenSymbol) {
@@ -87,6 +86,11 @@ export class Expression extends TransformSymbol implements Consumer {
             if (tokenType) {
                 type.push(new TypeName(tokenType));
             }
+        } else if (isReference(symbol)) {
+            const newType = new ExpressedType();
+            newType.setReference(symbol);
+
+            type = newType;
         }
 
         return type;

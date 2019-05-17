@@ -11,7 +11,7 @@ class moodle_database {
     }
 }
 
-class database_manager() {
+class database_manager {
     public function table_exists() {
 
     }

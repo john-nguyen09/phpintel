@@ -1833,3 +1833,127 @@ Array [
   },
 ]
 `;
+
+exports[`Testing functions around references temp ref test 1`] = `
+Array [
+  Method {
+    "assignFieldGetter": [Function],
+    "constructor": [Function],
+    "consume": [Function],
+    "consumeDocBlock": [Function],
+    "createNewObject": [Function],
+    "description": "",
+    "func": Function {
+      "description": "",
+      "name": undefined,
+      "parameters": Array [],
+      "scopeVar": ScopeVar {
+        "addGlobalVariableName": [Function],
+        "assignFieldGetter": [Function],
+        "constructor": [Function],
+        "consume": [Function],
+        "createNewObject": [Function],
+        "getType": [Function],
+        "globalVariables": Map {},
+        "isGlobal": [Function],
+        "isTop": false,
+        "location": Object {},
+        "set": [Function],
+        "toObject": [Function],
+        "variables": Object {
+          "$db": TypeComposite {
+            "_types": Array [
+              TypeName {
+                "name": "moodle_database",
+              },
+            ],
+            "existingTypes": Object {
+              "moodle_database": true,
+            },
+          },
+          "$db_man": TypeComposite {
+            "_types": Array [],
+            "existingTypes": Object {},
+          },
+        },
+      },
+      "types": Array [],
+    },
+    "getName": [Function],
+    "location": Object {
+      "range": Object {
+        "end": 396,
+        "start": 355,
+      },
+      "uri": "case/moodle_database.php",
+    },
+    "modifier": SymbolModifier {
+      "modifier": 0,
+      "visibility": 1,
+    },
+    "name": TypeName {
+      "name": "table_exists",
+    },
+    "parameters": Array [],
+    "pushParam": [Function],
+    "pushType": [Function],
+    "returnType": TypeComposite {
+      "_types": Array [],
+      "existingTypes": Object {},
+    },
+    "scope": TypeName {
+      "name": "\\\\database_manager",
+    },
+    "scopeVar": ScopeVar {
+      "addGlobalVariableName": [Function],
+      "assignFieldGetter": [Function],
+      "constructor": [Function],
+      "consume": [Function],
+      "createNewObject": [Function],
+      "getType": [Function],
+      "globalVariables": Map {},
+      "isGlobal": [Function],
+      "isTop": false,
+      "location": Object {},
+      "set": [Function],
+      "toObject": [Function],
+      "variables": Object {
+        "$db": TypeComposite {
+          "_types": Array [
+            TypeName {
+              "name": "moodle_database",
+            },
+          ],
+          "existingTypes": Object {
+            "moodle_database": true,
+          },
+        },
+        "$db_man": TypeComposite {
+          "_types": Array [],
+          "existingTypes": Object {},
+        },
+      },
+    },
+    "setScopeClass": [Function],
+    "setVariable": [Function],
+    "toObject": [Function],
+    "types": Array [],
+    "variables": Object {
+      "$db": TypeComposite {
+        "_types": Array [
+          TypeName {
+            "name": "moodle_database",
+          },
+        ],
+        "existingTypes": Object {
+          "moodle_database": true,
+        },
+      },
+      "$db_man": TypeComposite {
+        "_types": Array [],
+        "existingTypes": Object {},
+      },
+    },
+  },
+]
+`;

@@ -36,13 +36,7 @@ export class ScopeVar extends Symbol implements Consumer {
 
     getType(variableName: string): TypeComposite {
         if (variableName in this.variables) {
-            let returnType = new TypeComposite();
-
-            for (let type of this.variables[variableName].types) {
-                returnType.push(type);
-            }
-
-            return returnType;
+            return this.variables[variableName];
         }
 
         return new TypeComposite();
