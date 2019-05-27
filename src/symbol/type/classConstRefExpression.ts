@@ -6,6 +6,7 @@ import { Reference, RefKind } from "../reference";
 import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { Class } from "../class/class";
+import { Interface } from "../interface/interface";
 
 export class ClassConstRefExpression extends CollectionSymbol implements Consumer, Reference, ScopeMember {
     public isParentIncluded = true;
@@ -52,7 +53,7 @@ export class ClassConstRefExpression extends CollectionSymbol implements Consume
         ];
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.classRef.setScopeClass(scopeClass);
     }
 }

@@ -9,6 +9,7 @@ import { Variable } from "../variable/variable";
 import { Class } from "../class/class";
 import { ScopeVar } from "../variable/scopeVar";
 import { Parameter } from "../variable/parameter";
+import { Interface } from "../interface/interface";
 
 export class Method extends Symbol implements DocBlockConsumer, ScopeMember, NamedSymbol, Locatable {
     public modifier: SymbolModifier = new SymbolModifier();
@@ -68,7 +69,7 @@ export class Method extends Symbol implements DocBlockConsumer, ScopeMember, Nam
         return this.name.toString();
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.scope = scopeClass.name;
     }
 

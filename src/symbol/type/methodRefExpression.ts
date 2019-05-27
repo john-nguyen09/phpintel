@@ -3,6 +3,7 @@ import { ClassRef } from "../class/classRef";
 import { MethodCall } from "../function/methodCall";
 import { TokenKind } from "../../util/parser";
 import { Class } from "../class/class";
+import { Interface } from "../interface/interface";
 
 export class MethodRefExpression extends CollectionSymbol implements Consumer, ScopeMember {
     public isParentIncluded = true;
@@ -33,7 +34,7 @@ export class MethodRefExpression extends CollectionSymbol implements Consumer, S
         ]
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.classRef.setScopeClass(scopeClass);
     }
 }

@@ -10,6 +10,7 @@ import { Location } from './meta/location';
 import { ImportTable } from '../type/importTable';
 import { toRelative } from '../util/uri';
 import { Class } from './class/class';
+import { Interface } from './interface/interface';
 
 export abstract class Symbol {
     toObject(): any {
@@ -117,7 +118,7 @@ export interface DocBlockConsumer {
 }
 
 export interface ScopeMember {
-    setScopeClass(scopeClass: Class): void;
+    setScopeClass(scopeClass: Class | Interface): void;
 }
 
 export interface HasScope {

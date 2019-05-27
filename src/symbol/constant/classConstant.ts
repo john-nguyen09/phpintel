@@ -5,6 +5,7 @@ import { TypeName } from "../../type/name";
 import { Location } from "../meta/location";
 import { Class } from "../class/class";
 import { TypeComposite } from "../../type/composite";
+import { Interface } from "../interface/interface";
 
 export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, Locatable {
     public name: TypeName;
@@ -45,7 +46,7 @@ export class ClassConstant extends Symbol implements ScopeMember, NamedSymbol, L
         return this.name.toString();
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.scope = scopeClass.name;
     }
 }

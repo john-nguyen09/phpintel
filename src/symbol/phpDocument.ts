@@ -17,6 +17,7 @@ import { ArgumentExpressionList } from "./argumentExpressionList";
 import { DefineConstant } from "./constant/defineConstant";
 import { GlobalVariable } from "./variable/globalVariable";
 import { Range } from "./meta/range";
+import { Interface } from "./interface/interface";
 
 export class PhpDocument extends Symbol implements Consumer {
     public text: string;
@@ -35,6 +36,7 @@ export class PhpDocument extends Symbol implements Consumer {
     public references: Reference[];
     public argumentLists: ArgumentExpressionList[];
     public globalVariables: GlobalVariable[];
+    public interfaces: Interface[];
 
     public scopeVarStack: ScopeVar[];
 
@@ -60,6 +62,7 @@ export class PhpDocument extends Symbol implements Consumer {
         this.argumentLists = [];
         this.scopeVarStack = [];
         this.globalVariables = [];
+        this.interfaces = [];
     }
 
     getTree(): Phrase {
@@ -125,6 +128,8 @@ export class PhpDocument extends Symbol implements Consumer {
             this.argumentLists.push(symbol);
         } else if (symbol instanceof GlobalVariable) {
             this.globalVariables.push(symbol);
+        } else if (symbol instanceof Interface) {
+            this.interfaces.push(symbol);
         }
 
         if (isReference(symbol)) {

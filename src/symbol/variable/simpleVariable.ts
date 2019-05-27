@@ -6,13 +6,14 @@ import { Location } from "../meta/location";
 import { ScopeVar } from "./scopeVar";
 import { Class } from "../class/class";
 import { TypeName } from "../../type/name";
+import { Interface } from "../interface/interface";
 
 export class SimpleVariable extends Variable implements FieldGetter, ScopeMember {
     public location: Location;
 
     public scopeVar: ScopeVar | null = null;
 
-    private scopeClass: Class | null = null;
+    private scopeClass: Class | Interface | null = null;
 
     constructor() {
         super('');
@@ -48,7 +49,7 @@ export class SimpleVariable extends Variable implements FieldGetter, ScopeMember
         return ['name', 'type'];
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.scopeClass = scopeClass;
     }
 }

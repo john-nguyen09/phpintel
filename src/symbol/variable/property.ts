@@ -8,6 +8,7 @@ import { Location } from "../meta/location";
 import { TypeName } from "../../type/name";
 import { DocBlock } from "../docBlock";
 import { Class } from "../class/class";
+import { Interface } from "../interface/interface";
 
 export class Property extends Symbol implements DocBlockConsumer, ScopeMember, Locatable {
     public name: string;
@@ -48,7 +49,11 @@ export class Property extends Symbol implements DocBlockConsumer, ScopeMember, L
         this._variable.type = val;
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
+        if (scopeClass instanceof Interface) {
+            return;
+        }
+
         this.scope = scopeClass.name;
     }
 }

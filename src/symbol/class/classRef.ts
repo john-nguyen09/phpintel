@@ -5,6 +5,7 @@ import { Location } from "../meta/location";
 import { QualifiedName } from "../name/qualifiedName";
 import { ClassConstRefExpression } from "../type/classConstRefExpression";
 import { Class } from "./class";
+import { Interface } from "../interface/interface";
 
 export class ClassRef extends Symbol implements Consumer, Reference, ScopeMember {
     public readonly refKind = RefKind.Class;
@@ -27,7 +28,7 @@ export class ClassRef extends Symbol implements Consumer, Reference, ScopeMember
         return true;
     }
 
-    setScopeClass(scopeClass: Class) {
+    setScopeClass(scopeClass: Class | Interface) {
         this.scope = scopeClass.name;
     }
 }

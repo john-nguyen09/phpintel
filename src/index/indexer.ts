@@ -14,6 +14,7 @@ import { MethodTable } from "../storage/table/method";
 import { PropertyTable } from "../storage/table/property";
 import { PhpDocumentTable } from "../storage/table/phpDoc";
 import { GlobalVariableTable } from "../storage/table/globalVariable";
+import { InterfaceTable } from "../storage/table/interface";
 
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -46,7 +47,8 @@ export class Indexer {
         private functionTable: FunctionTable,
         private methodTable: MethodTable,
         private propertyTable: PropertyTable,
-        private globalVariableTable: GlobalVariableTable
+        private globalVariableTable: GlobalVariableTable,
+        private interfaceTable: InterfaceTable
     ) { }
 
     async getOrCreatePhpDoc(uri: string): Promise<PhpDocument> {
@@ -128,6 +130,7 @@ export class Indexer {
             this.methodTable.removeByDoc(uri),
             this.propertyTable.removeByDoc(uri),
             this.globalVariableTable.removeByDoc(uri),
+            this.interfaceTable.removeByDoc(uri),
         ]);
     }
 
@@ -163,6 +166,10 @@ export class Indexer {
         for (const globalVariable of doc.globalVariables) {
             globalVariable.assignExtraTypeForVariables();
             promises.push(this.globalVariableTable.put(doc, globalVariable));
+        }
+
+        for (const theInterface of doc.interfaces) {
+            promises.push(this.interfaceTable.put(doc, theInterface));
         }
 
         await Promise.all(promises);

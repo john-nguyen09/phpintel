@@ -48,13 +48,15 @@ import { MemberName } from "./name/memberName";
 import { MethodCallExpression } from "./type/methodCallExpression";
 import { ObjectCreationExpression } from "./type/objectCreationExpression";
 import { GlobalVariable } from "./variable/globalVariable";
+import { Interface } from "./interface/interface";
+import { InterfaceHeader } from "./interface/header";
 
 export class SymbolParser implements Visitor {
     protected symbolStack: (Symbol | null)[] = [];
     protected scopeVarStack: ScopeVar[] = [];
     protected doc: PhpDocument;
     protected lastDocBlock: DocBlock | null = null;
-    protected scopeClass: Class | null = null;
+    protected scopeClass: Class | Interface | null = null;
 
     constructor(doc: PhpDocument) {
         this.doc = doc;
@@ -305,6 +307,14 @@ export class SymbolParser implements Visitor {
                     globalVariable.setScopeVar(this.getScopeVar());
 
                     this.pushSymbol(globalVariable);
+                    break;
+                case PhraseKind.InterfaceDeclaration:
+                    const theInterface = new Interface();
+                    this.scopeClass = theInterface;
+                    this.pushSymbol(theInterface);
+                    break;
+                case PhraseKind.InterfaceDeclarationHeader:
+                    this.pushSymbol(new InterfaceHeader());
                     break;
 
                 default:
