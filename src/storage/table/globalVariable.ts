@@ -48,13 +48,8 @@ export class GlobalVariableTable {
 
     async get(name: string): Promise<Variable[]> {
         const uris = await NameIndex.get(this.nameIndex, name);
-        const variables: Promise<Variable>[] = [];
 
-        for (const uri of uris) {
-            variables.push(BelongsToDoc.get<Variable>(this.db, uri, name));
-        }
-
-        return Promise.all(variables);
+        return await BelongsToDoc.getMultiple<Variable>(this.db, uris, name);
     }
 
     async removeByDoc(uri: string) {

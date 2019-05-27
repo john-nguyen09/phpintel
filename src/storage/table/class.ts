@@ -39,14 +39,9 @@ export class ClassTable {
     }
 
     async get(name: string): Promise<Class[]> {
-        let classes: Class[] = [];
         let uris = await NameIndex.get(this.nameIndex, name);
 
-        for (let uri of uris) {
-            classes.push(await BelongsToDoc.get<Class>(this.db, uri, name));
-        }
-
-        return classes;
+        return BelongsToDoc.getMultiple<Class>(this.db, uris, name);
     }
 
     async search(keyword: string): Promise<CompletionValue[]> {

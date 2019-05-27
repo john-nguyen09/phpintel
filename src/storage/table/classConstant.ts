@@ -50,23 +50,21 @@ export class ClassConstantTable {
         let uris = await NameIndex.get(this.classIndex, key);
 
         for (let uri of uris) {
-            classConsts.push(await BelongsToDoc.get<ClassConstant>(this.db, uri, key));
+            const classConst = await BelongsToDoc.get<ClassConstant>(this.db, uri, key);
+
+            if (classConst != null) {
+                classConsts.push(classConst);
+            }
         }
 
         return classConsts;
     }
 
     async searchAllInClass(className: string): Promise<ClassConstant[]> {
-        let classConsts: ClassConstant[] = [];
         let prefix = ClassConstantTable.getKey(className, '');
         let datas = await NameIndex.prefixSearch(this.classIndex, prefix);
-
-        for (let data of datas) {
-            const classConst = await BelongsToDoc.get<ClassConstant>(this.db, data.uri, data.name);
-            classConsts.push(classConst);
-        }
-
-        return classConsts;
+        
+        return BelongsToDoc.getMultipleByNameIndex<ClassConstant>(this.db, datas);
     }
 
     async search(className: string, keyword: string): Promise<CompletionValue[]> {

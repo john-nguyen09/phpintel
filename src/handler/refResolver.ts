@@ -27,6 +27,12 @@ import { DefineConstant } from "../symbol/constant/defineConstant";
 import { GlobalVariableTable } from "../storage/table/globalVariable";
 
 export namespace RefResolver {
+    export async function resolveRef(phpDoc: PhpDocument, ref: Reference) {
+        if (ref.scope instanceof ExpressedType) {
+            await ref.scope.resolve(phpDoc);
+        }
+    }
+
     export async function getSymbolsByReference(phpDoc: PhpDocument, ref: Reference): Promise<Symbol[]> {
         let symbols: Symbol[] = [];
 
@@ -34,9 +40,7 @@ export namespace RefResolver {
             return symbols;
         }
 
-        if (ref.scope instanceof ExpressedType) {
-            await ref.scope.resolve(phpDoc);
-        }
+        await resolveRef(phpDoc, ref);
 
         switch (ref.refKind) {
             case RefKind.Function:
@@ -86,6 +90,8 @@ export namespace RefResolver {
         let scopeName: string;
         let completions: CompletionValue[];
         let scopeNames: string[] = [];
+
+        await resolveRef(phpDoc, ref);
 
         switch (ref.refKind) {
             case RefKind.ConstantAccess:

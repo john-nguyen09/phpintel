@@ -51,29 +51,24 @@ export class PropertyTable {
         let key = this.getKey(className, propName);
         let uris = await NameIndex.get(this.classIndex, key);
 
-        for (let uri of uris) {
-            const prop = await BelongsToDoc.get<Property>(this.db, uri, key);
-            if (predicate === undefined || predicate(prop)) {
-                props.push(prop);
-            }
+        props = await BelongsToDoc.getMultiple<Property>(this.db, uris, key);
+
+        if (predicate !== undefined) {
+            props = props.filter(predicate);
         }
 
         return props;
     }
 
     async searchAllInClass(className: string, predicate?: PropertyPredicate): Promise<Property[]> {
-        const props: Property[] = [];
+        let props: Property[] = [];
         const prefix = this.getKey(className, '');
         const datas = await NameIndex.prefixSearch(this.classIndex, prefix);
 
-        for (let data of datas) {
-            const prop = await BelongsToDoc.get<Property>(this.db, data.uri, data.name);
+        props = await BelongsToDoc.getMultipleByNameIndex<Property>(this.db, datas);
 
-            if (typeof predicate !== 'undefined' && !predicate(prop)) {
-                continue;
-            }
-
-            props.push(prop);
+        if (predicate !== undefined) {
+            props = props.filter(predicate);
         }
 
         return props;

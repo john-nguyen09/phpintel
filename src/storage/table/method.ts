@@ -48,36 +48,28 @@ export class MethodTable {
     }
 
     async getByClass(className: string, methodName: string, predicate?: MethodPredicate): Promise<Method[]> {
-        let methods: Method[] = [];
         let key = this.getKey(className, methodName);
 
-        let uris = await NameIndex.get(this.classIndex, key);
+        const uris = await NameIndex.get(this.classIndex, key);
 
-        for (let uri of uris) {
-            const method = await BelongsToDoc.get<Method>(this.db, uri, key);
+        let methods = await BelongsToDoc.getMultiple<Method>(this.db, uris, key);
 
-            if (predicate === undefined || predicate(method)) {
-                methods.push(method);
-            }
+        if (predicate !== undefined) {
+            methods = methods.filter(predicate);
         }
 
         return methods;
     }
 
     async searchAllInClass(className: string, predicate?: MethodPredicate): Promise<Method[]> {
-        const methods: Method[] = [];
+        let methods: Method[] = [];
         const prefix = this.getKey(className, '');
-
         const datas = await NameIndex.prefixSearch(this.classIndex, prefix);
 
-        for (let data of datas) {
-            const method = await BelongsToDoc.get<Method>(this.db, data.uri, data.name);
+        methods = await BelongsToDoc.getMultipleByNameIndex<Method>(this.db, datas);
 
-            if (typeof predicate !== 'undefined' && !predicate(method)) {
-                continue;
-            }
-
-            methods.push(method);
+        if (predicate !== undefined) {
+            methods = methods.filter(predicate);
         }
 
         return methods;

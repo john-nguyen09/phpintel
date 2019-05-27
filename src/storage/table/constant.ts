@@ -45,7 +45,11 @@ export class ConstantTable {
         let constSymbols: GeneralConstant[] = [];
 
         for (let uri of uris) {
-            constSymbols.push(await BelongsToDoc.get<GeneralConstant>(this.db, uri, name));
+            const theConst = await BelongsToDoc.get<GeneralConstant>(this.db, uri, name);
+
+            if (theConst != null) {
+                constSymbols.push();
+            }
         }
 
         return constSymbols;
