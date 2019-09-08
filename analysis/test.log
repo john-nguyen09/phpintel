@@ -1,0 +1,36 @@
+[
+  {
+    "Modifier": 0,
+    "Name": "TestClass",
+    "Extends": "",
+    "Interfaces": null
+  },
+  {
+    "Modifier": 0,
+    "Name": "TestClass1",
+    "Extends": "TestClass",
+    "Interfaces": [
+      "TestInterface"
+    ]
+  },
+  {
+    "Modifier": 0,
+    "Name": "TestClass2",
+    "Extends": "",
+    "Interfaces": [
+      "TestInterface",
+      "TestInterface2"
+    ]
+  },
+  {
+    "Modifier": 0,
+    "Name": "TestClass3",
+    "Extends": "TestClass",
+    "Interfaces": [
+      "TestInterface",
+      "TestInterface2"
+    ]
+  }
+]
+PASS
+ok  	github.com/john-nguyen09/phpintel/analysis	0.699s

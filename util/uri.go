@@ -39,12 +39,12 @@ func PathToUri(path string) string {
 	first, parts := parts[0], parts[1:]
 
 	if !strings.HasSuffix(first, ":") {
-		first = rawurlencode(first)
+		first = url.QueryEscape(first)
 	}
 
 	tempParts := parts[:0]
 	for _, part := range parts {
-		tempParts = append(tempParts, rawurlencode(part))
+		tempParts = append(tempParts, url.QueryEscape(part))
 	}
 	parts = append([]string{first}, tempParts...)
 
@@ -52,8 +52,4 @@ func PathToUri(path string) string {
 	urlIns.Path = "/" + strings.Join(parts, "/")
 
 	return urlIns.String()
-}
-
-func rawurlencode(str string) string {
-	return url.QueryEscape(str)
 }

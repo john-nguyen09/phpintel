@@ -1,0 +1,16 @@
+package analysis
+
+import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/sourcegraph/go-lsp"
+)
+
+type Property struct {
+	location lsp.Location
+}
+
+func NewProperty(document *Document, parent *Symbol, node *phrase.Phrase) *Property {
+	return &Property{
+		location: document.GetNodeLocation(node),
+	}
+}
