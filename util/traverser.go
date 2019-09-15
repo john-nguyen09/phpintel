@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 )
 
@@ -55,4 +56,13 @@ func (s *Traverser) Descend() {
 	}
 	s.node = node
 	s.index = 0
+}
+
+func (s *Traverser) SkipToken(tokenType lexer.TokenType) {
+	next := s.Peek()
+	for nextToken, ok := next.(*lexer.Token); ok && nextToken.Type == tokenType; {
+		s.Advance()
+		next = s.Peek()
+		nextToken, ok = next.(*lexer.Token)
+	}
 }

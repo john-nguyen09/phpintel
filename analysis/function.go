@@ -10,10 +10,10 @@ import (
 type Function struct {
 	location lsp.Location
 	document *Document
-	children []Symbol
 
-	Name   string `json:"Name"`
-	Params []Parameter
+	Children []Symbol
+	Name     string `json:"Name"`
+	Params   []Parameter
 }
 
 func NewFunction(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
@@ -81,10 +81,6 @@ func (s *Function) GetDocument() *Document {
 	return s.document
 }
 
-func (s *Function) GetChildren() []Symbol {
-	return s.children
-}
-
 func (s *Function) Consume(other Symbol) {
-	s.children = append(s.children, other)
+	s.Children = append(s.Children, other)
 }

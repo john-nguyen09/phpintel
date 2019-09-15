@@ -7,17 +7,16 @@ import (
 )
 
 type Document struct {
-	Symbol
-	uri      string
+	Uri      string `json:"uri"`
 	text     []rune
-	children []Symbol
+	Children []Symbol `json:"children"`
 }
 
 func NewDocument(uri string, text []rune, rootNode *phrase.Phrase) *Document {
 	document := &Document{
-		uri:      uri,
+		Uri:      uri,
 		text:     text,
-		children: []Symbol{},
+		Children: []Symbol{},
 	}
 
 	ScanForChildren(document, rootNode)
@@ -29,12 +28,8 @@ func (s *Document) GetDocument() *Document {
 	return s
 }
 
-func (s *Document) GetChildren() []Symbol {
-	return s.children
-}
-
 func (s *Document) GetUri() string {
-	return s.uri
+	return s.Uri
 }
 
 func (s *Document) GetText() []rune {
@@ -49,5 +44,5 @@ func (s *Document) GetNodeLocation(node *phrase.Phrase) lsp.Location {
 }
 
 func (s *Document) Consume(other Symbol) {
-	s.children = append(s.children, other)
+	s.Children = append(s.Children, other)
 }

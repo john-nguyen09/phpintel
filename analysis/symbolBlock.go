@@ -6,7 +6,6 @@ import (
 
 type SymbolBlock interface {
 	GetDocument() *Document
-	GetChildren() []Symbol
 }
 
 func ScanForChildren(s SymbolBlock, node *phrase.Phrase) {
@@ -15,11 +14,16 @@ func ScanForChildren(s SymbolBlock, node *phrase.Phrase) {
 		phrase.ClassDeclaration:       NewClass,
 		phrase.FunctionDeclaration:    NewFunction,
 		phrase.ClassConstDeclaration:  NewClassConstDeclaration,
+		phrase.ClassConstElement:      NewClassConst,
 		phrase.ConstDeclaration:       NewConstDeclaration,
 		phrase.ConstElement:           NewConst,
 		phrase.FunctionCallExpression: NewFunctionCall,
 		phrase.ExpressionStatement:    ProcessExpressionStatement,
 		phrase.ArgumentExpressionList: NewArgumentList,
+		phrase.TraitDeclaration:       NewTrait,
+
+		phrase.ClassMemberDeclarationList: ClassMemberDeclarationList,
+		phrase.ClassConstElementList:      ClassConstElementList,
 	}
 
 	for _, child := range node.Children {

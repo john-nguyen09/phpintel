@@ -15,6 +15,18 @@ type ClassConst struct {
 	Scope TypeString
 }
 
+func ClassConstElementList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+	ScanForChildren(parent, node)
+
+	return nil
+}
+
+func ClassConstElement(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+	ScanForChildren(parent, node)
+
+	return nil
+}
+
 // NewClassConstDeclaration is a proxy to NewClassConst due to the Parse Tree structure
 func NewClassConstDeclaration(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
 	ScanForChildren(parent, node)
@@ -22,7 +34,7 @@ func NewClassConstDeclaration(document *Document, parent SymbolBlock, node *phra
 	return nil
 }
 
-func NewClassConst(document *Document, parent Symbol, node *phrase.Phrase) *ClassConst {
+func NewClassConst(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}
@@ -40,11 +52,16 @@ func NewClassConst(document *Document, parent Symbol, node *phrase.Phrase) *Clas
 			case lexer.Equals:
 				{
 					hasEquals = true
+					traverser.SkipToken(lexer.Whitespace)
+				}
+			default:
+				if hasEquals {
+					classConst.Value += util.GetNodeText(token, document.GetText())
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			if hasEquals {
-				classConst.Value = util.GetNodeText(p, document.GetText())
+				classConst.Value += util.GetNodeText(p, document.GetText())
 			} else {
 				switch p.Type {
 				case phrase.Identifier:
@@ -59,4 +76,8 @@ func NewClassConst(document *Document, parent Symbol, node *phrase.Phrase) *Clas
 	}
 
 	return classConst
+}
+
+func (s *ClassConst) GetLocation() lsp.Location {
+	return s.location
 }

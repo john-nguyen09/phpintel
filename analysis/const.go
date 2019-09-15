@@ -44,12 +44,7 @@ func NewConst(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbo
 			case lexer.Equals:
 				{
 					hasEquals = true
-					next := traverser.Peek()
-					for nextToken, ok := next.(*lexer.Token); ok && nextToken.Type == lexer.Whitespace; {
-						traverser.Advance()
-						next = traverser.Peek()
-						nextToken, ok = next.(*lexer.Token)
-					}
+					traverser.SkipToken(lexer.Whitespace)
 				}
 			default:
 				{

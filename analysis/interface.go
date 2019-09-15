@@ -10,10 +10,10 @@ import (
 type Interface struct {
 	document *Document
 	location lsp.Location
-	children []Symbol
 
-	Name    TypeString
-	Extends []TypeString
+	Children []Symbol
+	Name     TypeString
+	Extends  []TypeString
 }
 
 func NewInterface(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
@@ -89,6 +89,6 @@ func (s *Interface) GetDocument() *Document {
 	return s.document
 }
 
-func (s *Interface) GetChildren() []Symbol {
-	return s.children
+func (s *Interface) GetScope() TypeString {
+	return s.Name
 }

@@ -10,27 +10,40 @@ import (
 type Class struct {
 	document *Document
 	location lsp.Location
-	children []Symbol
 
+	Children   []Symbol
 	Modifier   ClassModifier
 	Name       TypeString
 	Extends    TypeString
 	Interfaces []TypeString
 }
 
+func ClassMemberDeclarationList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+	ScanForChildren(parent, node)
+
+	return nil
+}
+
 func NewClass(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
 	class := &Class{
 		document: document,
 		location: document.GetNodeLocation(node),
+		Children: []Symbol{},
 	}
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
 
-	if classHeader, ok := node.Children[0].(*phrase.Phrase); ok && classHeader.Type == phrase.ClassDeclarationHeader {
-		class.analyseHeader(classHeader)
-	}
-	if len(node.Children) >= 2 {
-		if classBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			ScanForChildren(class, classBody)
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ClassDeclarationHeader:
+				class.analyseHeader(p)
+			case phrase.ClassDeclarationBody:
+				ScanForChildren(class, p)
+			}
 		}
+
+		child = traverser.Advance()
 	}
 
 	return class
@@ -120,10 +133,6 @@ func (s *Class) GetDocument() *Document {
 	return s.document
 }
 
-func (s *Class) GetChildren() []Symbol {
-	return s.children
-}
-
 func (s *Class) Consume(other Symbol) {
-	s.children = append(s.children, other)
+	s.Children = append(s.Children, other)
 }
