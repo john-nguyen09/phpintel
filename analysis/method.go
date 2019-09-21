@@ -8,24 +8,23 @@ import (
 
 // Method contains information of methods
 type Method struct {
-	location lsp.Location
+	Function
 
 	VisibilityModifier VisibilityModifierValue
 	IsStatic           bool
 	ClassModifier      ClassModifierValue
-	Function           Function
 }
 
 func newMethod(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	symbol := newFunction(document, parent, node)
 	method := &Method{
-		location: document.GetNodeLocation(node),
 		IsStatic: false,
 	}
 
 	if function, ok := symbol.(*Function); ok {
 		method.Function = *function
 	}
+	method.location = document.GetNodeLocation(node)
 
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
