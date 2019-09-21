@@ -12,10 +12,39 @@ type Class struct {
 	location lsp.Location
 
 	Children   []Symbol
-	Modifier   ClassModifier
+	Modifier   ClassModifierValue
 	Name       TypeString
 	Extends    TypeString
 	Interfaces []TypeString
+}
+
+func GetMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	visibilityModifier := Public
+	classModifier := NoClassModifier
+	isStatic := false
+	for child != nil {
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Abstract:
+				classModifier = Abstract
+			case lexer.Final:
+				classModifier = Final
+			case lexer.Static:
+				isStatic = true
+			case lexer.Public:
+				visibilityModifier = Public
+			case lexer.Protected:
+				visibilityModifier = Protected
+			case lexer.Private:
+				visibilityModifier = Private
+			}
+		}
+		child = traverser.Advance()
+	}
+
+	return visibilityModifier, isStatic, classModifier
 }
 
 func ClassMemberDeclarationList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {

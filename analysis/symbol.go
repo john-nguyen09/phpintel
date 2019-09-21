@@ -6,19 +6,20 @@ import (
 	lsp "github.com/sourcegraph/go-lsp"
 )
 
-type VisibilityModifier int
+type VisibilityModifierValue int
 
 const (
-	Public    VisibilityModifier = 1 << iota
-	Protected                    = 1 << iota
-	Private                      = 1 << iota
+	Public    VisibilityModifierValue = iota
+	Protected                         = iota
+	Private                           = iota
 )
 
-type ClassModifier int
+type ClassModifierValue int
 
 const (
-	Abstract ClassModifier = iota
-	Final                  = iota
+	NoClassModifier ClassModifierValue = iota
+	Abstract        ClassModifierValue = iota
+	Final                              = iota
 )
 
 type Symbol interface {

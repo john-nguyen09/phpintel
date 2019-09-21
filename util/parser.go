@@ -79,3 +79,24 @@ func NodeRange(node phrase.AstNode, text []rune) lsp.Range {
 
 	return lsp.Range{Start: ToPosition(start, text), End: ToPosition(end, text)}
 }
+
+func IsOfPhraseType(node phrase.AstNode, phraseType phrase.PhraseType) (*phrase.Phrase, bool) {
+	p, ok := node.(*phrase.Phrase)
+	if !ok {
+		return nil, false
+	}
+	return p, p.Type == phraseType
+}
+
+func IsOfPhraseTypes(node phrase.AstNode, phraseTypes []phrase.PhraseType) (*phrase.Phrase, bool) {
+	p, ok := node.(*phrase.Phrase)
+	if !ok {
+		return nil, false
+	}
+	for _, phraseType := range phraseTypes {
+		if p.Type == phraseType {
+			return p, true
+		}
+	}
+	return nil, false
+}

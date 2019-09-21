@@ -28,9 +28,6 @@ func NewParameter(document *Document, parent SymbolBlock, node *phrase.Phrase) *
 			case phrase.TypeDeclaration:
 				{
 					typeDeclaration := NewTypeDeclaration(document, parent, p)
-					if block, ok := parent.(HasConsume); ok {
-						block.Consume(typeDeclaration)
-					}
 					for _, typeString := range typeDeclaration.Type.typeStrings {
 						param.Type.Add(typeString)
 					}

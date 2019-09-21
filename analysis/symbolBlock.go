@@ -21,6 +21,7 @@ func ScanForChildren(s SymbolBlock, node *phrase.Phrase) {
 		phrase.ExpressionStatement:    ProcessExpressionStatement,
 		phrase.ArgumentExpressionList: NewArgumentList,
 		phrase.TraitDeclaration:       NewTrait,
+		phrase.MethodDeclaration:      NewMethod,
 
 		phrase.ClassMemberDeclarationList: ClassMemberDeclarationList,
 		phrase.ClassConstElementList:      ClassConstElementList,
