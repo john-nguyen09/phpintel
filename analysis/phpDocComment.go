@@ -104,7 +104,7 @@ type phpDocComment struct {
 	Globals     []tag
 }
 
-func Parse(text string) (phpDocComment, error) {
+func parse(text string) (phpDocComment, error) {
 	if len(text) == 0 {
 		return phpDocComment{}, errors.New("Text is zero")
 	}

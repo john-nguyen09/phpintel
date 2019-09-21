@@ -18,7 +18,7 @@ func TestInterface(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(interfaceTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(interfaceTest), []rune(string(data)), rootNode)
 
 	jsonData, err := json.MarshalIndent(document, "", " ")
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Method contains information of methods
 type Method struct {
 	location lsp.Location
 
@@ -15,8 +16,8 @@ type Method struct {
 	Function           Function
 }
 
-func NewMethod(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	symbol := NewFunction(document, parent, node)
+func newMethod(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	symbol := newFunction(document, parent, node)
 	method := &Method{
 		location: document.GetNodeLocation(node),
 		IsStatic: false,
@@ -38,7 +39,7 @@ func NewMethod(document *Document, parent SymbolBlock, node *phrase.Phrase) Symb
 	return method
 }
 
-func (s Method) GetLocation() lsp.Location {
+func (s Method) getLocation() lsp.Location {
 	return s.location
 }
 
@@ -49,7 +50,7 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.MemberModifierList:
-				s.VisibilityModifier, s.IsStatic, s.ClassModifier = GetMemberModifier(p)
+				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
 			}
 		}
 		child = traverser.Advance()

@@ -5,8 +5,8 @@ import (
 )
 
 // ProcessExpressionStatement is a proxy to scan for other types
-func ProcessExpressionStatement(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	ScanForChildren(parent, node)
+func ProcessExpressionStatement(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	scanForChildren(parent, node)
 
 	return nil
 }

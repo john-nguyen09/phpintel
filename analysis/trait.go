@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Trait contains information of a trait
 type Trait struct {
 	document *Document
 	location lsp.Location
@@ -15,7 +16,7 @@ type Trait struct {
 	Name     TypeString
 }
 
-func NewTrait(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newTrait(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	trait := &Trait{
 		document: document,
 		location: document.GetNodeLocation(node),
@@ -27,7 +28,7 @@ func NewTrait(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbo
 
 	if len(node.Children) >= 2 {
 		if classBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			ScanForChildren(trait, classBody)
+			scanForChildren(trait, classBody)
 		}
 	}
 
@@ -40,7 +41,7 @@ func (s *Trait) analyseHeader(traitHeader *phrase.Phrase) {
 	for child != nil {
 		if token, ok := child.(*lexer.Token); ok {
 			if token.Type == lexer.Name {
-				s.Name = NewTypeString(util.GetNodeText(token, s.document.GetText()))
+				s.Name = newTypeString(util.GetNodeText(token, s.document.GetText()))
 			}
 		}
 
@@ -48,10 +49,10 @@ func (s *Trait) analyseHeader(traitHeader *phrase.Phrase) {
 	}
 }
 
-func (s *Trait) GetDocument() *Document {
+func (s *Trait) getDocument() *Document {
 	return s.document
 }
 
-func (s *Trait) GetLocation() lsp.Location {
+func (s *Trait) getLocation() lsp.Location {
 	return s.location
 }

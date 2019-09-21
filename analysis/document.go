@@ -1,48 +1,65 @@
 package analysis
 
 import (
+	"encoding/json"
+
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
 	lsp "github.com/sourcegraph/go-lsp"
 )
 
+// Document contains information of documents
 type Document struct {
-	Uri      string `json:"uri"`
+	uri      string
 	text     []rune
 	Children []Symbol `json:"children"`
 }
 
-func NewDocument(uri string, text []rune, rootNode *phrase.Phrase) *Document {
+// MarshalJSON is used for json.Marshal
+func (s *Document) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		URI      string
+		Children []Symbol
+	}{
+		URI:      s.uri,
+		Children: s.Children,
+	})
+}
+
+func newDocument(uri string, text []rune, rootNode *phrase.Phrase) *Document {
 	document := &Document{
-		Uri:      uri,
+		uri:      uri,
 		text:     text,
 		Children: []Symbol{},
 	}
 
-	ScanForChildren(document, rootNode)
+	scanForChildren(document, rootNode)
 
 	return document
 }
 
-func (s *Document) GetDocument() *Document {
+func (s *Document) getDocument() *Document {
 	return s
 }
 
-func (s *Document) GetUri() string {
-	return s.Uri
+// GetURI is a getter for uri
+func (s *Document) GetURI() string {
+	return s.uri
 }
 
+// GetText is a getter for text
 func (s *Document) GetText() []rune {
 	return s.text
 }
 
+// GetNodeLocation retrieves the location of a phrase node
 func (s *Document) GetNodeLocation(node *phrase.Phrase) lsp.Location {
 	return lsp.Location{
-		URI:   lsp.DocumentURI(s.GetUri()),
+		URI:   lsp.DocumentURI(s.GetURI()),
 		Range: util.NodeRange(node, s.GetText()),
 	}
 }
 
-func (s *Document) Consume(other Symbol) {
+func (s *Document) consume(other Symbol) {
 	s.Children = append(s.Children, other)
 }

@@ -5,11 +5,12 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Property contains information for properties
 type Property struct {
 	location lsp.Location
 }
 
-func NewProperty(document *Document, parent *Symbol, node *phrase.Phrase) *Property {
+func newProperty(document *Document, parent *Symbol, node *phrase.Phrase) *Property {
 	return &Property{
 		location: document.GetNodeLocation(node),
 	}

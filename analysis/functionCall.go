@@ -8,18 +8,19 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// FunctionCall represents a reference to function call
 type FunctionCall struct {
 	location lsp.Location
 
 	ArgumentList ArgumentList
 }
 
-func NewFunctionCall(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	if node.Type == phrase.FunctionCallExpression &&
 		len(node.Children) >= 1 {
 		text := strings.ToLower(util.GetNodeText(node.Children[0], document.GetText()))
 		if text == "\\define" || text == "define" {
-			return NewDefine(document, parent, node)
+			return newDefine(document, parent, node)
 		}
 	}
 

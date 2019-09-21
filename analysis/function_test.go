@@ -19,7 +19,7 @@ func TestFunction(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(functionTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(functionTest), []rune(string(data)), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", " ")
 
 	fmt.Println(string(jsonData))

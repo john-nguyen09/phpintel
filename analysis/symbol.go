@@ -6,30 +6,39 @@ import (
 	lsp "github.com/sourcegraph/go-lsp"
 )
 
+// VisibilityModifierValue is a value of visibility modifier (public, protected, private)
 type VisibilityModifierValue int
 
 const (
-	Public    VisibilityModifierValue = iota
-	Protected                         = iota
-	Private                           = iota
+	// Public indicates public visibility
+	Public VisibilityModifierValue = iota
+	// Protected indicates protected visibility
+	Protected = iota
+	// Private indicates private visibility
+	Private = iota
 )
 
+// ClassModifierValue is a value of class modifier (abstract, final)
 type ClassModifierValue int
 
 const (
+	// NoClassModifier indicates there is no class modifier
 	NoClassModifier ClassModifierValue = iota
-	Abstract        ClassModifierValue = iota
-	Final                              = iota
+	// Abstract indicates there is an abstract keyword
+	Abstract = iota
+	// Final indicates there is a final keyword
+	Final = iota
 )
 
+// Symbol is a symbol
 type Symbol interface {
-	GetLocation() lsp.Location
+	getLocation() lsp.Location
 }
 
-type HasConsume interface {
-	Consume(symbol Symbol)
+type hasConsume interface {
+	consume(symbol Symbol)
 }
 
-func TransformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
-	return NewTypeString(string(util.GetNodeText(p, document.GetText())))
+func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
+	return newTypeString(string(util.GetNodeText(p, document.GetText())))
 }

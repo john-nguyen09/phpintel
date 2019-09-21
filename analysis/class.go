@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Class contains information of classes
 type Class struct {
 	document *Document
 	location lsp.Location
@@ -18,7 +19,7 @@ type Class struct {
 	Interfaces []TypeString
 }
 
-func GetMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
+func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	visibilityModifier := Public
@@ -47,13 +48,13 @@ func GetMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 	return visibilityModifier, isStatic, classModifier
 }
 
-func ClassMemberDeclarationList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	ScanForChildren(parent, node)
+func classMemberDeclarationList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	scanForChildren(parent, node)
 
 	return nil
 }
 
-func NewClass(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newClass(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	class := &Class{
 		document: document,
 		location: document.GetNodeLocation(node),
@@ -68,7 +69,7 @@ func NewClass(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbo
 			case phrase.ClassDeclarationHeader:
 				class.analyseHeader(p)
 			case phrase.ClassDeclarationBody:
-				ScanForChildren(class, p)
+				scanForChildren(class, p)
 			}
 		}
 
@@ -86,7 +87,7 @@ func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = NewTypeString(util.GetNodeText(token, s.document.text))
+					s.Name = newTypeString(util.GetNodeText(token, s.document.text))
 				}
 			case lexer.Abstract:
 				{
@@ -122,7 +123,7 @@ func (s *Class) extends(p *phrase.Phrase) {
 			switch p.Type {
 			case phrase.QualifiedName:
 				{
-					s.Extends = TransformQualifiedName(p, s.document)
+					s.Extends = transformQualifiedName(p, s.document)
 				}
 			}
 		}
@@ -140,7 +141,7 @@ func (s *Class) implements(p *phrase.Phrase) {
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Interfaces = append(s.Interfaces, TransformQualifiedName(p, s.document))
+					s.Interfaces = append(s.Interfaces, transformQualifiedName(p, s.document))
 				}
 
 				child = traverser.Advance()
@@ -154,14 +155,14 @@ func (s *Class) implements(p *phrase.Phrase) {
 	}
 }
 
-func (s *Class) GetLocation() lsp.Location {
+func (s *Class) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Class) GetDocument() *Document {
+func (s *Class) getDocument() *Document {
 	return s.document
 }
 
-func (s *Class) Consume(other Symbol) {
+func (s *Class) consume(other Symbol) {
 	s.Children = append(s.Children, other)
 }

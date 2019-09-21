@@ -7,13 +7,14 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// ArgumentList contains information of arguments in function-like call
 type ArgumentList struct {
 	location lsp.Location
 
 	arguments []phrase.AstNode
 }
 
-func NewArgumentList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newArgumentList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
@@ -33,10 +34,11 @@ func NewArgumentList(document *Document, parent SymbolBlock, node *phrase.Phrase
 	return argumentList
 }
 
-func (s *ArgumentList) GetLocation() lsp.Location {
+func (s *ArgumentList) getLocation() lsp.Location {
 	return s.location
 }
 
+// GetArguments returns the arguments
 func (s *ArgumentList) GetArguments() []phrase.AstNode {
 	return s.arguments
 }

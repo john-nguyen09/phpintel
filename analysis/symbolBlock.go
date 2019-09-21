@@ -4,42 +4,42 @@ import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 )
 
-type SymbolBlock interface {
-	GetDocument() *Document
+type symbolBlock interface {
+	getDocument() *Document
 }
 
-func ScanForChildren(s SymbolBlock, node *phrase.Phrase) {
+func scanForChildren(s symbolBlock, node *phrase.Phrase) {
 	var nodeToSymbolConstructor = map[phrase.PhraseType]interface{}{
-		phrase.InterfaceDeclaration:   NewInterface,
-		phrase.ClassDeclaration:       NewClass,
-		phrase.FunctionDeclaration:    NewFunction,
-		phrase.ClassConstDeclaration:  NewClassConstDeclaration,
-		phrase.ClassConstElement:      NewClassConst,
-		phrase.ConstDeclaration:       NewConstDeclaration,
-		phrase.ConstElement:           NewConst,
-		phrase.FunctionCallExpression: NewFunctionCall,
+		phrase.InterfaceDeclaration:   newInterface,
+		phrase.ClassDeclaration:       newClass,
+		phrase.FunctionDeclaration:    newFunction,
+		phrase.ClassConstDeclaration:  newClassConstDeclaration,
+		phrase.ClassConstElement:      newClassConst,
+		phrase.ConstDeclaration:       newConstDeclaration,
+		phrase.ConstElement:           newConst,
+		phrase.FunctionCallExpression: newFunctionCall,
 		phrase.ExpressionStatement:    ProcessExpressionStatement,
-		phrase.ArgumentExpressionList: NewArgumentList,
-		phrase.TraitDeclaration:       NewTrait,
-		phrase.MethodDeclaration:      NewMethod,
+		phrase.ArgumentExpressionList: newArgumentList,
+		phrase.TraitDeclaration:       newTrait,
+		phrase.MethodDeclaration:      newMethod,
 
-		phrase.ClassMemberDeclarationList: ClassMemberDeclarationList,
-		phrase.ClassConstElementList:      ClassConstElementList,
+		phrase.ClassMemberDeclarationList: classMemberDeclarationList,
+		phrase.ClassConstElementList:      classConstElementList,
 	}
 
 	for _, child := range node.Children {
 		if p, ok := child.(*phrase.Phrase); ok {
 			if constructor, ok := nodeToSymbolConstructor[p.Type]; ok {
-				if block, ok := s.(SymbolBlock); ok {
-					childSymbol := constructor.(func(*Document, SymbolBlock, *phrase.Phrase) Symbol)(
-						block.GetDocument(), s, p)
+				if block, ok := s.(symbolBlock); ok {
+					childSymbol := constructor.(func(*Document, symbolBlock, *phrase.Phrase) Symbol)(
+						block.getDocument(), s, p)
 
 					if childSymbol == nil {
 						continue
 					}
 
-					if consumer, ok := s.(HasConsume); ok {
-						consumer.Consume(childSymbol)
+					if consumer, ok := s.(hasConsume); ok {
+						consumer.consume(childSymbol)
 					}
 				}
 			}

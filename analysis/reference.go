@@ -4,6 +4,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Reference represents a reference
 type Reference struct {
 	Type     SymbolType
 	Scope    SymbolType
@@ -11,6 +12,6 @@ type Reference struct {
 	Name     string
 }
 
-type HasReferences interface {
+type hasReferences interface {
 	GetReferences() []Reference
 }

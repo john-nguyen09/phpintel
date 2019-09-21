@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Interface contains information of interfaces
 type Interface struct {
 	document *Document
 	location lsp.Location
@@ -16,7 +17,7 @@ type Interface struct {
 	Extends  []TypeString
 }
 
-func NewInterface(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newInterface(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
 		document: document,
 		location: document.GetNodeLocation(node),
@@ -27,7 +28,7 @@ func NewInterface(document *Document, parent SymbolBlock, node *phrase.Phrase) S
 	}
 	if len(node.Children) >= 2 {
 		if interfaceBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			ScanForChildren(theInterface, interfaceBody)
+			scanForChildren(theInterface, interfaceBody)
 		}
 	}
 
@@ -42,7 +43,7 @@ func (s *Interface) analyseHeader(node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = NewTypeString(util.GetNodeText(token, s.document.text))
+					s.Name = newTypeString(util.GetNodeText(token, s.document.text))
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
@@ -67,7 +68,7 @@ func (s *Interface) extends(node *phrase.Phrase) {
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Extends = append(s.Extends, TransformQualifiedName(p, s.document))
+					s.Extends = append(s.Extends, transformQualifiedName(p, s.document))
 				}
 
 				child = traverser.Advance()
@@ -81,14 +82,10 @@ func (s *Interface) extends(node *phrase.Phrase) {
 	}
 }
 
-func (s *Interface) GetLocation() lsp.Location {
+func (s *Interface) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Interface) GetDocument() *Document {
+func (s *Interface) getDocument() *Document {
 	return s.document
-}
-
-func (s *Interface) GetScope() TypeString {
-	return s.Name
 }

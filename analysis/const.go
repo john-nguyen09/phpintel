@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Const contains information of constants
 type Const struct {
 	location lsp.Location
 
@@ -14,12 +15,12 @@ type Const struct {
 	Value string
 }
 
-func NewConstDeclaration(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newConstDeclaration(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ConstElementList {
-			ScanForChildren(parent, p)
+			scanForChildren(parent, p)
 		}
 		child = traverser.Advance()
 	}
@@ -27,7 +28,7 @@ func NewConstDeclaration(document *Document, parent SymbolBlock, node *phrase.Ph
 	return nil
 }
 
-func NewConst(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newConst(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}
@@ -65,6 +66,6 @@ func NewConst(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbo
 	return constant
 }
 
-func (s *Const) GetLocation() lsp.Location {
+func (s *Const) getLocation() lsp.Location {
 	return s.location
 }

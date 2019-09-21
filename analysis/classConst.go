@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// ClassConst contains information of class constants
 type ClassConst struct {
 	location lsp.Location
 
@@ -15,26 +16,25 @@ type ClassConst struct {
 	Scope TypeString
 }
 
-func ClassConstElementList(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	ScanForChildren(parent, node)
+func classConstElementList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	scanForChildren(parent, node)
 
 	return nil
 }
 
-func ClassConstElement(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	ScanForChildren(parent, node)
+func classConstElement(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	scanForChildren(parent, node)
 
 	return nil
 }
 
-// NewClassConstDeclaration is a proxy to NewClassConst due to the Parse Tree structure
-func NewClassConstDeclaration(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
-	ScanForChildren(parent, node)
+func newClassConstDeclaration(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	scanForChildren(parent, node)
 
 	return nil
 }
 
-func NewClassConst(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newClassConst(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}
@@ -66,7 +66,7 @@ func NewClassConst(document *Document, parent SymbolBlock, node *phrase.Phrase) 
 				switch p.Type {
 				case phrase.Identifier:
 					{
-						classConst.Name = NewTypeString(util.GetNodeText(p, document.GetText()))
+						classConst.Name = newTypeString(util.GetNodeText(p, document.GetText()))
 					}
 				}
 			}
@@ -78,6 +78,6 @@ func NewClassConst(document *Document, parent SymbolBlock, node *phrase.Phrase) 
 	return classConst
 }
 
-func (s *ClassConst) GetLocation() lsp.Location {
+func (s *ClassConst) getLocation() lsp.Location {
 	return s.location
 }

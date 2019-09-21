@@ -6,13 +6,14 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// TypeDeclaration is type declaration for a symbol
 type TypeDeclaration struct {
 	location lsp.Location
 
 	Type TypeComposite
 }
 
-func NewTypeDeclaration(document *Document, parent SymbolBlock, node *phrase.Phrase) *TypeDeclaration {
+func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaration {
 	typeDeclaration := &TypeDeclaration{
 		location: document.GetNodeLocation(node),
 	}
@@ -21,15 +22,11 @@ func NewTypeDeclaration(document *Document, parent SymbolBlock, node *phrase.Phr
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			if p.Type == phrase.QualifiedName {
-				typeDeclaration.Type.Add(TransformQualifiedName(p, document))
+				typeDeclaration.Type.add(transformQualifiedName(p, document))
 			}
 		}
 		child = traverser.Advance()
 	}
 
 	return typeDeclaration
-}
-
-func (s *TypeDeclaration) GetLocation() lsp.Location {
-	return s.location
 }

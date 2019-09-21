@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Parameter contains information of a function parameter
 type Parameter struct {
 	location lsp.Location
 
@@ -15,7 +16,7 @@ type Parameter struct {
 	Value string        `json:"Value"`
 }
 
-func NewParameter(document *Document, parent SymbolBlock, node *phrase.Phrase) *Parameter {
+func newParameter(document *Document, parent symbolBlock, node *phrase.Phrase) *Parameter {
 	param := &Parameter{
 		location: document.GetNodeLocation(node),
 	}
@@ -27,9 +28,9 @@ func NewParameter(document *Document, parent SymbolBlock, node *phrase.Phrase) *
 			switch p.Type {
 			case phrase.TypeDeclaration:
 				{
-					typeDeclaration := NewTypeDeclaration(document, parent, p)
+					typeDeclaration := newTypeDeclaration(document, p)
 					for _, typeString := range typeDeclaration.Type.typeStrings {
-						param.Type.Add(typeString)
+						param.Type.add(typeString)
 					}
 				}
 			}

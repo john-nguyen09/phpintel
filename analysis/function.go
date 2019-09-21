@@ -7,6 +7,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
+// Function contains information of functions
 type Function struct {
 	location lsp.Location
 	document *Document
@@ -16,7 +17,7 @@ type Function struct {
 	Params   []Parameter
 }
 
-func NewFunction(document *Document, parent SymbolBlock, node *phrase.Phrase) Symbol {
+func newFunction(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location: document.GetNodeLocation(node),
 		document: document,
@@ -38,7 +39,7 @@ func NewFunction(document *Document, parent SymbolBlock, node *phrase.Phrase) Sy
 			phrase.FunctionDeclarationBody,
 			phrase.MethodDeclarationBody,
 		}); ok {
-			ScanForChildren(function, p)
+			scanForChildren(function, p)
 		}
 		child = traverser.Advance()
 	}
@@ -76,7 +77,7 @@ func (s *Function) analyseParameterDeclarationList(node *phrase.Phrase) {
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := NewParameter(s.document, s, p)
+			param := newParameter(s.document, s, p)
 			s.Params = append(s.Params, *param)
 		}
 
@@ -84,14 +85,14 @@ func (s *Function) analyseParameterDeclarationList(node *phrase.Phrase) {
 	}
 }
 
-func (s *Function) GetLocation() lsp.Location {
+func (s *Function) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Function) GetDocument() *Document {
+func (s *Function) getDocument() *Document {
 	return s.document
 }
 
-func (s *Function) Consume(other Symbol) {
+func (s *Function) consume(other Symbol) {
 	s.Children = append(s.Children, other)
 }
