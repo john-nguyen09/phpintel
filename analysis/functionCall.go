@@ -10,19 +10,26 @@ import (
 
 // FunctionCall represents a reference to function call
 type FunctionCall struct {
-	location lsp.Location
-
-	ArgumentList ArgumentList
+	Expression
 }
 
 func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	if node.Type == phrase.FunctionCallExpression &&
-		len(node.Children) >= 1 {
-		text := strings.ToLower(util.GetNodeText(node.Children[0], document.GetText()))
-		if text == "\\define" || text == "define" {
-			return newDefine(document, parent, node)
-		}
+	functionCall := &FunctionCall{
+		Expression: Expression{
+			Location: document.GetNodeLocation(node),
+		},
 	}
+	if len(node.Children) >= 1 {
+		functionCall.Name = util.GetNodeText(node.Children[0], document.GetText())
+	}
+	nameLowerCase := strings.ToLower(functionCall.Name)
+	if nameLowerCase == "\\define" || nameLowerCase == "define" {
+		return newDefine(document, parent, node)
+	}
+	scanForChildren(parent, node)
+	return functionCall
+}
 
-	return nil
+func (s *FunctionCall) getLocation() lsp.Location {
+	return s.Location
 }

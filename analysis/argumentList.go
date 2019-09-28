@@ -30,7 +30,7 @@ func newArgumentList(document *Document, parent symbolBlock, node *phrase.Phrase
 		argumentList.arguments = append(argumentList.arguments, child)
 		child = traverser.Advance()
 	}
-
+	scanForChildren(parent, node)
 	return argumentList
 }
 

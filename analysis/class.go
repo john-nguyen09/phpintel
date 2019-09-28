@@ -48,12 +48,6 @@ func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 	return visibilityModifier, isStatic, classModifier
 }
 
-func classMemberDeclarationList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	scanForChildren(parent, node)
-
-	return nil
-}
-
 func newClass(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	class := &Class{
 		document: document,

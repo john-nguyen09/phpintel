@@ -4,14 +4,10 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
-// Reference represents a reference
-type Reference struct {
+// Expression represents a reference
+type Expression struct {
 	Type     SymbolType
 	Scope    SymbolType
 	Location lsp.Location
 	Name     string
-}
-
-type hasReferences interface {
-	GetReferences() []Reference
 }

@@ -53,7 +53,7 @@ func (s *Document) GetText() []rune {
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node *phrase.Phrase) lsp.Location {
+func (s *Document) GetNodeLocation(node phrase.AstNode) lsp.Location {
 	return lsp.Location{
 		URI:   lsp.DocumentURI(s.GetURI()),
 		Range: util.NodeRange(node, s.GetText()),

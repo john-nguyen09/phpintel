@@ -16,24 +16,6 @@ type ClassConst struct {
 	Scope TypeString
 }
 
-func classConstElementList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	scanForChildren(parent, node)
-
-	return nil
-}
-
-func classConstElement(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	scanForChildren(parent, node)
-
-	return nil
-}
-
-func newClassConstDeclaration(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	scanForChildren(parent, node)
-
-	return nil
-}
-
 func newClassConst(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
