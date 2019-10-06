@@ -44,8 +44,11 @@ func scanForChildren(s symbolBlock, node *phrase.Phrase) {
 		phrase.TraitDeclaration:       newTrait,
 		phrase.MethodDeclaration:      newMethod,
 		// Expressions
-		phrase.FunctionCallExpression:   newFunctionCall,
-		phrase.ConstantAccessExpression: newConstantAccess,
+		phrase.FunctionCallExpression:         newFunctionCall,
+		phrase.ConstantAccessExpression:       newConstantAccess,
+		phrase.ScopedPropertyAccessExpression: newScopedPropertyAccess,
+		phrase.ScopedCallExpression:           newScopedMethodAccess,
+		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
 	}
 	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 		// Expressions
@@ -74,9 +77,13 @@ func scanForChildren(s symbolBlock, node *phrase.Phrase) {
 			}
 		}
 		if childSymbol != nil {
-			if consumer, ok := s.(hasConsume); ok {
-				consumer.consume(childSymbol)
-			}
+			consumeIfIsConsumer(s, childSymbol)
 		}
+	}
+}
+
+func consumeIfIsConsumer(parent symbolBlock, symbol Symbol) {
+	if consumer, ok := parent.(hasConsume); ok {
+		consumer.consume(symbol)
 	}
 }

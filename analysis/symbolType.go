@@ -6,7 +6,7 @@ import (
 
 // SymbolType is an interface to symbol types
 type SymbolType interface {
-	Resolve(document *Document) []TypeString
+	Resolve() []TypeString
 }
 
 // Aliases is a constant to look up aliases (e.g. boolean is bool)
@@ -100,6 +100,6 @@ func (t *TypeComposite) add(typeString TypeString) {
 }
 
 // Resolve resolves the type to slice of TypeString
-func (t TypeComposite) Resolve(document *Document) []TypeString {
+func (t TypeComposite) Resolve() []TypeString {
 	return t.typeStrings
 }

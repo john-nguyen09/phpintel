@@ -6,8 +6,12 @@ import (
 
 // Expression represents a reference
 type Expression struct {
-	Type     SymbolType
-	Scope    SymbolType
+	Type     TypeComposite
+	Scope    *Expression
 	Location lsp.Location
 	Name     string
+}
+
+type hasTypes interface {
+	getTypes() TypeComposite
 }
