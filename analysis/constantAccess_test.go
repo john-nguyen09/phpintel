@@ -18,7 +18,7 @@ func TestConstantAccess(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(constantAccessTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(constantAccessTest), string(data), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", "  ")
 	if err != nil {
 		panic(err)

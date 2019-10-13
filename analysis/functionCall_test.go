@@ -18,7 +18,7 @@ func TestFunctionCall(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(functionCallTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(functionCallTest), string(data), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", "  ")
 	if err != nil {
 		panic(err)

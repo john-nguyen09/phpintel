@@ -18,7 +18,7 @@ func TestScopedMemberAccess(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(scopedPropertyAccessTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(scopedPropertyAccessTest), string(data), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", "    ")
 	if err != nil {
 		panic(err)

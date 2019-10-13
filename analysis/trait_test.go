@@ -19,7 +19,7 @@ func TestTrait(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(traitTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(traitTest), string(data), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", " ")
 
 	if err != nil {

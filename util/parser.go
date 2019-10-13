@@ -6,7 +6,7 @@ import (
 	"github.com/sourcegraph/go-lsp"
 )
 
-func GetNodeText(node phrase.AstNode, docText []rune) string {
+func GetNodeText(node phrase.AstNode, docText string) string {
 	switch node := node.(type) {
 	case *lexer.Token:
 		return GetTokenText(node, docText)
@@ -17,13 +17,13 @@ func GetNodeText(node phrase.AstNode, docText []rune) string {
 	return ""
 }
 
-func GetPhraseText(phrase *phrase.Phrase, docText []rune) string {
+func GetPhraseText(phrase *phrase.Phrase, docText string) string {
 	firstToken, lastToken := FirstToken(phrase), LastToken(phrase)
 
 	return string(docText[firstToken.Offset : lastToken.Offset+lastToken.Length])
 }
 
-func GetTokenText(token *lexer.Token, docText []rune) string {
+func GetTokenText(token *lexer.Token, docText string) string {
 	return string(docText[token.Offset : token.Offset+token.Length])
 }
 
@@ -63,7 +63,7 @@ func LastToken(node phrase.AstNode) *lexer.Token {
 	return nil
 }
 
-func NodeRange(node phrase.AstNode, text []rune) lsp.Range {
+func NodeRange(node phrase.AstNode, text string) lsp.Range {
 	var start, end int
 
 	switch node := node.(type) {

@@ -18,7 +18,7 @@ func TestMethod(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(methodTest), []rune(string(data)), rootNode)
+	document := newDocument(util.PathToUri(methodTest), string(data), rootNode)
 	jsonData, err := json.MarshalIndent(document, "", " ")
 
 	if err != nil {

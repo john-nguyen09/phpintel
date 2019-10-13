@@ -11,7 +11,7 @@ import (
 // Document contains information of documents
 type Document struct {
 	uri      string
-	text     []rune
+	text     string
 	Children []Symbol `json:"children"`
 }
 
@@ -26,7 +26,7 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func newDocument(uri string, text []rune, rootNode *phrase.Phrase) *Document {
+func newDocument(uri string, text string, rootNode *phrase.Phrase) *Document {
 	document := &Document{
 		uri:      uri,
 		text:     text,
@@ -48,7 +48,7 @@ func (s *Document) GetURI() string {
 }
 
 // GetText is a getter for text
-func (s *Document) GetText() []rune {
+func (s *Document) GetText() string {
 	return s.text
 }
 
