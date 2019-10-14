@@ -13,7 +13,17 @@ type FunctionCall struct {
 	Expression
 }
 
-func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func tryToNewDefine(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+	if len(node.Children) >= 1 {
+		nameLowerCase := strings.ToLower(util.GetNodeText(node.Children[0], document.GetText()))
+		if nameLowerCase == "\\define" || nameLowerCase == "define" {
+			return newDefine(document, parent, node)
+		}
+	}
+	return nil
+}
+
+func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
 	functionCall := &FunctionCall{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -22,14 +32,14 @@ func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase
 	if len(node.Children) >= 1 {
 		functionCall.Name = util.GetNodeText(node.Children[0], document.GetText())
 	}
-	nameLowerCase := strings.ToLower(functionCall.Name)
-	if nameLowerCase == "\\define" || nameLowerCase == "define" {
-		return newDefine(document, parent, node)
-	}
-	scanForChildren(parent, node)
 	return functionCall
 }
 
 func (s *FunctionCall) getLocation() lsp.Location {
 	return s.Location
+}
+
+func (s *FunctionCall) getTypes() TypeComposite {
+	// TODO: Look up function for return types
+	return s.Type
 }

@@ -11,7 +11,7 @@ type ScopedMethodAccess struct {
 	Expression
 }
 
-func newScopedMethodAccess(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newScopedMethodAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -34,4 +34,9 @@ func newScopedMethodAccess(document *Document, parent symbolBlock, node *phrase.
 
 func (s *ScopedMethodAccess) getLocation() lsp.Location {
 	return s.Location
+}
+
+func (s *ScopedMethodAccess) getTypes() TypeComposite {
+	// TODO: Look up method return type
+	return s.Type
 }

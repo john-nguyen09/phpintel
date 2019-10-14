@@ -15,7 +15,6 @@ type symbolConstructorForToken func(*Document, symbolBlock, *lexer.Token) Symbol
 
 var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ExpressionStatement:        true,
-	phrase.SimpleAssignmentExpression: true,
 	phrase.WhileStatement:             true,
 	phrase.ClassMemberDeclarationList: true,
 	phrase.ClassConstElementList:      true,
@@ -34,21 +33,17 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 func scanForChildren(s symbolBlock, node *phrase.Phrase) {
 	var phraseToSymbolConstructor = map[phrase.PhraseType]symbolConstructorForPhrase{
 		// Symbols
-		phrase.InterfaceDeclaration:   newInterface,
-		phrase.ClassDeclaration:       newClass,
-		phrase.FunctionDeclaration:    newFunction,
-		phrase.ClassConstElement:      newClassConst,
-		phrase.ConstDeclaration:       newConstDeclaration,
-		phrase.ConstElement:           newConst,
-		phrase.ArgumentExpressionList: newArgumentList,
-		phrase.TraitDeclaration:       newTrait,
-		phrase.MethodDeclaration:      newMethod,
-		// Expressions
-		phrase.FunctionCallExpression:         newFunctionCall,
-		phrase.ConstantAccessExpression:       newConstantAccess,
-		phrase.ScopedPropertyAccessExpression: newScopedPropertyAccess,
-		phrase.ScopedCallExpression:           newScopedMethodAccess,
-		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
+		phrase.InterfaceDeclaration:       newInterface,
+		phrase.ClassDeclaration:           newClass,
+		phrase.FunctionDeclaration:        newFunction,
+		phrase.ClassConstElement:          newClassConst,
+		phrase.ConstDeclaration:           newConstDeclaration,
+		phrase.ConstElement:               newConst,
+		phrase.ArgumentExpressionList:     newArgumentList,
+		phrase.TraitDeclaration:           newTrait,
+		phrase.MethodDeclaration:          newMethod,
+		phrase.FunctionCallExpression:     tryToNewDefine,
+		phrase.SimpleAssignmentExpression: newAssignment,
 	}
 	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 		// Expressions

@@ -66,3 +66,11 @@ func (s *Traverser) SkipToken(tokenType lexer.TokenType) {
 		nextToken, ok = next.(*lexer.Token)
 	}
 }
+
+func (s *Traverser) Clone() Traverser {
+	return Traverser{
+		node:  s.node,
+		spine: s.spine,
+		index: s.index,
+	}
+}

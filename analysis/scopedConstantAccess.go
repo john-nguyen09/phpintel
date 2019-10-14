@@ -11,7 +11,7 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newScopedConstantAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -34,4 +34,9 @@ func newScopedConstantAccess(document *Document, parent symbolBlock, node *phras
 
 func (s *ScopedConstantAccess) getLocation() lsp.Location {
 	return s.Location
+}
+
+func (s *ScopedConstantAccess) getTypes() TypeComposite {
+	// TODO: Look up constant types
+	return s.Type
 }

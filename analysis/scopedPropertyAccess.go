@@ -12,7 +12,7 @@ type ScopedPropertyAccess struct {
 	Expression
 }
 
-func newScopedPropertyAccess(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newScopedPropertyAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -35,4 +35,9 @@ func newScopedPropertyAccess(document *Document, parent symbolBlock, node *phras
 
 func (s *ScopedPropertyAccess) getLocation() lsp.Location {
 	return s.Location
+}
+
+func (s *ScopedPropertyAccess) getTypes() TypeComposite {
+	// TODO: Look up property types
+	return s.Type
 }
