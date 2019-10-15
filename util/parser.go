@@ -3,7 +3,6 @@ package util
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/sourcegraph/go-lsp"
 )
 
 func GetNodeText(node phrase.AstNode, docText string) string {
@@ -61,23 +60,6 @@ func LastToken(node phrase.AstNode) *lexer.Token {
 	}
 
 	return nil
-}
-
-func NodeRange(node phrase.AstNode, text string) lsp.Range {
-	var start, end int
-
-	switch node := node.(type) {
-	case *lexer.Token:
-		start = node.Offset
-		end = node.Offset + node.Length
-	case *phrase.Phrase:
-		firstToken, lastToken := FirstToken(node), LastToken(node)
-
-		start = firstToken.Offset
-		end = lastToken.Offset + lastToken.Length
-	}
-
-	return lsp.Range{Start: ToPosition(start, text), End: ToPosition(end, text)}
 }
 
 func IsOfPhraseType(node phrase.AstNode, phraseType phrase.PhraseType) (*phrase.Phrase, bool) {

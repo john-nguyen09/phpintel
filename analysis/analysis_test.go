@@ -2,10 +2,10 @@ package analysis
 
 import (
 	"io/ioutil"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/karrick/godirwalk"
 
 	"github.com/john-nguyen09/phpintel/util"
 
@@ -21,14 +21,14 @@ func BenchmarkAnalysis(t *testing.B) {
 		go analyse(i, jobs)
 	}
 
-	filepath.Walk(dir, func(path string, f os.FileInfo, err error) error {
-		if err != nil {
-			panic(err)
-		}
-		if !f.IsDir() && strings.HasSuffix(path, ".php") {
-			jobs <- path
-		}
-		return nil
+	godirwalk.Walk(dir, &godirwalk.Options{
+		Callback: func(path string, de *godirwalk.Dirent) error {
+			if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
+				jobs <- path
+			}
+			return nil
+		},
+		Unsorted: true,
 	})
 }
 
