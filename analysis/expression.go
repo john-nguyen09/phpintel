@@ -19,6 +19,10 @@ type hasTypes interface {
 
 type expressionConstructorForPhrase func(*Document, symbolBlock, *phrase.Phrase) hasTypes
 
+var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{
+	phrase.ObjectCreationExpression: true,
+}
+
 func scanForExpression(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
 	var phraseToExpressionConstructor = map[phrase.PhraseType]expressionConstructorForPhrase{
 		phrase.FunctionCallExpression:         newFunctionCall,
@@ -27,14 +31,25 @@ func scanForExpression(document *Document, parent symbolBlock, node *phrase.Phra
 		phrase.ScopedCallExpression:           newScopedMethodAccess,
 		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
 		phrase.ClassTypeDesignator:            newClassTypeDesignator,
+		phrase.ObjectCreationExpression:       newClassTypeDesignator,
 		phrase.SimpleVariable:                 newVariableExpression,
 	}
 	var expression hasTypes = nil
+	defer func() {
+		if symbol, ok := expression.(Symbol); ok {
+			consumeIfIsConsumer(parent, symbol)
+		}
+	}()
+	if _, ok := skipPhraseTypes[node.Type]; ok {
+		for _, child := range node.Children {
+			if p, ok := child.(*phrase.Phrase); ok {
+				expression = scanForExpression(document, parent, p)
+				return expression
+			}
+		}
+	}
 	if constructor, ok := phraseToExpressionConstructor[node.Type]; ok {
 		expression = constructor(document, parent, node)
-	}
-	if symbol, ok := expression.(Symbol); ok {
-		consumeIfIsConsumer(parent, symbol)
 	}
 	return expression
 }

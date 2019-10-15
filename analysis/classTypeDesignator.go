@@ -23,7 +23,7 @@ func newClassTypeDesignator(document *Document, parent symbolBlock, node *phrase
 			switch p.Type {
 			case phrase.QualifiedName:
 				typeString := transformQualifiedName(p, document)
-				classTypeDesignator.Name = typeString.GetType()
+				classTypeDesignator.Name = typeString.original
 				classTypeDesignator.Type.add(typeString)
 			}
 		}

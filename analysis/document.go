@@ -10,10 +10,13 @@ import (
 
 // Document contains information of documents
 type Document struct {
-	uri      string
-	text     string
-	Children []Symbol `json:"children"`
+	uri            string
+	text           string
+	variableTables []variableTable
+	Children       []Symbol `json:"children"`
 }
+
+type variableTable map[string]*Variable
 
 // MarshalJSON is used for json.Marshal
 func (s *Document) MarshalJSON() ([]byte, error) {
@@ -32,6 +35,7 @@ func newDocument(uri string, text string, rootNode *phrase.Phrase) *Document {
 		text:     text,
 		Children: []Symbol{},
 	}
+	document.pushVariableTable()
 
 	scanForChildren(document, rootNode)
 
@@ -62,4 +66,20 @@ func (s *Document) GetNodeLocation(node phrase.AstNode) lsp.Location {
 
 func (s *Document) consume(other Symbol) {
 	s.Children = append(s.Children, other)
+}
+
+func (s *Document) pushVariableTable() {
+	s.variableTables = append(s.variableTables, variableTable{})
+}
+
+func (s *Document) getCurrentVariableTable() variableTable {
+	return s.variableTables[len(s.variableTables)-1]
+}
+
+func (s *Document) pushVariable(variable *Variable) {
+	variableTable := s.getCurrentVariableTable()
+	if currentVariable, ok := variableTable[variable.Name]; ok {
+		variable.mergeTypesWithVariable(currentVariable)
+	}
+	variableTable[variable.Name] = variable
 }

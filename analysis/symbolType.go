@@ -85,18 +85,18 @@ func newTypeComposite() TypeComposite {
 }
 
 // MarshalJSON marshals TypeComposite to JSON
-func (t *TypeComposite) MarshalJSON() ([]byte, error) {
-	typeStrings := []TypeString{}
-
-	for _, typeString := range t.typeStrings {
-		typeStrings = append(typeStrings, typeString)
-	}
-
-	return json.Marshal(&typeStrings)
+func (t TypeComposite) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.typeStrings)
 }
 
 func (t *TypeComposite) add(typeString TypeString) {
 	t.typeStrings = append(t.typeStrings, typeString)
+}
+
+func (t *TypeComposite) merge(types TypeComposite) {
+	for _, typeString := range types.typeStrings {
+		t.add(typeString)
+	}
 }
 
 // Resolve resolves the type to slice of TypeString

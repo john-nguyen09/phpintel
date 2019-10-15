@@ -25,6 +25,7 @@ func newFunction(document *Document, parent symbolBlock, node *phrase.Phrase) Sy
 		Children: make([]Symbol, 0),
 		Params:   make([]Parameter, 0),
 	}
+	document.pushVariableTable()
 
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
