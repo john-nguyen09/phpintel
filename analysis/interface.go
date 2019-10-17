@@ -12,12 +12,11 @@ type Interface struct {
 	document *Document
 	location lsp.Location
 
-	Children []Symbol
-	Name     TypeString
-	Extends  []TypeString
+	Name    TypeString
+	Extends []TypeString
 }
 
-func newInterface(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
 		document: document,
 		location: document.GetNodeLocation(node),
@@ -28,7 +27,7 @@ func newInterface(document *Document, parent symbolBlock, node *phrase.Phrase) S
 	}
 	if len(node.Children) >= 2 {
 		if interfaceBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			scanForChildren(theInterface, interfaceBody)
+			scanForChildren(document, interfaceBody)
 		}
 	}
 

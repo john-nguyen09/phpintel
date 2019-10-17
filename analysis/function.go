@@ -12,17 +12,14 @@ type Function struct {
 	location lsp.Location
 	document *Document
 
-	Children []Symbol
-	Name     string `json:"Name"`
-	Params   []Parameter
+	Name   string `json:"Name"`
+	Params []Parameter
 }
 
-func newFunction(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location: document.GetNodeLocation(node),
 		document: document,
-
-		Children: make([]Symbol, 0),
 		Params:   make([]Parameter, 0),
 	}
 	document.pushVariableTable()
@@ -40,7 +37,7 @@ func newFunction(document *Document, parent symbolBlock, node *phrase.Phrase) Sy
 			phrase.FunctionDeclarationBody,
 			phrase.MethodDeclarationBody,
 		}); ok {
-			scanForChildren(function, p)
+			scanForChildren(document, p)
 		}
 		child = traverser.Advance()
 	}
@@ -78,7 +75,7 @@ func (s *Function) analyseParameterDeclarationList(node *phrase.Phrase) {
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(s.document, s, p)
+			param := newParameter(s.document, p)
 			s.Params = append(s.Params, *param)
 		}
 
@@ -92,8 +89,4 @@ func (s *Function) getLocation() lsp.Location {
 
 func (s *Function) getDocument() *Document {
 	return s.document
-}
-
-func (s *Function) consume(other Symbol) {
-	s.Children = append(s.Children, other)
 }

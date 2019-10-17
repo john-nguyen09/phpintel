@@ -17,6 +17,7 @@ type Document struct {
 	lineOffsets    []int
 	variableTables []variableTable
 	Children       []Symbol `json:"children"`
+	classStack     []Symbol
 }
 
 type variableTable map[string]*Variable
@@ -136,8 +137,16 @@ func (s *Document) GetNodeLocation(node phrase.AstNode) lsp.Location {
 	}
 }
 
-func (s *Document) consume(other Symbol) {
+func (s *Document) addSymbol(other Symbol) {
 	s.Children = append(s.Children, other)
+	switch instance := other.(type) {
+	case *Class:
+		s.classStack = append(s.classStack, instance)
+	case *Interface:
+		s.classStack = append(s.classStack, instance)
+	case *Trait:
+		s.classStack = append(s.classStack, instance)
+	}
 }
 
 func (s *Document) pushVariableTable() {
@@ -154,4 +163,10 @@ func (s *Document) pushVariable(variable *Variable) {
 		variable.mergeTypesWithVariable(currentVariable)
 	}
 	variableTable[variable.Name] = variable
+}
+
+// Even though the name indicates class but actually this will also
+// return interface and trait
+func (s *Document) getLastClass() Symbol {
+	return s.classStack[len(s.classStack)-1]
 }

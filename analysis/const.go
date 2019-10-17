@@ -15,12 +15,12 @@ type Const struct {
 	Value string
 }
 
-func newConstDeclaration(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newConstDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ConstElementList {
-			scanForChildren(parent, p)
+			scanForChildren(document, p)
 		}
 		child = traverser.Advance()
 	}
@@ -28,7 +28,7 @@ func newConstDeclaration(document *Document, parent symbolBlock, node *phrase.Ph
 	return nil
 }
 
-func newConst(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newConst(document *Document, node *phrase.Phrase) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}

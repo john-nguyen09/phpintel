@@ -12,7 +12,7 @@ type ScopedPropertyAccess struct {
 	Expression
 }
 
-func newScopedPropertyAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -21,8 +21,8 @@ func newScopedPropertyAccess(document *Document, parent symbolBlock, node *phras
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, parent, p)
-		consumeIfIsConsumer(parent, classAccess)
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
 		propertyAccess.Scope = &classAccess.Expression
 	}
 	traverser.Advance()

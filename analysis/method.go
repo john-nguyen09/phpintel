@@ -15,8 +15,8 @@ type Method struct {
 	ClassModifier      ClassModifierValue
 }
 
-func newMethod(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
-	symbol := newFunction(document, parent, node)
+func newMethod(document *Document, node *phrase.Phrase) Symbol {
+	symbol := newFunction(document, node)
 	method := &Method{
 		IsStatic: false,
 	}

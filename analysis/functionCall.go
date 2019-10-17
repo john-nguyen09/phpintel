@@ -13,17 +13,17 @@ type FunctionCall struct {
 	Expression
 }
 
-func tryToNewDefine(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 	if len(node.Children) >= 1 {
 		nameLowerCase := strings.ToLower(util.GetNodeText(node.Children[0], document.GetText()))
 		if nameLowerCase == "\\define" || nameLowerCase == "define" {
-			return newDefine(document, parent, node)
+			return newDefine(document, node)
 		}
 	}
 	return nil
 }
 
-func newFunctionCall(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func newFunctionCall(document *Document, node *phrase.Phrase) hasTypes {
 	functionCall := &FunctionCall{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

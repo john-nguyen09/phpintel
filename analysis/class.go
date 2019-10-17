@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -12,7 +13,6 @@ type Class struct {
 	document *Document
 	location lsp.Location
 
-	Children   []Symbol
 	Modifier   ClassModifierValue
 	Name       TypeString
 	Extends    TypeString
@@ -48,11 +48,10 @@ func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 	return visibilityModifier, isStatic, classModifier
 }
 
-func newClass(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newClass(document *Document, node *phrase.Phrase) Symbol {
 	class := &Class{
 		document: document,
 		location: document.GetNodeLocation(node),
-		Children: []Symbol{},
 	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -62,8 +61,6 @@ func newClass(document *Document, parent symbolBlock, node *phrase.Phrase) Symbo
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
 				class.analyseHeader(p)
-			case phrase.ClassDeclarationBody:
-				scanForChildren(class, p)
 			}
 		}
 
@@ -157,6 +154,8 @@ func (s *Class) getDocument() *Document {
 	return s.document
 }
 
-func (s *Class) consume(other Symbol) {
-	s.Children = append(s.Children, other)
+func (s *Class) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+
+	return serialiser.GetBytes()
 }

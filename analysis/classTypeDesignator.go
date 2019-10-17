@@ -10,7 +10,7 @@ type ClassTypeDesignator struct {
 	Expression
 }
 
-func newClassTypeDesignator(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func newClassTypeDesignator(document *Document, node *phrase.Phrase) hasTypes {
 	classTypeDesignator := &ClassTypeDesignator{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

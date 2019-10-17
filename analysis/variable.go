@@ -16,11 +16,11 @@ type Variable struct {
 	expression hasTypes
 }
 
-func newVariableExpression(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
-	return newVariable(document, parent, node)
+func newVariableExpression(document *Document, node *phrase.Phrase) hasTypes {
+	return newVariable(document, node)
 }
 
-func newVariable(document *Document, parent symbolBlock, node *phrase.Phrase) *Variable {
+func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	variable := &Variable{
 		Name:     util.GetNodeText(node, document.GetText()),
 		location: document.GetNodeLocation(node),

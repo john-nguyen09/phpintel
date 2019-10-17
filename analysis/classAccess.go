@@ -11,7 +11,7 @@ type ClassAccess struct {
 	Expression
 }
 
-func newClassAccess(document *Document, parent symbolBlock, node *phrase.Phrase) *ClassAccess {
+func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

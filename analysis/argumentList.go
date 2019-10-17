@@ -14,7 +14,7 @@ type ArgumentList struct {
 	arguments []phrase.AstNode
 }
 
-func newArgumentList(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
@@ -30,7 +30,7 @@ func newArgumentList(document *Document, parent symbolBlock, node *phrase.Phrase
 		argumentList.arguments = append(argumentList.arguments, child)
 		child = traverser.Advance()
 	}
-	scanForChildren(parent, node)
+	scanForChildren(document, node)
 	return argumentList
 }
 

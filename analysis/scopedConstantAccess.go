@@ -11,7 +11,7 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -20,8 +20,8 @@ func newScopedConstantAccess(document *Document, parent symbolBlock, node *phras
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, parent, p)
-		consumeIfIsConsumer(parent, classAccess)
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
 		constantAccess.Scope = &classAccess.Expression
 	}
 	traverser.Advance()

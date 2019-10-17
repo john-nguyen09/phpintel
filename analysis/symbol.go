@@ -35,10 +35,6 @@ type Symbol interface {
 	getLocation() lsp.Location
 }
 
-type hasConsume interface {
-	consume(symbol Symbol)
-}
-
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
 	return newTypeString(string(util.GetNodeText(p, document.GetText())))
 }

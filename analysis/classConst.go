@@ -16,11 +16,12 @@ type ClassConst struct {
 	Scope TypeString
 }
 
-func newClassConst(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}
 
+	parent := document.getLastClass()
 	if theClass, ok := parent.(*Class); ok {
 		classConst.Scope = theClass.Name
 	}

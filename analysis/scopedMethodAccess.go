@@ -11,7 +11,7 @@ type ScopedMethodAccess struct {
 	Expression
 }
 
-func newScopedMethodAccess(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -20,8 +20,8 @@ func newScopedMethodAccess(document *Document, parent symbolBlock, node *phrase.
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, parent, p)
-		consumeIfIsConsumer(parent, classAccess)
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
 		methodAccess.Scope = &classAccess.Expression
 	}
 	traverser.Advance()

@@ -12,11 +12,10 @@ type Trait struct {
 	document *Document
 	location lsp.Location
 
-	Children []Symbol
-	Name     TypeString
+	Name TypeString
 }
 
-func newTrait(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newTrait(document *Document, node *phrase.Phrase) Symbol {
 	trait := &Trait{
 		document: document,
 		location: document.GetNodeLocation(node),
@@ -28,7 +27,7 @@ func newTrait(document *Document, parent symbolBlock, node *phrase.Phrase) Symbo
 
 	if len(node.Children) >= 2 {
 		if classBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			scanForChildren(trait, classBody)
+			scanForChildren(document, classBody)
 		}
 	}
 

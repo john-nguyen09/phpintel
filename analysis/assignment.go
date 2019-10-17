@@ -7,30 +7,30 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func newAssignment(document *Document, parent symbolBlock, node *phrase.Phrase) Symbol {
+func newAssignment(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
 		if p.Type == phrase.SimpleVariable {
-			analyseVariableAssignment(document, parent, p, traverser.Clone())
+			analyseVariableAssignment(document, p, traverser.Clone())
 		}
 	}
 	return nil
 }
 
-func analyseVariableAssignment(document *Document, parent symbolBlock,
+func analyseVariableAssignment(document *Document,
 	node *phrase.Phrase, traverser util.Traverser) {
 	traverser.Advance()
 	traverser.SkipToken(lexer.Whitespace)
 	traverser.SkipToken(lexer.Equals)
 	traverser.SkipToken(lexer.Whitespace)
 	rhs := traverser.Advance()
-	variable := newVariable(document, parent, node)
-	consumeIfIsConsumer(parent, variable)
+	variable := newVariable(document, node)
+	document.addSymbol(variable)
 
 	var expression hasTypes = nil
 	if p, ok := rhs.(*phrase.Phrase); ok {
-		expression = scanForExpression(document, parent, p)
+		expression = scanForExpression(document, p)
 	}
 	if expression != nil {
 		variable.setExpression(expression)

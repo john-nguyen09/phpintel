@@ -17,13 +17,13 @@ type hasTypes interface {
 	getTypes() TypeComposite
 }
 
-type expressionConstructorForPhrase func(*Document, symbolBlock, *phrase.Phrase) hasTypes
+type expressionConstructorForPhrase func(*Document, *phrase.Phrase) hasTypes
 
 var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ObjectCreationExpression: true,
 }
 
-func scanForExpression(document *Document, parent symbolBlock, node *phrase.Phrase) hasTypes {
+func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 	var phraseToExpressionConstructor = map[phrase.PhraseType]expressionConstructorForPhrase{
 		phrase.FunctionCallExpression:         newFunctionCall,
 		phrase.ConstantAccessExpression:       newConstantAccess,
@@ -37,19 +37,19 @@ func scanForExpression(document *Document, parent symbolBlock, node *phrase.Phra
 	var expression hasTypes = nil
 	defer func() {
 		if symbol, ok := expression.(Symbol); ok {
-			consumeIfIsConsumer(parent, symbol)
+			document.addSymbol(symbol)
 		}
 	}()
 	if _, ok := skipPhraseTypes[node.Type]; ok {
 		for _, child := range node.Children {
 			if p, ok := child.(*phrase.Phrase); ok {
-				expression = scanForExpression(document, parent, p)
+				expression = scanForExpression(document, p)
 				return expression
 			}
 		}
 	}
 	if constructor, ok := phraseToExpressionConstructor[node.Type]; ok {
-		expression = constructor(document, parent, node)
+		expression = constructor(document, node)
 	}
 	return expression
 }

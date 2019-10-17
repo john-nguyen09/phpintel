@@ -16,7 +16,7 @@ type Parameter struct {
 	Value string        `json:"Value"`
 }
 
-func newParameter(document *Document, parent symbolBlock, node *phrase.Phrase) *Parameter {
+func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 	param := &Parameter{
 		location: document.GetNodeLocation(node),
 	}
