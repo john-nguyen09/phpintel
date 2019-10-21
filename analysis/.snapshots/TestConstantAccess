@@ -1,0 +1,50 @@
+([]analysis.Symbol) (len=4) {
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+        Range: (lsp.Range) 2:0-2:7
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=11) "$currentDir",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+      Range: (lsp.Range) 4:0-4:11
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (analysis.hasTypes) <nil>
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=14) "$randomInclude",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+      Range: (lsp.Range) 4:24-5:13
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (analysis.hasTypes) <nil>
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+        Range: (lsp.Range) 10:128-10:135
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  })
+}

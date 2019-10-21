@@ -1,0 +1,74 @@
+([]analysis.Symbol) (len=4) {
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$file",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+      Range: (lsp.Range) 2:0-2:5
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.FunctionCall)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+          Range: (lsp.Range) 2:8-2:28
+        },
+        Name: (string) (len=5) "fopen"
+      }
+    })
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+        Range: (lsp.Range) 2:8-2:28
+      },
+      Name: (string) (len=5) "fopen"
+    }
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$line",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+      Range: (lsp.Range) 4:8-4:13
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.FunctionCall)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+          Range: (lsp.Range) 4:16-4:28
+        },
+        Name: (string) (len=5) "fgets"
+      }
+    })
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
+        Range: (lsp.Range) 4:16-4:28
+      },
+      Name: (string) (len=5) "fgets"
+    }
+  })
+}

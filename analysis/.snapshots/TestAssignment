@@ -1,0 +1,192 @@
+([]analysis.Symbol) (len=8) {
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$var1",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+      Range: (lsp.Range) 2:0-2:5
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.ClassTypeDesignator)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=10) "TestClass1",
+              original: (string) (len=10) "TestClass1"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+          Range: (lsp.Range) 2:12-2:22
+        },
+        Name: (string) (len=10) "TestClass1"
+      }
+    })
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$var2",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+      Range: (lsp.Range) 2:27-3:4
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.FunctionCall)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+          Range: (lsp.Range) 3:7-3:22
+        },
+        Name: (string) (len=13) "testFunction1"
+      }
+    })
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (lsp.Range) 3:7-3:22
+      },
+      Name: (string) (len=13) "testFunction1"
+    }
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$var3",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+      Range: (lsp.Range) 3:25-4:4
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.Variable)({
+      Name: (string) (len=5) "$var1",
+      location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (lsp.Range) 4:7-4:12
+      },
+      types: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      expression: (analysis.hasTypes) <nil>
+    })
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$var1",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+      Range: (lsp.Range) 4:7-4:12
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=10) "TestClass1",
+          original: (string) (len=10) "TestClass1"
+        }
+      }
+    },
+    expression: (analysis.hasTypes) <nil>
+  }),
+  (*analysis.Variable)({
+    Name: (string) (len=5) "$var4",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+      Range: (lsp.Range) 4:15-6:83
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.ScopedMethodAccess)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Expression)({
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=10) "TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            }
+          },
+          Scope: (*analysis.Expression)(<nil>),
+          Location: (lsp.Location) {
+            URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+            Range: (lsp.Range) 6:86-6:96
+          },
+          Name: (string) (len=10) "TestClass1"
+        }),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+          Range: (lsp.Range) 6:86-6:107
+        },
+        Name: (string) (len=7) "method1"
+      }
+    })
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (lsp.Range) 6:86-6:96
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)({
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=10) "TestClass1",
+              original: (string) (len=10) "TestClass1"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+          Range: (lsp.Range) 6:86-6:96
+        },
+        Name: (string) (len=10) "TestClass1"
+      }),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (lsp.Range) 6:86-6:107
+      },
+      Name: (string) (len=7) "method1"
+    }
+  })
+}

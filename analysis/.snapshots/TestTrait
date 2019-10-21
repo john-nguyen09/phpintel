@@ -1,0 +1,34 @@
+([]analysis.Symbol) (len=1) {
+  (*analysis.Trait)({
+    document: (*analysis.Document)({
+      uri: (string) (len=26) "file:///../cases/trait.php",
+      text: (string) (len=38) "<?php\r\n\r\ntrait TestTrait1 {\r\n    \r\n}\r\n",
+      lineOffsets: ([]int) (len=6) {
+        (int) 0,
+        (int) 8,
+        (int) 9,
+        (int) 30,
+        (int) 36,
+        (int) 0
+      },
+      variableTables: ([]analysis.variableTable) (len=1) {
+        (analysis.variableTable) {
+        }
+      },
+      Children: ([]analysis.Symbol) (len=1) {
+        (*analysis.Trait)(<already shown>)
+      },
+      classStack: ([]analysis.Symbol) (len=1) {
+        (*analysis.Trait)(<already shown>)
+      }
+    }),
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=26) "file:///../cases/trait.php",
+      Range: (lsp.Range) 2:0-5:36
+    },
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=10) "TestTrait1",
+      original: (string) (len=10) "TestTrait1"
+    }
+  })
+}

@@ -1,0 +1,45 @@
+([]analysis.Symbol) (len=2) {
+  (*analysis.Const)({
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
+      Range: (lsp.Range) 4:15-4:30
+    },
+    Name: (string) (len=11) "TEST_CONST1",
+    Value: (string) (len=1) "1"
+  }),
+  (*analysis.Define)({
+    document: (*analysis.Document)({
+      uri: (string) (len=26) "file:///../cases/const.php",
+      text: (string) (len=60) "<?php\r\n\r\nconst TEST_CONST1 = 1;\r\ndefine('TEST_CONST2', 2);\r\n",
+      lineOffsets: ([]int) (len=5) {
+        (int) 0,
+        (int) 8,
+        (int) 9,
+        (int) 34,
+        (int) 0
+      },
+      variableTables: ([]analysis.variableTable) (len=1) {
+        (analysis.variableTable) {
+        }
+      },
+      Children: ([]analysis.Symbol) (len=2) {
+        (*analysis.Const)({
+          location: (lsp.Location) {
+            URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
+            Range: (lsp.Range) 4:15-4:30
+          },
+          Name: (string) (len=11) "TEST_CONST1",
+          Value: (string) (len=1) "1"
+        }),
+        (*analysis.Define)(<already shown>)
+      },
+      classStack: ([]analysis.Symbol) <nil>
+    }),
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
+      Range: (lsp.Range) 4:33-4:57
+    },
+    Name: (string) (len=11) "TEST_CONST2",
+    Value: (string) (len=1) "2"
+  })
+}

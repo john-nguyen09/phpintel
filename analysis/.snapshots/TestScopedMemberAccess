@@ -1,0 +1,30 @@
+([]analysis.Symbol) (len=1) {
+  (*analysis.Variable)({
+    Name: (string) (len=9) "$instance",
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+      Range: (lsp.Range) 6:0-6:9
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    },
+    expression: (*analysis.ClassTypeDesignator)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=9) "TestClass",
+              original: (string) (len=9) "TestClass"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+          Range: (lsp.Range) 6:16-6:25
+        },
+        Name: (string) (len=9) "TestClass"
+      }
+    })
+  })
+}

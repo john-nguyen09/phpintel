@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"testing"
 
+	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/util"
 
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -20,11 +19,5 @@ func TestConstant(t *testing.T) {
 
 	rootNode := parser.Parse(string(data))
 	document := newDocument(util.PathToUri(constTest), string(data), rootNode)
-
-	jsonData, err := json.MarshalIndent(document, "", " ")
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(string(jsonData))
+	cupaloy.SnapshotT(t, document.Children)
 }
