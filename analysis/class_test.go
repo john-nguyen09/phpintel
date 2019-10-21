@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"testing"
 
@@ -19,4 +20,29 @@ func TestClass(t *testing.T) {
 	rootNode := parser.Parse(string(data))
 	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
+}
+
+func TestClassSerialiseAndDeserialise(t *testing.T) {
+	classTest := "../cases/class.php"
+	data, err := ioutil.ReadFile(classTest)
+	if err != nil {
+		panic(err)
+	}
+
+	rootNode := parser.Parse(string(data))
+	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
+	for _, child := range document.Children {
+		if theClass, ok := child.(*Class); ok {
+			bytes := theClass.Serialise()
+			jsonData, _ := json.MarshalIndent(theClass, "", "  ")
+			original := string(jsonData)
+			deserialisedClass := DeserialiseClass(document, bytes)
+
+			jsonData, _ = json.MarshalIndent(deserialisedClass, "", "  ")
+			deserialise := string(jsonData)
+			if original != deserialise {
+				t.Errorf("%s != %s\n", original, deserialise)
+			}
+		}
+	}
 }

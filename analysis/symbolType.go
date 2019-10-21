@@ -2,6 +2,8 @@ package analysis
 
 import (
 	"encoding/json"
+
+	"github.com/john-nguyen09/phpintel/indexer"
 )
 
 // SymbolType is an interface to symbol types
@@ -73,6 +75,18 @@ func (t TypeString) GetType() string {
 	return t.fqn
 }
 
+func (t *TypeString) Write(serialiser *indexer.Serialiser) {
+	serialiser.WriteString(t.original)
+	serialiser.WriteString(t.fqn)
+}
+
+func ReadTypeString(serialiser *indexer.Serialiser) TypeString {
+	return TypeString{
+		original: serialiser.ReadString(),
+		fqn:      serialiser.ReadString(),
+	}
+}
+
 // TypeComposite contains multiple type strings
 type TypeComposite struct {
 	typeStrings []TypeString
@@ -96,6 +110,12 @@ func (t *TypeComposite) add(typeString TypeString) {
 func (t *TypeComposite) merge(types TypeComposite) {
 	for _, typeString := range types.typeStrings {
 		t.add(typeString)
+	}
+}
+
+func (t *TypeComposite) Write(serialiser *indexer.Serialiser) {
+	for _, typeString := range t.typeStrings {
+		typeString.Write(serialiser)
 	}
 }
 

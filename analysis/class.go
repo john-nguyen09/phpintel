@@ -150,12 +150,31 @@ func (s *Class) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Class) getDocument() *Document {
-	return s.document
-}
-
 func (s *Class) Serialise() []byte {
 	serialiser := indexer.NewSerialiser()
-
+	util.WriteLocation(serialiser, s.location)
+	serialiser.WriteInt(int(s.Modifier))
+	s.Name.Write(serialiser)
+	s.Extends.Write(serialiser)
+	serialiser.WriteInt(len(s.Interfaces))
+	for _, theInterface := range s.Interfaces {
+		theInterface.Write(serialiser)
+	}
 	return serialiser.GetBytes()
+}
+
+func DeserialiseClass(document *Document, bytes []byte) *Class {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	theClass := &Class{
+		document: document,
+		location: util.ReadLocation(serialiser),
+		Modifier: ClassModifierValue(serialiser.ReadInt()),
+		Name:     ReadTypeString(serialiser),
+		Extends:  ReadTypeString(serialiser),
+	}
+	numInterfaces := serialiser.ReadInt()
+	for i := 0; i < numInterfaces; i++ {
+		theClass.Interfaces = append(theClass.Interfaces, ReadTypeString(serialiser))
+	}
+	return theClass
 }
