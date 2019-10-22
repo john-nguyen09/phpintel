@@ -20,7 +20,7 @@ func newTrait(document *Document, node *phrase.Phrase) Symbol {
 		document: document,
 		location: document.GetNodeLocation(node),
 	}
-
+	document.addClass(trait)
 	if traitHeader, ok := node.Children[0].(*phrase.Phrase); ok && traitHeader.Type == phrase.TraitDeclarationHeader {
 		trait.analyseHeader(traitHeader)
 	}

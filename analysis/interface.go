@@ -21,7 +21,7 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 		document: document,
 		location: document.GetNodeLocation(node),
 	}
-
+	document.addClass(theInterface)
 	if interfaceHeader, ok := node.Children[0].(*phrase.Phrase); ok && interfaceHeader.Type == phrase.InterfaceDeclarationHeader {
 		theInterface.analyseHeader(interfaceHeader)
 	}

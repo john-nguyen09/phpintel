@@ -53,6 +53,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		document: document,
 		location: document.GetNodeLocation(node),
 	}
+	document.addClass(class)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 
@@ -61,6 +62,8 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
 				class.analyseHeader(p)
+			case phrase.ClassDeclarationBody:
+				scanForChildren(document, p)
 			}
 		}
 

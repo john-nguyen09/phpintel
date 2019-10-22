@@ -139,14 +139,6 @@ func (s *Document) GetNodeLocation(node phrase.AstNode) lsp.Location {
 
 func (s *Document) addSymbol(other Symbol) {
 	s.Children = append(s.Children, other)
-	switch instance := other.(type) {
-	case *Class:
-		s.classStack = append(s.classStack, instance)
-	case *Interface:
-		s.classStack = append(s.classStack, instance)
-	case *Trait:
-		s.classStack = append(s.classStack, instance)
-	}
 }
 
 func (s *Document) pushVariableTable() {
@@ -169,4 +161,15 @@ func (s *Document) pushVariable(variable *Variable) {
 // return interface and trait
 func (s *Document) getLastClass() Symbol {
 	return s.classStack[len(s.classStack)-1]
+}
+
+func (s *Document) addClass(other Symbol) {
+	switch instance := other.(type) {
+	case *Class:
+		s.classStack = append(s.classStack, instance)
+	case *Interface:
+		s.classStack = append(s.classStack, instance)
+	case *Trait:
+		s.classStack = append(s.classStack, instance)
+	}
 }
