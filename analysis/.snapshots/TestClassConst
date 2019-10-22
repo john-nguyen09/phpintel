@@ -1,4 +1,74 @@
-([]analysis.Symbol) (len=1) {
+([]analysis.Symbol) (len=2) {
+  (*analysis.ClassConst)({
+    document: (*analysis.Document)({
+      uri: (string) (len=31) "file:///../cases/classConst.php",
+      text: (string) (len=66) "<?php\r\n\r\nclass ClassConstTest1 {\r\n    const CLASS_CONST1 = 5;\r\n}\r\n",
+      lineOffsets: ([]int) (len=6) {
+        (int) 0,
+        (int) 8,
+        (int) 9,
+        (int) 35,
+        (int) 64,
+        (int) 0
+      },
+      variableTables: ([]analysis.variableTable) (len=1) {
+        (analysis.variableTable) {
+        }
+      },
+      Children: ([]analysis.Symbol) (len=2) {
+        (*analysis.ClassConst)(<already shown>),
+        (*analysis.Class)({
+          document: (*analysis.Document)(<already shown>),
+          location: (lsp.Location) {
+            URI: (lsp.DocumentURI) (len=31) "file:///../cases/classConst.php",
+            Range: (lsp.Range) 2:0-5:64
+          },
+          Modifier: (analysis.ClassModifierValue) 0,
+          Name: (analysis.TypeString) {
+            fqn: (string) (len=15) "ClassConstTest1",
+            original: (string) (len=15) "ClassConstTest1"
+          },
+          Extends: (analysis.TypeString) {
+            fqn: (string) "",
+            original: (string) ""
+          },
+          Interfaces: ([]analysis.TypeString) <nil>
+        })
+      },
+      classStack: ([]analysis.Symbol) (len=1) {
+        (*analysis.Class)({
+          document: (*analysis.Document)(<already shown>),
+          location: (lsp.Location) {
+            URI: (lsp.DocumentURI) (len=31) "file:///../cases/classConst.php",
+            Range: (lsp.Range) 2:0-5:64
+          },
+          Modifier: (analysis.ClassModifierValue) 0,
+          Name: (analysis.TypeString) {
+            fqn: (string) (len=15) "ClassConstTest1",
+            original: (string) (len=15) "ClassConstTest1"
+          },
+          Extends: (analysis.TypeString) {
+            fqn: (string) "",
+            original: (string) ""
+          },
+          Interfaces: ([]analysis.TypeString) <nil>
+        })
+      }
+    }),
+    location: (lsp.Location) {
+      URI: (lsp.DocumentURI) (len=31) "file:///../cases/classConst.php",
+      Range: (lsp.Range) 5:44-5:60
+    },
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=12) "CLASS_CONST1",
+      original: (string) (len=12) "CLASS_CONST1"
+    },
+    Value: (string) (len=1) "5",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=15) "ClassConstTest1",
+      original: (string) (len=15) "ClassConstTest1"
+    }
+  }),
   (*analysis.Class)({
     document: (*analysis.Document)({
       uri: (string) (len=31) "file:///../cases/classConst.php",
@@ -15,7 +85,23 @@
         (analysis.variableTable) {
         }
       },
-      Children: ([]analysis.Symbol) (len=1) {
+      Children: ([]analysis.Symbol) (len=2) {
+        (*analysis.ClassConst)({
+          document: (*analysis.Document)(<already shown>),
+          location: (lsp.Location) {
+            URI: (lsp.DocumentURI) (len=31) "file:///../cases/classConst.php",
+            Range: (lsp.Range) 5:44-5:60
+          },
+          Name: (analysis.TypeString) {
+            fqn: (string) (len=12) "CLASS_CONST1",
+            original: (string) (len=12) "CLASS_CONST1"
+          },
+          Value: (string) (len=1) "5",
+          Scope: (analysis.TypeString) {
+            fqn: (string) (len=15) "ClassConstTest1",
+            original: (string) (len=15) "ClassConstTest1"
+          }
+        }),
         (*analysis.Class)(<already shown>)
       },
       classStack: ([]analysis.Symbol) (len=1) {
