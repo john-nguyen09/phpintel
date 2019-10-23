@@ -10,7 +10,7 @@ import (
 // Expression represents a reference
 type Expression struct {
 	Type     TypeComposite
-	Scope    *Expression
+	Scope    hasTypes
 	Location lsp.Location
 	Name     string
 }
@@ -18,6 +18,21 @@ type Expression struct {
 type hasTypes interface {
 	getTypes() TypeComposite
 }
+
+type expressionKind int
+
+const (
+	unknownKind              = iota
+	variableKind             = iota
+	classAccessKind          = iota
+	classTypeDesignatorKind  = iota
+	constantAccessKind       = iota
+	functionCallKind         = iota
+	propertyAccessKind       = iota
+	scopedConstantAccessKind = iota
+	scopedMethodAccessKind   = iota
+	scopedPropertyAccessKind = iota
+)
 
 type expressionConstructorForPhrase func(*Document, *phrase.Phrase) hasTypes
 
@@ -35,6 +50,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 		phrase.ClassTypeDesignator:            newClassTypeDesignator,
 		phrase.ObjectCreationExpression:       newClassTypeDesignator,
 		phrase.SimpleVariable:                 newVariableExpression,
+		phrase.PropertyAccessExpression:       newPropertyAccess,
 	}
 	var expression hasTypes = nil
 	defer func() {
@@ -56,13 +72,47 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 	return expression
 }
 
-func (s *Expression) Write(serialiser *indexer.Serialiser) {
+func (s *Expression) Serialise(serialiser *indexer.Serialiser) {
 	s.Type.Write(serialiser)
-	if s.Scope == nil {
-		serialiser.WriteBool(false)
-	} else {
+	switch expression := s.Scope.(type) {
+	case *Variable:
 		serialiser.WriteBool(true)
-		s.Scope.Write(serialiser)
+		serialiser.WriteInt(int(variableKind))
+		expression.Serialise(serialiser)
+	case *ClassAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(classAccessKind))
+		expression.Serialise(serialiser)
+	case *ClassTypeDesignator:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(classTypeDesignatorKind))
+		expression.Serialise(serialiser)
+	case *ConstantAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(constantAccessKind))
+		expression.Serialise(serialiser)
+	case *FunctionCall:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(functionCallKind))
+		expression.Serialise(serialiser)
+	case *PropertyAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(propertyAccessKind))
+		expression.Serialise(serialiser)
+	case *ScopedConstantAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(scopedConstantAccessKind))
+		expression.Serialise(serialiser)
+	case *ScopedMethodAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(scopedMethodAccessKind))
+		expression.Serialise(serialiser)
+	case *ScopedPropertyAccess:
+		serialiser.WriteBool(true)
+		serialiser.WriteInt(int(scopedPropertyAccessKind))
+		expression.Serialise(serialiser)
+	default:
+		serialiser.WriteBool(false)
 	}
 	util.WriteLocation(serialiser, s.Location)
 	serialiser.WriteString(s.Name)
@@ -73,8 +123,26 @@ func ReadExpression(serialiser *indexer.Serialiser) Expression {
 		Type: ReadTypeComposite(serialiser),
 	}
 	if serialiser.ReadBool() {
-		scope := ReadExpression(serialiser)
-		expr.Scope = &scope
+		switch expressionKind(serialiser.ReadInt()) {
+		case variableKind:
+			expr.Scope = ReadVariable(serialiser)
+		case classAccessKind:
+			expr.Scope = ReadClassAccess(serialiser)
+		case classTypeDesignatorKind:
+			expr.Scope = ReadClassTypeDesignator(serialiser)
+		case constantAccessKind:
+			expr.Scope = ReadConstantAccess(serialiser)
+		case functionCallKind:
+			expr.Scope = ReadFunctionCall(serialiser)
+		case propertyAccessKind:
+			expr.Scope = ReadPropertyAccess(serialiser)
+		case scopedConstantAccessKind:
+			expr.Scope = ReadScopedConstantAccess(serialiser)
+		case scopedMethodAccessKind:
+			expr.Scope = ReadScopedMethodAccess(serialiser)
+		case scopedPropertyAccessKind:
+			expr.Scope = ReadScopedPropertyAccess(serialiser)
+		}
 	}
 	expr.Location = util.ReadLocation(serialiser)
 	expr.Name = serialiser.ReadString()

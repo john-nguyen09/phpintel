@@ -37,8 +37,12 @@ func (s *ClassTypeDesignator) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ClassTypeDesignator) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Expression.Write(serialiser)
-	return serialiser.GetBytes()
+func (s *ClassTypeDesignator) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
+}
+
+func ReadClassTypeDesignator(serialiser *indexer.Serialiser) *ClassTypeDesignator {
+	return &ClassTypeDesignator{
+		Expression: ReadExpression(serialiser),
+	}
 }

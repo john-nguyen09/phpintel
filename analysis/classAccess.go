@@ -43,14 +43,11 @@ func (s *ClassAccess) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ClassAccess) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Expression.Write(serialiser)
-	return serialiser.GetBytes()
+func (s *ClassAccess) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
 }
 
-func DeserialiseClassAccess(document *Document, bytes []byte) *ClassAccess {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadClassAccess(serialiser *indexer.Serialiser) *ClassAccess {
 	return &ClassAccess{
 		Expression: ReadExpression(serialiser),
 	}

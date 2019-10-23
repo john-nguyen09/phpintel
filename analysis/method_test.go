@@ -7,6 +7,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/go-phpparser/parser"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -35,8 +36,10 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 		if method, ok := child.(*Method); ok {
 			jsonData, _ := json.MarshalIndent(method, "", "  ")
 			original := string(jsonData)
-			bytes := method.Serialise()
-			deserialisedMethod := DeserialiseMethod(document, bytes)
+			serialiser := indexer.NewSerialiser()
+			method.Serialise(serialiser)
+			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			deserialisedMethod := ReadMethod(document, serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedMethod, "", "  ")
 			after := string(jsonData)
 			if after != original {

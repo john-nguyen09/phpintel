@@ -92,7 +92,7 @@ func (s *Function) getDocument() *Document {
 	return s.document
 }
 
-func (s *Function) Write(serialiser *indexer.Serialiser) {
+func (s *Function) Serialise(serialiser *indexer.Serialiser) {
 	util.WriteLocation(serialiser, s.location)
 	serialiser.WriteString(s.Name)
 	serialiser.WriteInt(len(s.Params))
@@ -101,13 +101,7 @@ func (s *Function) Write(serialiser *indexer.Serialiser) {
 	}
 }
 
-func (s *Function) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Write(serialiser)
-	return serialiser.GetBytes()
-}
-
-func ReadFunction(serialiser *indexer.Serialiser) Function {
+func ReadFunction(document *Document, serialiser *indexer.Serialiser) *Function {
 	function := Function{
 		location: util.ReadLocation(serialiser),
 		Name:     serialiser.ReadString(),
@@ -117,12 +111,6 @@ func ReadFunction(serialiser *indexer.Serialiser) Function {
 	for i := 0; i < countParams; i++ {
 		function.Params = append(function.Params, ReadParameter(serialiser))
 	}
-	return function
-}
-
-func DeserialiseFunction(document *Document, bytes []byte) *Function {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
-	function := ReadFunction(serialiser)
 	function.document = document
 	return &function
 }

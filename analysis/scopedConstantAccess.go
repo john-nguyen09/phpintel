@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -22,7 +23,7 @@ func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	if p, ok := firstChild.(*phrase.Phrase); ok {
 		classAccess := newClassAccess(document, p)
 		document.addSymbol(classAccess)
-		constantAccess.Scope = &classAccess.Expression
+		constantAccess.Scope = classAccess
 	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
@@ -39,4 +40,14 @@ func (s *ScopedConstantAccess) getLocation() lsp.Location {
 func (s *ScopedConstantAccess) getTypes() TypeComposite {
 	// TODO: Look up constant types
 	return s.Type
+}
+
+func (s *ScopedConstantAccess) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
+}
+
+func ReadScopedConstantAccess(serialiser *indexer.Serialiser) *ScopedConstantAccess {
+	return &ScopedConstantAccess{
+		Expression: ReadExpression(serialiser),
+	}
 }

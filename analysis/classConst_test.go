@@ -7,6 +7,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/go-phpparser/parser"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -33,10 +34,12 @@ func TestClassConstSerialiseAndDeserialise(t *testing.T) {
 	document := newDocument(util.PathToUri(classConstTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if classConst, ok := child.(*ClassConst); ok {
-			bytes := classConst.Serialise()
 			jsonData, _ := json.MarshalIndent(classConst, "", "  ")
 			original := string(jsonData)
-			deserialisedClassConst := DeserialiseClassConst(document, bytes)
+			serialiser := indexer.NewSerialiser()
+			classConst.Serialise(serialiser)
+			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			deserialisedClassConst := ReadClassConst(document, serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedClassConst, "", "  ")
 			after := string(jsonData)
 			if after != original {

@@ -62,16 +62,13 @@ func (s *Define) analyseArgs(args *ArgumentList) {
 	}
 }
 
-func (s *Define) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
+func (s *Define) Serialise(serialiser *indexer.Serialiser) {
 	util.WriteLocation(serialiser, s.location)
 	serialiser.WriteString(s.Name)
 	serialiser.WriteString(s.Value)
-	return serialiser.GetBytes()
 }
 
-func DeserialiseDefine(document *Document, bytes []byte) *Define {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadDefine(document *Document, serialiser *indexer.Serialiser) *Define {
 	return &Define{
 		document: document,
 		location: util.ReadLocation(serialiser),

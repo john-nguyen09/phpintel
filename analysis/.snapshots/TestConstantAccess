@@ -1,10 +1,10 @@
-([]analysis.Symbol) (len=4) {
+([]analysis.Symbol) (len=5) {
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (*analysis.Expression)(<nil>),
+      Scope: (analysis.hasTypes) <nil>,
       Location: (lsp.Location) {
         URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
         Range: (lsp.Range) 2:0-2:7
@@ -13,33 +13,50 @@
     }
   }),
   (*analysis.Variable)({
-    Name: (string) (len=11) "$currentDir",
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-      Range: (lsp.Range) 4:0-4:11
-    },
-    types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
-    },
-    expression: (analysis.hasTypes) <nil>
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.hasTypes) <nil>,
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+        Range: (lsp.Range) 4:0-4:11
+      },
+      Name: (string) (len=11) "$currentDir"
+    }
   }),
   (*analysis.Variable)({
-    Name: (string) (len=14) "$randomInclude",
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-      Range: (lsp.Range) 4:24-5:13
-    },
-    types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
-    },
-    expression: (analysis.hasTypes) <nil>
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.hasTypes) <nil>,
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+        Range: (lsp.Range) 4:24-5:13
+      },
+      Name: (string) (len=14) "$randomInclude"
+    }
   }),
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (*analysis.Expression)(<nil>),
+      Scope: (analysis.hasTypes) <nil>,
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
+        Range: (lsp.Range) 7:4-7:15
+      },
+      Name: (string) (len=11) "TEST_CONST1"
+    }
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.hasTypes) <nil>,
       Location: (lsp.Location) {
         URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
         Range: (lsp.Range) 10:128-10:135

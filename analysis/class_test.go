@@ -7,6 +7,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/go-phpparser/parser"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -33,10 +34,12 @@ func TestClassSerialiseAndDeserialise(t *testing.T) {
 	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if theClass, ok := child.(*Class); ok {
-			bytes := theClass.Serialise()
 			jsonData, _ := json.MarshalIndent(theClass, "", "  ")
 			original := string(jsonData)
-			deserialisedClass := DeserialiseClass(document, bytes)
+			serialiser := indexer.NewSerialiser()
+			theClass.Serialise(serialiser)
+			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			deserialisedClass := ReadClass(document, serialiser)
 
 			jsonData, _ = json.MarshalIndent(deserialisedClass, "", "  ")
 			deserialise := string(jsonData)

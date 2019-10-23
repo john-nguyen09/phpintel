@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=2) {
+([]analysis.Symbol) (len=3) {
   (*analysis.Const)({
     location: (lsp.Location) {
       URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
@@ -6,6 +6,19 @@
     },
     Name: (string) (len=11) "TEST_CONST1",
     Value: (string) (len=1) "1"
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.hasTypes) <nil>,
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
+        Range: (lsp.Range) 4:33-4:57
+      },
+      Name: (string) (len=6) "define"
+    }
   }),
   (*analysis.Define)({
     document: (*analysis.Document)({
@@ -22,7 +35,7 @@
         (analysis.variableTable) {
         }
       },
-      Children: ([]analysis.Symbol) (len=2) {
+      Children: ([]analysis.Symbol) (len=3) {
         (*analysis.Const)({
           location: (lsp.Location) {
             URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
@@ -30,6 +43,19 @@
           },
           Name: (string) (len=11) "TEST_CONST1",
           Value: (string) (len=1) "1"
+        }),
+        (*analysis.FunctionCall)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) <nil>
+            },
+            Scope: (analysis.hasTypes) <nil>,
+            Location: (lsp.Location) {
+              URI: (lsp.DocumentURI) (len=26) "file:///../cases/const.php",
+              Range: (lsp.Range) 4:33-4:57
+            },
+            Name: (string) (len=6) "define"
+          }
         }),
         (*analysis.Define)(<already shown>)
       },

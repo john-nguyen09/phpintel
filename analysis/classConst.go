@@ -68,17 +68,14 @@ func (s *ClassConst) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *ClassConst) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
+func (s *ClassConst) Serialise(serialiser *indexer.Serialiser) {
 	util.WriteLocation(serialiser, s.location)
 	s.Name.Write(serialiser)
 	serialiser.WriteString(s.Value)
 	s.Scope.Write(serialiser)
-	return serialiser.GetBytes()
 }
 
-func DeserialiseClassConst(document *Document, bytes []byte) *ClassConst {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadClassConst(document *Document, serialiser *indexer.Serialiser) *ClassConst {
 	return &ClassConst{
 		document: document,
 		location: util.ReadLocation(serialiser),

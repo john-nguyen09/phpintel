@@ -57,19 +57,16 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 	}
 }
 
-func (s *Method) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Function.Write(serialiser)
+func (s *Method) Serialise(serialiser *indexer.Serialiser) {
+	s.Function.Serialise(serialiser)
 	serialiser.WriteInt(int(s.VisibilityModifier))
 	serialiser.WriteBool(s.IsStatic)
 	serialiser.WriteInt(int(s.ClassModifier))
-	return serialiser.GetBytes()
 }
 
-func DeserialiseMethod(document *Document, bytes []byte) *Method {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadMethod(document *Document, serialiser *indexer.Serialiser) *Method {
 	return &Method{
-		Function:           ReadFunction(serialiser),
+		Function:           *ReadFunction(document, serialiser),
 		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
 		IsStatic:           serialiser.ReadBool(),
 		ClassModifier:      ClassModifierValue(serialiser.ReadInt()),

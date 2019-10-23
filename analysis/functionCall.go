@@ -45,14 +45,11 @@ func (s *FunctionCall) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *FunctionCall) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Expression.Write(serialiser)
-	return serialiser.GetBytes()
+func (s *FunctionCall) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
 }
 
-func DeserialiseFunctionCall(document *Document, bytes []byte) *FunctionCall {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadFunctionCall(serialiser *indexer.Serialiser) *FunctionCall {
 	return &FunctionCall{
 		Expression: ReadExpression(serialiser),
 	}

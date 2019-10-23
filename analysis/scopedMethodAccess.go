@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -22,7 +23,7 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	if p, ok := firstChild.(*phrase.Phrase); ok {
 		classAccess := newClassAccess(document, p)
 		document.addSymbol(classAccess)
-		methodAccess.Scope = &classAccess.Expression
+		methodAccess.Scope = classAccess
 	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
@@ -39,4 +40,14 @@ func (s *ScopedMethodAccess) getLocation() lsp.Location {
 func (s *ScopedMethodAccess) getTypes() TypeComposite {
 	// TODO: Look up method return type
 	return s.Type
+}
+
+func (s *ScopedMethodAccess) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
+}
+
+func ReadScopedMethodAccess(serialiser *indexer.Serialiser) *ScopedMethodAccess {
+	return &ScopedMethodAccess{
+		Expression: ReadExpression(serialiser),
+	}
 }

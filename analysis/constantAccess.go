@@ -45,14 +45,11 @@ func (s *ConstantAccess) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ConstantAccess) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	s.Expression.Write(serialiser)
-	return serialiser.GetBytes()
+func (s *ConstantAccess) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
 }
 
-func DeserialiseConstantAccess(document *Document, bytes []byte) *ConstantAccess {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+func ReadConstantAccess(serialiser *indexer.Serialiser) *ConstantAccess {
 	return &ConstantAccess{
 		Expression: ReadExpression(serialiser),
 	}

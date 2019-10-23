@@ -6,7 +6,7 @@ type Serialiser struct {
 }
 
 type Serialisable interface {
-	Serialise() []byte
+	Serialise(serialiser *Serialiser)
 }
 
 const uIntSize = 32 << (^uint(0) >> 32 & 1)

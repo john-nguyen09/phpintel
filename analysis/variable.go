@@ -4,16 +4,14 @@ import (
 	"encoding/json"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
 
 // Variable represents a reference to the variable
 type Variable struct {
-	Name       string
-	location   lsp.Location
-	types      TypeComposite
-	expression hasTypes
+	Expression
 }
 
 func newVariableExpression(document *Document, node *phrase.Phrase) hasTypes {
@@ -22,34 +20,36 @@ func newVariableExpression(document *Document, node *phrase.Phrase) hasTypes {
 
 func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	variable := &Variable{
-		Name:     util.GetNodeText(node, document.GetText()),
-		location: document.GetNodeLocation(node),
+		Expression: Expression{
+			Name:     util.GetNodeText(node, document.GetText()),
+			Location: document.GetNodeLocation(node),
+		},
 	}
 	document.pushVariable(variable)
 	return variable
 }
 
 func (s *Variable) getLocation() lsp.Location {
-	return s.location
+	return s.Location
 }
 
 func (s *Variable) setExpression(expression hasTypes) {
-	s.expression = expression
+	s.Scope = expression
 }
 
 func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 	types := variable.getTypes()
 	for _, typeString := range types.Resolve() {
-		s.types.add(typeString)
+		s.Type.add(typeString)
 	}
 }
 
 func (s *Variable) getTypes() TypeComposite {
-	if s.expression == nil {
-		return s.types
+	if s.Scope == nil {
+		return s.Type
 	}
-	types := s.expression.getTypes()
-	for _, typeString := range s.types.Resolve() {
+	types := s.Scope.getTypes()
+	for _, typeString := range s.Type.Resolve() {
 		types.add(typeString)
 	}
 	return types
@@ -65,4 +65,14 @@ func (s *Variable) MarshalJSON() ([]byte, error) {
 		Location: s.getLocation(),
 		Types:    s.getTypes(),
 	})
+}
+
+func (s *Variable) Serialise(serialiser *indexer.Serialiser) {
+	s.Expression.Serialise(serialiser)
+}
+
+func ReadVariable(serialiser *indexer.Serialiser) *Variable {
+	return &Variable{
+		Expression: ReadExpression(serialiser),
+	}
 }
