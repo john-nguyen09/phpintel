@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -34,4 +35,10 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) hasTypes {
 
 func (s *ClassTypeDesignator) getTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *ClassTypeDesignator) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Expression.Write(serialiser)
+	return serialiser.GetBytes()
 }

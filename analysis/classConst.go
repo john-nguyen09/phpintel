@@ -3,12 +3,14 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
 
 // ClassConst contains information of class constants
 type ClassConst struct {
+	document *Document
 	location lsp.Location
 
 	Name  TypeString
@@ -18,6 +20,7 @@ type ClassConst struct {
 
 func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
+		document: document,
 		location: document.GetNodeLocation(node),
 	}
 
@@ -63,4 +66,24 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 
 func (s *ClassConst) getLocation() lsp.Location {
 	return s.location
+}
+
+func (s *ClassConst) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	util.WriteLocation(serialiser, s.location)
+	s.Name.Write(serialiser)
+	serialiser.WriteString(s.Value)
+	s.Scope.Write(serialiser)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseClassConst(document *Document, bytes []byte) *ClassConst {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &ClassConst{
+		document: document,
+		location: util.ReadLocation(serialiser),
+		Name:     ReadTypeString(serialiser),
+		Value:    serialiser.ReadString(),
+		Scope:    ReadTypeString(serialiser),
+	}
 }

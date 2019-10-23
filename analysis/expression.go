@@ -2,6 +2,8 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
+	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
 
@@ -52,4 +54,29 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 		expression = constructor(document, node)
 	}
 	return expression
+}
+
+func (s *Expression) Write(serialiser *indexer.Serialiser) {
+	s.Type.Write(serialiser)
+	if s.Scope == nil {
+		serialiser.WriteBool(false)
+	} else {
+		serialiser.WriteBool(true)
+		s.Scope.Write(serialiser)
+	}
+	util.WriteLocation(serialiser, s.Location)
+	serialiser.WriteString(s.Name)
+}
+
+func ReadExpression(serialiser *indexer.Serialiser) Expression {
+	expr := Expression{
+		Type: ReadTypeComposite(serialiser),
+	}
+	if serialiser.ReadBool() {
+		scope := ReadExpression(serialiser)
+		expr.Scope = &scope
+	}
+	expr.Location = util.ReadLocation(serialiser)
+	expr.Name = serialiser.ReadString()
+	return expr
 }

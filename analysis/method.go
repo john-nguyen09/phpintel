@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -53,5 +54,24 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 			}
 		}
 		child = traverser.Advance()
+	}
+}
+
+func (s *Method) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Function.Write(serialiser)
+	serialiser.WriteInt(int(s.VisibilityModifier))
+	serialiser.WriteBool(s.IsStatic)
+	serialiser.WriteInt(int(s.ClassModifier))
+	return serialiser.GetBytes()
+}
+
+func DeserialiseMethod(document *Document, bytes []byte) *Method {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &Method{
+		Function:           ReadFunction(serialiser),
+		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
+		IsStatic:           serialiser.ReadBool(),
+		ClassModifier:      ClassModifierValue(serialiser.ReadInt()),
 	}
 }

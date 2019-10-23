@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -42,4 +43,17 @@ func (s *FunctionCall) getLocation() lsp.Location {
 func (s *FunctionCall) getTypes() TypeComposite {
 	// TODO: Look up function for return types
 	return s.Type
+}
+
+func (s *FunctionCall) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Expression.Write(serialiser)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseFunctionCall(document *Document, bytes []byte) *FunctionCall {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &FunctionCall{
+		Expression: ReadExpression(serialiser),
+	}
 }

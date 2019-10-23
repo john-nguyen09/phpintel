@@ -114,9 +114,19 @@ func (t *TypeComposite) merge(types TypeComposite) {
 }
 
 func (t *TypeComposite) Write(serialiser *indexer.Serialiser) {
+	serialiser.WriteInt(len(t.typeStrings))
 	for _, typeString := range t.typeStrings {
 		typeString.Write(serialiser)
 	}
+}
+
+func ReadTypeComposite(serialiser *indexer.Serialiser) TypeComposite {
+	count := serialiser.ReadInt()
+	types := TypeComposite{}
+	for i := 0; i < count; i++ {
+		types.typeStrings = append(types.typeStrings, ReadTypeString(serialiser))
+	}
+	return types
 }
 
 // Resolve resolves the type to slice of TypeString

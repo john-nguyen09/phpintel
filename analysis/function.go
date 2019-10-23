@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -89,4 +90,39 @@ func (s *Function) getLocation() lsp.Location {
 
 func (s *Function) getDocument() *Document {
 	return s.document
+}
+
+func (s *Function) Write(serialiser *indexer.Serialiser) {
+	util.WriteLocation(serialiser, s.location)
+	serialiser.WriteString(s.Name)
+	serialiser.WriteInt(len(s.Params))
+	for _, param := range s.Params {
+		param.Write(serialiser)
+	}
+}
+
+func (s *Function) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Write(serialiser)
+	return serialiser.GetBytes()
+}
+
+func ReadFunction(serialiser *indexer.Serialiser) Function {
+	function := Function{
+		location: util.ReadLocation(serialiser),
+		Name:     serialiser.ReadString(),
+		Params:   make([]Parameter, 0),
+	}
+	countParams := serialiser.ReadInt()
+	for i := 0; i < countParams; i++ {
+		function.Params = append(function.Params, ReadParameter(serialiser))
+	}
+	return function
+}
+
+func DeserialiseFunction(document *Document, bytes []byte) *Function {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	function := ReadFunction(serialiser)
+	function.document = document
+	return &function
 }

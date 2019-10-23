@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -42,4 +43,17 @@ func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
 func (s *ConstantAccess) getTypes() TypeComposite {
 	// TODO: look up constant type
 	return s.Type
+}
+
+func (s *ConstantAccess) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Expression.Write(serialiser)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseConstantAccess(document *Document, bytes []byte) *ConstantAccess {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &ConstantAccess{
+		Expression: ReadExpression(serialiser),
+	}
 }

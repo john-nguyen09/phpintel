@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -68,4 +69,21 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 
 func (s *Const) getLocation() lsp.Location {
 	return s.location
+}
+
+func (s *Const) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	util.WriteLocation(serialiser, s.location)
+	serialiser.WriteString(s.Name)
+	serialiser.WriteString(s.Value)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseConst(document *Document, bytes []byte) *Const {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &Const{
+		location: util.ReadLocation(serialiser),
+		Name:     serialiser.ReadString(),
+		Value:    serialiser.ReadString(),
+	}
 }

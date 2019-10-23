@@ -48,6 +48,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil
 		if p, ok := child.(*phrase.Phrase); ok {
+			scanForExpression(document, p)
 			if _, ok := scanPhraseTypes[p.Type]; ok {
 				scanForChildren(document, p)
 				continue

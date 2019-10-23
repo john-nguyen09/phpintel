@@ -1,4 +1,142 @@
-([]analysis.Symbol) (len=1) {
+([]analysis.Symbol) (len=7) {
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 2:0-2:9
+      },
+      Name: (string) (len=9) "TestClass"
+    }
+  }),
+  (*analysis.ScopedPropertyAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)({
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=9) "TestClass",
+              original: (string) (len=9) "TestClass"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+          Range: (lsp.Range) 2:0-2:9
+        },
+        Name: (string) (len=9) "TestClass"
+      }),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 2:0-2:17
+      },
+      Name: (string) (len=6) "$prop1"
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 2:20-3:8
+      },
+      Name: (string) (len=9) "TestClass"
+    }
+  }),
+  (*analysis.ScopedConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)({
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=9) "TestClass",
+              original: (string) (len=9) "TestClass"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+          Range: (lsp.Range) 2:20-3:8
+        },
+        Name: (string) (len=9) "TestClass"
+      }),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 2:20-3:16
+      },
+      Name: (string) (len=6) "CONST1"
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (*analysis.Expression)(<nil>),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 3:19-4:8
+      },
+      Name: (string) (len=9) "TestClass"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Expression)({
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=9) "TestClass",
+              original: (string) (len=9) "TestClass"
+            }
+          }
+        },
+        Scope: (*analysis.Expression)(<nil>),
+        Location: (lsp.Location) {
+          URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+          Range: (lsp.Range) 3:19-4:8
+        },
+        Name: (string) (len=9) "TestClass"
+      }),
+      Location: (lsp.Location) {
+        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
+        Range: (lsp.Range) 3:19-4:19
+      },
+      Name: (string) (len=7) "method1"
+    }
+  }),
   (*analysis.Variable)({
     Name: (string) (len=9) "$instance",
     location: (lsp.Location) {

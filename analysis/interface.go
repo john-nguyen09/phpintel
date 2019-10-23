@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -87,4 +88,29 @@ func (s *Interface) getLocation() lsp.Location {
 
 func (s *Interface) getDocument() *Document {
 	return s.document
+}
+
+func (s *Interface) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	util.WriteLocation(serialiser, s.location)
+	s.Name.Write(serialiser)
+	serialiser.WriteInt(len(s.Extends))
+	for _, extend := range s.Extends {
+		extend.Write(serialiser)
+	}
+	return serialiser.GetBytes()
+}
+
+func DeserialiseInterface(document *Document, bytes []byte) *Interface {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	theInterface := &Interface{
+		document: document,
+		location: util.ReadLocation(serialiser),
+		Name:     ReadTypeString(serialiser),
+	}
+	countExtends := serialiser.ReadInt()
+	for i := 0; i < countExtends; i++ {
+		theInterface.Extends = append(theInterface.Extends, ReadTypeString(serialiser))
+	}
+	return theInterface
 }

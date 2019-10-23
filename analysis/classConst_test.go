@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"testing"
 
@@ -19,4 +20,28 @@ func TestClassConst(t *testing.T) {
 	rootNode := parser.Parse(string(data))
 	document := newDocument(util.PathToUri(classConstTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
+}
+
+func TestClassConstSerialiseAndDeserialise(t *testing.T) {
+	classConstTest := "../cases/classConst.php"
+	data, err := ioutil.ReadFile(classConstTest)
+	if err != nil {
+		panic(err)
+	}
+
+	rootNode := parser.Parse(string(data))
+	document := newDocument(util.PathToUri(classConstTest), string(data), rootNode)
+	for _, child := range document.Children {
+		if classConst, ok := child.(*ClassConst); ok {
+			bytes := classConst.Serialise()
+			jsonData, _ := json.MarshalIndent(classConst, "", "  ")
+			original := string(jsonData)
+			deserialisedClassConst := DeserialiseClassConst(document, bytes)
+			jsonData, _ = json.MarshalIndent(deserialisedClassConst, "", "  ")
+			after := string(jsonData)
+			if after != original {
+				t.Errorf("%s != %s\n", original, after)
+			}
+		}
+	}
 }

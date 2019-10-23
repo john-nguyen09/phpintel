@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -40,4 +41,17 @@ func (s *ClassAccess) getLocation() lsp.Location {
 
 func (s *ClassAccess) getTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *ClassAccess) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	s.Expression.Write(serialiser)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseClassAccess(document *Document, bytes []byte) *ClassAccess {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &ClassAccess{
+		Expression: ReadExpression(serialiser),
+	}
 }

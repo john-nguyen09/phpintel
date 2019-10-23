@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"testing"
 
@@ -19,4 +20,28 @@ func TestInterface(t *testing.T) {
 	rootNode := parser.Parse(string(data))
 	document := newDocument(util.PathToUri(interfaceTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
+}
+
+func TestInterfaceSerialiseAndDeserialise(t *testing.T) {
+	interfaceTest := "../cases/interface.php"
+	data, err := ioutil.ReadFile(interfaceTest)
+	if err != nil {
+		panic(err)
+	}
+
+	rootNode := parser.Parse(string(data))
+	document := newDocument(util.PathToUri(interfaceTest), string(data), rootNode)
+	for _, child := range document.Children {
+		if theInterface, ok := child.(*Interface); ok {
+			jsonData, _ := json.MarshalIndent(theInterface, "", "  ")
+			original := string(jsonData)
+			bytes := theInterface.Serialise()
+			deserialisedInterface := DeserialiseInterface(document, bytes)
+			jsonData, _ = json.MarshalIndent(deserialisedInterface, "", "  ")
+			after := string(jsonData)
+			if after != original {
+				t.Errorf("%s != %s\n", original, after)
+			}
+		}
+	}
 }

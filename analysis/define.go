@@ -4,6 +4,7 @@ import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -58,5 +59,23 @@ func (s *Define) analyseArgs(args *ArgumentList) {
 	if len(args.GetArguments()) >= 2 {
 		secondArg := args.GetArguments()[1]
 		s.Value = util.GetNodeText(secondArg, s.getDocument().GetText())
+	}
+}
+
+func (s *Define) Serialise() []byte {
+	serialiser := indexer.NewSerialiser()
+	util.WriteLocation(serialiser, s.location)
+	serialiser.WriteString(s.Name)
+	serialiser.WriteString(s.Value)
+	return serialiser.GetBytes()
+}
+
+func DeserialiseDefine(document *Document, bytes []byte) *Define {
+	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	return &Define{
+		document: document,
+		location: util.ReadLocation(serialiser),
+		Name:     serialiser.ReadString(),
+		Value:    serialiser.ReadString(),
 	}
 }
