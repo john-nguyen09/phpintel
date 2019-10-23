@@ -51,6 +51,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 		phrase.ObjectCreationExpression:       newClassTypeDesignator,
 		phrase.SimpleVariable:                 newVariableExpression,
 		phrase.PropertyAccessExpression:       newPropertyAccess,
+		phrase.MethodCallExpression:           newMethodAccess,
 	}
 	var expression hasTypes = nil
 	defer func() {
@@ -61,8 +62,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 	if _, ok := skipPhraseTypes[node.Type]; ok {
 		for _, child := range node.Children {
 			if p, ok := child.(*phrase.Phrase); ok {
-				expression = scanForExpression(document, p)
-				return expression
+				return scanForExpression(document, p)
 			}
 		}
 	}
