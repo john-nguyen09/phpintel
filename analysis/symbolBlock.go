@@ -40,6 +40,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.MethodDeclaration:          newMethod,
 		phrase.FunctionCallExpression:     tryToNewDefine,
 		phrase.SimpleAssignmentExpression: newAssignment,
+		phrase.PropertyDeclaration:        newPropertyDeclaration,
 	}
 	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 		// Expressions

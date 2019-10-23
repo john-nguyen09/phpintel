@@ -54,6 +54,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(class)
+	document.addSymbol(class)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 
@@ -70,7 +71,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		child = traverser.Advance()
 	}
 
-	return class
+	return nil
 }
 
 func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
