@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -154,8 +153,16 @@ func (s *Class) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Class) Serialise(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Class) GetCollection() string {
+	return "class"
+}
+
+func (s *Class) GetKey() string {
+	return s.Name.fqn + KeySep + s.document.GetURI()
+}
+
+func (s *Class) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteInt(int(s.Modifier))
 	s.Name.Write(serialiser)
 	s.Extends.Write(serialiser)
@@ -165,10 +172,9 @@ func (s *Class) Serialise(serialiser *indexer.Serialiser) {
 	}
 }
 
-func ReadClass(document *Document, serialiser *indexer.Serialiser) *Class {
+func ReadClass(serialiser *Serialiser) *Class {
 	theClass := &Class{
-		document: document,
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Modifier: ClassModifierValue(serialiser.ReadInt()),
 		Name:     ReadTypeString(serialiser),
 		Extends:  ReadTypeString(serialiser),

@@ -8,7 +8,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/go-phpparser/parser"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -37,9 +36,9 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 		if property, ok := child.(*Property); ok {
 			jsonData, _ := json.MarshalIndent(property, "", "  ")
 			original := string(jsonData)
-			serialiser := indexer.NewSerialiser()
+			serialiser := NewSerialiser()
 			property.Serialise(serialiser)
-			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
 			deserialisedProperty := ReadProperty(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedProperty, "", "  ")
 			after := string(jsonData)

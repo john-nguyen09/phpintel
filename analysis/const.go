@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -71,15 +70,15 @@ func (s *Const) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Const) Serialise(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Const) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)
 	serialiser.WriteString(s.Value)
 }
 
-func ReadConst(document *Document, serialiser *indexer.Serialiser) *Const {
+func ReadConst(document *Document, serialiser *Serialiser) *Const {
 	return &Const{
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
 		Value:    serialiser.ReadString(),
 	}

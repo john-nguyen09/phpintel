@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -37,9 +36,9 @@ func TestFunctionSerialiseAndDeserialise(t *testing.T) {
 		if function, ok := child.(*Function); ok {
 			jsonData, _ := json.MarshalIndent(function, "", "  ")
 			original := string(jsonData)
-			serialiser := indexer.NewSerialiser()
+			serialiser := NewSerialiser()
 			function.Serialise(serialiser)
-			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
 			deserialisedFunction := ReadFunction(document, serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedFunction, "", "  ")
 			after := string(jsonData)

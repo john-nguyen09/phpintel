@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -92,8 +91,8 @@ func (s *Function) getDocument() *Document {
 	return s.document
 }
 
-func (s *Function) Serialise(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Function) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)
 	serialiser.WriteInt(len(s.Params))
 	for _, param := range s.Params {
@@ -101,9 +100,9 @@ func (s *Function) Serialise(serialiser *indexer.Serialiser) {
 	}
 }
 
-func ReadFunction(document *Document, serialiser *indexer.Serialiser) *Function {
+func ReadFunction(document *Document, serialiser *Serialiser) *Function {
 	function := Function{
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
 		Params:   make([]Parameter, 0),
 	}

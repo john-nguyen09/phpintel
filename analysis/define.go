@@ -4,7 +4,6 @@ import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -62,16 +61,16 @@ func (s *Define) analyseArgs(args *ArgumentList) {
 	}
 }
 
-func (s *Define) Serialise(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Define) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)
 	serialiser.WriteString(s.Value)
 }
 
-func ReadDefine(document *Document, serialiser *indexer.Serialiser) *Define {
+func ReadDefine(document *Document, serialiser *Serialiser) *Define {
 	return &Define{
 		document: document,
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
 		Value:    serialiser.ReadString(),
 	}

@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -91,8 +90,8 @@ func (s *Interface) getDocument() *Document {
 }
 
 func (s *Interface) Serialise() []byte {
-	serialiser := indexer.NewSerialiser()
-	util.WriteLocation(serialiser, s.location)
+	serialiser := NewSerialiser()
+	serialiser.WriteLocation(s.location)
 	s.Name.Write(serialiser)
 	serialiser.WriteInt(len(s.Extends))
 	for _, extend := range s.Extends {
@@ -102,10 +101,10 @@ func (s *Interface) Serialise() []byte {
 }
 
 func DeserialiseInterface(document *Document, bytes []byte) *Interface {
-	serialiser := indexer.SerialiserFromByteSlice(bytes)
+	serialiser := SerialiserFromByteSlice(bytes)
 	theInterface := &Interface{
 		document: document,
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Name:     ReadTypeString(serialiser),
 	}
 	countExtends := serialiser.ReadInt()

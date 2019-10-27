@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -57,16 +56,16 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 	return param
 }
 
-func (s *Parameter) Write(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Parameter) Write(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)
 	s.Type.Write(serialiser)
 	serialiser.WriteString(s.Value)
 }
 
-func ReadParameter(serialiser *indexer.Serialiser) Parameter {
+func ReadParameter(serialiser *Serialiser) Parameter {
 	return Parameter{
-		location: util.ReadLocation(serialiser),
+		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
 		Type:     ReadTypeComposite(serialiser),
 		Value:    serialiser.ReadString(),

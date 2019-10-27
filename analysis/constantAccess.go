@@ -3,7 +3,6 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -45,11 +44,11 @@ func (s *ConstantAccess) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ConstantAccess) Serialise(serialiser *indexer.Serialiser) {
+func (s *ConstantAccess) Serialise(serialiser *Serialiser) {
 	s.Expression.Serialise(serialiser)
 }
 
-func ReadConstantAccess(serialiser *indexer.Serialiser) *ConstantAccess {
+func ReadConstantAccess(serialiser *Serialiser) *ConstantAccess {
 	return &ConstantAccess{
 		Expression: ReadExpression(serialiser),
 	}

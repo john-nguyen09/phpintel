@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -67,11 +66,11 @@ func (s *Variable) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (s *Variable) Serialise(serialiser *indexer.Serialiser) {
+func (s *Variable) Serialise(serialiser *Serialiser) {
 	s.Expression.Serialise(serialiser)
 }
 
-func ReadVariable(serialiser *indexer.Serialiser) *Variable {
+func ReadVariable(serialiser *Serialiser) *Variable {
 	return &Variable{
 		Expression: ReadExpression(serialiser),
 	}

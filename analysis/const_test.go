@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -37,9 +36,9 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		if constant, ok := child.(*Const); ok {
 			jsonData, _ := json.MarshalIndent(constant, "", "  ")
 			original := string(jsonData)
-			serialiser := indexer.NewSerialiser()
+			serialiser := NewSerialiser()
 			constant.Serialise(serialiser)
-			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
 			deserialisedConstant := ReadConst(document, serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)
@@ -49,9 +48,9 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		} else if constant, ok := child.(*Define); ok {
 			jsonData, _ := json.MarshalIndent(constant, "", "  ")
 			original := string(jsonData)
-			serialiser := indexer.NewSerialiser()
+			serialiser := NewSerialiser()
 			constant.Serialise(serialiser)
-			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
 			deserialisedConstant := ReadDefine(document, serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)

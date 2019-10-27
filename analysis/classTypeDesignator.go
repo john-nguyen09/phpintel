@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -37,11 +36,11 @@ func (s *ClassTypeDesignator) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ClassTypeDesignator) Serialise(serialiser *indexer.Serialiser) {
+func (s *ClassTypeDesignator) Serialise(serialiser *Serialiser) {
 	s.Expression.Serialise(serialiser)
 }
 
-func ReadClassTypeDesignator(serialiser *indexer.Serialiser) *ClassTypeDesignator {
+func ReadClassTypeDesignator(serialiser *Serialiser) *ClassTypeDesignator {
 	return &ClassTypeDesignator{
 		Expression: ReadExpression(serialiser),
 	}

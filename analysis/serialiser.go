@@ -1,4 +1,6 @@
-package indexer
+package analysis
+
+import "github.com/sourcegraph/go-lsp"
 
 type Serialiser struct {
 	index int
@@ -6,6 +8,8 @@ type Serialiser struct {
 }
 
 type Serialisable interface {
+	GetCollection() string
+	GetKey() string
 	Serialise(serialiser *Serialiser)
 }
 
@@ -132,8 +136,35 @@ func (s *Serialiser) ReadBool() bool {
 	s.index++
 	if theByte == 1 {
 		return true
-	} else {
-		return false
+	}
+	return false
+}
+
+func (s *Serialiser) WriteLocation(location lsp.Location) {
+	s.WriteString(string(location.URI))
+	s.WritePosition(location.Range.Start)
+	s.WritePosition(location.Range.End)
+}
+
+func (s *Serialiser) WritePosition(position lsp.Position) {
+	s.WriteInt(position.Line)
+	s.WriteInt(position.Character)
+}
+
+func (s *Serialiser) ReadLocation() lsp.Location {
+	return lsp.Location{
+		URI: lsp.DocumentURI(s.ReadString()),
+		Range: lsp.Range{
+			Start: s.ReadPosition(),
+			End:   s.ReadPosition(),
+		},
+	}
+}
+
+func (s *Serialiser) ReadPosition() lsp.Position {
+	return lsp.Position{
+		Line:      s.ReadInt(),
+		Character: s.ReadInt(),
 	}
 }
 

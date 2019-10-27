@@ -30,6 +30,9 @@ const (
 	Final = iota
 )
 
+// KeySep is the separator when constructing symbol key
+const KeySep = "\x00"
+
 // Symbol is a symbol
 type Symbol interface {
 	getLocation() lsp.Location

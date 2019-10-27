@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -35,9 +34,9 @@ func TestConstantAccessSerialiseAndDeserialise(t *testing.T) {
 		if constantAccess, ok := child.(*ConstantAccess); ok {
 			jsonData, _ := json.MarshalIndent(constantAccess, "", "  ")
 			original := string(jsonData)
-			serialiser := indexer.NewSerialiser()
+			serialiser := NewSerialiser()
 			constantAccess.Serialise(serialiser)
-			serialiser = indexer.SerialiserFromByteSlice(serialiser.GetBytes())
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
 			deserialisedConstantAccess := ReadConstantAccess(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedConstantAccess, "", "  ")
 			after := string(jsonData)

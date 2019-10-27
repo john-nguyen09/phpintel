@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -45,11 +44,11 @@ func (s *FunctionCall) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *FunctionCall) Serialise(serialiser *indexer.Serialiser) {
+func (s *FunctionCall) Serialise(serialiser *Serialiser) {
 	s.Expression.Serialise(serialiser)
 }
 
-func ReadFunctionCall(serialiser *indexer.Serialiser) *FunctionCall {
+func ReadFunctionCall(serialiser *Serialiser) *FunctionCall {
 	return &FunctionCall{
 		Expression: ReadExpression(serialiser),
 	}

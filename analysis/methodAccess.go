@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -42,11 +41,11 @@ func (s *MethodAccess) getTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *MethodAccess) Serialise(serialiser *indexer.Serialiser) {
+func (s *MethodAccess) Serialise(serialiser *Serialiser) {
 	s.Expression.Serialise(serialiser)
 }
 
-func ReadMethodAccess(serialiser *indexer.Serialiser) *MethodAccess {
+func ReadMethodAccess(serialiser *Serialiser) *MethodAccess {
 	return &MethodAccess{
 		Expression: ReadExpression(serialiser),
 	}

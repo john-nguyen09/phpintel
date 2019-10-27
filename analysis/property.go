@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/indexer"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/sourcegraph/go-lsp"
 )
@@ -64,17 +63,17 @@ func (s *Property) getLocation() lsp.Location {
 	return s.location
 }
 
-func (s *Property) Serialise(serialiser *indexer.Serialiser) {
-	util.WriteLocation(serialiser, s.location)
+func (s *Property) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)
 	s.Scope.Write(serialiser)
 	serialiser.WriteInt(int(s.VisibilityModifier))
 	serialiser.WriteBool(s.IsStatic)
 }
 
-func ReadProperty(serialiser *indexer.Serialiser) *Property {
+func ReadProperty(serialiser *Serialiser) *Property {
 	return &Property{
-		location:           util.ReadLocation(serialiser),
+		location:           serialiser.ReadLocation(),
 		Name:               serialiser.ReadString(),
 		Scope:              ReadTypeString(serialiser),
 		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
