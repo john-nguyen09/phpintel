@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -46,4 +47,17 @@ func TestPosition(t *testing.T) {
 	if position.Line != 12 || position.Character != 2 {
 		t.Errorf("Expect document.positionAt(8) = 12:2, got %v", position)
 	}
+}
+
+func TestSymbolAt(t *testing.T) {
+	memberAccess := "../cases/memberAccess.php"
+	data, _ := ioutil.ReadFile(memberAccess)
+	rootNode := parser.Parse(string(data))
+	document := newDocument(util.PathToUri(memberAccess), string(data), rootNode)
+	symbol := document.SymbolAt(14)
+	fmt.Printf("%T\n", symbol)
+	symbol = document.SymbolAt(20)
+	fmt.Printf("%T\n", symbol)
+	symbol = document.SymbolAt(19)
+	fmt.Printf("%T\n", symbol)
 }

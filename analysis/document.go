@@ -173,3 +173,16 @@ func (s *Document) addClass(other Symbol) {
 		s.classStack = append(s.classStack, instance)
 	}
 }
+
+func (s *Document) SymbolAt(offset int) Symbol {
+	pos := s.positionAt(offset)
+	index := sort.Search(len(s.Children), func(i int) bool {
+		location := s.Children[i].getLocation()
+		return util.IsInRange(pos, location.Range) <= 0
+	})
+	symbol := s.Children[index]
+	if util.IsInRange(pos, symbol.getLocation().Range) == 0 {
+		return symbol
+	}
+	return nil
+}

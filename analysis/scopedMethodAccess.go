@@ -13,9 +13,7 @@ type ScopedMethodAccess struct {
 
 func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	methodAccess := &ScopedMethodAccess{
-		Expression: Expression{
-			Location: document.GetNodeLocation(node),
-		},
+		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -26,6 +24,7 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
+	methodAccess.Location = document.GetNodeLocation(thirdChild)
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		methodAccess.Name = analyseMemberName(document, p)
 	}

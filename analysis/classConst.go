@@ -12,7 +12,7 @@ type ClassConst struct {
 	document *Document
 	location lsp.Location
 
-	Name  TypeString
+	Name  string
 	Value string
 	Scope TypeString
 }
@@ -51,7 +51,7 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 				switch p.Type {
 				case phrase.Identifier:
 					{
-						classConst.Name = newTypeString(util.GetNodeText(p, document.GetText()))
+						classConst.Name = util.GetNodeText(p, document.GetText())
 					}
 				}
 			}
@@ -67,18 +67,25 @@ func (s *ClassConst) getLocation() lsp.Location {
 	return s.location
 }
 
+func (s *ClassConst) GetCollection() string {
+	return "classConst"
+}
+
+func (s *ClassConst) GetKey() string {
+	return s.Scope.fqn + KeySep + s.Name
+}
+
 func (s *ClassConst) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
-	s.Name.Write(serialiser)
+	serialiser.WriteString(s.Name)
 	serialiser.WriteString(s.Value)
 	s.Scope.Write(serialiser)
 }
 
-func ReadClassConst(document *Document, serialiser *Serialiser) *ClassConst {
+func ReadClassConst(serialiser *Serialiser) *ClassConst {
 	return &ClassConst{
-		document: document,
 		location: serialiser.ReadLocation(),
-		Name:     ReadTypeString(serialiser),
+		Name:     serialiser.ReadString(),
 		Value:    serialiser.ReadString(),
 		Scope:    ReadTypeString(serialiser),
 	}

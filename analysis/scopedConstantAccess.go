@@ -13,9 +13,7 @@ type ScopedConstantAccess struct {
 
 func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	constantAccess := &ScopedConstantAccess{
-		Expression: Expression{
-			Location: document.GetNodeLocation(node),
-		},
+		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -26,6 +24,7 @@ func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
+	constantAccess.Location = document.GetNodeLocation(thirdChild)
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		constantAccess.Name = analyseMemberName(document, p)
 	}

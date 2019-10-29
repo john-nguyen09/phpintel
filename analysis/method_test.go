@@ -38,7 +38,7 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 			serialiser := NewSerialiser()
 			method.Serialise(serialiser)
 			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedMethod := ReadMethod(document, serialiser)
+			deserialisedMethod := ReadMethod(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedMethod, "", "  ")
 			after := string(jsonData)
 			if after != original {

@@ -100,7 +100,7 @@ func (s *Function) Serialise(serialiser *Serialiser) {
 	}
 }
 
-func ReadFunction(document *Document, serialiser *Serialiser) *Function {
+func ReadFunction(serialiser *Serialiser) *Function {
 	function := Function{
 		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
@@ -110,6 +110,5 @@ func ReadFunction(document *Document, serialiser *Serialiser) *Function {
 	for i := 0; i < countParams; i++ {
 		function.Params = append(function.Params, ReadParameter(serialiser))
 	}
-	function.document = document
 	return &function
 }

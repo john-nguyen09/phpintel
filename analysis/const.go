@@ -76,7 +76,7 @@ func (s *Const) Serialise(serialiser *Serialiser) {
 	serialiser.WriteString(s.Value)
 }
 
-func ReadConst(document *Document, serialiser *Serialiser) *Const {
+func ReadConst(serialiser *Serialiser) *Const {
 	return &Const{
 		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),

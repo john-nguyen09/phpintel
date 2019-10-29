@@ -10,6 +10,7 @@ import (
 type Method struct {
 	Function
 
+	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
 	IsStatic           bool
 	ClassModifier      ClassModifierValue
@@ -25,6 +26,14 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 		method.Function = *function
 	}
 	method.location = document.GetNodeLocation(node)
+	lastClass := document.getLastClass()
+	if theClass, ok := lastClass.(*Class); ok {
+		method.Scope = theClass.Name
+	} else if theInterface, ok := lastClass.(*Interface); ok {
+		method.Scope = theInterface.Name
+	} else if trait, ok := lastClass.(*Trait); ok {
+		method.Scope = trait.Name
+	}
 
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -56,16 +65,26 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 	}
 }
 
+func (s *Method) GetCollection() string {
+	return "method"
+}
+
+func (s *Method) GetKey() string {
+	return s.Scope.fqn + KeySep + s.Name + KeySep + s.document.GetURI()
+}
+
 func (s *Method) Serialise(serialiser *Serialiser) {
 	s.Function.Serialise(serialiser)
+	s.Scope.Write(serialiser)
 	serialiser.WriteInt(int(s.VisibilityModifier))
 	serialiser.WriteBool(s.IsStatic)
 	serialiser.WriteInt(int(s.ClassModifier))
 }
 
-func ReadMethod(document *Document, serialiser *Serialiser) *Method {
+func ReadMethod(serialiser *Serialiser) *Method {
 	return &Method{
-		Function:           *ReadFunction(document, serialiser),
+		Function:           *ReadFunction(serialiser),
+		Scope:              ReadTypeString(serialiser),
 		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
 		IsStatic:           serialiser.ReadBool(),
 		ClassModifier:      ClassModifierValue(serialiser.ReadInt()),

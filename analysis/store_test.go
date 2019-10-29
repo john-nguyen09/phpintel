@@ -25,7 +25,7 @@ func TestStore(t *testing.T) {
 		panic(err)
 	}
 	writeDocument(db, document)
-	classes := getClass(db, "TestClass")
+	classes := getClasses(db, "TestClass")
 	jsonData, _ := json.MarshalIndent(classes, "", "  ")
 	fmt.Println(string(jsonData))
 }

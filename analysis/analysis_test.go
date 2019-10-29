@@ -12,13 +12,22 @@ import (
 	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
+type ParsingContext struct {
+	documents []*Document
+}
+
+func (s *ParsingContext) addDocument(document *Document) {
+	s.documents = append(s.documents, document)
+}
+
 func BenchmarkAnalysis(t *testing.B) {
 	dir := "../../go-phpparser/cases/moodle"
 	jobs := make(chan string)
 	numOfWorkers := 4
+	context := &ParsingContext{}
 
 	for i := 0; i < numOfWorkers; i++ {
-		go analyse(i, jobs)
+		go analyse(context, i, jobs)
 	}
 
 	godirwalk.Walk(dir, &godirwalk.Options{
@@ -32,11 +41,11 @@ func BenchmarkAnalysis(t *testing.B) {
 	})
 }
 
-func analyse(id int, filePaths <-chan string) {
+func analyse(context *ParsingContext, id int, filePaths <-chan string) {
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
 		text := string(data)
 		rootNode := parser.Parse(text)
-		newDocument(util.PathToUri(filePath), text, rootNode)
+		context.addDocument(newDocument(util.PathToUri(filePath), text, rootNode))
 	}
 }

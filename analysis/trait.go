@@ -55,3 +55,23 @@ func (s *Trait) getDocument() *Document {
 func (s *Trait) getLocation() lsp.Location {
 	return s.location
 }
+
+func (s *Trait) GetCollection() string {
+	return "trait"
+}
+
+func (s *Trait) GetKey() string {
+	return s.Name.fqn + KeySep + s.document.GetURI()
+}
+
+func (s *Trait) Serialise(serialiser *Serialiser) {
+	serialiser.WriteLocation(s.location)
+	s.Name.Write(serialiser)
+}
+
+func ReadTrait(serialiser *Serialiser) *Trait {
+	return &Trait{
+		location: serialiser.ReadLocation(),
+		Name:     ReadTypeString(serialiser),
+	}
+}

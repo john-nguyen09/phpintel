@@ -63,6 +63,14 @@ func (s *Property) getLocation() lsp.Location {
 	return s.location
 }
 
+func (s *Property) GetCollection() string {
+	return "property"
+}
+
+func (s *Property) GetKey() string {
+	return s.Scope.fqn + KeySep + s.Name
+}
+
 func (s *Property) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

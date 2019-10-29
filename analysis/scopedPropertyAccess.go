@@ -14,9 +14,7 @@ type ScopedPropertyAccess struct {
 
 func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	propertyAccess := &ScopedPropertyAccess{
-		Expression: Expression{
-			Location: document.GetNodeLocation(node),
-		},
+		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -27,6 +25,7 @@ func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
+	propertyAccess.Location = document.GetNodeLocation(thirdChild)
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		propertyAccess.Name = analyseMemberName(document, p)
 	}

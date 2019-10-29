@@ -38,7 +38,7 @@ func TestClassConstSerialiseAndDeserialise(t *testing.T) {
 			serialiser := NewSerialiser()
 			classConst.Serialise(serialiser)
 			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedClassConst := ReadClassConst(document, serialiser)
+			deserialisedClassConst := ReadClassConst(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedClassConst, "", "  ")
 			after := string(jsonData)
 			if after != original {

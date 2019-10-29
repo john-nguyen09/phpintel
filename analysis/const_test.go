@@ -39,7 +39,7 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 			serialiser := NewSerialiser()
 			constant.Serialise(serialiser)
 			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedConstant := ReadConst(document, serialiser)
+			deserialisedConstant := ReadConst(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)
 			if after != original {
@@ -51,7 +51,7 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 			serialiser := NewSerialiser()
 			constant.Serialise(serialiser)
 			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedConstant := ReadDefine(document, serialiser)
+			deserialisedConstant := ReadDefine(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)
 			if after != original {

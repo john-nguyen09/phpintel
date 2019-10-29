@@ -13,7 +13,7 @@ type Define struct {
 	document *Document
 	location lsp.Location
 
-	Name  string
+	Name  TypeString
 	Value string
 }
 
@@ -52,7 +52,7 @@ func (s *Define) analyseArgs(args *ArgumentList) {
 	if token, ok := firstArg.(*lexer.Token); ok {
 		if token.Type == lexer.StringLiteral {
 			stringText := util.GetTokenText(token, s.getDocument().GetText())
-			s.Name = string(stringText[1 : len(stringText)-1])
+			s.Name = newTypeString(stringText[1 : len(stringText)-1])
 		}
 	}
 	if len(args.GetArguments()) >= 2 {
@@ -61,17 +61,24 @@ func (s *Define) analyseArgs(args *ArgumentList) {
 	}
 }
 
+func (s *Define) GetCollection() string {
+	return "define"
+}
+
+func (s *Define) GetKey() string {
+	return s.Name.fqn + KeySep + s.document.GetURI()
+}
+
 func (s *Define) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
+	s.Name.Write(serialiser)
 	serialiser.WriteString(s.Value)
 }
 
-func ReadDefine(document *Document, serialiser *Serialiser) *Define {
+func ReadDefine(serialiser *Serialiser) *Define {
 	return &Define{
-		document: document,
 		location: serialiser.ReadLocation(),
-		Name:     serialiser.ReadString(),
+		Name:     ReadTypeString(serialiser),
 		Value:    serialiser.ReadString(),
 	}
 }

@@ -89,6 +89,14 @@ func (s *Interface) getDocument() *Document {
 	return s.document
 }
 
+func (s *Interface) GetCollection() string {
+	return "interface"
+}
+
+func (s *Interface) GetKey() string {
+	return s.Name.fqn + KeySep + s.document.GetURI()
+}
+
 func (s *Interface) Serialise() []byte {
 	serialiser := NewSerialiser()
 	serialiser.WriteLocation(s.location)
@@ -100,10 +108,8 @@ func (s *Interface) Serialise() []byte {
 	return serialiser.GetBytes()
 }
 
-func DeserialiseInterface(document *Document, bytes []byte) *Interface {
-	serialiser := SerialiserFromByteSlice(bytes)
+func ReadInterface(serialiser *Serialiser) *Interface {
 	theInterface := &Interface{
-		document: document,
 		location: serialiser.ReadLocation(),
 		Name:     ReadTypeString(serialiser),
 	}
