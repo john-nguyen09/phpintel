@@ -3,14 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Class contains information of classes
 type Class struct {
-	document *Document
-	location lsp.Location
+	location protocol.Location
 
 	Modifier   ClassModifierValue
 	Name       TypeString
@@ -49,7 +48,6 @@ func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 
 func newClass(document *Document, node *phrase.Phrase) Symbol {
 	class := &Class{
-		document: document,
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(class)
@@ -61,7 +59,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
-				class.analyseHeader(p)
+				class.analyseHeader(document, p)
 			case phrase.ClassDeclarationBody:
 				scanForChildren(document, p)
 			}
@@ -73,7 +71,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
+func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 	traverser := util.NewTraverser(classHeader)
 	child := traverser.Advance()
 	for child != nil {
@@ -81,7 +79,7 @@ func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = newTypeString(util.GetNodeText(token, s.document.text))
+					s.Name = newTypeString(document.GetTokenText(token))
 				}
 			case lexer.Abstract:
 				{
@@ -96,11 +94,11 @@ func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
 			switch p.Type {
 			case phrase.ClassBaseClause:
 				{
-					s.extends(p)
+					s.extends(document, p)
 				}
 			case phrase.ClassInterfaceClause:
 				{
-					s.implements(p)
+					s.implements(document, p)
 				}
 			}
 		}
@@ -109,7 +107,7 @@ func (s *Class) analyseHeader(classHeader *phrase.Phrase) {
 	}
 }
 
-func (s *Class) extends(p *phrase.Phrase) {
+func (s *Class) extends(document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
 	for child != nil {
@@ -117,7 +115,7 @@ func (s *Class) extends(p *phrase.Phrase) {
 			switch p.Type {
 			case phrase.QualifiedName:
 				{
-					s.Extends = transformQualifiedName(p, s.document)
+					s.Extends = transformQualifiedName(p, document)
 				}
 			}
 		}
@@ -126,7 +124,7 @@ func (s *Class) extends(p *phrase.Phrase) {
 	}
 }
 
-func (s *Class) implements(p *phrase.Phrase) {
+func (s *Class) implements(document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Peek()
 	for child != nil {
@@ -135,7 +133,7 @@ func (s *Class) implements(p *phrase.Phrase) {
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Interfaces = append(s.Interfaces, transformQualifiedName(p, s.document))
+					s.Interfaces = append(s.Interfaces, transformQualifiedName(p, document))
 				}
 
 				child = traverser.Advance()
@@ -149,7 +147,7 @@ func (s *Class) implements(p *phrase.Phrase) {
 	}
 }
 
-func (s *Class) getLocation() lsp.Location {
+func (s *Class) getLocation() protocol.Location {
 	return s.location
 }
 
@@ -158,7 +156,7 @@ func (s *Class) GetCollection() string {
 }
 
 func (s *Class) GetKey() string {
-	return s.Name.fqn + KeySep + s.document.GetURI()
+	return s.Name.fqn + KeySep + s.location.URI
 }
 
 func (s *Class) Serialise(serialiser *Serialiser) {

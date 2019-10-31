@@ -3,14 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // ClassConst contains information of class constants
 type ClassConst struct {
-	document *Document
-	location lsp.Location
+	location protocol.Location
 
 	Name  string
 	Value string
@@ -19,7 +18,6 @@ type ClassConst struct {
 
 func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
-		document: document,
 		location: document.GetNodeLocation(node),
 	}
 
@@ -41,17 +39,17 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 				}
 			default:
 				if hasEquals {
-					classConst.Value += util.GetNodeText(token, document.GetText())
+					classConst.Value += document.GetTokenText(token)
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			if hasEquals {
-				classConst.Value += util.GetNodeText(p, document.GetText())
+				classConst.Value += document.GetPhraseText(p)
 			} else {
 				switch p.Type {
 				case phrase.Identifier:
 					{
-						classConst.Name = util.GetNodeText(p, document.GetText())
+						classConst.Name = document.GetPhraseText(p)
 					}
 				}
 			}
@@ -63,7 +61,7 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	return classConst
 }
 
-func (s *ClassConst) getLocation() lsp.Location {
+func (s *ClassConst) getLocation() protocol.Location {
 	return s.location
 }
 

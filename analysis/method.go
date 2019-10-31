@@ -2,8 +2,8 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Method contains information of methods
@@ -47,7 +47,7 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	return method
 }
 
-func (s Method) getLocation() lsp.Location {
+func (s Method) getLocation() protocol.Location {
 	return s.location
 }
 
@@ -70,7 +70,7 @@ func (s *Method) GetCollection() string {
 }
 
 func (s *Method) GetKey() string {
-	return s.Scope.fqn + KeySep + s.Name + KeySep + s.document.GetURI()
+	return s.Scope.fqn + KeySep + s.Name + KeySep + s.location.URI
 }
 
 func (s *Method) Serialise(serialiser *Serialiser) {

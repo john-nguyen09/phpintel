@@ -1,188 +1,8 @@
 ([]analysis.Symbol) (len=12) {
   (*analysis.Class)({
-    document: (*analysis.Document)({
-      uri: (string) (len=29) "file:///../cases/property.php",
-      text: (string) (len=427) "<?php\r\n\r\nclass ClassWithProperties {\r\n    private static $staticProp1;\r\n    protected static $staticProp2;\r\n    public static $staticProp2;\r\n    static $staticProp3, $staticProp4;\r\n    private static $staticProp5, $staticProp6;\r\n\r\n    private $prop1;\r\n    protected $prop2;\r\n    public $prop3;\r\n    var $prop4, $prop5;\r\n    protected $prop6, $prop7;\r\n\r\n    /**\r\n     * @var ClassWithProperties\r\n     */\r\n    public $prop5;\r\n}\r\n",
-      lineOffsets: ([]int) (len=21) {
-        (int) 0,
-        (int) 8,
-        (int) 9,
-        (int) 39,
-        (int) 73,
-        (int) 109,
-        (int) 142,
-        (int) 182,
-        (int) 230,
-        (int) 231,
-        (int) 253,
-        (int) 276,
-        (int) 296,
-        (int) 321,
-        (int) 352,
-        (int) 353,
-        (int) 363,
-        (int) 396,
-        (int) 405,
-        (int) 425,
-        (int) 0
-      },
-      variableTables: ([]analysis.variableTable) (len=1) {
-        (analysis.variableTable) {
-        }
-      },
-      Children: ([]analysis.Symbol) (len=12) {
-        (*analysis.Class)(<already shown>),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 3:18-3:30
-          },
-          Name: (string) (len=12) "$staticProp1",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-          IsStatic: (bool) true
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 4:20-4:32
-          },
-          Name: (string) (len=12) "$staticProp2",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-          IsStatic: (bool) true
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 5:17-5:29
-          },
-          Name: (string) (len=12) "$staticProp2",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-          IsStatic: (bool) true
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 6:10-6:36
-          },
-          Name: (string) (len=12) "$staticProp4",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-          IsStatic: (bool) true
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 7:18-7:44
-          },
-          Name: (string) (len=12) "$staticProp6",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-          IsStatic: (bool) true
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 9:12-9:18
-          },
-          Name: (string) (len=6) "$prop1",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-          IsStatic: (bool) false
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 10:13-10:19
-          },
-          Name: (string) (len=6) "$prop2",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-          IsStatic: (bool) false
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 11:10-11:16
-          },
-          Name: (string) (len=6) "$prop3",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-          IsStatic: (bool) false
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 12:7-12:21
-          },
-          Name: (string) (len=6) "$prop5",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-          IsStatic: (bool) false
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 13:13-13:27
-          },
-          Name: (string) (len=6) "$prop7",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-          IsStatic: (bool) false
-        }),
-        (*analysis.Property)({
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-            Range: (lsp.Range) 18:10-18:16
-          },
-          Name: (string) (len=6) "$prop5",
-          Scope: (analysis.TypeString) {
-            fqn: (string) (len=19) "ClassWithProperties",
-            original: (string) (len=19) "ClassWithProperties"
-          },
-          VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-          IsStatic: (bool) false
-        })
-      },
-      classStack: ([]analysis.Symbol) (len=1) {
-        (*analysis.Class)(<already shown>)
-      }
-    }),
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 2:0-20:425
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 2:0-20:425
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
@@ -196,9 +16,9 @@
     Interfaces: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 3:18-3:30
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 3:18-3:30
     },
     Name: (string) (len=12) "$staticProp1",
     Scope: (analysis.TypeString) {
@@ -209,9 +29,9 @@
     IsStatic: (bool) true
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 4:20-4:32
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 4:20-4:32
     },
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
@@ -222,9 +42,9 @@
     IsStatic: (bool) true
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 5:17-5:29
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 5:17-5:29
     },
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
@@ -235,9 +55,9 @@
     IsStatic: (bool) true
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 6:10-6:36
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 6:10-6:36
     },
     Name: (string) (len=12) "$staticProp4",
     Scope: (analysis.TypeString) {
@@ -248,9 +68,9 @@
     IsStatic: (bool) true
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 7:18-7:44
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 7:18-7:44
     },
     Name: (string) (len=12) "$staticProp6",
     Scope: (analysis.TypeString) {
@@ -261,9 +81,9 @@
     IsStatic: (bool) true
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 9:12-9:18
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 9:12-9:18
     },
     Name: (string) (len=6) "$prop1",
     Scope: (analysis.TypeString) {
@@ -274,9 +94,9 @@
     IsStatic: (bool) false
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 10:13-10:19
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 10:13-10:19
     },
     Name: (string) (len=6) "$prop2",
     Scope: (analysis.TypeString) {
@@ -287,9 +107,9 @@
     IsStatic: (bool) false
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 11:10-11:16
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 11:10-11:16
     },
     Name: (string) (len=6) "$prop3",
     Scope: (analysis.TypeString) {
@@ -300,9 +120,9 @@
     IsStatic: (bool) false
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 12:7-12:21
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 12:7-12:21
     },
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
@@ -313,9 +133,9 @@
     IsStatic: (bool) false
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 13:13-13:27
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 13:13-13:27
     },
     Name: (string) (len=6) "$prop7",
     Scope: (analysis.TypeString) {
@@ -326,9 +146,9 @@
     IsStatic: (bool) false
   }),
   (*analysis.Property)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/property.php",
-      Range: (lsp.Range) 18:10-18:16
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/property.php",
+      Range: (protocol.Range) 18:10-18:16
     },
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {

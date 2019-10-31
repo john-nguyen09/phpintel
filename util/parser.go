@@ -5,27 +5,6 @@ import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 )
 
-func GetNodeText(node phrase.AstNode, docText string) string {
-	switch node := node.(type) {
-	case *lexer.Token:
-		return GetTokenText(node, docText)
-	case *phrase.Phrase:
-		return GetPhraseText(node, docText)
-	}
-
-	return ""
-}
-
-func GetPhraseText(phrase *phrase.Phrase, docText string) string {
-	firstToken, lastToken := FirstToken(phrase), LastToken(phrase)
-
-	return string(docText[firstToken.Offset : lastToken.Offset+lastToken.Length])
-}
-
-func GetTokenText(token *lexer.Token, docText string) string {
-	return string(docText[token.Offset : token.Offset+token.Length])
-}
-
 func FirstToken(node phrase.AstNode) *lexer.Token {
 	if t, ok := node.(*lexer.Token); ok {
 		return t

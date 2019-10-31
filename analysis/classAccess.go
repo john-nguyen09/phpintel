@@ -2,8 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // ClassAccess represents a reference to the part before ::
@@ -15,7 +14,7 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     util.GetNodeText(node, document.GetText()),
+			Name:     document.GetPhraseText(node),
 		},
 	}
 	types := newTypeComposite()
@@ -28,13 +27,13 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 
 func analyseMemberName(document *Document, node *phrase.Phrase) string {
 	if node.Type == phrase.ScopedMemberName {
-		return util.GetPhraseText(node, document.GetText())
+		return document.GetPhraseText(node)
 	}
 
 	return ""
 }
 
-func (s *ClassAccess) getLocation() lsp.Location {
+func (s *ClassAccess) getLocation() protocol.Location {
 	return s.Location
 }
 

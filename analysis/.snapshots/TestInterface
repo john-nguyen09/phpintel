@@ -1,67 +1,8 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Interface)({
-    document: (*analysis.Document)({
-      uri: (string) (len=30) "file:///../cases/interface.php",
-      text: (string) (len=96) "<?php\r\n\r\ninterface TestInterface\r\n{\r\n\r\n}\r\n\r\ninterface TestInterface2 extends TestInterface { }\r\n",
-      lineOffsets: ([]int) (len=9) {
-        (int) 0,
-        (int) 8,
-        (int) 9,
-        (int) 35,
-        (int) 38,
-        (int) 39,
-        (int) 43,
-        (int) 44,
-        (int) 0
-      },
-      variableTables: ([]analysis.variableTable) (len=1) {
-        (analysis.variableTable) {
-        }
-      },
-      Children: ([]analysis.Symbol) (len=2) {
-        (*analysis.Interface)(<already shown>),
-        (*analysis.Interface)({
-          document: (*analysis.Document)(<already shown>),
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-            Range: (lsp.Range) 8:44-8:94
-          },
-          Name: (analysis.TypeString) {
-            fqn: (string) (len=14) "TestInterface2",
-            original: (string) (len=14) "TestInterface2"
-          },
-          Extends: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=13) "TestInterface",
-              original: (string) (len=13) "TestInterface"
-            }
-          }
-        })
-      },
-      classStack: ([]analysis.Symbol) (len=2) {
-        (*analysis.Interface)(<already shown>),
-        (*analysis.Interface)({
-          document: (*analysis.Document)(<already shown>),
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-            Range: (lsp.Range) 8:44-8:94
-          },
-          Name: (analysis.TypeString) {
-            fqn: (string) (len=14) "TestInterface2",
-            original: (string) (len=14) "TestInterface2"
-          },
-          Extends: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=13) "TestInterface",
-              original: (string) (len=13) "TestInterface"
-            }
-          }
-        })
-      }
-    }),
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-      Range: (lsp.Range) 2:0-5:1
+    location: (protocol.Location) {
+      URI: (string) (len=30) "file:///../cases/interface.php",
+      Range: (protocol.Range) 2:0-5:1
     },
     Name: (analysis.TypeString) {
       fqn: (string) (len=13) "TestInterface",
@@ -70,58 +11,9 @@
     Extends: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Interface)({
-    document: (*analysis.Document)({
-      uri: (string) (len=30) "file:///../cases/interface.php",
-      text: (string) (len=96) "<?php\r\n\r\ninterface TestInterface\r\n{\r\n\r\n}\r\n\r\ninterface TestInterface2 extends TestInterface { }\r\n",
-      lineOffsets: ([]int) (len=9) {
-        (int) 0,
-        (int) 8,
-        (int) 9,
-        (int) 35,
-        (int) 38,
-        (int) 39,
-        (int) 43,
-        (int) 44,
-        (int) 0
-      },
-      variableTables: ([]analysis.variableTable) (len=1) {
-        (analysis.variableTable) {
-        }
-      },
-      Children: ([]analysis.Symbol) (len=2) {
-        (*analysis.Interface)({
-          document: (*analysis.Document)(<already shown>),
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-            Range: (lsp.Range) 2:0-5:1
-          },
-          Name: (analysis.TypeString) {
-            fqn: (string) (len=13) "TestInterface",
-            original: (string) (len=13) "TestInterface"
-          },
-          Extends: ([]analysis.TypeString) <nil>
-        }),
-        (*analysis.Interface)(<already shown>)
-      },
-      classStack: ([]analysis.Symbol) (len=2) {
-        (*analysis.Interface)({
-          document: (*analysis.Document)(<already shown>),
-          location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-            Range: (lsp.Range) 2:0-5:1
-          },
-          Name: (analysis.TypeString) {
-            fqn: (string) (len=13) "TestInterface",
-            original: (string) (len=13) "TestInterface"
-          },
-          Extends: ([]analysis.TypeString) <nil>
-        }),
-        (*analysis.Interface)(<already shown>)
-      }
-    }),
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=30) "file:///../cases/interface.php",
-      Range: (lsp.Range) 8:44-8:94
+    location: (protocol.Location) {
+      URI: (string) (len=30) "file:///../cases/interface.php",
+      Range: (protocol.Range) 8:44-8:94
     },
     Name: (analysis.TypeString) {
       fqn: (string) (len=14) "TestInterface2",

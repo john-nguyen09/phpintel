@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // Variable represents a reference to the variable
@@ -20,7 +19,7 @@ func newVariableExpression(document *Document, node *phrase.Phrase) hasTypes {
 func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	variable := &Variable{
 		Expression: Expression{
-			Name:     util.GetNodeText(node, document.GetText()),
+			Name:     document.GetNodeText(node),
 			Location: document.GetNodeLocation(node),
 		},
 	}
@@ -28,7 +27,7 @@ func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	return variable
 }
 
-func (s *Variable) getLocation() lsp.Location {
+func (s *Variable) getLocation() protocol.Location {
 	return s.Location
 }
 
@@ -57,7 +56,7 @@ func (s *Variable) getTypes() TypeComposite {
 func (s *Variable) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Name     string
-		Location lsp.Location
+		Location protocol.Location
 		Types    TypeComposite
 	}{
 		Name:     s.Name,

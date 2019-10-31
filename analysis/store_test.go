@@ -21,6 +21,7 @@ func TestStore(t *testing.T) {
 	rootNode := parser.Parse(string(data))
 	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
 	db, err := badger.Open(badger.DefaultOptions("./testData"))
+	defer db.Close()
 	if err != nil {
 		panic(err)
 	}

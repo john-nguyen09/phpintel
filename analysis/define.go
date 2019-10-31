@@ -4,14 +4,13 @@ import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Define contains information of define constants
 type Define struct {
-	document *Document
-	location lsp.Location
+	location protocol.Location
 
 	Name  TypeString
 	Value string
@@ -19,7 +18,6 @@ type Define struct {
 
 func newDefine(document *Document, node *phrase.Phrase) Symbol {
 	define := &Define{
-		document: document,
 		location: document.GetNodeLocation(node),
 	}
 	traverser := util.NewTraverser(node)
@@ -29,7 +27,7 @@ func newDefine(document *Document, node *phrase.Phrase) Symbol {
 			if p.Type == phrase.ArgumentExpressionList {
 				symbol := newArgumentList(document, p)
 				if args, ok := symbol.(*ArgumentList); ok {
-					define.analyseArgs(args)
+					define.analyseArgs(document, args)
 				}
 			}
 		}
@@ -39,25 +37,21 @@ func newDefine(document *Document, node *phrase.Phrase) Symbol {
 	return define
 }
 
-func (s *Define) getLocation() lsp.Location {
+func (s *Define) getLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Define) getDocument() *Document {
-	return s.document
-}
-
-func (s *Define) analyseArgs(args *ArgumentList) {
+func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
 	firstArg := args.GetArguments()[0]
 	if token, ok := firstArg.(*lexer.Token); ok {
 		if token.Type == lexer.StringLiteral {
-			stringText := util.GetTokenText(token, s.getDocument().GetText())
+			stringText := document.GetTokenText(token)
 			s.Name = newTypeString(stringText[1 : len(stringText)-1])
 		}
 	}
 	if len(args.GetArguments()) >= 2 {
 		secondArg := args.GetArguments()[1]
-		s.Value = util.GetNodeText(secondArg, s.getDocument().GetText())
+		s.Value = document.GetNodeText(secondArg)
 	}
 }
 
@@ -66,7 +60,7 @@ func (s *Define) GetCollection() string {
 }
 
 func (s *Define) GetKey() string {
-	return s.Name.fqn + KeySep + s.document.GetURI()
+	return s.Name.fqn + KeySep + s.location.URI
 }
 
 func (s *Define) Serialise(serialiser *Serialiser) {

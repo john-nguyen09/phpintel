@@ -3,14 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Interface contains information of interfaces
 type Interface struct {
-	document *Document
-	location lsp.Location
+	location protocol.Location
 
 	Name    TypeString
 	Extends []TypeString
@@ -18,12 +17,11 @@ type Interface struct {
 
 func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
-		document: document,
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(theInterface)
 	if interfaceHeader, ok := node.Children[0].(*phrase.Phrase); ok && interfaceHeader.Type == phrase.InterfaceDeclarationHeader {
-		theInterface.analyseHeader(interfaceHeader)
+		theInterface.analyseHeader(document, interfaceHeader)
 	}
 	if len(node.Children) >= 2 {
 		if interfaceBody, ok := node.Children[1].(*phrase.Phrase); ok {
@@ -34,7 +32,7 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	return theInterface
 }
 
-func (s *Interface) analyseHeader(node *phrase.Phrase) {
+func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -42,14 +40,14 @@ func (s *Interface) analyseHeader(node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = newTypeString(util.GetNodeText(token, s.document.text))
+					s.Name = newTypeString(document.GetTokenText(token))
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.InterfaceBaseClause:
 				{
-					s.extends(p)
+					s.extends(document, p)
 				}
 			}
 		}
@@ -58,7 +56,7 @@ func (s *Interface) analyseHeader(node *phrase.Phrase) {
 	}
 }
 
-func (s *Interface) extends(node *phrase.Phrase) {
+func (s *Interface) extends(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
@@ -67,7 +65,7 @@ func (s *Interface) extends(node *phrase.Phrase) {
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Extends = append(s.Extends, transformQualifiedName(p, s.document))
+					s.Extends = append(s.Extends, transformQualifiedName(p, document))
 				}
 
 				child = traverser.Advance()
@@ -81,12 +79,8 @@ func (s *Interface) extends(node *phrase.Phrase) {
 	}
 }
 
-func (s *Interface) getLocation() lsp.Location {
+func (s *Interface) getLocation() protocol.Location {
 	return s.location
-}
-
-func (s *Interface) getDocument() *Document {
-	return s.document
 }
 
 func (s *Interface) GetCollection() string {
@@ -94,7 +88,7 @@ func (s *Interface) GetCollection() string {
 }
 
 func (s *Interface) GetKey() string {
-	return s.Name.fqn + KeySep + s.document.GetURI()
+	return s.Name.fqn + KeySep + s.location.URI
 }
 
 func (s *Interface) Serialise() []byte {

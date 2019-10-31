@@ -3,13 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Parameter contains information of a function parameter
 type Parameter struct {
-	location lsp.Location
+	location protocol.Location
 
 	Name  string        `json:"Name"`
 	Type  TypeComposite `json:"Type"`
@@ -36,7 +36,7 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 			}
 
 			if hasEqual {
-				param.Value += util.GetNodeText(p, document.GetText())
+				param.Value += document.GetPhraseText(p)
 			}
 		} else if token, ok := child.(*lexer.Token); ok {
 			switch token.Type {
@@ -46,7 +46,7 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 				}
 			case lexer.VariableName:
 				{
-					param.Name = util.GetNodeText(token, document.GetText())
+					param.Name = document.GetTokenText(token)
 				}
 			}
 		}

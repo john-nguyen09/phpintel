@@ -5,9 +5,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-        Range: (lsp.Range) 2:0-2:7
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 2:0-2:7
       },
       Name: (string) (len=7) "__DIR__"
     }
@@ -18,9 +18,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-        Range: (lsp.Range) 4:0-4:11
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 4:0-4:11
       },
       Name: (string) (len=11) "$currentDir"
     }
@@ -31,9 +31,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-        Range: (lsp.Range) 4:24-5:13
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 4:24-5:13
       },
       Name: (string) (len=14) "$randomInclude"
     }
@@ -44,9 +44,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-        Range: (lsp.Range) 7:4-7:15
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 7:4-7:15
       },
       Name: (string) (len=11) "TEST_CONST1"
     }
@@ -57,9 +57,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=35) "file:///../cases/constantAccess.php",
-        Range: (lsp.Range) 10:128-10:135
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 10:128-10:135
       },
       Name: (string) (len=7) "__DIR__"
     }

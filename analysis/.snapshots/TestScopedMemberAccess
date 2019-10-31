@@ -10,9 +10,9 @@
         }
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 2:0-2:9
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 2:0-2:9
       },
       Name: (string) (len=9) "TestClass"
     }
@@ -33,16 +33,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 2:0-2:9
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 2:0-2:9
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 2:0-2:17
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 2:11-2:17
       },
       Name: (string) (len=6) "$prop1"
     }
@@ -58,9 +58,9 @@
         }
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 2:20-3:8
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 2:20-3:8
       },
       Name: (string) (len=9) "TestClass"
     }
@@ -81,16 +81,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 2:20-3:8
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 2:20-3:8
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 2:20-3:16
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 3:10-3:16
       },
       Name: (string) (len=6) "CONST1"
     }
@@ -106,9 +106,9 @@
         }
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 3:19-4:8
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 3:19-4:8
       },
       Name: (string) (len=9) "TestClass"
     }
@@ -129,16 +129,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 3:19-4:8
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 3:19-4:8
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 3:19-4:19
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 4:10-4:17
       },
       Name: (string) (len=7) "method1"
     }
@@ -159,16 +159,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 6:16-6:25
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 6:16-6:25
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 6:0-6:9
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:0-6:9
       },
       Name: (string) (len=9) "$instance"
     }
@@ -184,9 +184,9 @@
         }
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 6:28-7:8
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:28-7:8
       },
       Name: (string) (len=9) "$instance"
     }
@@ -207,16 +207,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 6:28-7:8
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 6:28-7:8
           },
           Name: (string) (len=9) "$instance"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 6:28-7:15
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:28-7:15
       },
       Name: (string) (len=5) "prop2"
     }
@@ -232,9 +232,9 @@
         }
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 7:18-9:130
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 7:18-9:130
       },
       Name: (string) (len=9) "$instance"
     }
@@ -255,16 +255,16 @@
             }
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-            Range: (lsp.Range) 7:18-9:130
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/memberAccess.php",
+            Range: (protocol.Range) 7:18-9:130
           },
           Name: (string) (len=9) "$instance"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/memberAccess.php",
-        Range: (lsp.Range) 7:18-9:141
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 7:18-9:141
       },
       Name: (string) (len=7) "method2"
     }

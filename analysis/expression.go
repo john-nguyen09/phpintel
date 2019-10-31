@@ -2,14 +2,14 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // Expression represents a reference
 type Expression struct {
 	Type     TypeComposite
 	Scope    hasTypes
-	Location lsp.Location
+	Location protocol.Location
 	Name     string
 }
 

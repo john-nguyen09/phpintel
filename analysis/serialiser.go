@@ -1,6 +1,8 @@
 package analysis
 
-import "github.com/sourcegraph/go-lsp"
+import (
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+)
 
 type Serialiser struct {
 	index int
@@ -33,13 +35,6 @@ func SerialiserFromByteSlice(theBytes []byte) *Serialiser {
 	}
 }
 
-func (s *Serialiser) needs(numberOfBytes int) {
-	if cap(s.buf) < (s.index + numberOfBytes) {
-		extraBuf := make([]byte, bufferSize, bufferSize)
-		s.buf = append(s.buf, extraBuf...)
-	}
-}
-
 func (s *Serialiser) WriteInt(number int) {
 	if uIntSize == 32 {
 		s.WriteInt32(int32(number))
@@ -58,12 +53,12 @@ func (s *Serialiser) ReadInt() int {
 }
 
 func (s *Serialiser) WriteInt32(number int32) {
-	s.needs(4)
-	s.buf[s.index] = byte(number)
-	s.buf[s.index+1] = byte(number >> 8)
-	s.buf[s.index+2] = byte(number >> 16)
-	s.buf[s.index+3] = byte(number >> 24)
-	s.index += 4
+	buf := make([]byte, 4)
+	buf[0] = byte(number)
+	buf[1] = byte(number >> 8)
+	buf[2] = byte(number >> 16)
+	buf[3] = byte(number >> 24)
+	s.buf = append(s.buf, buf...)
 }
 
 func (s *Serialiser) ReadInt32() int32 {
@@ -77,15 +72,16 @@ func (s *Serialiser) ReadInt32() int32 {
 }
 
 func (s *Serialiser) WriteIn64(number int64) {
-	s.needs(8)
-	s.buf[s.index] = byte(number)
-	s.buf[s.index+1] = byte(number >> 8)
-	s.buf[s.index+2] = byte(number >> 16)
-	s.buf[s.index+3] = byte(number >> 24)
-	s.buf[s.index+4] = byte(number >> 32)
-	s.buf[s.index+5] = byte(number >> 40)
-	s.buf[s.index+6] = byte(number >> 48)
-	s.buf[s.index+7] = byte(number >> 56)
+	buf := make([]byte, 8)
+	buf[0] = byte(number)
+	buf[1] = byte(number >> 8)
+	buf[2] = byte(number >> 16)
+	buf[3] = byte(number >> 24)
+	buf[4] = byte(number >> 32)
+	buf[5] = byte(number >> 40)
+	buf[6] = byte(number >> 48)
+	buf[7] = byte(number >> 56)
+	s.buf = append(s.buf, buf...)
 	s.index += 8
 }
 
@@ -107,9 +103,7 @@ func (s *Serialiser) WriteString(theString string) {
 	theBytes := []byte(theString)
 	count := len(theBytes)
 	s.WriteInt(count)
-	s.needs(count)
-	copy(s.buf[s.index:], theBytes)
-	s.index += count
+	s.buf = append(s.buf, theBytes...)
 }
 
 func (s *Serialiser) ReadString() string {
@@ -120,15 +114,13 @@ func (s *Serialiser) ReadString() string {
 }
 
 func (s *Serialiser) WriteBool(theBool bool) {
-	s.needs(1)
 	var theByte byte = 0
 	if theBool {
 		theByte = 1
 	} else {
 		theByte = 0
 	}
-	s.buf[s.index] = theByte
-	s.index++
+	s.buf = append(s.buf, theByte)
 }
 
 func (s *Serialiser) ReadBool() bool {
@@ -140,34 +132,34 @@ func (s *Serialiser) ReadBool() bool {
 	return false
 }
 
-func (s *Serialiser) WriteLocation(location lsp.Location) {
+func (s *Serialiser) WriteLocation(location protocol.Location) {
 	s.WriteString(string(location.URI))
 	s.WritePosition(location.Range.Start)
 	s.WritePosition(location.Range.End)
 }
 
-func (s *Serialiser) WritePosition(position lsp.Position) {
+func (s *Serialiser) WritePosition(position protocol.Position) {
 	s.WriteInt(position.Line)
 	s.WriteInt(position.Character)
 }
 
-func (s *Serialiser) ReadLocation() lsp.Location {
-	return lsp.Location{
-		URI: lsp.DocumentURI(s.ReadString()),
-		Range: lsp.Range{
+func (s *Serialiser) ReadLocation() protocol.Location {
+	return protocol.Location{
+		URI: protocol.DocumentURI(s.ReadString()),
+		Range: protocol.Range{
 			Start: s.ReadPosition(),
 			End:   s.ReadPosition(),
 		},
 	}
 }
 
-func (s *Serialiser) ReadPosition() lsp.Position {
-	return lsp.Position{
+func (s *Serialiser) ReadPosition() protocol.Position {
+	return protocol.Position{
 		Line:      s.ReadInt(),
 		Character: s.ReadInt(),
 	}
 }
 
 func (s *Serialiser) GetBytes() []byte {
-	return s.buf[0:s.index]
+	return s.buf
 }

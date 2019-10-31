@@ -6,14 +6,14 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	lsp "github.com/sourcegraph/go-lsp"
 )
 
 // Document contains information of documents
 type Document struct {
 	uri            string
-	text           string
+	text           []rune
 	lineOffsets    []int
 	variableTables []variableTable
 	Children       []Symbol `json:"children"`
@@ -58,7 +58,7 @@ func (s *Document) GetURI() string {
 
 // SetText is a setter for text, at the same time update line offsets
 func (s *Document) SetText(text string) {
-	s.text = text
+	s.text = []rune(text)
 	s.calculateLineOffsets()
 }
 
@@ -99,15 +99,15 @@ func (s *Document) lineAt(offset int) int {
 	}) - 1
 }
 
-func (s *Document) positionAt(offset int) lsp.Position {
+func (s *Document) positionAt(offset int) protocol.Position {
 	line := s.lineAt(offset)
-	return lsp.Position{
+	return protocol.Position{
 		Line:      line,
 		Character: offset - s.lineOffsets[line],
 	}
 }
 
-func (s *Document) NodeRange(node phrase.AstNode) lsp.Range {
+func (s *Document) NodeRange(node phrase.AstNode) protocol.Range {
 	var start, end int
 
 	switch node := node.(type) {
@@ -121,20 +121,41 @@ func (s *Document) NodeRange(node phrase.AstNode) lsp.Range {
 		end = lastToken.Offset + lastToken.Length
 	}
 
-	return lsp.Range{Start: s.positionAt(start), End: s.positionAt(end)}
+	return protocol.Range{Start: s.positionAt(start), End: s.positionAt(end)}
 }
 
 // GetText is a getter for text
-func (s *Document) GetText() string {
+func (s *Document) GetText() []rune {
 	return s.text
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node phrase.AstNode) lsp.Location {
-	return lsp.Location{
-		URI:   lsp.DocumentURI(s.GetURI()),
+func (s *Document) GetNodeLocation(node phrase.AstNode) protocol.Location {
+	return protocol.Location{
+		URI:   protocol.DocumentURI(s.GetURI()),
 		Range: s.NodeRange(node),
 	}
+}
+
+func (s *Document) GetNodeText(node phrase.AstNode) string {
+	switch node := node.(type) {
+	case *lexer.Token:
+		return s.GetTokenText(node)
+	case *phrase.Phrase:
+		return s.GetPhraseText(node)
+	}
+
+	return ""
+}
+
+func (s *Document) GetPhraseText(phrase *phrase.Phrase) string {
+	firstToken, lastToken := util.FirstToken(phrase), util.LastToken(phrase)
+
+	return string(s.text[firstToken.Offset : lastToken.Offset+lastToken.Length])
+}
+
+func (s *Document) GetTokenText(token *lexer.Token) string {
+	return string(s.text[token.Offset : token.Offset+token.Length])
 }
 
 func (s *Document) addSymbol(other Symbol) {

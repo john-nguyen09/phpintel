@@ -1,37 +1,15 @@
 ([]analysis.Symbol) (len=1) {
   (*analysis.Function)({
-    location: (lsp.Location) {
-      URI: (lsp.DocumentURI) (len=29) "file:///../cases/function.php",
-      Range: (lsp.Range) 2:0-5:67
+    location: (protocol.Location) {
+      URI: (string) (len=29) "file:///../cases/function.php",
+      Range: (protocol.Range) 2:0-5:67
     },
-    document: (*analysis.Document)({
-      uri: (string) (len=29) "file:///../cases/function.php",
-      text: (string) (len=69) "<?php\r\n\r\nfunction testFunction(TestClass $param1 = null) {\r\n    \r\n}\r\n",
-      lineOffsets: ([]int) (len=6) {
-        (int) 0,
-        (int) 8,
-        (int) 9,
-        (int) 61,
-        (int) 67,
-        (int) 0
-      },
-      variableTables: ([]analysis.variableTable) (len=2) {
-        (analysis.variableTable) {
-        },
-        (analysis.variableTable) {
-        }
-      },
-      Children: ([]analysis.Symbol) (len=1) {
-        (*analysis.Function)(<already shown>)
-      },
-      classStack: ([]analysis.Symbol) <nil>
-    }),
     Name: (string) (len=12) "testFunction",
     Params: ([]analysis.Parameter) (len=1) {
       (analysis.Parameter) {
-        location: (lsp.Location) {
-          URI: (lsp.DocumentURI) (len=29) "file:///../cases/function.php",
-          Range: (lsp.Range) 2:22-2:46
+        location: (protocol.Location) {
+          URI: (string) (len=29) "file:///../cases/function.php",
+          Range: (protocol.Range) 2:22-2:46
         },
         Name: (string) (len=7) "$param1",
         Type: (analysis.TypeComposite) {

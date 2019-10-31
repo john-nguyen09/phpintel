@@ -3,14 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Function contains information of functions
 type Function struct {
-	location lsp.Location
-	document *Document
+	location protocol.Location
 
 	Name   string `json:"Name"`
 	Params []Parameter
@@ -19,7 +18,6 @@ type Function struct {
 func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location: document.GetNodeLocation(node),
-		document: document,
 		Params:   make([]Parameter, 0),
 	}
 	document.pushVariableTable()
@@ -31,7 +29,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 			phrase.FunctionDeclarationHeader,
 			phrase.MethodDeclarationHeader,
 		}); ok {
-			function.analyseHeader(p)
+			function.analyseHeader(document, p)
 		}
 		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
 			phrase.FunctionDeclarationBody,
@@ -45,7 +43,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	return function
 }
 
-func (s *Function) analyseHeader(node *phrase.Phrase) {
+func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -53,29 +51,29 @@ func (s *Function) analyseHeader(node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = util.GetNodeText(token, s.document.text)
+					s.Name = document.GetTokenText(token)
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ParameterDeclarationList:
 				{
-					s.analyseParameterDeclarationList(p)
+					s.analyseParameterDeclarationList(document, p)
 				}
 			case phrase.Identifier:
-				s.Name = util.GetNodeText(p, s.document.text)
+				s.Name = document.GetPhraseText(p)
 			}
 		}
 		child = traverser.Advance()
 	}
 }
 
-func (s *Function) analyseParameterDeclarationList(node *phrase.Phrase) {
+func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(s.document, p)
+			param := newParameter(document, p)
 			s.Params = append(s.Params, *param)
 		}
 
@@ -83,12 +81,8 @@ func (s *Function) analyseParameterDeclarationList(node *phrase.Phrase) {
 	}
 }
 
-func (s *Function) getLocation() lsp.Location {
+func (s *Function) getLocation() protocol.Location {
 	return s.location
-}
-
-func (s *Function) getDocument() *Document {
-	return s.document
 }
 
 func (s *Function) Serialise(serialiser *Serialiser) {

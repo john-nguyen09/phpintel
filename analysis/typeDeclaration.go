@@ -3,12 +3,12 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // TypeDeclaration is type declaration for a symbol
 type TypeDeclaration struct {
-	location lsp.Location
+	location protocol.Location
 
 	Type TypeComposite
 }

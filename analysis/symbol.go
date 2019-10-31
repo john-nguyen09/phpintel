@@ -2,8 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
-	lsp "github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // VisibilityModifierValue is a value of visibility modifier (public, protected, private)
@@ -35,9 +34,9 @@ const KeySep = "\x00"
 
 // Symbol is a symbol
 type Symbol interface {
-	getLocation() lsp.Location
+	getLocation() protocol.Location
 }
 
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
-	return newTypeString(string(util.GetNodeText(p, document.GetText())))
+	return newTypeString(string(document.GetNodeText(p)))
 }

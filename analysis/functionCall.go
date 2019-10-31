@@ -4,8 +4,7 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // FunctionCall represents a reference to function call
@@ -15,7 +14,7 @@ type FunctionCall struct {
 
 func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 	if len(node.Children) >= 1 {
-		nameLowerCase := strings.ToLower(util.GetNodeText(node.Children[0], document.GetText()))
+		nameLowerCase := strings.ToLower(document.GetNodeText(node.Children[0]))
 		if nameLowerCase == "\\define" || nameLowerCase == "define" {
 			return newDefine(document, node)
 		}
@@ -30,12 +29,12 @@ func newFunctionCall(document *Document, node *phrase.Phrase) hasTypes {
 		},
 	}
 	if len(node.Children) >= 1 {
-		functionCall.Name = util.GetNodeText(node.Children[0], document.GetText())
+		functionCall.Name = document.GetNodeText(node.Children[0])
 	}
 	return functionCall
 }
 
-func (s *FunctionCall) getLocation() lsp.Location {
+func (s *FunctionCall) getLocation() protocol.Location {
 	return s.Location
 }
 

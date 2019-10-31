@@ -1,14 +1,15 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Property contains information for properties
 type Property struct {
-	location lsp.Location
+	location protocol.Location
 
 	Name               string
 	Scope              TypeString
@@ -51,7 +52,12 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			if p.Type == phrase.PropertyElement {
-				property.Name = util.GetNodeText(p, document.GetText())
+				if len(p.Children) > 0 {
+					firstChild := p.Children[0]
+					if t, ok := firstChild.(*lexer.Token); ok && t.Type == lexer.VariableName {
+						property.Name = document.GetTokenText(t)
+					}
+				}
 			}
 		}
 		child = traverser.Advance()
@@ -59,7 +65,7 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	return property
 }
 
-func (s *Property) getLocation() lsp.Location {
+func (s *Property) getLocation() protocol.Location {
 	return s.location
 }
 

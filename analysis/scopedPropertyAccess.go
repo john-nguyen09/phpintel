@@ -3,7 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // ScopedPropertyAccess represents a reference to property in
@@ -32,7 +32,7 @@ func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return propertyAccess
 }
 
-func (s *ScopedPropertyAccess) getLocation() lsp.Location {
+func (s *ScopedPropertyAccess) getLocation() protocol.Location {
 	return s.Location
 }
 

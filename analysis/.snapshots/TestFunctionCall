@@ -10,16 +10,16 @@
             typeStrings: ([]analysis.TypeString) <nil>
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-            Range: (lsp.Range) 2:8-2:28
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/functionCall.php",
+            Range: (protocol.Range) 2:8-2:28
           },
           Name: (string) (len=5) "fopen"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 2:0-2:5
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$file"
     }
@@ -30,9 +30,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 2:8-2:28
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 2:8-2:28
       },
       Name: (string) (len=5) "fopen"
     }
@@ -48,16 +48,16 @@
             typeStrings: ([]analysis.TypeString) <nil>
           },
           Scope: (analysis.hasTypes) <nil>,
-          Location: (lsp.Location) {
-            URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-            Range: (lsp.Range) 4:16-4:28
+          Location: (protocol.Location) {
+            URI: (string) (len=33) "file:///../cases/functionCall.php",
+            Range: (protocol.Range) 4:16-4:28
           },
           Name: (string) (len=5) "fgets"
         }
       }),
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 4:8-4:13
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$line"
     }
@@ -68,9 +68,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 4:16-4:28
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 4:16-4:28
       },
       Name: (string) (len=5) "fgets"
     }
@@ -81,9 +81,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 5:3-5:26
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 5:3-5:26
       },
       Name: (string) (len=6) "printf"
     }
@@ -94,9 +94,9 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.hasTypes) <nil>,
-      Location: (lsp.Location) {
-        URI: (lsp.DocumentURI) (len=33) "file:///../cases/functionCall.php",
-        Range: (lsp.Range) 9:111-9:124
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 9:111-9:124
       },
       Name: (string) (len=6) "fclose"
     }

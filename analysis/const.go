@@ -3,13 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // Const contains information of constants
 type Const struct {
-	location lsp.Location
+	location protocol.Location
 
 	Name  string
 	Value string
@@ -40,7 +40,7 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 			switch token.Type {
 			case lexer.Name:
 				{
-					constant.Name = util.GetNodeText(token, document.GetText())
+					constant.Name = document.GetTokenText(token)
 				}
 			case lexer.Equals:
 				{
@@ -50,13 +50,13 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 			default:
 				{
 					if hasEquals {
-						constant.Value += util.GetNodeText(token, document.GetText())
+						constant.Value += document.GetTokenText(token)
 					}
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			if hasEquals {
-				constant.Value += util.GetNodeText(p, document.GetText())
+				constant.Value += document.GetPhraseText(p)
 			}
 		}
 
@@ -66,7 +66,7 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 	return constant
 }
 
-func (s *Const) getLocation() lsp.Location {
+func (s *Const) getLocation() protocol.Location {
 	return s.location
 }
 

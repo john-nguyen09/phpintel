@@ -3,13 +3,13 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
 )
 
 // ArgumentList contains information of arguments in function-like call
 type ArgumentList struct {
-	location lsp.Location
+	location protocol.Location
 
 	arguments []phrase.AstNode
 }
@@ -34,7 +34,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	return argumentList
 }
 
-func (s *ArgumentList) getLocation() lsp.Location {
+func (s *ArgumentList) getLocation() protocol.Location {
 	return s.location
 }
 

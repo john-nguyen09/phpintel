@@ -1,9 +1,11 @@
 package util
 
-import "github.com/sourcegraph/go-lsp"
+import (
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+)
 
 // IsInRange compare whether a position is within a range
-func IsInRange(position lsp.Position, theRange lsp.Range) int {
+func IsInRange(position protocol.Position, theRange protocol.Range) int {
 	start := theRange.Start
 	end := theRange.End
 
@@ -18,7 +20,7 @@ func IsInRange(position lsp.Position, theRange lsp.Range) int {
 	return 0
 }
 
-// func PositionSearch(position lsp.Position, length int, getRange func(i int) lsp.Range) {
+// func PositionSearch(position protocol.Position, length int, getRange func(i int) protocol.Range) {
 // 	i, j := 0, length
 // 	for i < j {
 

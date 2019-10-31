@@ -3,7 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 type MethodAccess struct {
@@ -32,7 +32,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return methodAccess
 }
 
-func (s *MethodAccess) getLocation() lsp.Location {
+func (s *MethodAccess) getLocation() protocol.Location {
 	return s.Location
 }
 

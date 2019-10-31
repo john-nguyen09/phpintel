@@ -3,8 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
-	"github.com/sourcegraph/go-lsp"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // ConstantAccess represents a reference to constant access
@@ -31,12 +30,12 @@ func newConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return constantAccess
 }
 
-func (s *ConstantAccess) getLocation() lsp.Location {
+func (s *ConstantAccess) getLocation() protocol.Location {
 	return s.Location
 }
 
 func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
-	s.Name = util.GetNodeText(node, document.text)
+	s.Name = document.GetNodeText(node)
 }
 
 func (s *ConstantAccess) getTypes() TypeComposite {
