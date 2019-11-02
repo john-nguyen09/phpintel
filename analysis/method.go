@@ -66,7 +66,7 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 }
 
 func (s *Method) GetCollection() string {
-	return "method"
+	return methodCollection
 }
 
 func (s *Method) GetKey() string {

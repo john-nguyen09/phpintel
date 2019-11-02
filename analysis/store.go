@@ -5,10 +5,25 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/dgraph-io/badger"
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/util"
 )
 
-const collectionSep string = "#"
+const (
+	documentSymbols      string = "documentSymbols"
+	classCollection      string = "class"
+	interfaceCollection  string = "interface"
+	traitCollection      string = "trait"
+	functionCollection   string = "function"
+	constCollection      string = "const"
+	defineCollection     string = "define"
+	methodCollection     string = "method"
+	classConstCollection string = "classConst"
+	propertyCollection   string = "property"
+)
+
+// KeySep is the separator when constructing key
+const KeySep string = "\x00"
 
 type entry struct {
 	key        []byte
@@ -17,13 +32,20 @@ type entry struct {
 
 func newEntry(collection string, key string) *entry {
 	return &entry{
-		key:        []byte(collection + collectionSep + key),
+		key:        []byte(collection + KeySep + key),
 		serialiser: NewSerialiser(),
 	}
 }
 
 func (s *entry) getSerialiser() *Serialiser {
 	return s.serialiser
+}
+
+func (s *entry) getKeyRange() *util.Range {
+	return &util.Range{
+		Start: append(s.getKeyBytes(), '\x00'),
+		Limit: append(s.getKeyBytes(), '\xFF'),
+	}
 }
 
 func (s *entry) getKeyBytes() []byte {
@@ -35,12 +57,12 @@ func (s *entry) getBytes() []byte {
 }
 
 type Store struct {
-	db            *badger.DB
+	db            *leveldb.DB
 	documentLocks map[string]sync.Mutex
 }
 
 func NewStore(storePath string) (*Store, error) {
-	db, err := badger.Open(badger.DefaultOptions(storePath))
+	db, err := leveldb.OpenFile(storePath, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,233 +77,145 @@ func (s *Store) Close() error {
 }
 
 func (s *Store) SyncDocument(document *Document) {
-	db := s.db
-	txn := db.NewTransaction(true)
-	forgetAllSymbols(db, txn, document)
-	writeAllSymbols(db, txn, document)
-	err := txn.Commit()
+	batch := new(leveldb.Batch)
+	s.forgetAllSymbols(batch, document)
+	s.writeAllSymbols(batch, document)
+	err := s.db.Write(batch, nil)
 	if err != nil {
 		log.Print(err)
 	}
 }
 
-func forgetAllSymbols(db *badger.DB, txn *badger.Txn, document *Document) {
-	opts := badger.DefaultIteratorOptions
-	opts.PrefetchValues = false
-	it := txn.NewIterator(opts)
-	defer it.Close()
-	entry := newEntry("documentSymbols", document.GetURI()+KeySep)
-	for it.Seek(entry.getKeyBytes()); it.ValidForPrefix(entry.getKeyBytes()); it.Next() {
-		item := it.Item()
-		keyInfo := strings.Split(string(item.Key()), KeySep)
+func (s *Store) forgetAllSymbols(batch *leveldb.Batch, document *Document) {
+	entry := newEntry(documentSymbols, document.GetURI()+KeySep)
+	it := s.db.NewIterator(entry.getKeyRange(), nil)
+	defer it.Release()
+	for it.Next() {
+		keyInfo := strings.Split(string(it.Key()), KeySep)
 		toBeDelete := newEntry(keyInfo[1], keyInfo[2])
-		if err := deleteEntry(txn, toBeDelete); err == badger.ErrTxnTooBig {
-			txn.Commit()
-			txn := db.NewTransaction(true)
-			deleteEntry(txn, toBeDelete)
-		}
+		deleteEntry(batch, toBeDelete)
 	}
 }
 
-func writeAllSymbols(db *badger.DB, txn *badger.Txn, document *Document) {
+func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			entry := newEntry(serialisable.GetCollection(), serialisable.GetKey())
 			serialisable.Serialise(entry.serialiser)
-			if err := writeEntry(txn, entry); err == badger.ErrTxnTooBig {
-				txn.Commit()
-				txn = db.NewTransaction(true)
-				writeEntry(txn, entry)
-			}
-			if err := rememberSymbol(txn, document, serialisable); err == badger.ErrTxnTooBig {
-				txn.Commit()
-				txn = db.NewTransaction(true)
-				rememberSymbol(txn, document, serialisable)
-			}
+			writeEntry(batch, entry)
+			rememberSymbol(batch, document, serialisable)
 		}
 	}
 }
 
-func rememberSymbol(txn *badger.Txn, document *Document, serialisable Serialisable) error {
-	entry := newEntry("documentSymbols", document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
-	return writeEntry(txn, entry)
+func rememberSymbol(batch *leveldb.Batch, document *Document, serialisable Serialisable) {
+	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
+	writeEntry(batch, entry)
 }
 
-func writeEntry(txn *badger.Txn, entry *entry) error {
-	return txn.Set(entry.getKeyBytes(), entry.getBytes())
+func writeEntry(batch *leveldb.Batch, entry *entry) {
+	batch.Put(entry.getKeyBytes(), entry.getBytes())
 }
 
-func deleteEntry(txn *badger.Txn, entry *entry) error {
-	return txn.Delete(entry.getKeyBytes())
+func deleteEntry(batch *leveldb.Batch, entry *entry) {
+	batch.Delete(entry.getKeyBytes())
 }
 
 func (s *Store) getClasses(name string) []*Class {
-	prefix := []byte("class" + collectionSep + name + KeySep)
+	prefix := []byte("class" + KeySep + name)
 	classes := []*Class{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				classes = append(classes, ReadClass(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		classes = append(classes, ReadClass(serialiser))
+	}
 	return classes
 }
 
 func (s *Store) getInterfaces(name string) []*Interface {
-	prefix := []byte("interface" + collectionSep + name + KeySep)
+	prefix := []byte("interface" + KeySep + name)
 	interfaces := []*Interface{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				interfaces = append(interfaces, ReadInterface(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		interfaces = append(interfaces, ReadInterface(serialiser))
+	}
 	return interfaces
 }
 
 func (s *Store) getTraits(name string) []*Trait {
-	prefix := []byte("trait" + collectionSep + name + KeySep)
+	prefix := []byte("trait" + KeySep + name)
 	traits := []*Trait{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				traits = append(traits, ReadTrait(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		traits = append(traits, ReadTrait(serialiser))
+	}
 	return traits
 }
 
 func (s *Store) getFunctions(name string) []*Function {
-	prefix := []byte("function" + collectionSep + name + KeySep)
+	prefix := []byte("function" + KeySep + name)
 	functions := []*Function{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				functions = append(functions, ReadFunction(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		functions = append(functions, ReadFunction(serialiser))
+	}
 	return functions
 }
 
 func (s *Store) getConsts(name string) []*Const {
-	prefix := []byte("const" + collectionSep + name + KeySep)
+	prefix := []byte("const" + KeySep + name)
 	consts := []*Const{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				consts = append(consts, ReadConst(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		consts = append(consts, ReadConst(serialiser))
+	}
 	return consts
 }
 
 func (s *Store) getDefines(name string) []*Define {
-	prefix := []byte("define" + collectionSep + name + KeySep)
+	prefix := []byte("define" + KeySep + name)
 	defines := []*Define{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				defines = append(defines, ReadDefine(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		defines = append(defines, ReadDefine(serialiser))
+	}
 	return defines
 }
 
 func (s *Store) getMethods(scope string, name string) []*Method {
-	prefix := []byte("method" + collectionSep + scope + KeySep + name + KeySep)
+	prefix := []byte("method" + KeySep + scope + KeySep + name)
 	methods := []*Method{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				methods = append(methods, ReadMethod(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		methods = append(methods, ReadMethod(serialiser))
+	}
 	return methods
 }
 
 func (s *Store) getClassConsts(scope string, name string) []*ClassConst {
-	prefix := []byte("classConst" + collectionSep + scope + KeySep + name + KeySep)
+	prefix := []byte("classConst" + KeySep + scope + KeySep + name)
 	classConsts := []*ClassConst{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				classConsts = append(classConsts, ReadClassConst(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		classConsts = append(classConsts, ReadClassConst(serialiser))
+	}
 	return classConsts
 }
 
 func (s *Store) getProperties(scope string, name string) []*Property {
-	prefix := []byte("property" + collectionSep + scope + KeySep + name + KeySep)
+	prefix := []byte("property" + KeySep + scope + KeySep + name)
 	properties := []*Property{}
-	s.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
-			item := it.Item()
-			item.Value(func(v []byte) error {
-				serialiser := SerialiserFromByteSlice(v)
-				properties = append(properties, ReadProperty(serialiser))
-				return nil
-			})
-		}
-		return nil
-	})
+	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		properties = append(properties, ReadProperty(serialiser))
+	}
 	return properties
 }

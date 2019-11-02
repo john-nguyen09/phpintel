@@ -1,19 +1,15 @@
 package analysis
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
 
-	"github.com/dgraph-io/badger"
 	"github.com/karrick/godirwalk"
 
 	"github.com/john-nguyen09/phpintel/util"
-
-	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
 type ParsingContext struct {
@@ -23,7 +19,10 @@ type ParsingContext struct {
 }
 
 func newParsingContext() *ParsingContext {
-	store, _ := NewStore("./testData")
+	store, err := NewStore("./testData")
+	if err != nil {
+		panic(err)
+	}
 	return &ParsingContext{
 		store:     store,
 		documents: []*Document{},
@@ -63,26 +62,22 @@ func BenchmarkAnalysis(t *testing.B) {
 	context.waitGroup.Wait()
 }
 
-func TestReadData(t *testing.T) {
-	context := newParsingContext()
-	defer context.close()
-	context.store.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Rewind(); it.Valid(); it.Next() {
-			item := it.Item()
-			fmt.Println(string(item.Key()))
-		}
-		return nil
-	})
-}
+// func TestReadData(t *testing.T) {
+// 	context := newParsingContext()
+// 	defer context.close()
+// 	it := context.store.db.NewIterator(nil, nil)
+// 	defer it.Release()
+// 	for it.Next() {
+// 		fmt.Println(string(it.Key()))
+// 	}
+// }
 
 func analyse(context *ParsingContext, id int, filePaths <-chan string) {
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
-		text := string(data)
-		rootNode := parser.Parse(text)
-		context.addDocument(NewDocument(util.PathToUri(filePath), text, rootNode))
+		document := NewDocument(util.PathToUri(filePath), string(data))
+		document.Load()
+		context.addDocument(document)
 		context.waitGroup.Done()
 	}
 }

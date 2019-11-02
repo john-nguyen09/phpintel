@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -18,8 +17,8 @@ func TestProperty(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(propertyTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(propertyTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,8 +29,8 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(propertyTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(propertyTest), string(data))
+	document.Load()
 	for _, child := range document.Children {
 		if property, ok := child.(*Property); ok {
 			jsonData, _ := json.MarshalIndent(property, "", "  ")

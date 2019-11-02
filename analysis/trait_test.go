@@ -6,8 +6,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/util"
-
-	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
 func TestTrait(t *testing.T) {
@@ -17,7 +15,7 @@ func TestTrait(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(traitTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(traitTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -15,6 +16,7 @@ type Document struct {
 	uri            string
 	text           []rune
 	lineOffsets    []int
+	isLoaded       bool
 	variableTables []variableTable
 	Children       []Symbol `json:"children"`
 	classStack     []Symbol
@@ -33,18 +35,32 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewDocument(uri string, text string, rootNode *phrase.Phrase) *Document {
+func NewDocument(uri string, text string) *Document {
 	document := &Document{
 		uri:      uri,
 		Children: []Symbol{},
 	}
 	document.SetText(text)
-	document.pushVariableTable()
-
-	// TODO: Remove rootNode dependency
-	scanForChildren(document, rootNode)
 
 	return document
+}
+
+// Load makes sure that symbols are available
+func (s *Document) Load() {
+	if !s.isLoaded {
+		s.pushVariableTable()
+		rootNode := parser.Parse(string(s.GetText()))
+		scanForChildren(s, rootNode)
+		s.isLoaded = true
+	}
+}
+
+// Release releases symbols to save memory
+func (s *Document) Release() {
+	s.variableTables = []variableTable{}
+	s.Children = []Symbol{}
+	s.classStack = []Symbol{}
+	s.isLoaded = false
 }
 
 func (s *Document) getDocument() *Document {

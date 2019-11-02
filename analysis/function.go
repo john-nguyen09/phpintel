@@ -85,6 +85,14 @@ func (s *Function) getLocation() protocol.Location {
 	return s.location
 }
 
+func (s *Function) GetCollection() string {
+	return functionCollection
+}
+
+func (s *Function) GetKey() string {
+	return s.Name + KeySep + s.location.URI
+}
+
 func (s *Function) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

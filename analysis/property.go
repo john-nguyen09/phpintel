@@ -70,7 +70,7 @@ func (s *Property) getLocation() protocol.Location {
 }
 
 func (s *Property) GetCollection() string {
-	return "property"
+	return propertyCollection
 }
 
 func (s *Property) GetKey() string {

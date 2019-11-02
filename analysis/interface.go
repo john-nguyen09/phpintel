@@ -84,7 +84,7 @@ func (s *Interface) getLocation() protocol.Location {
 }
 
 func (s *Interface) GetCollection() string {
-	return "interface"
+	return interfaceCollection
 }
 
 func (s *Interface) GetKey() string {

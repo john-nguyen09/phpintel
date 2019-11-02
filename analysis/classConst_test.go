@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -17,8 +16,8 @@ func TestClassConst(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(classConstTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classConstTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -29,8 +28,8 @@ func TestClassConstSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(classConstTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classConstTest), string(data))
+	document.Load()
 	for _, child := range document.Children {
 		if classConst, ok := child.(*ClassConst); ok {
 			jsonData, _ := json.MarshalIndent(classConst, "", "  ")

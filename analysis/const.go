@@ -70,6 +70,14 @@ func (s *Const) getLocation() protocol.Location {
 	return s.location
 }
 
+func (s *Const) GetCollection() string {
+	return constCollection
+}
+
+func (s *Const) GetKey() string {
+	return s.Name + KeySep + s.location.URI
+}
+
 func (s *Const) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

@@ -7,8 +7,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/util"
-
-	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
 func TestFunction(t *testing.T) {
@@ -18,8 +16,8 @@ func TestFunction(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(functionTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(functionTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,8 +28,8 @@ func TestFunctionSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(functionTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(functionTest), string(data))
+	document.Load()
 	for _, child := range document.Children {
 		if function, ok := child.(*Function); ok {
 			jsonData, _ := json.MarshalIndent(function, "", "  ")

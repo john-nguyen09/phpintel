@@ -7,8 +7,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/util"
-
-	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
 func TestConstant(t *testing.T) {
@@ -18,8 +16,8 @@ func TestConstant(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(constTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(constTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,8 +28,8 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(constTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(constTest), string(data))
+	document.Load()
 	for _, child := range document.Children {
 		if constant, ok := child.(*Const); ok {
 			jsonData, _ := json.MarshalIndent(constant, "", "  ")

@@ -56,7 +56,7 @@ func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
 }
 
 func (s *Define) GetCollection() string {
-	return "define"
+	return defineCollection
 }
 
 func (s *Define) GetKey() string {

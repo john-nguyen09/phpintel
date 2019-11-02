@@ -51,7 +51,7 @@ func (s *Trait) getLocation() protocol.Location {
 }
 
 func (s *Trait) GetCollection() string {
-	return "trait"
+	return traitCollection
 }
 
 func (s *Trait) GetKey() string {

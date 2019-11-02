@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -15,8 +14,8 @@ func TestLineOffset(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(classTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classTest), string(data))
+	document.Load()
 	line := document.lineAt(39)
 	if line != 6 {
 		t.Errorf("lineAt(39) != 6, got: %d", line)
@@ -37,8 +36,8 @@ func TestPosition(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(classTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classTest), string(data))
+	document.Load()
 	position := document.positionAt(9)
 	if position.Line != 2 || position.Character != 0 {
 		t.Errorf("Expect document.positionAt(9) = 2:0, got %v", position)
@@ -52,8 +51,8 @@ func TestPosition(t *testing.T) {
 func TestSymbolAt(t *testing.T) {
 	memberAccess := "../cases/memberAccess.php"
 	data, _ := ioutil.ReadFile(memberAccess)
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(memberAccess), string(data), rootNode)
+	document := NewDocument(util.PathToUri(memberAccess), string(data))
+	document.Load()
 	symbol := document.SymbolAt(14)
 	fmt.Printf("%T\n", symbol)
 	symbol = document.SymbolAt(20)

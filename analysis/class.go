@@ -152,7 +152,7 @@ func (s *Class) getLocation() protocol.Location {
 }
 
 func (s *Class) GetCollection() string {
-	return "class"
+	return classCollection
 }
 
 func (s *Class) GetKey() string {

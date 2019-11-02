@@ -66,7 +66,7 @@ func (s *ClassConst) getLocation() protocol.Location {
 }
 
 func (s *ClassConst) GetCollection() string {
-	return "classConst"
+	return classConstCollection
 }
 
 func (s *ClassConst) GetKey() string {

@@ -6,8 +6,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/util"
-
-	"github.com/john-nguyen09/go-phpparser/parser"
 )
 
 func TestScopedMemberAccess(t *testing.T) {
@@ -16,7 +14,7 @@ func TestScopedMemberAccess(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	rootNode := parser.Parse(string(data))
-	document := NewDocument(util.PathToUri(scopedPropertyAccessTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(scopedPropertyAccessTest), string(data))
+	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

@@ -93,6 +93,6 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 func (s *workspaceStore) addDocument(document *analysis.Document) {
 	store := s.getStore(document.GetURI())
 	if store != nil {
-		store.WriteDocument(document)
+		store.SyncDocument(document)
 	}
 }
