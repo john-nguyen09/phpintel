@@ -18,7 +18,7 @@ func TestInterface(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(interfaceTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(interfaceTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,7 +30,7 @@ func TestInterfaceSerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(interfaceTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(interfaceTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if theInterface, ok := child.(*Interface); ok {
 			jsonData, _ := json.MarshalIndent(theInterface, "", "  ")

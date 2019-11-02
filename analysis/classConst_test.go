@@ -18,7 +18,7 @@ func TestClassConst(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(classConstTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classConstTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,7 +30,7 @@ func TestClassConstSerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(classConstTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classConstTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if classConst, ok := child.(*ClassConst); ok {
 			jsonData, _ := json.MarshalIndent(classConst, "", "  ")

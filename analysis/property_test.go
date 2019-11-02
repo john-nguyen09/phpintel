@@ -19,7 +19,7 @@ func TestProperty(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(propertyTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(propertyTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -31,7 +31,7 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(propertyTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(propertyTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if property, ok := child.(*Property); ok {
 			jsonData, _ := json.MarshalIndent(property, "", "  ")

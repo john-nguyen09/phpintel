@@ -2,6 +2,8 @@ package analysis
 
 import (
 	"log"
+	"strings"
+	"sync"
 
 	"github.com/dgraph-io/badger"
 )
@@ -13,9 +15,9 @@ type entry struct {
 	serialiser *Serialiser
 }
 
-func newEntry(prefix string, key string) *entry {
+func newEntry(collection string, key string) *entry {
 	return &entry{
-		key:        []byte(prefix + collectionSep + key),
+		key:        []byte(collection + collectionSep + key),
 		serialiser: NewSerialiser(),
 	}
 }
@@ -32,12 +34,56 @@ func (s *entry) getBytes() []byte {
 	return s.serialiser.GetBytes()
 }
 
-func writeEntry(txn *badger.Txn, entry *entry) error {
-	return txn.Set(entry.getKeyBytes(), entry.getBytes())
+type Store struct {
+	db            *badger.DB
+	documentLocks map[string]sync.Mutex
 }
 
-func writeDocument(db *badger.DB, document *Document) {
+func NewStore(storePath string) (*Store, error) {
+	db, err := badger.Open(badger.DefaultOptions(storePath))
+	if err != nil {
+		return nil, err
+	}
+	return &Store{
+		db:            db,
+		documentLocks: map[string]sync.Mutex{},
+	}, nil
+}
+
+func (s *Store) Close() error {
+	return s.db.Close()
+}
+
+func (s *Store) SyncDocument(document *Document) {
+	db := s.db
 	txn := db.NewTransaction(true)
+	forgetAllSymbols(db, txn, document)
+	writeAllSymbols(db, txn, document)
+	err := txn.Commit()
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func forgetAllSymbols(db *badger.DB, txn *badger.Txn, document *Document) {
+	opts := badger.DefaultIteratorOptions
+	opts.PrefetchValues = false
+	it := txn.NewIterator(opts)
+	defer it.Close()
+	entry := newEntry("documentSymbols", document.GetURI()+KeySep)
+	for it.Seek(entry.getKeyBytes()); it.ValidForPrefix(entry.getKeyBytes()); it.Next() {
+		item := it.Item()
+		keyInfo := strings.Split(string(item.Key()), KeySep)
+		toBeDelete := newEntry(keyInfo[1], keyInfo[2])
+		if err := deleteEntry(txn, toBeDelete); err == badger.ErrTxnTooBig {
+			txn.Commit()
+			txn := db.NewTransaction(true)
+			deleteEntry(txn, toBeDelete)
+		}
+	}
+}
+
+func writeAllSymbols(db *badger.DB, txn *badger.Txn, document *Document) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			entry := newEntry(serialisable.GetCollection(), serialisable.GetKey())
@@ -47,19 +93,32 @@ func writeDocument(db *badger.DB, document *Document) {
 				txn = db.NewTransaction(true)
 				writeEntry(txn, entry)
 			}
-
+			if err := rememberSymbol(txn, document, serialisable); err == badger.ErrTxnTooBig {
+				txn.Commit()
+				txn = db.NewTransaction(true)
+				rememberSymbol(txn, document, serialisable)
+			}
 		}
-	}
-	err := txn.Commit()
-	if err != nil {
-		log.Print(err)
 	}
 }
 
-func getClasses(db *badger.DB, name string) []*Class {
+func rememberSymbol(txn *badger.Txn, document *Document, serialisable Serialisable) error {
+	entry := newEntry("documentSymbols", document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
+	return writeEntry(txn, entry)
+}
+
+func writeEntry(txn *badger.Txn, entry *entry) error {
+	return txn.Set(entry.getKeyBytes(), entry.getBytes())
+}
+
+func deleteEntry(txn *badger.Txn, entry *entry) error {
+	return txn.Delete(entry.getKeyBytes())
+}
+
+func (s *Store) getClasses(name string) []*Class {
 	prefix := []byte("class" + collectionSep + name + KeySep)
 	classes := []*Class{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -75,10 +134,10 @@ func getClasses(db *badger.DB, name string) []*Class {
 	return classes
 }
 
-func getInterfaces(db *badger.DB, name string) []*Interface {
+func (s *Store) getInterfaces(name string) []*Interface {
 	prefix := []byte("interface" + collectionSep + name + KeySep)
 	interfaces := []*Interface{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -94,10 +153,10 @@ func getInterfaces(db *badger.DB, name string) []*Interface {
 	return interfaces
 }
 
-func getTraits(db *badger.DB, name string) []*Trait {
+func (s *Store) getTraits(name string) []*Trait {
 	prefix := []byte("trait" + collectionSep + name + KeySep)
 	traits := []*Trait{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -113,10 +172,10 @@ func getTraits(db *badger.DB, name string) []*Trait {
 	return traits
 }
 
-func getFunctions(db *badger.DB, name string) []*Function {
+func (s *Store) getFunctions(name string) []*Function {
 	prefix := []byte("function" + collectionSep + name + KeySep)
 	functions := []*Function{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -132,10 +191,10 @@ func getFunctions(db *badger.DB, name string) []*Function {
 	return functions
 }
 
-func getConsts(db *badger.DB, name string) []*Const {
+func (s *Store) getConsts(name string) []*Const {
 	prefix := []byte("const" + collectionSep + name + KeySep)
 	consts := []*Const{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -151,10 +210,10 @@ func getConsts(db *badger.DB, name string) []*Const {
 	return consts
 }
 
-func getDefines(db *badger.DB, name string) []*Define {
+func (s *Store) getDefines(name string) []*Define {
 	prefix := []byte("define" + collectionSep + name + KeySep)
 	defines := []*Define{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -170,10 +229,10 @@ func getDefines(db *badger.DB, name string) []*Define {
 	return defines
 }
 
-func getMethods(db *badger.DB, scope string, name string) []*Method {
+func (s *Store) getMethods(scope string, name string) []*Method {
 	prefix := []byte("method" + collectionSep + scope + KeySep + name + KeySep)
 	methods := []*Method{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -189,10 +248,10 @@ func getMethods(db *badger.DB, scope string, name string) []*Method {
 	return methods
 }
 
-func getClassConsts(db *badger.DB, scope string, name string) []*ClassConst {
+func (s *Store) getClassConsts(scope string, name string) []*ClassConst {
 	prefix := []byte("classConst" + collectionSep + scope + KeySep + name + KeySep)
 	classConsts := []*ClassConst{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -208,10 +267,10 @@ func getClassConsts(db *badger.DB, scope string, name string) []*ClassConst {
 	return classConsts
 }
 
-func getProperties(db *badger.DB, scope string, name string) []*Property {
+func (s *Store) getProperties(scope string, name string) []*Property {
 	prefix := []byte("property" + collectionSep + scope + KeySep + name + KeySep)
 	properties := []*Property{}
-	db.View(func(txn *badger.Txn) error {
+	s.db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
 		defer it.Close()
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {

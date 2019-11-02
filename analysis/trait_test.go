@@ -18,6 +18,6 @@ func TestTrait(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(traitTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(traitTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }

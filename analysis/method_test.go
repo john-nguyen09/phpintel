@@ -18,7 +18,7 @@ func TestMethod(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(methodTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(methodTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,7 +30,7 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(methodTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(methodTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if method, ok := child.(*Method); ok {
 			jsonData, _ := json.MarshalIndent(method, "", "  ")

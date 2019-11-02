@@ -29,10 +29,12 @@ type serverHandler struct {
 	server Server
 }
 
-func NewServer(ctx context.Context, stream jsonrpc2.Stream, server Server) (context.Context, *jsonrpc2.Conn) {
+func NewServer(ctx context.Context, stream jsonrpc2.Stream, server Server) (context.Context, *jsonrpc2.Conn, Client) {
 	conn := jsonrpc2.NewConn(stream)
+	client := &clientDispatcher{Conn: conn}
+	ctx = WithClient(ctx, client)
 	conn.AddHandler(&serverHandler{server: server})
-	return ctx, conn
+	return ctx, conn, client
 }
 
 func sendParseError(ctx context.Context, req *jsonrpc2.Request, err error) {

@@ -33,7 +33,7 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func newDocument(uri string, text string, rootNode *phrase.Phrase) *Document {
+func NewDocument(uri string, text string, rootNode *phrase.Phrase) *Document {
 	document := &Document{
 		uri:      uri,
 		Children: []Symbol{},

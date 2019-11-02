@@ -17,6 +17,6 @@ func TestAssignment(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(assignmentTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(assignmentTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }

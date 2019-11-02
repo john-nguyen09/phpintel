@@ -18,7 +18,7 @@ func TestConstantAccess(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(constantAccessTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(constantAccessTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -29,7 +29,7 @@ func TestConstantAccessSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(constantAccessTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(constantAccessTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if constantAccess, ok := child.(*ConstantAccess); ok {
 			jsonData, _ := json.MarshalIndent(constantAccess, "", "  ")

@@ -1,12 +1,10 @@
 package analysis
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"testing"
 
-	"github.com/dgraph-io/badger"
+	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -19,14 +17,13 @@ func TestStore(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
-	db, err := badger.Open(badger.DefaultOptions("./testData"))
-	defer db.Close()
+	document := NewDocument(util.PathToUri(classTest), string(data), rootNode)
+	store, err := NewStore("./testData")
+	defer store.Close()
 	if err != nil {
 		panic(err)
 	}
-	writeDocument(db, document)
-	classes := getClasses(db, "TestClass")
-	jsonData, _ := json.MarshalIndent(classes, "", "  ")
-	fmt.Println(string(jsonData))
+	store.SyncDocument(document)
+	classes := store.getClasses("TestClass1")
+	cupaloy.Snapshot(classes)
 }

@@ -19,7 +19,7 @@ func TestFunction(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(functionTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(functionTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -31,7 +31,7 @@ func TestFunctionSerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(functionTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(functionTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if function, ok := child.(*Function); ok {
 			jsonData, _ := json.MarshalIndent(function, "", "  ")

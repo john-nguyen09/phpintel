@@ -1,0 +1,23 @@
+([]*analysis.Class) (len=1) {
+  (*analysis.Class)({
+    location: (protocol.Location) {
+      URI: (string) (len=26) "file:///../cases/class.php",
+      Range: (protocol.Range) 6:0-8:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=10) "TestClass1",
+      original: (string) (len=10) "TestClass1"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=9) "TestClass",
+      original: (string) (len=9) "TestClass"
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=13) "TestInterface",
+        original: (string) (len=13) "TestInterface"
+      }
+    }
+  })
+}

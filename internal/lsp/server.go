@@ -18,7 +18,7 @@ import (
 // stream is closed.
 func NewServer(ctx context.Context, stream jsonrpc2.Stream) (context.Context, *Server) {
 	s := &Server{}
-	ctx, s.Conn = protocol.NewServer(ctx, stream, s)
+	ctx, s.Conn, s.client = protocol.NewServer(ctx, stream, s)
 	return ctx, s
 }
 
@@ -63,24 +63,23 @@ type Server struct {
 
 	stateMu sync.Mutex
 	state   serverState
+	store   workspaceStore
 
-	// folders is only valid between initialize and initialized, and holds the
-	// set of folders to build views for when we are ready
 	pendingFolders []protocol.WorkspaceFolder
 }
 
 // General
 
 func (s *Server) Initialize(ctx context.Context, params *protocol.InitializeParams) (*protocol.InitializeResult, error) {
-	return nil, notImplemented("initialize")
+	return s.initialize(ctx, params)
 }
 
 func (s *Server) Initialized(ctx context.Context, params *protocol.InitializedParams) error {
-	return notImplemented("initialized")
+	return s.initialized(ctx, params)
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
-	return notImplemented("shutdown")
+	return s.shutdown(ctx)
 }
 
 func (s *Server) Exit(ctx context.Context) error {

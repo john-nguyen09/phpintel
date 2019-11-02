@@ -18,7 +18,7 @@ func TestClass(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classTest), string(data), rootNode)
 	cupaloy.SnapshotT(t, document.Children)
 }
 
@@ -30,7 +30,7 @@ func TestClassSerialiseAndDeserialise(t *testing.T) {
 	}
 
 	rootNode := parser.Parse(string(data))
-	document := newDocument(util.PathToUri(classTest), string(data), rootNode)
+	document := NewDocument(util.PathToUri(classTest), string(data), rootNode)
 	for _, child := range document.Children {
 		if theClass, ok := child.(*Class); ok {
 			jsonData, _ := json.MarshalIndent(theClass, "", "  ")

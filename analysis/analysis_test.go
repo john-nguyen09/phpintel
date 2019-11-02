@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/dgraph-io/badger"
@@ -16,26 +17,26 @@ import (
 )
 
 type ParsingContext struct {
-	db        *badger.DB
+	store     *Store
+	waitGroup sync.WaitGroup
 	documents []*Document
 }
 
 func newParsingContext() *ParsingContext {
-	fmt.Println("Hello???")
-	db, _ := badger.Open(badger.DefaultOptions("./testData"))
+	store, _ := NewStore("./testData")
 	return &ParsingContext{
-		db:        db,
+		store:     store,
 		documents: []*Document{},
 	}
 }
 
 func (s *ParsingContext) addDocument(document *Document) {
 	s.documents = append(s.documents, document)
-	writeDocument(s.db, document)
+	s.store.SyncDocument(document)
 }
 
 func (s *ParsingContext) close() {
-	s.db.Close()
+	s.store.Close()
 }
 
 func BenchmarkAnalysis(t *testing.B) {
@@ -52,33 +53,36 @@ func BenchmarkAnalysis(t *testing.B) {
 	godirwalk.Walk(dir, &godirwalk.Options{
 		Callback: func(path string, de *godirwalk.Dirent) error {
 			if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
+				context.waitGroup.Add(1)
 				jobs <- path
 			}
 			return nil
 		},
 		Unsorted: true,
 	})
+	context.waitGroup.Wait()
 }
 
-// func TestReadData(t *testing.T) {
-// 	context := newParsingContext()
-// 	defer context.close()
-// 	context.db.View(func(txn *badger.Txn) error {
-// 		it := txn.NewIterator(badger.DefaultIteratorOptions)
-// 		defer it.Close()
-// 		for it.Rewind(); it.Valid(); it.Next() {
-// 			item := it.Item()
-// 			fmt.Println(string(item.Key()))
-// 		}
-// 		return nil
-// 	})
-// }
+func TestReadData(t *testing.T) {
+	context := newParsingContext()
+	defer context.close()
+	context.store.db.View(func(txn *badger.Txn) error {
+		it := txn.NewIterator(badger.DefaultIteratorOptions)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			fmt.Println(string(item.Key()))
+		}
+		return nil
+	})
+}
 
 func analyse(context *ParsingContext, id int, filePaths <-chan string) {
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
 		text := string(data)
 		rootNode := parser.Parse(text)
-		context.addDocument(newDocument(util.PathToUri(filePath), text, rootNode))
+		context.addDocument(NewDocument(util.PathToUri(filePath), text, rootNode))
+		context.waitGroup.Done()
 	}
 }
