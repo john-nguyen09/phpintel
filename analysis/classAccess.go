@@ -33,11 +33,11 @@ func analyseMemberName(document *Document, node *phrase.Phrase) string {
 	return ""
 }
 
-func (s *ClassAccess) getLocation() protocol.Location {
+func (s *ClassAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ClassAccess) getTypes() TypeComposite {
+func (s *ClassAccess) GetTypes() TypeComposite {
 	return s.Type
 }
 

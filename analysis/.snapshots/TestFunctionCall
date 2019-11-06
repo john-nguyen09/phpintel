@@ -9,7 +9,7 @@
           Type: (analysis.TypeComposite) {
             typeStrings: ([]analysis.TypeString) <nil>
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/functionCall.php",
             Range: (protocol.Range) 2:8-2:28
@@ -29,7 +29,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
         Range: (protocol.Range) 2:8-2:28
@@ -47,7 +47,7 @@
           Type: (analysis.TypeComposite) {
             typeStrings: ([]analysis.TypeString) <nil>
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/functionCall.php",
             Range: (protocol.Range) 4:16-4:28
@@ -67,7 +67,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
         Range: (protocol.Range) 4:16-4:28
@@ -80,7 +80,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
         Range: (protocol.Range) 5:3-5:26
@@ -93,7 +93,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
         Range: (protocol.Range) 9:111-9:124

@@ -28,7 +28,7 @@ func analyseVariableAssignment(document *Document,
 	variable := newVariable(document, node)
 	document.addSymbol(variable)
 
-	var expression hasTypes = nil
+	var expression HasTypes = nil
 	if p, ok := rhs.(*phrase.Phrase); ok {
 		expression = scanForExpression(document, p)
 	}

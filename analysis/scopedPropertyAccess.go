@@ -12,7 +12,7 @@ type ScopedPropertyAccess struct {
 	Expression
 }
 
-func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newScopedPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
 	}
@@ -32,11 +32,11 @@ func newScopedPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return propertyAccess
 }
 
-func (s *ScopedPropertyAccess) getLocation() protocol.Location {
+func (s *ScopedPropertyAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedPropertyAccess) getTypes() TypeComposite {
+func (s *ScopedPropertyAccess) GetTypes() TypeComposite {
 	// TODO: Look up property types
 	return s.Type
 }

@@ -12,7 +12,7 @@ type Variable struct {
 	Expression
 }
 
-func newVariableExpression(document *Document, node *phrase.Phrase) hasTypes {
+func newVariableExpression(document *Document, node *phrase.Phrase) HasTypes {
 	return newVariable(document, node)
 }
 
@@ -27,26 +27,26 @@ func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	return variable
 }
 
-func (s *Variable) getLocation() protocol.Location {
+func (s *Variable) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *Variable) setExpression(expression hasTypes) {
+func (s *Variable) setExpression(expression HasTypes) {
 	s.Scope = expression
 }
 
 func (s *Variable) mergeTypesWithVariable(variable *Variable) {
-	types := variable.getTypes()
+	types := variable.GetTypes()
 	for _, typeString := range types.Resolve() {
 		s.Type.add(typeString)
 	}
 }
 
-func (s *Variable) getTypes() TypeComposite {
+func (s *Variable) GetTypes() TypeComposite {
 	if s.Scope == nil {
 		return s.Type
 	}
-	types := s.Scope.getTypes()
+	types := s.Scope.GetTypes()
 	for _, typeString := range s.Type.Resolve() {
 		types.add(typeString)
 	}
@@ -60,8 +60,8 @@ func (s *Variable) MarshalJSON() ([]byte, error) {
 		Types    TypeComposite
 	}{
 		Name:     s.Name,
-		Location: s.getLocation(),
-		Types:    s.getTypes(),
+		Location: s.GetLocation(),
+		Types:    s.GetTypes(),
 	})
 }
 

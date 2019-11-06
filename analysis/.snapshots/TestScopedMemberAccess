@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=11) {
+([]analysis.Symbol) (len=12) {
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -9,7 +9,7 @@
           }
         }
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
         Range: (protocol.Range) 2:0-2:9
@@ -32,7 +32,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 2:0-2:9
@@ -57,7 +57,7 @@
           }
         }
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
         Range: (protocol.Range) 2:20-3:8
@@ -80,7 +80,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 2:20-3:8
@@ -105,7 +105,7 @@
           }
         }
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
         Range: (protocol.Range) 3:19-4:8
@@ -128,7 +128,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 3:19-4:8
@@ -158,7 +158,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 6:16-6:25
@@ -173,6 +173,24 @@
       Name: (string) (len=9) "$instance"
     }
   }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:16-6:25
+      },
+      Name: (string) (len=9) "TestClass"
+    }
+  }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -183,7 +201,7 @@
           }
         }
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
         Range: (protocol.Range) 6:28-7:8
@@ -206,7 +224,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 6:28-7:8
@@ -231,7 +249,7 @@
           }
         }
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
         Range: (protocol.Range) 7:18-9:130
@@ -254,7 +272,7 @@
               }
             }
           },
-          Scope: (analysis.hasTypes) <nil>,
+          Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
             Range: (protocol.Range) 7:18-9:130

@@ -46,8 +46,17 @@ func (s *Trait) analyseHeader(document *Document, traitHeader *phrase.Phrase) {
 	}
 }
 
-func (s *Trait) getLocation() protocol.Location {
+func (s *Trait) GetLocation() protocol.Location {
 	return s.location
+}
+
+func (s *Trait) GetName() string {
+	return s.Name.original
+}
+
+func (s *Trait) GetDescription() string {
+	// TODO: Docblock description
+	return ""
 }
 
 func (s *Trait) GetCollection() string {

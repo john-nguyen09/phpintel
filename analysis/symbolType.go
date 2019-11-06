@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/json"
+	"strings"
 )
 
 // SymbolType is an interface to symbol types
@@ -61,6 +62,21 @@ func (t TypeString) IsFqn() bool {
 	}
 
 	return []rune(t.fqn)[0] == '\\'
+}
+
+// IsEmpty checks whether TypeString is empty
+func (t TypeString) IsEmpty() bool {
+	return t.fqn == "" || t.fqn == "\\"
+}
+
+// GetOriginal gets original name
+func (t TypeString) GetOriginal() string {
+	return t.original
+}
+
+// GetFQN gets the FQN converted name
+func (t TypeString) GetFQN() string {
+	return t.fqn
 }
 
 // SetFqn is a setter to FQN
@@ -130,4 +146,32 @@ func ReadTypeComposite(serialiser *Serialiser) TypeComposite {
 // Resolve resolves the type to slice of TypeString
 func (t TypeComposite) Resolve() []TypeString {
 	return t.typeStrings
+}
+
+func (t TypeComposite) IsEmpty() bool {
+	types := t.Resolve()
+	isAllTypesEmpty := true
+	if len(types) > 0 {
+		for _, typeString := range types {
+			if !typeString.IsEmpty() {
+				isAllTypesEmpty = false
+				break
+			}
+		}
+	}
+	return len(types) == 0 || isAllTypesEmpty
+}
+
+func (t TypeComposite) ToString() string {
+	types := t.Resolve()
+	contents := []string{}
+	if len(types) > 0 {
+		for _, typeString := range types {
+			if typeString.IsEmpty() {
+				continue
+			}
+			contents = append(contents, typeString.GetFQN())
+		}
+	}
+	return strings.Join(contents, "|")
 }

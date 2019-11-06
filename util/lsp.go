@@ -19,10 +19,3 @@ func IsInRange(position protocol.Position, theRange protocol.Range) int {
 	}
 	return 0
 }
-
-// func PositionSearch(position protocol.Position, length int, getRange func(i int) protocol.Range) {
-// 	i, j := 0, length
-// 	for i < j {
-
-// 	}
-// }

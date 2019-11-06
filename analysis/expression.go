@@ -8,13 +8,13 @@ import (
 // Expression represents a reference
 type Expression struct {
 	Type     TypeComposite
-	Scope    hasTypes
+	Scope    HasTypes
 	Location protocol.Location
 	Name     string
 }
 
-type hasTypes interface {
-	getTypes() TypeComposite
+type HasTypes interface {
+	GetTypes() TypeComposite
 }
 
 type expressionKind int
@@ -32,13 +32,13 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type expressionConstructorForPhrase func(*Document, *phrase.Phrase) hasTypes
+type expressionConstructorForPhrase func(*Document, *phrase.Phrase) HasTypes
 
 var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ObjectCreationExpression: true,
 }
 
-func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
+func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 	var phraseToExpressionConstructor = map[phrase.PhraseType]expressionConstructorForPhrase{
 		phrase.FunctionCallExpression:         newFunctionCall,
 		phrase.ConstantAccessExpression:       newConstantAccess,
@@ -51,7 +51,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) hasTypes {
 		phrase.PropertyAccessExpression:       newPropertyAccess,
 		phrase.MethodCallExpression:           newMethodAccess,
 	}
-	var expression hasTypes = nil
+	var expression HasTypes = nil
 	defer func() {
 		if symbol, ok := expression.(Symbol); ok {
 			document.addSymbol(symbol)

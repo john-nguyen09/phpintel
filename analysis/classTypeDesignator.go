@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -10,7 +11,7 @@ type ClassTypeDesignator struct {
 	Expression
 }
 
-func newClassTypeDesignator(document *Document, node *phrase.Phrase) hasTypes {
+func newClassTypeDesignator(document *Document, node *phrase.Phrase) HasTypes {
 	classTypeDesignator := &ClassTypeDesignator{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -32,7 +33,11 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) hasTypes {
 	return classTypeDesignator
 }
 
-func (s *ClassTypeDesignator) getTypes() TypeComposite {
+func (s *ClassTypeDesignator) GetLocation() protocol.Location {
+	return s.Location
+}
+
+func (s *ClassTypeDesignator) GetTypes() TypeComposite {
 	return s.Type
 }
 

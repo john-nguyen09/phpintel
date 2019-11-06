@@ -1,10 +1,13 @@
 package analysis
 
 import (
+	"io/ioutil"
 	"log"
 	"strings"
 	"sync"
 
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	putil "github.com/john-nguyen09/phpintel/util"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/util"
 )
@@ -59,6 +62,7 @@ func (s *entry) getBytes() []byte {
 type Store struct {
 	db            *leveldb.DB
 	documentLocks map[string]sync.Mutex
+	documents     map[string]*Document
 }
 
 func NewStore(storePath string) (*Store, error) {
@@ -69,11 +73,47 @@ func NewStore(storePath string) (*Store, error) {
 	return &Store{
 		db:            db,
 		documentLocks: map[string]sync.Mutex{},
+		documents:     map[string]*Document{},
 	}, nil
 }
 
 func (s *Store) Close() error {
 	return s.db.Close()
+}
+
+func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
+	var document *Document
+	var ok bool
+	if document, ok = s.documents[uri]; !ok {
+		filePath := putil.PathToUri(uri)
+		data, err := ioutil.ReadFile(filePath)
+		if err != nil {
+			log.Printf("cannot read %s, error: %s", filePath, err)
+			return nil
+		}
+		document := NewDocument(uri, string(data))
+		s.documents[uri] = document
+	}
+	return document
+}
+
+func (s *Store) OpenDocument(uri protocol.DocumentURI) {
+	document := s.GetOrCreateDocument(uri)
+	document.Open()
+}
+
+func (s *Store) IndexDocument(filePath string) {
+	uri := putil.PathToUri(filePath)
+	document := s.GetOrCreateDocument(uri)
+	if document == nil {
+		log.Printf("Failed to get %s", filePath)
+		return
+	}
+	document.Load()
+	s.SyncDocument(document)
+	if !document.isOpen {
+		document.Release()
+	}
 }
 
 func (s *Store) SyncDocument(document *Document) {
@@ -121,7 +161,7 @@ func deleteEntry(batch *leveldb.Batch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 
-func (s *Store) getClasses(name string) []*Class {
+func (s *Store) GetClasses(name string) []*Class {
 	prefix := []byte("class" + KeySep + name)
 	classes := []*Class{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -132,7 +172,7 @@ func (s *Store) getClasses(name string) []*Class {
 	return classes
 }
 
-func (s *Store) getInterfaces(name string) []*Interface {
+func (s *Store) GetInterfaces(name string) []*Interface {
 	prefix := []byte("interface" + KeySep + name)
 	interfaces := []*Interface{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -143,7 +183,7 @@ func (s *Store) getInterfaces(name string) []*Interface {
 	return interfaces
 }
 
-func (s *Store) getTraits(name string) []*Trait {
+func (s *Store) GetTraits(name string) []*Trait {
 	prefix := []byte("trait" + KeySep + name)
 	traits := []*Trait{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -154,7 +194,7 @@ func (s *Store) getTraits(name string) []*Trait {
 	return traits
 }
 
-func (s *Store) getFunctions(name string) []*Function {
+func (s *Store) GetFunctions(name string) []*Function {
 	prefix := []byte("function" + KeySep + name)
 	functions := []*Function{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -165,7 +205,7 @@ func (s *Store) getFunctions(name string) []*Function {
 	return functions
 }
 
-func (s *Store) getConsts(name string) []*Const {
+func (s *Store) GetConsts(name string) []*Const {
 	prefix := []byte("const" + KeySep + name)
 	consts := []*Const{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -176,7 +216,7 @@ func (s *Store) getConsts(name string) []*Const {
 	return consts
 }
 
-func (s *Store) getDefines(name string) []*Define {
+func (s *Store) GetDefines(name string) []*Define {
 	prefix := []byte("define" + KeySep + name)
 	defines := []*Define{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -187,7 +227,7 @@ func (s *Store) getDefines(name string) []*Define {
 	return defines
 }
 
-func (s *Store) getMethods(scope string, name string) []*Method {
+func (s *Store) GetMethods(scope string, name string) []*Method {
 	prefix := []byte("method" + KeySep + scope + KeySep + name)
 	methods := []*Method{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -198,7 +238,7 @@ func (s *Store) getMethods(scope string, name string) []*Method {
 	return methods
 }
 
-func (s *Store) getClassConsts(scope string, name string) []*ClassConst {
+func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	prefix := []byte("classConst" + KeySep + scope + KeySep + name)
 	classConsts := []*ClassConst{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
@@ -209,7 +249,7 @@ func (s *Store) getClassConsts(scope string, name string) []*ClassConst {
 	return classConsts
 }
 
-func (s *Store) getProperties(scope string, name string) []*Property {
+func (s *Store) GetProperties(scope string, name string) []*Property {
 	prefix := []byte("property" + KeySep + scope + KeySep + name)
 	properties := []*Property{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)

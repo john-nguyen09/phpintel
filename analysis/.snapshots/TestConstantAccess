@@ -4,7 +4,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
         Range: (protocol.Range) 2:0-2:7
@@ -17,7 +17,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
         Range: (protocol.Range) 4:0-4:11
@@ -30,7 +30,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
         Range: (protocol.Range) 4:24-5:13
@@ -43,7 +43,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
         Range: (protocol.Range) 7:4-7:15
@@ -56,7 +56,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
         Range: (protocol.Range) 10:128-10:135

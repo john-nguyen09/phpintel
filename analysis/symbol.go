@@ -31,7 +31,15 @@ const (
 
 // Symbol is a symbol
 type Symbol interface {
-	getLocation() protocol.Location
+	GetLocation() protocol.Location
+}
+
+// Definition symbol type is a type of symbol of (classes, interfaces,
+// traits, properties, methods, class consts, defines, consts, functions)
+type Definition interface {
+	GetLocation() protocol.Location
+	GetName() string
+	GetDescription() string
 }
 
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {

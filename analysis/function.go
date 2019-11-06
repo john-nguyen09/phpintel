@@ -81,8 +81,17 @@ func (s *Function) analyseParameterDeclarationList(document *Document, node *phr
 	}
 }
 
-func (s *Function) getLocation() protocol.Location {
+func (s *Function) GetLocation() protocol.Location {
 	return s.location
+}
+
+func (s *Function) GetName() string {
+	return s.Name
+}
+
+func (s *Function) GetDescription() string {
+	// TODO: Implements docblock description
+	return ""
 }
 
 func (s *Function) GetCollection() string {

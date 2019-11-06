@@ -1,6 +1,6 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=31) "file:///../cases/classConst.php",
       Range: (protocol.Range) 2:0-5:64
     },

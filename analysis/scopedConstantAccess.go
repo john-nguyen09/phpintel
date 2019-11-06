@@ -11,7 +11,7 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newScopedConstantAccess(document *Document, node *phrase.Phrase) HasTypes {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
 	}
@@ -31,11 +31,11 @@ func newScopedConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return constantAccess
 }
 
-func (s *ScopedConstantAccess) getLocation() protocol.Location {
+func (s *ScopedConstantAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedConstantAccess) getTypes() TypeComposite {
+func (s *ScopedConstantAccess) GetTypes() TypeComposite {
 	// TODO: Look up constant types
 	return s.Type
 }

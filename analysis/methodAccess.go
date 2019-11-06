@@ -10,7 +10,7 @@ type MethodAccess struct {
 	Expression
 }
 
-func newMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 	methodAccess := &MethodAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -32,11 +32,11 @@ func newMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return methodAccess
 }
 
-func (s *MethodAccess) getLocation() protocol.Location {
+func (s *MethodAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *MethodAccess) getTypes() TypeComposite {
+func (s *MethodAccess) GetTypes() TypeComposite {
 	// TODO: Lookup method return types
 	return s.Type
 }

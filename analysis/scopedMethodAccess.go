@@ -11,7 +11,7 @@ type ScopedMethodAccess struct {
 	Expression
 }
 
-func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newScopedMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
 	}
@@ -31,11 +31,11 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return methodAccess
 }
 
-func (s *ScopedMethodAccess) getLocation() protocol.Location {
+func (s *ScopedMethodAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedMethodAccess) getTypes() TypeComposite {
+func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 	// TODO: Look up method return type
 	return s.Type
 }

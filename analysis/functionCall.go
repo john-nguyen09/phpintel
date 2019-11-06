@@ -22,7 +22,7 @@ func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func newFunctionCall(document *Document, node *phrase.Phrase) hasTypes {
+func newFunctionCall(document *Document, node *phrase.Phrase) HasTypes {
 	functionCall := &FunctionCall{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -34,11 +34,11 @@ func newFunctionCall(document *Document, node *phrase.Phrase) hasTypes {
 	return functionCall
 }
 
-func (s *FunctionCall) getLocation() protocol.Location {
+func (s *FunctionCall) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *FunctionCall) getTypes() TypeComposite {
+func (s *FunctionCall) GetTypes() TypeComposite {
 	// TODO: Look up function for return types
 	return s.Type
 }

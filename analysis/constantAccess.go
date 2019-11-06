@@ -20,7 +20,7 @@ func newDirectoryConstantAccess(document *Document, token *lexer.Token) Symbol {
 	constantAccess.readName(document, token)
 	return constantAccess
 }
-func newConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newConstantAccess(document *Document, node *phrase.Phrase) HasTypes {
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -30,7 +30,7 @@ func newConstantAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return constantAccess
 }
 
-func (s *ConstantAccess) getLocation() protocol.Location {
+func (s *ConstantAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
@@ -38,7 +38,7 @@ func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
 	s.Name = document.GetNodeText(node)
 }
 
-func (s *ConstantAccess) getTypes() TypeComposite {
+func (s *ConstantAccess) GetTypes() TypeComposite {
 	// TODO: look up constant type
 	return s.Type
 }

@@ -1,6 +1,6 @@
 ([]analysis.Symbol) (len=14) {
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=27) "file:///../cases/method.php",
       Range: (protocol.Range) 2:0-38:0
     },
@@ -205,7 +205,7 @@
     ClassModifier: (analysis.ClassModifierValue) 2
   }),
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=27) "file:///../cases/method.php",
       Range: (protocol.Range) 40:0-45:767
     },

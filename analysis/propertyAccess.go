@@ -10,7 +10,7 @@ type PropertyAccess struct {
 	Expression
 }
 
-func newPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
+func newPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
 	propertyAccess := &PropertyAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -32,11 +32,11 @@ func newPropertyAccess(document *Document, node *phrase.Phrase) hasTypes {
 	return propertyAccess
 }
 
-func (s *PropertyAccess) getLocation() protocol.Location {
+func (s *PropertyAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *PropertyAccess) getTypes() TypeComposite {
+func (s *PropertyAccess) GetTypes() TypeComposite {
 	return s.Type
 }
 

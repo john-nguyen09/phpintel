@@ -61,7 +61,7 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	return classConst
 }
 
-func (s *ClassConst) getLocation() protocol.Location {
+func (s *ClassConst) GetLocation() protocol.Location {
 	return s.location
 }
 

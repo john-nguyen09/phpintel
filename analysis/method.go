@@ -47,7 +47,7 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	return method
 }
 
-func (s Method) getLocation() protocol.Location {
+func (s Method) GetLocation() protocol.Location {
 	return s.location
 }
 

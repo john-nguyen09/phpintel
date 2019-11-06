@@ -23,6 +23,6 @@ func TestStore(t *testing.T) {
 		panic(err)
 	}
 	store.SyncDocument(document)
-	classes := store.getClasses("TestClass1")
+	classes := store.GetClasses("TestClass1")
 	cupaloy.Snapshot(classes)
 }

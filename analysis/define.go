@@ -37,8 +37,17 @@ func newDefine(document *Document, node *phrase.Phrase) Symbol {
 	return define
 }
 
-func (s *Define) getLocation() protocol.Location {
+func (s *Define) GetLocation() protocol.Location {
 	return s.location
+}
+
+func (s *Define) GetName() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Define) GetDescription() string {
+	// TODO: Implements docblock description
+	return ""
 }
 
 func (s *Define) analyseArgs(document *Document, args *ArgumentList) {

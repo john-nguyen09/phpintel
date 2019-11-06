@@ -9,7 +9,7 @@ import (
 
 // Class contains information of classes
 type Class struct {
-	location protocol.Location
+	Location protocol.Location
 
 	Modifier   ClassModifierValue
 	Name       TypeString
@@ -48,7 +48,7 @@ func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 
 func newClass(document *Document, node *phrase.Phrase) Symbol {
 	class := &Class{
-		location: document.GetNodeLocation(node),
+		Location: document.GetNodeLocation(node),
 	}
 	document.addClass(class)
 	document.addSymbol(class)
@@ -147,8 +147,17 @@ func (s *Class) implements(document *Document, p *phrase.Phrase) {
 	}
 }
 
-func (s *Class) getLocation() protocol.Location {
-	return s.location
+func (s *Class) GetLocation() protocol.Location {
+	return s.Location
+}
+
+func (s *Class) GetName() string {
+	return s.Name.original
+}
+
+func (s *Class) GetDescription() string {
+	// TODO: implement php docblock
+	return ""
 }
 
 func (s *Class) GetCollection() string {
@@ -156,11 +165,11 @@ func (s *Class) GetCollection() string {
 }
 
 func (s *Class) GetKey() string {
-	return s.Name.fqn + KeySep + s.location.URI
+	return s.Name.fqn + KeySep + s.Location.URI
 }
 
 func (s *Class) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
+	serialiser.WriteLocation(s.Location)
 	serialiser.WriteInt(int(s.Modifier))
 	s.Name.Write(serialiser)
 	s.Extends.Write(serialiser)
@@ -172,7 +181,7 @@ func (s *Class) Serialise(serialiser *Serialiser) {
 
 func ReadClass(serialiser *Serialiser) *Class {
 	theClass := &Class{
-		location: serialiser.ReadLocation(),
+		Location: serialiser.ReadLocation(),
 		Modifier: ClassModifierValue(serialiser.ReadInt()),
 		Name:     ReadTypeString(serialiser),
 		Extends:  ReadTypeString(serialiser),

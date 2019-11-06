@@ -5,13 +5,10 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io"
-	"io/ioutil"
 	"path/filepath"
 	"strings"
 
-	"github.com/john-nguyen09/go-phpparser/parser"
 	"github.com/john-nguyen09/phpintel/analysis"
-	"github.com/john-nguyen09/phpintel/internal/log"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	"github.com/karrick/godirwalk"
@@ -31,19 +28,15 @@ func newWorkspaceStore(ctx context.Context) *workspaceStore {
 		stores: map[string]*analysis.Store{},
 		jobs:   make(chan string),
 	}
+	for i := 0; i < numOfWorkers; i++ {
+		go workspaceStore.analyse(i)
+	}
 	return workspaceStore
 }
 
-func (s *workspaceStore) analyse(id int, filePaths <-chan string) {
-	for filePath := range filePaths {
-		data, err := ioutil.ReadFile(filePath)
-		if err != nil {
-			log.Error(s.ctx, "", err)
-			continue
-		}
-		text := string(data)
-		rootNode := parser.Parse(text)
-		s.addDocument(analysis.NewDocument(util.PathToUri(filePath), text, rootNode))
+func (s *workspaceStore) analyse(id int) {
+	for filePath := range s.jobs {
+		s.addDocument(filePath)
 	}
 }
 
@@ -90,9 +83,9 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 	return nil
 }
 
-func (s *workspaceStore) addDocument(document *analysis.Document) {
-	store := s.getStore(document.GetURI())
+func (s *workspaceStore) addDocument(filePath string) {
+	store := s.getStore(util.PathToUri(filePath))
 	if store != nil {
-		store.SyncDocument(document)
+		store.IndexDocument(filePath)
 	}
 }

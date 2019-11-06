@@ -1,6 +1,6 @@
 ([]analysis.Symbol) (len=4) {
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
       Range: (protocol.Range) 2:0-4:0
     },
@@ -16,7 +16,7 @@
     Interfaces: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
       Range: (protocol.Range) 6:0-8:1
     },
@@ -37,7 +37,7 @@
     }
   }),
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
       Range: (protocol.Range) 10:0-12:1
     },
@@ -62,7 +62,7 @@
     }
   }),
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
       Range: (protocol.Range) 12:3-14:253
     },

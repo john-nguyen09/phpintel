@@ -79,7 +79,7 @@ func (s *Interface) extends(document *Document, node *phrase.Phrase) {
 	}
 }
 
-func (s *Interface) getLocation() protocol.Location {
+func (s *Interface) GetLocation() protocol.Location {
 	return s.location
 }
 

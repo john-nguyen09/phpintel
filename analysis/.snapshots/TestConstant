@@ -12,7 +12,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (analysis.hasTypes) <nil>,
+      Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=26) "file:///../cases/const.php",
         Range: (protocol.Range) 4:33-4:57

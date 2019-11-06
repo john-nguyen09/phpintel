@@ -1,6 +1,6 @@
 ([]analysis.Symbol) (len=12) {
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 2:0-20:425
     },

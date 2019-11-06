@@ -65,7 +65,7 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	return property
 }
 
-func (s *Property) getLocation() protocol.Location {
+func (s *Property) GetLocation() protocol.Location {
 	return s.location
 }
 

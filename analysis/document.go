@@ -3,6 +3,7 @@ package analysis
 import (
 	"encoding/json"
 	"sort"
+	"sync"
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -16,7 +17,9 @@ type Document struct {
 	uri            string
 	text           []rune
 	lineOffsets    []int
+	loadMu         sync.Mutex
 	isLoaded       bool
+	isOpen         bool
 	variableTables []variableTable
 	Children       []Symbol `json:"children"`
 	classStack     []Symbol
@@ -45,6 +48,16 @@ func NewDocument(uri string, text string) *Document {
 	return document
 }
 
+// Open sets a flag to indicate the document is open
+func (s *Document) Open() {
+	s.isOpen = true
+}
+
+// Close unsets the flag
+func (s *Document) Close() {
+	s.isOpen = false
+}
+
 // Load makes sure that symbols are available
 func (s *Document) Load() {
 	if !s.isLoaded {
@@ -53,6 +66,15 @@ func (s *Document) Load() {
 		scanForChildren(s, rootNode)
 		s.isLoaded = true
 	}
+}
+
+// LockToDo locks the document to do a thing
+// the operation in thing should be synchronous, i.e.
+// no goroutine to be spawned
+func (s *Document) LockToDo(thing func(*Document)) {
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
+	thing(s)
 }
 
 // Release releases symbols to save memory
@@ -213,12 +235,16 @@ func (s *Document) addClass(other Symbol) {
 
 func (s *Document) SymbolAt(offset int) Symbol {
 	pos := s.positionAt(offset)
+	return s.SymbolAtPos(pos)
+}
+
+func (s *Document) SymbolAtPos(pos protocol.Position) Symbol {
 	index := sort.Search(len(s.Children), func(i int) bool {
-		location := s.Children[i].getLocation()
+		location := s.Children[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
 	symbol := s.Children[index]
-	if util.IsInRange(pos, symbol.getLocation().Range) == 0 {
+	if util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
 		return symbol
 	}
 	return nil

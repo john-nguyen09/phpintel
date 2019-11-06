@@ -1,6 +1,6 @@
 ([]*analysis.Class) (len=1) {
   (*analysis.Class)({
-    location: (protocol.Location) {
+    Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
       Range: (protocol.Range) 6:0-8:1
     },

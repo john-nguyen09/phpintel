@@ -34,7 +34,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	return argumentList
 }
 
-func (s *ArgumentList) getLocation() protocol.Location {
+func (s *ArgumentList) GetLocation() protocol.Location {
 	return s.location
 }
 

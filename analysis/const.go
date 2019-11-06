@@ -66,8 +66,17 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 	return constant
 }
 
-func (s *Const) getLocation() protocol.Location {
+func (s *Const) GetLocation() protocol.Location {
 	return s.location
+}
+
+func (s *Const) GetName() string {
+	return s.Name
+}
+
+func (s *Const) GetDescription() string {
+	// TODO: Implement docblock description
+	return ""
 }
 
 func (s *Const) GetCollection() string {
