@@ -116,3 +116,71 @@ func TraitToHover(ref analysis.Symbol, trait analysis.Trait) protocol.Hover {
 		Range: &theRange,
 	}
 }
+
+func ClassConstToHover(ref analysis.Symbol, classConst analysis.ClassConst) protocol.Hover {
+	content := "# const " + classConst.Name
+	if len(classConst.Value) > 0 {
+		content += " = " + classConst.Value
+	}
+	content = concatDescriptionIfAvailable(content, classConst.GetDescription())
+	theRange := ref.GetLocation().Range
+	return protocol.Hover{
+		Contents: protocol.MarkupContent{
+			Kind: "markdown",
+			Value: content,
+		},
+		Range: &theRange,
+	}
+}
+
+func concatVisibility(content string, visibility analysis.VisibilityModifierValue) string {
+	if visibility ==  analysis.Public {
+		return content + " public"
+	}
+	if visibility == analysis.Private {
+		return content + " private"
+	}
+	if visibility == analysis.Protected {
+		return content + " protected"
+	}
+	return content
+}
+
+func MethodToHover(ref analysis.Symbol, method analysis.Method) protocol.Hover {
+	content := "#"
+	content = concatVisibility(content, method.VisibilityModifier)
+	if method.IsStatic {
+		content += " static"
+	}
+	content += " " + method.GetName() + "("
+	content += paramsToString(method.Params)
+	content += ")"
+	content = concatDescriptionIfAvailable(content, method.GetDescription())
+	theRange := ref.GetLocation().Range
+	return protocol.Hover{
+		Contents: protocol.MarkupContent{
+			Kind: "markdown",
+			Value: content,
+		},
+		Range: &theRange,
+	}
+}
+
+func PropertyToHover(ref analysis.Symbol, property analysis.Property) protocol.Hover {
+	content := "#"
+	content = concatVisibility(content, property.VisibilityModifier)
+	if property.IsStatic {
+		content += " static"
+	}
+	content += " " + property.GetName()
+	content = concatDescriptionIfAvailable(content, property.GetDescription())
+	theRange := ref.GetLocation().Range
+	return protocol.Hover{
+		Contents: protocol.MarkupContent{
+			Kind: "markdown",
+			Value: content,
+		},
+		Range: &theRange,
+	}
+}
+

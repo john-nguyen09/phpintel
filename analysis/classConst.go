@@ -65,6 +65,15 @@ func (s *ClassConst) GetLocation() protocol.Location {
 	return s.location
 }
 
+func (s *ClassConst) GetName() string {
+	return s.Name
+}
+
+func (s *ClassConst) GetDescription() string {
+	// TODO: Implement docblock description
+	return ""
+}
+
 func (s *ClassConst) GetCollection() string {
 	return classConstCollection
 }

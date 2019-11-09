@@ -66,8 +66,34 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ScopedConstantAccess:
 		classConsts := []*analysis.ClassConst{}
 		for _, typeString := range v.Type.Resolve() {
-			for _, scopeType := range v.Scope.GetTypes() {
-				classConsts = append(classConsts, store.GetClassConsts(scopeType, typeString.GetFQN())...)
+			for _, scopeType := range v.Scope.GetTypes().Resolve() {
+				classConsts = append(classConsts, store.GetClassConsts(scopeType.GetFQN(), typeString.GetFQN())...)
+				if len(classConsts) > 0 {
+					hover = cmd.ClassConstToHover(symbol, *classConsts[0])
+					break
+				}
+			}
+		}
+	case *analysis.ScopedMethodAccess:
+		methods := []*analysis.Method{}
+		for _, typeString := range v.Type.Resolve() {
+			for _, scopeType := range v.Scope.GetTypes().Resolve() {
+				methods = append(methods, store.GetMethods(scopeType.GetFQN(), typeString.GetFQN())...)
+				if len(methods) > 0 {
+					hover = cmd.MethodToHover(symbol, *methods[0])
+					break
+				}
+			}
+		}
+	case *analysis.ScopedPropertyAccess:
+		properties := []*analysis.Property{}
+		for _, typeString := range v.Type.Resolve() {
+			for _, scopeType := range v.Scope.GetTypes().Resolve() {
+				properties = append(properties, store.GetProperties(scopeType.GetFQN(), typeString.GetFQN())...)
+				if len(properties) > 0 {
+					hover = cmd.PropertyToHover(symbol, *properties[0])
+					break
+				}
 			}
 		}
 	}

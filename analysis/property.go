@@ -69,6 +69,15 @@ func (s *Property) GetLocation() protocol.Location {
 	return s.location
 }
 
+func (s *Property) GetName() string {
+	return s.Name
+}
+
+func (s *Property) GetDescription() string {
+	// TODO: Implement docblock description
+	return ""
+}
+
 func (s *Property) GetCollection() string {
 	return propertyCollection
 }
