@@ -138,8 +138,12 @@ func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentConten
 		log.Printf("Document %s not found", uri)
 	}
 	document.ApplyChanges(changes)
+	document.Release()
 	document.Load()
 	s.SyncDocument(document)
+	if !document.isOpen {
+		document.Release()
+	}
 	return nil
 }
 

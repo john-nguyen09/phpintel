@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/json"
+	"log"
 	"sort"
 	"sync"
 
@@ -286,11 +287,12 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 
 		startOffset := s.offsetAtPosition(start)
 		endOffset := s.offsetAtPosition(end)
-		s.text = append(s.text, s.text[0:startOffset]...)
-		s.text = append(s.text, text...)
-		s.text = append(s.text, s.text[endOffset:]...)
+		newText := s.text[0:startOffset]
+		newText = append(newText, text...)
+		newText = append(newText, s.text[endOffset:]...)
+		s.text = newText
 
-		newLineOffsets := s.lineOffsets[0:change.Range.Start.Line]
+		newLineOffsets := s.lineOffsets[0 : start.Line+1]
 		lengthDiff := len(text) - (endOffset - startOffset)
 		newLineOffsets = append(newLineOffsets, calculateLineOffsets(text, startOffset)[1:]...)
 		endLineOffsets := s.lineOffsets[end.Line+1:]
@@ -299,5 +301,29 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 	}
-	s.isLoaded = false
+}
+
+func (s *Document) getLines() []string {
+	lines := []string{}
+	text := s.GetText()
+	lineOffsets := s.lineOffsets
+	log.Println(string(text))
+
+	start, lineOffsets := s.lineOffsets[0], lineOffsets[1:]
+	for index, lineOffset := range lineOffsets {
+		line := ""
+		if index != len(lineOffsets)-1 {
+			line = string(text[start:lineOffset])
+		} else {
+			line = string(text[start : lineOffset-1])
+		}
+		lines = append(lines, line)
+		start = lineOffset
+	}
+	if start == len(text) {
+		lines = append(lines, "")
+	} else {
+		lines = append(lines, string(text[start:len(text)]))
+	}
+	return lines
 }

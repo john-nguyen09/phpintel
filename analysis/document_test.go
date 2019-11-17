@@ -1,10 +1,13 @@
 package analysis
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"testing"
 
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -59,4 +62,26 @@ func TestSymbolAt(t *testing.T) {
 	fmt.Printf("%T\n", symbol)
 	symbol = document.SymbolAt(19)
 	fmt.Printf("%T\n", symbol)
+}
+
+func TestApplyChanges(t *testing.T) {
+	document := NewDocument("test1", "<?php\necho 'Hello world';")
+	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
+		protocol.TextDocumentContentChangeEvent{
+			Range: &protocol.Range{
+				Start: protocol.Position{
+					Line:      1,
+					Character: 19,
+				},
+				End: protocol.Position{
+					Line:      1,
+					Character: 19,
+				},
+			},
+			RangeLength: 0,
+			Text:        "\n// This is inserted",
+		},
+	})
+	data, _ := json.MarshalIndent(document.getLines(), "", "  ")
+	log.Println(string(data))
 }

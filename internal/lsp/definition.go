@@ -47,27 +47,21 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ScopedConstantAccess:
-		for _, typeString := range v.Type.Resolve() {
-			for _, scopeType := range v.Scope.GetTypes().Resolve() {
-				for _, classConst := range store.GetClassConsts(scopeType.GetFQN(), typeString.GetFQN()) {
-					locations = append(locations, classConst.GetLocation())
-				}
+		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+			for _, classConst := range store.GetClassConsts(scopeType.GetFQN(), v.Name) {
+				locations = append(locations, classConst.GetLocation())
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		for _, typeString := range v.Type.Resolve() {
-			for _, scopeType := range v.Scope.GetTypes().Resolve() {
-				for _, method := range store.GetMethods(scopeType.GetFQN(), typeString.GetFQN()) {
-					locations = append(locations, method.GetLocation())
-				}
+		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
+				locations = append(locations, method.GetLocation())
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
-		for _, typeString := range v.Type.Resolve() {
-			for _, scopeType := range v.Scope.GetTypes().Resolve() {
-				for _, property := range store.GetProperties(scopeType.GetFQN(), typeString.GetFQN()) {
-					locations = append(locations, property.GetLocation())
-				}
+		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
+				locations = append(locations, property.GetLocation())
 			}
 		}
 	}

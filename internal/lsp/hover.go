@@ -79,13 +79,11 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.ScopedMethodAccess:
 		methods := []*analysis.Method{}
-		for _, typeString := range v.Type.Resolve() {
-			for _, scopeType := range v.Scope.GetTypes().Resolve() {
-				methods = append(methods, store.GetMethods(scopeType.GetFQN(), typeString.GetFQN())...)
-				if len(methods) > 0 {
-					hover = cmd.MethodToHover(symbol, *methods[0])
-					break
-				}
+		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+			methods = append(methods, store.GetMethods(scopeType.GetFQN(), v.Name)...)
+			if len(methods) > 0 {
+				hover = cmd.MethodToHover(symbol, *methods[0])
+				break
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
