@@ -24,6 +24,11 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.EchoIntrinsic:              true,
 	phrase.ExpressionList:             true,
 	phrase.ClassDeclarationBody:       true,
+	phrase.TryStatement:               true,
+	phrase.CatchClauseList:            true,
+	phrase.CatchClause:                true,
+	phrase.ReturnStatement:            true,
+	phrase.ObjectCreationExpression:   true,
 }
 
 func scanForChildren(document *Document, node *phrase.Phrase) {

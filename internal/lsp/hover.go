@@ -6,19 +6,22 @@ import (
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/cmd"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/pkg/errors"
 )
 
 func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*protocol.Hover, error) {
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, errors.Errorf("store not found for %s", uri)
+		return nil, StoreNotFound(uri)
 	}
 	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return nil, DocumentNotFound(uri)
+	}
 	document.Load()
 	symbol := document.SymbolAtPos(params.TextDocumentPositionParams.Position)
-	hover := protocol.Hover{}
+	var hover *protocol.Hover = nil
+	// log.Printf("%T %s\n", symbol, symbol.GetLocation())
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
@@ -96,6 +99,8 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				}
 			}
 		}
+	case *analysis.Variable:
+		hover = cmd.VariableToHover(v)
 	}
-	return &hover, nil
+	return hover, nil
 }

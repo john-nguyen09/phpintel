@@ -62,6 +62,7 @@ func (s *entry) getBytes() []byte {
 type Store struct {
 	db            *leveldb.DB
 	documentLocks map[string]sync.Mutex
+	documentMu    sync.Mutex
 	documents     map[string]*Document
 }
 
@@ -84,14 +85,16 @@ func (s *Store) Close() error {
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	var ok bool
+	s.documentMu.Lock()
+	defer s.documentMu.Unlock()
 	if document, ok = s.documents[uri]; !ok {
-		filePath := putil.PathToUri(uri)
+		filePath := putil.UriToPath(uri)
 		data, err := ioutil.ReadFile(filePath)
 		if err != nil {
 			log.Printf("cannot read %s, error: %s", filePath, err)
 			return nil
 		}
-		document := NewDocument(uri, string(data))
+		document = NewDocument(uri, string(data))
 		s.documents[uri] = document
 	}
 	return document
@@ -99,7 +102,20 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 
 func (s *Store) OpenDocument(uri protocol.DocumentURI) {
 	document := s.GetOrCreateDocument(uri)
+	if document == nil {
+		log.Printf("Document %s not found", uri)
+		return
+	}
 	document.Open()
+}
+
+func (s *Store) CloseDocument(uri protocol.DocumentURI) {
+	document := s.GetOrCreateDocument(uri)
+	if document == nil {
+		log.Printf("document %s not found", uri)
+		return
+	}
+	document.Close()
 }
 
 func (s *Store) IndexDocument(filePath string) {
@@ -114,6 +130,17 @@ func (s *Store) IndexDocument(filePath string) {
 	if !document.isOpen {
 		document.Release()
 	}
+}
+
+func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentContentChangeEvent) error {
+	document := s.GetOrCreateDocument(uri)
+	if document == nil {
+		log.Printf("Document %s not found", uri)
+	}
+	document.ApplyChanges(changes)
+	document.Load()
+	s.SyncDocument(document)
+	return nil
 }
 
 func (s *Store) SyncDocument(document *Document) {
@@ -162,7 +189,7 @@ func deleteEntry(batch *leveldb.Batch, entry *entry) {
 }
 
 func (s *Store) GetClasses(name string) []*Class {
-	prefix := []byte("class" + KeySep + name)
+	prefix := []byte("class" + KeySep + name + KeySep)
 	classes := []*Class{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
 	for it.Next() {

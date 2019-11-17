@@ -18,6 +18,7 @@ func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 		if nameLowerCase == "\\define" || nameLowerCase == "define" {
 			return newDefine(document, node)
 		}
+		scanForChildren(document, node)
 	}
 	return nil
 }

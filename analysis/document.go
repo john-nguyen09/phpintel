@@ -97,12 +97,11 @@ func (s *Document) GetURI() string {
 // SetText is a setter for text, at the same time update line offsets
 func (s *Document) SetText(text string) {
 	s.text = []rune(text)
-	s.calculateLineOffsets()
+	s.lineOffsets = calculateLineOffsets(s.text, 0)
 }
 
-func (s *Document) calculateLineOffsets() {
+func calculateLineOffsets(text []rune, offset int) []int {
 	n := 0
-	text := []rune(s.GetText())
 	length := len(text)
 	isLineStart := true
 	lineOffsets := []int{}
@@ -119,16 +118,15 @@ func (s *Document) calculateLineOffsets() {
 			if n < length && text[n] == '\n' {
 				n++
 			}
-			isLineStart = true
-			continue
+			lineOffsets = append(lineOffsets, n+offset)
 		} else if c == '\n' {
-			isLineStart = true
+			lineOffsets = append(lineOffsets, n+offset+1)
 		}
 	}
 	if isLineStart {
 		lineOffsets = append(lineOffsets, n)
 	}
-	s.lineOffsets = lineOffsets
+	return lineOffsets
 }
 
 func (s *Document) lineAt(offset int) int {
@@ -137,11 +135,36 @@ func (s *Document) lineAt(offset int) int {
 	}) - 1
 }
 
+func (s *Document) offsetAtLine(line int) int {
+	if line <= 0 || len(s.lineOffsets) < 1 {
+		return 0
+	}
+	if line > len(s.lineOffsets)-1 {
+		return s.lineOffsets[len(s.lineOffsets)-1]
+	}
+	return s.lineOffsets[line]
+}
+
 func (s *Document) positionAt(offset int) protocol.Position {
 	line := s.lineAt(offset)
 	return protocol.Position{
 		Line:      line,
 		Character: offset - s.lineOffsets[line],
+	}
+}
+
+func (s *Document) offsetAtPosition(pos protocol.Position) int {
+	offset := s.offsetAtLine(pos.Line) + pos.Character
+	min := 0
+	if offset < len(s.text) {
+		min = offset
+	} else {
+		min = len(s.text)
+	}
+	if 0 > min {
+		return 0
+	} else {
+		return min
 	}
 }
 
@@ -233,19 +256,48 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
-func (s *Document) SymbolAt(offset int) Symbol {
+func (s *Document) SymbolAt(offset int) HasTypes {
 	pos := s.positionAt(offset)
 	return s.SymbolAtPos(pos)
 }
 
-func (s *Document) SymbolAtPos(pos protocol.Position) Symbol {
+func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	index := sort.Search(len(s.Children), func(i int) bool {
 		location := s.Children[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
-	symbol := s.Children[index]
-	if util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
-		return symbol
+	for _, symbol := range s.Children[index:] {
+		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
+		if inRange > 0 {
+			break
+		}
+		if hasTypes, ok := symbol.(HasTypes); ok && inRange == 0 {
+			return hasTypes
+		}
 	}
 	return nil
+}
+
+func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
+	for _, change := range changes {
+		start := change.Range.Start
+		end := change.Range.End
+		text := []rune(change.Text)
+
+		startOffset := s.offsetAtPosition(start)
+		endOffset := s.offsetAtPosition(end)
+		s.text = append(s.text, s.text[0:startOffset]...)
+		s.text = append(s.text, text...)
+		s.text = append(s.text, s.text[endOffset:]...)
+
+		newLineOffsets := s.lineOffsets[0:change.Range.Start.Line]
+		lengthDiff := len(text) - (endOffset - startOffset)
+		newLineOffsets = append(newLineOffsets, calculateLineOffsets(text, startOffset)[1:]...)
+		endLineOffsets := s.lineOffsets[end.Line+1:]
+		for _, endLineOffset := range endLineOffsets {
+			newLineOffsets = append(newLineOffsets, endLineOffset+lengthDiff)
+		}
+		s.lineOffsets = newLineOffsets
+	}
+	s.isLoaded = false
 }

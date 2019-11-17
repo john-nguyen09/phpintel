@@ -57,7 +57,7 @@ func (s *workspaceStore) addView(uri protocol.DocumentURI) {
 		// folder fails to grasp the storagePath
 		panic(err)
 	}
-	s.stores[hash] = store
+	s.stores[uri] = store
 	folderPath := util.UriToPath(uri)
 	s.indexFolder(folderPath)
 }

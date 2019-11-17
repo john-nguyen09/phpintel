@@ -10,6 +10,7 @@ import (
 // Variable represents a reference to the variable
 type Variable struct {
 	Expression
+	description string
 }
 
 func newVariableExpression(document *Document, node *phrase.Phrase) HasTypes {
@@ -51,6 +52,10 @@ func (s *Variable) GetTypes() TypeComposite {
 		types.add(typeString)
 	}
 	return types
+}
+
+func (s *Variable) GetDescription() string {
+	return s.description
 }
 
 func (s *Variable) MarshalJSON() ([]byte, error) {

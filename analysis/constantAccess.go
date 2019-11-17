@@ -36,6 +36,7 @@ func (s *ConstantAccess) GetLocation() protocol.Location {
 
 func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
 	s.Name = document.GetNodeText(node)
+	s.Type.add(newTypeString(s.Name))
 }
 
 func (s *ConstantAccess) GetTypes() TypeComposite {

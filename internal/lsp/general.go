@@ -42,15 +42,17 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 	}
 	return &protocol.InitializeResult{
 		Capabilities: protocol.ServerCapabilities{
-			CompletionProvider: &protocol.CompletionOptions{
-				TriggerCharacters: []string{"."},
-			},
+			CompletionProvider: nil,
+			// CompletionProvider: &protocol.CompletionOptions{
+			// 	TriggerCharacters: []string{"."},
+			// },
 			DefinitionProvider:     true,
-			DocumentSymbolProvider: true,
+			DocumentSymbolProvider: false,
 			HoverProvider:          true,
-			SignatureHelpProvider: &protocol.SignatureHelpOptions{
-				TriggerCharacters: []string{"(", ","},
-			},
+			SignatureHelpProvider:  nil,
+			// SignatureHelpProvider: &protocol.SignatureHelpOptions{
+			// 	TriggerCharacters: []string{"(", ","},
+			// },
 			TextDocumentSync: &protocol.TextDocumentSyncOptions{
 				Change:    protocol.Incremental,
 				OpenClose: true,

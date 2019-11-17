@@ -14,6 +14,7 @@ type Expression struct {
 }
 
 type HasTypes interface {
+	GetLocation() protocol.Location
 	GetTypes() TypeComposite
 }
 

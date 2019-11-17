@@ -17,7 +17,9 @@ import (
 // NewServer starts an LSP server on the supplied stream, and waits until the
 // stream is closed.
 func NewServer(ctx context.Context, stream jsonrpc2.Stream) (context.Context, *Server) {
-	s := &Server{}
+	s := &Server{
+		store: newWorkspaceStore(ctx),
+	}
 	ctx, s.Conn, s.client = protocol.NewServer(ctx, stream, s)
 	return ctx, s
 }
@@ -63,7 +65,7 @@ type Server struct {
 
 	stateMu sync.Mutex
 	state   serverState
-	store   workspaceStore
+	store   *workspaceStore
 
 	pendingFolders []protocol.WorkspaceFolder
 }
@@ -111,7 +113,7 @@ func (s *Server) ExecuteCommand(ctx context.Context, params *protocol.ExecuteCom
 // Text Synchronization
 
 func (s *Server) DidOpen(ctx context.Context, params *protocol.DidOpenTextDocumentParams) error {
-	return nil
+	return s.didOpen(ctx, params)
 }
 
 func (s *Server) DidChange(ctx context.Context, params *protocol.DidChangeTextDocumentParams) error {
@@ -131,7 +133,7 @@ func (s *Server) DidSave(ctx context.Context, params *protocol.DidSaveTextDocume
 }
 
 func (s *Server) DidClose(ctx context.Context, params *protocol.DidCloseTextDocumentParams) error {
-	return nil
+	return s.didClose(ctx, params)
 }
 
 // Language Features
@@ -145,7 +147,7 @@ func (s *Server) Resolve(ctx context.Context, item *protocol.CompletionItem) (*p
 }
 
 func (s *Server) Hover(ctx context.Context, params *protocol.HoverParams) (*protocol.Hover, error) {
-	return nil, notImplemented("Hover")
+	return s.hover(ctx, params)
 }
 
 func (s *Server) SignatureHelp(ctx context.Context, params *protocol.SignatureHelpParams) (*protocol.SignatureHelp, error) {
@@ -153,7 +155,7 @@ func (s *Server) SignatureHelp(ctx context.Context, params *protocol.SignatureHe
 }
 
 func (s *Server) Definition(ctx context.Context, params *protocol.DefinitionParams) ([]protocol.Location, error) {
-	return nil, notImplemented("Definition")
+	return s.definition(ctx, params)
 }
 
 func (s *Server) TypeDefinition(ctx context.Context, params *protocol.TypeDefinitionParams) ([]protocol.Location, error) {

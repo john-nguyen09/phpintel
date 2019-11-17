@@ -15,6 +15,7 @@ func newAssignment(document *Document, node *phrase.Phrase) Symbol {
 			analyseVariableAssignment(document, p, traverser.Clone())
 		}
 	}
+	scanForChildren(document, node)
 	return nil
 }
 
