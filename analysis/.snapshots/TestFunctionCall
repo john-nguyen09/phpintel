@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=6) {
+([]analysis.Symbol) (len=18) {
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -22,7 +22,8 @@
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$file"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -35,6 +36,43 @@
         Range: (protocol.Range) 2:8-2:28
       },
       Name: (string) (len=5) "fopen"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 2:0-2:5
+      },
+      Name: (string) (len=5) "$file"
+    },
+    description: (string) ""
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 2:8-2:28
+      },
+      Name: (string) (len=5) "fopen"
+    }
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      Range: (protocol.Range) 2:14-2:27
+    },
+    arguments: ([]phrase.AstNode) (len=2) {
+      (*lexer.Token)(FileConstant 23 8),
+      (*lexer.Token)(StringLiteral 33 3)
     }
   }),
   (*analysis.Variable)({
@@ -60,7 +98,8 @@
         Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$line"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -75,6 +114,20 @@
       Name: (string) (len=5) "fgets"
     }
   }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 4:8-4:13
+      },
+      Name: (string) (len=5) "$line"
+    },
+    description: (string) ""
+  }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -83,9 +136,37 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 5:3-5:26
+        Range: (protocol.Range) 4:16-4:28
       },
-      Name: (string) (len=6) "printf"
+      Name: (string) (len=5) "fgets"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 4:22-4:27
+      },
+      Name: (string) (len=5) "$file"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      Range: (protocol.Range) 4:22-4:27
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) SimpleVariable,
+        Children: ([]phrase.AstNode) (len=1) {
+          (*lexer.Token)(VariableName 64 5)
+        }
+      })
     }
   }),
   (*analysis.FunctionCall)({
@@ -96,9 +177,120 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 9:111-9:124
+        Range: (protocol.Range) 5:4-5:27
+      },
+      Name: (string) (len=6) "printf"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 5:11-5:16
+      },
+      Name: (string) (len=5) "$line"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=7) "PHP_EOL",
+            original: (string) (len=7) "PHP_EOL"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 5:19-5:26
+      },
+      Name: (string) (len=7) "PHP_EOL"
+    }
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      Range: (protocol.Range) 5:11-5:26
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) AdditiveExpression,
+        Children: ([]phrase.AstNode) (len=5) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) SimpleVariable,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(VariableName 87 5)
+            }
+          }),
+          (*lexer.Token)(Whitespace 92 1),
+          (*lexer.Token)(Dot 93 1),
+          (*lexer.Token)(Whitespace 94 1),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) ConstantAccessExpression,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*phrase.Phrase)({
+                Type: (phrase.PhraseType) QualifiedName,
+                Children: ([]phrase.AstNode) (len=1) {
+                  (*phrase.Phrase)({
+                    Type: (phrase.PhraseType) NamespaceName,
+                    Children: ([]phrase.AstNode) (len=1) {
+                      (*lexer.Token)(Name 95 7)
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 8:0-8:13
       },
       Name: (string) (len=6) "fclose"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        Range: (protocol.Range) 8:7-8:12
+      },
+      Name: (string) (len=5) "$file"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      Range: (protocol.Range) 8:7-8:12
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) SimpleVariable,
+        Children: ([]phrase.AstNode) (len=1) {
+          (*lexer.Token)(VariableName 118 5)
+        }
+      })
     }
   })
 }

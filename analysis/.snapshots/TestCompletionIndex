@@ -1,0 +1,34 @@
+([]*analysis.Class) (len=2) {
+  (*analysis.Class)({
+    Location: (protocol.Location) {
+      URI: (string) (len=63) "file:///C:/Users/Thuan/Development/go/phpintel/cases/method.php",
+      Range: (protocol.Range) 40:0-44:1
+    },
+    Modifier: (analysis.ClassModifierValue) 1,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=23) "TestAbstractMethodClass",
+      original: (string) (len=23) "TestAbstractMethodClass"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    Location: (protocol.Location) {
+      URI: (string) (len=63) "file:///C:/Users/Thuan/Development/go/phpintel/cases/method.php",
+      Range: (protocol.Range) 2:0-38:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=15) "TestMethodClass",
+      original: (string) (len=15) "TestMethodClass"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  })
+}

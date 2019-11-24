@@ -2,7 +2,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=31) "file:///../cases/classConst.php",
-      Range: (protocol.Range) 2:0-5:64
+      Range: (protocol.Range) 2:0-4:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
@@ -18,7 +18,7 @@
   (*analysis.ClassConst)({
     location: (protocol.Location) {
       URI: (string) (len=31) "file:///../cases/classConst.php",
-      Range: (protocol.Range) 5:44-5:60
+      Range: (protocol.Range) 3:10-3:26
     },
     Name: (string) (len=12) "CLASS_CONST1",
     Value: (string) (len=1) "5",

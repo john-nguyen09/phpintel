@@ -46,6 +46,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		phrase.ScopedPropertyAccessExpression: newScopedPropertyAccess,
 		phrase.ScopedCallExpression:           newScopedMethodAccess,
 		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
+		phrase.ErrorScopedAccessExpression:    newScopedConstantAccess,
 		phrase.ClassTypeDesignator:            newClassTypeDesignator,
 		phrase.ObjectCreationExpression:       newClassTypeDesignator,
 		phrase.SimpleVariable:                 newVariableExpression,

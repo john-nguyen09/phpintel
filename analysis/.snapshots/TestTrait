@@ -2,7 +2,7 @@
   (*analysis.Trait)({
     location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/trait.php",
-      Range: (protocol.Range) 2:0-5:36
+      Range: (protocol.Range) 2:0-4:1
     },
     Name: (analysis.TypeString) {
       fqn: (string) (len=10) "TestTrait1",

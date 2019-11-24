@@ -20,7 +20,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 		location: document.GetNodeLocation(node),
 		Params:   make([]Parameter, 0),
 	}
-	document.pushVariableTable()
+	document.pushVariableTable(node)
 
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -100,6 +100,18 @@ func (s *Function) GetCollection() string {
 
 func (s *Function) GetKey() string {
 	return s.Name + KeySep + s.location.URI
+}
+
+func (s *Function) GetIndexableName() string {
+	return s.Name
+}
+
+func (s *Function) GetIndexCollection() string {
+	return functionCompletionIndex
+}
+
+func (s *Function) GetPrefix() string {
+	return ""
 }
 
 func (s *Function) Serialise(serialiser *Serialiser) {

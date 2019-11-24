@@ -72,6 +72,18 @@ func (s *Define) GetKey() string {
 	return s.Name.fqn + KeySep + s.location.URI
 }
 
+func (s *Define) GetIndexableName() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Define) GetIndexCollection() string {
+	return defineCompletionIndex
+}
+
+func (s *Define) GetPrefix() string {
+	return ""
+}
+
 func (s *Define) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	s.Name.Write(serialiser)

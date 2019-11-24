@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"encoding/json"
-	"log"
 	"sort"
 	"sync"
 
@@ -21,12 +20,39 @@ type Document struct {
 	loadMu         sync.Mutex
 	isLoaded       bool
 	isOpen         bool
-	variableTables []variableTable
+	variableTables []VariableTable
 	Children       []Symbol `json:"children"`
 	classStack     []Symbol
 }
 
-type variableTable map[string]*Variable
+// VariableTable holds the range and the variables inside
+type VariableTable struct {
+	locationRange protocol.Range
+	variables     map[string]*Variable
+}
+
+func newVariableTable(locationRange protocol.Range) VariableTable {
+	return VariableTable{
+		locationRange: locationRange,
+		variables:     map[string]*Variable{},
+	}
+}
+
+func (vt *VariableTable) add(variable *Variable) {
+	vt.variables[variable.Name] = variable
+}
+
+func (vt *VariableTable) get(name string) *Variable {
+	if variable, ok := vt.variables[name]; ok {
+		return variable
+	}
+	return nil
+}
+
+// GetVariables returns all the variables in the table
+func (vt *VariableTable) GetVariables() map[string]*Variable {
+	return vt.variables
+}
 
 // MarshalJSON is used for json.Marshal
 func (s *Document) MarshalJSON() ([]byte, error) {
@@ -62,8 +88,8 @@ func (s *Document) Close() {
 // Load makes sure that symbols are available
 func (s *Document) Load() {
 	if !s.isLoaded {
-		s.pushVariableTable()
 		rootNode := parser.Parse(string(s.GetText()))
+		s.pushVariableTable(rootNode)
 		scanForChildren(s, rootNode)
 		s.isLoaded = true
 	}
@@ -80,7 +106,7 @@ func (s *Document) LockToDo(thing func(*Document)) {
 
 // Release releases symbols to save memory
 func (s *Document) Release() {
-	s.variableTables = []variableTable{}
+	s.variableTables = []VariableTable{}
 	s.Children = []Symbol{}
 	s.classStack = []Symbol{}
 	s.isLoaded = false
@@ -164,12 +190,11 @@ func (s *Document) offsetAtPosition(pos protocol.Position) int {
 	}
 	if 0 > min {
 		return 0
-	} else {
-		return min
 	}
+	return min
 }
 
-func (s *Document) NodeRange(node phrase.AstNode) protocol.Range {
+func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
 	var start, end int
 
 	switch node := node.(type) {
@@ -195,7 +220,7 @@ func (s *Document) GetText() []rune {
 func (s *Document) GetNodeLocation(node phrase.AstNode) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
-		Range: s.NodeRange(node),
+		Range: s.nodeRange(node),
 	}
 }
 
@@ -224,20 +249,43 @@ func (s *Document) addSymbol(other Symbol) {
 	s.Children = append(s.Children, other)
 }
 
-func (s *Document) pushVariableTable() {
-	s.variableTables = append(s.variableTables, variableTable{})
+func (s *Document) pushVariableTable(node *phrase.Phrase) {
+	s.variableTables = append(s.variableTables, newVariableTable(s.nodeRange(node)))
 }
 
-func (s *Document) getCurrentVariableTable() variableTable {
+func (s *Document) getCurrentVariableTable() VariableTable {
 	return s.variableTables[len(s.variableTables)-1]
+}
+
+// GetVariableTableAt returns the closest variable table which is in range
+func (s *Document) GetVariableTableAt(pos protocol.Position) VariableTable {
+	found := s.variableTables[0] // First one is always the document
+	foundOne := false
+	// The algorithm is that the first one is in range means the next ones
+	// might also be in range so it goes on until no more in-range ones
+	// and return the last one in range
+	for _, varTable := range s.variableTables {
+		if util.IsInRange(pos, varTable.locationRange) == 0 {
+			found = varTable
+			foundOne = true
+		} else {
+			if foundOne {
+				return found
+			}
+		}
+	}
+	// If this is reached then pos is either outside the range of document variableTable
+	// therefore returning the document variableTable
+	return found
 }
 
 func (s *Document) pushVariable(variable *Variable) {
 	variableTable := s.getCurrentVariableTable()
-	if currentVariable, ok := variableTable[variable.Name]; ok {
+	currentVariable := variableTable.get(variable.Name)
+	if currentVariable != nil {
 		variable.mergeTypesWithVariable(currentVariable)
 	}
-	variableTable[variable.Name] = variable
+	variableTable.add(variable)
 }
 
 // Even though the name indicates class but actually this will also
@@ -257,11 +305,13 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
+// SymbolAt is an interface to SymbolAtPos but with offset
 func (s *Document) SymbolAt(offset int) HasTypes {
 	pos := s.positionAt(offset)
 	return s.SymbolAtPos(pos)
 }
 
+// SymbolAtPos returns a HasTypes symbol at the position
 func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	index := sort.Search(len(s.Children), func(i int) bool {
 		location := s.Children[i].GetLocation()
@@ -279,6 +329,7 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	return nil
 }
 
+// ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
 	for _, change := range changes {
 		start := change.Range.Start
@@ -287,7 +338,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 
 		startOffset := s.offsetAtPosition(start)
 		endOffset := s.offsetAtPosition(end)
-		newText := s.text[0:startOffset]
+		newText := append(s.text[:0:0], s.text[0:startOffset]...)
 		newText = append(newText, text...)
 		newText = append(newText, s.text[endOffset:]...)
 		s.text = newText
@@ -307,7 +358,6 @@ func (s *Document) getLines() []string {
 	lines := []string{}
 	text := s.GetText()
 	lineOffsets := s.lineOffsets
-	log.Println(string(text))
 
 	start, lineOffsets := s.lineOffsets[0], lineOffsets[1:]
 	for index, lineOffset := range lineOffsets {

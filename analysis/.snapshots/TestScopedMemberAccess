@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=12) {
+([]analysis.Symbol) (len=15) {
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -60,7 +60,7 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 2:20-3:8
+        Range: (protocol.Range) 3:0-3:9
       },
       Name: (string) (len=9) "TestClass"
     }
@@ -83,14 +83,14 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
-            Range: (protocol.Range) 2:20-3:8
+            Range: (protocol.Range) 3:0-3:9
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 3:10-3:16
+        Range: (protocol.Range) 3:11-3:17
       },
       Name: (string) (len=6) "CONST1"
     }
@@ -108,7 +108,7 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 3:19-4:8
+        Range: (protocol.Range) 4:0-4:9
       },
       Name: (string) (len=9) "TestClass"
     }
@@ -131,14 +131,14 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
-            Range: (protocol.Range) 3:19-4:8
+            Range: (protocol.Range) 4:0-4:9
           },
           Name: (string) (len=9) "TestClass"
         }
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 4:10-4:17
+        Range: (protocol.Range) 4:11-4:18
       },
       Name: (string) (len=7) "method1"
     }
@@ -171,6 +171,62 @@
         Range: (protocol.Range) 6:0-6:9
       },
       Name: (string) (len=9) "$instance"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:16-6:25
+      },
+      Name: (string) (len=9) "TestClass"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:0-6:9
+      },
+      Name: (string) (len=9) "$instance"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "TestClass",
+            original: (string) (len=9) "TestClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=33) "file:///../cases/memberAccess.php",
+        Range: (protocol.Range) 6:16-6:25
+      },
+      Name: (string) (len=9) "TestClass"
     }
   }),
   (*analysis.ClassTypeDesignator)({
@@ -204,10 +260,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 6:28-7:8
+        Range: (protocol.Range) 7:0-7:9
       },
       Name: (string) (len=9) "$instance"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.PropertyAccess)({
     Expression: (analysis.Expression) {
@@ -227,14 +284,15 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
-            Range: (protocol.Range) 6:28-7:8
+            Range: (protocol.Range) 7:0-7:9
           },
           Name: (string) (len=9) "$instance"
-        }
+        },
+        description: (string) ""
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 6:28-7:15
+        Range: (protocol.Range) 7:0-7:16
       },
       Name: (string) (len=5) "prop2"
     }
@@ -252,10 +310,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 7:18-9:130
+        Range: (protocol.Range) 8:0-8:9
       },
       Name: (string) (len=9) "$instance"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.MethodAccess)({
     Expression: (analysis.Expression) {
@@ -275,14 +334,15 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/memberAccess.php",
-            Range: (protocol.Range) 7:18-9:130
+            Range: (protocol.Range) 8:0-8:9
           },
           Name: (string) (len=9) "$instance"
-        }
+        },
+        description: (string) ""
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 7:18-9:141
+        Range: (protocol.Range) 8:0-8:20
       },
       Name: (string) (len=7) "method2"
     }

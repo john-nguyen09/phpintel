@@ -1,0 +1,50 @@
+([]analysis.Symbol) (len=2) {
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+        Range: (protocol.Range) 1:0-1:15
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  }),
+  (*analysis.ScopedConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=15) "TestMethodClass",
+                original: (string) (len=15) "TestMethodClass"
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+            Range: (protocol.Range) 1:0-1:15
+          },
+          Name: (string) (len=15) "TestMethodClass"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+        Range: (protocol.Range) 1:17-1:17
+      },
+      Name: (string) ""
+    }
+  })
+}

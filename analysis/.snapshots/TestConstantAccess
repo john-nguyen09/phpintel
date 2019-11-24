@@ -1,8 +1,13 @@
-([]analysis.Symbol) (len=5) {
+([]analysis.Symbol) (len=9) {
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=7) "__DIR__",
+            original: (string) (len=7) "__DIR__"
+          }
+        }
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -23,6 +28,39 @@
         Range: (protocol.Range) 4:0-4:11
       },
       Name: (string) (len=11) "$currentDir"
+    },
+    description: (string) ""
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 4:0-4:11
+      },
+      Name: (string) (len=11) "$currentDir"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=7) "__DIR__",
+            original: (string) (len=7) "__DIR__"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 4:14-4:21
+      },
+      Name: (string) (len=7) "__DIR__"
     }
   }),
   (*analysis.Variable)({
@@ -33,15 +71,53 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
-        Range: (protocol.Range) 4:24-5:13
+        Range: (protocol.Range) 5:0-5:14
       },
       Name: (string) (len=14) "$randomInclude"
+    },
+    description: (string) ""
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 5:0-5:14
+      },
+      Name: (string) (len=14) "$randomInclude"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=7) "__DIR__",
+            original: (string) (len=7) "__DIR__"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/constantAccess.php",
+        Range: (protocol.Range) 5:25-5:32
+      },
+      Name: (string) (len=7) "__DIR__"
     }
   }),
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "TEST_CONST1",
+            original: (string) (len=11) "TEST_CONST1"
+          }
+        }
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -54,12 +130,17 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=7) "__DIR__",
+            original: (string) (len=7) "__DIR__"
+          }
+        }
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=35) "file:///../cases/constantAccess.php",
-        Range: (protocol.Range) 10:128-10:135
+        Range: (protocol.Range) 8:9-8:16
       },
       Name: (string) (len=7) "__DIR__"
     }

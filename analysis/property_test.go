@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -44,7 +43,6 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 			if after != original {
 				t.Errorf("%s != %s\n", original, after)
 			}
-			fmt.Println(after)
 		}
 	}
 }

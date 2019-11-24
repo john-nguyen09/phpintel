@@ -73,6 +73,18 @@ func (s *Method) GetKey() string {
 	return s.Scope.fqn + KeySep + s.Name + KeySep + s.location.URI
 }
 
+func (s *Method) GetIndexableName() string {
+	return s.Name
+}
+
+func (s *Method) GetIndexCollection() string {
+	return methodCompletionIndex
+}
+
+func (s *Method) GetPrefix() string {
+	return s.Scope.GetFQN()
+}
+
 func (s *Method) Serialise(serialiser *Serialiser) {
 	s.Function.Serialise(serialiser)
 	s.Scope.Write(serialiser)

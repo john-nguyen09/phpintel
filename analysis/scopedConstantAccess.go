@@ -2,8 +2,8 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 // ScopedConstantAccess represents a reference to constant in class access, e.g. ::CONSTANT

@@ -13,7 +13,7 @@
   (*analysis.Interface)({
     location: (protocol.Location) {
       URI: (string) (len=30) "file:///../cases/interface.php",
-      Range: (protocol.Range) 8:44-8:94
+      Range: (protocol.Range) 7:0-7:50
     },
     Name: (analysis.TypeString) {
       fqn: (string) (len=14) "TestInterface2",

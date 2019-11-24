@@ -168,6 +168,18 @@ func (s *Class) GetKey() string {
 	return s.Name.fqn + KeySep + s.Location.URI
 }
 
+func (s *Class) GetIndexableName() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Class) GetIndexCollection() string {
+	return classCompletionIndex
+}
+
+func (s *Class) GetPrefix() string {
+	return ""
+}
+
 func (s *Class) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.Location)
 	serialiser.WriteInt(int(s.Modifier))

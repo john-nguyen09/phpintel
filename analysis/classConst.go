@@ -82,6 +82,18 @@ func (s *ClassConst) GetKey() string {
 	return s.Scope.fqn + KeySep + s.Name
 }
 
+func (s *ClassConst) GetIndexableName() string {
+	return s.GetName()
+}
+
+func (s *ClassConst) GetIndexCollection() string {
+	return classConstCompletionIndex
+}
+
+func (s *ClassConst) GetPrefix() string {
+	return s.Scope.GetFQN()
+}
+
 func (s *ClassConst) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

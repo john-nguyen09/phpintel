@@ -2,7 +2,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=27) "file:///../cases/method.php",
-      Range: (protocol.Range) 2:0-38:0
+      Range: (protocol.Range) 2:0-38:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
@@ -19,7 +19,7 @@
     Function: (analysis.Function) {
       location: (protocol.Location) {
         URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 3:3-5:5
+        Range: (protocol.Range) 3:4-5:5
       },
       Name: (string) (len=11) "testMethod1",
       Params: ([]analysis.Parameter) {
@@ -207,7 +207,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=27) "file:///../cases/method.php",
-      Range: (protocol.Range) 40:0-45:767
+      Range: (protocol.Range) 40:0-44:1
     },
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
@@ -224,7 +224,7 @@
     Function: (analysis.Function) {
       location: (protocol.Location) {
         URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 41:3-41:44
+        Range: (protocol.Range) 41:4-41:45
       },
       Name: (string) (len=12) "testMethod10",
       Params: ([]analysis.Parameter) {
@@ -242,7 +242,7 @@
     Function: (analysis.Function) {
       location: (protocol.Location) {
         URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 42:3-42:46
+        Range: (protocol.Range) 42:4-42:47
       },
       Name: (string) (len=12) "testMethod11",
       Params: ([]analysis.Parameter) {
@@ -260,7 +260,7 @@
     Function: (analysis.Function) {
       location: (protocol.Location) {
         URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 43:3-43:61
+        Range: (protocol.Range) 43:4-43:62
       },
       Name: (string) (len=12) "testMethod12",
       Params: ([]analysis.Parameter) {

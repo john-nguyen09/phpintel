@@ -67,6 +67,18 @@ func (s *Trait) GetKey() string {
 	return s.Name.fqn + KeySep + s.location.URI
 }
 
+func (s *Trait) GetIndexableName() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Trait) GetIndexCollection() string {
+	return traitCompletionIndex
+}
+
+func (s *Trait) GetPrefix() string {
+	return ""
+}
+
 func (s *Trait) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	s.Name.Write(serialiser)

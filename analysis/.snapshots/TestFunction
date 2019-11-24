@@ -2,7 +2,7 @@
   (*analysis.Function)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/function.php",
-      Range: (protocol.Range) 2:0-5:67
+      Range: (protocol.Range) 2:0-4:1
     },
     Name: (string) (len=12) "testFunction",
     Params: ([]analysis.Parameter) (len=1) {

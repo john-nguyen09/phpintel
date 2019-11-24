@@ -2,7 +2,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 2:0-4:0
+      Range: (protocol.Range) 2:0-4:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
@@ -64,7 +64,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 12:3-14:253
+      Range: (protocol.Range) 13:0-13:78
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {

@@ -2,11 +2,10 @@ package analysis
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"testing"
 
+	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -57,11 +56,17 @@ func TestSymbolAt(t *testing.T) {
 	document := NewDocument(util.PathToUri(memberAccess), string(data))
 	document.Load()
 	symbol := document.SymbolAt(14)
-	fmt.Printf("%T\n", symbol)
+	if _, ok := symbol.(*ClassAccess); !ok {
+		t.Errorf("symbolAt(14) is not *ClassAccess but %T", symbol)
+	}
 	symbol = document.SymbolAt(20)
-	fmt.Printf("%T\n", symbol)
+	if _, ok := symbol.(*ScopedPropertyAccess); !ok {
+		t.Errorf("symbolAt(20) is not *ScopedPropertyAccess but %T", symbol)
+	}
 	symbol = document.SymbolAt(19)
-	fmt.Printf("%T\n", symbol)
+	if symbol != nil {
+		t.Errorf("symbolAt(19) is not nil but %T", symbol)
+	}
 }
 
 func TestApplyChanges(t *testing.T) {
@@ -83,5 +88,5 @@ func TestApplyChanges(t *testing.T) {
 		},
 	})
 	data, _ := json.MarshalIndent(document.getLines(), "", "  ")
-	log.Println(string(data))
+	cupaloy.SnapshotT(t, string(data))
 }

@@ -91,6 +91,18 @@ func (s *Interface) GetKey() string {
 	return s.Name.fqn + KeySep + s.location.URI
 }
 
+func (s *Interface) GetIndexableName() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Interface) GetIndexCollection() string {
+	return interfaceCompletionIndex
+}
+
+func (s *Interface) getPrefix() string {
+	return ""
+}
+
 func (s *Interface) Serialise() []byte {
 	serialiser := NewSerialiser()
 	serialiser.WriteLocation(s.location)

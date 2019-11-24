@@ -42,6 +42,13 @@ type Definition interface {
 	GetDescription() string
 }
 
+// NameIndexable indicates a symbol is name indexable, i.e. have completion
+type NameIndexable interface {
+	GetIndexableName() string
+	GetIndexCollection() string
+	GetPrefix() string
+}
+
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
 	return newTypeString(string(document.GetNodeText(p)))
 }

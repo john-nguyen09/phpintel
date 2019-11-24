@@ -139,7 +139,7 @@ func (s *Server) DidClose(ctx context.Context, params *protocol.DidCloseTextDocu
 // Language Features
 
 func (s *Server) Completion(ctx context.Context, params *protocol.CompletionParams) (*protocol.CompletionList, error) {
-	return nil, notImplemented("Completion")
+	return s.completion(ctx, params)
 }
 
 func (s *Server) Resolve(ctx context.Context, item *protocol.CompletionItem) (*protocol.CompletionItem, error) {

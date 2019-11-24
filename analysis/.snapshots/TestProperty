@@ -2,7 +2,7 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 2:0-20:425
+      Range: (protocol.Range) 2:0-19:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
@@ -18,7 +18,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 3:18-3:30
+      Range: (protocol.Range) 3:19-3:31
     },
     Name: (string) (len=12) "$staticProp1",
     Scope: (analysis.TypeString) {
@@ -31,7 +31,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 4:20-4:32
+      Range: (protocol.Range) 4:21-4:33
     },
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
@@ -44,7 +44,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 5:17-5:29
+      Range: (protocol.Range) 5:18-5:30
     },
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
@@ -57,7 +57,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 6:10-6:36
+      Range: (protocol.Range) 6:11-6:37
     },
     Name: (string) (len=12) "$staticProp4",
     Scope: (analysis.TypeString) {
@@ -70,7 +70,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 7:18-7:44
+      Range: (protocol.Range) 7:19-7:45
     },
     Name: (string) (len=12) "$staticProp6",
     Scope: (analysis.TypeString) {
@@ -96,7 +96,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 10:13-10:19
+      Range: (protocol.Range) 10:14-10:20
     },
     Name: (string) (len=6) "$prop2",
     Scope: (analysis.TypeString) {
@@ -109,7 +109,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 11:10-11:16
+      Range: (protocol.Range) 11:11-11:17
     },
     Name: (string) (len=6) "$prop3",
     Scope: (analysis.TypeString) {
@@ -122,7 +122,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 12:7-12:21
+      Range: (protocol.Range) 12:8-12:22
     },
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
@@ -135,7 +135,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 13:13-13:27
+      Range: (protocol.Range) 13:14-13:28
     },
     Name: (string) (len=6) "$prop7",
     Scope: (analysis.TypeString) {
@@ -148,7 +148,7 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
-      Range: (protocol.Range) 18:10-18:16
+      Range: (protocol.Range) 18:11-18:17
     },
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {

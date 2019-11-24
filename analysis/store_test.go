@@ -17,7 +17,7 @@ func TestStore(t *testing.T) {
 
 	document := NewDocument(util.PathToUri(classTest), string(data))
 	document.Load()
-	store, err := NewStore("./testData")
+	store, err := NewStore("./testData/TestStore")
 	defer store.Close()
 	if err != nil {
 		panic(err)

@@ -20,6 +20,10 @@ func FirstToken(node phrase.AstNode) *lexer.Token {
 		}
 	}
 
+	if pe, ok := node.(*phrase.ParseError); ok {
+		return pe.Unexpected
+	}
+
 	return nil
 }
 
@@ -36,6 +40,10 @@ func LastToken(node phrase.AstNode) *lexer.Token {
 				return t
 			}
 		}
+	}
+
+	if pe, ok := node.(*phrase.ParseError); ok {
+		return pe.Unexpected
 	}
 
 	return nil

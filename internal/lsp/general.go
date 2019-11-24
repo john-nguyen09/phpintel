@@ -42,10 +42,12 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 	}
 	return &protocol.InitializeResult{
 		Capabilities: protocol.ServerCapabilities{
-			CompletionProvider: nil,
-			// CompletionProvider: &protocol.CompletionOptions{
-			// 	TriggerCharacters: []string{"."},
-			// },
+			CompletionProvider: &protocol.CompletionOptions{
+				TriggerCharacters: []string{
+					"$", ">", ":",
+					".", "<", "/",
+				},
+			},
 			DefinitionProvider:     true,
 			DocumentSymbolProvider: false,
 			HoverProvider:          true,

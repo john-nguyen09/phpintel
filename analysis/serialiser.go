@@ -101,15 +101,11 @@ func (s *Serialiser) ReadInt64() int64 {
 
 func (s *Serialiser) WriteString(theString string) {
 	theBytes := []byte(theString)
-	count := len(theBytes)
-	s.WriteInt(count)
-	s.buf = append(s.buf, theBytes...)
+	s.WriteBytes(theBytes)
 }
 
 func (s *Serialiser) ReadString() string {
-	count := s.ReadInt()
-	theBytes := append(s.buf[:0:0], s.buf[s.index:s.index+count]...)
-	s.index += count
+	theBytes := s.ReadBytes()
 	return string(theBytes)
 }
 
@@ -141,6 +137,19 @@ func (s *Serialiser) WriteLocation(location protocol.Location) {
 func (s *Serialiser) WritePosition(position protocol.Position) {
 	s.WriteInt(position.Line)
 	s.WriteInt(position.Character)
+}
+
+func (s *Serialiser) WriteBytes(theBytes []byte) {
+	count := len(theBytes)
+	s.WriteInt(count)
+	s.buf = append(s.buf, theBytes...)
+}
+
+func (s *Serialiser) ReadBytes() []byte {
+	count := s.ReadInt()
+	theBytes := append(s.buf[:0:0], s.buf[s.index:s.index+count]...)
+	s.index += count
+	return theBytes
 }
 
 func (s *Serialiser) ReadLocation() protocol.Location {

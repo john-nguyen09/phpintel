@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=9) {
+([]analysis.Symbol) (len=23) {
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -27,6 +27,62 @@
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$var1"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 2:12-2:22
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 2:0-2:5
+      },
+      Name: (string) (len=5) "$var1"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 2:12-2:22
+      },
+      Name: (string) (len=10) "TestClass1"
     }
   }),
   (*analysis.ClassTypeDesignator)({
@@ -60,17 +116,18 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-            Range: (protocol.Range) 3:7-3:22
+            Range: (protocol.Range) 3:8-3:23
           },
           Name: (string) (len=13) "testFunction1"
         }
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 2:27-3:4
+        Range: (protocol.Range) 3:0-3:5
       },
       Name: (string) (len=5) "$var2"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -80,7 +137,34 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 3:7-3:22
+        Range: (protocol.Range) 3:8-3:23
+      },
+      Name: (string) (len=13) "testFunction1"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 3:0-3:5
+      },
+      Name: (string) (len=5) "$var2"
+    },
+    description: (string) ""
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 3:8-3:23
       },
       Name: (string) (len=13) "testFunction1"
     }
@@ -103,17 +187,19 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-            Range: (protocol.Range) 4:7-4:12
+            Range: (protocol.Range) 4:8-4:13
           },
           Name: (string) (len=5) "$var1"
-        }
+        },
+        description: (string) ""
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 3:25-4:4
+        Range: (protocol.Range) 4:0-4:5
       },
       Name: (string) (len=5) "$var3"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -128,10 +214,49 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 4:7-4:12
+        Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$var1"
-    }
+    },
+    description: (string) ""
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 4:0-4:5
+      },
+      Name: (string) (len=5) "$var3"
+    },
+    description: (string) ""
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 4:8-4:13
+      },
+      Name: (string) (len=5) "$var1"
+    },
+    description: (string) ""
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -156,24 +281,25 @@
               Scope: (analysis.HasTypes) <nil>,
               Location: (protocol.Location) {
                 URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-                Range: (protocol.Range) 6:86-6:96
+                Range: (protocol.Range) 5:8-5:18
               },
               Name: (string) (len=10) "TestClass1"
             }
           }),
           Location: (protocol.Location) {
             URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-            Range: (protocol.Range) 6:98-6:105
+            Range: (protocol.Range) 5:20-5:27
           },
           Name: (string) (len=7) "method1"
         }
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 4:15-6:83
+        Range: (protocol.Range) 5:0-5:5
       },
       Name: (string) (len=5) "$var4"
-    }
+    },
+    description: (string) ""
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
@@ -188,7 +314,7 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 6:86-6:96
+        Range: (protocol.Range) 5:8-5:18
       },
       Name: (string) (len=10) "TestClass1"
     }
@@ -211,16 +337,174 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-            Range: (protocol.Range) 6:86-6:96
+            Range: (protocol.Range) 5:8-5:18
           },
           Name: (string) (len=10) "TestClass1"
         }
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 6:98-6:105
+        Range: (protocol.Range) 5:20-5:27
       },
       Name: (string) (len=7) "method1"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 5:0-5:5
+      },
+      Name: (string) (len=5) "$var4"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "TestClass1",
+            original: (string) (len=10) "TestClass1"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 5:8-5:18
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=10) "TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            Range: (protocol.Range) 5:8-5:18
+          },
+          Name: (string) (len=10) "TestClass1"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 5:20-5:27
+      },
+      Name: (string) (len=7) "method1"
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 6:0-6:15
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=15) "TestMethodClass",
+                original: (string) (len=15) "TestMethodClass"
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            Range: (protocol.Range) 6:0-6:15
+          },
+          Name: (string) (len=15) "TestMethodClass"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 6:17-6:28
+      },
+      Name: (string) (len=11) "testMethod6"
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 7:0-7:15
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=15) "TestMethodClass",
+                original: (string) (len=15) "TestMethodClass"
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            Range: (protocol.Range) 7:0-7:15
+          },
+          Name: (string) (len=15) "TestMethodClass"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        Range: (protocol.Range) 7:17-7:28
+      },
+      Name: (string) (len=11) "testMethod3"
     }
   })
 }

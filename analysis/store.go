@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
@@ -23,7 +24,20 @@ const (
 	methodCollection     string = "method"
 	classConstCollection string = "classConst"
 	propertyCollection   string = "property"
+
+	documentCompletionIndices string = "documentCompletionIndices"
+	functionCompletionIndex   string = "functionCompletionIndex"
+	constCompletionIndex      string = "constCompletionIndex"
+	defineCompletionIndex     string = "defineCompletionIndex"
+	classCompletionIndex      string = "classCompletionIndex"
+	interfaceCompletionIndex  string = "interfaceCompletionindex"
+	traitCompletionIndex      string = "traitCompletionIndex"
+	methodCompletionIndex     string = "methodCompletionIndex"
+	propertyCompletionIndex   string = "propertyCompletionIndex"
+	classConstCompletionIndex string = "classConstCompletionIndex"
 )
+
+const scopeSep = "::"
 
 // KeySep is the separator when constructing key
 const KeySep string = "\x00"
@@ -44,11 +58,8 @@ func (s *entry) getSerialiser() *Serialiser {
 	return s.serialiser
 }
 
-func (s *entry) getKeyRange() *util.Range {
-	return &util.Range{
-		Start: append(s.getKeyBytes(), '\x00'),
-		Limit: append(s.getKeyBytes(), '\xFF'),
-	}
+func (s *entry) prefixRange() *util.Range {
+	return util.BytesPrefix(s.getKeyBytes())
 }
 
 func (s *entry) getKeyBytes() []byte {
@@ -133,6 +144,7 @@ func (s *Store) IndexDocument(filePath string) {
 }
 
 func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentContentChangeEvent) error {
+	defer putil.TimeTrack(time.Now(), "ChangeDocument")
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
 		log.Printf("Document %s not found", uri)
@@ -159,22 +171,28 @@ func (s *Store) SyncDocument(document *Document) {
 
 func (s *Store) forgetAllSymbols(batch *leveldb.Batch, document *Document) {
 	entry := newEntry(documentSymbols, document.GetURI()+KeySep)
-	it := s.db.NewIterator(entry.getKeyRange(), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	defer it.Release()
 	for it.Next() {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
 		toBeDelete := newEntry(keyInfo[1], keyInfo[2])
 		deleteEntry(batch, toBeDelete)
 	}
+	deleteCompletionIndex(s.db, batch, document.GetURI())
 }
 
 func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
-			entry := newEntry(serialisable.GetCollection(), serialisable.GetKey())
+			key := serialisable.GetKey()
+			entry := newEntry(serialisable.GetCollection(), key)
 			serialisable.Serialise(entry.serialiser)
 			writeEntry(batch, entry)
 			rememberSymbol(batch, document, serialisable)
+
+			if indexable, ok := child.(NameIndexable); ok {
+				indexName(batch, document, indexable, key)
+			}
 		}
 	}
 }
@@ -182,6 +200,13 @@ func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
 func rememberSymbol(batch *leveldb.Batch, document *Document, serialisable Serialisable) {
 	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
 	writeEntry(batch, entry)
+}
+
+func indexName(batch *leveldb.Batch, document *Document, indexable NameIndexable, key string) {
+	entries := createCompletionEntries(document.GetURI(), indexable, key)
+	for _, entry := range entries {
+		writeEntry(batch, entry)
+	}
 }
 
 func writeEntry(batch *leveldb.Batch, entry *entry) {
@@ -203,12 +228,44 @@ func (s *Store) GetClasses(name string) []*Class {
 	return classes
 }
 
+func (s *Store) SearchClasses(keyword string) []*Class {
+	completionValues := searchCompletions(s.db, classCompletionIndex, keyword, "")
+	classes := []*Class{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(classCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
+		classes = append(classes, ReadClass(serialiser))
+	}
+	return classes
+}
+
 func (s *Store) GetInterfaces(name string) []*Interface {
 	prefix := []byte("interface" + KeySep + name)
 	interfaces := []*Interface{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
+		interfaces = append(interfaces, ReadInterface(serialiser))
+	}
+	return interfaces
+}
+
+func (s *Store) SearchInterfaces(keyword string) []*Interface {
+	completionValues := searchCompletions(s.db, interfaceCompletionIndex, keyword, "")
+	interfaces := []*Interface{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(interfaceCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
 		interfaces = append(interfaces, ReadInterface(serialiser))
 	}
 	return interfaces
@@ -225,12 +282,44 @@ func (s *Store) GetTraits(name string) []*Trait {
 	return traits
 }
 
+func (s *Store) SearchTraits(keyword string) []*Trait {
+	completionValues := searchCompletions(s.db, traitCompletionIndex, keyword, "")
+	traits := []*Trait{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(traitCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
+		traits = append(traits, ReadTrait(serialiser))
+	}
+	return traits
+}
+
 func (s *Store) GetFunctions(name string) []*Function {
 	prefix := []byte("function" + KeySep + name)
 	functions := []*Function{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
+		functions = append(functions, ReadFunction(serialiser))
+	}
+	return functions
+}
+
+func (s *Store) SearchFunctions(keyword string) []*Function {
+	completionValues := searchCompletions(s.db, functionCompletionIndex, keyword, "")
+	functions := []*Function{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(functionCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
 		functions = append(functions, ReadFunction(serialiser))
 	}
 	return functions
@@ -247,12 +336,44 @@ func (s *Store) GetConsts(name string) []*Const {
 	return consts
 }
 
+func (s *Store) SearchConsts(keyword string) []*Const {
+	completionValues := searchCompletions(s.db, constCompletionIndex, keyword, "")
+	consts := []*Const{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(constCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
+		consts = append(consts, ReadConst(serialiser))
+	}
+	return consts
+}
+
 func (s *Store) GetDefines(name string) []*Define {
 	prefix := []byte("define" + KeySep + name)
 	defines := []*Define{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
+		defines = append(defines, ReadDefine(serialiser))
+	}
+	return defines
+}
+
+func (s *Store) SearchDefines(keyword string) []*Define {
+	completionValues := searchCompletions(s.db, defineCompletionIndex, keyword, "")
+	defines := []*Define{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(defineCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
 		defines = append(defines, ReadDefine(serialiser))
 	}
 	return defines
@@ -269,6 +390,22 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 	return methods
 }
 
+func (s *Store) SearchMethods(scope string, keyword string) []*Method {
+	completionValues := searchCompletions(s.db, methodCompletionIndex, keyword, scope)
+	methods := []*Method{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(methodCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
+		methods = append(methods, ReadMethod(serialiser))
+	}
+	return methods
+}
+
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	prefix := []byte("classConst" + KeySep + scope + KeySep + name)
 	classConsts := []*ClassConst{}
@@ -280,12 +417,44 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	return classConsts
 }
 
+func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
+	completionValues := searchCompletions(s.db, classConstCompletionIndex, keyword, scope)
+	classConsts := []*ClassConst{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(classConstCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
+		classConsts = append(classConsts, ReadClassConst(serialiser))
+	}
+	return classConsts
+}
+
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	prefix := []byte("property" + KeySep + scope + KeySep + name)
 	properties := []*Property{}
 	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
+		properties = append(properties, ReadProperty(serialiser))
+	}
+	return properties
+}
+
+func (s *Store) SearchProperties(scope string, keyword string) []*Property {
+	completionValues := searchCompletions(s.db, propertyCompletionIndex, keyword, scope)
+	properties := []*Property{}
+	for _, completionValue := range completionValues {
+		entry := newEntry(propertyCollection, string(completionValue))
+		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		serialiser := SerialiserFromByteSlice(theBytes)
 		properties = append(properties, ReadProperty(serialiser))
 	}
 	return properties
