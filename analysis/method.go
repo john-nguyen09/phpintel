@@ -70,11 +70,11 @@ func (s *Method) GetCollection() string {
 }
 
 func (s *Method) GetKey() string {
-	return s.Scope.fqn + KeySep + s.Name + KeySep + s.location.URI
+	return s.Scope.fqn + KeySep + s.Function.GetKey()
 }
 
 func (s *Method) GetIndexableName() string {
-	return s.Name
+	return s.Function.GetIndexableName()
 }
 
 func (s *Method) GetIndexCollection() string {

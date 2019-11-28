@@ -3,8 +3,10 @@ package analysis
 import (
 	"encoding/json"
 
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 // Variable represents a reference to the variable
@@ -20,9 +22,18 @@ func newVariableExpression(document *Document, node *phrase.Phrase) HasTypes {
 func newVariable(document *Document, node *phrase.Phrase) *Variable {
 	variable := &Variable{
 		Expression: Expression{
-			Name:     document.GetNodeText(node),
 			Location: document.GetNodeLocation(node),
 		},
+	}
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if t, ok := child.(*lexer.Token); ok {
+			if t.Type == lexer.VariableName {
+				variable.Name = document.GetTokenText(t)
+			}
+		}
+		child = traverser.Advance()
 	}
 	document.pushVariable(variable)
 	return variable
@@ -43,6 +54,10 @@ func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 	}
 }
 
+func (s *Variable) Resolve(store *Store) {
+
+}
+
 func (s *Variable) GetTypes() TypeComposite {
 	if s.Scope == nil {
 		return s.Type
@@ -56,6 +71,10 @@ func (s *Variable) GetTypes() TypeComposite {
 
 func (s *Variable) GetDescription() string {
 	return s.description
+}
+
+func (s *Variable) GetDetail() string {
+	return s.Type.ToString()
 }
 
 func (s *Variable) MarshalJSON() ([]byte, error) {

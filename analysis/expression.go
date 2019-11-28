@@ -13,9 +13,17 @@ type Expression struct {
 	Name     string
 }
 
+func (e *Expression) GetScope() TypeComposite {
+	if e.Scope != nil {
+		return e.Scope.GetTypes()
+	}
+	return newTypeComposite()
+}
+
 type HasTypes interface {
 	GetLocation() protocol.Location
 	GetTypes() TypeComposite
+	Resolve(store *Store)
 }
 
 type expressionKind int

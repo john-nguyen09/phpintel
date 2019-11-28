@@ -37,6 +37,10 @@ func (s *ClassTypeDesignator) GetLocation() protocol.Location {
 	return s.Location
 }
 
+func (s *ClassTypeDesignator) Resolve(store *Store) {
+
+}
+
 func (s *ClassTypeDesignator) GetTypes() TypeComposite {
 	return s.Type
 }

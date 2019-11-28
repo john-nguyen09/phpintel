@@ -10,6 +10,7 @@ import (
 // FunctionCall represents a reference to function call
 type FunctionCall struct {
 	Expression
+	hasResolved bool
 }
 
 func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
@@ -37,6 +38,15 @@ func newFunctionCall(document *Document, node *phrase.Phrase) HasTypes {
 
 func (s *FunctionCall) GetLocation() protocol.Location {
 	return s.Location
+}
+
+func (s *FunctionCall) Resolve(store *Store) {
+	if !s.hasResolved {
+		functions := store.GetFunctions(s.Name)
+		for _, function := range functions {
+			s.Type.merge(function.returnTypes)
+		}
+	}
 }
 
 func (s *FunctionCall) GetTypes() TypeComposite {

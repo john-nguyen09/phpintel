@@ -9,7 +9,8 @@ import (
 
 // Parameter contains information of a function parameter
 type Parameter struct {
-	location protocol.Location
+	location    protocol.Location
+	description string
 
 	Name  string        `json:"Name"`
 	Type  TypeComposite `json:"Type"`
@@ -63,8 +64,8 @@ func (s *Parameter) Write(serialiser *Serialiser) {
 	serialiser.WriteString(s.Value)
 }
 
-func ReadParameter(serialiser *Serialiser) Parameter {
-	return Parameter{
+func ReadParameter(serialiser *Serialiser) *Parameter {
+	return &Parameter{
 		location: serialiser.ReadLocation(),
 		Name:     serialiser.ReadString(),
 		Type:     ReadTypeComposite(serialiser),

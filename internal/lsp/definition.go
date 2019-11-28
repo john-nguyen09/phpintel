@@ -41,27 +41,43 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.FunctionCall:
-		for _, typeString := range v.Type.Resolve() {
-			for _, function := range store.GetFunctions(typeString.GetFQN()) {
-				locations = append(locations, function.GetLocation())
-			}
+		for _, function := range store.GetFunctions(v.Name) {
+			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:
-		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+		for _, scopeType := range v.GetScope().Resolve() {
 			for _, classConst := range store.GetClassConsts(scopeType.GetFQN(), v.Name) {
 				locations = append(locations, classConst.GetLocation())
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+		for _, scopeType := range v.GetScope().Resolve() {
 			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
+				if !method.IsStatic {
+					continue
+				}
 				locations = append(locations, method.GetLocation())
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
-		for _, scopeType := range v.Scope.GetTypes().Resolve() {
+		for _, scopeType := range v.GetScope().Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
+				if !property.IsStatic {
+					continue
+				}
 				locations = append(locations, property.GetLocation())
+			}
+		}
+	case *analysis.PropertyAccess:
+		for _, scopeType := range v.GetScope().Resolve() {
+			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
+				locations = append(locations, property.GetLocation())
+			}
+		}
+	case *analysis.MethodAccess:
+		for _, scopeType := range v.GetScope().Resolve() {
+			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
+				locations = append(locations, method.GetLocation())
 			}
 		}
 	}

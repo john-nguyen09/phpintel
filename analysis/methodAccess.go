@@ -2,8 +2,8 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 type MethodAccess struct {
@@ -12,9 +12,7 @@ type MethodAccess struct {
 
 func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 	methodAccess := &MethodAccess{
-		Expression: Expression{
-			Location: document.GetNodeLocation(node),
-		},
+		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -25,15 +23,16 @@ func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 		}
 	}
 	traverser.Advance()
-	memberName := traverser.Advance()
-	if p, ok := memberName.(*phrase.Phrase); ok && p.Type == phrase.MemberName {
-		methodAccess.Name = readMemberName(document, p)
-	}
+	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
 	return methodAccess
 }
 
 func (s *MethodAccess) GetLocation() protocol.Location {
 	return s.Location
+}
+
+func (s *MethodAccess) Resolve(store *Store) {
+
 }
 
 func (s *MethodAccess) GetTypes() TypeComposite {

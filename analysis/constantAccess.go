@@ -39,6 +39,10 @@ func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
 	s.Type.add(newTypeString(s.Name))
 }
 
+func (s *ConstantAccess) Resolve(store *Store) {
+
+}
+
 func (s *ConstantAccess) GetTypes() TypeComposite {
 	// TODO: look up constant type
 	return s.Type

@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"log"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -23,12 +24,16 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case *analysis.ConstantAccess:
 		completionList = nameCompletion(store, document, s.Name, params.Position)
 	case *analysis.ScopedConstantAccess:
-		for _, typeString := range s.Scope.GetTypes().Resolve() {
+		for _, typeString := range s.GetScope().Resolve() {
 			completionList = scopedAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
 		}
 	case *analysis.PropertyAccess:
-		for _, typeString := range s.Scope.GetTypes().Resolve() {
-			completionList = memberAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
+		if s.Scope != nil {
+			s.Scope.Resolve(store)
+			for _, typeString := range s.GetScope().Resolve() {
+				log.Println(typeString)
+				completionList = memberAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
+			}
 		}
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s.Name, params.Position)
@@ -48,6 +53,7 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 			Kind:          protocol.VariableCompletion,
 			Label:         variable.Name,
 			Documentation: variable.GetDescription(),
+			Detail:        variable.GetDetail(),
 		})
 	}
 	return completionList
@@ -77,6 +83,15 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 			Kind:          protocol.ConstantCompletion,
 			Label:         define.GetName(),
 			Documentation: define.GetDescription(),
+		})
+	}
+	functions := store.SearchFunctions(word)
+	for _, function := range functions {
+		completionList.Items = append(completionList.Items, protocol.CompletionItem{
+			Kind:          protocol.FunctionCompletion,
+			Label:         function.GetName().GetOriginal(),
+			Documentation: function.GetDescription(),
+			Detail:        function.GetDetail(),
 		})
 	}
 	return completionList
@@ -115,7 +130,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.MethodCompletion,
-			Label:         method.GetName(),
+			Label:         method.GetName().GetOriginal(),
 			Documentation: method.GetDescription(),
 		})
 	}
@@ -151,7 +166,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.MethodCompletion,
-			Label:         method.GetName(),
+			Label:         method.GetName().GetOriginal(),
 			Documentation: method.GetDescription(),
 		})
 	}

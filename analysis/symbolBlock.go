@@ -50,6 +50,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 		// Expressions
 		lexer.DirectoryConstant: newDirectoryConstantAccess,
+		lexer.DocumentComment:   newPhpDocFromNode,
 	}
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil

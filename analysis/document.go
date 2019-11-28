@@ -23,6 +23,7 @@ type Document struct {
 	variableTables []VariableTable
 	Children       []Symbol `json:"children"`
 	classStack     []Symbol
+	lastPhpDoc     *phpDocComment
 }
 
 // VariableTable holds the range and the variables inside
@@ -203,9 +204,10 @@ func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
 		end = node.Offset + node.Length
 	case *phrase.Phrase:
 		firstToken, lastToken := util.FirstToken(node), util.LastToken(node)
-
-		start = firstToken.Offset
-		end = lastToken.Offset + lastToken.Length
+		if firstToken != nil || lastToken != nil {
+			start = firstToken.Offset
+			end = lastToken.Offset + lastToken.Length
+		}
 	}
 
 	return protocol.Range{Start: s.positionAt(start), End: s.positionAt(end)}
@@ -246,6 +248,11 @@ func (s *Document) GetTokenText(token *lexer.Token) string {
 }
 
 func (s *Document) addSymbol(other Symbol) {
+	s.lastPhpDoc = nil
+	if doc, ok := other.(*phpDocComment); ok {
+		s.lastPhpDoc = doc
+		return
+	}
 	s.Children = append(s.Children, other)
 }
 
@@ -343,12 +350,18 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newText = append(newText, s.text[endOffset:]...)
 		s.text = newText
 
-		newLineOffsets := s.lineOffsets[0 : start.Line+1]
+		min := start.Line + 1
+		if min > len(s.lineOffsets) {
+			min = len(s.lineOffsets)
+		}
+		newLineOffsets := append(s.lineOffsets[:0:0], s.lineOffsets[0:min]...)
 		lengthDiff := len(text) - (endOffset - startOffset)
 		newLineOffsets = append(newLineOffsets, calculateLineOffsets(text, startOffset)[1:]...)
-		endLineOffsets := s.lineOffsets[end.Line+1:]
-		for _, endLineOffset := range endLineOffsets {
-			newLineOffsets = append(newLineOffsets, endLineOffset+lengthDiff)
+		if end.Line+1 < len(s.lineOffsets) {
+			endLineOffsets := s.lineOffsets[end.Line+1:]
+			for _, endLineOffset := range endLineOffsets {
+				newLineOffsets = append(newLineOffsets, endLineOffset+lengthDiff)
+			}
 		}
 		s.lineOffsets = newLineOffsets
 	}
@@ -376,4 +389,16 @@ func (s *Document) getLines() []string {
 		lines = append(lines, string(text[start:len(text)]))
 	}
 	return lines
+}
+
+func (s *Document) getValidPhpDoc(location protocol.Location) *phpDocComment {
+	if s.lastPhpDoc == nil {
+		return nil
+	}
+	endOfPhpDoc := s.lastPhpDoc.GetLocation().Range.End
+	start := location.Range.Start
+	if endOfPhpDoc.Line < start.Line && endOfPhpDoc.Line >= (start.Line-2) {
+		return s.lastPhpDoc
+	}
+	return nil
 }

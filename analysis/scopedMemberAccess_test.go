@@ -18,3 +18,12 @@ func TestScopedMemberAccess(t *testing.T) {
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
+
+func TestScopedAccess(t *testing.T) {
+	scopedAccessTest := "../cases/completion/scopedAccess.php"
+	data, _ := ioutil.ReadFile(scopedAccessTest)
+	document := NewDocument(util.PathToUri(scopedAccessTest), string(data))
+	document.Load()
+
+	cupaloy.SnapshotT(t, document.Children)
+}

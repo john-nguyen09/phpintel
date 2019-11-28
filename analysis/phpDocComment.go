@@ -4,6 +4,9 @@ import (
 	"errors"
 	"regexp"
 	"strings"
+
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 type methodTagParam struct {
@@ -102,6 +105,7 @@ type phpDocComment struct {
 	Methods     []tag
 	Vars        []tag
 	Globals     []tag
+	location    protocol.Location
 }
 
 func parse(text string) (phpDocComment, error) {
@@ -147,7 +151,11 @@ func parse(text string) (phpDocComment, error) {
 }
 
 func parseTag(text string) (tag, error) {
-	substr := text[:4]
+	min := 4
+	if min >= len(text) {
+		min = len(text) - 1
+	}
+	substr := text[:min]
 	switch substr {
 	case "@par", "@pro":
 		if matches := paramOrPropPattern.FindStringSubmatch(text); len(matches) > 0 {
@@ -192,11 +200,33 @@ func newPhpDoc(description string, tags []tag) phpDocComment {
 func (d phpDocComment) findTagsByTagName(tagName string) []tag {
 	tags := d.tags[:0]
 
-	for _, tag := range tags {
+	for _, tag := range d.tags {
 		if tag.TagName == tagName {
 			tags = append(tags, tag)
 		}
 	}
 
 	return tags
+}
+
+func (d phpDocComment) findParamTag(name string) *tag {
+	for _, tag := range d.tags {
+		if tag.TagName == "@param" && tag.Name == name {
+			return &tag
+		}
+	}
+	return nil
+}
+
+func (d *phpDocComment) GetLocation() protocol.Location {
+	return d.location
+}
+
+func newPhpDocFromNode(document *Document, token *lexer.Token) Symbol {
+	phpDocComment, err := parse(document.GetTokenText(token))
+	if err != nil {
+		return nil
+	}
+	phpDocComment.location = document.GetNodeLocation(token)
+	return &phpDocComment
 }

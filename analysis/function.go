@@ -11,14 +11,17 @@ import (
 type Function struct {
 	location protocol.Location
 
-	Name   string `json:"Name"`
-	Params []Parameter
+	Name        TypeString `json:"Name"`
+	Params      []*Parameter
+	returnTypes TypeComposite
+	description string
 }
 
 func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
-		location: document.GetNodeLocation(node),
-		Params:   make([]Parameter, 0),
+		location:    document.GetNodeLocation(node),
+		Params:      make([]*Parameter, 0),
+		returnTypes: newTypeComposite(),
 	}
 	document.pushVariableTable(node)
 
@@ -30,6 +33,10 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 			phrase.MethodDeclarationHeader,
 		}); ok {
 			function.analyseHeader(document, p)
+			phpDoc := document.getValidPhpDoc(function.location)
+			if phpDoc != nil {
+				function.applyPhpDoc(*phpDoc)
+			}
 		}
 		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
 			phrase.FunctionDeclarationBody,
@@ -51,7 +58,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = document.GetTokenText(token)
+					s.Name = newTypeString(document.GetTokenText(token))
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
@@ -61,7 +68,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 					s.analyseParameterDeclarationList(document, p)
 				}
 			case phrase.Identifier:
-				s.Name = document.GetPhraseText(p)
+				s.Name = newTypeString(document.GetPhraseText(p))
 			}
 		}
 		child = traverser.Advance()
@@ -74,24 +81,42 @@ func (s *Function) analyseParameterDeclarationList(document *Document, node *phr
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
 			param := newParameter(document, p)
-			s.Params = append(s.Params, *param)
+			s.Params = append(s.Params, param)
 		}
 
 		child = traverser.Advance()
 	}
 }
 
+func (s *Function) applyPhpDoc(phpDoc phpDocComment) {
+	tags := phpDoc.Returns
+	for _, tag := range tags {
+		s.returnTypes.add(newTypeString(tag.TypeString))
+	}
+	for index, param := range s.Params {
+		tag := phpDoc.findParamTag(param.Name)
+		if tag != nil {
+			s.Params[index].Type.add(newTypeString(tag.TypeString))
+			s.Params[index].description = tag.Description
+		}
+	}
+	s.description = phpDoc.Description
+}
+
 func (s *Function) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Function) GetName() string {
+func (s *Function) GetName() TypeString {
 	return s.Name
 }
 
 func (s *Function) GetDescription() string {
-	// TODO: Implements docblock description
-	return ""
+	return s.description
+}
+
+func (s *Function) GetDetail() string {
+	return s.returnTypes.ToString()
 }
 
 func (s *Function) GetCollection() string {
@@ -99,11 +124,11 @@ func (s *Function) GetCollection() string {
 }
 
 func (s *Function) GetKey() string {
-	return s.Name + KeySep + s.location.URI
+	return s.Name.GetFQN() + KeySep + s.location.URI
 }
 
 func (s *Function) GetIndexableName() string {
-	return s.Name
+	return s.Name.GetOriginal()
 }
 
 func (s *Function) GetIndexCollection() string {
@@ -116,22 +141,26 @@ func (s *Function) GetPrefix() string {
 
 func (s *Function) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
+	s.Name.Write(serialiser)
 	serialiser.WriteInt(len(s.Params))
 	for _, param := range s.Params {
 		param.Write(serialiser)
 	}
+	s.returnTypes.Write(serialiser)
+	serialiser.WriteString(s.description)
 }
 
 func ReadFunction(serialiser *Serialiser) *Function {
 	function := Function{
 		location: serialiser.ReadLocation(),
-		Name:     serialiser.ReadString(),
-		Params:   make([]Parameter, 0),
+		Name:     ReadTypeString(serialiser),
+		Params:   make([]*Parameter, 0),
 	}
 	countParams := serialiser.ReadInt()
 	for i := 0; i < countParams; i++ {
 		function.Params = append(function.Params, ReadParameter(serialiser))
 	}
+	function.returnTypes = ReadTypeComposite(serialiser)
+	function.description = serialiser.ReadString()
 	return &function
 }

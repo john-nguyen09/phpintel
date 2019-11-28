@@ -1,7 +1,9 @@
 <?php
 
 class TestClass {
-    
+    public function method1() {
+
+    }
 }
 
 class TestClass1 extends TestClass implements TestInterface {

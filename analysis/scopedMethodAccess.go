@@ -2,8 +2,8 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/util"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
@@ -33,6 +33,10 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 
 func (s *ScopedMethodAccess) GetLocation() protocol.Location {
 	return s.Location
+}
+
+func (s *ScopedMethodAccess) Resolve(store *Store) {
+
 }
 
 func (s *ScopedMethodAccess) GetTypes() TypeComposite {
