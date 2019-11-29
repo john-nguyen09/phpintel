@@ -14,28 +14,33 @@ import (
 
 // Document contains information of documents
 type Document struct {
-	uri            string
-	text           []rune
-	lineOffsets    []int
-	loadMu         sync.Mutex
-	isLoaded       bool
-	isOpen         bool
-	variableTables []VariableTable
-	Children       []Symbol `json:"children"`
-	classStack     []Symbol
-	lastPhpDoc     *phpDocComment
+	uri                string
+	text               []rune
+	lineOffsets        []int
+	loadMu             sync.Mutex
+	isOpen             bool
+	variableTables     []VariableTable
+	variableTableLevel int
+	Children           []Symbol `json:"children"`
+	classStack         []Symbol
+	lastPhpDoc         *phpDocComment
+	hasChanges         bool
 }
 
 // VariableTable holds the range and the variables inside
 type VariableTable struct {
-	locationRange protocol.Range
-	variables     map[string]*Variable
+	locationRange  protocol.Range
+	variables      map[string]*Variable
+	globalDeclares map[string]bool
+	level          int
 }
 
-func newVariableTable(locationRange protocol.Range) VariableTable {
+func newVariableTable(locationRange protocol.Range, level int) VariableTable {
 	return VariableTable{
-		locationRange: locationRange,
-		variables:     map[string]*Variable{},
+		locationRange:  locationRange,
+		variables:      map[string]*Variable{},
+		globalDeclares: map[string]bool{},
+		level:          level,
 	}
 }
 
@@ -48,6 +53,17 @@ func (vt *VariableTable) get(name string) *Variable {
 		return variable
 	}
 	return nil
+}
+
+func (vt *VariableTable) canReferenceGlobal(name string) bool {
+	if _, ok := vt.globalDeclares[name]; ok {
+		return true
+	}
+	return false
+}
+
+func (vt VariableTable) setReferenceGlobal(name string) {
+	vt.globalDeclares[name] = true
 }
 
 // GetVariables returns all the variables in the table
@@ -68,8 +84,10 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 
 func NewDocument(uri string, text string) *Document {
 	document := &Document{
-		uri:      uri,
-		Children: []Symbol{},
+		uri:                uri,
+		Children:           []Symbol{},
+		variableTableLevel: 0,
+		hasChanges:         true,
 	}
 	document.SetText(text)
 
@@ -88,12 +106,13 @@ func (s *Document) Close() {
 
 // Load makes sure that symbols are available
 func (s *Document) Load() {
-	if !s.isLoaded {
-		rootNode := parser.Parse(string(s.GetText()))
-		s.pushVariableTable(rootNode)
-		scanForChildren(s, rootNode)
-		s.isLoaded = true
+	if !s.hasChanges {
+		return
 	}
+	s.hasChanges = false
+	rootNode := parser.Parse(string(s.GetText()))
+	s.pushVariableTable(rootNode)
+	scanForChildren(s, rootNode)
 }
 
 // LockToDo locks the document to do a thing
@@ -103,14 +122,6 @@ func (s *Document) LockToDo(thing func(*Document)) {
 	s.loadMu.Lock()
 	defer s.loadMu.Unlock()
 	thing(s)
-}
-
-// Release releases symbols to save memory
-func (s *Document) Release() {
-	s.variableTables = []VariableTable{}
-	s.Children = []Symbol{}
-	s.classStack = []Symbol{}
-	s.isLoaded = false
 }
 
 func (s *Document) getDocument() *Document {
@@ -257,7 +268,8 @@ func (s *Document) addSymbol(other Symbol) {
 }
 
 func (s *Document) pushVariableTable(node *phrase.Phrase) {
-	s.variableTables = append(s.variableTables, newVariableTable(s.nodeRange(node)))
+	s.variableTables = append(s.variableTables, newVariableTable(s.nodeRange(node), s.variableTableLevel))
+	s.variableTableLevel++
 }
 
 func (s *Document) getCurrentVariableTable() VariableTable {
@@ -291,6 +303,9 @@ func (s *Document) pushVariable(variable *Variable) {
 	currentVariable := variableTable.get(variable.Name)
 	if currentVariable != nil {
 		variable.mergeTypesWithVariable(currentVariable)
+	}
+	if variableTable.level == 0 || variableTable.canReferenceGlobal(variable.Name) {
+		variable.canReferenceGlobal = true
 	}
 	variableTable.add(variable)
 }
@@ -338,6 +353,7 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
+	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
@@ -399,6 +415,15 @@ func (s *Document) getValidPhpDoc(location protocol.Location) *phpDocComment {
 	start := location.Range.Start
 	if endOfPhpDoc.Line < start.Line && endOfPhpDoc.Line >= (start.Line-2) {
 		return s.lastPhpDoc
+	}
+	return nil
+}
+
+func (s *Document) getGlobalVariable(name string) *GlobalVariable {
+	for _, child := range s.Children {
+		if globalVariable, ok := child.(*GlobalVariable); ok && globalVariable.GetName() == name {
+			return globalVariable
+		}
 	}
 	return nil
 }

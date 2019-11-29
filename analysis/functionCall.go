@@ -26,11 +26,10 @@ func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 
 func newFunctionCall(document *Document, node *phrase.Phrase) HasTypes {
 	functionCall := &FunctionCall{
-		Expression: Expression{
-			Location: document.GetNodeLocation(node),
-		},
+		Expression: Expression{},
 	}
 	if len(node.Children) >= 1 {
+		functionCall.Location = document.GetNodeLocation(node.Children[0])
 		functionCall.Name = document.GetNodeText(node.Children[0])
 	}
 	return functionCall
@@ -41,16 +40,17 @@ func (s *FunctionCall) GetLocation() protocol.Location {
 }
 
 func (s *FunctionCall) Resolve(store *Store) {
-	if !s.hasResolved {
-		functions := store.GetFunctions(s.Name)
-		for _, function := range functions {
-			s.Type.merge(function.returnTypes)
-		}
+	if s.hasResolved {
+		return
 	}
+	functions := store.GetFunctions(s.Name)
+	for _, function := range functions {
+		s.Type.merge(function.returnTypes)
+	}
+	s.hasResolved = true
 }
 
 func (s *FunctionCall) GetTypes() TypeComposite {
-	// TODO: Look up function for return types
 	return s.Type
 }
 

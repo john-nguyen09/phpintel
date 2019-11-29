@@ -14,7 +14,7 @@ import (
 	"github.com/karrick/godirwalk"
 )
 
-const numOfWorkers int = 4
+const numOfWorkers int = 2
 
 type workspaceStore struct {
 	ctx    context.Context
@@ -63,15 +63,17 @@ func (s *workspaceStore) addView(uri protocol.DocumentURI) {
 }
 
 func (s *workspaceStore) indexFolder(folderPath string) {
-	godirwalk.Walk(folderPath, &godirwalk.Options{
-		Callback: func(path string, de *godirwalk.Dirent) error {
-			if !de.IsDir() && strings.HasSuffix(path, ".php") {
-				s.jobs <- path
-			}
-			return nil
-		},
-		Unsorted: true,
-	})
+	go func() {
+		godirwalk.Walk(folderPath, &godirwalk.Options{
+			Callback: func(path string, de *godirwalk.Dirent) error {
+				if !de.IsDir() && strings.HasSuffix(path, ".php") {
+					s.jobs <- path
+				}
+				return nil
+			},
+			Unsorted: true,
+		})
+	}()
 }
 
 func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {

@@ -8,6 +8,8 @@ import (
 
 type MethodAccess struct {
 	Expression
+
+	hasResolved bool
 }
 
 func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
@@ -16,10 +18,10 @@ func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	if p, ok := firstChild.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
+	if p, ok := firstChild.(*phrase.Phrase); ok {
 		expression := scanForExpression(document, p)
-		if variable, ok := expression.(*Variable); ok {
-			methodAccess.Scope = variable
+		if expression != nil {
+			methodAccess.Scope = expression
 		}
 	}
 	traverser.Advance()
@@ -32,11 +34,18 @@ func (s *MethodAccess) GetLocation() protocol.Location {
 }
 
 func (s *MethodAccess) Resolve(store *Store) {
-
+	if s.hasResolved {
+		return
+	}
+	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
+		for _, method := range store.GetMethods(scopeType.GetFQN(), s.Name) {
+			s.Type.merge(method.returnTypes)
+		}
+	}
+	s.hasResolved = true
 }
 
 func (s *MethodAccess) GetTypes() TypeComposite {
-	// TODO: Lookup method return types
 	return s.Type
 }
 

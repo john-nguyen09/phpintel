@@ -45,13 +45,13 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, classConst := range store.GetClassConsts(scopeType.GetFQN(), v.Name) {
 				locations = append(locations, classConst.GetLocation())
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				if !method.IsStatic {
 					continue
@@ -60,7 +60,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
 				if !property.IsStatic {
 					continue
@@ -69,13 +69,13 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.PropertyAccess:
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
 				locations = append(locations, property.GetLocation())
 			}
 		}
 	case *analysis.MethodAccess:
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				locations = append(locations, method.GetLocation())
 			}

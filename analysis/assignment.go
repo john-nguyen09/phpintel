@@ -36,4 +36,11 @@ func analyseVariableAssignment(document *Document,
 	if expression != nil {
 		variable.setExpression(expression)
 	}
+	globalVariable := document.getGlobalVariable(variable.Name)
+	if globalVariable != nil {
+		types := variable.GetTypes()
+		if !types.IsEmpty() {
+			globalVariable.types.merge(types)
+		}
+	}
 }

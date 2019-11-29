@@ -9,7 +9,7 @@ import (
 
 func concatDescriptionIfAvailable(content string, description string) string {
 	if len(description) > 0 {
-		return content + "\n" + description
+		return content + "\n___\n" + description
 	}
 	return content
 }
@@ -83,7 +83,7 @@ func DefineToHover(ref analysis.HasTypes, define analysis.Define) *protocol.Hove
 	}
 	content += ")"
 	content += "```"
-	content = concatDescriptionIfAvailable(content, define.GetDescription()) + "```"
+	content = concatDescriptionIfAvailable(content, define.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
@@ -99,6 +99,9 @@ func FunctionToHover(ref analysis.HasTypes, function analysis.Function) *protoco
 	content += "function " + function.GetName().GetOriginal() + "("
 	content += paramsToString(function.Params)
 	content += ")"
+	if !function.GetReturnTypes().IsEmpty() {
+		content += ": " + function.GetReturnTypes().ToString()
+	}
 	content += "```"
 	content = concatDescriptionIfAvailable(content, function.GetDescription())
 	theRange := ref.GetLocation().Range
@@ -166,7 +169,11 @@ func MethodToHover(ref analysis.HasTypes, method analysis.Method) *protocol.Hove
 	}
 	content += " function " + method.GetName().GetOriginal() + "("
 	content += paramsToString(method.Params)
-	content += ")```"
+	content += ")"
+	if !method.GetReturnTypes().IsEmpty() {
+		content += ": " + method.GetReturnTypes().ToString()
+	}
+	content += "```"
 	content = concatDescriptionIfAvailable(content, method.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
@@ -185,6 +192,9 @@ func PropertyToHover(ref analysis.HasTypes, property analysis.Property) *protoco
 		content += " static"
 	}
 	content += " " + property.GetName()
+	if !property.Types.IsEmpty() {
+		content += ": " + property.Types.ToString()
+	}
 	content += "```"
 	content = concatDescriptionIfAvailable(content, property.GetDescription())
 	theRange := ref.GetLocation().Range

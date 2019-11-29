@@ -1,0 +1,138 @@
+([]analysis.Symbol) (len=7) {
+  (*analysis.GlobalVariable)({
+    location: (protocol.Location) {
+      URI: (string) (len=35) "file:///../cases/globalVariable.php",
+      Range: (protocol.Range) 5:7-5:10
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=15) "TestMethodClass",
+          original: (string) (len=15) "TestMethodClass"
+        }
+      }
+    },
+    description: (string) "",
+    Name: (string) (len=3) "$DB"
+  }),
+  (*analysis.GlobalVariable)({
+    location: (protocol.Location) {
+      URI: (string) (len=35) "file:///../cases/globalVariable.php",
+      Range: (protocol.Range) 7:7-7:14
+    },
+    types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=15) "TestMethodClass",
+          original: (string) (len=15) "TestMethodClass"
+        }
+      }
+    },
+    description: (string) "",
+    Name: (string) (len=7) "$OUTPUT"
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=15) "TestMethodClass",
+                original: (string) (len=15) "TestMethodClass"
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=35) "file:///../cases/globalVariable.php",
+            Range: (protocol.Range) 9:14-9:29
+          },
+          Name: (string) (len=15) "TestMethodClass"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        Range: (protocol.Range) 9:0-9:7
+      },
+      Name: (string) (len=7) "$OUTPUT"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        Range: (protocol.Range) 9:14-9:29
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        Range: (protocol.Range) 9:0-9:7
+      },
+      Name: (string) (len=7) "$OUTPUT"
+    },
+    description: (string) ""
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        Range: (protocol.Range) 9:14-9:29
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  }),
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=15) "TestMethodClass",
+            original: (string) (len=15) "TestMethodClass"
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        Range: (protocol.Range) 9:14-9:29
+      },
+      Name: (string) (len=15) "TestMethodClass"
+    }
+  })
+}

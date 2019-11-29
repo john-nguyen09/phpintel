@@ -18,22 +18,19 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	document.Load()
 	var completionList *protocol.CompletionList = nil
 	symbol := document.SymbolAtPos(params.Position)
+	// log.Printf("%T", symbol)
 	switch s := symbol.(type) {
 	case *analysis.Variable:
 		completionList = variableCompletion(document, params.Position)
 	case *analysis.ConstantAccess:
 		completionList = nameCompletion(store, document, s.Name, params.Position)
 	case *analysis.ScopedConstantAccess:
-		for _, typeString := range s.GetScope().Resolve() {
+		for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
 			completionList = scopedAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
 		}
 	case *analysis.PropertyAccess:
-		if s.Scope != nil {
-			s.Scope.Resolve(store)
-			for _, typeString := range s.GetScope().Resolve() {
-				log.Println(typeString)
-				completionList = memberAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
-			}
+		for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
+			completionList = memberAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
 		}
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s.Name, params.Position)
@@ -75,6 +72,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 			Kind:          protocol.ConstantCompletion,
 			Label:         constant.GetName(),
 			Documentation: constant.GetDescription(),
+			Detail:        constant.Value,
 		})
 	}
 	defines := store.SearchDefines(word)
@@ -83,6 +81,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 			Kind:          protocol.ConstantCompletion,
 			Label:         define.GetName(),
 			Documentation: define.GetDescription(),
+			Detail:        define.Value,
 		})
 	}
 	functions := store.SearchFunctions(word)
@@ -148,6 +147,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{}
 	properties := store.SearchProperties(scope, word)
+	log.Printf("%s %v", word, properties)
 	for _, property := range properties {
 		name := property.GetName()
 		if !property.IsStatic {

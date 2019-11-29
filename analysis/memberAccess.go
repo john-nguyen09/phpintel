@@ -23,11 +23,15 @@ func readMemberName(document *Document, traverser util.Traverser) (string, proto
 	location := protocol.Location{}
 	name := ""
 	if p, ok := memberName.(*phrase.Phrase); ok && p.Type == phrase.MemberName {
+		for _, child := range p.Children {
+			if t, ok := child.(*lexer.Token); ok && t.Type == lexer.Name {
+				name = document.GetTokenText(t)
+			}
+		}
 		location = document.GetNodeLocation(p)
 		if startRange != nil {
 			location.Range.Start = startRange.Start
 		}
-		name = document.GetNodeText(p)
 	}
 	return name, location
 }

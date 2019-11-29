@@ -1,60 +1,6 @@
---- FAIL: TestFunction (0.00s)
-    function_test.go:21: snapshot not equal:
-        --- Previous
-        +++ Current
-        @@ -1,2 +1,2 @@
-        -([]analysis.Symbol) (len=1) {
-        +([]analysis.Symbol) (len=2) {
-           (*analysis.Function)({
-        @@ -6,5 +6,8 @@
-             },
-        -    Name: (string) (len=12) "testFunction",
-        -    Params: ([]analysis.Parameter) (len=1) {
-        -      (analysis.Parameter) {
-        +    Name: (analysis.TypeString) {
-        +      fqn: (string) (len=12) "testFunction",
-        +      original: (string) (len=12) "testFunction"
-        +    },
-        +    Params: ([]*analysis.Parameter) (len=1) {
-        +      (*analysis.Parameter)({
-                 location: (protocol.Location) {
-        @@ -13,2 +16,3 @@
-                 },
-        +        description: (string) "",
-                 Name: (string) (len=7) "$param1",
-        @@ -23,4 +27,30 @@
-                 Value: (string) (len=4) "null"
-        +      })
-        +    },
-        +    returnTypes: (analysis.TypeComposite) {
-        +      typeStrings: ([]analysis.TypeString) {
-               }
-        -    }
-        +    },
-        +    description: (string) ""
-        +  }),
-        +  (*analysis.Function)({
-        +    location: (protocol.Location) {
-        +      URI: (string) (len=29) "file:///../cases/function.php",
-        +      Range: (protocol.Range) 11:0-13:1
-        +    },
-        +    Name: (analysis.TypeString) {
-        +      fqn: (string) (len=9) "function3",
-        +      original: (string) (len=9) "function3"
-        +    },
-        +    Params: ([]*analysis.Parameter) {
-        +    },
-        +    returnTypes: (analysis.TypeComposite) {
-        +      typeStrings: ([]analysis.TypeString) (len=1) {
-        +        (analysis.TypeString) {
-        +          fqn: (string) (len=9) "TestClass",
-        +          original: (string) (len=9) "TestClass"
-        +        }
-        +      }
-        +    },
-        +    description: (string) (len=23) "function3's description"
-           })
-        
+2019/11/29 23:04:37 {[{TestMethodClass TestMethodClass}]}
+--- FAIL: TestGlobalVariableReference (0.01s)
+    globalVariable_test.go:82: snapshot created for test TestGlobalVariableReference
 FAIL
 exit status 1
-FAIL	github.com/john-nguyen09/phpintel/analysis	0.034s
+FAIL	github.com/john-nguyen09/phpintel/analysis	0.038s

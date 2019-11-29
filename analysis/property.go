@@ -9,12 +9,14 @@ import (
 
 // Property contains information for properties
 type Property struct {
-	location protocol.Location
+	location    protocol.Location
+	description string
 
 	Name               string
 	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
 	IsStatic           bool
+	Types              TypeComposite
 }
 
 func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
@@ -62,6 +64,10 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 		}
 		child = traverser.Advance()
 	}
+	phpDoc := document.getValidPhpDoc(property.location)
+	if phpDoc != nil {
+		property.applyPhpDoc(*phpDoc)
+	}
 	return property
 }
 
@@ -74,8 +80,16 @@ func (s *Property) GetName() string {
 }
 
 func (s *Property) GetDescription() string {
-	// TODO: Implement docblock description
-	return ""
+	return s.description
+}
+
+func (s *Property) applyPhpDoc(phpDoc phpDocComment) {
+	tags := phpDoc.Vars
+	for _, tag := range tags {
+		s.Types.add(newTypeString(tag.TypeString))
+		s.description = tag.Description
+		break
+	}
 }
 
 func (s *Property) GetCollection() string {
@@ -87,7 +101,7 @@ func (s *Property) GetKey() string {
 }
 
 func (s *Property) GetIndexableName() string {
-	return s.Name
+	return string([]rune(s.Name)[1:])
 }
 
 func (s *Property) GetIndexCollection() string {
@@ -104,6 +118,7 @@ func (s *Property) Serialise(serialiser *Serialiser) {
 	s.Scope.Write(serialiser)
 	serialiser.WriteInt(int(s.VisibilityModifier))
 	serialiser.WriteBool(s.IsStatic)
+	s.Types.Write(serialiser)
 }
 
 func ReadProperty(serialiser *Serialiser) *Property {
@@ -113,5 +128,6 @@ func ReadProperty(serialiser *Serialiser) *Property {
 		Scope:              ReadTypeString(serialiser),
 		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
 		IsStatic:           serialiser.ReadBool(),
+		Types:              ReadTypeComposite(serialiser),
 	}
 }

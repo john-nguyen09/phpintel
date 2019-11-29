@@ -12,7 +12,9 @@ import (
 // Variable represents a reference to the variable
 type Variable struct {
 	Expression
-	description string
+	description        string
+	canReferenceGlobal bool
+	hasResolved        bool
 }
 
 func newVariableExpression(document *Document, node *phrase.Phrase) HasTypes {
@@ -55,7 +57,17 @@ func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 }
 
 func (s *Variable) Resolve(store *Store) {
-
+	if s.hasResolved {
+		return
+	}
+	s.hasResolved = true
+	if !s.canReferenceGlobal {
+		return
+	}
+	globalVariables := store.GetGlobalVariables(s.Name)
+	for _, globalVariable := range globalVariables {
+		s.Type.merge(globalVariable.types)
+	}
 }
 
 func (s *Variable) GetTypes() TypeComposite {

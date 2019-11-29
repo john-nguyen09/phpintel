@@ -119,6 +119,10 @@ func (s *Function) GetDetail() string {
 	return s.returnTypes.ToString()
 }
 
+func (s *Function) GetReturnTypes() TypeComposite {
+	return s.returnTypes
+}
+
 func (s *Function) GetCollection() string {
 	return functionCollection
 }

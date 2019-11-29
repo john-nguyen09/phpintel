@@ -13,8 +13,9 @@ type Expression struct {
 	Name     string
 }
 
-func (e *Expression) GetScope() TypeComposite {
+func (e *Expression) ResolveAndGetScope(store *Store) TypeComposite {
 	if e.Scope != nil {
+		e.Scope.Resolve(store)
 		return e.Scope.GetTypes()
 	}
 	return newTypeComposite()

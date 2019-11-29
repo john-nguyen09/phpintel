@@ -34,7 +34,7 @@ func createCompletionEntries(uri string, indexable NameIndexable, symbolKey stri
 }
 
 func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]byte) *entry {
-	entry := newEntry(documentCompletionIndices, uri+KeySep+symbolKey)
+	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
 	entry.serialiser.WriteInt(len(keys))
 	for _, key := range keys {
 		entry.serialiser.WriteBytes(key)
@@ -43,7 +43,7 @@ func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]by
 }
 
 func deleteCompletionIndex(db *leveldb.DB, batch *leveldb.Batch, uri string) {
-	entry := newEntry(documentCompletionIndices, uri)
+	entry := newEntry(documentCompletionIndex, uri)
 	it := db.NewIterator(entry.prefixRange(), nil)
 	defer it.Release()
 	for it.Next() {

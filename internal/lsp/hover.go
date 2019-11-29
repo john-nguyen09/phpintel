@@ -67,7 +67,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.ScopedConstantAccess:
 		classConsts := []*analysis.ClassConst{}
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			classConsts = append(classConsts, store.GetClassConsts(scopeType.GetFQN(), v.Name)...)
 			if len(classConsts) > 0 {
 				hover = cmd.ClassConstToHover(symbol, *classConsts[0])
@@ -76,7 +76,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.ScopedMethodAccess:
 		methods := []*analysis.Method{}
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				if !method.IsStatic {
 					continue
@@ -90,7 +90,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.ScopedPropertyAccess:
 		properties := []*analysis.Property{}
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
 				if !property.IsStatic {
 				}
@@ -102,10 +102,11 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			}
 		}
 	case *analysis.Variable:
+		v.Resolve(store)
 		hover = cmd.VariableToHover(v)
 	case *analysis.PropertyAccess:
 		properties := []*analysis.Property{}
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
 				properties = append(properties, property)
 			}
@@ -116,7 +117,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.MethodAccess:
 		methods := []*analysis.Method{}
-		for _, scopeType := range v.GetScope().Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				methods = append(methods, method)
 			}

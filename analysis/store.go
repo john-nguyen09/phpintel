@@ -14,18 +14,19 @@ import (
 )
 
 const (
-	documentSymbols      string = "documentSymbols"
-	classCollection      string = "class"
-	interfaceCollection  string = "interface"
-	traitCollection      string = "trait"
-	functionCollection   string = "function"
-	constCollection      string = "const"
-	defineCollection     string = "define"
-	methodCollection     string = "method"
-	classConstCollection string = "classConst"
-	propertyCollection   string = "property"
+	documentSymbols          string = "documentSymbols"
+	classCollection          string = "class"
+	interfaceCollection      string = "interface"
+	traitCollection          string = "trait"
+	functionCollection       string = "function"
+	constCollection          string = "const"
+	defineCollection         string = "define"
+	methodCollection         string = "method"
+	classConstCollection     string = "classConst"
+	propertyCollection       string = "property"
+	globalVariableCollection string = "globalVariable"
 
-	documentCompletionIndices string = "documentCompletionIndices"
+	documentCompletionIndex   string = "documentCompletionIndices"
 	functionCompletionIndex   string = "functionCompletionIndex"
 	constCompletionIndex      string = "constCompletionIndex"
 	defineCompletionIndex     string = "defineCompletionIndex"
@@ -71,10 +72,9 @@ func (s *entry) getBytes() []byte {
 }
 
 type Store struct {
-	db            *leveldb.DB
-	documentLocks map[string]sync.Mutex
-	documentMu    sync.Mutex
-	documents     map[string]*Document
+	db         *leveldb.DB
+	documentMu sync.Mutex
+	documents  map[string]*Document
 }
 
 func NewStore(storePath string) (*Store, error) {
@@ -83,9 +83,8 @@ func NewStore(storePath string) (*Store, error) {
 		return nil, err
 	}
 	return &Store{
-		db:            db,
-		documentLocks: map[string]sync.Mutex{},
-		documents:     map[string]*Document{},
+		db:        db,
+		documents: map[string]*Document{},
 	}, nil
 }
 
@@ -96,8 +95,6 @@ func (s *Store) Close() error {
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	var ok bool
-	s.documentMu.Lock()
-	defer s.documentMu.Unlock()
 	if document, ok = s.documents[uri]; !ok {
 		filePath := putil.UriToPath(uri)
 		data, err := ioutil.ReadFile(filePath)
@@ -106,7 +103,6 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, string(data))
-		s.documents[uri] = document
 	}
 	return document
 }
@@ -118,6 +114,8 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) {
 		return
 	}
 	document.Open()
+	document.Load()
+	s.SyncDocument(document)
 }
 
 func (s *Store) CloseDocument(uri protocol.DocumentURI) {
@@ -127,6 +125,7 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 		return
 	}
 	document.Close()
+	s.SyncDocument(document)
 }
 
 func (s *Store) IndexDocument(filePath string) {
@@ -138,9 +137,6 @@ func (s *Store) IndexDocument(filePath string) {
 	}
 	document.Load()
 	s.SyncDocument(document)
-	if !document.isOpen {
-		document.Release()
-	}
 }
 
 func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentContentChangeEvent) error {
@@ -150,12 +146,8 @@ func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentConten
 		log.Printf("Document %s not found", uri)
 	}
 	document.ApplyChanges(changes)
-	document.Release()
 	document.Load()
 	s.SyncDocument(document)
-	if !document.isOpen {
-		document.Release()
-	}
 	return nil
 }
 
@@ -166,6 +158,15 @@ func (s *Store) SyncDocument(document *Document) {
 	err := s.db.Write(batch, nil)
 	if err != nil {
 		log.Print(err)
+	}
+	if document.isOpen {
+		s.documentMu.Lock()
+		s.documents[document.uri] = document
+		s.documentMu.Unlock()
+	} else {
+		s.documentMu.Lock()
+		delete(s.documents, document.uri)
+		s.documentMu.Unlock()
 	}
 }
 
@@ -482,4 +483,15 @@ func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 		properties = append(properties, ReadProperty(serialiser))
 	}
 	return properties
+}
+
+func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
+	entry := newEntry(globalVariableCollection, name)
+	results := []*GlobalVariable{}
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		results = append(results, ReadGlobalVariable(serialiser))
+	}
+	return results
 }

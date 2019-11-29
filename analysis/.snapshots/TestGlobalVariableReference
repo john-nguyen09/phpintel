@@ -1,0 +1,37 @@
+(struct { dbTypes analysis.TypeComposite; outputTypes analysis.TypeComposite; varTypes analysis.TypeComposite; insideFunctionNoGlobalTypes analysis.TypeComposite; insideFunctionHasGlobalTypes analysis.TypeComposite }) {
+  dbTypes: (analysis.TypeComposite) {
+    typeStrings: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=15) "TestMethodClass",
+        original: (string) (len=15) "TestMethodClass"
+      }
+    }
+  },
+  outputTypes: (analysis.TypeComposite) {
+    typeStrings: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=15) "TestMethodClass",
+        original: (string) (len=15) "TestMethodClass"
+      }
+    }
+  },
+  varTypes: (analysis.TypeComposite) {
+    typeStrings: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=15) "TestMethodClass",
+        original: (string) (len=15) "TestMethodClass"
+      }
+    }
+  },
+  insideFunctionNoGlobalTypes: (analysis.TypeComposite) {
+    typeStrings: ([]analysis.TypeString) <nil>
+  },
+  insideFunctionHasGlobalTypes: (analysis.TypeComposite) {
+    typeStrings: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=15) "TestMethodClass",
+        original: (string) (len=15) "TestMethodClass"
+      }
+    }
+  }
+}
