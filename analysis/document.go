@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"sort"
 	"sync"
+	"time"
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/parser"
@@ -14,11 +15,12 @@ import (
 
 // Document contains information of documents
 type Document struct {
-	uri                string
-	text               []rune
-	lineOffsets        []int
-	loadMu             sync.Mutex
-	isOpen             bool
+	uri         string
+	text        []rune
+	lineOffsets []int
+	loadMu      sync.Mutex
+	isOpen      bool
+
 	variableTables     []VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
@@ -104,6 +106,14 @@ func (s *Document) Close() {
 	s.isOpen = false
 }
 
+func (s *Document) ResetState() {
+	s.Children = []Symbol{}
+	s.variableTableLevel = 0
+	s.variableTables = []VariableTable{}
+	s.classStack = []Symbol{}
+	s.lastPhpDoc = nil
+}
+
 // Load makes sure that symbols are available
 func (s *Document) Load() {
 	if !s.hasChanges {
@@ -113,15 +123,6 @@ func (s *Document) Load() {
 	rootNode := parser.Parse(string(s.GetText()))
 	s.pushVariableTable(rootNode)
 	scanForChildren(s, rootNode)
-}
-
-// LockToDo locks the document to do a thing
-// the operation in thing should be synchronous, i.e.
-// no goroutine to be spawned
-func (s *Document) LockToDo(thing func(*Document)) {
-	s.loadMu.Lock()
-	defer s.loadMu.Unlock()
-	thing(s)
 }
 
 func (s *Document) getDocument() *Document {
@@ -135,6 +136,8 @@ func (s *Document) GetURI() string {
 
 // SetText is a setter for text, at the same time update line offsets
 func (s *Document) SetText(text string) {
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
 	s.text = []rune(text)
 	s.lineOffsets = calculateLineOffsets(s.text, 0)
 }
@@ -335,6 +338,8 @@ func (s *Document) SymbolAt(offset int) HasTypes {
 
 // SymbolAtPos returns a HasTypes symbol at the position
 func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
 	index := sort.Search(len(s.Children), func(i int) bool {
 		location := s.Children[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
@@ -353,6 +358,9 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
+	util.TimeTrack(time.Now(), "ApplyChanges")
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
 	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
@@ -381,6 +389,8 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 	}
+	s.ResetState()
+	s.Load()
 }
 
 func (s *Document) getLines() []string {

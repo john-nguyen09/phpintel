@@ -95,7 +95,9 @@ func (s *Store) Close() error {
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	var ok bool
+	s.documentMu.Lock()
 	if document, ok = s.documents[uri]; !ok {
+		s.documentMu.Unlock()
 		filePath := putil.UriToPath(uri)
 		data, err := ioutil.ReadFile(filePath)
 		if err != nil {
@@ -103,6 +105,8 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, string(data))
+	} else {
+		s.documentMu.Unlock()
 	}
 	return document
 }
@@ -146,7 +150,6 @@ func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentConten
 		log.Printf("Document %s not found", uri)
 	}
 	document.ApplyChanges(changes)
-	document.Load()
 	s.SyncDocument(document)
 	return nil
 }

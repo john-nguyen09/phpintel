@@ -1,8 +1,6 @@
 package analysis
 
 import (
-	"log"
-
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -42,7 +40,6 @@ func (s *PropertyAccess) Resolve(store *Store) {
 	}
 	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
 		for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+s.Name) {
-			log.Println(property.Types)
 			s.Type.merge(property.Types)
 		}
 	}
