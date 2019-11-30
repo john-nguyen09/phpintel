@@ -5,8 +5,10 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io"
+	"log"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -64,15 +66,21 @@ func (s *workspaceStore) addView(uri protocol.DocumentURI) {
 
 func (s *workspaceStore) indexFolder(folderPath string) {
 	go func() {
+		log.Println("Start indexing")
+		start := time.Now()
+		count := 0
 		godirwalk.Walk(folderPath, &godirwalk.Options{
 			Callback: func(path string, de *godirwalk.Dirent) error {
 				if !de.IsDir() && strings.HasSuffix(path, ".php") {
+					count++
 					s.jobs <- path
 				}
 				return nil
 			},
 			Unsorted: true,
 		})
+		elapsed := time.Since(start)
+		log.Printf("Finished indexing %d files in %s", count, elapsed)
 	}()
 }
 

@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -25,6 +26,7 @@ const (
 	classConstCollection     string = "classConst"
 	propertyCollection       string = "property"
 	globalVariableCollection string = "globalVariable"
+	documentCollection       string = "document"
 
 	documentCompletionIndex   string = "documentCompletionIndices"
 	functionCompletionIndex   string = "functionCompletionIndex"
@@ -139,6 +141,14 @@ func (s *Store) IndexDocument(filePath string) {
 		log.Printf("Failed to get %s", filePath)
 		return
 	}
+
+	currentMD5 := document.GetMD5Hash()
+	entry := newEntry(documentCollection, document.GetURI())
+	savedMD5, err := s.db.Get(entry.getKeyBytes(), nil)
+	if err == nil && bytes.Compare(currentMD5, savedMD5) == 0 {
+		return
+	}
+
 	document.Load()
 	s.SyncDocument(document)
 }
@@ -158,6 +168,8 @@ func (s *Store) SyncDocument(document *Document) {
 	batch := new(leveldb.Batch)
 	s.forgetAllSymbols(batch, document)
 	s.writeAllSymbols(batch, document)
+	entry := newEntry(documentCollection, document.GetURI())
+	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
 	err := s.db.Write(batch, nil)
 	if err != nil {
 		log.Print(err)

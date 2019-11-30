@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"sort"
 	"sync"
@@ -436,4 +437,10 @@ func (s *Document) getGlobalVariable(name string) *GlobalVariable {
 		}
 	}
 	return nil
+}
+
+func (s *Document) GetMD5Hash() []byte {
+	hasher := md5.New()
+	hasher.Write(util.RunesToUTF8(s.GetText()))
+	return hasher.Sum(nil)
 }
