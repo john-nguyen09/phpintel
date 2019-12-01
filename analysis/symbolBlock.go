@@ -56,6 +56,12 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil
 		if p, ok := child.(*phrase.Phrase); ok {
+			if p.Type == phrase.NamespaceDefinition {
+				namespace := newNamespace(document, node)
+				document.setNamespace(namespace)
+				continue
+			}
+
 			scanForExpression(document, p)
 			if _, ok := scanPhraseTypes[p.Type]; ok {
 				scanForChildren(document, p)

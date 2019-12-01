@@ -28,6 +28,7 @@ type Document struct {
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
+	namespace          *Namespace
 }
 
 // VariableTable holds the range and the variables inside
@@ -443,4 +444,8 @@ func (s *Document) GetMD5Hash() []byte {
 	hasher := md5.New()
 	hasher.Write(util.RunesToUTF8(s.GetText()))
 	return hasher.Sum(nil)
+}
+
+func (s *Document) setNamespace(namespace *Namespace) {
+	s.namespace = namespace
 }

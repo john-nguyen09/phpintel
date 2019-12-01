@@ -5,11 +5,6 @@ import (
 	"strings"
 )
 
-// SymbolType is an interface to symbol types
-type SymbolType interface {
-	Resolve() []TypeString
-}
-
 // Aliases is a constant to look up aliases (e.g. boolean is bool)
 var /* const */ Aliases = map[string]string{
 	"boolean": "bool",

@@ -1,6 +1,0 @@
-2019/11/29 23:04:37 {[{TestMethodClass TestMethodClass}]}
---- FAIL: TestGlobalVariableReference (0.01s)
-    globalVariable_test.go:82: snapshot created for test TestGlobalVariableReference
-FAIL
-exit status 1
-FAIL	github.com/john-nguyen09/phpintel/analysis	0.038s

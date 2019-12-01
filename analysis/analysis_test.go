@@ -15,7 +15,6 @@ import (
 type ParsingContext struct {
 	store     *Store
 	waitGroup sync.WaitGroup
-	documents []*Document
 }
 
 func newParsingContext() *ParsingContext {
@@ -24,13 +23,11 @@ func newParsingContext() *ParsingContext {
 		panic(err)
 	}
 	return &ParsingContext{
-		store:     store,
-		documents: []*Document{},
+		store: store,
 	}
 }
 
 func (s *ParsingContext) addDocument(document *Document) {
-	s.documents = append(s.documents, document)
 	s.store.SyncDocument(document)
 }
 
