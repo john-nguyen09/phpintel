@@ -1,0 +1,12 @@
+(analysis.ImportTable) {
+  namespace: (string) (len=14) "TestNamespace1",
+  classes: (map[string]string) (len=1) {
+    (string) (len=13) "RootTestClass": (string) (len=9) "TestClass"
+  },
+  functions: (map[string]string) (len=2) {
+    (string) (len=13) "testFunction2": (string) (len=28) "TestNamespace3\\testFunction2",
+    (string) (len=13) "testFunction3": (string) (len=28) "TestNamespace3\\testFunction3"
+  },
+  constants: (map[string]string) {
+  }
+}

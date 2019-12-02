@@ -6,7 +6,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     Extends: (analysis.TypeString) {
@@ -20,142 +20,191 @@
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 3:19-3:31
     },
+    description: (string) "",
     Name: (string) (len=12) "$staticProp1",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) true
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 4:21-4:33
     },
+    description: (string) "",
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) true
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 5:18-5:30
     },
+    description: (string) "",
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) true
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 6:11-6:37
     },
+    description: (string) "",
     Name: (string) (len=12) "$staticProp4",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) true
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 7:19-7:45
     },
+    description: (string) "",
     Name: (string) (len=12) "$staticProp6",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) true
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 9:12-9:18
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop1",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 10:14-10:20
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop2",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 11:11-11:17
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop3",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 12:8-12:22
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 13:14-13:28
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop7",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=29) "file:///../cases/property.php",
       Range: (protocol.Range) 18:11-18:17
     },
+    description: (string) "",
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=19) "ClassWithProperties",
+      fqn: (string) (len=20) "\\ClassWithProperties",
       original: (string) (len=19) "ClassWithProperties"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=19) "ClassWithProperties",
+          original: (string) (len=19) "ClassWithProperties"
+        }
+      }
+    }
   })
 }

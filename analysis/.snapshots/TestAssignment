@@ -28,7 +28,9 @@
       },
       Name: (string) (len=5) "$var1"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {
@@ -65,7 +67,9 @@
       },
       Name: (string) (len=5) "$var1"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {
@@ -116,10 +120,11 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-            Range: (protocol.Range) 3:8-3:23
+            Range: (protocol.Range) 3:8-3:20
           },
-          Name: (string) (len=13) "testFunction1"
-        }
+          Name: (string) (len=12) "testFunction"
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
@@ -127,7 +132,9 @@
       },
       Name: (string) (len=5) "$var2"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -137,10 +144,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 3:8-3:23
+        Range: (protocol.Range) 3:8-3:20
       },
-      Name: (string) (len=13) "testFunction1"
-    }
+      Name: (string) (len=12) "testFunction"
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -154,7 +162,9 @@
       },
       Name: (string) (len=5) "$var2"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -164,10 +174,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
-        Range: (protocol.Range) 3:8-3:23
+        Range: (protocol.Range) 3:8-3:20
       },
-      Name: (string) (len=13) "testFunction1"
-    }
+      Name: (string) (len=12) "testFunction"
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -191,7 +202,9 @@
           },
           Name: (string) (len=5) "$var1"
         },
-        description: (string) ""
+        description: (string) "",
+        canReferenceGlobal: (bool) true,
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=39) "file:///../cases/variableAssignment.php",
@@ -199,7 +212,9 @@
       },
       Name: (string) (len=5) "$var3"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -218,7 +233,9 @@
       },
       Name: (string) (len=5) "$var1"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -237,7 +254,9 @@
       },
       Name: (string) (len=5) "$var3"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -256,7 +275,9 @@
       },
       Name: (string) (len=5) "$var1"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -299,7 +320,9 @@
       },
       Name: (string) (len=5) "$var4"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
@@ -361,7 +384,9 @@
       },
       Name: (string) (len=5) "$var4"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {

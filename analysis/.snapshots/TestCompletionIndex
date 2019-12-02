@@ -6,7 +6,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
     },
     Extends: (analysis.TypeString) {
@@ -22,7 +22,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     Extends: (analysis.TypeString) {

@@ -4,7 +4,10 @@
       URI: (string) (len=26) "file:///../cases/const.php",
       Range: (protocol.Range) 2:6-2:21
     },
-    Name: (string) (len=11) "TEST_CONST1",
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=12) "\\TEST_CONST1",
+      original: (string) (len=11) "TEST_CONST1"
+    },
     Value: (string) (len=1) "1"
   }),
   (*analysis.FunctionCall)({
@@ -15,10 +18,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=26) "file:///../cases/const.php",
-        Range: (protocol.Range) 3:0-3:24
+        Range: (protocol.Range) 3:0-3:6
       },
       Name: (string) (len=6) "define"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Define)({
     location: (protocol.Location) {
@@ -26,7 +30,7 @@
       Range: (protocol.Range) 3:0-3:24
     },
     Name: (analysis.TypeString) {
-      fqn: (string) (len=11) "TEST_CONST2",
+      fqn: (string) (len=12) "\\TEST_CONST2",
       original: (string) (len=11) "TEST_CONST2"
     },
     Value: (string) (len=1) "2"

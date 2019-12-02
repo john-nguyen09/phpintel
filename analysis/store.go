@@ -234,9 +234,9 @@ func deleteEntry(batch *leveldb.Batch, entry *entry) {
 }
 
 func (s *Store) GetClasses(name string) []*Class {
-	prefix := []byte("class" + KeySep + name + KeySep)
+	entry := newEntry(classCollection, name)
 	classes := []*Class{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classes = append(classes, ReadClass(serialiser))
@@ -260,9 +260,9 @@ func (s *Store) SearchClasses(keyword string) []*Class {
 }
 
 func (s *Store) GetInterfaces(name string) []*Interface {
-	prefix := []byte("interface" + KeySep + name)
+	entry := newEntry(interfaceCollection, name)
 	interfaces := []*Interface{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		interfaces = append(interfaces, ReadInterface(serialiser))
@@ -286,9 +286,9 @@ func (s *Store) SearchInterfaces(keyword string) []*Interface {
 }
 
 func (s *Store) GetTraits(name string) []*Trait {
-	prefix := []byte("trait" + KeySep + name)
+	entry := newEntry(traitCollection, name)
 	traits := []*Trait{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		traits = append(traits, ReadTrait(serialiser))
@@ -312,9 +312,9 @@ func (s *Store) SearchTraits(keyword string) []*Trait {
 }
 
 func (s *Store) GetFunctions(name string) []*Function {
-	prefix := []byte("function" + KeySep + name)
+	entry := newEntry(functionCollection, name)
 	functions := []*Function{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		functions = append(functions, ReadFunction(serialiser))
@@ -338,9 +338,9 @@ func (s *Store) SearchFunctions(keyword string) []*Function {
 }
 
 func (s *Store) GetConsts(name string) []*Const {
-	prefix := []byte("const" + KeySep + name)
+	entry := newEntry(constCollection, name)
 	consts := []*Const{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		consts = append(consts, ReadConst(serialiser))
@@ -364,9 +364,9 @@ func (s *Store) SearchConsts(keyword string) []*Const {
 }
 
 func (s *Store) GetDefines(name string) []*Define {
-	prefix := []byte("define" + KeySep + name)
+	entry := newEntry(defineCollection, name)
 	defines := []*Define{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		defines = append(defines, ReadDefine(serialiser))
@@ -390,9 +390,9 @@ func (s *Store) SearchDefines(keyword string) []*Define {
 }
 
 func (s *Store) GetMethods(scope string, name string) []*Method {
-	prefix := []byte("method" + KeySep + scope + KeySep + name)
+	entry := newEntry(methodCollection, scope+KeySep+name)
 	methods := []*Method{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
@@ -427,9 +427,9 @@ func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 }
 
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
-	prefix := []byte("classConst" + KeySep + scope + KeySep + name)
+	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
@@ -464,9 +464,9 @@ func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
 }
 
 func (s *Store) GetProperties(scope string, name string) []*Property {
-	prefix := []byte("property" + KeySep + scope + KeySep + name)
+	entry := newEntry(propertyCollection, scope+KeySep+name)
 	properties := []*Property{}
-	it := s.db.NewIterator(util.BytesPrefix(prefix), nil)
+	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))

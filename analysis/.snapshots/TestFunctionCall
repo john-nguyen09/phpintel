@@ -12,10 +12,11 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/functionCall.php",
-            Range: (protocol.Range) 2:8-2:28
+            Range: (protocol.Range) 2:8-2:13
           },
           Name: (string) (len=5) "fopen"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
@@ -23,7 +24,9 @@
       },
       Name: (string) (len=5) "$file"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -33,10 +36,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 2:8-2:28
+        Range: (protocol.Range) 2:8-2:13
       },
       Name: (string) (len=5) "fopen"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -50,7 +54,9 @@
       },
       Name: (string) (len=5) "$file"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -60,10 +66,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 2:8-2:28
+        Range: (protocol.Range) 2:8-2:13
       },
       Name: (string) (len=5) "fopen"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -88,10 +95,11 @@
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
             URI: (string) (len=33) "file:///../cases/functionCall.php",
-            Range: (protocol.Range) 4:16-4:28
+            Range: (protocol.Range) 4:16-4:21
           },
           Name: (string) (len=5) "fgets"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
@@ -99,7 +107,9 @@
       },
       Name: (string) (len=5) "$line"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -109,10 +119,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 4:16-4:28
+        Range: (protocol.Range) 4:16-4:21
       },
       Name: (string) (len=5) "fgets"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -126,7 +137,9 @@
       },
       Name: (string) (len=5) "$line"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
@@ -136,10 +149,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 4:16-4:28
+        Range: (protocol.Range) 4:16-4:21
       },
       Name: (string) (len=5) "fgets"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -153,7 +167,9 @@
       },
       Name: (string) (len=5) "$file"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -177,10 +193,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 5:4-5:27
+        Range: (protocol.Range) 5:4-5:10
       },
       Name: (string) (len=6) "printf"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -194,7 +211,9 @@
       },
       Name: (string) (len=5) "$line"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
@@ -260,10 +279,11 @@
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/functionCall.php",
-        Range: (protocol.Range) 8:0-8:13
+        Range: (protocol.Range) 8:0-8:6
       },
       Name: (string) (len=6) "fclose"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -277,7 +297,9 @@
       },
       Name: (string) (len=5) "$file"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {

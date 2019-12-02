@@ -86,7 +86,7 @@ func (s *Property) GetDescription() string {
 func (s *Property) applyPhpDoc(phpDoc phpDocComment) {
 	tags := phpDoc.Vars
 	for _, tag := range tags {
-		s.Types.add(newTypeString(tag.TypeString))
+		s.Types.add(NewTypeString(tag.TypeString))
 		s.description = tag.Description
 		break
 	}

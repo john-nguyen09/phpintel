@@ -28,7 +28,7 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 			scanForChildren(document, interfaceBody)
 		}
 	}
-
+	theInterface.Name.SetNamespace(document.importTable.namespace)
 	return theInterface
 }
 
@@ -40,7 +40,7 @@ func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = newTypeString(document.GetTokenText(token))
+					s.Name = NewTypeString(document.GetTokenText(token))
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
@@ -61,7 +61,7 @@ func (s *Interface) extends(document *Document, node *phrase.Phrase) {
 	child := traverser.Peek()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedNameList {
-			traverser.Descend()
+			traverser, _ = traverser.Descend()
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {

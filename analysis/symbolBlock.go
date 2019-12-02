@@ -47,6 +47,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.SimpleAssignmentExpression: newAssignment,
 		phrase.PropertyDeclaration:        newPropertyDeclaration,
 		phrase.GlobalDeclaration:          newGlobalDeclaration,
+		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
 	}
 	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 		// Expressions
@@ -57,7 +58,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		var childSymbol Symbol = nil
 		if p, ok := child.(*phrase.Phrase); ok {
 			if p.Type == phrase.NamespaceDefinition {
-				namespace := newNamespace(document, node)
+				namespace := newNamespace(document, p)
 				document.setNamespace(namespace)
 				continue
 			}

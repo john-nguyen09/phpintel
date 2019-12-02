@@ -32,7 +32,7 @@ type TypeString struct {
 	original string
 }
 
-func newTypeString(typeString string) TypeString {
+func NewTypeString(typeString string) TypeString {
 	symbolTypeString := TypeString{
 		original: typeString,
 	}
@@ -50,15 +50,6 @@ func (t *TypeString) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.fqn)
 }
 
-// IsFqn checks whether the type is fqn
-func (t TypeString) IsFqn() bool {
-	if _, ok := Natives[t.fqn]; ok {
-		return true
-	}
-
-	return []rune(t.fqn)[0] == '\\'
-}
-
 // IsEmpty checks whether TypeString is empty
 func (t TypeString) IsEmpty() bool {
 	return t.fqn == "" || t.fqn == "\\"
@@ -74,9 +65,28 @@ func (t TypeString) GetFQN() string {
 	return t.fqn
 }
 
-// SetFqn is a setter to FQN
-func (t *TypeString) SetFqn(fqn string) {
-	t.fqn = fqn
+func (t *TypeString) SetNamespace(namespace string) {
+	if !isFQN(t.fqn) {
+		if namespace == "" || namespace == "\\" {
+			t.fqn = "\\" + t.fqn
+		} else {
+			t.fqn = "\\" + namespace + "\\" + t.fqn
+		}
+	}
+}
+
+func (t TypeString) FirstPart() string {
+	if strings.Index(t.original, "\\") != -1 {
+		return strings.Split(t.original, "\\")[0]
+	}
+	return t.original
+}
+
+func isFQN(name string) bool {
+	if _, ok := Natives[name]; ok {
+		return true
+	}
+	return name[0] == '\\'
 }
 
 // GetType gets the FQN of type

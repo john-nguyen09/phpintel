@@ -6,7 +6,7 @@ import (
 )
 
 type Namespace struct {
-	Name TypeString
+	Name string
 }
 
 func newNamespace(document *Document, node *phrase.Phrase) *Namespace {
@@ -17,7 +17,7 @@ func newNamespace(document *Document, node *phrase.Phrase) *Namespace {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.NamespaceName:
-				namespace.Name = newTypeString("\\" + document.GetPhraseText(node))
+				namespace.Name = document.GetPhraseText(p)
 			}
 		}
 		child = traverser.Advance()

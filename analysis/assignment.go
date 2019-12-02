@@ -19,8 +19,7 @@ func newAssignment(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func analyseVariableAssignment(document *Document,
-	node *phrase.Phrase, traverser util.Traverser) {
+func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverser *util.Traverser) {
 	traverser.Advance()
 	traverser.SkipToken(lexer.Whitespace)
 	traverser.SkipToken(lexer.Equals)

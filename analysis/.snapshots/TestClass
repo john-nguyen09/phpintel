@@ -1,12 +1,12 @@
-([]analysis.Symbol) (len=4) {
+([]analysis.Symbol) (len=5) {
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 2:0-4:1
+      Range: (protocol.Range) 2:0-6:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=9) "TestClass",
+      fqn: (string) (len=10) "\\TestClass",
       original: (string) (len=9) "TestClass"
     },
     Extends: (analysis.TypeString) {
@@ -15,14 +15,35 @@
     },
     Interfaces: ([]analysis.TypeString) <nil>
   }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=26) "file:///../cases/class.php",
+      Range: (protocol.Range) 3:4-5:5
+    },
+    Name: (string) (len=7) "method1",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
+      }
+    },
+    description: (string) "",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=10) "\\TestClass",
+      original: (string) (len=9) "TestClass"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 6:0-8:1
+      Range: (protocol.Range) 8:0-10:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=10) "TestClass1",
+      fqn: (string) (len=11) "\\TestClass1",
       original: (string) (len=10) "TestClass1"
     },
     Extends: (analysis.TypeString) {
@@ -39,11 +60,11 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 10:0-12:1
+      Range: (protocol.Range) 12:0-14:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=10) "TestClass2",
+      fqn: (string) (len=11) "\\TestClass2",
       original: (string) (len=10) "TestClass2"
     },
     Extends: (analysis.TypeString) {
@@ -64,11 +85,11 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 13:0-13:78
+      Range: (protocol.Range) 15:0-15:78
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=10) "TestClass3",
+      fqn: (string) (len=11) "\\TestClass3",
       original: (string) (len=10) "TestClass3"
     },
     Extends: (analysis.TypeString) {

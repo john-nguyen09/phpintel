@@ -6,7 +6,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=15) "ClassConstTest1",
+      fqn: (string) (len=16) "\\ClassConstTest1",
       original: (string) (len=15) "ClassConstTest1"
     },
     Extends: (analysis.TypeString) {
@@ -23,7 +23,7 @@
     Name: (string) (len=12) "CLASS_CONST1",
     Value: (string) (len=1) "5",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "ClassConstTest1",
+      fqn: (string) (len=16) "\\ClassConstTest1",
       original: (string) (len=15) "ClassConstTest1"
     }
   })

@@ -172,7 +172,9 @@
       },
       Name: (string) (len=9) "$instance"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {
@@ -209,7 +211,9 @@
       },
       Name: (string) (len=9) "$instance"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {
@@ -264,7 +268,9 @@
       },
       Name: (string) (len=9) "$instance"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.PropertyAccess)({
     Expression: (analysis.Expression) {
@@ -288,14 +294,17 @@
           },
           Name: (string) (len=9) "$instance"
         },
-        description: (string) ""
+        description: (string) "",
+        canReferenceGlobal: (bool) true,
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 7:0-7:16
+        Range: (protocol.Range) 7:11-7:16
       },
       Name: (string) (len=5) "prop2"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -314,7 +323,9 @@
       },
       Name: (string) (len=9) "$instance"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
     Expression: (analysis.Expression) {
@@ -338,13 +349,16 @@
           },
           Name: (string) (len=9) "$instance"
         },
-        description: (string) ""
+        description: (string) "",
+        canReferenceGlobal: (bool) true,
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=33) "file:///../cases/memberAccess.php",
-        Range: (protocol.Range) 8:0-8:20
+        Range: (protocol.Range) 8:11-8:18
       },
       Name: (string) (len=7) "method2"
-    }
+    },
+    hasResolved: (bool) false
   })
 }

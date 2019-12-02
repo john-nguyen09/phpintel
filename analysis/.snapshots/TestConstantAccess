@@ -29,7 +29,9 @@
       },
       Name: (string) (len=11) "$currentDir"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -43,7 +45,9 @@
       },
       Name: (string) (len=11) "$currentDir"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
@@ -75,7 +79,9 @@
       },
       Name: (string) (len=14) "$randomInclude"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -89,7 +95,9 @@
       },
       Name: (string) (len=14) "$randomInclude"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {

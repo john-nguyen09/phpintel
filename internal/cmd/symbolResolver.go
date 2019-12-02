@@ -59,7 +59,7 @@ func ClassToHover(ref analysis.HasTypes, class analysis.Class) *protocol.Hover {
 
 func ConstToHover(ref analysis.HasTypes, constant analysis.Const) *protocol.Hover {
 	content := "```"
-	content += "const " + constant.Name
+	content += "const " + constant.Name.GetOriginal()
 	if len(constant.Value) > 0 {
 		content += " = " + constant.Value
 	}

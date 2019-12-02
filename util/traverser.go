@@ -1,21 +1,23 @@
 package util
 
 import (
+	"errors"
+
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 )
 
 type Traverser struct {
-	spine []*phrase.Phrase
-	node  phrase.AstNode
-	index int
+	node   phrase.AstNode
+	index  int
+	parent *Traverser
 }
 
-func NewTraverser(node *phrase.Phrase) Traverser {
-	return Traverser{
-		node:  node,
-		spine: []*phrase.Phrase{node},
-		index: 0,
+func NewTraverser(node *phrase.Phrase) *Traverser {
+	return &Traverser{
+		node:   node,
+		index:  0,
+		parent: nil,
 	}
 }
 
@@ -40,22 +42,28 @@ func (s *Traverser) Peek() phrase.AstNode {
 	return p.Children[s.index]
 }
 
-func (s *Traverser) Descend() {
+func (s *Traverser) Descend() (*Traverser, error) {
 	p, ok := s.node.(*phrase.Phrase)
 	if !ok {
-		return
+		return nil, errors.New("Cannot descend into token")
 	}
 
 	if s.index >= len(p.Children) {
-		return
+		return nil, errors.New("This is outside of children")
 	}
 
-	node := p.Children[s.index]
-	if p, ok := node.(*phrase.Phrase); ok {
-		s.spine = append(s.spine, p)
+	return &Traverser{
+		node:   p.Children[s.index],
+		index:  0,
+		parent: s,
+	}, nil
+}
+
+func (s *Traverser) Ascend() (*Traverser, error) {
+	if s.parent == nil {
+		return nil, errors.New("Cannot ascend because has not been descended")
 	}
-	s.node = node
-	s.index = 0
+	return s.parent, nil
 }
 
 func (s *Traverser) SkipToken(tokenType lexer.TokenType) {
@@ -67,10 +75,9 @@ func (s *Traverser) SkipToken(tokenType lexer.TokenType) {
 	}
 }
 
-func (s *Traverser) Clone() Traverser {
-	return Traverser{
+func (s *Traverser) Clone() *Traverser {
+	return &Traverser{
 		node:  s.node,
-		spine: s.spine,
 		index: s.index,
 	}
 }

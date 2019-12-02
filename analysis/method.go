@@ -8,8 +8,12 @@ import (
 
 // Method contains information of methods
 type Method struct {
-	Function
+	location protocol.Location
 
+	Name               string
+	Params             []*Parameter
+	returnTypes        TypeComposite
+	description        string
 	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
 	IsStatic           bool
@@ -23,7 +27,10 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	}
 
 	if function, ok := symbol.(*Function); ok {
-		method.Function = *function
+		method.Name = function.Name.GetOriginal()
+		method.Params = function.Params
+		method.returnTypes = function.returnTypes
+		method.description = function.description
 	}
 	method.location = document.GetNodeLocation(node)
 	lastClass := document.getLastClass()
@@ -70,11 +77,11 @@ func (s *Method) GetCollection() string {
 }
 
 func (s *Method) GetKey() string {
-	return s.Scope.fqn + KeySep + s.Function.GetKey()
+	return s.Scope.GetFQN() + KeySep + s.Name + s.location.URI
 }
 
 func (s *Method) GetIndexableName() string {
-	return s.Function.GetIndexableName()
+	return s.Name
 }
 
 func (s *Method) GetIndexCollection() string {
@@ -86,7 +93,15 @@ func (s *Method) GetPrefix() string {
 }
 
 func (s *Method) Serialise(serialiser *Serialiser) {
-	s.Function.Serialise(serialiser)
+	serialiser.WriteLocation(s.location)
+	serialiser.WriteString(s.Name)
+	serialiser.WriteInt(len(s.Params))
+	for _, param := range s.Params {
+		param.Write(serialiser)
+	}
+	s.returnTypes.Write(serialiser)
+	serialiser.WriteString(s.description)
+
 	s.Scope.Write(serialiser)
 	serialiser.WriteInt(int(s.VisibilityModifier))
 	serialiser.WriteBool(s.IsStatic)
@@ -94,11 +109,22 @@ func (s *Method) Serialise(serialiser *Serialiser) {
 }
 
 func ReadMethod(serialiser *Serialiser) *Method {
-	return &Method{
-		Function:           *ReadFunction(serialiser),
-		Scope:              ReadTypeString(serialiser),
-		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
-		IsStatic:           serialiser.ReadBool(),
-		ClassModifier:      ClassModifierValue(serialiser.ReadInt()),
+	method := Method{
+		location: serialiser.ReadLocation(),
+		Name:     serialiser.ReadString(),
+		Params:   make([]*Parameter, 0),
 	}
+	countParams := serialiser.ReadInt()
+	for i := 0; i < countParams; i++ {
+		method.Params = append(method.Params, ReadParameter(serialiser))
+	}
+	method.returnTypes = ReadTypeComposite(serialiser)
+	method.description = serialiser.ReadString()
+
+	method.Scope = ReadTypeString(serialiser)
+	method.VisibilityModifier = VisibilityModifierValue(serialiser.ReadInt())
+	method.IsStatic = serialiser.ReadBool()
+	method.ClassModifier = ClassModifierValue(serialiser.ReadInt())
+
+	return &method
 }

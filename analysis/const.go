@@ -11,7 +11,7 @@ import (
 type Const struct {
 	location protocol.Location
 
-	Name  string
+	Name  TypeString
 	Value string
 }
 
@@ -40,7 +40,7 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 			switch token.Type {
 			case lexer.Name:
 				{
-					constant.Name = document.GetTokenText(token)
+					constant.Name = NewTypeString(document.GetTokenText(token))
 				}
 			case lexer.Equals:
 				{
@@ -62,6 +62,7 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 
 		child = traverser.Advance()
 	}
+	constant.Name.SetNamespace(document.importTable.namespace)
 
 	return constant
 }
@@ -71,7 +72,7 @@ func (s *Const) GetLocation() protocol.Location {
 }
 
 func (s *Const) GetName() string {
-	return s.Name
+	return s.Name.GetFQN()
 }
 
 func (s *Const) GetDescription() string {
@@ -84,11 +85,11 @@ func (s *Const) GetCollection() string {
 }
 
 func (s *Const) GetKey() string {
-	return s.Name + KeySep + s.location.URI
+	return s.GetName() + KeySep + s.location.URI
 }
 
 func (s *Const) GetIndexableName() string {
-	return s.Name
+	return s.Name.GetOriginal()
 }
 
 func (s *Const) GetIndexCollection() string {
@@ -101,14 +102,14 @@ func (s *Const) GetPrefix() string {
 
 func (s *Const) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
+	s.Name.Write(serialiser)
 	serialiser.WriteString(s.Value)
 }
 
 func ReadConst(serialiser *Serialiser) *Const {
 	return &Const{
 		location: serialiser.ReadLocation(),
-		Name:     serialiser.ReadString(),
+		Name:     ReadTypeString(serialiser),
 		Value:    serialiser.ReadString(),
 	}
 }

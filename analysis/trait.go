@@ -28,7 +28,7 @@ func newTrait(document *Document, node *phrase.Phrase) Symbol {
 			scanForChildren(document, classBody)
 		}
 	}
-
+	trait.Name.SetNamespace(document.importTable.namespace)
 	return trait
 }
 
@@ -38,7 +38,7 @@ func (s *Trait) analyseHeader(document *Document, traitHeader *phrase.Phrase) {
 	for child != nil {
 		if token, ok := child.(*lexer.Token); ok {
 			if token.Type == lexer.Name {
-				s.Name = newTypeString(document.GetTokenText(token))
+				s.Name = NewTypeString(document.GetTokenText(token))
 			}
 		}
 

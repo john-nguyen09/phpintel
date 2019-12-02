@@ -5,7 +5,7 @@
       Range: (protocol.Range) 2:0-4:1
     },
     Name: (analysis.TypeString) {
-      fqn: (string) (len=10) "TestTrait1",
+      fqn: (string) (len=11) "\\TestTrait1",
       original: (string) (len=10) "TestTrait1"
     }
   })

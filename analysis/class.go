@@ -79,7 +79,7 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = newTypeString(document.GetTokenText(token))
+					s.Name = NewTypeString(document.GetTokenText(token))
 				}
 			case lexer.Abstract:
 				{
@@ -105,6 +105,8 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 
 		child = traverser.Advance()
 	}
+
+	s.Name.SetNamespace(document.importTable.namespace)
 }
 
 func (s *Class) extends(document *Document, p *phrase.Phrase) {
@@ -129,7 +131,7 @@ func (s *Class) implements(document *Document, p *phrase.Phrase) {
 	child := traverser.Peek()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedNameList {
-			traverser.Descend()
+			traverser, _ = traverser.Descend()
 			child = traverser.Advance()
 			for child != nil {
 				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {

@@ -50,5 +50,5 @@ type NameIndexable interface {
 }
 
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
-	return newTypeString(string(document.GetNodeText(p)))
+	return NewTypeString(string(document.GetNodeText(p)))
 }

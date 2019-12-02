@@ -62,7 +62,7 @@ func (s *GlobalVariable) applyPhpDoc(phpDoc *phpDocComment) {
 	tags := phpDoc.Globals
 	for _, tag := range tags {
 		if tag.Name == s.Name {
-			s.types.add(newTypeString(tag.TypeString))
+			s.types.add(NewTypeString(tag.TypeString))
 			s.description = tag.Description
 			break
 		}

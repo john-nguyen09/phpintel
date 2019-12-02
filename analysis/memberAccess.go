@@ -7,7 +7,7 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func readMemberName(document *Document, traverser util.Traverser) (string, protocol.Location) {
+func readMemberName(document *Document, traverser *util.Traverser) (string, protocol.Location) {
 	next := traverser.Peek()
 	var startRange *protocol.Range = nil
 	for nextToken, ok := next.(*lexer.Token); ok && nextToken.Type == lexer.Whitespace; {

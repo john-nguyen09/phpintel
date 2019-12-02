@@ -5,7 +5,7 @@
       Range: (protocol.Range) 2:0-5:1
     },
     Name: (analysis.TypeString) {
-      fqn: (string) (len=13) "TestInterface",
+      fqn: (string) (len=14) "\\TestInterface",
       original: (string) (len=13) "TestInterface"
     },
     Extends: ([]analysis.TypeString) <nil>
@@ -16,7 +16,7 @@
       Range: (protocol.Range) 7:0-7:50
     },
     Name: (analysis.TypeString) {
-      fqn: (string) (len=14) "TestInterface2",
+      fqn: (string) (len=15) "\\TestInterface2",
       original: (string) (len=14) "TestInterface2"
     },
     Extends: ([]analysis.TypeString) (len=1) {

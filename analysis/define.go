@@ -33,7 +33,7 @@ func newDefine(document *Document, node *phrase.Phrase) Symbol {
 		}
 		child = traverser.Advance()
 	}
-
+	define.Name.SetNamespace(document.importTable.namespace)
 	return define
 }
 
@@ -55,7 +55,7 @@ func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
 	if token, ok := firstArg.(*lexer.Token); ok {
 		if token.Type == lexer.StringLiteral {
 			stringText := document.GetTokenText(token)
-			s.Name = newTypeString(stringText[1 : len(stringText)-1])
+			s.Name = NewTypeString(stringText[1 : len(stringText)-1])
 		}
 	}
 	if len(args.GetArguments()) >= 2 {

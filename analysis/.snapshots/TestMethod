@@ -6,7 +6,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     Extends: (analysis.TypeString) {
@@ -16,17 +16,20 @@
     Interfaces: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 3:4-5:5
-      },
-      Name: (string) (len=11) "testMethod1",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 3:4-5:5
+    },
+    Name: (string) (len=11) "testMethod1",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
@@ -34,44 +37,49 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 7:4-9:5
-      },
-      Name: (string) (len=11) "testMethod2",
-      Params: ([]analysis.Parameter) (len=2) {
-        (analysis.Parameter) {
-          location: (protocol.Location) {
-            URI: (string) (len=27) "file:///../cases/method.php",
-            Range: (protocol.Range) 7:35-7:46
-          },
-          Name: (string) (len=7) "$param1",
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Value: (string) ""
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 7:4-9:5
+    },
+    Name: (string) (len=11) "testMethod2",
+    Params: ([]*analysis.Parameter) (len=2) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=27) "file:///../cases/method.php",
+          Range: (protocol.Range) 7:35-7:46
         },
-        (analysis.Parameter) {
-          location: (protocol.Location) {
-            URI: (string) (len=27) "file:///../cases/method.php",
-            Range: (protocol.Range) 7:48-7:79
-          },
-          Name: (string) (len=7) "$param2",
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=23) "TestAbstractMethodClass",
-                original: (string) (len=23) "TestAbstractMethodClass"
-              }
+        description: (string) "",
+        Name: (string) (len=7) "$param1",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=27) "file:///../cases/method.php",
+          Range: (protocol.Range) 7:48-7:79
+        },
+        description: (string) "",
+        Name: (string) (len=7) "$param2",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=23) "TestAbstractMethodClass",
+              original: (string) (len=23) "TestAbstractMethodClass"
             }
-          },
-          Value: (string) ""
-        }
+          }
+        },
+        Value: (string) ""
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
@@ -79,17 +87,20 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 11:4-13:5
-      },
-      Name: (string) (len=11) "testMethod3",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 11:4-13:5
+    },
+    Name: (string) (len=11) "testMethod3",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
@@ -97,17 +108,20 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 15:4-17:5
-      },
-      Name: (string) (len=11) "testMethod4",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 15:4-17:5
+    },
+    Name: (string) (len=11) "testMethod4",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
@@ -115,17 +129,20 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 19:4-21:5
-      },
-      Name: (string) (len=11) "testMethod5",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 19:4-21:5
+    },
+    Name: (string) (len=11) "testMethod5",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
@@ -133,17 +150,20 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 23:4-25:5
-      },
-      Name: (string) (len=11) "testMethod6",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 23:4-25:5
+    },
+    Name: (string) (len=11) "testMethod6",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
@@ -151,17 +171,20 @@
     ClassModifier: (analysis.ClassModifierValue) 0
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 27:4-29:5
-      },
-      Name: (string) (len=11) "testMethod7",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 27:4-29:5
+    },
+    Name: (string) (len=11) "testMethod7",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
@@ -169,17 +192,20 @@
     ClassModifier: (analysis.ClassModifierValue) 2
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 31:4-33:5
-      },
-      Name: (string) (len=11) "testMethod8",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 31:4-33:5
+    },
+    Name: (string) (len=11) "testMethod8",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
@@ -187,17 +213,20 @@
     ClassModifier: (analysis.ClassModifierValue) 2
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 35:4-37:5
-      },
-      Name: (string) (len=11) "testMethod9",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 35:4-37:5
+    },
+    Name: (string) (len=11) "testMethod9",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
@@ -211,7 +240,7 @@
     },
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
     },
     Extends: (analysis.TypeString) {
@@ -221,17 +250,20 @@
     Interfaces: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 41:4-41:45
-      },
-      Name: (string) (len=12) "testMethod10",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 41:4-41:45
+    },
+    Name: (string) (len=12) "testMethod10",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
@@ -239,17 +271,20 @@
     ClassModifier: (analysis.ClassModifierValue) 1
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 42:4-42:47
-      },
-      Name: (string) (len=12) "testMethod11",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 42:4-42:47
+    },
+    Name: (string) (len=12) "testMethod11",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
@@ -257,17 +292,20 @@
     ClassModifier: (analysis.ClassModifierValue) 1
   }),
   (*analysis.Method)({
-    Function: (analysis.Function) {
-      location: (protocol.Location) {
-        URI: (string) (len=27) "file:///../cases/method.php",
-        Range: (protocol.Range) 43:4-43:62
-      },
-      Name: (string) (len=12) "testMethod12",
-      Params: ([]analysis.Parameter) {
+    location: (protocol.Location) {
+      URI: (string) (len=27) "file:///../cases/method.php",
+      Range: (protocol.Range) 43:4-43:62
+    },
+    Name: (string) (len=12) "testMethod12",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) {
       }
     },
+    description: (string) "",
     Scope: (analysis.TypeString) {
-      fqn: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,

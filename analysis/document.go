@@ -28,7 +28,7 @@ type Document struct {
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
-	namespace          *Namespace
+	importTable        ImportTable
 }
 
 // VariableTable holds the range and the variables inside
@@ -92,6 +92,7 @@ func NewDocument(uri string, text string) *Document {
 		Children:           []Symbol{},
 		variableTableLevel: 0,
 		hasChanges:         true,
+		importTable:        newImportTable(),
 	}
 	document.SetText(text)
 
@@ -446,6 +447,10 @@ func (s *Document) GetMD5Hash() []byte {
 	return hasher.Sum(nil)
 }
 
+func (s Document) GetImportTable() ImportTable {
+	return s.importTable
+}
+
 func (s *Document) setNamespace(namespace *Namespace) {
-	s.namespace = namespace
+	s.importTable.setNamespace(namespace)
 }

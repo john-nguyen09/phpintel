@@ -46,7 +46,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 		}
 		child = traverser.Advance()
 	}
-
+	function.Name.SetNamespace(document.importTable.namespace)
 	return function
 }
 
@@ -58,7 +58,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				{
-					s.Name = newTypeString(document.GetTokenText(token))
+					s.Name = NewTypeString(document.GetTokenText(token))
 				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
@@ -68,7 +68,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 					s.analyseParameterDeclarationList(document, p)
 				}
 			case phrase.Identifier:
-				s.Name = newTypeString(document.GetPhraseText(p))
+				s.Name = NewTypeString(document.GetPhraseText(p))
 			}
 		}
 		child = traverser.Advance()
@@ -91,12 +91,12 @@ func (s *Function) analyseParameterDeclarationList(document *Document, node *phr
 func (s *Function) applyPhpDoc(phpDoc phpDocComment) {
 	tags := phpDoc.Returns
 	for _, tag := range tags {
-		s.returnTypes.add(newTypeString(tag.TypeString))
+		s.returnTypes.add(NewTypeString(tag.TypeString))
 	}
 	for index, param := range s.Params {
 		tag := phpDoc.findParamTag(param.Name)
 		if tag != nil {
-			s.Params[index].Type.add(newTypeString(tag.TypeString))
+			s.Params[index].Type.add(NewTypeString(tag.TypeString))
 			s.Params[index].description = tag.Description
 		}
 	}

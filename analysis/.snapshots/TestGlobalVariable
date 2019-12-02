@@ -60,7 +60,9 @@
       },
       Name: (string) (len=7) "$OUTPUT"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {
@@ -97,7 +99,9 @@
       },
       Name: (string) (len=7) "$OUTPUT"
     },
-    description: (string) ""
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
     Expression: (analysis.Expression) {

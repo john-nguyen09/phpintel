@@ -2,11 +2,11 @@
   (*analysis.Class)({
     Location: (protocol.Location) {
       URI: (string) (len=26) "file:///../cases/class.php",
-      Range: (protocol.Range) 6:0-8:1
+      Range: (protocol.Range) 8:0-10:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=10) "TestClass1",
+      fqn: (string) (len=11) "\\TestClass1",
       original: (string) (len=10) "TestClass1"
     },
     Extends: (analysis.TypeString) {

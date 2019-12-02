@@ -19,16 +19,16 @@ func TestLineOffset(t *testing.T) {
 	document := NewDocument(util.PathToUri(classTest), string(data))
 	document.Load()
 	line := document.lineAt(39)
-	if line != 6 {
-		t.Errorf("lineAt(39) != 6, got: %d", line)
+	if line != 3 {
+		t.Errorf("lineAt(39) != 3, got: %d", line)
 	}
 	line = document.lineAt(64)
-	if line != 6 {
-		t.Errorf("lineAt(64) != 6, got: %d", line)
+	if line != 5 {
+		t.Errorf("lineAt(64) != 5, got: %d", line)
 	}
 	line = document.lineAt(38)
-	if line != 5 {
-		t.Errorf("lineAt(38) != 5, got: %d", line)
+	if line != 3 {
+		t.Errorf("lineAt(38) != 3, got: %d", line)
 	}
 }
 
@@ -45,8 +45,8 @@ func TestPosition(t *testing.T) {
 		t.Errorf("Expect document.positionAt(9) = 2:0, got %v", position)
 	}
 	position = document.positionAt(174)
-	if position.Line != 12 || position.Character != 2 {
-		t.Errorf("Expect document.positionAt(8) = 12:2, got %v", position)
+	if position.Line != 12 || position.Character != 29 {
+		t.Errorf("Expect document.positionAt(174) = 12:29, got %v", position)
 	}
 }
 
