@@ -12,3 +12,5 @@
 *.out
 
 testData
+
+dist

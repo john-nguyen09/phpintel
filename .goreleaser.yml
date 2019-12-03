@@ -1,0 +1,31 @@
+builds:
+- binary: phpintel
+  goos:
+    - linux
+    - windows
+    - darwin
+  goarch:
+    - amd64
+    - 386
+  hooks:
+    post: /bin/sh scripts/upx.sh
+archives:
+-
+  format: tar.gz
+  replacements:
+    darwin: macOS
+    i386: x86
+    amd64: x64
+  format_overrides:
+    - goos: windows
+      format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
