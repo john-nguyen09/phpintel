@@ -234,7 +234,7 @@ func deleteEntry(batch *leveldb.Batch, entry *entry) {
 }
 
 func (s *Store) GetClasses(name string) []*Class {
-	entry := newEntry(classCollection, name)
+	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -260,7 +260,7 @@ func (s *Store) SearchClasses(keyword string) []*Class {
 }
 
 func (s *Store) GetInterfaces(name string) []*Interface {
-	entry := newEntry(interfaceCollection, name)
+	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -286,7 +286,7 @@ func (s *Store) SearchInterfaces(keyword string) []*Interface {
 }
 
 func (s *Store) GetTraits(name string) []*Trait {
-	entry := newEntry(traitCollection, name)
+	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -312,7 +312,7 @@ func (s *Store) SearchTraits(keyword string) []*Trait {
 }
 
 func (s *Store) GetFunctions(name string) []*Function {
-	entry := newEntry(functionCollection, name)
+	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -338,7 +338,7 @@ func (s *Store) SearchFunctions(keyword string) []*Function {
 }
 
 func (s *Store) GetConsts(name string) []*Const {
-	entry := newEntry(constCollection, name)
+	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -364,7 +364,7 @@ func (s *Store) SearchConsts(keyword string) []*Const {
 }
 
 func (s *Store) GetDefines(name string) []*Define {
-	entry := newEntry(defineCollection, name)
+	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -390,7 +390,7 @@ func (s *Store) SearchDefines(keyword string) []*Define {
 }
 
 func (s *Store) GetMethods(scope string, name string) []*Method {
-	entry := newEntry(methodCollection, scope+KeySep+name)
+	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
@@ -402,7 +402,7 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 
 func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 	if keyword == "" {
-		entry := newEntry(methodCollection, scope)
+		entry := newEntry(methodCollection, scope+KeySep)
 		methods := []*Method{}
 		it := s.db.NewIterator(entry.prefixRange(), nil)
 		for it.Next() {
@@ -439,7 +439,7 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 
 func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
 	if keyword == "" {
-		entry := newEntry(classConstCollection, scope)
+		entry := newEntry(classConstCollection, scope+KeySep)
 		classConsts := []*ClassConst{}
 		it := s.db.NewIterator(entry.prefixRange(), nil)
 		for it.Next() {
@@ -476,7 +476,7 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 
 func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 	if keyword == "" {
-		entry := newEntry(propertyCollection, scope)
+		entry := newEntry(propertyCollection, scope+KeySep)
 		properties := []*Property{}
 		it := s.db.NewIterator(entry.prefixRange(), nil)
 		for it.Next() {
@@ -501,7 +501,7 @@ func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 }
 
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
-	entry := newEntry(globalVariableCollection, name)
+	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {

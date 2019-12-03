@@ -72,6 +72,18 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 	}
 }
 
+func (s Method) GetName() string {
+	return s.Name
+}
+
+func (s Method) GetDescription() string {
+	return s.description
+}
+
+func (s Method) GetReturnTypes() TypeComposite {
+	return s.returnTypes
+}
+
 func (s *Method) GetCollection() string {
 	return methodCollection
 }

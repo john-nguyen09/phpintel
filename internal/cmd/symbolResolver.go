@@ -167,7 +167,7 @@ func MethodToHover(ref analysis.HasTypes, method analysis.Method) *protocol.Hove
 	if method.IsStatic {
 		content += " static"
 	}
-	content += " function " + method.GetName().GetOriginal() + "("
+	content += " function " + method.GetName() + "("
 	content += paramsToString(method.Params)
 	content += ")"
 	if !method.GetReturnTypes().IsEmpty() {

@@ -128,7 +128,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.MethodCompletion,
-			Label:         method.GetName().GetOriginal(),
+			Label:         method.GetName(),
 			Documentation: method.GetDescription(),
 		})
 	}
@@ -164,7 +164,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.MethodCompletion,
-			Label:         method.GetName().GetOriginal(),
+			Label:         method.GetName(),
 			Documentation: method.GetDescription(),
 		})
 	}
