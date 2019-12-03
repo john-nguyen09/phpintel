@@ -16,14 +16,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 2:12-2:22
           },
           Name: (string) (len=10) "TestClass1"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$var1"
@@ -44,7 +44,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:12-2:22
       },
       Name: (string) (len=10) "TestClass1"
@@ -62,7 +62,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$var1"
@@ -83,7 +83,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:12-2:22
       },
       Name: (string) (len=10) "TestClass1"
@@ -101,7 +101,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:12-2:22
       },
       Name: (string) (len=10) "TestClass1"
@@ -119,7 +119,7 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 3:8-3:20
           },
           Name: (string) (len=12) "testFunction"
@@ -127,7 +127,7 @@
         hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:0-3:5
       },
       Name: (string) (len=5) "$var2"
@@ -143,7 +143,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:8-3:20
       },
       Name: (string) (len=12) "testFunction"
@@ -157,7 +157,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:0-3:5
       },
       Name: (string) (len=5) "$var2"
@@ -173,7 +173,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:8-3:20
       },
       Name: (string) (len=12) "testFunction"
@@ -197,7 +197,7 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 4:8-4:13
           },
           Name: (string) (len=5) "$var1"
@@ -207,7 +207,7 @@
         hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:0-4:5
       },
       Name: (string) (len=5) "$var3"
@@ -228,7 +228,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$var1"
@@ -249,7 +249,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:0-4:5
       },
       Name: (string) (len=5) "$var3"
@@ -270,7 +270,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$var1"
@@ -301,21 +301,21 @@
               },
               Scope: (analysis.HasTypes) <nil>,
               Location: (protocol.Location) {
-                URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+                URI: (string) (len=5) "test1",
                 Range: (protocol.Range) 5:8-5:18
               },
               Name: (string) (len=10) "TestClass1"
             }
           }),
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 5:20-5:27
           },
           Name: (string) (len=7) "method1"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:0-5:5
       },
       Name: (string) (len=5) "$var4"
@@ -336,7 +336,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:8-5:18
       },
       Name: (string) (len=10) "TestClass1"
@@ -359,14 +359,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 5:8-5:18
           },
           Name: (string) (len=10) "TestClass1"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:20-5:27
       },
       Name: (string) (len=7) "method1"
@@ -379,7 +379,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:0-5:5
       },
       Name: (string) (len=5) "$var4"
@@ -400,7 +400,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:8-5:18
       },
       Name: (string) (len=10) "TestClass1"
@@ -423,14 +423,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 5:8-5:18
           },
           Name: (string) (len=10) "TestClass1"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:20-5:27
       },
       Name: (string) (len=7) "method1"
@@ -448,7 +448,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 6:0-6:15
       },
       Name: (string) (len=15) "TestMethodClass"
@@ -471,14 +471,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 6:0-6:15
           },
           Name: (string) (len=15) "TestMethodClass"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 6:17-6:28
       },
       Name: (string) (len=11) "testMethod6"
@@ -496,7 +496,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 7:0-7:15
       },
       Name: (string) (len=15) "TestMethodClass"
@@ -519,14 +519,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 7:0-7:15
           },
           Name: (string) (len=15) "TestMethodClass"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=39) "file:///../cases/variableAssignment.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 7:17-7:28
       },
       Name: (string) (len=11) "testMethod3"

@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=1) {
   (*analysis.Trait)({
     location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/trait.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-4:1
     },
     Name: (analysis.TypeString) {

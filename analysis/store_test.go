@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestStore(t *testing.T) {
@@ -15,7 +14,7 @@ func TestStore(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(classTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	store, err := NewStore("./testData/TestStore")
 	defer store.Close()

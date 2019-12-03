@@ -8,8 +8,6 @@ import (
 	"testing"
 
 	"github.com/karrick/godirwalk"
-
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 type ParsingContext struct {
@@ -70,11 +68,13 @@ func BenchmarkAnalysis(t *testing.B) {
 // }
 
 func analyse(context *ParsingContext, id int, filePaths <-chan string) {
+	count := 0
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
-		document := NewDocument(util.PathToUri(filePath), string(data))
+		document := NewDocument("test"+string(id)+string(count), string(data))
 		document.Load()
 		context.addDocument(document)
 		context.waitGroup.Done()
+		count++
 	}
 }

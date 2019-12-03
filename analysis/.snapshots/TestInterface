@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Interface)({
     location: (protocol.Location) {
-      URI: (string) (len=30) "file:///../cases/interface.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-5:1
     },
     Name: (analysis.TypeString) {
@@ -12,7 +12,7 @@
   }),
   (*analysis.Interface)({
     location: (protocol.Location) {
-      URI: (string) (len=30) "file:///../cases/interface.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:0-7:50
     },
     Name: (analysis.TypeString) {

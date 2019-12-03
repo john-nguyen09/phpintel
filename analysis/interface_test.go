@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestInterface(t *testing.T) {
@@ -16,7 +15,7 @@ func TestInterface(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(interfaceTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +27,7 @@ func TestInterfaceSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(interfaceTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	for _, child := range document.Children {
 		if theInterface, ok := child.(*Interface); ok {

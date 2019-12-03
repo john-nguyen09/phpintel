@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=5) {
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/class.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-6:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
@@ -17,7 +17,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/class.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:4-5:5
     },
     Name: (string) (len=7) "method1",
@@ -38,7 +38,7 @@
   }),
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/class.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 8:0-10:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
@@ -59,7 +59,7 @@
   }),
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/class.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 12:0-14:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
@@ -84,7 +84,7 @@
   }),
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/class.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 15:0-15:78
     },
     Modifier: (analysis.ClassModifierValue) 0,

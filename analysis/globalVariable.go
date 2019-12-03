@@ -90,6 +90,9 @@ func (s *GlobalVariable) GetCollection() string {
 }
 
 func (s *GlobalVariable) GetKey() string {
+	if s.types.IsEmpty() {
+		return ""
+	}
 	return s.Name + KeySep + s.location.URI
 }
 

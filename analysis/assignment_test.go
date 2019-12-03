@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestAssignment(t *testing.T) {
@@ -14,7 +13,7 @@ func TestAssignment(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(assignmentTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

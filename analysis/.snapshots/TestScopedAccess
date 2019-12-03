@@ -11,7 +11,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 1:0-1:15
       },
       Name: (string) (len=15) "TestMethodClass"
@@ -34,14 +34,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 1:0-1:15
           },
           Name: (string) (len=15) "TestMethodClass"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=44) "file:///../cases/completion/scopedAccess.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 1:17-1:17
       },
       Name: (string) ""

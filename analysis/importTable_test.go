@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestNamespace(t *testing.T) {
@@ -15,7 +14,7 @@ func TestNamespace(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(references2), string(data))
+	document := NewDocument("references2", string(data))
 	document.Load()
 
 	cupaloy.SnapshotT(t, document.importTable)

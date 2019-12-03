@@ -11,7 +11,7 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=33) "file:///../cases/functionCall.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 2:8-2:13
           },
           Name: (string) (len=5) "fopen"
@@ -19,7 +19,7 @@
         hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$file"
@@ -35,7 +35,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:8-2:13
       },
       Name: (string) (len=5) "fopen"
@@ -49,7 +49,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
       },
       Name: (string) (len=5) "$file"
@@ -65,7 +65,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:8-2:13
       },
       Name: (string) (len=5) "fopen"
@@ -74,7 +74,7 @@
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
-      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:14-2:27
     },
     arguments: ([]phrase.AstNode) (len=2) {
@@ -94,7 +94,7 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=33) "file:///../cases/functionCall.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 4:16-4:21
           },
           Name: (string) (len=5) "fgets"
@@ -102,7 +102,7 @@
         hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$line"
@@ -118,7 +118,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:16-4:21
       },
       Name: (string) (len=5) "fgets"
@@ -132,7 +132,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
       },
       Name: (string) (len=5) "$line"
@@ -148,7 +148,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:16-4:21
       },
       Name: (string) (len=5) "fgets"
@@ -162,7 +162,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:22-4:27
       },
       Name: (string) (len=5) "$file"
@@ -173,7 +173,7 @@
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
-      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 4:22-4:27
     },
     arguments: ([]phrase.AstNode) (len=1) {
@@ -192,7 +192,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:4-5:10
       },
       Name: (string) (len=6) "printf"
@@ -206,7 +206,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:11-5:16
       },
       Name: (string) (len=5) "$line"
@@ -227,7 +227,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:19-5:26
       },
       Name: (string) (len=7) "PHP_EOL"
@@ -235,7 +235,7 @@
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
-      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 5:11-5:26
     },
     arguments: ([]phrase.AstNode) (len=1) {
@@ -278,7 +278,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 8:0-8:6
       },
       Name: (string) (len=6) "fclose"
@@ -292,7 +292,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=33) "file:///../cases/functionCall.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 8:7-8:12
       },
       Name: (string) (len=5) "$file"
@@ -303,7 +303,7 @@
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
-      URI: (string) (len=33) "file:///../cases/functionCall.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 8:7-8:12
     },
     arguments: ([]phrase.AstNode) (len=1) {

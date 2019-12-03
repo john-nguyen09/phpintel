@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestTrait(t *testing.T) {
@@ -15,7 +14,7 @@ func TestTrait(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(traitTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

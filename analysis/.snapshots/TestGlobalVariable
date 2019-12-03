@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=7) {
   (*analysis.GlobalVariable)({
     location: (protocol.Location) {
-      URI: (string) (len=35) "file:///../cases/globalVariable.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 5:7-5:10
     },
     types: (analysis.TypeComposite) {
@@ -17,7 +17,7 @@
   }),
   (*analysis.GlobalVariable)({
     location: (protocol.Location) {
-      URI: (string) (len=35) "file:///../cases/globalVariable.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:7-7:14
     },
     types: (analysis.TypeComposite) {
@@ -48,14 +48,14 @@
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
-            URI: (string) (len=35) "file:///../cases/globalVariable.php",
+            URI: (string) (len=5) "test1",
             Range: (protocol.Range) 9:14-9:29
           },
           Name: (string) (len=15) "TestMethodClass"
         }
       }),
       Location: (protocol.Location) {
-        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:0-9:7
       },
       Name: (string) (len=7) "$OUTPUT"
@@ -76,7 +76,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:14-9:29
       },
       Name: (string) (len=15) "TestMethodClass"
@@ -94,7 +94,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:0-9:7
       },
       Name: (string) (len=7) "$OUTPUT"
@@ -115,7 +115,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:14-9:29
       },
       Name: (string) (len=15) "TestMethodClass"
@@ -133,7 +133,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=35) "file:///../cases/globalVariable.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:14-9:29
       },
       Name: (string) (len=15) "TestMethodClass"

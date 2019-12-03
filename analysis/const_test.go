@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestConstant(t *testing.T) {
@@ -16,7 +15,7 @@ func TestConstant(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(constTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +27,7 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(constTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	for _, child := range document.Children {
 		if constant, ok := child.(*Const); ok {

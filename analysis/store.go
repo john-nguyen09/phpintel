@@ -201,6 +201,9 @@ func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			key := serialisable.GetKey()
+			if key == "" {
+				continue
+			}
 			entry := newEntry(serialisable.GetCollection(), key)
 			serialisable.Serialise(entry.serialiser)
 			writeEntry(batch, entry)

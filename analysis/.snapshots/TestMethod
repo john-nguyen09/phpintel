@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=14) {
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-38:1
     },
     Modifier: (analysis.ClassModifierValue) 0,
@@ -17,7 +17,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:4-5:5
     },
     Name: (string) (len=11) "testMethod1",
@@ -38,14 +38,14 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:4-9:5
     },
     Name: (string) (len=11) "testMethod2",
     Params: ([]*analysis.Parameter) (len=2) {
       (*analysis.Parameter)({
         location: (protocol.Location) {
-          URI: (string) (len=27) "file:///../cases/method.php",
+          URI: (string) (len=5) "test1",
           Range: (protocol.Range) 7:35-7:46
         },
         description: (string) "",
@@ -57,7 +57,7 @@
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
-          URI: (string) (len=27) "file:///../cases/method.php",
+          URI: (string) (len=5) "test1",
           Range: (protocol.Range) 7:48-7:79
         },
         description: (string) "",
@@ -88,7 +88,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:4-13:5
     },
     Name: (string) (len=11) "testMethod3",
@@ -109,7 +109,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 15:4-17:5
     },
     Name: (string) (len=11) "testMethod4",
@@ -130,7 +130,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 19:4-21:5
     },
     Name: (string) (len=11) "testMethod5",
@@ -151,7 +151,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 23:4-25:5
     },
     Name: (string) (len=11) "testMethod6",
@@ -172,7 +172,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 27:4-29:5
     },
     Name: (string) (len=11) "testMethod7",
@@ -193,7 +193,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 31:4-33:5
     },
     Name: (string) (len=11) "testMethod8",
@@ -214,7 +214,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 35:4-37:5
     },
     Name: (string) (len=11) "testMethod9",
@@ -235,7 +235,7 @@
   }),
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 40:0-44:1
     },
     Modifier: (analysis.ClassModifierValue) 1,
@@ -251,7 +251,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 41:4-41:45
     },
     Name: (string) (len=12) "testMethod10",
@@ -272,7 +272,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 42:4-42:47
     },
     Name: (string) (len=12) "testMethod11",
@@ -293,7 +293,7 @@
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
-      URI: (string) (len=27) "file:///../cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 43:4-43:62
     },
     Name: (string) (len=12) "testMethod12",

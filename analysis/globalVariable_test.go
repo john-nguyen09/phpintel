@@ -6,25 +6,39 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestGlobalVariable(t *testing.T) {
 	globalVariableTest := "../cases/globalVariable.php"
 	data, _ := ioutil.ReadFile(globalVariableTest)
-	document := NewDocument(util.PathToUri(globalVariableTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
+}
+
+func indexDocument(store *Store, filePath string, uri string) {
+	data, _ := ioutil.ReadFile(filePath)
+	document := NewDocument(uri, string(data))
+	document.Load()
+	store.SyncDocument(document)
+}
+
+func openDocument(store *Store, filePath string, uri string) *Document {
+	data, _ := ioutil.ReadFile(filePath)
+	document := NewDocument(uri, string(data))
+	document.Open()
+	document.Load()
+	store.SyncDocument(document)
+	return document
 }
 
 func TestGlobalVariableReference(t *testing.T) {
 	store, _ := NewStore("./testData/globalVariable")
 	globalVariableTest, _ := filepath.Abs("../cases/globalVariable.php")
-	store.IndexDocument(globalVariableTest)
+	indexDocument(store, globalVariableTest, "test1")
 
 	referenceFile, _ := filepath.Abs("../cases/reference/globalVariable.php")
-	store.OpenDocument(util.PathToUri(referenceFile))
-	document := store.GetOrCreateDocument(util.PathToUri(referenceFile))
+	document := openDocument(store, referenceFile, "test2")
 
 	symbol := document.SymbolAt(14)
 	var propAccess *PropertyAccess = nil

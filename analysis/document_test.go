@@ -7,7 +7,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestLineOffset(t *testing.T) {
@@ -16,7 +15,7 @@ func TestLineOffset(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(classTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	line := document.lineAt(39)
 	if line != 3 {
@@ -38,7 +37,7 @@ func TestPosition(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(classTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	position := document.positionAt(9)
 	if position.Line != 2 || position.Character != 0 {
@@ -53,7 +52,7 @@ func TestPosition(t *testing.T) {
 func TestSymbolAt(t *testing.T) {
 	memberAccess := "../cases/memberAccess.php"
 	data, _ := ioutil.ReadFile(memberAccess)
-	document := NewDocument(util.PathToUri(memberAccess), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	symbol := document.SymbolAt(14)
 	if _, ok := symbol.(*ClassAccess); !ok {

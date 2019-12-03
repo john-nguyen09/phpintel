@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestFunctionCall(t *testing.T) {
@@ -15,7 +14,7 @@ func TestFunctionCall(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(functionCallTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -26,7 +25,7 @@ func TestFunctionCallSerialiseAndDeserialise(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(util.PathToUri(functionCallTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	for _, child := range document.Children {
 		if functionCall, ok := child.(*FunctionCall); ok {

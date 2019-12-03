@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Function)({
     location: (protocol.Location) {
-      URI: (string) (len=29) "file:///../cases/function.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-4:1
     },
     Name: (analysis.TypeString) {
@@ -11,7 +11,7 @@
     Params: ([]*analysis.Parameter) (len=1) {
       (*analysis.Parameter)({
         location: (protocol.Location) {
-          URI: (string) (len=29) "file:///../cases/function.php",
+          URI: (string) (len=5) "test1",
           Range: (protocol.Range) 2:22-2:46
         },
         description: (string) "",
@@ -35,7 +35,7 @@
   }),
   (*analysis.Function)({
     location: (protocol.Location) {
-      URI: (string) (len=29) "file:///../cases/function.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:0-13:1
     },
     Name: (analysis.TypeString) {

@@ -1,7 +1,7 @@
 ([]analysis.Symbol) (len=3) {
   (*analysis.Const)({
     location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/const.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:6-2:21
     },
     Name: (analysis.TypeString) {
@@ -17,7 +17,7 @@
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
-        URI: (string) (len=26) "file:///../cases/const.php",
+        URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:0-3:6
       },
       Name: (string) (len=6) "define"
@@ -26,7 +26,7 @@
   }),
   (*analysis.Define)({
     location: (protocol.Location) {
-      URI: (string) (len=26) "file:///../cases/const.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:0-3:24
     },
     Name: (analysis.TypeString) {

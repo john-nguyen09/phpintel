@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func TestClass(t *testing.T) {
@@ -16,7 +15,7 @@ func TestClass(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(classTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +27,7 @@ func TestClassSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument(util.PathToUri(classTest), string(data))
+	document := NewDocument("test1", string(data))
 	document.Load()
 	for _, child := range document.Children {
 		if theClass, ok := child.(*Class); ok {
