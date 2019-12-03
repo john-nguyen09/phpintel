@@ -16,7 +16,7 @@ notifications:
 
 script:
   - go get -t -v ./...
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./analysis
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
