@@ -1,7 +1,7 @@
 ([]*analysis.Class) (len=2) {
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=63) "file:///C:/Users/Thuan/Development/go/phpintel/cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 40:0-44:1
     },
     Modifier: (analysis.ClassModifierValue) 1,
@@ -17,7 +17,7 @@
   }),
   (*analysis.Class)({
     Location: (protocol.Location) {
-      URI: (string) (len=63) "file:///C:/Users/Thuan/Development/go/phpintel/cases/method.php",
+      URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-38:1
     },
     Modifier: (analysis.ClassModifierValue) 0,

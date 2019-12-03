@@ -16,22 +16,6 @@ func TestGlobalVariable(t *testing.T) {
 	cupaloy.SnapshotT(t, document.Children)
 }
 
-func indexDocument(store *Store, filePath string, uri string) {
-	data, _ := ioutil.ReadFile(filePath)
-	document := NewDocument(uri, string(data))
-	document.Load()
-	store.SyncDocument(document)
-}
-
-func openDocument(store *Store, filePath string, uri string) *Document {
-	data, _ := ioutil.ReadFile(filePath)
-	document := NewDocument(uri, string(data))
-	document.Open()
-	document.Load()
-	store.SyncDocument(document)
-	return document
-}
-
 func TestGlobalVariableReference(t *testing.T) {
 	store, _ := NewStore("./testData/globalVariable")
 	globalVariableTest, _ := filepath.Abs("../cases/globalVariable.php")

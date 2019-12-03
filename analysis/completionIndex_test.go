@@ -10,7 +10,7 @@ import (
 func TestCompletionIndex(t *testing.T) {
 	testMethodClassTest, _ := filepath.Abs("../cases/method.php")
 	store, _ := NewStore("./testData/TestCompletionIndex")
-	store.IndexDocument(testMethodClassTest)
+	indexDocument(store, testMethodClassTest, "test1")
 
 	cupaloy.SnapshotT(t, store.SearchClasses("T"))
 }
