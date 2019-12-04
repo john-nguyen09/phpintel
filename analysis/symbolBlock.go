@@ -29,6 +29,12 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.CatchClause:                true,
 	phrase.ReturnStatement:            true,
 	phrase.ObjectCreationExpression:   true,
+	phrase.ScopedCallExpression:       true,
+	phrase.ArrayCreationExpression:    true,
+	phrase.ArrayInitialiserList:       true,
+	phrase.ArrayElement:               true,
+	phrase.ArrayValue:                 true,
+	phrase.ArrayKey:                   true,
 }
 
 func scanForChildren(document *Document, node *phrase.Phrase) {

@@ -65,6 +65,10 @@ func (t TypeString) GetFQN() string {
 	return t.fqn
 }
 
+func (t *TypeString) SetFQN(fqn string) {
+	t.fqn = fqn
+}
+
 func (t *TypeString) SetNamespace(namespace string) {
 	if !isFQN(t.fqn) {
 		if namespace == "" || namespace == "\\" {
@@ -83,6 +87,9 @@ func (t TypeString) FirstPart() string {
 }
 
 func isFQN(name string) bool {
+	if name == "" {
+		return false
+	}
 	if _, ok := Natives[name]; ok {
 		return true
 	}

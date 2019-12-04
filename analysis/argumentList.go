@@ -18,6 +18,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
+	document.addSymbol(argumentList)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -31,7 +32,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 		child = traverser.Advance()
 	}
 	scanForChildren(document, node)
-	return argumentList
+	return nil
 }
 
 func (s *ArgumentList) GetLocation() protocol.Location {

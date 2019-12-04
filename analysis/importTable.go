@@ -13,7 +13,7 @@ type ImportTable struct {
 
 func newImportTable() ImportTable {
 	return ImportTable{
-		namespace: "",
+		namespace: "\\",
 		classes:   map[string]string{},
 		functions: map[string]string{},
 		constants: map[string]string{},
@@ -44,12 +44,16 @@ func (i *ImportTable) addConstName(alias string, name string) {
 }
 
 func (i *ImportTable) setNamespace(namespace *Namespace) {
+	if namespace.Name == "" {
+		return
+	}
 	i.namespace = namespace.Name
 }
 
 func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 	if fqn, ok := i.classes[name.FirstPart()]; ok {
-		name.SetNamespace(fqn)
+		fqn = "\\" + fqn
+		name.SetFQN(fqn)
 	} else {
 		name.SetNamespace(i.namespace)
 	}
