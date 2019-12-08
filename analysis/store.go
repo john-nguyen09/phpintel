@@ -400,19 +400,31 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
 	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		methods = append(methods, class.GetInheritedMethods(s, name)...)
+	}
+	return methods
+}
+
+func (s *Store) GetAllMethods(scope string) []*Method {
+	entry := newEntry(methodCollection, scope+KeySep)
+	methods := []*Method{}
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		methods = append(methods, ReadMethod(serialiser))
+	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		methods = append(methods, class.SearchInheritedMethods(s, "")...)
+	}
 	return methods
 }
 
 func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 	if keyword == "" {
-		entry := newEntry(methodCollection, scope+KeySep)
-		methods := []*Method{}
-		it := s.db.NewIterator(entry.prefixRange(), nil)
-		for it.Next() {
-			serialiser := SerialiserFromByteSlice(it.Value())
-			methods = append(methods, ReadMethod(serialiser))
-		}
-		return methods
+		return s.GetAllMethods(scope)
 	}
 
 	completionValues := searchCompletions(s.db, methodCompletionIndex, keyword, scope)
@@ -426,6 +438,10 @@ func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 		serialiser := SerialiserFromByteSlice(theBytes)
 		methods = append(methods, ReadMethod(serialiser))
 	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		methods = append(methods, class.SearchInheritedMethods(s, keyword)...)
+	}
 	return methods
 }
 
@@ -437,19 +453,31 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
 	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		classConsts = append(classConsts, class.GetInheritedClassConsts(s, name)...)
+	}
+	return classConsts
+}
+
+func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
+	entry := newEntry(classConstCollection, scope+KeySep)
+	classConsts := []*ClassConst{}
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		classConsts = append(classConsts, ReadClassConst(serialiser))
+	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		classConsts = append(classConsts, class.SearchInheritedClassConsts(s, "")...)
+	}
 	return classConsts
 }
 
 func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
 	if keyword == "" {
-		entry := newEntry(classConstCollection, scope+KeySep)
-		classConsts := []*ClassConst{}
-		it := s.db.NewIterator(entry.prefixRange(), nil)
-		for it.Next() {
-			serialiser := SerialiserFromByteSlice(it.Value())
-			classConsts = append(classConsts, ReadClassConst(serialiser))
-		}
-		return classConsts
+		s.GetAllClassConsts(scope)
 	}
 
 	completionValues := searchCompletions(s.db, classConstCompletionIndex, keyword, scope)
@@ -463,6 +491,10 @@ func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
 		serialiser := SerialiserFromByteSlice(theBytes)
 		classConsts = append(classConsts, ReadClassConst(serialiser))
 	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		classConsts = append(classConsts, class.SearchInheritedClassConsts(s, keyword)...)
+	}
 	return classConsts
 }
 
@@ -474,19 +506,31 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
 	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		properties = append(properties, class.GetInheritedProperties(s, name)...)
+	}
+	return properties
+}
+
+func (s *Store) GetAllProperties(scope string) []*Property {
+	entry := newEntry(propertyCollection, scope+KeySep)
+	properties := []*Property{}
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	for it.Next() {
+		serialiser := SerialiserFromByteSlice(it.Value())
+		properties = append(properties, ReadProperty(serialiser))
+	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		properties = append(properties, class.SearchInheritedProperties(s, "")...)
+	}
 	return properties
 }
 
 func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 	if keyword == "" {
-		entry := newEntry(propertyCollection, scope+KeySep)
-		properties := []*Property{}
-		it := s.db.NewIterator(entry.prefixRange(), nil)
-		for it.Next() {
-			serialiser := SerialiserFromByteSlice(it.Value())
-			properties = append(properties, ReadProperty(serialiser))
-		}
-		return properties
+		return s.GetAllProperties(scope)
 	}
 
 	completionValues := searchCompletions(s.db, propertyCompletionIndex, keyword, scope)
@@ -499,6 +543,10 @@ func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 		}
 		serialiser := SerialiserFromByteSlice(theBytes)
 		properties = append(properties, ReadProperty(serialiser))
+	}
+	classes := s.GetClasses(scope)
+	for _, class := range classes {
+		properties = append(properties, class.SearchInheritedProperties(s, keyword)...)
 	}
 	return properties
 }

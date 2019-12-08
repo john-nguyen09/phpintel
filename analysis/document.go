@@ -3,6 +3,7 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
+	"runtime/debug"
 	"sort"
 	"sync"
 	"time"
@@ -269,6 +270,9 @@ func (s *Document) addSymbol(other Symbol) {
 	if doc, ok := other.(*phpDocComment); ok {
 		s.lastPhpDoc = doc
 		return
+	}
+	if other == nil {
+		debug.PrintStack()
 	}
 	s.Children = append(s.Children, other)
 }

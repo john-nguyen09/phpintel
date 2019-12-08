@@ -37,6 +37,9 @@ func newVariable(document *Document, node *phrase.Phrase) *Variable {
 		}
 		child = traverser.Advance()
 	}
+	if variable.Name == "$this" {
+		variable.setExpression(newRelativeScope(document, variable.Location))
+	}
 	document.pushVariable(variable)
 	return variable
 }

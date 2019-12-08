@@ -26,6 +26,16 @@ func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 	}
 	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ArgumentExpressionList:
+				newArgumentList(document, p)
+			}
+		}
+		child = traverser.Advance()
+	}
 	return methodAccess
 }
 

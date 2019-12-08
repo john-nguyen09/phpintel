@@ -21,6 +21,10 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	if node.Type == phrase.QualifiedName {
 		types.add(transformQualifiedName(node, document))
 	}
+	if isNameRelative(classAccess.Name) {
+		relativeScope := newRelativeScope(document, classAccess.Location)
+		types.merge(relativeScope.Types)
+	}
 	classAccess.Type = types
 	return classAccess
 }
