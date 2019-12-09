@@ -17,6 +17,19 @@ const (
 	Private = iota
 )
 
+func (v VisibilityModifierValue) ToString() string {
+	if v == Public {
+		return "public"
+	}
+	if v == Private {
+		return "private"
+	}
+	if v == Protected {
+		return "protected"
+	}
+	return ""
+}
+
 // ClassModifierValue is a value of class modifier (abstract, final)
 type ClassModifierValue int
 
@@ -47,6 +60,16 @@ type NameIndexable interface {
 	GetIndexableName() string
 	GetIndexCollection() string
 	GetPrefix() string
+}
+
+type HasParams interface {
+	GetParams() []*Parameter
+	GetDescription() string
+	GetNameLabel() string
+}
+
+type HasParamsResolvable interface {
+	ResolveToHasParams(store *Store, document *Document) []HasParams
 }
 
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {

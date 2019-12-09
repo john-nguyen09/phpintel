@@ -11,7 +11,7 @@ type ClassTypeDesignator struct {
 	Expression
 }
 
-func newClassTypeDesignator(document *Document, node *phrase.Phrase) HasTypes {
+func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	classTypeDesignator := &ClassTypeDesignator{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -34,7 +34,7 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) HasTypes {
 		}
 		child = traverser.Advance()
 	}
-	return classTypeDesignator
+	return classTypeDesignator, true
 }
 
 func (s *ClassTypeDesignator) GetLocation() protocol.Location {

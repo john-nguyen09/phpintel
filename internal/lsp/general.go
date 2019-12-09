@@ -51,10 +51,9 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 			DefinitionProvider:     true,
 			DocumentSymbolProvider: false,
 			HoverProvider:          true,
-			SignatureHelpProvider:  nil,
-			// SignatureHelpProvider: &protocol.SignatureHelpOptions{
-			// 	TriggerCharacters: []string{"(", ","},
-			// },
+			SignatureHelpProvider: &protocol.SignatureHelpOptions{
+				TriggerCharacters: []string{"(", ","},
+			},
 			TextDocumentSync: &protocol.TextDocumentSyncOptions{
 				Change:    protocol.Incremental,
 				OpenClose: true,

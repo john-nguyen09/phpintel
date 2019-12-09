@@ -107,6 +107,19 @@ func (s *Method) GetPrefix() string {
 	return s.Scope.GetFQN()
 }
 
+func (s *Method) GetNameLabel() string {
+	label := s.VisibilityModifier.ToString()
+	if s.IsStatic {
+		label += " static"
+	}
+	label += " " + s.Name
+	return label
+}
+
+func (s *Method) GetParams() []*Parameter {
+	return s.Params
+}
+
 func (s *Method) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

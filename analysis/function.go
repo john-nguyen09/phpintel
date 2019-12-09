@@ -143,6 +143,14 @@ func (s *Function) GetPrefix() string {
 	return ""
 }
 
+func (s *Function) GetNameLabel() string {
+	return s.Name.GetOriginal()
+}
+
+func (s *Function) GetParams() []*Parameter {
+	return s.Params
+}
+
 func (s *Function) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	s.Name.Write(serialiser)

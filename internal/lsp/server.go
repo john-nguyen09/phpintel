@@ -153,7 +153,7 @@ func (s *Server) Hover(ctx context.Context, params *protocol.HoverParams) (*prot
 }
 
 func (s *Server) SignatureHelp(ctx context.Context, params *protocol.SignatureHelpParams) (*protocol.SignatureHelp, error) {
-	return nil, notImplemented("SignatureHelp")
+	return s.signatureHelp(ctx, params)
 }
 
 func (s *Server) Definition(ctx context.Context, params *protocol.DefinitionParams) ([]protocol.Location, error) {

@@ -174,7 +174,7 @@ func (s *Store) SyncDocument(document *Document) {
 	if err != nil {
 		log.Print(err)
 	}
-	if document.isOpen {
+	if document.IsOpen() {
 		s.documentMu.Lock()
 		s.documents[document.uri] = document
 		s.documentMu.Unlock()

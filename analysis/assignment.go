@@ -25,7 +25,7 @@ func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverse
 	traverser.SkipToken(lexer.Equals)
 	traverser.SkipToken(lexer.Whitespace)
 	rhs := traverser.Advance()
-	variable := newVariable(document, node)
+	variable, _ := newVariable(document, node)
 	document.addSymbol(variable)
 
 	var expression HasTypes = nil

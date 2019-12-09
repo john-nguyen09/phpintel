@@ -12,7 +12,7 @@ type MethodAccess struct {
 	hasResolved bool
 }
 
-func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
+func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
 		Expression: Expression{},
 	}
@@ -36,7 +36,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 		}
 		child = traverser.Advance()
 	}
-	return methodAccess
+	return methodAccess, true
 }
 
 func (s *MethodAccess) GetLocation() protocol.Location {

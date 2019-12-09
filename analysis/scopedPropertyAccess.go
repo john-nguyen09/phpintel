@@ -12,7 +12,7 @@ type ScopedPropertyAccess struct {
 	Expression
 }
 
-func newScopedPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
+func newScopedPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
 	}
@@ -29,7 +29,7 @@ func newScopedPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		propertyAccess.Name = analyseMemberName(document, p)
 	}
-	return propertyAccess
+	return propertyAccess, true
 }
 
 func (s *ScopedPropertyAccess) GetLocation() protocol.Location {

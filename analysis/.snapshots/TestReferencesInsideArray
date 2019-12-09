@@ -206,6 +206,9 @@
           (*lexer.Token)(CloseBracket 194 1)
         }
       })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 2:13-8:1
     }
   }),
   (*analysis.FunctionCall)({
@@ -230,6 +233,9 @@
     },
     arguments: ([]phrase.AstNode) (len=1) {
       (*lexer.Token)(StringLiteral 164 27)
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 7:25-7:52
     }
   })
 }

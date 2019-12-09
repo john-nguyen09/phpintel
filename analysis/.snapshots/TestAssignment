@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=23) {
+([]analysis.Symbol) (len=29) {
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -169,6 +169,16 @@
     },
     hasResolved: (bool) false
   }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 3:20-3:21
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 3:20-3:21
+    }
+  }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -200,6 +210,16 @@
       Name: (string) (len=12) "testFunction"
     },
     hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 3:20-3:21
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 3:20-3:21
+    }
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -418,6 +438,16 @@
       Name: (string) (len=7) "method1"
     }
   }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:27-5:28
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 5:27-5:28
+    }
+  }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -490,6 +520,16 @@
       Name: (string) (len=7) "method1"
     }
   }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:27-5:28
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 5:27-5:28
+    }
+  }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -545,6 +585,16 @@
       Name: (string) (len=11) "testMethod6"
     }
   }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 6:28-6:29
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 6:28-6:29
+    }
+  }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -598,6 +648,16 @@
         Range: (protocol.Range) 7:17-7:28
       },
       Name: (string) (len=11) "testMethod3"
+    }
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:28-7:29
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 7:28-7:29
     }
   })
 }

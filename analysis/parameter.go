@@ -57,6 +57,10 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 	return param
 }
 
+func (s *Parameter) GetDescription() string {
+	return s.description
+}
+
 func (s *Parameter) Write(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	serialiser.WriteString(s.Name)

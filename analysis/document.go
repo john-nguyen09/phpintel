@@ -3,6 +3,7 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
+	"log"
 	"runtime/debug"
 	"sort"
 	"sync"
@@ -102,12 +103,22 @@ func NewDocument(uri string, text string) *Document {
 
 // Open sets a flag to indicate the document is open
 func (s *Document) Open() {
+	s.loadMu.Lock()
 	s.isOpen = true
+	s.loadMu.Unlock()
 }
 
 // Close unsets the flag
 func (s *Document) Close() {
+	s.loadMu.Lock()
 	s.isOpen = false
+	s.loadMu.Unlock()
+}
+
+func (s *Document) IsOpen() bool {
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
+	return s.isOpen
 }
 
 func (s *Document) ResetState() {
@@ -363,10 +374,41 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	return nil
 }
 
+// ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
+func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
+	s.loadMu.Lock()
+	log.Printf("ArgumentListAndFunctionCallAt: %p", s)
+	defer s.loadMu.Unlock()
+	index := sort.Search(len(s.Children), func(i int) bool {
+		location := s.Children[i].GetLocation()
+		return util.IsInRange(pos, location.Range) <= 0
+	})
+	var hasParamsResolvable HasParamsResolvable = nil
+	var argumentList *ArgumentList = nil
+	var ok = false
+	for i, symbol := range s.Children[index:] {
+		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
+		if inRange > 0 {
+			argumentList = nil
+			break
+		}
+		if argumentList, ok = symbol.(*ArgumentList); ok && inRange == 0 {
+			if i+index-1 >= 0 {
+				previousSymbol := s.Children[i+index-1]
+				log.Printf("%T", previousSymbol)
+				hasParamsResolvable, _ = previousSymbol.(HasParamsResolvable)
+			}
+			break
+		}
+	}
+	return argumentList, hasParamsResolvable
+}
+
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
-	util.TimeTrack(time.Now(), "ApplyChanges")
+	defer util.TimeTrack(time.Now(), "ApplyChanges")
 	s.loadMu.Lock()
+	log.Printf("ApplyChanges: %p", s)
 	defer s.loadMu.Unlock()
 	s.hasChanges = true
 	for _, change := range changes {

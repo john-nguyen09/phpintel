@@ -3550,13 +3550,13 @@ type SignatureHelp struct {
 	 * The active signature. Set to `null` if no
 	 * signatures exist.
 	 */
-	ActiveSignature float64 `json:"activeSignature"`
+	ActiveSignature int `json:"activeSignature"`
 
 	/*ActiveParameter defined:
 	 * The active parameter of the active signature. Set to `null`
 	 * if the active signature has no parameters.
 	 */
-	ActiveParameter float64 `json:"activeParameter"`
+	ActiveParameter int `json:"activeParameter"`
 }
 
 /*ReferenceContext defined:

@@ -3,8 +3,10 @@ package analysis
 import (
 	"strings"
 
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 // FunctionCall represents a reference to function call
@@ -24,15 +26,42 @@ func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func newFunctionCall(document *Document, node *phrase.Phrase) HasTypes {
+func newFunctionCall(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	functionCall := &FunctionCall{
 		Expression: Expression{},
 	}
-	if len(node.Children) >= 1 {
+	document.addSymbol(functionCall)
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	firstChild := child
+	if firstChild != nil {
 		functionCall.Location = document.GetNodeLocation(node.Children[0])
 		functionCall.Name = document.GetNodeText(node.Children[0])
 	}
-	return functionCall
+	var open *lexer.Token = nil
+	var close *lexer.Token = nil
+	hasArgs := false
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			if p.Type == phrase.ArgumentExpressionList {
+				hasArgs = true
+				break
+			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.OpenParenthesis:
+				open = t
+			case lexer.CloseParenthesis:
+				close = t
+			}
+		}
+		child = traverser.Advance()
+	}
+	if !hasArgs {
+		args := newEmptyArgumentList(document, open, close)
+		document.addSymbol(args)
+	}
+	return functionCall, false
 }
 
 func (s *FunctionCall) GetLocation() protocol.Location {
@@ -52,6 +81,16 @@ func (s *FunctionCall) Resolve(store *Store) {
 
 func (s *FunctionCall) GetTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *FunctionCall) ResolveToHasParams(store *Store, document *Document) []HasParams {
+	functions := []HasParams{}
+	typeString := NewTypeString(s.Name)
+	typeString.SetFQN(document.GetImportTable().GetFunctionReferenceFQN(typeString))
+	for _, function := range store.GetFunctions(typeString.GetFQN()) {
+		functions = append(functions, function)
+	}
+	return functions
 }
 
 func (s *FunctionCall) Serialise(serialiser *Serialiser) {

@@ -11,7 +11,7 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, node *phrase.Phrase) HasTypes {
+func newScopedConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
 	}
@@ -28,7 +28,7 @@ func newScopedConstantAccess(document *Document, node *phrase.Phrase) HasTypes {
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		constantAccess.Name = analyseMemberName(document, p)
 	}
-	return constantAccess
+	return constantAccess, true
 }
 
 func (s *ScopedConstantAccess) GetLocation() protocol.Location {

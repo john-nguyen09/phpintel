@@ -42,7 +42,7 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type expressionConstructorForPhrase func(*Document, *phrase.Phrase) HasTypes
+type expressionConstructorForPhrase func(*Document, *phrase.Phrase) (HasTypes, bool)
 
 var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ObjectCreationExpression: true,
@@ -63,7 +63,11 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		phrase.MethodCallExpression:           newMethodAccess,
 	}
 	var expression HasTypes = nil
+	shouldAdd := false
 	defer func() {
+		if !shouldAdd {
+			return
+		}
 		if symbol, ok := expression.(Symbol); ok {
 			document.addSymbol(symbol)
 		}
@@ -76,7 +80,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		}
 	}
 	if constructor, ok := phraseToExpressionConstructor[node.Type]; ok {
-		expression = constructor(document, node)
+		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
 }

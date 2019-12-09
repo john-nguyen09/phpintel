@@ -12,7 +12,7 @@ type PropertyAccess struct {
 	hasResolved bool
 }
 
-func newPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
+func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &PropertyAccess{
 		Expression: Expression{},
 	}
@@ -27,7 +27,7 @@ func newPropertyAccess(document *Document, node *phrase.Phrase) HasTypes {
 	traverser.Advance()
 
 	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)
-	return propertyAccess
+	return propertyAccess, true
 }
 
 func (s *PropertyAccess) GetLocation() protocol.Location {

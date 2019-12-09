@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -11,7 +12,7 @@ type ScopedMethodAccess struct {
 	Expression
 }
 
-func newScopedMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
+func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
 	}
@@ -22,13 +23,38 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) HasTypes {
 		document.addSymbol(classAccess)
 		methodAccess.Scope = classAccess
 	}
+	document.addSymbol(methodAccess)
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	methodAccess.Location = document.GetNodeLocation(thirdChild)
 	if p, ok := thirdChild.(*phrase.Phrase); ok {
 		methodAccess.Name = analyseMemberName(document, p)
 	}
-	return methodAccess
+	child := traverser.Advance()
+	var open *lexer.Token = nil
+	var close *lexer.Token = nil
+	hasArgs := false
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			if p.Type == phrase.ArgumentExpressionList {
+				hasArgs = true
+				break
+			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.OpenParenthesis:
+				open = t
+			case lexer.CloseParenthesis:
+				close = t
+			}
+		}
+		child = traverser.Advance()
+	}
+	if !hasArgs {
+		args := newEmptyArgumentList(document, open, close)
+		document.addSymbol(args)
+	}
+	return methodAccess, false
 }
 
 func (s *ScopedMethodAccess) GetLocation() protocol.Location {
@@ -42,6 +68,20 @@ func (s *ScopedMethodAccess) Resolve(store *Store) {
 func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 	// TODO: Look up method return type
 	return s.Type
+}
+
+func (s *ScopedMethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
+	hasParams := []HasParams{}
+	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
+		methods := store.GetMethods(typeString.GetFQN(), s.Name)
+		for _, method := range methods {
+			if !method.IsStatic {
+				continue
+			}
+			hasParams = append(hasParams, method)
+		}
+	}
+	return hasParams
 }
 
 func (s *ScopedMethodAccess) Serialise(serialiser *Serialiser) {

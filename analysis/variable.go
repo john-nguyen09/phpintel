@@ -17,11 +17,11 @@ type Variable struct {
 	hasResolved        bool
 }
 
-func newVariableExpression(document *Document, node *phrase.Phrase) HasTypes {
+func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	return newVariable(document, node)
 }
 
-func newVariable(document *Document, node *phrase.Phrase) *Variable {
+func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
 	variable := &Variable{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -41,7 +41,7 @@ func newVariable(document *Document, node *phrase.Phrase) *Variable {
 		variable.setExpression(newRelativeScope(document, variable.Location))
 	}
 	document.pushVariable(variable)
-	return variable
+	return variable, true
 }
 
 func (s *Variable) GetLocation() protocol.Location {

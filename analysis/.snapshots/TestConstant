@@ -33,6 +33,10 @@
     arguments: ([]phrase.AstNode) (len=2) {
       (*lexer.Token)(StringLiteral 40 13),
       (*lexer.Token)(IntegerLiteral 55 1)
+    },
+    ranges: ([]protocol.Range) (len=2) {
+      (protocol.Range) 3:7-3:20,
+      (protocol.Range) 3:20-3:23
     }
   }),
   (*analysis.Define)({

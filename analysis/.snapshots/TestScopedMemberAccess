@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=15) {
+([]analysis.Symbol) (len=16) {
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -162,6 +162,16 @@
         Range: (protocol.Range) 4:11-4:18
       },
       Name: (string) (len=7) "method1"
+    }
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:18-4:19
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 4:18-4:19
     }
   }),
   (*analysis.Variable)({
