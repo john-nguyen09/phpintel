@@ -1,8 +1,6 @@
 package analysis
 
 import (
-	"log"
-
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -21,13 +19,13 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) HasTypes {
 	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
-	log.Println(classTypeDesignator.Location.Range)
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.QualifiedName:
 				typeString := transformQualifiedName(p, document)
-				classTypeDesignator.Name = typeString.original
+				typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+				classTypeDesignator.Name = typeString.GetOriginal()
 				classTypeDesignator.Type.add(typeString)
 			case phrase.RelativeScope:
 				relativeScope := newRelativeScope(document, classTypeDesignator.Location)

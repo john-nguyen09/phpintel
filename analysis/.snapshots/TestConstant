@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=3) {
+([]analysis.Symbol) (len=5) {
   (*analysis.Const)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -13,7 +13,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -23,6 +24,16 @@
       Name: (string) (len=6) "define"
     },
     hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 3:7-3:23
+    },
+    arguments: ([]phrase.AstNode) (len=2) {
+      (*lexer.Token)(StringLiteral 40 13),
+      (*lexer.Token)(IntegerLiteral 55 1)
+    }
   }),
   (*analysis.Define)({
     location: (protocol.Location) {
@@ -34,5 +45,26 @@
       original: (string) (len=11) "TEST_CONST2"
     },
     Value: (string) (len=1) "2"
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=12) "\\TEST_CONST2",
+            original: (string) (len=11) "TEST_CONST2"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=12) "\\TEST_CONST2": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 5:0-5:11
+      },
+      Name: (string) (len=11) "TEST_CONST2"
+    }
   })
 }

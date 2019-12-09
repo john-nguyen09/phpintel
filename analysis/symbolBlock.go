@@ -35,6 +35,17 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ArrayElement:               true,
 	phrase.ArrayValue:                 true,
 	phrase.ArrayKey:                   true,
+	phrase.LogicalExpression:          true,
+	phrase.EqualityExpression:         true,
+}
+
+var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{
+	phrase.ArgumentExpressionList: true,
+}
+var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
+	// Expressions
+	lexer.DirectoryConstant: newDirectoryConstantAccess,
+	lexer.DocumentComment:   newPhpDocFromNode,
 }
 
 func scanForChildren(document *Document, node *phrase.Phrase) {
@@ -55,13 +66,9 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.GlobalDeclaration:          newGlobalDeclaration,
 		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
 	}
-	var tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
-		// Expressions
-		lexer.DirectoryConstant: newDirectoryConstantAccess,
-		lexer.DocumentComment:   newPhpDocFromNode,
-	}
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil
+		shouldSkipAdding := false
 		if p, ok := child.(*phrase.Phrase); ok {
 			if p.Type == phrase.NamespaceDefinition {
 				namespace := newNamespace(document, p)
@@ -77,13 +84,16 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 			if constructor, ok := phraseToSymbolConstructor[p.Type]; ok {
 				childSymbol = constructor(document, p)
 			}
+			if _, ok := skipAddingSymbol[p.Type]; ok {
+				shouldSkipAdding = true
+			}
 		} else if t, ok := child.(*lexer.Token); ok {
 			if constructor, ok := tokenToSymbolConstructor[t.Type]; ok {
 				childSymbol = constructor(document, t)
 			}
 		}
 
-		if childSymbol != nil {
+		if !shouldSkipAdding && childSymbol != nil {
 			document.addSymbol(childSymbol)
 		}
 	}

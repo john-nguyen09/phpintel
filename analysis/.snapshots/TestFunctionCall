@@ -2,12 +2,14 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (*analysis.FunctionCall)({
         Expression: (analysis.Expression) {
           Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
@@ -31,7 +33,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -45,7 +48,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -61,7 +65,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -85,12 +90,14 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (*analysis.FunctionCall)({
         Expression: (analysis.Expression) {
           Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
           },
           Scope: (analysis.HasTypes) <nil>,
           Location: (protocol.Location) {
@@ -114,7 +121,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -128,7 +136,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -144,7 +153,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -153,22 +163,6 @@
       },
       Name: (string) (len=5) "fgets"
     },
-    hasResolved: (bool) false
-  }),
-  (*analysis.Variable)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 4:22-4:27
-      },
-      Name: (string) (len=5) "$file"
-    },
-    description: (string) "",
-    canReferenceGlobal: (bool) true,
     hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
@@ -185,10 +179,28 @@
       })
     }
   }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 4:22-4:27
+      },
+      Name: (string) (len=5) "$file"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -198,40 +210,6 @@
       Name: (string) (len=6) "printf"
     },
     hasResolved: (bool) false
-  }),
-  (*analysis.Variable)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 5:11-5:16
-      },
-      Name: (string) (len=5) "$line"
-    },
-    description: (string) "",
-    canReferenceGlobal: (bool) true,
-    hasResolved: (bool) false
-  }),
-  (*analysis.ConstantAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=7) "PHP_EOL",
-            original: (string) (len=7) "PHP_EOL"
-          }
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 5:19-5:26
-      },
-      Name: (string) (len=7) "PHP_EOL"
-    }
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -271,10 +249,49 @@
       })
     }
   }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 5:11-5:16
+      },
+      Name: (string) (len=5) "$line"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=8) "\\PHP_EOL",
+            original: (string) (len=7) "PHP_EOL"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=8) "\\PHP_EOL": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 5:19-5:26
+      },
+      Name: (string) (len=7) "PHP_EOL"
+    }
+  }),
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -283,22 +300,6 @@
       },
       Name: (string) (len=6) "fclose"
     },
-    hasResolved: (bool) false
-  }),
-  (*analysis.Variable)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 8:7-8:12
-      },
-      Name: (string) (len=5) "$file"
-    },
-    description: (string) "",
-    canReferenceGlobal: (bool) true,
     hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
@@ -314,5 +315,22 @@
         }
       })
     }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:7-8:12
+      },
+      Name: (string) (len=5) "$file"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
   })
 }

@@ -4,9 +4,12 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
-            fqn: (string) (len=15) "TestMethodClass",
+            fqn: (string) (len=16) "\\TestMethodClass",
             original: (string) (len=15) "TestMethodClass"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=16) "\\TestMethodClass": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -20,16 +23,20 @@
   (*analysis.ScopedConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (*analysis.ClassAccess)({
         Expression: (analysis.Expression) {
           Type: (analysis.TypeComposite) {
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
-                fqn: (string) (len=15) "TestMethodClass",
+                fqn: (string) (len=16) "\\TestMethodClass",
                 original: (string) (len=15) "TestMethodClass"
               }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=16) "\\TestMethodClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,

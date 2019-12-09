@@ -28,7 +28,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ClassTypeDesignator:
 		classes := []*analysis.Class{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString))...)
+			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
 			if len(classes) > 0 {
 				hover = cmd.ClassToHover(symbol, *classes[0])
 				break
@@ -37,7 +37,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ClassAccess:
 		classes := []*analysis.Class{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString))...)
+			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
 			if len(classes) > 0 {
 				hover = cmd.ClassToHover(symbol, *classes[0])
 				break
@@ -47,12 +47,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}
 		for _, typeString := range v.Type.Resolve() {
-			consts = append(consts, store.GetConsts(document.GetImportTable().GetConstReferenceFQN(typeString))...)
+			consts = append(consts, store.GetConsts(typeString.GetFQN())...)
 			if len(consts) > 0 {
 				hover = cmd.ConstToHover(symbol, *consts[0])
 				break
 			}
-			defines = append(defines, store.GetDefines(document.GetImportTable().GetConstReferenceFQN(typeString))...)
+			defines = append(defines, store.GetDefines(typeString.GetFQN())...)
 			if len(defines) > 0 {
 				hover = cmd.DefineToHover(symbol, *defines[0])
 				break
@@ -70,7 +70,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		classConsts := []*analysis.ClassConst{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			classConsts = append(classConsts, store.GetClassConsts(
-				document.GetImportTable().GetClassReferenceFQN(scopeType), v.Name)...)
+				scopeType.GetFQN(), v.Name)...)
 			if len(classConsts) > 0 {
 				hover = cmd.ClassConstToHover(symbol, *classConsts[0])
 				break
@@ -79,7 +79,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ScopedMethodAccess:
 		methods := []*analysis.Method{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(document.GetImportTable().GetClassReferenceFQN(scopeType), v.Name) {
+			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				if !method.IsStatic {
 					continue
 				}
@@ -93,7 +93,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ScopedPropertyAccess:
 		properties := []*analysis.Property{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(document.GetImportTable().GetClassReferenceFQN(scopeType), v.Name) {
+			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
 				if !property.IsStatic {
 				}
 				properties = append(properties, property)
@@ -109,7 +109,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.PropertyAccess:
 		properties := []*analysis.Property{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(document.GetImportTable().GetClassReferenceFQN(scopeType), "$"+v.Name) {
+			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
 				properties = append(properties, property)
 			}
 			if len(properties) > 0 {
@@ -120,7 +120,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.MethodAccess:
 		methods := []*analysis.Method{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(document.GetImportTable().GetClassReferenceFQN(scopeType), v.Name) {
+			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
 				methods = append(methods, method)
 			}
 			if len(methods) > 0 {

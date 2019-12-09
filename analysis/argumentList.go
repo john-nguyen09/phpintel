@@ -32,7 +32,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 		child = traverser.Advance()
 	}
 	scanForChildren(document, node)
-	return nil
+	return argumentList
 }
 
 func (s *ArgumentList) GetLocation() protocol.Location {

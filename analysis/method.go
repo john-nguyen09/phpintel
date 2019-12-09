@@ -36,10 +36,13 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	lastClass := document.getLastClass()
 	if theClass, ok := lastClass.(*Class); ok {
 		method.Scope = theClass.Name
+		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
 	} else if theInterface, ok := lastClass.(*Interface); ok {
 		method.Scope = theInterface.Name
+		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
 	} else if trait, ok := lastClass.(*Trait); ok {
 		method.Scope = trait.Name
+		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
 	}
 
 	traverser := util.NewTraverser(node)
@@ -89,7 +92,7 @@ func (s *Method) GetCollection() string {
 }
 
 func (s *Method) GetKey() string {
-	return s.Scope.GetFQN() + KeySep + s.Name + s.location.URI
+	return s.Scope.GetFQN() + KeySep + s.Name + KeySep + s.location.URI
 }
 
 func (s *Method) GetIndexableName() string {

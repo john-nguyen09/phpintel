@@ -42,7 +42,7 @@ func (s *Define) GetLocation() protocol.Location {
 }
 
 func (s *Define) GetName() string {
-	return s.Name.GetOriginal()
+	return s.Name.GetFQN()
 }
 
 func (s *Define) GetDescription() string {
@@ -69,7 +69,7 @@ func (s *Define) GetCollection() string {
 }
 
 func (s *Define) GetKey() string {
-	return s.Name.fqn + KeySep + s.location.URI
+	return s.GetName() + KeySep + s.location.URI
 }
 
 func (s *Define) GetIndexableName() string {

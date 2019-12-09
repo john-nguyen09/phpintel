@@ -22,6 +22,9 @@
               fqn: (string) (len=9) "TestClass",
               original: (string) (len=9) "TestClass"
             }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=9) "TestClass": (bool) true
           }
         },
         Value: (string) (len=4) "null"
@@ -29,6 +32,8 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
+      },
+      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) ""
@@ -50,6 +55,9 @@
           fqn: (string) (len=9) "TestClass",
           original: (string) (len=9) "TestClass"
         }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=9) "TestClass": (bool) true
       }
     },
     description: (string) (len=23) "function3's description"

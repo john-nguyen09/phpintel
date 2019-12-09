@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"log"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -17,7 +18,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	document.Load()
 	var completionList *protocol.CompletionList = nil
 	symbol := document.SymbolAtPos(params.Position)
-	// log.Printf("Completion: %T", symbol)
+	log.Printf("Completion: %T", symbol)
 	switch s := symbol.(type) {
 	case *analysis.Variable:
 		completionList = variableCompletion(document, params.Position)
@@ -58,10 +59,11 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 func nameCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{}
 	classes := store.SearchClasses(word)
+	importTable := document.GetImportTable()
 	for _, class := range classes {
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.ClassCompletion,
-			Label:         class.GetName(),
+			Label:         importTable.ResolveToQualified(class.Name),
 			Documentation: class.GetDescription(),
 		})
 	}
@@ -69,7 +71,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 	for _, constant := range consts {
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.ConstantCompletion,
-			Label:         constant.GetName(),
+			Label:         importTable.ResolveToQualified(constant.Name),
 			Documentation: constant.GetDescription(),
 			Detail:        constant.Value,
 		})
@@ -78,7 +80,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 	for _, define := range defines {
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.ConstantCompletion,
-			Label:         define.GetName(),
+			Label:         importTable.ResolveToQualified(define.Name),
 			Documentation: define.GetDescription(),
 			Detail:        define.Value,
 		})
@@ -87,7 +89,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, word str
 	for _, function := range functions {
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.FunctionCompletion,
-			Label:         function.GetName().GetOriginal(),
+			Label:         importTable.ResolveToQualified(function.Name),
 			Documentation: function.GetDescription(),
 			Detail:        function.GetDetail(),
 		})

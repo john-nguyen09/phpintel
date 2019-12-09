@@ -430,7 +430,7 @@ func (s *Document) getValidPhpDoc(location protocol.Location) *phpDocComment {
 	}
 	endOfPhpDoc := s.lastPhpDoc.GetLocation().Range.End
 	start := location.Range.Start
-	if endOfPhpDoc.Line < start.Line && endOfPhpDoc.Line >= (start.Line-2) {
+	if endOfPhpDoc.Line < start.Line && endOfPhpDoc.Line == (start.Line-1) {
 		return s.lastPhpDoc
 	}
 	return nil
@@ -451,7 +451,7 @@ func (s *Document) GetMD5Hash() []byte {
 	return hasher.Sum(nil)
 }
 
-func (s Document) GetImportTable() ImportTable {
+func (s *Document) GetImportTable() ImportTable {
 	return s.importTable
 }
 

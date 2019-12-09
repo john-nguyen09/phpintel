@@ -24,6 +24,9 @@ var /* const */ Natives = map[string]bool{
 	"binary": true,
 	"array":  true,
 	"object": true,
+
+	"__DIR__":  true,
+	"__FILE__": true,
 }
 
 // TypeString contains fqn and original name of type
@@ -86,6 +89,10 @@ func (t TypeString) FirstPart() string {
 	return t.original
 }
 
+func (t TypeString) GetParts() []string {
+	return strings.Split(t.original, "\\")
+}
+
 func isFQN(name string) bool {
 	if name == "" {
 		return false
@@ -116,11 +123,13 @@ func ReadTypeString(serialiser *Serialiser) TypeString {
 // TypeComposite contains multiple type strings
 type TypeComposite struct {
 	typeStrings []TypeString
+	uniqueFQNs  map[string]bool
 }
 
 func newTypeComposite() TypeComposite {
 	return TypeComposite{
 		typeStrings: []TypeString{},
+		uniqueFQNs:  map[string]bool{},
 	}
 }
 
@@ -130,7 +139,14 @@ func (t TypeComposite) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TypeComposite) add(typeString TypeString) {
+	if _, ok := t.uniqueFQNs[typeString.GetFQN()]; ok {
+		return
+	}
 	t.typeStrings = append(t.typeStrings, typeString)
+	if t.uniqueFQNs == nil {
+		t.uniqueFQNs = map[string]bool{}
+	}
+	t.uniqueFQNs[typeString.GetFQN()] = true
 }
 
 func (t *TypeComposite) merge(types TypeComposite) {

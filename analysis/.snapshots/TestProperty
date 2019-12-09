@@ -29,7 +29,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -46,7 +47,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) true,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -63,7 +65,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -80,7 +83,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -97,7 +101,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -114,7 +119,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -131,7 +137,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -148,7 +155,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -165,7 +173,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -182,7 +191,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
     Types: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
     }
   }),
   (*analysis.Property)({
@@ -204,6 +214,9 @@
           fqn: (string) (len=19) "ClassWithProperties",
           original: (string) (len=19) "ClassWithProperties"
         }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=19) "ClassWithProperties": (bool) true
       }
     }
   })

@@ -7,6 +7,9 @@
             fqn: (string) (len=7) "__DIR__",
             original: (string) (len=7) "__DIR__"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=7) "__DIR__": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -20,7 +23,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -36,7 +40,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -57,6 +62,9 @@
             fqn: (string) (len=7) "__DIR__",
             original: (string) (len=7) "__DIR__"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=7) "__DIR__": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -70,7 +78,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -86,7 +95,8 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -107,6 +117,9 @@
             fqn: (string) (len=7) "__DIR__",
             original: (string) (len=7) "__DIR__"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=7) "__DIR__": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -122,9 +135,12 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
-            fqn: (string) (len=11) "TEST_CONST1",
+            fqn: (string) (len=12) "\\TEST_CONST1",
             original: (string) (len=11) "TEST_CONST1"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=12) "\\TEST_CONST1": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -143,6 +159,9 @@
             fqn: (string) (len=7) "__DIR__",
             original: (string) (len=7) "__DIR__"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=7) "__DIR__": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,

@@ -36,7 +36,9 @@ func (s *ConstantAccess) GetLocation() protocol.Location {
 
 func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
 	s.Name = document.GetNodeText(node)
-	s.Type.add(NewTypeString(s.Name))
+	typeString := NewTypeString(s.Name)
+	typeString.SetFQN(document.GetImportTable().GetConstReferenceFQN(typeString))
+	s.Type.add(typeString)
 }
 
 func (s *ConstantAccess) Resolve(store *Store) {

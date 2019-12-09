@@ -19,7 +19,9 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	}
 	types := newTypeComposite()
 	if node.Type == phrase.QualifiedName {
-		types.add(transformQualifiedName(node, document))
+		typeString := transformQualifiedName(node, document)
+		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		types.add(typeString)
 	}
 	if isNameRelative(classAccess.Name) {
 		relativeScope := newRelativeScope(document, classAccess.Location)

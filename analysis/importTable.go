@@ -77,3 +77,23 @@ func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
 	}
 	return name.GetFQN()
 }
+
+func (i ImportTable) ResolveToQualified(name TypeString) string {
+	parts := name.GetParts()
+	firstPart, parts := parts[0], parts[1:]
+	if alias, ok := i.classes[firstPart]; ok {
+		if len(parts) > 0 {
+			return alias + "\\" + strings.Join(parts, "\\")
+		}
+		return alias
+	}
+	if strings.Index(name.GetFQN(), i.namespace) == 0 {
+		return name.GetFQN()[len(i.namespace):]
+	}
+	// TODO: Insert use instead of FQN
+	return name.GetFQN()
+}
+
+func (i ImportTable) GetNamespace() string {
+	return i.namespace
+}

@@ -4,9 +4,12 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
-            fqn: (string) (len=4) "User",
+            fqn: (string) (len=5) "\\User",
             original: (string) (len=4) "User"
           }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=5) "\\User": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -20,16 +23,20 @@
   (*analysis.ScopedMethodAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (*analysis.ClassAccess)({
         Expression: (analysis.Expression) {
           Type: (analysis.TypeComposite) {
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
-                fqn: (string) (len=4) "User",
+                fqn: (string) (len=5) "\\User",
                 original: (string) (len=4) "User"
               }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=5) "\\User": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -204,7 +211,8 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {

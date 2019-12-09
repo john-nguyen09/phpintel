@@ -25,6 +25,8 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
+      },
+      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
