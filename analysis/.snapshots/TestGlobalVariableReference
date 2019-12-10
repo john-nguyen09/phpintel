@@ -2,12 +2,12 @@
   dbTypes: (analysis.TypeComposite) {
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
-        fqn: (string) (len=15) "TestMethodClass",
+        fqn: (string) (len=16) "\\TestMethodClass",
         original: (string) (len=15) "TestMethodClass"
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
-      (string) (len=15) "TestMethodClass": (bool) true
+      (string) (len=16) "\\TestMethodClass": (bool) true
     }
   },
   outputTypes: (analysis.TypeComposite) {
@@ -24,12 +24,12 @@
   varTypes: (analysis.TypeComposite) {
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
-        fqn: (string) (len=15) "TestMethodClass",
+        fqn: (string) (len=16) "\\TestMethodClass",
         original: (string) (len=15) "TestMethodClass"
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
-      (string) (len=15) "TestMethodClass": (bool) true
+      (string) (len=16) "\\TestMethodClass": (bool) true
     }
   },
   insideFunctionNoGlobalTypes: (analysis.TypeComposite) {
@@ -39,12 +39,12 @@
   insideFunctionHasGlobalTypes: (analysis.TypeComposite) {
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
-        fqn: (string) (len=15) "TestMethodClass",
+        fqn: (string) (len=16) "\\TestMethodClass",
         original: (string) (len=15) "TestMethodClass"
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
-      (string) (len=15) "TestMethodClass": (bool) true
+      (string) (len=16) "\\TestMethodClass": (bool) true
     }
   }
 }

@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=29) {
+([]analysis.Symbol) (len=30) {
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -57,6 +57,16 @@
       Name: (string) (len=10) "TestClass1"
     }
   }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:22-2:23
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 2:22-2:23
+    }
+  }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -102,25 +112,14 @@
       Name: (string) (len=10) "TestClass1"
     }
   }),
-  (*analysis.ClassTypeDesignator)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=11) "\\TestClass1",
-            original: (string) (len=10) "TestClass1"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=11) "\\TestClass1": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 2:12-2:22
-      },
-      Name: (string) (len=10) "TestClass1"
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:22-2:23
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 2:22-2:23
     }
   }),
   (*analysis.Variable)({
