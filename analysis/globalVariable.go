@@ -51,18 +51,20 @@ func newGlobalVariable(document *Document, node *phrase.Phrase) Symbol {
 	}
 	phpDoc := document.getValidPhpDoc(globalVariable.location)
 	if phpDoc != nil {
-		globalVariable.applyPhpDoc(phpDoc)
+		globalVariable.applyPhpDoc(document, phpDoc)
 	}
 	variableTable := document.getCurrentVariableTable()
 	variableTable.setReferenceGlobal(globalVariable.GetName())
 	return globalVariable
 }
 
-func (s *GlobalVariable) applyPhpDoc(phpDoc *phpDocComment) {
+func (s *GlobalVariable) applyPhpDoc(document *Document, phpDoc *phpDocComment) {
 	tags := phpDoc.Globals
 	for _, tag := range tags {
 		if tag.Name == s.Name {
-			s.types.add(NewTypeString(tag.TypeString))
+			typeString := NewTypeString(tag.TypeString)
+			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			s.types.add(typeString)
 			s.description = tag.Description
 			break
 		}
