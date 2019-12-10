@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -27,14 +28,30 @@ func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
 	child := traverser.Advance()
+	var open *lexer.Token = nil
+	var close *lexer.Token = nil
+	hasArgs := false
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ArgumentExpressionList:
 				newArgumentList(document, p)
+				hasArgs = true
+				break
+			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.OpenParenthesis:
+				open = t
+			case lexer.CloseParenthesis:
+				close = t
 			}
 		}
 		child = traverser.Advance()
+	}
+	if !hasArgs {
+		args := newEmptyArgumentList(document, open, close)
+		document.addSymbol(args)
 	}
 	return methodAccess, true
 }
@@ -57,6 +74,20 @@ func (s *MethodAccess) Resolve(store *Store) {
 
 func (s *MethodAccess) GetTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *MethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
+	hasParams := []HasParams{}
+	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
+		methods := store.GetMethods(typeString.GetFQN(), s.Name)
+		for _, method := range methods {
+			if !method.IsStatic {
+				continue
+			}
+			hasParams = append(hasParams, method)
+		}
+	}
+	return hasParams
 }
 
 func (s *MethodAccess) Serialise(serialiser *Serialiser) {

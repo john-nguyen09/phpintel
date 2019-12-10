@@ -28,7 +28,7 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	pos := params.TextDocumentPositionParams.Position
 	argumentList, hasParamsResolvable := document.ArgumentListAndFunctionCallAt(pos)
 	if argumentList == nil || hasParamsResolvable == nil {
-		return nil, ArgumentListNotFound(uri, pos)
+		return nil, nil
 	}
 	hasParams := hasParamsResolvable.ResolveToHasParams(store, document)
 	for _, hasParam := range hasParams {

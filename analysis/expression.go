@@ -44,9 +44,7 @@ const (
 
 type expressionConstructorForPhrase func(*Document, *phrase.Phrase) (HasTypes, bool)
 
-var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{
-	phrase.ObjectCreationExpression: true,
-}
+var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{}
 
 func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 	var phraseToExpressionConstructor = map[phrase.PhraseType]expressionConstructorForPhrase{
@@ -56,7 +54,6 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		phrase.ScopedCallExpression:           newScopedMethodAccess,
 		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
 		phrase.ErrorScopedAccessExpression:    newScopedConstantAccess,
-		phrase.ClassTypeDesignator:            newClassTypeDesignator,
 		phrase.ObjectCreationExpression:       newClassTypeDesignator,
 		phrase.SimpleVariable:                 newVariableExpression,
 		phrase.PropertyAccessExpression:       newPropertyAccess,
