@@ -27,6 +27,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	}
 	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
+	document.addSymbol(methodAccess)
 	child := traverser.Advance()
 	var open *lexer.Token = nil
 	var close *lexer.Token = nil
@@ -53,7 +54,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 		args := newEmptyArgumentList(document, open, close)
 		document.addSymbol(args)
 	}
-	return methodAccess, true
+	return methodAccess, false
 }
 
 func (s *MethodAccess) GetLocation() protocol.Location {
@@ -81,7 +82,7 @@ func (s *MethodAccess) ResolveToHasParams(store *Store, document *Document) []Ha
 	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
 		methods := store.GetMethods(typeString.GetFQN(), s.Name)
 		for _, method := range methods {
-			if !method.IsStatic {
+			if method.IsStatic {
 				continue
 			}
 			hasParams = append(hasParams, method)

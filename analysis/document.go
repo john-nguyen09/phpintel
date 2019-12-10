@@ -395,7 +395,6 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 		if argumentList, ok = symbol.(*ArgumentList); ok && inRange == 0 {
 			if i+index-1 >= 0 {
 				previousSymbol := s.Children[i+index-1]
-				log.Printf("%T", previousSymbol)
 				hasParamsResolvable, _ = previousSymbol.(HasParamsResolvable)
 			}
 			break
