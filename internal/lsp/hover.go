@@ -2,7 +2,6 @@ package lsp
 
 import (
 	"context"
-	"log"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/cmd"
@@ -22,7 +21,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	document.Load()
 	symbol := document.SymbolAtPos(params.TextDocumentPositionParams.Position)
 	var hover *protocol.Hover = nil
-	log.Printf("Hover: %T\n", symbol)
+	// log.Printf("Hover: %T\n", symbol)
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:

@@ -19,6 +19,24 @@ type Property struct {
 	Types              TypeComposite
 }
 
+func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
+	types := newTypeComposite()
+	typeString := NewTypeString(docTag.TypeString)
+	typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+	types.add(typeString)
+	property := &Property{
+		location:    location,
+		description: docTag.Description,
+
+		Name:               docTag.Name,
+		Scope:              parent.Name,
+		VisibilityModifier: Public,
+		IsStatic:           false,
+		Types:              types,
+	}
+	return property
+}
+
 func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	visibility := Public

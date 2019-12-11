@@ -9,7 +9,8 @@ import (
 
 // Class contains information of classes
 type Class struct {
-	Location protocol.Location
+	description string
+	Location    protocol.Location
 
 	Modifier   ClassModifierValue
 	Name       TypeString
@@ -51,6 +52,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		Location: document.GetNodeLocation(node),
 	}
 	document.addClass(class)
+	phpDoc := document.getValidPhpDoc(class.Location)
 	document.addSymbol(class)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -60,6 +62,22 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
 				class.analyseHeader(document, p)
+
+				if phpDoc != nil {
+					class.description = phpDoc.Description
+					for _, propertyTag := range phpDoc.Properties {
+						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+					for _, propertyTag := range phpDoc.PropertyReads {
+						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+					for _, propertyTag := range phpDoc.PropertyWrites {
+						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+				}
 			case phrase.ClassDeclarationBody:
 				scanForChildren(document, p)
 			}
@@ -158,8 +176,7 @@ func (s *Class) GetName() string {
 }
 
 func (s *Class) GetDescription() string {
-	// TODO: implement php docblock
-	return ""
+	return s.description
 }
 
 func (s *Class) GetCollection() string {
@@ -185,6 +202,7 @@ func (s *Class) GetPrefix() string {
 func (s *Class) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.Location)
 	serialiser.WriteInt(int(s.Modifier))
+	serialiser.WriteString(s.description)
 	s.Name.Write(serialiser)
 	s.Extends.Write(serialiser)
 	serialiser.WriteInt(len(s.Interfaces))
@@ -195,10 +213,11 @@ func (s *Class) Serialise(serialiser *Serialiser) {
 
 func ReadClass(serialiser *Serialiser) *Class {
 	theClass := &Class{
-		Location: serialiser.ReadLocation(),
-		Modifier: ClassModifierValue(serialiser.ReadInt()),
-		Name:     ReadTypeString(serialiser),
-		Extends:  ReadTypeString(serialiser),
+		Location:    serialiser.ReadLocation(),
+		Modifier:    ClassModifierValue(serialiser.ReadInt()),
+		description: serialiser.ReadString(),
+		Name:        ReadTypeString(serialiser),
+		Extends:     ReadTypeString(serialiser),
 	}
 	numInterfaces := serialiser.ReadInt()
 	for i := 0; i < numInterfaces; i++ {

@@ -18,7 +18,7 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 		},
 	}
 	types := newTypeComposite()
-	if node.Type == phrase.QualifiedName {
+	if node.Type == phrase.QualifiedName || node.Type == phrase.FullyQualifiedName {
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)

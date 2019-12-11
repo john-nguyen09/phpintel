@@ -45,3 +45,15 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 		}
 	}
 }
+
+func TestPropertyPhpDoc(t *testing.T) {
+	testFile := "../cases/propertyDocs.php"
+	data, err := ioutil.ReadFile(testFile)
+	if err != nil {
+		panic(err)
+	}
+
+	document := NewDocument("test1", string(data))
+	document.Load()
+	cupaloy.SnapshotT(t, document.Children)
+}

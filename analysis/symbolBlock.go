@@ -20,6 +20,7 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.StatementList:              true,
 	phrase.AdditiveExpression:         true,
 	phrase.IfStatement:                true,
+	phrase.ElseClause:                 true,
 	phrase.IncludeExpression:          true,
 	phrase.EchoIntrinsic:              true,
 	phrase.ExpressionList:             true,

@@ -27,10 +27,10 @@ var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[
 var /* const */ tagBoundaryPattern = regexp.MustCompile(`(?:\r\n|\r|\n)@`)
 var /* const */ whitespacePattern = regexp.MustCompile(`\s+`)
 
-var /* const */ paramOrPropPattern = regexp.MustCompile(`^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*([.\r\n]*)$`)
+var /* const */ paramOrPropPattern = regexp.MustCompile(`^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
 var /* const */ varPattern = regexp.MustCompile(`^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*([.\r\n]*)$`)
 var /* const */ returnPattern = regexp.MustCompile(`^(@return)\s+(\S+)\s*([.\r\n]*)$`)
-var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*([.\r\n)]*)\s*\)\s*([.\r\n]*)$`)
+var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*([.\r\n)]*)\s*\)\s*(.*)$`)
 var /* const */ globalPattern = regexp.MustCompile(`^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*([.\r\n]*)$`)
 
 func typeTag(tagName string, typeString string, name string, description string) tag {
@@ -106,6 +106,9 @@ type phpDocComment struct {
 	Vars        []tag
 	Globals     []tag
 	location    protocol.Location
+
+	PropertyReads  []tag
+	PropertyWrites []tag
 }
 
 func parse(text string) (phpDocComment, error) {
@@ -190,6 +193,8 @@ func newPhpDoc(description string, tags []tag) phpDocComment {
 
 	phpDoc.Returns = phpDoc.findTagsByTagName("@return")
 	phpDoc.Properties = phpDoc.findTagsByTagName("@property")
+	phpDoc.PropertyReads = phpDoc.findTagsByTagName("@property-read")
+	phpDoc.PropertyWrites = phpDoc.findTagsByTagName("@property-write")
 	phpDoc.Methods = phpDoc.findTagsByTagName("@method")
 	phpDoc.Vars = phpDoc.findTagsByTagName("@var")
 	phpDoc.Globals = phpDoc.findTagsByTagName("@global")

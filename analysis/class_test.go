@@ -46,3 +46,15 @@ func TestClassSerialiseAndDeserialise(t *testing.T) {
 		}
 	}
 }
+
+func TestClassDescription(t *testing.T) {
+	testFile := "../cases/classDescription.php"
+	data, err := ioutil.ReadFile(testFile)
+	if err != nil {
+		panic(err)
+	}
+
+	document := NewDocument("test1", string(data))
+	document.Load()
+	cupaloy.SnapshotT(t, document.Children)
+}

@@ -1,0 +1,94 @@
+([]analysis.Symbol) (len=4) {
+  (*analysis.Class)({
+    description: (string) (len=36) "This is the description of the class",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 9:0-12:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\ClassWithOnlyDocProps",
+      original: (string) (len=21) "ClassWithOnlyDocProps"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:0-8:3
+    },
+    description: (string) (len=19) "The section manager",
+    Name: (string) (len=16) "$section_manager",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\ClassWithOnlyDocProps",
+      original: (string) (len=21) "ClassWithOnlyDocProps"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=16) "\\section_manager",
+          original: (string) (len=15) "section_manager"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=16) "\\section_manager": (bool) true
+      }
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:0-8:3
+    },
+    description: (string) (len=19) "The section manager",
+    Name: (string) (len=16) "$section_manager",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\ClassWithOnlyDocProps",
+      original: (string) (len=21) "ClassWithOnlyDocProps"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=16) "\\section_manager",
+          original: (string) (len=15) "section_manager"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=16) "\\section_manager": (bool) true
+      }
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:0-8:3
+    },
+    description: (string) (len=19) "The section manager",
+    Name: (string) (len=16) "$section_manager",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\ClassWithOnlyDocProps",
+      original: (string) (len=21) "ClassWithOnlyDocProps"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=16) "\\section_manager",
+          original: (string) (len=15) "section_manager"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=16) "\\section_manager": (bool) true
+      }
+    }
+  })
+}

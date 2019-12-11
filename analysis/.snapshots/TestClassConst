@@ -1,5 +1,6 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Class)({
+    description: (string) "",
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-4:1

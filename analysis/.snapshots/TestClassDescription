@@ -1,0 +1,19 @@
+([]analysis.Symbol) (len=1) {
+  (*analysis.Class)({
+    description: (string) (len=59) "This class is used to represent a node in a navigation tree",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 10:0-12:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=21) "\\TestClassDescription",
+      original: (string) (len=20) "TestClassDescription"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  })
+}

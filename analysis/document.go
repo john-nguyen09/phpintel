@@ -407,7 +407,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
 	defer util.TimeTrack(time.Now(), "ApplyChanges")
 	s.loadMu.Lock()
-	log.Printf("ApplyChanges: %p", s)
+	// log.Printf("ApplyChanges: %p", s)
 	defer s.loadMu.Unlock()
 	s.hasChanges = true
 	for _, change := range changes {

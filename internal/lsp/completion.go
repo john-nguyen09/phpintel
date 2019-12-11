@@ -2,7 +2,6 @@ package lsp
 
 import (
 	"context"
-	"log"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -18,7 +17,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	document.Load()
 	var completionList *protocol.CompletionList = nil
 	symbol := document.SymbolAtPos(params.Position)
-	log.Printf("Completion: %T", symbol)
+	// log.Printf("Completion: %T", symbol)
 	switch s := symbol.(type) {
 	case *analysis.Variable:
 		completionList = variableCompletion(document, params.Position)
