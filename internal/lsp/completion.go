@@ -160,7 +160,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	}
 	methods := store.SearchMethods(scope, word)
 	for _, method := range methods {
-		if method.IsStatic {
+		if method.Name == "__construct" {
 			continue
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
