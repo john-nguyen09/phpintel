@@ -3,7 +3,6 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
-	"log"
 	"runtime/debug"
 	"sort"
 	"sync"
@@ -378,7 +377,7 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
 func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
 	s.loadMu.Lock()
-	log.Printf("ArgumentListAndFunctionCallAt: %p", s)
+	// log.Printf("ArgumentListAndFunctionCallAt: %p", s)
 	defer s.loadMu.Unlock()
 	index := sort.Search(len(s.Children), func(i int) bool {
 		location := s.Children[i].GetLocation()
