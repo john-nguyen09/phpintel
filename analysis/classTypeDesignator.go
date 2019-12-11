@@ -53,7 +53,7 @@ func (s *ClassTypeDesignator) analyseNode(document *Document, node *phrase.Phras
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
-			case phrase.QualifiedName:
+			case phrase.QualifiedName, phrase.FullyQualifiedName:
 				typeString := transformQualifiedName(p, document)
 				typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 				s.Name = typeString.GetOriginal()

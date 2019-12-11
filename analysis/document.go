@@ -304,7 +304,8 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) VariableTable {
 	// The algorithm is that the first one is in range means the next ones
 	// might also be in range so it goes on until no more in-range ones
 	// and return the last one in range
-	for _, varTable := range s.variableTables {
+	for i := range s.variableTables {
+		varTable := s.variableTables[len(s.variableTables)-1-i]
 		if util.IsInRange(pos, varTable.locationRange) == 0 {
 			found = varTable
 			foundOne = true

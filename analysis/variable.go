@@ -64,12 +64,14 @@ func (s *Variable) Resolve(store *Store) {
 		return
 	}
 	s.hasResolved = true
-	if !s.canReferenceGlobal {
-		return
+	if s.canReferenceGlobal {
+		globalVariables := store.GetGlobalVariables(s.Name)
+		for _, globalVariable := range globalVariables {
+			s.Type.merge(globalVariable.types)
+		}
 	}
-	globalVariables := store.GetGlobalVariables(s.Name)
-	for _, globalVariable := range globalVariables {
-		s.Type.merge(globalVariable.types)
+	if s.Scope != nil {
+		s.Scope.Resolve(store)
 	}
 }
 
