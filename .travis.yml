@@ -9,6 +9,9 @@ env:
 git:
   depth: 1
 
+before_install:
+  - sudo apt-get -y install upx-ucl
+
 install: true
 
 notifications:
