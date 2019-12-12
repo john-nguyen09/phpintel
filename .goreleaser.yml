@@ -9,6 +9,8 @@ builds:
     - 386
   hooks:
     post: /bin/sh scripts/upx.sh
+  ldflags:
+    - -X main.version=`git tag -l --points-at HEAD`
 archives:
 -
   format: tar.gz
