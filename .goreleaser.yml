@@ -10,7 +10,7 @@ builds:
   hooks:
     post: /bin/sh scripts/upx.sh
   ldflags:
-    - -X main.version=`git tag -l --points-at HEAD`
+    - -X main.version={{.Version}}
 archives:
 -
   format: tar.gz
