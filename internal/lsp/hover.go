@@ -41,6 +41,11 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				hover = cmd.ClassToHover(symbol, *classes[0])
 				break
 			}
+			interfaces := store.GetInterfaces(typeString.GetFQN())
+			if len(interfaces) > 0 {
+				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
+				break
+			}
 		}
 	case *analysis.InterfaceAccess:
 		interfaces := []*analysis.Interface{}
@@ -133,6 +138,19 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])
+				break
+			}
+		}
+	case *analysis.TypeDeclaration:
+		for _, typeString := range v.Type.Resolve() {
+			classes := store.GetClasses(typeString.GetFQN())
+			if len(classes) > 0 {
+				hover = cmd.ClassToHover(symbol, *classes[0])
+				break
+			}
+			interfaces := store.GetInterfaces(typeString.GetFQN())
+			if len(interfaces) > 0 {
+				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
 				break
 			}
 		}

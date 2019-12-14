@@ -33,6 +33,7 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 					for _, typeString := range typeDeclaration.Type.typeStrings {
 						param.Type.add(typeString)
 					}
+					document.addSymbol(typeDeclaration)
 				}
 			}
 
@@ -59,6 +60,19 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 
 func (s *Parameter) GetDescription() string {
 	return s.description
+}
+
+func (s Parameter) ToVariable() *Variable {
+	return &Variable{
+		Expression: Expression{
+			Location: s.location,
+			Type:     s.Type,
+			Name:     s.Name,
+			Scope:    nil,
+		},
+		description:        s.description,
+		canReferenceGlobal: false,
+	}
 }
 
 func (s *Parameter) Write(serialiser *Serialiser) {

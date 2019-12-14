@@ -84,7 +84,7 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	}
 	phpDoc := document.getValidPhpDoc(property.location)
 	if phpDoc != nil {
-		property.applyPhpDoc(*phpDoc)
+		property.applyPhpDoc(document, *phpDoc)
 	}
 	return property
 }
@@ -101,10 +101,12 @@ func (s *Property) GetDescription() string {
 	return s.description
 }
 
-func (s *Property) applyPhpDoc(phpDoc phpDocComment) {
+func (s *Property) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	tags := phpDoc.Vars
 	for _, tag := range tags {
-		s.Types.add(NewTypeString(tag.TypeString))
+		typeString := NewTypeString(tag.TypeString)
+		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		s.Types.add(typeString)
 		s.description = tag.Description
 		break
 	}

@@ -41,6 +41,8 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.EqualityExpression:             true,
 	phrase.ForeachStatement:               true,
 	phrase.ForeachCollection:              true,
+	phrase.UnaryOpExpression:              true,
+	phrase.ThrowStatement:                 true,
 }
 
 var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{

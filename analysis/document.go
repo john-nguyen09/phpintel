@@ -23,7 +23,7 @@ type Document struct {
 	loadMu      sync.Mutex
 	isOpen      bool
 
-	variableTables     []VariableTable
+	variableTables     []*VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
 	classStack         []Symbol
@@ -40,8 +40,8 @@ type VariableTable struct {
 	level          int
 }
 
-func newVariableTable(locationRange protocol.Range, level int) VariableTable {
-	return VariableTable{
+func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
+	return &VariableTable{
 		locationRange:  locationRange,
 		variables:      map[string]*Variable{},
 		globalDeclares: map[string]bool{},
@@ -123,7 +123,7 @@ func (s *Document) IsOpen() bool {
 func (s *Document) ResetState() {
 	s.Children = []Symbol{}
 	s.variableTableLevel = 0
-	s.variableTables = []VariableTable{}
+	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
 }
@@ -292,12 +292,12 @@ func (s *Document) pushVariableTable(node *phrase.Phrase) {
 	s.variableTableLevel++
 }
 
-func (s *Document) getCurrentVariableTable() VariableTable {
+func (s *Document) getCurrentVariableTable() *VariableTable {
 	return s.variableTables[len(s.variableTables)-1]
 }
 
 // GetVariableTableAt returns the closest variable table which is in range
-func (s *Document) GetVariableTableAt(pos protocol.Position) VariableTable {
+func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 	found := s.variableTables[0] // First one is always the document
 	foundOne := false
 	// The algorithm is that the first one is in range means the next ones

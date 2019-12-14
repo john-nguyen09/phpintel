@@ -78,10 +78,12 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
+	variableTable := document.getCurrentVariableTable()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
 			param := newParameter(document, p)
 			s.Params = append(s.Params, param)
+			variableTable.add(param.ToVariable())
 		}
 
 		child = traverser.Advance()

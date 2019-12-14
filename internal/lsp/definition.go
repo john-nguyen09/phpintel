@@ -87,6 +87,17 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 				locations = append(locations, method.GetLocation())
 			}
 		}
+	case *analysis.TypeDeclaration:
+		for _, typeString := range v.Type.Resolve() {
+			classes := store.GetClasses(typeString.GetFQN())
+			for _, class := range classes {
+				locations = append(locations, class.GetLocation())
+			}
+			interfaces := store.GetInterfaces(typeString.GetFQN())
+			for _, theInterface := range interfaces {
+				locations = append(locations, theInterface.GetLocation())
+			}
+		}
 	}
 	return locations, nil
 }
