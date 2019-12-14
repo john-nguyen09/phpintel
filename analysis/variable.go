@@ -57,6 +57,9 @@ func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 	for _, typeString := range types.Resolve() {
 		s.Type.add(typeString)
 	}
+	if s.Scope == nil {
+		s.setExpression(variable.Scope)
+	}
 }
 
 func (s *Variable) Resolve(store *Store) {
