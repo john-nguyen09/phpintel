@@ -21,16 +21,22 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(theInterface)
-	if interfaceHeader, ok := node.Children[0].(*phrase.Phrase); ok && interfaceHeader.Type == phrase.InterfaceDeclarationHeader {
-		theInterface.analyseHeader(document, interfaceHeader)
-	}
-	if len(node.Children) >= 2 {
-		if interfaceBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			scanForChildren(document, interfaceBody)
+	document.addSymbol(theInterface)
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.InterfaceDeclarationHeader:
+				theInterface.analyseHeader(document, p)
+			case phrase.InterfaceDeclarationBody:
+				scanForChildren(document, p)
+			}
 		}
+		child = traverser.Advance()
 	}
 	theInterface.Name.SetNamespace(document.importTable.namespace)
-	return theInterface
+	return nil
 }
 
 func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
