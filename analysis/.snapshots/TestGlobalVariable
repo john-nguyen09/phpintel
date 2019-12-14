@@ -118,7 +118,27 @@
           (string) (len=16) "\\TestMethodClass": (bool) true
         }
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=16) "\\TestMethodClass",
+                original: (string) (len=15) "TestMethodClass"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=16) "\\TestMethodClass": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 9:14-9:29
+          },
+          Name: (string) (len=15) "TestMethodClass"
+        }
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 9:0-9:7

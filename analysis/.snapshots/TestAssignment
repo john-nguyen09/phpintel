@@ -80,7 +80,27 @@
           (string) (len=11) "\\TestClass1": (bool) true
         }
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=11) "\\TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=11) "\\TestClass1": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:12-2:22
+          },
+          Name: (string) (len=10) "TestClass1"
+        }
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
@@ -184,7 +204,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 3:8-3:20
+          },
+          Name: (string) (len=12) "testFunction"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 3:0-3:5
@@ -239,7 +273,27 @@
               (string) (len=11) "\\TestClass1": (bool) true
             }
           },
-          Scope: (analysis.HasTypes) <nil>,
+          Scope: (*analysis.ClassTypeDesignator)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=11) "\\TestClass1",
+                    original: (string) (len=10) "TestClass1"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=11) "\\TestClass1": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 2:12-2:22
+              },
+              Name: (string) (len=10) "TestClass1"
+            }
+          }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
             Range: (protocol.Range) 4:8-4:13
@@ -273,7 +327,27 @@
           (string) (len=11) "\\TestClass1": (bool) true
         }
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=11) "\\TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=11) "\\TestClass1": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:12-2:22
+          },
+          Name: (string) (len=10) "TestClass1"
+        }
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
@@ -297,7 +371,50 @@
           (string) (len=11) "\\TestClass1": (bool) true
         }
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=11) "\\TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=11) "\\TestClass1": (bool) true
+            }
+          },
+          Scope: (*analysis.ClassTypeDesignator)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=11) "\\TestClass1",
+                    original: (string) (len=10) "TestClass1"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=11) "\\TestClass1": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 2:12-2:22
+              },
+              Name: (string) (len=10) "TestClass1"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 4:8-4:13
+          },
+          Name: (string) (len=5) "$var1"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) true,
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:0-4:5
@@ -321,7 +438,27 @@
           (string) (len=11) "\\TestClass1": (bool) true
         }
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=11) "\\TestClass1",
+                original: (string) (len=10) "TestClass1"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=11) "\\TestClass1": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:12-2:22
+          },
+          Name: (string) (len=10) "TestClass1"
+        }
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
@@ -453,7 +590,40 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=11) "\\TestClass1",
+                    original: (string) (len=10) "TestClass1"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=11) "\\TestClass1": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 5:8-5:18
+              },
+              Name: (string) (len=10) "TestClass1"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 5:20-5:27
+          },
+          Name: (string) (len=7) "method1"
+        }
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:0-5:5

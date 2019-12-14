@@ -51,7 +51,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:8-2:13
+          },
+          Name: (string) (len=5) "fopen"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 2:0-2:5
@@ -143,7 +157,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 4:16-4:21
+          },
+          Name: (string) (len=5) "fgets"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:8-4:13
@@ -192,7 +220,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:8-2:13
+          },
+          Name: (string) (len=5) "fopen"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 4:22-4:27
@@ -265,7 +307,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 4:16-4:21
+          },
+          Name: (string) (len=5) "fgets"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 5:11-5:16
@@ -335,7 +391,21 @@
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
       },
-      Scope: (analysis.HasTypes) <nil>,
+      Scope: (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:8-2:13
+          },
+          Name: (string) (len=5) "fopen"
+        },
+        hasResolved: (bool) false
+      }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
         Range: (protocol.Range) 8:7-8:12
