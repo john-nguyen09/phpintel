@@ -334,6 +334,9 @@ func (s *Document) pushVariable(variable *Variable) {
 // Even though the name indicates class but actually this will also
 // return interface and trait
 func (s *Document) getLastClass() Symbol {
+	if len(s.classStack) == 0 {
+		return nil
+	}
 	return s.classStack[len(s.classStack)-1]
 }
 
