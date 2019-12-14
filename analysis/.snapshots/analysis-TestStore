@@ -11,12 +11,12 @@
       original: (string) (len=10) "TestClass1"
     },
     Extends: (analysis.TypeString) {
-      fqn: (string) (len=9) "TestClass",
+      fqn: (string) (len=10) "\\TestClass",
       original: (string) (len=9) "TestClass"
     },
     Interfaces: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
-        fqn: (string) (len=13) "TestInterface",
+        fqn: (string) (len=14) "\\TestInterface",
         original: (string) (len=13) "TestInterface"
       }
     }

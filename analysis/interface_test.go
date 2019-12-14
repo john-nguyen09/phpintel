@@ -33,8 +33,10 @@ func TestInterfaceSerialiseAndDeserialise(t *testing.T) {
 		if theInterface, ok := child.(*Interface); ok {
 			jsonData, _ := json.MarshalIndent(theInterface, "", "  ")
 			original := string(jsonData)
-			bytes := theInterface.Serialise()
-			serialiser := SerialiserFromByteSlice(bytes)
+			serialiser := NewSerialiser()
+			theInterface.Serialise(serialiser)
+			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
+
 			deserialisedInterface := ReadInterface(serialiser)
 			jsonData, _ = json.MarshalIndent(deserialisedInterface, "", "  ")
 			after := string(jsonData)
