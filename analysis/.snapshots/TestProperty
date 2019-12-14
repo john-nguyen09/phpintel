@@ -212,12 +212,12 @@
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
-          fqn: (string) (len=19) "ClassWithProperties",
+          fqn: (string) (len=20) "\\ClassWithProperties",
           original: (string) (len=19) "ClassWithProperties"
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=19) "ClassWithProperties": (bool) true
+        (string) (len=20) "\\ClassWithProperties": (bool) true
       }
     }
   })

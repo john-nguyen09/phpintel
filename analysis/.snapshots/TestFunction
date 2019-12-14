@@ -1,4 +1,21 @@
-([]analysis.Symbol) (len=2) {
+([]analysis.Symbol) (len=3) {
+  (*analysis.TypeDeclaration)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:22-2:31
+    },
+    Type: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=10) "\\TestClass",
+          original: (string) (len=9) "TestClass"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=10) "\\TestClass": (bool) true
+      }
+    }
+  }),
   (*analysis.Function)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -19,12 +36,12 @@
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
-              fqn: (string) (len=9) "TestClass",
+              fqn: (string) (len=10) "\\TestClass",
               original: (string) (len=9) "TestClass"
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=9) "TestClass": (bool) true
+            (string) (len=10) "\\TestClass": (bool) true
           }
         },
         Value: (string) (len=4) "null"
