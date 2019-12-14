@@ -82,9 +82,6 @@ func (s *MethodAccess) ResolveToHasParams(store *Store, document *Document) []Ha
 	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
 		methods := store.GetMethods(typeString.GetFQN(), s.Name)
 		for _, method := range methods {
-			if method.IsStatic {
-				continue
-			}
 			hasParams = append(hasParams, method)
 		}
 	}
