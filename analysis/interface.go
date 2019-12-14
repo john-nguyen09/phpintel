@@ -9,7 +9,8 @@ import (
 
 // Interface contains information of interfaces
 type Interface struct {
-	location protocol.Location
+	location    protocol.Location
+	description string
 
 	Name    TypeString
 	Extends []TypeString
@@ -81,6 +82,10 @@ func (s *Interface) extends(document *Document, node *phrase.Phrase) {
 
 func (s *Interface) GetLocation() protocol.Location {
 	return s.location
+}
+
+func (s *Interface) GetDescription() string {
+	return s.description
 }
 
 func (s *Interface) GetCollection() string {

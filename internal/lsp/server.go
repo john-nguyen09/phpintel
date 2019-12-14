@@ -177,7 +177,7 @@ func (s *Server) DocumentHighlight(ctx context.Context, params *protocol.Documen
 }
 
 func (s *Server) DocumentSymbol(ctx context.Context, params *protocol.DocumentSymbolParams) ([]protocol.DocumentSymbol, error) {
-	return nil, notImplemented("DocumentSymbol")
+	return s.documentSymbol(ctx, params)
 }
 
 func (s *Server) CodeAction(ctx context.Context, params *protocol.CodeActionParams) ([]protocol.CodeAction, error) {

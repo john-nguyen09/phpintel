@@ -49,7 +49,7 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 				},
 			},
 			DefinitionProvider:     true,
-			DocumentSymbolProvider: false,
+			DocumentSymbolProvider: true,
 			HoverProvider:          true,
 			SignatureHelpProvider: &protocol.SignatureHelpOptions{
 				TriggerCharacters: []string{"(", ","},
