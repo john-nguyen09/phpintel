@@ -298,25 +298,18 @@ func (s *Document) getCurrentVariableTable() *VariableTable {
 
 // GetVariableTableAt returns the closest variable table which is in range
 func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
-	found := s.variableTables[0] // First one is always the document
-	foundOne := false
-	// The algorithm is that the first one is in range means the next ones
-	// might also be in range so it goes on until no more in-range ones
-	// and return the last one in range
+	// The algorithm is going reverse until found one, since parent tables
+	// are appear first therefore going backward makes sure that parent is
+	// the last to be considered
 	for i := range s.variableTables {
 		varTable := s.variableTables[len(s.variableTables)-1-i]
 		if util.IsInRange(pos, varTable.locationRange) == 0 {
-			found = varTable
-			foundOne = true
-		} else {
-			if foundOne {
-				return found
-			}
+			return varTable
 		}
 	}
-	// If this is reached then pos is either outside the range of document variableTable
-	// therefore returning the document variableTable
-	return found
+	// This might not be position because the whole file is a variable table
+	// so only if the pos is outside of the file
+	return nil
 }
 
 func (s *Document) pushVariable(variable *Variable) {
