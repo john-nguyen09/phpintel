@@ -93,7 +93,7 @@ func (s *Interface) GetCollection() string {
 }
 
 func (s *Interface) GetKey() string {
-	return s.Name.fqn + KeySep + s.location.URI
+	return s.Name.GetFQN() + KeySep + s.location.URI
 }
 
 func (s *Interface) GetIndexableName() string {
@@ -108,15 +108,13 @@ func (s *Interface) getPrefix() string {
 	return ""
 }
 
-func (s *Interface) Serialise() []byte {
-	serialiser := NewSerialiser()
+func (s *Interface) Serialise(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
 	s.Name.Write(serialiser)
 	serialiser.WriteInt(len(s.Extends))
 	for _, extend := range s.Extends {
 		extend.Write(serialiser)
 	}
-	return serialiser.GetBytes()
 }
 
 func ReadInterface(serialiser *Serialiser) *Interface {
