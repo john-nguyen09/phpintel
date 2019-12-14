@@ -12,6 +12,9 @@ git:
 notifications:
   email: false
 
+before_install:
+  - sudo apt-get -y install upx-ucl
+
 script:
   - go get -t -v ./...
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./analysis
@@ -22,7 +25,7 @@ after_success:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sudo apt-get -y install upx-ucl && curl -sL https://git.io/goreleaser | bash
+  script: curl -sL https://git.io/goreleaser | bash
   on:
     tags: true
     condition: $TRAVIS_OS_NAME = linux
