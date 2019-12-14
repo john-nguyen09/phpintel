@@ -130,17 +130,24 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 func (s *Class) extends(document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
+	var classAccessNode *phrase.Phrase = nil
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
-			case phrase.QualifiedName:
+			case phrase.QualifiedName, phrase.FullyQualifiedName:
 				{
 					s.Extends = transformQualifiedName(p, document)
+					classAccessNode = p
 				}
 			}
 		}
 
 		child = traverser.Advance()
+	}
+
+	if classAccessNode != nil {
+		classAccess := newClassAccess(document, classAccessNode)
+		document.addSymbol(classAccess)
 	}
 }
 
