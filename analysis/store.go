@@ -5,11 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
+	cmap "github.com/orcaman/concurrent-map"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/util"
 )
@@ -74,19 +74,24 @@ func (s *entry) getBytes() []byte {
 }
 
 type Store struct {
-	db         *leveldb.DB
-	documentMu sync.Mutex
-	documents  map[string]*Document
+	uri       protocol.DocumentURI
+	db        *leveldb.DB
+	documents cmap.ConcurrentMap
+
+	syncedDocumentURIs cmap.ConcurrentMap
 }
 
-func NewStore(storePath string) (*Store, error) {
+func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	db, err := leveldb.OpenFile(storePath, nil)
 	if err != nil {
 		return nil, err
 	}
 	return &Store{
+		uri:       uri,
 		db:        db,
-		documents: map[string]*Document{},
+		documents: cmap.New(),
+
+		syncedDocumentURIs: cmap.New(),
 	}, nil
 }
 
@@ -96,19 +101,15 @@ func (s *Store) Close() error {
 
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
-	var ok bool
-	s.documentMu.Lock()
-	if document, ok = s.documents[uri]; !ok {
-		s.documentMu.Unlock()
+	if value, ok := s.documents.Get(uri); !ok {
 		filePath := putil.UriToPath(uri)
 		data, err := ioutil.ReadFile(filePath)
 		if err != nil {
-			log.Printf("cannot read %s, error: %s", filePath, err)
 			return nil
 		}
 		document = NewDocument(uri, string(data))
 	} else {
-		s.documentMu.Unlock()
+		document = value.(*Document)
 	}
 	return document
 }
@@ -134,18 +135,46 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 	s.SyncDocument(document)
 }
 
-func (s *Store) IndexDocument(filePath string) {
+func (s *Store) CreateDocument(uri protocol.DocumentURI) {
+	document := s.GetOrCreateDocument(uri)
+	if document == nil {
+		return
+	}
+	document.Load()
+	s.SyncDocument(document)
+}
+
+func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
+	batch := new(leveldb.Batch)
+	s.forgetDocument(batch, uri)
+	err := s.db.Write(batch, nil)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
+	entry := newEntry(documentCollection, uri)
+	iter := s.db.NewIterator(entry.prefixRange(), nil)
+	for iter.Next() {
+		uri := strings.Split(string(iter.Key()), KeySep)[1]
+		s.DeleteDocument(uri)
+	}
+}
+
+func (s *Store) CompareAndIndexDocument(filePath string) {
 	uri := putil.PathToUri(filePath)
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
-		log.Printf("Failed to get %s", filePath)
 		return
 	}
 
 	currentMD5 := document.GetMD5Hash()
-	entry := newEntry(documentCollection, document.GetURI())
-	savedMD5, err := s.db.Get(entry.getKeyBytes(), nil)
-	if err == nil && bytes.Compare(currentMD5, savedMD5) == 0 {
+	savedMD5, ok := s.syncedDocumentURIs.Get(uri)
+	if ok {
+		s.syncedDocumentURIs.Remove(uri)
+	}
+	if ok && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
 		return
 	}
 
@@ -166,7 +195,7 @@ func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentConten
 
 func (s *Store) SyncDocument(document *Document) {
 	batch := new(leveldb.Batch)
-	s.forgetAllSymbols(batch, document)
+	s.forgetAllSymbols(batch, document.GetURI())
 	s.writeAllSymbols(batch, document)
 	entry := newEntry(documentCollection, document.GetURI())
 	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
@@ -175,18 +204,52 @@ func (s *Store) SyncDocument(document *Document) {
 		log.Print(err)
 	}
 	if document.IsOpen() {
-		s.documentMu.Lock()
-		s.documents[document.uri] = document
-		s.documentMu.Unlock()
+		s.documents.Set(document.uri, document)
 	} else {
-		s.documentMu.Lock()
-		delete(s.documents, document.uri)
-		s.documentMu.Unlock()
+		s.documents.Remove(document.uri)
 	}
 }
 
-func (s *Store) forgetAllSymbols(batch *leveldb.Batch, document *Document) {
-	entry := newEntry(documentSymbols, document.GetURI()+KeySep)
+func (s *Store) PrepareForIndexing() {
+	syncedDocumentURIs := s.getSyncedDocumentURIs()
+	for key, value := range syncedDocumentURIs {
+		s.syncedDocumentURIs.Set(key, value)
+	}
+}
+
+func (s *Store) FinishIndexing() {
+	batch := new(leveldb.Batch)
+	for iter := range s.syncedDocumentURIs.Iter() {
+		s.forgetDocument(batch, iter.Key)
+		s.syncedDocumentURIs.Remove(iter.Key)
+	}
+	err := s.db.Write(batch, nil)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (s *Store) getSyncedDocumentURIs() map[string][]byte {
+	documentURIs := make(map[string][]byte)
+	entry := newEntry(documentCollection, "")
+	iterator := s.db.NewIterator(entry.prefixRange(), nil)
+	for iterator.Next() {
+		key := string(iterator.Key())
+		value := iterator.Value()
+		value = append(value[:0:0], value...)
+		documentURIs[strings.Split(key, KeySep)[1]] = value
+	}
+	return documentURIs
+}
+
+func (s *Store) forgetDocument(batch *leveldb.Batch, uri string) {
+	s.forgetAllSymbols(batch, uri)
+	entry := newEntry(documentCollection, uri)
+	batch.Delete(entry.getKeyBytes())
+}
+
+func (s *Store) forgetAllSymbols(batch *leveldb.Batch, uri string) {
+	entry := newEntry(documentSymbols, uri+KeySep)
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	defer it.Release()
 	for it.Next() {
@@ -194,7 +257,7 @@ func (s *Store) forgetAllSymbols(batch *leveldb.Batch, document *Document) {
 		toBeDelete := newEntry(keyInfo[2], strings.Join(keyInfo[3:], KeySep))
 		deleteEntry(batch, toBeDelete)
 	}
-	deleteCompletionIndex(s.db, batch, document.GetURI())
+	deleteCompletionIndex(s.db, batch, uri)
 }
 
 func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
@@ -234,6 +297,10 @@ func writeEntry(batch *leveldb.Batch, entry *entry) {
 
 func deleteEntry(batch *leveldb.Batch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
+}
+
+func (s *Store) GetURI() protocol.DocumentURI {
+	return s.uri
 }
 
 func (s *Store) GetClasses(name string) []*Class {

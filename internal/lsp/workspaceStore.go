@@ -16,29 +16,50 @@ import (
 	"github.com/karrick/godirwalk"
 )
 
-const numOfWorkers int = 2
+const numCreators int = 2
+const numDeletors int = 1
 
 type workspaceStore struct {
-	ctx    context.Context
-	stores map[string]*analysis.Store
-	jobs   chan string
+	ctx        context.Context
+	stores     []*analysis.Store
+	createJobs chan string
+	deleteJobs chan string
 }
 
 func newWorkspaceStore(ctx context.Context) *workspaceStore {
 	workspaceStore := &workspaceStore{
-		ctx:    ctx,
-		stores: map[string]*analysis.Store{},
-		jobs:   make(chan string),
+		ctx:        ctx,
+		stores:     []*analysis.Store{},
+		createJobs: make(chan string),
+		deleteJobs: make(chan string),
 	}
-	for i := 0; i < numOfWorkers; i++ {
-		go workspaceStore.analyse(i)
+	for i := 0; i < numCreators; i++ {
+		go workspaceStore.newCreator(i)
+	}
+	for i := 0; i < numDeletors; i++ {
+		go workspaceStore.newDeletor(i)
 	}
 	return workspaceStore
 }
 
-func (s *workspaceStore) analyse(id int) {
-	for filePath := range s.jobs {
-		s.addDocument(filePath)
+func (s *workspaceStore) newCreator(id int) {
+	for filePath := range s.createJobs {
+		uri := util.PathToUri(filePath)
+		store := s.getStore(uri)
+		if store == nil {
+			continue
+		}
+		s.addDocument(store, filePath)
+	}
+}
+
+func (s *workspaceStore) newDeletor(id int) {
+	for uri := range s.deleteJobs {
+		store := s.getStore(uri)
+		if store == nil {
+			continue
+		}
+		s.removeDocument(store, uri)
 	}
 }
 
@@ -48,23 +69,45 @@ func (s *workspaceStore) close() {
 	}
 }
 
-func (s *workspaceStore) addView(uri protocol.DocumentURI) {
+func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
 	h := md5.New()
 	io.WriteString(h, uri)
 	hash := hex.EncodeToString(h.Sum(nil))
 	storagePath := filepath.Join(getDataDir(), hash)
-	store, err := analysis.NewStore(storagePath)
+	store, err := analysis.NewStore(uri, storagePath)
 	if err != nil {
 		// TODO: don't crash the whole server just because 1
 		// folder fails to grasp the storagePath
 		panic(err)
 	}
-	s.stores[uri] = store
+	s.stores = append(s.stores, store)
 	folderPath := util.UriToPath(uri)
-	s.indexFolder(folderPath)
+	s.indexFolder(store, folderPath)
+	err = s.registerFileWatcher(folderPath, server, ctx)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
-func (s *workspaceStore) indexFolder(folderPath string) {
+func (s *workspaceStore) registerFileWatcher(path string, server *Server, ctx context.Context) error {
+	// fileExtensions := "php"
+	regParams := protocol.DidChangeWatchedFilesRegistrationOptions{
+		Watchers: []protocol.FileSystemWatcher{{
+			GlobPattern: path + "/**/*",
+			Kind:        int(protocol.WatchCreate + protocol.WatchDelete),
+		}},
+	}
+	return server.client.RegisterCapability(ctx, &protocol.RegistrationParams{
+		Registrations: []protocol.Registration{
+			protocol.Registration{
+				ID: path + "-fileWatcher", Method: "workspace/didChangeWatchedFiles", RegisterOptions: regParams,
+			},
+		},
+	})
+}
+
+func (s *workspaceStore) indexFolder(store *analysis.Store, folderPath string) {
+	store.PrepareForIndexing()
 	go func() {
 		log.Println("Start indexing")
 		start := time.Now()
@@ -73,29 +116,32 @@ func (s *workspaceStore) indexFolder(folderPath string) {
 			Callback: func(path string, de *godirwalk.Dirent) error {
 				if !de.IsDir() && strings.HasSuffix(path, ".php") {
 					count++
-					s.jobs <- path
+					s.createJobs <- path
 				}
 				return nil
 			},
 			Unsorted: true,
 		})
+		store.FinishIndexing()
 		elapsed := time.Since(start)
 		log.Printf("Finished indexing %d files in %s", count, elapsed)
 	}()
 }
 
 func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
-	for workspaceURI, store := range s.stores {
-		if strings.HasPrefix(uri, workspaceURI) {
+	for _, store := range s.stores {
+		if strings.HasPrefix(uri, store.GetURI()) {
 			return store
 		}
 	}
 	return nil
 }
 
-func (s *workspaceStore) addDocument(filePath string) {
-	store := s.getStore(util.PathToUri(filePath))
-	if store != nil {
-		store.IndexDocument(filePath)
-	}
+func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
+	store.CompareAndIndexDocument(filePath)
+}
+
+func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
+	store.DeleteDocument(uri)
+	store.DeleteFolder(uri)
 }

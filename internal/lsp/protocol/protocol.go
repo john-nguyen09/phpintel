@@ -1642,7 +1642,7 @@ type FileSystemWatcher struct {
 	 * to WatchKind.Create | WatchKind.Change | WatchKind.Delete
 	 * which is 7.
 	 */
-	Kind float64 `json:"kind,omitempty"`
+	Kind int `json:"kind,omitempty"`
 }
 
 /*PublishDiagnosticsClientCapabilities defined:

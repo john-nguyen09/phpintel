@@ -84,7 +84,7 @@ func (s *Server) initialized(ctx context.Context, params *protocol.InitializedPa
 	s.state = serverInitialized
 	s.stateMu.Unlock()
 	for _, folder := range s.pendingFolders {
-		s.store.addView(folder.URI)
+		s.store.addView(s, ctx, folder.URI)
 	}
 	return nil
 }
