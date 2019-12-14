@@ -160,8 +160,13 @@ func (s *Class) implements(document *Document, p *phrase.Phrase) {
 			traverser, _ = traverser.Descend()
 			child = traverser.Advance()
 			for child != nil {
-				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Interfaces = append(s.Interfaces, transformQualifiedName(p, document))
+				if p, ok = child.(*phrase.Phrase); ok && (p.Type == phrase.QualifiedName || p.Type == phrase.FullyQualifiedName) {
+					typeString := transformQualifiedName(p, document)
+					typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+					s.Interfaces = append(s.Interfaces, typeString)
+
+					interfaceAccess := newInterfaceAccess(document, p)
+					document.addSymbol(interfaceAccess)
 				}
 
 				child = traverser.Advance()

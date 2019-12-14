@@ -31,6 +31,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 				locations = append(locations, theClass.GetLocation())
 			}
 		}
+	case *analysis.InterfaceAccess:
+		for _, typeString := range v.Type.Resolve() {
+			for _, theInterface := range store.GetInterfaces(document.GetImportTable().GetClassReferenceFQN(typeString)) {
+				locations = append(locations, theInterface.GetLocation())
+			}
+		}
 	case *analysis.ConstantAccess:
 		for _, typeString := range v.Type.Resolve() {
 			for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(typeString)) {

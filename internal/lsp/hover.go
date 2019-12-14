@@ -42,6 +42,15 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				break
 			}
 		}
+	case *analysis.InterfaceAccess:
+		interfaces := []*analysis.Interface{}
+		for _, typeString := range v.Type.Resolve() {
+			interfaces = append(interfaces, store.GetInterfaces(typeString.GetFQN())...)
+			if len(interfaces) > 0 {
+				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
+				break
+			}
+		}
 	case *analysis.ConstantAccess:
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}

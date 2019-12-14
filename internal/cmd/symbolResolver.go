@@ -57,6 +57,32 @@ func ClassToHover(ref analysis.HasTypes, class analysis.Class) *protocol.Hover {
 	}
 }
 
+func InterfaceToHover(ref analysis.HasTypes, theInterface analysis.Interface) *protocol.Hover {
+	content := "```"
+	content += "interface " + theInterface.Name.GetOriginal()
+
+	extendStrings := []string{}
+	for _, extend := range theInterface.Extends {
+		if extend.IsEmpty() {
+			continue
+		}
+		extendStrings = append(extendStrings, extend.GetOriginal())
+	}
+	if len(extendStrings) != 0 {
+		content += " extends " + strings.Join(extendStrings, ", ")
+	}
+	content += "```"
+	content = concatDescriptionIfAvailable(content, theInterface.GetDescription())
+	theRange := ref.GetLocation().Range
+	return &protocol.Hover{
+		Contents: protocol.MarkupContent{
+			Kind:  "markdown",
+			Value: content,
+		},
+		Range: &theRange,
+	}
+}
+
 func ConstToHover(ref analysis.HasTypes, constant analysis.Const) *protocol.Hover {
 	content := "```"
 	content += "const " + constant.Name.GetOriginal()
