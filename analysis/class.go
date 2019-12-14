@@ -137,6 +137,7 @@ func (s *Class) extends(document *Document, p *phrase.Phrase) {
 			case phrase.QualifiedName, phrase.FullyQualifiedName:
 				{
 					s.Extends = transformQualifiedName(p, document)
+					s.Extends.SetFQN(document.GetImportTable().GetClassReferenceFQN(s.Extends))
 					classAccessNode = p
 				}
 			}
