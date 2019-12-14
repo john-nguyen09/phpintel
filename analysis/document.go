@@ -18,6 +18,7 @@ import (
 // Document contains information of documents
 type Document struct {
 	uri         string
+	rootNode    *phrase.Phrase
 	text        []rune
 	lineOffsets []int
 	loadMu      sync.Mutex
@@ -126,6 +127,14 @@ func (s *Document) ResetState() {
 	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
+	s.rootNode = nil
+}
+
+func (s *Document) GetRootNode() *phrase.Phrase {
+	if s.rootNode == nil {
+		s.rootNode = parser.Parse(string(s.GetText()))
+	}
+	return s.rootNode
 }
 
 // Load makes sure that symbols are available
@@ -134,7 +143,7 @@ func (s *Document) Load() {
 		return
 	}
 	s.hasChanges = false
-	rootNode := parser.Parse(string(s.GetText()))
+	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
 	scanForChildren(s, rootNode)
 }
@@ -239,6 +248,22 @@ func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
 	}
 
 	return protocol.Range{Start: s.positionAt(start), End: s.positionAt(end)}
+}
+
+func (s *Document) errorRange(err *phrase.ParseError) protocol.Range {
+	if len(err.Children) == 0 {
+		return protocol.Range{
+			Start: s.positionAt(err.Unexpected.Offset),
+			End:   s.positionAt(err.Unexpected.Offset + err.Unexpected.Length),
+		}
+	}
+
+	firstToken := err.Children[0].(*lexer.Token)
+	lastToken := err.Children[len(err.Children)-1].(*lexer.Token)
+	return protocol.Range{
+		Start: s.positionAt(firstToken.Offset),
+		End:   s.positionAt(lastToken.Offset + lastToken.Length),
+	}
 }
 
 // GetText is a getter for text

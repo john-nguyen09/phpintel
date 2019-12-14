@@ -20,14 +20,16 @@ const numCreators int = 2
 const numDeletors int = 1
 
 type workspaceStore struct {
+	server     *Server
 	ctx        context.Context
 	stores     []*analysis.Store
 	createJobs chan string
 	deleteJobs chan string
 }
 
-func newWorkspaceStore(ctx context.Context) *workspaceStore {
+func newWorkspaceStore(server *Server, ctx context.Context) *workspaceStore {
 	workspaceStore := &workspaceStore{
+		server:     server,
 		ctx:        ctx,
 		stores:     []*analysis.Store{},
 		createJobs: make(chan string),
@@ -138,7 +140,8 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 }
 
 func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
-	store.CompareAndIndexDocument(filePath)
+	document := store.CompareAndIndexDocument(filePath)
+	s.server.provideDiagnostics(s.ctx, document)
 }
 
 func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {

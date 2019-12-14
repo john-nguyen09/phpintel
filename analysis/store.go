@@ -162,11 +162,11 @@ func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	}
 }
 
-func (s *Store) CompareAndIndexDocument(filePath string) {
+func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	uri := putil.PathToUri(filePath)
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
-		return
+		return nil
 	}
 
 	currentMD5 := document.GetMD5Hash()
@@ -175,11 +175,12 @@ func (s *Store) CompareAndIndexDocument(filePath string) {
 		s.syncedDocumentURIs.Remove(uri)
 	}
 	if ok && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
-		return
+		return document
 	}
 
 	document.Load()
 	s.SyncDocument(document)
+	return document
 }
 
 func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentContentChangeEvent) error {

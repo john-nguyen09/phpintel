@@ -81,3 +81,19 @@ func (s *Traverser) Clone() *Traverser {
 		index: s.index,
 	}
 }
+
+func (s *Traverser) Traverse(visit func(phrase.AstNode) bool) {
+	s.realTraverse(s.node, visit)
+}
+
+func (s *Traverser) realTraverse(node phrase.AstNode, visit func(phrase.AstNode) bool) {
+	shouldAscend := visit(node)
+	if !shouldAscend {
+		return
+	}
+	if p, ok := node.(*phrase.Phrase); ok {
+		for _, child := range p.Children {
+			s.realTraverse(child, visit)
+		}
+	}
+}

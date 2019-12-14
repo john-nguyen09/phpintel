@@ -18,9 +18,9 @@ import (
 // NewServer starts an LSP server on the supplied stream, and waits until the
 // stream is closed.
 func NewServer(ctx context.Context, stream jsonrpc2.Stream) (context.Context, *Server) {
-	s := &Server{
-		store: newWorkspaceStore(ctx),
-	}
+	s := &Server{}
+	store := newWorkspaceStore(s, ctx)
+	s.store = store
 	ctx, s.Conn, s.client = protocol.NewServer(ctx, stream, s)
 	return ctx, s
 }
