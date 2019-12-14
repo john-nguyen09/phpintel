@@ -469,7 +469,7 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		methods = append(methods, class.GetInheritedMethods(s, name)...)
+		methods = append(methods, class.GetInheritedMethods(s, name, methods)...)
 	}
 	return methods
 }
@@ -484,7 +484,7 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, "")...)
+		methods = append(methods, class.SearchInheritedMethods(s, "", methods)...)
 	}
 	return methods
 }
@@ -507,7 +507,7 @@ func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, keyword)...)
+		methods = append(methods, class.SearchInheritedMethods(s, keyword, methods)...)
 	}
 	return methods
 }
@@ -575,7 +575,7 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		properties = append(properties, class.GetInheritedProperties(s, name)...)
+		properties = append(properties, class.GetInheritedProperties(s, name, properties)...)
 	}
 	return properties
 }
@@ -590,7 +590,7 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		properties = append(properties, class.SearchInheritedProperties(s, "")...)
+		properties = append(properties, class.SearchInheritedProperties(s, "", properties)...)
 	}
 	return properties
 }
@@ -613,7 +613,7 @@ func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 	}
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
-		properties = append(properties, class.SearchInheritedProperties(s, keyword)...)
+		properties = append(properties, class.SearchInheritedProperties(s, keyword, properties)...)
 	}
 	return properties
 }

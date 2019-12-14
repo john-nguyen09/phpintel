@@ -1,8 +1,11 @@
 package analysis
 
-func (s *Class) SearchInheritedMethods(store *Store, keyword string) []*Method {
+func (s *Class) SearchInheritedMethods(store *Store, keyword string, excludedMethods []*Method) []*Method {
 	methods := []*Method{}
 	excludeNames := map[string]bool{}
+	for _, excludedMethod := range excludedMethods {
+		excludeNames[excludedMethod.Name] = true
+	}
 	for _, method := range store.SearchMethods(s.Extends.GetFQN(), keyword) {
 		if _, ok := excludeNames[method.Name]; ok && method.VisibilityModifier == Private {
 			continue
@@ -21,9 +24,12 @@ func (s *Class) SearchInheritedMethods(store *Store, keyword string) []*Method {
 	return methods
 }
 
-func (s *Class) GetInheritedMethods(store *Store, name string) []*Method {
+func (s *Class) GetInheritedMethods(store *Store, name string, excludedMethods []*Method) []*Method {
 	methods := []*Method{}
 	excludeNames := map[string]bool{}
+	for _, excludedMethod := range excludedMethods {
+		excludeNames[excludedMethod.Name] = true
+	}
 	for _, method := range store.GetMethods(s.Extends.GetFQN(), name) {
 		if _, ok := excludeNames[method.Name]; ok && method.VisibilityModifier == Private {
 			continue
@@ -42,9 +48,12 @@ func (s *Class) GetInheritedMethods(store *Store, name string) []*Method {
 	return methods
 }
 
-func (s *Class) SearchInheritedProperties(store *Store, keyword string) []*Property {
+func (s *Class) SearchInheritedProperties(store *Store, keyword string, excludedProperties []*Property) []*Property {
 	properties := []*Property{}
 	excludeNames := map[string]bool{}
+	for _, excludedProperty := range excludedProperties {
+		excludeNames[excludedProperty.Name] = true
+	}
 	for _, property := range store.SearchProperties(s.Extends.GetFQN(), keyword) {
 		if _, ok := excludeNames[property.Name]; ok {
 			continue
@@ -63,9 +72,12 @@ func (s *Class) SearchInheritedProperties(store *Store, keyword string) []*Prope
 	return properties
 }
 
-func (s *Class) GetInheritedProperties(store *Store, name string) []*Property {
+func (s *Class) GetInheritedProperties(store *Store, name string, excludedProperties []*Property) []*Property {
 	properties := []*Property{}
 	excludeNames := map[string]bool{}
+	for _, excludedProperty := range excludedProperties {
+		excludeNames[excludedProperty.Name] = true
+	}
 	for _, property := range store.GetProperties(s.Extends.GetFQN(), name) {
 		if _, ok := excludeNames[property.Name]; ok {
 			continue
