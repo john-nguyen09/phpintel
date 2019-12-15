@@ -385,7 +385,7 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	})
 	for _, symbol := range s.Children[index:] {
 		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if inRange > 0 {
+		if inRange < 0 {
 			break
 		}
 		if hasTypes, ok := symbol.(HasTypes); ok && inRange == 0 {
