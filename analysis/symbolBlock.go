@@ -43,6 +43,8 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ForeachCollection:              true,
 	phrase.UnaryOpExpression:              true,
 	phrase.ThrowStatement:                 true,
+	phrase.ElseIfClauseList:               true,
+	phrase.ElseIfClause:                   true,
 }
 
 var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{
@@ -71,6 +73,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.PropertyDeclaration:        newPropertyDeclaration,
 		phrase.GlobalDeclaration:          newGlobalDeclaration,
 		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
+		phrase.InstanceOfExpression:       processInstanceofExpression,
 	}
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil

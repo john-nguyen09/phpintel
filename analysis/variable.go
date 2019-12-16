@@ -89,6 +89,10 @@ func (s *Variable) GetTypes() TypeComposite {
 	return types
 }
 
+func (s *Variable) AddTypes(types TypeComposite) {
+	s.Type.merge(types)
+}
+
 func (s *Variable) GetDescription() string {
 	return s.description
 }

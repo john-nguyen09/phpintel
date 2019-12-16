@@ -10,6 +10,7 @@ import (
 type TypeDeclaration struct {
 	location protocol.Location
 
+	Name string
 	Type TypeComposite
 }
 
@@ -24,6 +25,7 @@ func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaratio
 			switch p.Type {
 			case phrase.QualifiedName, phrase.FullyQualifiedName:
 				typeString := transformQualifiedName(p, document)
+				typeDeclaration.Name = typeString.GetFQN()
 				typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 				typeDeclaration.Type.add(typeString)
 			}

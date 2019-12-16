@@ -51,8 +51,12 @@ func (i *ImportTable) setNamespace(namespace *Namespace) {
 }
 
 func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
-	if fqn, ok := i.classes[name.FirstPart()]; ok {
+	firstPart, parts := name.GetFirstAndRestParts()
+	if fqn, ok := i.classes[firstPart]; ok {
 		fqn = "\\" + fqn
+		if len(parts) > 0 {
+			fqn += "\\" + strings.Join(parts, "\\")
+		}
 		name.SetFQN(fqn)
 	} else {
 		name.SetNamespace(i.namespace)
@@ -61,7 +65,13 @@ func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 }
 
 func (i ImportTable) GetFunctionReferenceFQN(name TypeString) string {
-	if fqn, ok := i.functions[name.FirstPart()]; ok {
+	firstPart, parts := name.GetFirstAndRestParts()
+	aliasTable := i.functions
+	if len(parts) > 0 {
+		aliasTable = i.classes
+	}
+
+	if fqn, ok := aliasTable[firstPart]; ok {
 		name.SetNamespace(fqn)
 	} else {
 		name.SetNamespace(i.namespace)
@@ -70,7 +80,13 @@ func (i ImportTable) GetFunctionReferenceFQN(name TypeString) string {
 }
 
 func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
-	if fqn, ok := i.constants[name.FirstPart()]; ok {
+	firstPart, parts := name.GetFirstAndRestParts()
+	aliasTable := i.constants
+	if len(parts) > 0 {
+		aliasTable = i.classes
+	}
+
+	if fqn, ok := aliasTable[firstPart]; ok {
 		name.SetNamespace(fqn)
 	} else {
 		name.SetNamespace(i.namespace)

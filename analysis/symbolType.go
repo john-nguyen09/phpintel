@@ -89,6 +89,11 @@ func (t TypeString) FirstPart() string {
 	return t.original
 }
 
+func (t TypeString) GetFirstAndRestParts() (string, []string) {
+	parts := t.GetParts()
+	return parts[0], parts[1:]
+}
+
 func (t TypeString) GetParts() []string {
 	return strings.Split(t.original, "\\")
 }

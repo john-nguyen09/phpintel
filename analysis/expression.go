@@ -27,6 +27,10 @@ type HasTypes interface {
 	Resolve(store *Store)
 }
 
+type CanAddType interface {
+	AddTypes(types TypeComposite)
+}
+
 type expressionKind int
 
 const (

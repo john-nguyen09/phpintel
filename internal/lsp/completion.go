@@ -33,6 +33,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		}
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s.Name, params.Position)
+	case *analysis.TypeDeclaration:
+		completionList = typeCompletion(store, document, s.Name, params.Position)
 	}
 	return completionList, nil
 }
@@ -167,6 +169,28 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			Kind:          protocol.MethodCompletion,
 			Label:         method.GetName(),
 			Documentation: method.GetDescription(),
+		})
+	}
+	return completionList
+}
+
+func typeCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{}
+	classes := store.SearchClasses(word)
+	importTable := document.GetImportTable()
+	for _, class := range classes {
+		completionList.Items = append(completionList.Items, protocol.CompletionItem{
+			Kind:          protocol.ClassCompletion,
+			Label:         importTable.ResolveToQualified(class.Name),
+			Documentation: class.GetDescription(),
+		})
+	}
+	interfaces := store.SearchInterfaces(word)
+	for _, theInterface := range interfaces {
+		completionList.Items = append(completionList.Items, protocol.CompletionItem{
+			Kind:          protocol.ClassCompletion,
+			Label:         importTable.ResolveToQualified(theInterface.Name),
+			Documentation: theInterface.GetDescription(),
 		})
 	}
 	return completionList
