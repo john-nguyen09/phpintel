@@ -44,6 +44,7 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:48-7:71
     },
+    Name: (string) (len=23) "TestAbstractMethodClass",
     Type: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
