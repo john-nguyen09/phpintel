@@ -76,8 +76,7 @@ func (s *Const) GetName() string {
 }
 
 func (s *Const) GetDescription() string {
-	// TODO: Implement docblock description
-	return ""
+	return s.GetName() + " = " + s.Value
 }
 
 func (s *Const) GetCollection() string {

@@ -46,8 +46,7 @@ func (s *Define) GetName() string {
 }
 
 func (s *Define) GetDescription() string {
-	// TODO: Implements docblock description
-	return ""
+	return s.GetName() + " = " + s.Value
 }
 
 func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
