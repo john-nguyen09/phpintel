@@ -23,6 +23,7 @@ type Document struct {
 	lineOffsets []int
 	loadMu      sync.Mutex
 	isOpen      bool
+	detectedEOL string
 
 	variableTables     []*VariableTable
 	variableTableLevel int
@@ -162,15 +163,17 @@ func (s *Document) SetText(text string) {
 	s.loadMu.Lock()
 	defer s.loadMu.Unlock()
 	s.text = []rune(text)
-	s.lineOffsets = calculateLineOffsets(s.text, 0)
+	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
 
-func calculateLineOffsets(text []rune, offset int) []int {
+func calculateLineOffsets(text []rune, offset int) ([]int, string) {
 	n := 0
 	length := len(text)
 	isLineStart := true
 	lineOffsets := []int{}
 	var c rune
+	eol := "\n"
+	stopDetectingEol := false
 
 	for n := 0; n < length; n++ {
 		c = text[n]
@@ -182,6 +185,15 @@ func calculateLineOffsets(text []rune, offset int) []int {
 			n++
 			if n < length && text[n] == '\n' {
 				n++
+				if !stopDetectingEol {
+					eol = "\r\n"
+					stopDetectingEol = true
+				}
+			} else {
+				if !stopDetectingEol {
+					eol = "\r"
+					stopDetectingEol = true
+				}
 			}
 			lineOffsets = append(lineOffsets, n+offset)
 		} else if c == '\n' {
@@ -191,7 +203,7 @@ func calculateLineOffsets(text []rune, offset int) []int {
 	if isLineStart {
 		lineOffsets = append(lineOffsets, n)
 	}
-	return lineOffsets
+	return lineOffsets, eol
 }
 
 func (s *Document) lineAt(offset int) int {
@@ -449,7 +461,9 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		newLineOffsets := append(s.lineOffsets[:0:0], s.lineOffsets[0:min]...)
 		lengthDiff := len(text) - (endOffset - startOffset)
-		newLineOffsets = append(newLineOffsets, calculateLineOffsets(text, startOffset)[1:]...)
+		offsets, eol := calculateLineOffsets(text, startOffset)
+		s.detectedEOL = eol
+		newLineOffsets = append(newLineOffsets, offsets[1:]...)
 		if end.Line+1 < len(s.lineOffsets) {
 			endLineOffsets := s.lineOffsets[end.Line+1:]
 			for _, endLineOffset := range endLineOffsets {

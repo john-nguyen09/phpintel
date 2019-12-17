@@ -2,6 +2,8 @@ package analysis
 
 import (
 	"strings"
+
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 type ImportTable struct {
@@ -94,20 +96,25 @@ func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
 	return name.GetFQN()
 }
 
-func (i ImportTable) ResolveToQualified(name TypeString) string {
+func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name TypeString) (string, *protocol.TextEdit) {
+	insertUse := GetInsertUseContext(document)
 	parts := name.GetParts()
 	firstPart, parts := parts[0], parts[1:]
-	if alias, ok := i.classes[firstPart]; ok {
+	if fqn, ok := i.classes[firstPart]; ok && "\\"+fqn == name.GetFQN() {
 		if len(parts) > 0 {
-			return alias + "\\" + strings.Join(parts, "\\")
+			return firstPart + "\\" + strings.Join(parts, "\\"), nil
 		}
-		return alias
+		return firstPart, nil
 	}
 	if strings.Index(name.GetFQN(), i.namespace) == 0 {
-		return name.GetFQN()[len(i.namespace):]
+		return name.GetFQN()[len(i.namespace)+1:], nil
 	}
-	// TODO: Insert use instead of FQN
-	return name.GetFQN()
+	for alias, fqn := range i.classes {
+		if "\\"+fqn == name.GetFQN() {
+			return alias, nil
+		}
+	}
+	return name.GetOriginal(), insertUse.GetUseEdit(name, symbol, "")
 }
 
 func (i ImportTable) GetNamespace() string {

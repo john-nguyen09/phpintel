@@ -22,7 +22,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case *analysis.Variable:
 		completionList = variableCompletion(document, params.Position)
 	case *analysis.ConstantAccess:
-		completionList = nameCompletion(store, document, s.Name, params.Position)
+		completionList = nameCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.ScopedConstantAccess:
 		for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
 			completionList = scopedAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
@@ -32,16 +32,18 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			completionList = memberAccessCompletion(store, document, s.Name, typeString.GetFQN(), params.Position)
 		}
 	case *analysis.ClassTypeDesignator:
-		completionList = classCompletion(store, document, s.Name, params.Position)
+		completionList = classCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.TypeDeclaration:
-		completionList = typeCompletion(store, document, s.Name, params.Position)
+		completionList = typeCompletion(store, document, s, s.Name, params.Position)
 	}
 	return completionList, nil
 }
 
 func variableCompletion(document *analysis.Document, pos protocol.Position) *protocol.CompletionList {
 	varTable := document.GetVariableTableAt(pos)
-	completionList := &protocol.CompletionList{}
+	completionList := &protocol.CompletionList{
+		IsIncomplete: true,
+	}
 	for _, variable := range varTable.GetVariables() {
 		if variable.Name == "$" {
 			continue
@@ -57,62 +59,104 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 	return completionList
 }
 
-func nameCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
-	completionList := &protocol.CompletionList{}
+func nameCompletion(store *analysis.Store, document *analysis.Document,
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: true,
+	}
 	classes := store.SearchClasses(word)
 	importTable := document.GetImportTable()
 	for _, class := range classes {
+		label, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ClassCompletion,
-			Label:         importTable.ResolveToQualified(class.Name),
-			Documentation: class.GetDescription(),
+			Kind:                protocol.ClassCompletion,
+			Label:               label,
+			Documentation:       class.GetDescription(),
+			AdditionalTextEdits: textEdits,
+			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
 	consts := store.SearchConsts(word)
 	for _, constant := range consts {
+		label, textEdit := importTable.ResolveToQualified(document, constant, constant.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ConstantCompletion,
-			Label:         importTable.ResolveToQualified(constant.Name),
-			Documentation: constant.GetDescription(),
-			Detail:        constant.Value,
+			Kind:                protocol.ConstantCompletion,
+			Label:               label,
+			AdditionalTextEdits: textEdits,
+			Documentation:       constant.GetDescription(),
+			Detail:              getDetailFromTextEdit(constant.Name, textEdit),
 		})
 	}
 	defines := store.SearchDefines(word)
 	for _, define := range defines {
+		label, textEdit := importTable.ResolveToQualified(document, define, define.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ConstantCompletion,
-			Label:         importTable.ResolveToQualified(define.Name),
-			Documentation: define.GetDescription(),
-			Detail:        define.Value,
+			Kind:                protocol.ConstantCompletion,
+			Label:               label,
+			InsertText:          label,
+			Documentation:       define.GetDescription(),
+			AdditionalTextEdits: textEdits,
+			Detail:              getDetailFromTextEdit(define.Name, textEdit),
 		})
 	}
 	functions := store.SearchFunctions(word)
 	for _, function := range functions {
+		label, textEdit := importTable.ResolveToQualified(document, function, function.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.FunctionCompletion,
-			Label:         importTable.ResolveToQualified(function.Name),
-			Documentation: function.GetDescription(),
-			Detail:        function.GetDetail(),
+			Kind:                protocol.FunctionCompletion,
+			Label:               label,
+			AdditionalTextEdits: textEdits,
+			Documentation:       function.GetDescription(),
+			Detail:              getDetailFromTextEdit(function.Name, textEdit),
 		})
 	}
 	return completionList
 }
 
-func classCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
-	completionList := &protocol.CompletionList{}
+func classCompletion(store *analysis.Store, document *analysis.Document,
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
+	}
 	classes := store.SearchClasses(word)
+	importTable := document.GetImportTable()
 	for _, class := range classes {
+		name, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ClassCompletion,
-			Label:         class.GetName(),
-			Documentation: class.GetDescription(),
+			Kind:                protocol.ClassCompletion,
+			Label:               name,
+			Documentation:       class.GetDescription(),
+			AdditionalTextEdits: textEdits,
+			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
 	return completionList
 }
 
 func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope string, pos protocol.Position) *protocol.CompletionList {
-	completionList := &protocol.CompletionList{}
+	completionList := &protocol.CompletionList{
+		IsIncomplete: true,
+	}
 	properties := store.SearchProperties(scope, word)
 	for _, property := range properties {
 		if !property.IsStatic {
@@ -147,7 +191,9 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 }
 
 func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope string, pos protocol.Position) *protocol.CompletionList {
-	completionList := &protocol.CompletionList{}
+	completionList := &protocol.CompletionList{
+		IsIncomplete: true,
+	}
 	properties := store.SearchProperties(scope, word)
 	for _, property := range properties {
 		name := property.GetName()
@@ -174,24 +220,48 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func typeCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
-	completionList := &protocol.CompletionList{}
+func typeCompletion(store *analysis.Store, document *analysis.Document,
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: true,
+	}
 	classes := store.SearchClasses(word)
 	importTable := document.GetImportTable()
 	for _, class := range classes {
+		label, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ClassCompletion,
-			Label:         importTable.ResolveToQualified(class.Name),
-			Documentation: class.GetDescription(),
+			Kind:                protocol.ClassCompletion,
+			Label:               label,
+			Documentation:       class.GetDescription(),
+			AdditionalTextEdits: textEdits,
+			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
 	interfaces := store.SearchInterfaces(word)
 	for _, theInterface := range interfaces {
+		label, textEdit := importTable.ResolveToQualified(document, theInterface, theInterface.Name)
+		textEdits := []protocol.TextEdit{}
+		if textEdit != nil {
+			textEdits = append(textEdits, *textEdit)
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:          protocol.ClassCompletion,
-			Label:         importTable.ResolveToQualified(theInterface.Name),
-			Documentation: theInterface.GetDescription(),
+			Kind:                protocol.ClassCompletion,
+			Label:               label,
+			Documentation:       theInterface.GetDescription(),
+			AdditionalTextEdits: textEdits,
+			Detail:              getDetailFromTextEdit(theInterface.Name, textEdit),
 		})
 	}
 	return completionList
+}
+
+func getDetailFromTextEdit(name analysis.TypeString, textEdit *protocol.TextEdit) string {
+	if textEdit == nil {
+		return name.GetFQN()
+	}
+	return "use " + name.GetFQN()
 }
