@@ -7,7 +7,7 @@ func (s *Class) SearchInheritedMethods(store *Store, keyword string, excludedMet
 		excludeNames[excludedMethod.Name] = true
 	}
 	for _, method := range store.SearchMethods(s.Extends.GetFQN(), keyword) {
-		if _, ok := excludeNames[method.Name]; ok && method.VisibilityModifier == Private {
+		if _, ok := excludeNames[method.Name]; ok || method.VisibilityModifier == Private {
 			continue
 		}
 		methods = append(methods, method)
@@ -31,7 +31,7 @@ func (s *Class) GetInheritedMethods(store *Store, name string, excludedMethods [
 		excludeNames[excludedMethod.Name] = true
 	}
 	for _, method := range store.GetMethods(s.Extends.GetFQN(), name) {
-		if _, ok := excludeNames[method.Name]; ok && method.VisibilityModifier == Private {
+		if _, ok := excludeNames[method.Name]; ok || method.VisibilityModifier == Private {
 			continue
 		}
 		methods = append(methods, method)

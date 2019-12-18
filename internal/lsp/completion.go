@@ -41,11 +41,15 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 
 func variableCompletion(document *analysis.Document, pos protocol.Position) *protocol.CompletionList {
 	varTable := document.GetVariableTableAt(pos)
+	symbol := document.SymbolAtPos(pos)
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
 	for _, variable := range varTable.GetVariables() {
 		if variable.Name == "$" {
+			continue
+		}
+		if symbol != nil && symbol.GetLocation().Range == variable.GetLocation().Range {
 			continue
 		}
 
