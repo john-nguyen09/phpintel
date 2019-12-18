@@ -41,6 +41,10 @@ const (
 
 const scopeSep = "::"
 
+var /* const */ stubs = []*PhpStub{
+	NewPhpStormStub(),
+}
+
 // KeySep is the separator when constructing key
 const KeySep string = "\x00"
 
@@ -85,13 +89,27 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Store{
+	store := &Store{
 		uri:       uri,
 		db:        db,
 		documents: cmap.New(),
 
 		syncedDocumentURIs: cmap.New(),
-	}, nil
+	}
+	for _, stub := range stubs {
+		stub.Walk(func(path string, data []byte) error {
+			document := NewDocument(stub.GetUri(path), string(data))
+			currentMD5 := document.GetMD5Hash()
+			entry := newEntry(documentCollection, document.GetURI())
+			savedMD5, err := db.Get(entry.getKeyBytes(), nil)
+			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
+				document.Load()
+				store.SyncDocument(document)
+			}
+			return nil
+		})
+	}
+	return store, nil
 }
 
 func (s *Store) Close() error {
@@ -220,7 +238,7 @@ func (s *Store) FinishIndexing() {
 
 func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
-	entry := newEntry(documentCollection, "")
+	entry := newEntry(documentCollection, "file://")
 	iterator := s.db.NewIterator(entry.prefixRange(), nil)
 	for iterator.Next() {
 		key := string(iterator.Key())

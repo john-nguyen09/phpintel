@@ -1,0 +1,84 @@
+([]*analysis.Function) (len=1) {
+  (*analysis.Function)({
+    location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+      Range: (protocol.Range) 158:0-158:92
+    },
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=11) "\\preg_match",
+      original: (string) (len=10) "preg_match"
+    },
+    Params: ([]*analysis.Parameter) (len=5) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 158:21-158:29
+        },
+        description: (string) "",
+        Name: (string) (len=8) "$pattern",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 158:31-158:39
+        },
+        description: (string) "",
+        Name: (string) (len=8) "$subject",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 158:41-158:63
+        },
+        description: (string) "",
+        Name: (string) (len=8) "$matches",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) (len=4) "null"
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 158:65-158:75
+        },
+        description: (string) "",
+        Name: (string) (len=6) "$flags",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 158:77-158:88
+        },
+        description: (string) "",
+        Name: (string) (len=7) "$offset",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) ""
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    },
+    description: (string) ""
+  })
+}

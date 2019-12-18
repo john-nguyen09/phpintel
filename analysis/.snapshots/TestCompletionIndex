@@ -1,4 +1,199 @@
-([]*analysis.Class) (len=2) {
+([]*analysis.Class) (len=50) {
+  (*analysis.Class)({
+    description: (string) (len=11) "Class Table",
+    Location: (protocol.Location) {
+      URI: (string) (len=48) "phpstorm-stubs://mysql_xdevapi/mysql_xdevapi.php",
+      Range: (protocol.Range) 1253:0-1332:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\mysql_xdevapi\\Table",
+      original: (string) (len=5) "Table"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=27) "\\mysql_xdevapi\\SchemaObject",
+        original: (string) (len=27) "\\mysql_xdevapi\\SchemaObject"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=17) "Class TableDelete",
+    Location: (protocol.Location) {
+      URI: (string) (len=48) "phpstorm-stubs://mysql_xdevapi/mysql_xdevapi.php",
+      Range: (protocol.Range) 1340:0-1380:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=26) "\\mysql_xdevapi\\TableDelete",
+      original: (string) (len=11) "TableDelete"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=25) "\\mysql_xdevapi\\Executable",
+        original: (string) (len=25) "\\mysql_xdevapi\\Executable"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=17) "Class TableInsert",
+    Location: (protocol.Location) {
+      URI: (string) (len=48) "phpstorm-stubs://mysql_xdevapi/mysql_xdevapi.php",
+      Range: (protocol.Range) 1388:0-1403:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=26) "\\mysql_xdevapi\\TableInsert",
+      original: (string) (len=11) "TableInsert"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=25) "\\mysql_xdevapi\\Executable",
+        original: (string) (len=25) "\\mysql_xdevapi\\Executable"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=275) "Instance of hashTableObj is always embedded inside the `classObj`_,\n`layerObj`_, `mapObj`_ and `webObj`_. It is uses a read only.\n$hashTable = $oLayer->metadata;\n$key = null;\nwhile ($key = $hashTable->nextkey($key))\necho \"Key: \".$key.\" value: \".$hashTable->get($key).\"<br/>\";",
+    Location: (protocol.Location) {
+      URI: (string) (len=40) "phpstorm-stubs://mapscript/mapscript.php",
+      Range: (protocol.Range) 742:0-787:1
+    },
+    Modifier: (analysis.ClassModifierValue) 2,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=13) "\\hashTableObj",
+      original: (string) (len=12) "hashTableObj"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=17) "Class TableSelect",
+    Location: (protocol.Location) {
+      URI: (string) (len=48) "phpstorm-stubs://mysql_xdevapi/mysql_xdevapi.php",
+      Range: (protocol.Range) 1411:0-1490:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=26) "\\mysql_xdevapi\\TableSelect",
+      original: (string) (len=11) "TableSelect"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=39) "\\mysql_xdevapi\\mysql_xdevapi\\Executable",
+        original: (string) (len=24) "mysql_xdevapi\\Executable"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=17) "Class TableUpdate",
+    Location: (protocol.Location) {
+      URI: (string) (len=48) "phpstorm-stubs://mysql_xdevapi/mysql_xdevapi.php",
+      Range: (protocol.Range) 1498:0-1546:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=26) "\\mysql_xdevapi\\TableUpdate",
+      original: (string) (len=11) "TableUpdate"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=25) "\\mysql_xdevapi\\Executable",
+        original: (string) (len=25) "\\mysql_xdevapi\\Executable"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=18) "Class: GearmanTask",
+    Location: (protocol.Location) {
+      URI: (string) (len=36) "phpstorm-stubs://gearman/gearman.php",
+      Range: (protocol.Range) 1815:0-1920:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=12) "\\GearmanTask",
+      original: (string) (len=11) "GearmanTask"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=85) "The SplTempFileObject class offers an object oriented interface for a temporary file.",
+    Location: (protocol.Location) {
+      URI: (string) (len=31) "phpstorm-stubs://SPL/SPL_c1.php",
+      Range: (protocol.Range) 957:0-968:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=18) "\\SplTempFileObject",
+      original: (string) (len=17) "SplTempFileObject"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\SplFileObject",
+      original: (string) (len=13) "SplFileObject"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=57) "phpstorm-stubs://tests/StubsMetaExpectedArgumentsTest.php",
+      Range: (protocol.Range) 18:0-217:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=41) "\\StubTests\\StubsMetaExpectedArgumentsTest",
+      original: (string) (len=30) "StubsMetaExpectedArgumentsTest"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=27) "\\PHPUnit\\Framework\\TestCase",
+      original: (string) (len=8) "TestCase"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=36) "phpstorm-stubs://tests/StubsTest.php",
+      Range: (protocol.Range) 22:0-409:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\StubTests\\StubsTest",
+      original: (string) (len=9) "StubsTest"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=27) "\\PHPUnit\\Framework\\TestCase",
+      original: (string) (len=8) "TestCase"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -19,6 +214,40 @@
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
+      URI: (string) (len=73) "phpstorm-stubs://tests/TestData/Providers/ReflectionTestDataProviders.php",
+      Range: (protocol.Range) 8:0-41:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=57) "\\StubTests\\TestData\\Providers\\ReflectionTestDataProviders",
+      original: (string) (len=27) "ReflectionTestDataProviders"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=68) "phpstorm-stubs://tests/TestData/Providers/StubsTestDataProviders.php",
+      Range: (protocol.Range) 5:0-61:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=52) "\\StubTests\\TestData\\Providers\\StubsTestDataProviders",
+      original: (string) (len=22) "StubsTestDataProviders"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-38:1
     },
@@ -26,6 +255,658 @@
     Name: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
       original: (string) (len=15) "TestMethodClass"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=180) "The DOMText class inherits from <classname>DOMCharacterData</classname> and represents the textual content of\na <classname>DOMElement</classname> or <classname>DOMAttr</classname>.",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://dom/dom_c.php",
+      Range: (protocol.Range) 1729:0-1773:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=8) "\\DOMText",
+      original: (string) (len=7) "DOMText"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=17) "\\DOMCharacterData",
+      original: (string) (len=16) "DOMCharacterData"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://ming/ming.php",
+      Range: (protocol.Range) 74:0-102:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=8) "\\SWFText",
+      original: (string) (len=7) "SWFText"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://ming/ming.php",
+      Range: (protocol.Range) 104:0-136:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=13) "\\SWFTextField",
+      original: (string) (len=12) "SWFTextField"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=287) "(PECL pthreads &gt;= 2.0.0)<br/>\nWhen the start method of a Thread is invoked, the run method code will be\nexecuted in separate Thread, in parallel.<br/>\nAfter the run method is executed the Thread will exit immediately, it will\nbe joined with the creating Thread at the approriate time.",
+    Location: (protocol.Location) {
+      URI: (string) (len=38) "phpstorm-stubs://pthreads/pthreads.php",
+      Range: (protocol.Range) 413:0-503:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=7) "\\Thread",
+      original: (string) (len=6) "Thread"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=9) "\\Threaded",
+      original: (string) (len=8) "Threaded"
+    },
+    Interfaces: ([]analysis.TypeString) (len=3) {
+      (analysis.TypeString) {
+        fqn: (string) (len=10) "\\Countable",
+        original: (string) (len=9) "Countable"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=12) "\\Traversable",
+        original: (string) (len=11) "Traversable"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=12) "\\ArrayAccess",
+        original: (string) (len=11) "ArrayAccess"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=282) "Threaded objects form the basis of pthreads ability to execute user code\nin parallel; they expose synchronization methods and various useful\ninterfaces.<br/>\nThreaded objects, most importantly, provide implicit safety for the programmer;\nall operations on the object scope are safe.",
+    Location: (protocol.Location) {
+      URI: (string) (len=38) "phpstorm-stubs://pthreads/pthreads.php",
+      Range: (protocol.Range) 172:0-392:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=9) "\\Threaded",
+      original: (string) (len=8) "Threaded"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=4) {
+      (analysis.TypeString) {
+        fqn: (string) (len=12) "\\Collectable",
+        original: (string) (len=11) "Collectable"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=12) "\\Traversable",
+        original: (string) (len=11) "Traversable"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=10) "\\Countable",
+        original: (string) (len=9) "Countable"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=12) "\\ArrayAccess",
+        original: (string) (len=11) "ArrayAccess"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) (len=32) "Representation of date and time.",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://date/date_c.php",
+      Range: (protocol.Range) 312:0-493:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=9) "\\DateTime",
+      original: (string) (len=8) "DateTime"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=18) "\\DateTimeInterface",
+        original: (string) (len=17) "DateTimeInterface"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://date/date_c.php",
+      Range: (protocol.Range) 81:0-305:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=18) "\\DateTimeImmutable",
+      original: (string) (len=17) "DateTimeImmutable"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) (len=1) {
+      (analysis.TypeString) {
+        fqn: (string) (len=18) "\\DateTimeInterface",
+        original: (string) (len=17) "DateTimeInterface"
+      }
+    }
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://v8js/v8js.php",
+      Range: (protocol.Range) 179:0-181:1
+    },
+    Modifier: (analysis.ClassModifierValue) 2,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=23) "\\V8JsTimeLimitException",
+      original: (string) (len=22) "V8JsTimeLimitException"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=10) "\\Exception",
+      original: (string) (len=9) "Exception"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=27) "Representation of time zone",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://date/date_c.php",
+      Range: (protocol.Range) 499:0-577:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=13) "\\DateTimeZone",
+      original: (string) (len=12) "DateTimeZone"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://intl/intl.php",
+      Range: (protocol.Range) 3004:0-3225:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=13) "\\IntlTimeZone",
+      original: (string) (len=12) "IntlTimeZone"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=59) "phpstorm-stubs://parallel/parallel/Events/Error/Timeout.php",
+      Range: (protocol.Range) 6:0-7:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=30) "\\parallel\\Events\\Error\\Timeout",
+      original: (string) (len=7) "Timeout"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\parallel\\Events\\Error",
+      original: (string) (len=5) "Error"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://mongo/mongo.php",
+      Range: (protocol.Range) 2317:0-2319:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=28) "\\MongoCursorTimeoutException",
+      original: (string) (len=27) "MongoCursorTimeoutException"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=21) "\\MongoCursorException",
+      original: (string) (len=20) "MongoCursorException"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=31) "<p>(PECL mongo &gt;= 1.5.0)</p>",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://mongo/mongo.php",
+      Range: (protocol.Range) 2346:0-2346:62
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=31) "\\MongoExecutionTimeoutException",
+      original: (string) (len=30) "MongoExecutionTimeoutException"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=15) "\\MongoException",
+      original: (string) (len=14) "MongoException"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=40) "phpstorm-stubs://zookeeper/zookeeper.php",
+      Range: (protocol.Range) 394:0-396:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\ZookeeperOperationTimeoutException",
+      original: (string) (len=34) "ZookeeperOperationTimeoutException"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=19) "\\ZookeeperException",
+      original: (string) (len=18) "ZookeeperException"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=1226) "Class EvTimer\n\nEvTimer watchers are simple relative timers that generate an event after a given time, and optionally repeating in\nregular intervals after that.\n\nThe timers are based on real time, that is, if one registers an event that times out after an hour and resets the\nsystem clock to January last year, it will still time out after( roughly) one hour. \"Roughly\" because detecting time\njumps is hard, and some inaccuracies are unavoidable.\n\nThe callback is guaranteed to be invoked only after its timeout has passed (not at, so on systems with very\nlow-resolution clocks this might introduce a small delay). If multiple timers become ready during the same loop\niteration then the ones with earlier time-out values are invoked before ones of the same priority with later time-out\nvalues (but this is no longer true when a callback calls EvLoop::run() recursively).\n\nThe timer itself will do a best-effort at avoiding drift, that is, if a timer is configured to trigger every 10\nseconds, then it will normally trigger at exactly 10 second intervals. If, however, the script cannot keep up with\nthe timer (because it takes longer than those 10 seconds to do) the timer will not fire more than once per event loop\niteration.",
+    Location: (protocol.Location) {
+      URI: (string) (len=26) "phpstorm-stubs://Ev/Ev.php",
+      Range: (protocol.Range) 1040:0-1109:1
+    },
+    Modifier: (analysis.ClassModifierValue) 2,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=8) "\\EvTimer",
+      original: (string) (len=7) "EvTimer"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=10) "\\EvWatcher",
+      original: (string) (len=9) "EvWatcher"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=52) "stub class representing AMQPTimestamp from pecl-amqp",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://amqp/amqp.php",
+      Range: (protocol.Range) 1592:0-1609:1
+    },
+    Modifier: (analysis.ClassModifierValue) 2,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\AMQPTimestamp",
+      original: (string) (len=13) "AMQPTimestamp"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://mongo/mongo.php",
+      Range: (protocol.Range) 2380:0-2409:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=15) "\\MongoTimestamp",
+      original: (string) (len=14) "MongoTimestamp"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://Parle/Token.php",
+      Range: (protocol.Range) 3:0-21:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=12) "\\Parle\\Token",
+      original: (string) (len=5) "Token"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=50) "phpstorm-stubs://rdkafka/RdKafka/ConsumerTopic.php",
+      Range: (protocol.Range) 4:0-59:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\RdKafka\\ConsumerTopic",
+      original: (string) (len=13) "ConsumerTopic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\RdKafka\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=55) "phpstorm-stubs://rdkafka/RdKafka/KafkaConsumerTopic.php",
+      Range: (protocol.Range) 4:0-15:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=27) "\\RdKafka\\KafkaConsumerTopic",
+      original: (string) (len=18) "KafkaConsumerTopic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\RdKafka\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=51) "phpstorm-stubs://rdkafka/RdKafka/Metadata/Topic.php",
+      Range: (protocol.Range) 4:0-26:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=23) "\\RdKafka\\Metadata\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=50) "phpstorm-stubs://rdkafka/RdKafka/ProducerTopic.php",
+      Range: (protocol.Range) 4:0-34:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\RdKafka\\ProducerTopic",
+      original: (string) (len=13) "ProducerTopic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\RdKafka\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=42) "phpstorm-stubs://rdkafka/RdKafka/Topic.php",
+      Range: (protocol.Range) 4:0-12:1
+    },
+    Modifier: (analysis.ClassModifierValue) 1,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\RdKafka\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=92) "Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md",
+    Location: (protocol.Location) {
+      URI: (string) (len=46) "phpstorm-stubs://rdkafka/RdKafka/TopicConf.php",
+      Range: (protocol.Range) 7:0-34:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=18) "\\RdKafka\\TopicConf",
+      original: (string) (len=9) "TopicConf"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=51) "phpstorm-stubs://rdkafka/RdKafka/TopicPartition.php",
+      Range: (protocol.Range) 4:0-62:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=23) "\\RdKafka\\TopicPartition",
+      original: (string) (len=14) "TopicPartition"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://intl/intl.php",
+      Range: (protocol.Range) 2050:0-2156:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=15) "\\Transliterator",
+      original: (string) (len=14) "Transliterator"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=83) "Allows iterating over a <b>RecursiveIterator</b> to generate an ASCII graphic tree.",
+    Location: (protocol.Location) {
+      URI: (string) (len=28) "phpstorm-stubs://SPL/SPL.php",
+      Range: (protocol.Range) 1373:0-1536:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=22) "\\RecursiveTreeIterator",
+      original: (string) (len=21) "RecursiveTreeIterator"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=26) "\\RecursiveIteratorIterator",
+      original: (string) (len=25) "RecursiveIteratorIterator"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=25) "The DOMDocumentType class",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://dom/dom_c.php",
+      Range: (protocol.Range) 1855:0-1905:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=16) "\\DOMDocumentType",
+      original: (string) (len=15) "DOMDocumentType"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=8) "\\DOMNode",
+      original: (string) (len=7) "DOMNode"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=42) "phpstorm-stubs://Reflection/Reflection.php",
+      Range: (protocol.Range) 2145:0-2154:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\ReflectionNamedType",
+      original: (string) (len=19) "ReflectionNamedType"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=15) "\\ReflectionType",
+      original: (string) (len=14) "ReflectionType"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=75) "The ReflectionType class reports information about a function's parameters.",
+    Location: (protocol.Location) {
+      URI: (string) (len=42) "phpstorm-stubs://Reflection/Reflection.php",
+      Range: (protocol.Range) 1998:0-2035:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=15) "\\ReflectionType",
+      original: (string) (len=14) "ReflectionType"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=40) "Abstract parent class for all SPL types.",
+    Location: (protocol.Location) {
+      URI: (string) (len=36) "phpstorm-stubs://SplType/SplType.php",
+      Range: (protocol.Range) 7:0-22:1
+    },
+    Modifier: (analysis.ClassModifierValue) 1,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=8) "\\SplType",
+      original: (string) (len=7) "SplType"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=56) "phpstorm-stubs://parallel/parallel/Events/Event/Type.php",
+      Range: (protocol.Range) 4:0-22:1
+    },
+    Modifier: (analysis.ClassModifierValue) 2,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=27) "\\parallel\\Events\\Event\\Type",
+      original: (string) (len=4) "Type"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) (len=397) "There are three scenarios where a TypeError may be thrown.\nThe first is where the argument type being passed to a function does not match its corresponding declared\nparameter type. The second is where a value being returned from a function does not match the declared function return type. The third is where an\ninvalid number of arguments are passed to a built-in PHP function (strict mode only).",
+    Location: (protocol.Location) {
+      URI: (string) (len=32) "phpstorm-stubs://Core/Core_c.php",
+      Range: (protocol.Range) 472:0-474:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=10) "\\TypeError",
+      original: (string) (len=9) "TypeError"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=6) "\\Error",
+      original: (string) (len=5) "Error"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=28) "phpstorm-stubs://yaf/yaf.php",
+      Range: (protocol.Range) 2873:0-2875:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=24) "\\Yaf_Exception_TypeError",
+      original: (string) (len=23) "Yaf_Exception_TypeError"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\Yaf_Exception",
+      original: (string) (len=13) "Yaf_Exception"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://http/http.php",
+      Range: (protocol.Range) 17:0-18:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=25) "\\HttpMessageTypeException",
+      original: (string) (len=24) "HttpMessageTypeException"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\HttpException",
+      original: (string) (len=13) "HttpException"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=30) "phpstorm-stubs://dom/dom_c.php",
+      Range: (protocol.Range) 1791:0-1792:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=12) "\\DOMTypeinfo",
+      original: (string) (len=11) "DOMTypeinfo"
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
