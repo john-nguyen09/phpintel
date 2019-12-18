@@ -1,4 +1,4 @@
-([]*analysis.Class) (len=50) {
+([]*analysis.Class) (len=46) {
   (*analysis.Class)({
     description: (string) (len=11) "Class Table",
     Location: (protocol.Location) {
@@ -163,40 +163,6 @@
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
-      URI: (string) (len=57) "phpstorm-stubs://tests/StubsMetaExpectedArgumentsTest.php",
-      Range: (protocol.Range) 18:0-217:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=41) "\\StubTests\\StubsMetaExpectedArgumentsTest",
-      original: (string) (len=30) "StubsMetaExpectedArgumentsTest"
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) (len=27) "\\PHPUnit\\Framework\\TestCase",
-      original: (string) (len=8) "TestCase"
-    },
-    Interfaces: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=36) "phpstorm-stubs://tests/StubsTest.php",
-      Range: (protocol.Range) 22:0-409:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=20) "\\StubTests\\StubsTest",
-      original: (string) (len=9) "StubsTest"
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) (len=27) "\\PHPUnit\\Framework\\TestCase",
-      original: (string) (len=8) "TestCase"
-    },
-    Interfaces: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 40:0-44:1
     },
@@ -204,40 +170,6 @@
     Name: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
       original: (string) (len=23) "TestAbstractMethodClass"
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
-    },
-    Interfaces: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=73) "phpstorm-stubs://tests/TestData/Providers/ReflectionTestDataProviders.php",
-      Range: (protocol.Range) 8:0-41:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=57) "\\StubTests\\TestData\\Providers\\ReflectionTestDataProviders",
-      original: (string) (len=27) "ReflectionTestDataProviders"
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
-    },
-    Interfaces: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=68) "phpstorm-stubs://tests/TestData/Providers/StubsTestDataProviders.php",
-      Range: (protocol.Range) 5:0-61:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=52) "\\StubTests\\TestData\\Providers\\StubsTestDataProviders",
-      original: (string) (len=22) "StubsTestDataProviders"
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
