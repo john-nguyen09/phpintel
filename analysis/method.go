@@ -27,6 +27,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 		returnTypes: typesFromPhpDoc(document, methodTag.TypeString),
 		Params:      []*Parameter{},
 		description: methodTag.Description,
+		Scope:       class.Name,
 	}
 	for _, paramTag := range methodTag.Parameters {
 		param := &Parameter{

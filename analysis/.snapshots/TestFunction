@@ -70,12 +70,12 @@
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
-          fqn: (string) (len=9) "TestClass",
+          fqn: (string) (len=10) "\\TestClass",
           original: (string) (len=9) "TestClass"
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=9) "TestClass": (bool) true
+        (string) (len=10) "\\TestClass": (bool) true
       }
     },
     description: (string) (len=23) "function3's description"

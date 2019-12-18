@@ -60,27 +60,8 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
-				if phpDoc != nil {
-					class.description = phpDoc.Description
-					for _, propertyTag := range phpDoc.Properties {
-						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-						document.addSymbol(property)
-					}
-					for _, propertyTag := range phpDoc.PropertyReads {
-						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-						document.addSymbol(property)
-					}
-					for _, propertyTag := range phpDoc.PropertyWrites {
-						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-						document.addSymbol(property)
-					}
-					for _, methodTag := range phpDoc.Methods {
-						method := newMethodFromPhpDocTag(document, class, methodTag, phpDoc.GetLocation())
-						document.addSymbol(method)
-					}
-				}
-				class.analyseHeader(document, p)
 				document.addSymbol(class)
+				class.analyseHeader(document, p, phpDoc)
 			case phrase.ClassDeclarationBody:
 				scanForChildren(document, p)
 			}
@@ -92,7 +73,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
+func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase, phpDoc *phpDocComment) {
 	traverser := util.NewTraverser(classHeader)
 	child := traverser.Advance()
 	for child != nil {
@@ -101,6 +82,26 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 			case lexer.Name:
 				{
 					s.Name = NewTypeString(document.GetTokenText(token))
+					s.Name.SetNamespace(document.importTable.namespace)
+					if phpDoc != nil {
+						s.description = phpDoc.Description
+						for _, propertyTag := range phpDoc.Properties {
+							property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+							document.addSymbol(property)
+						}
+						for _, propertyTag := range phpDoc.PropertyReads {
+							property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+							document.addSymbol(property)
+						}
+						for _, propertyTag := range phpDoc.PropertyWrites {
+							property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+							document.addSymbol(property)
+						}
+						for _, methodTag := range phpDoc.Methods {
+							method := newMethodFromPhpDocTag(document, s, methodTag, phpDoc.GetLocation())
+							document.addSymbol(method)
+						}
+					}
 				}
 			case lexer.Abstract:
 				{
@@ -126,8 +127,6 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase) {
 
 		child = traverser.Advance()
 	}
-
-	s.Name.SetNamespace(document.importTable.namespace)
 }
 
 func (s *Class) extends(document *Document, p *phrase.Phrase) {
