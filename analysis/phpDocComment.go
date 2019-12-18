@@ -12,6 +12,7 @@ import (
 type methodTagParam struct {
 	TypeString string
 	Name       string
+	Value      string
 }
 
 type tag struct {
@@ -28,10 +29,10 @@ var /* const */ tagBoundaryPattern = regexp.MustCompile(`(?:\r\n|\r|\n)@`)
 var /* const */ whitespacePattern = regexp.MustCompile(`\s+`)
 
 var /* const */ paramOrPropPattern = regexp.MustCompile(`^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
-var /* const */ varPattern = regexp.MustCompile(`^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*([.\r\n]*)$`)
-var /* const */ returnPattern = regexp.MustCompile(`^(@return)\s+(\S+)\s*([.\r\n]*)$`)
-var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*([.\r\n)]*)\s*\)\s*(.*)$`)
-var /* const */ globalPattern = regexp.MustCompile(`^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*([.\r\n]*)$`)
+var /* const */ varPattern = regexp.MustCompile(`^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
+var /* const */ returnPattern = regexp.MustCompile(`^(@return)\s+(\S+)\s*(.*)$`)
+var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*)\s*\)\s*(.*)$`)
+var /* const */ globalPattern = regexp.MustCompile(`^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
 
 func typeTag(tagName string, typeString string, name string, description string) tag {
 	return tag{
@@ -67,7 +68,7 @@ func methodParams(text string) []methodTagParam {
 	paramSplit := strings.Split(text, ",")
 
 	for _, paramBit := range paramSplit {
-		var name, typeString string
+		var name, typeString, value string
 		param := whitespacePattern.Split(strings.TrimSpace(paramBit), -1)
 
 		switch len(param) {
@@ -77,6 +78,10 @@ func methodParams(text string) []methodTagParam {
 		case 2:
 			typeString = param[0]
 			name = param[1]
+		case 4:
+			typeString = param[0]
+			name = param[1]
+			value = param[3]
 		default:
 			name = ""
 		}
@@ -85,6 +90,7 @@ func methodParams(text string) []methodTagParam {
 			params = append(params, methodTagParam{
 				TypeString: typeString,
 				Name:       name,
+				Value:      value,
 			})
 		}
 	}

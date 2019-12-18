@@ -13,17 +13,18 @@ var /* const */ Aliases = map[string]string{
 
 // Natives is a constant to look up native types
 var /* const */ Natives = map[string]bool{
-	"mixed":  true,
-	"null":   true,
-	"bool":   true,
-	"int":    true,
-	"float":  true,
-	"real":   true,
-	"double": true,
-	"string": true,
-	"binary": true,
-	"array":  true,
-	"object": true,
+	"mixed":    true,
+	"null":     true,
+	"bool":     true,
+	"int":      true,
+	"float":    true,
+	"real":     true,
+	"double":   true,
+	"string":   true,
+	"binary":   true,
+	"array":    true,
+	"object":   true,
+	"callable": true,
 
 	"__DIR__":  true,
 	"__FILE__": true,
@@ -136,6 +137,17 @@ func newTypeComposite() TypeComposite {
 		typeStrings: []TypeString{},
 		uniqueFQNs:  map[string]bool{},
 	}
+}
+
+func typesFromPhpDoc(document *Document, text string) TypeComposite {
+	parts := strings.Split(text, "|")
+	types := newTypeComposite()
+	for _, part := range parts {
+		typeString := NewTypeString(strings.TrimSpace(part))
+		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		types.add(typeString)
+	}
+	return types
 }
 
 // MarshalJSON marshals TypeComposite to JSON

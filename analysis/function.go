@@ -35,7 +35,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 			function.analyseHeader(document, p)
 			phpDoc := document.getValidPhpDoc(function.location)
 			if phpDoc != nil {
-				function.applyPhpDoc(*phpDoc)
+				function.applyPhpDoc(document, *phpDoc)
 			}
 		}
 		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
@@ -90,15 +90,15 @@ func (s *Function) analyseParameterDeclarationList(document *Document, node *phr
 	}
 }
 
-func (s *Function) applyPhpDoc(phpDoc phpDocComment) {
+func (s *Function) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	tags := phpDoc.Returns
 	for _, tag := range tags {
-		s.returnTypes.add(NewTypeString(tag.TypeString))
+		s.returnTypes.merge(typesFromPhpDoc(document, tag.TypeString))
 	}
 	for index, param := range s.Params {
 		tag := phpDoc.findParamTag(param.Name)
 		if tag != nil {
-			s.Params[index].Type.add(NewTypeString(tag.TypeString))
+			s.Params[index].Type.merge(typesFromPhpDoc(document, tag.TypeString))
 			s.Params[index].description = tag.Description
 		}
 	}

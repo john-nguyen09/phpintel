@@ -62,9 +62,7 @@ func (s *GlobalVariable) applyPhpDoc(document *Document, phpDoc *phpDocComment) 
 	tags := phpDoc.Globals
 	for _, tag := range tags {
 		if tag.Name == s.Name {
-			typeString := NewTypeString(tag.TypeString)
-			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
-			s.types.add(typeString)
+			s.types.merge(typesFromPhpDoc(document, tag.TypeString))
 			s.description = tag.Description
 			break
 		}

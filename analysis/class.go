@@ -53,7 +53,6 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 	}
 	document.addClass(class)
 	phpDoc := document.getValidPhpDoc(class.Location)
-	document.addSymbol(class)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 
@@ -61,8 +60,6 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
-				class.analyseHeader(document, p)
-
 				if phpDoc != nil {
 					class.description = phpDoc.Description
 					for _, propertyTag := range phpDoc.Properties {
@@ -77,7 +74,13 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 						property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
 						document.addSymbol(property)
 					}
+					for _, methodTag := range phpDoc.Methods {
+						method := newMethodFromPhpDocTag(document, class, methodTag, phpDoc.GetLocation())
+						document.addSymbol(method)
+					}
 				}
+				class.analyseHeader(document, p)
+				document.addSymbol(class)
 			case phrase.ClassDeclarationBody:
 				scanForChildren(document, p)
 			}

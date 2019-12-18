@@ -20,6 +20,26 @@ type Method struct {
 	ClassModifier      ClassModifierValue
 }
 
+func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
+	method := &Method{
+		IsStatic:    methodTag.IsStatic,
+		Name:        methodTag.Name,
+		returnTypes: typesFromPhpDoc(document, methodTag.TypeString),
+		Params:      []*Parameter{},
+		description: methodTag.Description,
+	}
+	for _, paramTag := range methodTag.Parameters {
+		param := &Parameter{
+			location: location,
+			Name:     paramTag.Name,
+			Value:    paramTag.Value,
+			Type:     typesFromPhpDoc(document, paramTag.TypeString),
+		}
+		method.Params = append(method.Params, param)
+	}
+	return method
+}
+
 func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	symbol := newFunction(document, node)
 	method := &Method{

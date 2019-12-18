@@ -20,10 +20,6 @@ type Property struct {
 }
 
 func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
-	types := newTypeComposite()
-	typeString := NewTypeString(docTag.TypeString)
-	typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
-	types.add(typeString)
 	property := &Property{
 		location:    location,
 		description: docTag.Description,
@@ -32,7 +28,7 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 		Scope:              parent.Name,
 		VisibilityModifier: Public,
 		IsStatic:           false,
-		Types:              types,
+		Types:              typesFromPhpDoc(document, docTag.TypeString),
 	}
 	return property
 }
@@ -104,9 +100,7 @@ func (s *Property) GetDescription() string {
 func (s *Property) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	tags := phpDoc.Vars
 	for _, tag := range tags {
-		typeString := NewTypeString(tag.TypeString)
-		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
-		s.Types.add(typeString)
+		s.Types.merge(typesFromPhpDoc(document, tag.TypeString))
 		s.description = tag.Description
 		break
 	}
