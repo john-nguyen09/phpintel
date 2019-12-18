@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-	"time"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
@@ -181,17 +180,6 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	document.Load()
 	s.SyncDocument(document)
 	return document
-}
-
-func (s *Store) ChangeDocument(uri string, changes []protocol.TextDocumentContentChangeEvent) error {
-	defer putil.TimeTrack(time.Now(), "ChangeDocument")
-	document := s.GetOrCreateDocument(uri)
-	if document == nil {
-		log.Printf("Document %s not found", uri)
-	}
-	document.ApplyChanges(changes)
-	s.SyncDocument(document)
-	return nil
 }
 
 func (s *Store) SyncDocument(document *Document) {

@@ -22,11 +22,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 
 func (s *Server) didChange(ctx context.Context, params *protocol.DidChangeTextDocumentParams) error {
 	uri := params.TextDocument.URI
-	store := s.store.getStore(uri)
-	if store == nil {
-		return StoreNotFound(uri)
-	}
-	return store.ChangeDocument(uri, params.ContentChanges)
+	return s.store.changeDocument(ctx, uri, params.ContentChanges)
 }
 
 func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocumentParams) error {

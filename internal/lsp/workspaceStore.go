@@ -148,3 +148,19 @@ func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
 	store.DeleteDocument(uri)
 	store.DeleteFolder(uri)
 }
+
+func (s *workspaceStore) changeDocument(ctx context.Context, uri string, changes []protocol.TextDocumentContentChangeEvent) error {
+	defer util.TimeTrack(time.Now(), "changeDocument")
+	store := s.getStore(uri)
+	if store == nil {
+		return StoreNotFound(uri)
+	}
+	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return DocumentNotFound(uri)
+	}
+	document.ApplyChanges(changes)
+	store.SyncDocument(document)
+	s.server.provideDiagnostics(ctx, document)
+	return nil
+}
