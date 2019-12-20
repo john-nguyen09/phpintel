@@ -107,7 +107,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 		return firstPart, nil
 	}
 	if strings.Index(name.GetFQN(), i.namespace) == 0 {
-		return name.GetFQN()[len(i.namespace)+1:], nil
+		return name.GetFQN()[len(i.namespace):], nil
 	}
 	for alias, fqn := range i.classes {
 		if "\\"+fqn == name.GetFQN() {
