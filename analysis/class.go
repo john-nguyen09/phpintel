@@ -240,3 +240,11 @@ func ReadClass(serialiser *Serialiser) *Class {
 	}
 	return theClass
 }
+
+func (s *Class) GetConstructor(store *Store) *Method {
+	methods := store.GetMethods(s.Name.GetFQN(), "__construct")
+	if len(methods) > 0 {
+		return methods[0]
+	}
+	return nil
+}
