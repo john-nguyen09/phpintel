@@ -23,6 +23,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 		Params:      make([]*Parameter, 0),
 		returnTypes: newTypeComposite(),
 	}
+	phpDoc := document.getValidPhpDoc(function.location)
 	document.pushVariableTable(node)
 
 	traverser := util.NewTraverser(node)
@@ -33,7 +34,6 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 			phrase.MethodDeclarationHeader,
 		}); ok {
 			function.analyseHeader(document, p)
-			phpDoc := document.getValidPhpDoc(function.location)
 			if phpDoc != nil {
 				function.applyPhpDoc(document, *phpDoc)
 			}

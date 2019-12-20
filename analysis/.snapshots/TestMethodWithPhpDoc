@@ -1,0 +1,1163 @@
+([]analysis.Symbol) (len=30) {
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:0-26:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=16) "\\bscitl\\sss_user",
+      original: (string) (len=8) "sss_user"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.TypeDeclaration)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:49-11:54
+    },
+    Name: (string) "",
+    Type: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:2-13:7
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=12) "\\bscitl\\post",
+            original: (string) (len=4) "post"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=12) "\\bscitl\\post": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:10-13:14
+      },
+      Name: (string) (len=4) "post"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=12) "\\bscitl\\post",
+                original: (string) (len=4) "post"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=12) "\\bscitl\\post": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:10-13:14
+          },
+          Name: (string) (len=4) "post"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:16-13:36
+      },
+      Name: (string) (len=20) "get_instance_by_data"
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:2-13:7
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=12) "\\bscitl\\post",
+            original: (string) (len=4) "post"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=12) "\\bscitl\\post": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:10-13:14
+      },
+      Name: (string) (len=4) "post"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=12) "\\bscitl\\post",
+                original: (string) (len=4) "post"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=12) "\\bscitl\\post": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:10-13:14
+          },
+          Name: (string) (len=4) "post"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:16-13:36
+      },
+      Name: (string) (len=20) "get_instance_by_data"
+    }
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 13:37-13:50
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) CastExpression,
+        Children: ([]phrase.AstNode) (len=2) {
+          (*lexer.Token)(ObjectCast 358 8),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) SimpleVariable,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(VariableName 366 5)
+            }
+          })
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 13:37-13:50
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 14:2-14:7
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 14:2-14:7
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 14:9-14:13
+      },
+      Name: (string) (len=4) "save"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 14:13-14:14
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 14:13-14:14
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 17:2-17:7
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 17:2-17:7
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 17:9-17:25
+      },
+      Name: (string) (len=16) "set_timemodified"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 17:26-17:50
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) MethodCallExpression,
+        Children: ([]phrase.AstNode) (len=5) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) SimpleVariable,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(VariableName 589 5)
+            }
+          }),
+          (*lexer.Token)(Arrow 594 2),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) MemberName,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(Name 596 15)
+            }
+          }),
+          (*lexer.Token)(OpenParenthesis 611 1),
+          (*lexer.Token)(CloseParenthesis 612 1)
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 17:26-17:50
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 17:26-17:31
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 17:26-17:31
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 17:33-17:48
+      },
+      Name: (string) (len=15) "get_timecreated"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 17:48-17:49
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 17:48-17:49
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 18:2-18:7
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 18:2-18:7
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 18:9-18:13
+      },
+      Name: (string) (len=4) "save"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 18:13-18:14
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 18:13-18:14
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 21:3-21:8
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 21:3-21:8
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 21:10-21:37
+      },
+      Name: (string) (len=27) "delete_existing_attachments"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 21:37-21:38
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 21:37-21:38
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 22:3-22:8
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=12) "\\bscitl\\post",
+                        original: (string) (len=4) "post"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=12) "\\bscitl\\post": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 13:10-13:14
+                  },
+                  Name: (string) (len=4) "post"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:16-13:36
+              },
+              Name: (string) (len=20) "get_instance_by_data"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 22:3-22:8
+          },
+          Name: (string) (len=5) "$post"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 22:10-22:26
+      },
+      Name: (string) (len=16) "save_attachments"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 22:27-22:33
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) SimpleVariable,
+        Children: ([]phrase.AstNode) (len=1) {
+          (*lexer.Token)(VariableName 727 6)
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 22:27-22:33
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 22:27-22:33
+      },
+      Name: (string) (len=6) "$files"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=12) "\\bscitl\\post",
+                    original: (string) (len=4) "post"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=12) "\\bscitl\\post": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 13:10-13:14
+              },
+              Name: (string) (len=4) "post"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 13:16-13:36
+          },
+          Name: (string) (len=20) "get_instance_by_data"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 24:9-24:14
+      },
+      Name: (string) (len=5) "$post"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:1-25:2
+    },
+    Name: (string) (len=30) "save_post_data_and_attachments",
+    Params: ([]*analysis.Parameter) (len=2) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 11:49-11:60
+        },
+        description: (string) "",
+        Name: (string) (len=5) "$data",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>,
+          uniqueFQNs: (map[string]bool) <nil>
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 11:62-11:75
+        },
+        description: (string) (len=11) "attachments",
+        Name: (string) (len=6) "$files",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "array",
+              original: (string) (len=5) "array"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=5) "array": (bool) true
+          }
+        },
+        Value: (string) (len=4) "null"
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=12) "\\bscitl\\post",
+          original: (string) (len=12) "\\bscitl\\post"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=12) "\\bscitl\\post": (bool) true
+      }
+    },
+    description: (string) (len=30) "Save post data and attachments",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=16) "\\bscitl\\sss_user",
+      original: (string) (len=8) "sss_user"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 2,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  })
+}

@@ -45,3 +45,14 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 		}
 	}
 }
+
+func TestMethodWithPhpDoc(t *testing.T) {
+	testCase := "../cases/methodReturnPhpDoc.php"
+	data, err := ioutil.ReadFile(testCase)
+	if err != nil {
+		panic(err)
+	}
+	document := NewDocument("test1", string(data))
+	document.Load()
+	cupaloy.SnapshotT(t, document.Children)
+}
