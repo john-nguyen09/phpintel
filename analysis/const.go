@@ -95,8 +95,8 @@ func (s *Const) GetIndexCollection() string {
 	return constCompletionIndex
 }
 
-func (s *Const) GetPrefix() string {
-	return ""
+func (s *Const) GetPrefixes() []string {
+	return []string{""}
 }
 
 func (s *Const) Serialise(serialiser *Serialiser) {

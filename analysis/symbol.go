@@ -59,7 +59,7 @@ type Definition interface {
 type NameIndexable interface {
 	GetIndexableName() string
 	GetIndexCollection() string
-	GetPrefix() string
+	GetPrefixes() []string
 }
 
 type HasParams interface {

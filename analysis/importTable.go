@@ -96,7 +96,8 @@ func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
 	return name.GetFQN()
 }
 
-func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name TypeString) (string, *protocol.TextEdit) {
+func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
+	name TypeString, word string) (string, *protocol.TextEdit) {
 	insertUse := GetInsertUseContext(document)
 	parts := name.GetParts()
 	firstPart, parts := parts[0], parts[1:]
@@ -113,6 +114,9 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 		if "\\"+fqn == name.GetFQN() {
 			return alias, nil
 		}
+	}
+	if isFQN(word) {
+		return name.GetOriginal(), nil
 	}
 	return name.GetOriginal(), insertUse.GetUseEdit(name, symbol, "")
 }

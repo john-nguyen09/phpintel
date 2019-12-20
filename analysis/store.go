@@ -322,7 +322,12 @@ func (s *Store) GetClasses(name string) []*Class {
 }
 
 func (s *Store) SearchClasses(keyword string) []*Class {
-	completionValues := searchCompletions(s.db, classCompletionIndex, keyword, "")
+	scope, keyword := GetScopeAndNameFromString(keyword)
+	prefixes := []string{""}
+	if scope != "" {
+		prefixes = append(prefixes, scope)
+	}
+	completionValues := searchCompletions(s.db, classCompletionIndex, keyword, prefixes)
 	classes := []*Class{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(classCollection, string(completionValue))
@@ -348,7 +353,12 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 }
 
 func (s *Store) SearchInterfaces(keyword string) []*Interface {
-	completionValues := searchCompletions(s.db, interfaceCompletionIndex, keyword, "")
+	scope, keyword := GetScopeAndNameFromString(keyword)
+	prefixes := []string{""}
+	if scope != "" {
+		prefixes = append(prefixes, scope)
+	}
+	completionValues := searchCompletions(s.db, interfaceCompletionIndex, keyword, prefixes)
 	interfaces := []*Interface{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(interfaceCollection, string(completionValue))
@@ -374,7 +384,12 @@ func (s *Store) GetTraits(name string) []*Trait {
 }
 
 func (s *Store) SearchTraits(keyword string) []*Trait {
-	completionValues := searchCompletions(s.db, traitCompletionIndex, keyword, "")
+	scope, keyword := GetScopeAndNameFromString(keyword)
+	prefixes := []string{""}
+	if scope != "" {
+		prefixes = append(prefixes, scope)
+	}
+	completionValues := searchCompletions(s.db, traitCompletionIndex, keyword, prefixes)
 	traits := []*Trait{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(traitCollection, string(completionValue))
@@ -400,7 +415,7 @@ func (s *Store) GetFunctions(name string) []*Function {
 }
 
 func (s *Store) SearchFunctions(keyword string) []*Function {
-	completionValues := searchCompletions(s.db, functionCompletionIndex, keyword, "")
+	completionValues := searchCompletions(s.db, functionCompletionIndex, keyword, []string{""})
 	functions := []*Function{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(functionCollection, string(completionValue))
@@ -426,7 +441,7 @@ func (s *Store) GetConsts(name string) []*Const {
 }
 
 func (s *Store) SearchConsts(keyword string) []*Const {
-	completionValues := searchCompletions(s.db, constCompletionIndex, keyword, "")
+	completionValues := searchCompletions(s.db, constCompletionIndex, keyword, []string{""})
 	consts := []*Const{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(constCollection, string(completionValue))
@@ -452,7 +467,7 @@ func (s *Store) GetDefines(name string) []*Define {
 }
 
 func (s *Store) SearchDefines(keyword string) []*Define {
-	completionValues := searchCompletions(s.db, defineCompletionIndex, keyword, "")
+	completionValues := searchCompletions(s.db, defineCompletionIndex, keyword, []string{""})
 	defines := []*Define{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(defineCollection, string(completionValue))
@@ -501,7 +516,7 @@ func (s *Store) SearchMethods(scope string, keyword string) []*Method {
 		return s.GetAllMethods(scope)
 	}
 
-	completionValues := searchCompletions(s.db, methodCompletionIndex, keyword, scope)
+	completionValues := searchCompletions(s.db, methodCompletionIndex, keyword, []string{scope})
 	methods := []*Method{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(methodCollection, string(completionValue))
@@ -554,7 +569,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
 		s.GetAllClassConsts(scope)
 	}
 
-	completionValues := searchCompletions(s.db, classConstCompletionIndex, keyword, scope)
+	completionValues := searchCompletions(s.db, classConstCompletionIndex, keyword, []string{scope})
 	classConsts := []*ClassConst{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(classConstCollection, string(completionValue))
@@ -607,7 +622,7 @@ func (s *Store) SearchProperties(scope string, keyword string) []*Property {
 		return s.GetAllProperties(scope)
 	}
 
-	completionValues := searchCompletions(s.db, propertyCompletionIndex, keyword, scope)
+	completionValues := searchCompletions(s.db, propertyCompletionIndex, keyword, []string{scope})
 	properties := []*Property{}
 	for _, completionValue := range completionValues {
 		entry := newEntry(propertyCollection, string(completionValue))

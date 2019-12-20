@@ -79,8 +79,8 @@ func (s *Define) GetIndexCollection() string {
 	return defineCompletionIndex
 }
 
-func (s *Define) GetPrefix() string {
-	return ""
+func (s *Define) GetPrefixes() []string {
+	return []string{""}
 }
 
 func (s *Define) Serialise(serialiser *Serialiser) {

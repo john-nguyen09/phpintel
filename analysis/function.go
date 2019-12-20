@@ -141,8 +141,8 @@ func (s *Function) GetIndexCollection() string {
 	return functionCompletionIndex
 }
 
-func (s *Function) GetPrefix() string {
-	return ""
+func (s *Function) GetPrefixes() []string {
+	return []string{""}
 }
 
 func (s *Function) GetNameLabel() string {

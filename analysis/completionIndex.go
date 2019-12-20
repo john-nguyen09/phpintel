@@ -63,11 +63,13 @@ func getCompletionKeys(uri string, indexable NameIndexable, symbolKey string) []
 	tokens := wordtokeniser.Tokenise(indexable.GetIndexableName())
 	keys := []string{}
 	for _, token := range tokens {
-		if indexable.GetPrefix() != "" {
-			token = indexable.GetPrefix() + scopeSep + token
-		}
+		for _, prefix := range indexable.GetPrefixes() {
+			if prefix != "" {
+				token = prefix + scopeSep + token
+			}
 
-		keys = append(keys, getCompletionKey(token, symbolKey))
+			keys = append(keys, getCompletionKey(token, symbolKey))
+		}
 	}
 	return keys
 }
@@ -76,22 +78,25 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *leveldb.DB, collection string, keyword string, prefix string) []CompletionValue {
-	if prefix != "" {
-		keyword = prefix + scopeSep + keyword
-	}
-	entry := newEntry(collection, keyword)
-	it := db.NewIterator(entry.prefixRange(), nil)
-	defer it.Release()
+func searchCompletions(db *leveldb.DB, collection string, keyword string, prefixes []string) []CompletionValue {
 	completionValues := []CompletionValue{}
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
-	for it.Next() {
-		completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
-		if _, ok := uniqueCompletionValues[completionValue]; ok {
-			continue
+	for _, prefix := range prefixes {
+		name := keyword
+		if prefix != "" {
+			name = prefix + scopeSep + name
 		}
-		completionValues = append(completionValues, completionValue)
-		uniqueCompletionValues[completionValue] = true
+		entry := newEntry(collection, name)
+		it := db.NewIterator(entry.prefixRange(), nil)
+		for it.Next() {
+			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
+			if _, ok := uniqueCompletionValues[completionValue]; ok {
+				continue
+			}
+			completionValues = append(completionValues, completionValue)
+			uniqueCompletionValues[completionValue] = true
+		}
+		it.Release()
 	}
 	return completionValues
 }

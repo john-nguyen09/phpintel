@@ -124,8 +124,8 @@ func (s *Method) GetIndexCollection() string {
 	return methodCompletionIndex
 }
 
-func (s *Method) GetPrefix() string {
-	return s.Scope.GetFQN()
+func (s *Method) GetPrefixes() []string {
+	return []string{s.Scope.GetFQN()}
 }
 
 func (s *Method) GetNameLabel() string {

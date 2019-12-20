@@ -122,8 +122,8 @@ func (s *Property) GetIndexCollection() string {
 	return propertyCompletionIndex
 }
 
-func (s *Property) GetPrefix() string {
-	return s.Scope.GetFQN()
+func (s *Property) GetPrefixes() []string {
+	return []string{s.Scope.GetFQN()}
 }
 
 func (s *Property) Serialise(serialiser *Serialiser) {

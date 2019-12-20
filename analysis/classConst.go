@@ -90,8 +90,8 @@ func (s *ClassConst) GetIndexCollection() string {
 	return classConstCompletionIndex
 }
 
-func (s *ClassConst) GetPrefix() string {
-	return s.Scope.GetFQN()
+func (s *ClassConst) GetPrefixes() []string {
+	return []string{s.Scope.GetFQN()}
 }
 
 func (s *ClassConst) Serialise(serialiser *Serialiser) {

@@ -577,23 +577,6 @@
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
-      URI: (string) (len=51) "phpstorm-stubs://rdkafka/RdKafka/Metadata/Topic.php",
-      Range: (protocol.Range) 4:0-26:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=23) "\\RdKafka\\Metadata\\Topic",
-      original: (string) (len=5) "Topic"
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
-    },
-    Interfaces: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
       URI: (string) (len=50) "phpstorm-stubs://rdkafka/RdKafka/ProducerTopic.php",
       Range: (protocol.Range) 4:0-34:1
     },
@@ -617,6 +600,23 @@
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
       fqn: (string) (len=14) "\\RdKafka\\Topic",
+      original: (string) (len=5) "Topic"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=51) "phpstorm-stubs://rdkafka/RdKafka/Metadata/Topic.php",
+      Range: (protocol.Range) 4:0-26:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=23) "\\RdKafka\\Metadata\\Topic",
       original: (string) (len=5) "Topic"
     },
     Extends: (analysis.TypeString) {

@@ -199,7 +199,7 @@ func (s *Class) GetCollection() string {
 }
 
 func (s *Class) GetKey() string {
-	return s.Name.fqn + KeySep + s.Location.URI
+	return s.Name.GetFQN() + KeySep + s.Location.URI
 }
 
 func (s *Class) GetIndexableName() string {
@@ -210,8 +210,13 @@ func (s *Class) GetIndexCollection() string {
 	return classCompletionIndex
 }
 
-func (s *Class) GetPrefix() string {
-	return ""
+func (s *Class) GetPrefixes() []string {
+	scope, _ := GetScopeAndNameFromString(s.Name.GetFQN())
+	prefixes := []string{""}
+	if scope != "" {
+		prefixes = append(prefixes, scope)
+	}
+	return prefixes
 }
 
 func (s *Class) Serialise(serialiser *Serialiser) {

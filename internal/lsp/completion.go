@@ -71,7 +71,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document,
 	classes := store.SearchClasses(word)
 	importTable := document.GetImportTable()
 	for _, class := range classes {
-		label, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -86,7 +86,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document,
 	}
 	consts := store.SearchConsts(word)
 	for _, constant := range consts {
-		label, textEdit := importTable.ResolveToQualified(document, constant, constant.Name)
+		label, textEdit := importTable.ResolveToQualified(document, constant, constant.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -101,7 +101,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document,
 	}
 	defines := store.SearchDefines(word)
 	for _, define := range defines {
-		label, textEdit := importTable.ResolveToQualified(document, define, define.Name)
+		label, textEdit := importTable.ResolveToQualified(document, define, define.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -117,7 +117,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document,
 	}
 	functions := store.SearchFunctions(word)
 	for _, function := range functions {
-		label, textEdit := importTable.ResolveToQualified(document, function, function.Name)
+		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -141,7 +141,7 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	classes := store.SearchClasses(word)
 	importTable := document.GetImportTable()
 	for _, class := range classes {
-		name, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		name, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -232,7 +232,7 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 	classes := store.SearchClasses(word)
 	importTable := document.GetImportTable()
 	for _, class := range classes {
-		label, textEdit := importTable.ResolveToQualified(document, class, class.Name)
+		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -247,7 +247,7 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 	}
 	interfaces := store.SearchInterfaces(word)
 	for _, theInterface := range interfaces {
-		label, textEdit := importTable.ResolveToQualified(document, theInterface, theInterface.Name)
+		label, textEdit := importTable.ResolveToQualified(document, theInterface, theInterface.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)

@@ -220,3 +220,22 @@ func (t TypeComposite) ToString() string {
 	}
 	return strings.Join(contents, "|")
 }
+
+func GetNameParts(name string) []string {
+	parts := strings.Split(name, "\\")
+	if len(parts) == 1 {
+		return parts
+	}
+	if parts[0] == "" {
+		return parts[1:]
+	}
+	return parts
+}
+
+func GetScopeAndNameFromString(name string) (string, string) {
+	parts := GetNameParts(name)
+	if len(parts) == 1 {
+		return "\\", parts[0]
+	}
+	return "\\" + strings.Join(parts[:len(parts)-1], "\\"), parts[len(parts)-1]
+}
