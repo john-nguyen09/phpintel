@@ -11,11 +11,32 @@ func isNameRelative(name string) bool {
 	return name == "static" || name == "self"
 }
 
+func isNameParent(name string) bool {
+	return name == "parent"
+}
+
 func newRelativeScope(document *Document, location protocol.Location) *RelativeScope {
 	types := newTypeComposite()
 	lastClass := document.getLastClass()
 	if class, ok := lastClass.(*Class); ok {
 		types.add(class.Name)
+	}
+	return &RelativeScope{
+		location: location,
+		Types:    types,
+	}
+}
+
+func newParentScope(document *Document, location protocol.Location) *RelativeScope {
+	types := newTypeComposite()
+	lastClass := document.getLastClass()
+	switch v := lastClass.(type) {
+	case *Class:
+		types.add(v.Extends)
+	case *Interface:
+		for _, extend := range v.Extends {
+			types.add(extend)
+		}
 	}
 	return &RelativeScope{
 		location: location,

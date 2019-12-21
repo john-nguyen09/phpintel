@@ -25,6 +25,7 @@ var /* const */ Natives = map[string]bool{
 	"array":    true,
 	"object":   true,
 	"callable": true,
+	"void":     true,
 
 	"__DIR__":  true,
 	"__FILE__": true,

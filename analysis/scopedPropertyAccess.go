@@ -10,6 +10,8 @@ import (
 // scoped class access, e.g. ::$property
 type ScopedPropertyAccess struct {
 	Expression
+
+	hasResolved bool
 }
 
 func newScopedPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
@@ -37,11 +39,18 @@ func (s *ScopedPropertyAccess) GetLocation() protocol.Location {
 }
 
 func (s *ScopedPropertyAccess) Resolve(store *Store) {
-
+	if s.hasResolved {
+		return
+	}
+	s.hasResolved = true
+	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
+		for _, property := range store.GetProperties(scopeType.GetFQN(), s.Name) {
+			s.Type.merge(property.Types)
+		}
+	}
 }
 
 func (s *ScopedPropertyAccess) GetTypes() TypeComposite {
-	// TODO: Look up property types
 	return s.Type
 }
 

@@ -1,0 +1,1226 @@
+([]analysis.Symbol) (len=39) {
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:0-79:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
+      original: (string) (len=15) "ServiceProvider"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
+            original: (string) (len=15) "ServiceProvider"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 7:35-7:50
+      },
+      Name: (string) (len=15) "ServiceProvider"
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 16:14-16:49
+    },
+    description: (string) "",
+    Name: (string) (len=10) "$namespace",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=6) "string",
+          original: (string) (len=6) "string"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=6) "string": (bool) true
+      }
+    }
+  }),
+  (*analysis.ClassConst)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 23:17-23:27
+    },
+    Name: (string) (len=4) "HOME",
+    Value: (string) (len=3) "'/'",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=2) {
+          (analysis.TypeString) {
+            fqn: (string) (len=21) "\\App\\Providers\\parent",
+            original: (string) (len=6) "parent"
+          },
+          (analysis.TypeString) {
+            fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
+            original: (string) (len=15) "ServiceProvider"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=2) {
+          (string) (len=21) "\\App\\Providers\\parent": (bool) true,
+          (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 34:8-34:14
+      },
+      Name: (string) (len=6) "parent"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=2) {
+              (analysis.TypeString) {
+                fqn: (string) (len=21) "\\App\\Providers\\parent",
+                original: (string) (len=6) "parent"
+              },
+              (analysis.TypeString) {
+                fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
+                original: (string) (len=15) "ServiceProvider"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=2) {
+              (string) (len=21) "\\App\\Providers\\parent": (bool) true,
+              (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 34:8-34:14
+          },
+          Name: (string) (len=6) "parent"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 34:16-34:20
+      },
+      Name: (string) (len=4) "boot"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 34:20-34:21
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 34:20-34:21
+    }
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 30:4-35:5
+    },
+    Name: (string) (len=4) "boot",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=4) "void",
+          original: (string) (len=4) "void"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=4) "void": (bool) true
+      }
+    },
+    description: (string) (len=55) "Define your route model bindings, pattern filters, etc.",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.RelativeScope)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 44:8-44:13
+        },
+        Types: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+              original: (string) (len=20) "RouteServiceProvider"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+          }
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 44:8-44:13
+      },
+      Name: (string) (len=5) "$this"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.RelativeScope)({
+            location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 44:8-44:13
+            },
+            Types: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                  original: (string) (len=20) "RouteServiceProvider"
+                }
+              },
+              uniqueFQNs: (map[string]bool) (len=1) {
+                (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+              }
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 44:8-44:13
+          },
+          Name: (string) (len=5) "$this"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 44:15-44:27
+      },
+      Name: (string) (len=12) "mapApiRoutes"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 44:27-44:28
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 44:27-44:28
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+            original: (string) (len=20) "RouteServiceProvider"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+        }
+      },
+      Scope: (*analysis.RelativeScope)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 46:8-46:13
+        },
+        Types: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+              original: (string) (len=20) "RouteServiceProvider"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+          }
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 46:8-46:13
+      },
+      Name: (string) (len=5) "$this"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                original: (string) (len=20) "RouteServiceProvider"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+            }
+          },
+          Scope: (*analysis.RelativeScope)({
+            location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 46:8-46:13
+            },
+            Types: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                  original: (string) (len=20) "RouteServiceProvider"
+                }
+              },
+              uniqueFQNs: (map[string]bool) (len=1) {
+                (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+              }
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 46:8-46:13
+          },
+          Name: (string) (len=5) "$this"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 46:15-46:27
+      },
+      Name: (string) (len=12) "mapWebRoutes"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 46:27-46:28
+    },
+    arguments: ([]phrase.AstNode) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 46:27-46:28
+    }
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 42:4-49:5
+    },
+    Name: (string) (len=3) "map",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=4) "void",
+          original: (string) (len=4) "void"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=4) "void": (bool) true
+      }
+    },
+    description: (string) (len=38) "Define the routes for the application.",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+            original: (string) (len=5) "Route"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 60:8-60:13
+      },
+      Name: (string) (len=5) "Route"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                original: (string) (len=5) "Route"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 60:8-60:13
+          },
+          Name: (string) (len=5) "Route"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 60:15-60:25
+      },
+      Name: (string) (len=10) "middleware"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                    original: (string) (len=5) "Route"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 60:8-60:13
+              },
+              Name: (string) (len=5) "Route"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 60:15-60:25
+          },
+          Name: (string) (len=10) "middleware"
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 61:15-61:24
+      },
+      Name: (string) (len=9) "namespace"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 61:25-61:41
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) PropertyAccessExpression,
+        Children: ([]phrase.AstNode) (len=3) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) SimpleVariable,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(VariableName 1228 5)
+            }
+          }),
+          (*lexer.Token)(Arrow 1233 2),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) MemberName,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(Name 1235 9)
+            }
+          })
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 61:25-61:41
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.RelativeScope)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 61:25-61:30
+        },
+        Types: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+              original: (string) (len=20) "RouteServiceProvider"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+          }
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 61:25-61:30
+      },
+      Name: (string) (len=5) "$this"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.PropertyAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.RelativeScope)({
+            location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 61:25-61:30
+            },
+            Types: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                  original: (string) (len=20) "RouteServiceProvider"
+                }
+              },
+              uniqueFQNs: (map[string]bool) (len=1) {
+                (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+              }
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 61:25-61:30
+          },
+          Name: (string) (len=5) "$this"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 61:32-61:41
+      },
+      Name: (string) (len=9) "namespace"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.MethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                        original: (string) (len=5) "Route"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 60:8-60:13
+                  },
+                  Name: (string) (len=5) "Route"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 60:15-60:25
+              },
+              Name: (string) (len=10) "middleware"
+            },
+            hasResolved: (bool) false
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 61:15-61:24
+          },
+          Name: (string) (len=9) "namespace"
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 62:15-62:20
+      },
+      Name: (string) (len=5) "group"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 62:21-62:48
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) FunctionCallExpression,
+        Children: ([]phrase.AstNode) (len=4) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) QualifiedName,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*phrase.Phrase)({
+                Type: (phrase.PhraseType) NamespaceName,
+                Children: ([]phrase.AstNode) (len=1) {
+                  (*lexer.Token)(Name 1267 9)
+                }
+              })
+            }
+          }),
+          (*lexer.Token)(OpenParenthesis 1276 1),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) ArgumentExpressionList,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(StringLiteral 1277 16)
+            }
+          }),
+          (*lexer.Token)(CloseParenthesis 1293 1)
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 62:21-62:48
+    }
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 62:21-62:30
+      },
+      Name: (string) (len=9) "base_path"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 62:31-62:47
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*lexer.Token)(StringLiteral 1277 16)
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 62:31-62:47
+    }
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 58:4-63:5
+    },
+    Name: (string) (len=12) "mapWebRoutes",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=4) "void",
+          original: (string) (len=4) "void"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=4) "void": (bool) true
+      }
+    },
+    description: (string) (len=107) "Define the \"web\" routes for the application.\n\nThese routes all receive session state, CSRF protection, etc.",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+            original: (string) (len=5) "Route"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 74:8-74:13
+      },
+      Name: (string) (len=5) "Route"
+    }
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                original: (string) (len=5) "Route"
+              }
+            },
+            uniqueFQNs: (map[string]bool) (len=1) {
+              (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 74:8-74:13
+          },
+          Name: (string) (len=5) "Route"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 74:15-74:21
+      },
+      Name: (string) (len=6) "prefix"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.ScopedMethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ClassAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                    original: (string) (len=5) "Route"
+                  }
+                },
+                uniqueFQNs: (map[string]bool) (len=1) {
+                  (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 74:8-74:13
+              },
+              Name: (string) (len=5) "Route"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 74:15-74:21
+          },
+          Name: (string) (len=6) "prefix"
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 75:15-75:25
+      },
+      Name: (string) (len=10) "middleware"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 75:26-75:31
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*lexer.Token)(StringLiteral 1550 5)
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 75:26-75:31
+    }
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.MethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.ScopedMethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ClassAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) (len=1) {
+                      (analysis.TypeString) {
+                        fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                        original: (string) (len=5) "Route"
+                      }
+                    },
+                    uniqueFQNs: (map[string]bool) (len=1) {
+                      (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+                    }
+                  },
+                  Scope: (analysis.HasTypes) <nil>,
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 74:8-74:13
+                  },
+                  Name: (string) (len=5) "Route"
+                }
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 74:15-74:21
+              },
+              Name: (string) (len=6) "prefix"
+            },
+            hasResolved: (bool) false
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 75:15-75:25
+          },
+          Name: (string) (len=10) "middleware"
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 76:15-76:24
+      },
+      Name: (string) (len=9) "namespace"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 76:25-76:41
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) PropertyAccessExpression,
+        Children: ([]phrase.AstNode) (len=3) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) SimpleVariable,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(VariableName 1582 5)
+            }
+          }),
+          (*lexer.Token)(Arrow 1587 2),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) MemberName,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(Name 1589 9)
+            }
+          })
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 76:25-76:41
+    }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.RelativeScope)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 76:25-76:30
+        },
+        Types: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+              original: (string) (len=20) "RouteServiceProvider"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+          }
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 76:25-76:30
+      },
+      Name: (string) (len=5) "$this"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
+  }),
+  (*analysis.PropertyAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.Variable)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.RelativeScope)({
+            location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 76:25-76:30
+            },
+            Types: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                  original: (string) (len=20) "RouteServiceProvider"
+                }
+              },
+              uniqueFQNs: (map[string]bool) (len=1) {
+                (string) (len=35) "\\App\\Providers\\RouteServiceProvider": (bool) true
+              }
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 76:25-76:30
+          },
+          Name: (string) (len=5) "$this"
+        },
+        description: (string) "",
+        canReferenceGlobal: (bool) false,
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 76:32-76:41
+      },
+      Name: (string) (len=9) "namespace"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (*analysis.MethodAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>,
+            uniqueFQNs: (map[string]bool) <nil>
+          },
+          Scope: (*analysis.MethodAccess)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>,
+                uniqueFQNs: (map[string]bool) <nil>
+              },
+              Scope: (*analysis.ScopedMethodAccess)({
+                Expression: (analysis.Expression) {
+                  Type: (analysis.TypeComposite) {
+                    typeStrings: ([]analysis.TypeString) <nil>,
+                    uniqueFQNs: (map[string]bool) <nil>
+                  },
+                  Scope: (*analysis.ClassAccess)({
+                    Expression: (analysis.Expression) {
+                      Type: (analysis.TypeComposite) {
+                        typeStrings: ([]analysis.TypeString) (len=1) {
+                          (analysis.TypeString) {
+                            fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                            original: (string) (len=5) "Route"
+                          }
+                        },
+                        uniqueFQNs: (map[string]bool) (len=1) {
+                          (string) (len=33) "\\Illuminate\\Support\\Facades\\Route": (bool) true
+                        }
+                      },
+                      Scope: (analysis.HasTypes) <nil>,
+                      Location: (protocol.Location) {
+                        URI: (string) (len=5) "test1",
+                        Range: (protocol.Range) 74:8-74:13
+                      },
+                      Name: (string) (len=5) "Route"
+                    }
+                  }),
+                  Location: (protocol.Location) {
+                    URI: (string) (len=5) "test1",
+                    Range: (protocol.Range) 74:15-74:21
+                  },
+                  Name: (string) (len=6) "prefix"
+                },
+                hasResolved: (bool) false
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 75:15-75:25
+              },
+              Name: (string) (len=10) "middleware"
+            },
+            hasResolved: (bool) false
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 76:15-76:24
+          },
+          Name: (string) (len=9) "namespace"
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 77:15-77:20
+      },
+      Name: (string) (len=5) "group"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 77:21-77:48
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*phrase.Phrase)({
+        Type: (phrase.PhraseType) FunctionCallExpression,
+        Children: ([]phrase.AstNode) (len=4) {
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) QualifiedName,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*phrase.Phrase)({
+                Type: (phrase.PhraseType) NamespaceName,
+                Children: ([]phrase.AstNode) (len=1) {
+                  (*lexer.Token)(Name 1621 9)
+                }
+              })
+            }
+          }),
+          (*lexer.Token)(OpenParenthesis 1630 1),
+          (*phrase.Phrase)({
+            Type: (phrase.PhraseType) ArgumentExpressionList,
+            Children: ([]phrase.AstNode) (len=1) {
+              (*lexer.Token)(StringLiteral 1631 16)
+            }
+          }),
+          (*lexer.Token)(CloseParenthesis 1647 1)
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 77:21-77:48
+    }
+  }),
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 77:21-77:30
+      },
+      Name: (string) (len=9) "base_path"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 77:31-77:47
+    },
+    arguments: ([]phrase.AstNode) (len=1) {
+      (*lexer.Token)(StringLiteral 1631 16)
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 77:31-77:47
+    }
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 72:4-78:5
+    },
+    Name: (string) (len=12) "mapApiRoutes",
+    Params: ([]*analysis.Parameter) {
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=4) "void",
+          original: (string) (len=4) "void"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=4) "void": (bool) true
+      }
+    },
+    description: (string) (len=83) "Define the \"api\" routes for the application.\n\nThese routes are typically stateless.",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+      original: (string) (len=20) "RouteServiceProvider"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  })
+}

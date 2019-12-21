@@ -10,6 +10,8 @@ import (
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
 type ScopedMethodAccess struct {
 	Expression
+
+	hasResolved bool
 }
 
 func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
@@ -62,11 +64,18 @@ func (s *ScopedMethodAccess) GetLocation() protocol.Location {
 }
 
 func (s *ScopedMethodAccess) Resolve(store *Store) {
-
+	if s.hasResolved {
+		return
+	}
+	s.hasResolved = true
+	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
+		for _, method := range store.GetMethods(scopeType.GetFQN(), s.Name) {
+			s.Type.merge(method.GetReturnTypes())
+		}
+	}
 }
 
 func (s *ScopedMethodAccess) GetTypes() TypeComposite {
-	// TODO: Look up method return type
 	return s.Type
 }
 
