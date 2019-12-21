@@ -32,7 +32,7 @@ func (s *PhpStub) Walk(walkFn PhpWalkFn) {
 	if s.box == nil {
 		return
 	}
-	s.box.Walk(".", func(path string, info os.FileInfo, err error) error {
+	s.box.Walk("", func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() || !strings.HasSuffix(path, ".php") {
 			return nil
 		}

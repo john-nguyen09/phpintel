@@ -99,24 +99,27 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 
 		syncedDocumentURIs: cmap.New(),
 	}
-	for _, stub := range stubs {
-		stub.Walk(func(path string, data []byte) error {
-			document := NewDocument(stub.GetUri(path), string(data))
-			currentMD5 := document.GetMD5Hash()
-			entry := newEntry(documentCollection, document.GetURI())
-			savedMD5, err := db.Get(entry.getKeyBytes(), nil)
-			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
-				document.Load()
-				store.SyncDocument(document)
-			}
-			return nil
-		})
-	}
 	return store, nil
 }
 
 func (s *Store) Close() error {
 	return s.db.Close()
+}
+
+func (s *Store) LoadStubs() {
+	for _, stub := range stubs {
+		stub.Walk(func(path string, data []byte) error {
+			document := NewDocument(stub.GetUri(path), string(data))
+			currentMD5 := document.GetMD5Hash()
+			entry := newEntry(documentCollection, document.GetURI())
+			savedMD5, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
+				document.Load()
+				s.SyncDocument(document)
+			}
+			return nil
+		})
+	}
 }
 
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {

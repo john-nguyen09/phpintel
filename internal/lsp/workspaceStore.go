@@ -82,6 +82,7 @@ func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protoc
 		// folder fails to grasp the storagePath
 		panic(err)
 	}
+	store.LoadStubs()
 	s.stores = append(s.stores, store)
 	folderPath := util.UriToPath(uri)
 	s.indexFolder(store, folderPath)

@@ -24,7 +24,7 @@ func setupStore(uri string, name string) (*Store, error) {
 		return nil, err
 	}
 	it := store.db.NewIterator(nil, nil)
-	for it.Valid() {
+	for it.Next() {
 		store.db.Delete(it.Key(), nil)
 	}
 	it.Release()

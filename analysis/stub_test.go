@@ -8,6 +8,7 @@ import (
 
 func TestPhpStormStub(t *testing.T) {
 	store, err := setupStore("", "stub_test")
+	store.LoadStubs()
 	if err != nil {
 		panic(err)
 	}
