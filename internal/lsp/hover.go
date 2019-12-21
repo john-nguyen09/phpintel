@@ -161,6 +161,10 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	if hover == nil && symbol != nil {
 		symbolRange := symbol.GetLocation().Range
 		hover = &protocol.Hover{
+			Contents: protocol.MarkupContent{
+				Kind:  protocol.Markdown,
+				Value: "",
+			},
 			Range: &symbolRange,
 		}
 	}

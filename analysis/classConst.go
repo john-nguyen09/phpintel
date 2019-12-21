@@ -91,7 +91,11 @@ func (s *ClassConst) GetIndexCollection() string {
 }
 
 func (s *ClassConst) GetPrefixes() []string {
-	return []string{s.Scope.GetFQN()}
+	return []string{s.GetScope().GetFQN()}
+}
+
+func (s *ClassConst) GetScope() TypeString {
+	return s.Scope
 }
 
 func (s *ClassConst) Serialise(serialiser *Serialiser) {

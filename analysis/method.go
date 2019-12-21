@@ -125,7 +125,7 @@ func (s *Method) GetIndexCollection() string {
 }
 
 func (s *Method) GetPrefixes() []string {
-	return []string{s.Scope.GetFQN()}
+	return []string{s.GetScope().GetFQN()}
 }
 
 func (s *Method) GetNameLabel() string {
@@ -139,6 +139,10 @@ func (s *Method) GetNameLabel() string {
 
 func (s *Method) GetParams() []*Parameter {
 	return s.Params
+}
+
+func (s *Method) GetScope() TypeString {
+	return s.Scope
 }
 
 func (s *Method) Serialise(serialiser *Serialiser) {

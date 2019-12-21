@@ -68,6 +68,10 @@ type HasParams interface {
 	GetNameLabel() string
 }
 
+type HasScope interface {
+	GetScope() TypeString
+}
+
 type HasParamsResolvable interface {
 	ResolveToHasParams(store *Store, document *Document) []HasParams
 }

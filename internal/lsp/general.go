@@ -2,9 +2,9 @@ package lsp
 
 import (
 	"context"
-	"runtime/pprof"
 	"path"
 	"path/filepath"
+	"runtime/pprof"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -76,6 +76,7 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 					ChangeNotifications: "workspace/didChangeWorkspaceFolders",
 				},
 			},
+			WorkspaceSymbolProvider: true,
 		},
 	}, nil
 }

@@ -123,7 +123,11 @@ func (s *Property) GetIndexCollection() string {
 }
 
 func (s *Property) GetPrefixes() []string {
-	return []string{s.Scope.GetFQN()}
+	return []string{s.GetScope().GetFQN()}
+}
+
+func (s *Property) GetScope() TypeString {
+	return s.Scope
 }
 
 func (s *Property) Serialise(serialiser *Serialiser) {
