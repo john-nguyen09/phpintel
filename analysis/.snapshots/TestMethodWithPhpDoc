@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=30) {
+([]analysis.Symbol) (len=31) {
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -776,6 +776,23 @@
     ranges: ([]protocol.Range) (len=1) {
       (protocol.Range) 18:13-18:14
     }
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 20:12-20:18
+      },
+      Name: (string) (len=6) "$files"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) false,
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {

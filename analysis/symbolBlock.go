@@ -47,6 +47,11 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.ElseIfClause:                   true,
 	phrase.TernaryExpression:              true,
 	phrase.SubscriptExpression:            true,
+	phrase.EmptyIntrinsic:                 true,
+	phrase.UnsetIntrinsic:                 true,
+	phrase.IssetIntrinsic:                 true,
+	phrase.EvalIntrinsic:                  true,
+	phrase.VariableList:                   true,
 }
 
 var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{

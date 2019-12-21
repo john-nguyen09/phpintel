@@ -27,6 +27,10 @@ func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
 			Location: document.GetNodeLocation(node),
 		},
 	}
+	phpDoc := document.getValidPhpDoc(variable.Location)
+	if phpDoc != nil {
+		variable.applyPhpDoc(document, *phpDoc)
+	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -59,6 +63,12 @@ func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 	}
 	if s.Scope == nil {
 		s.setExpression(variable.Scope)
+	}
+}
+
+func (s *Variable) applyPhpDoc(document *Document, phpDoc phpDocComment) {
+	for _, varTag := range phpDoc.Vars {
+		s.AddTypes(typesFromPhpDoc(document, varTag.TypeString))
 	}
 }
 

@@ -89,3 +89,13 @@ func TestApplyChanges(t *testing.T) {
 	data, _ := json.MarshalIndent(document.getLines(), "", "  ")
 	cupaloy.SnapshotT(t, string(data))
 }
+
+func TestIntrinsics(t *testing.T) {
+	data, err := ioutil.ReadFile("../cases/intrinsics.php")
+	if err != nil {
+		panic(err)
+	}
+	document := NewDocument("test1", string(data))
+	document.Load()
+	cupaloy.SnapshotT(t, document.Children)
+}

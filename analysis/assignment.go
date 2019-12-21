@@ -25,7 +25,11 @@ func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverse
 	traverser.SkipToken(lexer.Equals)
 	traverser.SkipToken(lexer.Whitespace)
 	rhs := traverser.Advance()
+	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(node))
 	variable, _ := newVariable(document, node)
+	if phpDoc != nil {
+		variable.applyPhpDoc(document, *phpDoc)
+	}
 	document.addSymbol(variable)
 
 	var expression HasTypes = nil
