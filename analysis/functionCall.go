@@ -86,7 +86,7 @@ func (s *FunctionCall) GetTypes() TypeComposite {
 func (s *FunctionCall) ResolveToHasParams(store *Store, document *Document) []HasParams {
 	functions := []HasParams{}
 	typeString := NewTypeString(s.Name)
-	typeString.SetFQN(document.GetImportTable().GetFunctionReferenceFQN(typeString))
+	typeString.SetFQN(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range store.GetFunctions(typeString.GetFQN()) {
 		functions = append(functions, function)
 	}

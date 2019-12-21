@@ -66,7 +66,7 @@ func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 	return name.GetFQN()
 }
 
-func (i ImportTable) GetFunctionReferenceFQN(name TypeString) string {
+func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.functions
 	if len(parts) > 0 {
@@ -74,10 +74,17 @@ func (i ImportTable) GetFunctionReferenceFQN(name TypeString) string {
 	}
 
 	if fqn, ok := aliasTable[firstPart]; ok {
-		name.SetNamespace(fqn)
-	} else {
-		name.SetNamespace(i.namespace)
+		return "\\" + fqn
 	}
+	fqn := name.GetFQN()
+	if !isFQN(fqn) {
+		fqn = "\\" + fqn
+	}
+	functions := store.GetFunctions(fqn)
+	if len(functions) > 0 {
+		return fqn
+	}
+	name.SetNamespace(i.namespace)
 	return name.GetFQN()
 }
 
@@ -117,6 +124,12 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 	}
 	if isFQN(word) {
 		return name.GetOriginal(), nil
+	}
+	if _, ok := symbol.(*Function); ok {
+		scope, _ := GetScopeAndNameFromString(name.GetFQN())
+		if scope == "\\" {
+			return name.GetOriginal(), nil
+		}
 	}
 	return name.GetOriginal(), insertUse.GetUseEdit(name, symbol, "")
 }

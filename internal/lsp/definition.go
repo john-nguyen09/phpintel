@@ -49,7 +49,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
-		for _, function := range store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(name)) {
+		for _, function := range store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, name)) {
 			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:

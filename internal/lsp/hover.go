@@ -78,7 +78,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.FunctionCall:
 		functions := []*analysis.Function{}
 		name := analysis.NewTypeString(v.Name)
-		functions = append(functions, store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(name))...)
+		functions = append(functions, store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, name))...)
 		if len(functions) > 0 {
 			hover = cmd.FunctionToHover(symbol, *functions[0])
 			break
