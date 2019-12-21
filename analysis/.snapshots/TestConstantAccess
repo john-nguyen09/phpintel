@@ -2,15 +2,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=7) "__DIR__",
-            original: (string) (len=7) "__DIR__"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=7) "__DIR__": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -57,15 +50,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=7) "__DIR__",
-            original: (string) (len=7) "__DIR__"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=7) "__DIR__": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -112,15 +98,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=7) "__DIR__",
-            original: (string) (len=7) "__DIR__"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=7) "__DIR__": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -133,15 +112,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=12) "\\TEST_CONST1",
-            original: (string) (len=11) "TEST_CONST1"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=12) "\\TEST_CONST1": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -154,15 +126,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=7) "__DIR__",
-            original: (string) (len=7) "__DIR__"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=7) "__DIR__": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {

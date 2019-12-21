@@ -335,15 +335,8 @@
   (*analysis.ConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=8) "\\PHP_EOL",
-            original: (string) (len=7) "PHP_EOL"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=8) "\\PHP_EOL": (bool) true
-        }
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
