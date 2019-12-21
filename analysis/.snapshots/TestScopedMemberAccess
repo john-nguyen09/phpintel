@@ -52,7 +52,8 @@
         Range: (protocol.Range) 2:11-2:17
       },
       Name: (string) (len=6) "$prop1"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
@@ -162,7 +163,8 @@
         Range: (protocol.Range) 4:11-4:18
       },
       Name: (string) (len=7) "method1"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {

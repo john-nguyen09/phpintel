@@ -507,7 +507,8 @@
             Range: (protocol.Range) 5:20-5:27
           },
           Name: (string) (len=7) "method1"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -572,7 +573,8 @@
         Range: (protocol.Range) 5:20-5:27
       },
       Name: (string) (len=7) "method1"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -622,7 +624,8 @@
             Range: (protocol.Range) 5:20-5:27
           },
           Name: (string) (len=7) "method1"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -687,7 +690,8 @@
         Range: (protocol.Range) 5:20-5:27
       },
       Name: (string) (len=7) "method1"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -752,7 +756,8 @@
         Range: (protocol.Range) 6:17-6:28
       },
       Name: (string) (len=11) "testMethod6"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -817,7 +822,8 @@
         Range: (protocol.Range) 7:17-7:28
       },
       Name: (string) (len=11) "testMethod3"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {

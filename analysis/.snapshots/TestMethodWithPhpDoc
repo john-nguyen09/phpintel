@@ -65,7 +65,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -130,7 +131,8 @@
         Range: (protocol.Range) 13:16-13:36
       },
       Name: (string) (len=20) "get_instance_by_data"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -170,7 +172,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -235,7 +238,8 @@
         Range: (protocol.Range) 13:16-13:36
       },
       Name: (string) (len=20) "get_instance_by_data"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
@@ -298,7 +302,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -354,7 +359,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -422,7 +428,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -478,7 +485,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -567,7 +575,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -623,7 +632,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -691,7 +701,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -747,7 +758,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -832,7 +844,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -888,7 +901,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -956,7 +970,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -1012,7 +1027,8 @@
                 Range: (protocol.Range) 13:16-13:36
               },
               Name: (string) (len=20) "get_instance_by_data"
-            }
+            },
+            hasResolved: (bool) false
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -1104,7 +1120,8 @@
             Range: (protocol.Range) 13:16-13:36
           },
           Name: (string) (len=20) "get_instance_by_data"
-        }
+        },
+        hasResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",

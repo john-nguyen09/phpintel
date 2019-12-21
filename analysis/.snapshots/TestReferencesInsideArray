@@ -52,7 +52,8 @@
         Range: (protocol.Range) 2:6-2:12
       },
       Name: (string) (len=6) "create"
-    }
+    },
+    hasResolved: (bool) false
   }),
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
