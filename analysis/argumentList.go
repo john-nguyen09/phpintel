@@ -16,12 +16,16 @@ type ArgumentList struct {
 }
 
 func newEmptyArgumentList(document *Document, open *lexer.Token, close *lexer.Token) *ArgumentList {
+	closePos := document.positionAt(open.Offset)
+	if close != nil {
+		closePos = document.positionAt(close.Offset)
+	}
 	argumentList := &ArgumentList{
 		location: protocol.Location{
 			URI: document.GetURI(),
 			Range: protocol.Range{
 				Start: document.positionAt(open.Offset),
-				End:   document.positionAt(close.Offset),
+				End:   closePos,
 			},
 		},
 	}

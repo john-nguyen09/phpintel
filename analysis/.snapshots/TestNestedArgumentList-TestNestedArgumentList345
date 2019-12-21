@@ -1,0 +1,45 @@
+(*analysis.ArgumentList)({
+  location: (protocol.Location) {
+    URI: (string) (len=5) "test1",
+    Range: (protocol.Range) 20:12-20:13
+  },
+  arguments: ([]phrase.AstNode) <nil>,
+  ranges: ([]protocol.Range) (len=1) {
+    (protocol.Range) 20:12-20:13
+  }
+})
+(*analysis.ScopedMethodAccess)({
+  Expression: (analysis.Expression) {
+    Type: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    },
+    Scope: (*analysis.ClassAccess)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "\\User",
+              original: (string) (len=4) "User"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=5) "\\User": (bool) true
+          }
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 20:0-20:4
+        },
+        Name: (string) (len=4) "User"
+      }
+    }),
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 20:6-20:12
+    },
+    Name: (string) (len=6) "create"
+  },
+  hasResolved: (bool) false
+})

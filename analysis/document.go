@@ -418,19 +418,26 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
 	var argumentList *ArgumentList = nil
-	var ok = false
-	for i, symbol := range s.Children[index:] {
+	for i := index + 1; i < len(s.Children); i++ {
+		symbol := s.Children[i]
+		isArgumentList := false
 		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if inRange > 0 {
-			argumentList = nil
+		if inRange < 0 {
 			break
 		}
-		if argumentList, ok = symbol.(*ArgumentList); ok && inRange == 0 {
-			if i+index-1 >= 0 {
-				previousSymbol := s.Children[i+index-1]
-				hasParamsResolvable, _ = previousSymbol.(HasParamsResolvable)
-			}
-			break
+		if _, isArgumentList = symbol.(*ArgumentList); !isArgumentList {
+			continue
+		}
+		if inRange == 0 {
+			index = i
+			continue
+		}
+	}
+	symbol := s.Children[index]
+	ok := false
+	if argumentList, ok = symbol.(*ArgumentList); ok && util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
+		if index-1 >= 0 {
+			hasParamsResolvable = s.Children[index-1].(HasParamsResolvable)
 		}
 	}
 	return argumentList, hasParamsResolvable
