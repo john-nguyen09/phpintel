@@ -142,7 +142,9 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 
 func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
 	document := store.CompareAndIndexDocument(filePath)
-	s.server.provideDiagnostics(s.ctx, document)
+	if document != nil {
+		s.server.provideDiagnostics(s.ctx, document)
+	}
 }
 
 func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
