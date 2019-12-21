@@ -12,6 +12,9 @@ git:
 notifications:
   email: false
 
+before_install:
+  - sudo apt-get -y install upx-ucl
+
 script:
   - go get -t -v ./...
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./analysis
