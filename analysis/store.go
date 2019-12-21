@@ -41,9 +41,7 @@ const (
 
 const scopeSep = "::"
 
-var /* const */ stubs = []*PhpStub{
-	NewPhpStormStub(),
-}
+var stubs = []*PhpStub{}
 
 // KeySep is the separator when constructing key
 const KeySep string = "\x00"
@@ -84,8 +82,13 @@ type Store struct {
 	syncedDocumentURIs cmap.ConcurrentMap
 }
 
+func initStubs() {
+	stubs = append(stubs, NewPhpStormStub())
+}
+
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	db, err := leveldb.OpenFile(storePath, nil)
+	initStubs()
 	if err != nil {
 		return nil, err
 	}
