@@ -7,7 +7,7 @@ import (
 )
 
 func TestPhpStormStub(t *testing.T) {
-	store, err := NewStore("", "testData/stub_test")
+	store, err := setupStore("", "stub_test")
 	if err != nil {
 		panic(err)
 	}

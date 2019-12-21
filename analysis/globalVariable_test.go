@@ -17,7 +17,7 @@ func TestGlobalVariable(t *testing.T) {
 }
 
 func TestGlobalVariableReference(t *testing.T) {
-	store, _ := NewStore("test", "./testData/globalVariable")
+	store, _ := setupStore("test", "globalVariable")
 	globalVariableTest, _ := filepath.Abs("../cases/globalVariable.php")
 	indexDocument(store, globalVariableTest, "test1")
 

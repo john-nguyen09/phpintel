@@ -16,7 +16,7 @@ type ParsingContext struct {
 }
 
 func newParsingContext() *ParsingContext {
-	store, err := NewStore("test", "./testData/BenchmarkAnalysis")
+	store, err := setupStore("test", "BenchmarkAnalysis")
 	if err != nil {
 		panic(err)
 	}

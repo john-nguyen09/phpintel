@@ -17,3 +17,16 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 	store.SyncDocument(document)
 	return document
 }
+
+func setupStore(uri string, name string) (*Store, error) {
+	store, err := NewStore(uri, "./testData/"+name)
+	if err != nil {
+		return nil, err
+	}
+	it := store.db.NewIterator(nil, nil)
+	for it.Valid() {
+		store.db.Delete(it.Key(), nil)
+	}
+	it.Release()
+	return store, nil
+}

@@ -20,7 +20,7 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 }
 
 func TestFunctionCompletionWithNamespace(t *testing.T) {
-	store, err := NewStore("test", "testData/TestFunctionCompletionWithNamespace")
+	store, err := setupStore("test", "TestFunctionCompletionWithNamespace")
 	if err != nil {
 		panic(err)
 	}
