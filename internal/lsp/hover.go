@@ -63,17 +63,16 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ConstantAccess:
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}
-		for _, typeString := range v.Type.Resolve() {
-			consts = append(consts, store.GetConsts(typeString.GetFQN())...)
-			if len(consts) > 0 {
-				hover = cmd.ConstToHover(symbol, *consts[0])
-				break
-			}
-			defines = append(defines, store.GetDefines(typeString.GetFQN())...)
-			if len(defines) > 0 {
-				hover = cmd.DefineToHover(symbol, *defines[0])
-				break
-			}
+		name := analysis.NewTypeString(v.Name)
+		consts = append(consts, store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name))...)
+		if len(consts) > 0 {
+			hover = cmd.ConstToHover(symbol, *consts[0])
+			break
+		}
+		defines = append(defines, store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name))...)
+		if len(defines) > 0 {
+			hover = cmd.DefineToHover(symbol, *defines[0])
+			break
 		}
 	case *analysis.FunctionCall:
 		functions := []*analysis.Function{}

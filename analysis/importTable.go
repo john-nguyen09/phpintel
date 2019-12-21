@@ -88,7 +88,7 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 	return name.GetFQN()
 }
 
-func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
+func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.constants
 	if len(parts) > 0 {
@@ -96,10 +96,23 @@ func (i ImportTable) GetConstReferenceFQN(name TypeString) string {
 	}
 
 	if fqn, ok := aliasTable[firstPart]; ok {
-		name.SetNamespace(fqn)
-	} else {
-		name.SetNamespace(i.namespace)
+		return "\\" + fqn
 	}
+	fqn := name.GetFQN()
+	if !isFQN(fqn) {
+		fqn = "\\" + fqn
+	}
+	constants := store.GetConsts(fqn)
+	if len(constants) > 0 {
+		return fqn
+	}
+	// TODO: Defines do not have implicit namespace except
+	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
+	defines := store.GetDefines(fqn)
+	if len(defines) > 0 {
+		return fqn
+	}
+	name.SetNamespace(i.namespace)
 	return name.GetFQN()
 }
 
@@ -125,7 +138,10 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 	if isFQN(word) {
 		return name.GetOriginal(), nil
 	}
-	if _, ok := symbol.(*Function); ok {
+	// TODO: Defines do not have implicit namespace except
+	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
+	switch symbol.(type) {
+	case *Function, *Const, *Define:
 		scope, _ := GetScopeAndNameFromString(name.GetFQN())
 		if scope == "\\" {
 			return name.GetOriginal(), nil
