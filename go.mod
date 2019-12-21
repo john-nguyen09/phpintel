@@ -4,7 +4,9 @@ go 1.12
 
 require (
 	github.com/GeertJohan/go.rice v1.0.0
+	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
+	github.com/evorts/html-to-markdown v0.0.3
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/john-nguyen09/go-phpparser v0.0.0-20191214130445-ec1858e53b7e

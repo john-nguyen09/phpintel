@@ -5,10 +5,16 @@ import (
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	md "github.com/evorts/html-to-markdown"
 )
 
 func concatDescriptionIfAvailable(content string, description string) string {
 	if len(description) > 0 {
+		converter := md.NewConverter("", true, nil)
+		markdown, err := converter.ConvertString(description)
+		if err == nil {
+			description = markdown
+		}
 		return content + "\n___\n" + description
 	}
 	return content
