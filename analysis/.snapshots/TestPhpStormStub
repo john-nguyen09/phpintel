@@ -79,6 +79,6 @@
       typeStrings: ([]analysis.TypeString) <nil>,
       uniqueFQNs: (map[string]bool) <nil>
     },
-    description: (string) ""
+    description: (string) (len=34) "Perform a regular expression match"
   })
 }
