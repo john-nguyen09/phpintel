@@ -9,9 +9,22 @@ import "context"
 type contextKey int
 
 const (
-	clientKey = contextKey(iota)
+	clientKey     = contextKey(iota)
+	cpuprofileKey = contextKey(iota)
 )
 
 func WithClient(ctx context.Context, client Client) context.Context {
 	return context.WithValue(ctx, clientKey, client)
+}
+
+func WithCpuProfile(ctx context.Context, value bool) context.Context {
+	return context.WithValue(ctx, cpuprofileKey, value)
+}
+
+func HasCpuProfile(ctx context.Context) bool {
+	value := ctx.Value(cpuprofileKey)
+	if cpuprofile, ok := value.(bool); ok {
+		return cpuprofile
+	}
+	return false
 }

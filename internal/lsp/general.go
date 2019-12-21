@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"runtime/pprof"
 	"path"
 	"path/filepath"
 
@@ -96,5 +97,8 @@ func (s *Server) shutdown(ctx context.Context) error {
 		return jsonrpc2.NewErrorf(jsonrpc2.CodeInvalidRequest, "not intialised")
 	}
 	s.store.close()
+	if protocol.HasCpuProfile(ctx) {
+		pprof.StopCPUProfile()
+	}
 	return nil
 }
