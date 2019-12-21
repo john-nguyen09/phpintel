@@ -304,6 +304,9 @@ func (s *Document) GetNodeText(node phrase.AstNode) string {
 
 func (s *Document) GetPhraseText(phrase *phrase.Phrase) string {
 	firstToken, lastToken := util.FirstToken(phrase), util.LastToken(phrase)
+	if firstToken == nil || lastToken == nil {
+		return ""
+	}
 
 	return string(s.text[firstToken.Offset : lastToken.Offset+lastToken.Length])
 }
