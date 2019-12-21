@@ -24,6 +24,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	method := &Method{
 		IsStatic:    methodTag.IsStatic,
 		Name:        methodTag.Name,
+		location:    location,
 		returnTypes: typesFromPhpDoc(document, methodTag.TypeString),
 		Params:      []*Parameter{},
 		description: methodTag.Description,
