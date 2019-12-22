@@ -95,11 +95,6 @@ func methodParams(text string) []methodTagParam {
 		}
 	}
 
-	for i := len(params)/2 - 1; i >= 0; i-- {
-		opp := len(params) - 1 - i
-		params[i], params[opp] = params[opp], params[i]
-	}
-
 	return params
 }
 

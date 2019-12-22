@@ -1,0 +1,176 @@
+([]analysis.Symbol) (len=3) {
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:0-7:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
+      original: (string) (len=20) "TestMethodFromPhpDoc"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) ""
+    },
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 1:0-4:3
+    },
+    Name: (string) (len=6) "create",
+    Params: ([]*analysis.Parameter) (len=2) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        description: (string) "",
+        Name: (string) (len=6) "$table",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=6) "string": (bool) true
+          }
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        description: (string) "",
+        Name: (string) (len=9) "$callback",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=8) "\\Closure",
+              original: (string) (len=8) "\\Closure"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=8) "\\Closure": (bool) true
+          }
+        },
+        Value: (string) ""
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=8) "\\Builder",
+          original: (string) (len=7) "Builder"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=8) "\\Builder": (bool) true
+      }
+    },
+    description: (string) "",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
+      original: (string) (len=20) "TestMethodFromPhpDoc"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) true,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 1:0-4:3
+    },
+    Name: (string) (len=8) "register",
+    Params: ([]*analysis.Parameter) (len=3) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        description: (string) "",
+        Name: (string) (len=6) "$class",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=6) "string": (bool) true
+          }
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        description: (string) "",
+        Name: (string) (len=5) "$name",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=6) "string": (bool) true
+          }
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        description: (string) "",
+        Name: (string) (len=5) "$type",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=6) "string": (bool) true
+          }
+        },
+        Value: (string) ""
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=4) "void",
+          original: (string) (len=4) "void"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=4) "void": (bool) true
+      }
+    },
+    description: (string) "",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
+      original: (string) (len=20) "TestMethodFromPhpDoc"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  })
+}

@@ -56,3 +56,13 @@ func TestMethodWithPhpDoc(t *testing.T) {
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
+
+func TestMethodFromPhpDoc(t *testing.T) {
+	data, err := ioutil.ReadFile("../cases/methodFromPhpDoc.php")
+	if err != nil {
+		panic(err)
+	}
+	document := NewDocument("test1", string(data))
+	document.Load()
+	cupaloy.SnapshotT(t, document.Children)
+}
