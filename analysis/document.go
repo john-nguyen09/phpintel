@@ -436,11 +436,13 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 			continue
 		}
 	}
-	symbol := s.Children[index]
-	ok := false
-	if argumentList, ok = symbol.(*ArgumentList); ok && util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
-		if index-1 >= 0 {
-			hasParamsResolvable = s.Children[index-1].(HasParamsResolvable)
+	if index >= 0 && index <= len(s.Children)-1 {
+		symbol := s.Children[index]
+		ok := false
+		if argumentList, ok = symbol.(*ArgumentList); ok && util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
+			if index-1 >= 0 {
+				hasParamsResolvable = s.Children[index-1].(HasParamsResolvable)
+			}
 		}
 	}
 	return argumentList, hasParamsResolvable

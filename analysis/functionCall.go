@@ -72,11 +72,16 @@ func (s *FunctionCall) Resolve(store *Store) {
 	if s.hasResolved {
 		return
 	}
-	functions := store.GetFunctions(s.Name)
+	s.hasResolved = true
+	document := store.GetOrCreateDocument(s.GetLocation().URI)
+	if document == nil {
+		return
+	}
+	typeString := NewTypeString(s.Name)
+	functions := store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range functions {
 		s.Type.merge(function.returnTypes)
 	}
-	s.hasResolved = true
 }
 
 func (s *FunctionCall) GetTypes() TypeComposite {
