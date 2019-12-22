@@ -6,6 +6,18 @@ func (s *Class) SearchInheritedMethods(store *Store, keyword string, excludedMet
 	for _, excludedMethod := range excludedMethods {
 		excludeNames[excludedMethod.Name] = true
 	}
+	for _, typeString := range s.Use {
+		if typeString.IsEmpty() {
+			continue
+		}
+		for _, method := range store.SearchMethods(typeString.GetFQN(), keyword) {
+			if _, ok := excludeNames[method.Name]; ok {
+				continue
+			}
+			methods = append(methods, method)
+			excludeNames[method.Name] = true
+		}
+	}
 	if !s.Extends.IsEmpty() {
 		for _, method := range store.SearchMethods(s.Extends.GetFQN(), keyword) {
 			if _, ok := excludeNames[method.Name]; ok || method.VisibilityModifier == Private {
@@ -34,6 +46,18 @@ func (s *Class) GetInheritedMethods(store *Store, name string, excludedMethods [
 	excludeNames := map[string]bool{}
 	for _, excludedMethod := range excludedMethods {
 		excludeNames[excludedMethod.Name] = true
+	}
+	for _, typeString := range s.Use {
+		if typeString.IsEmpty() {
+			continue
+		}
+		for _, method := range store.GetMethods(typeString.GetFQN(), name) {
+			if _, ok := excludeNames[method.Name]; ok {
+				continue
+			}
+			methods = append(methods, method)
+			excludeNames[method.Name] = true
+		}
 	}
 	if !s.Extends.IsEmpty() {
 		for _, method := range store.GetMethods(s.Extends.GetFQN(), name) {

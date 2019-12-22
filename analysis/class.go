@@ -230,6 +230,10 @@ func (s *Class) Serialise(serialiser *Serialiser) {
 	for _, theInterface := range s.Interfaces {
 		theInterface.Write(serialiser)
 	}
+	serialiser.WriteInt(len(s.Use))
+	for _, use := range s.Use {
+		use.Write(serialiser)
+	}
 }
 
 func ReadClass(serialiser *Serialiser) *Class {
@@ -243,6 +247,10 @@ func ReadClass(serialiser *Serialiser) *Class {
 	numInterfaces := serialiser.ReadInt()
 	for i := 0; i < numInterfaces; i++ {
 		theClass.Interfaces = append(theClass.Interfaces, ReadTypeString(serialiser))
+	}
+	numUse := serialiser.ReadInt()
+	for i := 0; i < numUse; i++ {
+		theClass.Use = append(theClass.Use, ReadTypeString(serialiser))
 	}
 	return theClass
 }
