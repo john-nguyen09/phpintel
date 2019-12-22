@@ -26,6 +26,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	phpDoc := document.getValidPhpDoc(function.location)
 	document.pushVariableTable(node)
 
+	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -36,6 +37,9 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 			function.analyseHeader(document, p)
 			if phpDoc != nil {
 				function.applyPhpDoc(document, *phpDoc)
+			}
+			for _, param := range function.Params {
+				variableTable.add(param.ToVariable())
 			}
 		}
 		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
@@ -78,12 +82,10 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
-	variableTable := document.getCurrentVariableTable()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
 			param := newParameter(document, p)
 			s.Params = append(s.Params, param)
-			variableTable.add(param.ToVariable())
 		}
 
 		child = traverser.Advance()
