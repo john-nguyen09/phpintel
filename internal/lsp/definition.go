@@ -38,6 +38,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 				locations = append(locations, theInterface.GetLocation())
 			}
 		}
+	case *analysis.TraitAccess:
+		for _, typeString := range v.GetTypes().Resolve() {
+			for _, trait := range store.GetTraits(typeString.GetFQN()) {
+				locations = append(locations, trait.GetLocation())
+			}
+		}
 	case *analysis.ConstantAccess:
 		for _, typeString := range v.Type.Resolve() {
 			for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, typeString)) {

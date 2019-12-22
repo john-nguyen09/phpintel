@@ -14,7 +14,8 @@
       fqn: (string) "",
       original: (string) ""
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Class)({
     description: (string) "",
@@ -31,6 +32,7 @@
       fqn: (string) "",
       original: (string) ""
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   })
 }

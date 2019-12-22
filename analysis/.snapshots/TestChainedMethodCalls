@@ -14,7 +14,8 @@
       fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
       original: (string) (len=15) "ServiceProvider"
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {

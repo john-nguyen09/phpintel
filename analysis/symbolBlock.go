@@ -82,6 +82,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.GlobalDeclaration:          newGlobalDeclaration,
 		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
 		phrase.InstanceOfExpression:       processInstanceofExpression,
+		phrase.TraitUseClause:             processTraitUseClause,
 	}
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil

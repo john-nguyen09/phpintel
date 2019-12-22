@@ -14,7 +14,8 @@
       fqn: (string) "",
       original: (string) ""
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
@@ -289,7 +290,8 @@
       fqn: (string) "",
       original: (string) ""
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Method)({
     location: (protocol.Location) {

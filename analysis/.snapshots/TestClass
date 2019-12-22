@@ -14,7 +14,8 @@
       fqn: (string) "",
       original: (string) ""
     },
-    Interfaces: ([]analysis.TypeString) <nil>
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.Method)({
     location: (protocol.Location) {
@@ -59,7 +60,8 @@
         fqn: (string) (len=14) "\\TestInterface",
         original: (string) (len=13) "TestInterface"
       }
-    }
+    },
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
@@ -127,7 +129,8 @@
         fqn: (string) (len=15) "\\TestInterface2",
         original: (string) (len=14) "TestInterface2"
       }
-    }
+    },
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.InterfaceAccess)({
     Expression: (analysis.Expression) {
@@ -195,7 +198,8 @@
         fqn: (string) (len=15) "\\TestInterface2",
         original: (string) (len=14) "TestInterface2"
       }
-    }
+    },
+    Use: ([]analysis.TypeString) <nil>
   }),
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {

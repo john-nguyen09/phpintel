@@ -1,0 +1,138 @@
+([]analysis.Symbol) (len=5) {
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 9:0-12:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=32) "\\App\\Http\\Controllers\\Controller",
+      original: (string) (len=10) "Controller"
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) (len=30) "\\Illuminate\\Routing\\Controller",
+      original: (string) (len=14) "BaseController"
+    },
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) (len=3) {
+      (analysis.TypeString) {
+        fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
+        original: (string) (len=18) "AuthorizesRequests"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs",
+        original: (string) (len=14) "DispatchesJobs"
+      },
+      (analysis.TypeString) {
+        fqn: (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests",
+        original: (string) (len=17) "ValidatesRequests"
+      }
+    }
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=30) "\\Illuminate\\Routing\\Controller",
+            original: (string) (len=14) "BaseController"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=30) "\\Illuminate\\Routing\\Controller": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 9:25-9:39
+      },
+      Name: (string) (len=14) "BaseController"
+    }
+  }),
+  (*analysis.TraitAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
+            original: (string) (len=18) "AuthorizesRequests"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 11:8-11:26
+      },
+      Name: (string) (len=18) "AuthorizesRequests"
+    }
+  }),
+  (*analysis.TraitAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs",
+            original: (string) (len=14) "DispatchesJobs"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 11:28-11:42
+      },
+      Name: (string) (len=14) "DispatchesJobs"
+    }
+  }),
+  (*analysis.TraitAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests",
+            original: (string) (len=17) "ValidatesRequests"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests": (bool) true
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 11:44-11:61
+      },
+      Name: (string) (len=17) "ValidatesRequests"
+    }
+  })
+}
+(*analysis.TraitAccess)({
+  Expression: (analysis.Expression) {
+    Type: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
+          original: (string) (len=18) "AuthorizesRequests"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests": (bool) true
+      }
+    },
+    Scope: (analysis.HasTypes) <nil>,
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:8-11:26
+    },
+    Name: (string) (len=18) "AuthorizesRequests"
+  }
+})

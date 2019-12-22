@@ -3,9 +3,9 @@ package cmd
 import (
 	"strings"
 
+	md "github.com/evorts/html-to-markdown"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	md "github.com/evorts/html-to-markdown"
 )
 
 func concatDescriptionIfAvailable(content string, description string) string {
@@ -146,12 +146,11 @@ func FunctionToHover(ref analysis.HasTypes, function analysis.Function) *protoco
 	}
 }
 
-// TODO: Implement TraitUseClause to use this function
 func TraitToHover(ref analysis.HasTypes, trait analysis.Trait) *protocol.Hover {
 	content := "```"
 	content += "trait " + trait.Name.GetOriginal()
 	content += "```"
-	content = concatDescriptionIfAvailable(content, trait.GetDescription()) + "```"
+	content = concatDescriptionIfAvailable(content, trait.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{

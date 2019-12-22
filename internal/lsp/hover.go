@@ -60,6 +60,14 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				break
 			}
 		}
+	case *analysis.TraitAccess:
+		for _, typeString := range v.GetTypes().Resolve() {
+			traits := store.GetTraits(typeString.GetFQN())
+			if len(traits) > 0 {
+				hover = cmd.TraitToHover(v, *traits[0])
+				break
+			}
+		}
 	case *analysis.ConstantAccess:
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}

@@ -11,7 +11,7 @@ type InterfaceAccess struct {
 }
 
 func newInterfaceAccess(document *Document, node *phrase.Phrase) *InterfaceAccess {
-	InterfaceAccess := &InterfaceAccess{
+	interfaceAccess := &InterfaceAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
 			Name:     document.GetPhraseText(node),
@@ -23,8 +23,8 @@ func newInterfaceAccess(document *Document, node *phrase.Phrase) *InterfaceAcces
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
-	InterfaceAccess.Type = types
-	return InterfaceAccess
+	interfaceAccess.Type = types
+	return interfaceAccess
 }
 
 func (s *InterfaceAccess) GetLocation() protocol.Location {

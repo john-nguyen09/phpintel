@@ -19,6 +19,7 @@
         fqn: (string) (len=14) "\\TestInterface",
         original: (string) (len=13) "TestInterface"
       }
-    }
+    },
+    Use: ([]analysis.TypeString) <nil>
   })
 }

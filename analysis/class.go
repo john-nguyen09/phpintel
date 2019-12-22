@@ -16,6 +16,7 @@ type Class struct {
 	Name       TypeString
 	Extends    TypeString
 	Interfaces []TypeString
+	Use        []TypeString
 }
 
 func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
@@ -252,4 +253,8 @@ func (s *Class) GetConstructor(store *Store) *Method {
 		return methods[0]
 	}
 	return nil
+}
+
+func (s *Class) AddUse(name TypeString) {
+	s.Use = append(s.Use, name)
 }
