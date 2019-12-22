@@ -84,6 +84,8 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
 		phrase.InstanceOfExpression:       processInstanceofExpression,
 		phrase.TraitUseClause:             processTraitUseClause,
+
+		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
 	}
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil
