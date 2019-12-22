@@ -209,7 +209,7 @@ func newPhpDoc(description string, tags []tag) phpDocComment {
 }
 
 func (d phpDocComment) findTagsByTagName(tagName string) []tag {
-	tags := d.tags[:0]
+	tags := []tag{}
 
 	for _, tag := range d.tags {
 		if tag.TagName == tagName {
