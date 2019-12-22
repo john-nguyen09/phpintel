@@ -53,6 +53,7 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.IssetIntrinsic:                 true,
 	phrase.EvalIntrinsic:                  true,
 	phrase.VariableList:                   true,
+	phrase.TraitMemberDeclarationList:     true,
 }
 
 var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{

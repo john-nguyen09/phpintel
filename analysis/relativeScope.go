@@ -18,8 +18,13 @@ func isNameParent(name string) bool {
 func newRelativeScope(document *Document, location protocol.Location) *RelativeScope {
 	types := newTypeComposite()
 	lastClass := document.getLastClass()
-	if class, ok := lastClass.(*Class); ok {
-		types.add(class.Name)
+	switch v := lastClass.(type) {
+	case *Class:
+		types.add(v.Name)
+	case *Interface:
+		types.add(v.Name)
+	case *Trait:
+		types.add(v.Name)
 	}
 	return &RelativeScope{
 		location: location,

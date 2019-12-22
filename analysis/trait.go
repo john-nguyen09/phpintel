@@ -19,17 +19,21 @@ func newTrait(document *Document, node *phrase.Phrase) Symbol {
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(trait)
-	if traitHeader, ok := node.Children[0].(*phrase.Phrase); ok && traitHeader.Type == phrase.TraitDeclarationHeader {
-		trait.analyseHeader(document, traitHeader)
-	}
-
-	if len(node.Children) >= 2 {
-		if classBody, ok := node.Children[1].(*phrase.Phrase); ok {
-			scanForChildren(document, classBody)
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.TraitDeclarationHeader:
+				document.addSymbol(trait)
+				trait.analyseHeader(document, p)
+			case phrase.TraitDeclarationBody:
+				scanForChildren(document, p)
+			}
 		}
+		child = traverser.Advance()
 	}
-	trait.Name.SetNamespace(document.importTable.namespace)
-	return trait
+	return nil
 }
 
 func (s *Trait) analyseHeader(document *Document, traitHeader *phrase.Phrase) {
@@ -39,6 +43,7 @@ func (s *Trait) analyseHeader(document *Document, traitHeader *phrase.Phrase) {
 		if token, ok := child.(*lexer.Token); ok {
 			if token.Type == lexer.Name {
 				s.Name = NewTypeString(document.GetTokenText(token))
+				s.Name.SetNamespace(document.GetImportTable().namespace)
 			}
 		}
 
