@@ -793,8 +793,15 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=5) "array",
+            original: (string) (len=5) "array"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=5) "array": (bool) true
+        }
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -1069,8 +1076,15 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=5) "array",
+            original: (string) (len=5) "array"
+          }
+        },
+        uniqueFQNs: (map[string]bool) (len=1) {
+          (string) (len=5) "array": (bool) true
+        }
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -1146,11 +1160,18 @@
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 11:49-11:60
         },
-        description: (string) "",
+        description: (string) (len=9) "post data",
         Name: (string) (len=5) "$data",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
-          uniqueFQNs: (map[string]bool) <nil>
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "array",
+              original: (string) (len=5) "array"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=5) "array": (bool) true
+          }
         },
         Value: (string) ""
       }),

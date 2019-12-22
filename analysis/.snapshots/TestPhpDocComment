@@ -1,0 +1,55 @@
+(analysis.phpDocComment) {
+  Description: (string) (len=55) "Run the validation routine against the given validator.",
+  tags: ([]analysis.tag) (len=3) {
+    (analysis.tag) {
+      TagName: (string) (len=6) "@param",
+      Name: (string) (len=10) "$validator",
+      Description: (string) "",
+      TypeString: (string) (len=52) "\\\\Illuminate\\\\Contracts\\\\Validation\\\\Validator|array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=6) "@param",
+      Name: (string) (len=8) "$request",
+      Description: (string) "",
+      TypeString: (string) (len=32) "\\\\Illuminate\\\\Http\\\\Request|null",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=7) "@return",
+      Name: (string) "",
+      Description: (string) "",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    }
+  },
+  Returns: ([]analysis.tag) (len=1) {
+    (analysis.tag) {
+      TagName: (string) (len=7) "@return",
+      Name: (string) "",
+      Description: (string) "",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    }
+  },
+  Properties: ([]analysis.tag) {
+  },
+  Methods: ([]analysis.tag) {
+  },
+  Vars: ([]analysis.tag) {
+  },
+  Globals: ([]analysis.tag) {
+  },
+  location: (protocol.Location) {
+    URI: (string) "",
+    Range: (protocol.Range) 0:0-0:0
+  },
+  PropertyReads: ([]analysis.tag) {
+  },
+  PropertyWrites: ([]analysis.tag) {
+  }
+}
