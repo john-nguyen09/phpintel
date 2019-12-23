@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"log"
 	"path"
 	"path/filepath"
 	"runtime/pprof"
@@ -85,6 +86,8 @@ func (s *Server) initialized(ctx context.Context, params *protocol.InitializedPa
 	s.stateMu.Lock()
 	s.state = serverInitialized
 	s.stateMu.Unlock()
+	version := protocol.GetVersion(ctx)
+	log.Println("phpintel server initialised. Version: " + version)
 	for _, folder := range s.pendingFolders {
 		s.store.addView(s, ctx, folder.URI)
 	}

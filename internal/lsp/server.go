@@ -7,7 +7,6 @@ package lsp
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"sync"
 
@@ -78,7 +77,6 @@ func (s *Server) Initialize(ctx context.Context, params *protocol.InitializePara
 }
 
 func (s *Server) Initialized(ctx context.Context, params *protocol.InitializedParams) error {
-	log.Println("phpintel server initialised")
 	return s.initialized(ctx, params)
 }
 

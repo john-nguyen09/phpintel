@@ -15,7 +15,7 @@ import (
 
 var (
 	flgVersion bool
-	version    string
+	version    string = "Unknown"
 	cpuprofile string
 )
 
@@ -43,6 +43,7 @@ func main() {
 	stream := jsonrpc2.NewHeaderStream(os.Stdin, os.Stdout)
 	ctx := context.Background()
 	ctx = protocol.WithCpuProfile(ctx, cpuprofile != "")
+	ctx = protocol.WithVersion(ctx, version)
 	ctx, srv := lsp.NewServer(ctx, stream)
 	srv.Run(ctx)
 }
