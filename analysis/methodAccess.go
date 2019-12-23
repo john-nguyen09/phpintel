@@ -25,6 +25,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 			methodAccess.Scope = expression
 		}
 	}
+	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()

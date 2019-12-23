@@ -9,12 +9,7 @@ import (
 
 func readMemberName(document *Document, traverser *util.Traverser) (string, protocol.Location) {
 	next := traverser.Peek()
-	var startPos *protocol.Position = nil
 	for nextToken, ok := next.(*lexer.Token); ok && (nextToken.Type == lexer.Whitespace || nextToken.Type == lexer.Arrow); {
-		if nextToken.Type == lexer.Arrow {
-			pos := document.positionAt(nextToken.Offset + nextToken.Length)
-			startPos = &pos
-		}
 		traverser.Advance()
 		next = traverser.Peek()
 		nextToken, ok = next.(*lexer.Token)
@@ -29,10 +24,6 @@ func readMemberName(document *Document, traverser *util.Traverser) (string, prot
 			}
 		}
 		location = document.GetNodeLocation(p)
-		if startPos != nil {
-			location.Range.Start = *startPos
-		}
-		name = string(document.GetText()[document.OffsetAtPosition(location.Range.Start):document.OffsetAtPosition(location.Range.End)])
 	}
 	return name, location
 }

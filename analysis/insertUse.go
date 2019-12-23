@@ -100,7 +100,7 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 func getIndentation(document *Document, node *phrase.Phrase) string {
 	firstToken := util.FirstToken(node)
 	tokenStartPosition := document.positionAt(firstToken.Offset)
-	startOffset := document.OffsetAtPosition(protocol.Position{
+	startOffset := document.offsetAtPosition(protocol.Position{
 		Line:      tokenStartPosition.Line,
 		Character: 0,
 	})

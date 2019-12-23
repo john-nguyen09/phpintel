@@ -2,7 +2,6 @@ package lsp
 
 import (
 	"context"
-	"strings"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -23,27 +22,17 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case *analysis.Variable:
 		completionList = variableCompletion(document, params.Position)
 	case *analysis.ConstantAccess:
-		completionList = nameCompletion(store, document, s, params.Position)
+		completionList = nameCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.ScopedConstantAccess:
-		completionList = scopedAccessCompletion(store, document, s, params.Position)
+		completionList = scopedAccessCompletion(store, document, s.Name, s.ResolveAndGetScope(store), params.Position)
 	case *analysis.PropertyAccess:
-		completionList = memberAccessCompletion(store, document, s, params.Position)
+		completionList = memberAccessCompletion(store, document, s.Name, s.ResolveAndGetScope(store), params.Position)
 	case *analysis.ClassTypeDesignator:
-		completionList = classCompletion(store, document, s, params.Position)
+		completionList = classCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.TypeDeclaration:
-		completionList = typeCompletion(store, document, s, params.Position)
+		completionList = typeCompletion(store, document, s, s.Name, params.Position)
 	}
 	return completionList, nil
-}
-
-func getWord(document *analysis.Document, pos protocol.Position, theRange protocol.Range, name string) string {
-	rangeEndOffset := document.OffsetAtPosition(theRange.End)
-	offset := document.OffsetAtPosition(pos)
-	if offset < rangeEndOffset {
-		runes := []rune(name)
-		return strings.TrimSpace(string(runes[:len(runes)-(rangeEndOffset-offset)]))
-	}
-	return strings.TrimSpace(name)
 }
 
 func variableCompletion(document *analysis.Document, pos protocol.Position) *protocol.CompletionList {
@@ -70,8 +59,8 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 	return completionList
 }
 
-func nameCompletion(store *analysis.Store, document *analysis.Document, symbol *analysis.ConstantAccess, pos protocol.Position) *protocol.CompletionList {
-	word := getWord(document, pos, symbol.GetLocation().Range, symbol.Name)
+func nameCompletion(store *analysis.Store, document *analysis.Document,
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
@@ -140,8 +129,8 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol *
 	return completionList
 }
 
-func classCompletion(store *analysis.Store, document *analysis.Document, symbol *analysis.ClassTypeDesignator, pos protocol.Position) *protocol.CompletionList {
-	word := getWord(document, pos, symbol.GetLocation().Range, symbol.Name)
+func classCompletion(store *analysis.Store, document *analysis.Document,
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
@@ -164,12 +153,11 @@ func classCompletion(store *analysis.Store, document *analysis.Document, symbol 
 	return completionList
 }
 
-func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, symbol *analysis.ScopedConstantAccess, pos protocol.Position) *protocol.CompletionList {
-	word := getWord(document, pos, symbol.GetLocation().Range, symbol.Name)
+func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	for _, scopeType := range symbol.ResolveAndGetScope(store).Resolve() {
+	for _, scopeType := range scope.Resolve() {
 		scope := scopeType.GetFQN()
 		properties := store.SearchProperties(scope, word)
 		for _, property := range properties {
@@ -205,12 +193,11 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, symbol *analysis.PropertyAccess, pos protocol.Position) *protocol.CompletionList {
-	word := getWord(document, pos, symbol.GetLocation().Range, symbol.Name)
+func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	for _, scopeType := range symbol.ResolveAndGetScope(store).Resolve() {
+	for _, scopeType := range scope.Resolve() {
 		scope := scopeType.GetFQN()
 		properties := store.SearchProperties(scope, word)
 		for _, property := range properties {
@@ -240,8 +227,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 }
 
 func typeCompletion(store *analysis.Store, document *analysis.Document,
-	symbol *analysis.TypeDeclaration, pos protocol.Position) *protocol.CompletionList {
-	word := getWord(document, pos, symbol.GetLocation().Range, symbol.Name)
+	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}

@@ -230,7 +230,7 @@ func (s *Document) positionAt(offset int) protocol.Position {
 	}
 }
 
-func (s *Document) OffsetAtPosition(pos protocol.Position) int {
+func (s *Document) offsetAtPosition(pos protocol.Position) int {
 	offset := s.offsetAtLine(pos.Line) + pos.Character
 	min := 0
 	if offset < len(s.text) {
@@ -460,8 +460,8 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		end := change.Range.End
 		text := []rune(change.Text)
 
-		startOffset := s.OffsetAtPosition(start)
-		endOffset := s.OffsetAtPosition(end)
+		startOffset := s.offsetAtPosition(start)
+		endOffset := s.offsetAtPosition(end)
 		newText := append(s.text[:0:0], s.text[0:startOffset]...)
 		newText = append(newText, text...)
 		newText = append(newText, s.text[endOffset:]...)
