@@ -11,7 +11,7 @@ func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
 	rootNode := document.GetRootNode()
 	diagnostics := []protocol.Diagnostic{}
 	traverser := util.NewTraverser(rootNode)
-	traverser.Traverse(func(node phrase.AstNode) bool {
+	traverser.Traverse(func(node phrase.AstNode, _ []*phrase.Phrase) bool {
 		if err, ok := node.(*phrase.ParseError); ok {
 			diagnostics = append(diagnostics, parserErrorToDiagnostic(document, err))
 		}

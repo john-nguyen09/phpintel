@@ -3,6 +3,7 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
+	"regexp"
 	"runtime/debug"
 	"sort"
 	"sync"
@@ -14,6 +15,8 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
+
+var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
 
 // Document contains information of documents
 type Document struct {
@@ -230,7 +233,7 @@ func (s *Document) positionAt(offset int) protocol.Position {
 	}
 }
 
-func (s *Document) offsetAtPosition(pos protocol.Position) int {
+func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	offset := s.offsetAtLine(pos.Line) + pos.Character
 	min := 0
 	if offset < len(s.text) {
@@ -384,6 +387,19 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
+func (s *Document) NodeSpineAt(offset int) util.NodeStack {
+	found := util.NodeStack{}
+	traverser := util.NewTraverser(s.GetRootNode())
+	traverser.Traverse(func(node phrase.AstNode, spine []*phrase.Phrase) bool {
+		if t, ok := node.(*lexer.Token); ok && offset > t.Offset && offset <= (t.Offset+t.Length) {
+			found = spine
+			return false
+		}
+		return true
+	})
+	return found
+}
+
 // SymbolAt is an interface to SymbolAtPos but with offset
 func (s *Document) SymbolAt(offset int) HasTypes {
 	pos := s.positionAt(offset)
@@ -408,6 +424,19 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 		}
 	}
 	return nil
+}
+
+func (s *Document) WordAtPos(pos protocol.Position) string {
+	offset := s.OffsetAtPosition(pos)
+	lineNumber := sort.SearchInts(s.lineOffsets, offset) - 1
+	if lineNumber < 0 {
+		lineNumber = 0
+	}
+	if lineNumber < len(s.lineOffsets)-1 && offset == s.lineOffsets[lineNumber+1] {
+		lineNumber++
+	}
+	lineSubString := string(s.GetText()[s.lineOffsets[lineNumber]:offset])
+	return wordRegex.FindString(lineSubString)
 }
 
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
@@ -460,8 +489,8 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		end := change.Range.End
 		text := []rune(change.Text)
 
-		startOffset := s.offsetAtPosition(start)
-		endOffset := s.offsetAtPosition(end)
+		startOffset := s.OffsetAtPosition(start)
+		endOffset := s.OffsetAtPosition(end)
 		newText := append(s.text[:0:0], s.text[0:startOffset]...)
 		newText = append(newText, text...)
 		newText = append(newText, s.text[endOffset:]...)

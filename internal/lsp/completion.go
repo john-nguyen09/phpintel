@@ -2,9 +2,12 @@ package lsp
 
 import (
 	"context"
+	"strings"
 
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 func (s *Server) completion(ctx context.Context, params *protocol.CompletionParams) (*protocol.CompletionList, error) {
@@ -17,16 +20,46 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	document.Load()
 	var completionList *protocol.CompletionList = nil
 	symbol := document.SymbolAtPos(params.Position)
+	word := document.WordAtPos(params.Position)
+	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
+	parent := nodes.Parent()
+	switch parent.Type {
+	case phrase.SimpleVariable:
+		completionList = variableCompletion(document, params.Position, word)
+	case phrase.NamespaceName:
+		nodes.Parent()
+		if nodes.Parent().Type == phrase.ConstantAccessExpression {
+			completionList = nameCompletion(store, document, symbol, word)
+		}
+	case phrase.ErrorScopedAccessExpression:
+		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
+			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+		}
+	case phrase.Identifier:
+		nodes.Parent()
+		parent := nodes.Parent()
+		if parent.Type == phrase.ClassConstantAccessExpression {
+			symbol := document.SymbolAt(util.FirstToken(&parent).Offset)
+			if s, ok := symbol.(*analysis.ClassAccess); ok {
+				s.Resolve(store)
+				completionList = scopedAccessCompletion(store, document, word, s.Type)
+			}
+		}
+	case phrase.PropertyAccessExpression:
+		symbol := document.SymbolAt(util.FirstToken(&parent).Offset)
+		if s, ok := symbol.(analysis.HasTypes); ok {
+			s.Resolve(store)
+			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
+		}
+	case phrase.MemberName:
+		if nodes.Parent().Type == phrase.PropertyAccessExpression {
+			if s, ok := symbol.(*analysis.PropertyAccess); ok {
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), params.Position)
+			}
+		}
+	}
 	// log.Printf("Completion: %T", symbol)
 	switch s := symbol.(type) {
-	case *analysis.Variable:
-		completionList = variableCompletion(document, params.Position)
-	case *analysis.ConstantAccess:
-		completionList = nameCompletion(store, document, s, s.Name, params.Position)
-	case *analysis.ScopedConstantAccess:
-		completionList = scopedAccessCompletion(store, document, s.Name, s.ResolveAndGetScope(store), params.Position)
-	case *analysis.PropertyAccess:
-		completionList = memberAccessCompletion(store, document, s.Name, s.ResolveAndGetScope(store), params.Position)
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.TypeDeclaration:
@@ -35,7 +68,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	return completionList, nil
 }
 
-func variableCompletion(document *analysis.Document, pos protocol.Position) *protocol.CompletionList {
+func variableCompletion(document *analysis.Document, pos protocol.Position, word string) *protocol.CompletionList {
 	varTable := document.GetVariableTableAt(pos)
 	symbol := document.SymbolAtPos(pos)
 	completionList := &protocol.CompletionList{
@@ -46,6 +79,9 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 			continue
 		}
 		if symbol != nil && symbol.GetLocation().Range == variable.GetLocation().Range {
+			continue
+		}
+		if word != "" && !strings.Contains(variable.Name, word) {
 			continue
 		}
 
@@ -59,8 +95,7 @@ func variableCompletion(document *analysis.Document, pos protocol.Position) *pro
 	return completionList
 }
 
-func nameCompletion(store *analysis.Store, document *analysis.Document,
-	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+func nameCompletion(store *analysis.Store, document *analysis.Document, symbol analysis.HasTypes, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
@@ -153,7 +188,7 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	return completionList
 }
 
-func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite, pos protocol.Position) *protocol.CompletionList {
+func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
