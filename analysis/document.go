@@ -426,6 +426,23 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	return nil
 }
 
+func (s *Document) SymbolBeforePos(pos protocol.Position) HasTypes {
+	s.loadMu.Lock()
+	defer s.loadMu.Unlock()
+	index := sort.Search(len(s.Children), func(i int) bool {
+		location := s.Children[i].GetLocation()
+		return util.IsInRange(pos, location.Range) == 0
+	})
+	for i := index - 1; i >= 0; i-- {
+		symbol := s.Children[i]
+		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
+		if hasTypes, ok := symbol.(HasTypes); ok && inRange > 0 {
+			return hasTypes
+		}
+	}
+	return nil
+}
+
 func (s *Document) WordAtPos(pos protocol.Position) string {
 	offset := s.OffsetAtPosition(pos)
 	lineNumber := sort.SearchInts(s.lineOffsets, offset) - 1
