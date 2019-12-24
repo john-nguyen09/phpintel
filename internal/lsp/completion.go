@@ -23,6 +23,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	word := document.WordAtPos(params.Position)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
 	parent := nodes.Parent()
+	// log.Printf("Completion: %T %v", symbol, parent)
 	switch parent.Type {
 	case phrase.SimpleVariable:
 		completionList = variableCompletion(document, params.Position, word)
@@ -58,7 +59,6 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			}
 		}
 	}
-	// log.Printf("Completion: %T", symbol)
 	switch s := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s, s.Name, params.Position)

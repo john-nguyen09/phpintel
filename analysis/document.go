@@ -392,7 +392,7 @@ func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	traverser := util.NewTraverser(s.GetRootNode())
 	traverser.Traverse(func(node phrase.AstNode, spine []*phrase.Phrase) bool {
 		if t, ok := node.(*lexer.Token); ok && offset > t.Offset && offset <= (t.Offset+t.Length) {
-			found = spine
+			found = append(spine[:0:0], spine...)
 			return false
 		}
 		return true
