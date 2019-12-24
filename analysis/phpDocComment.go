@@ -31,7 +31,7 @@ var /* const */ whitespacePattern = regexp.MustCompile(`\s+`)
 var /* const */ paramOrPropPattern = regexp.MustCompile(`^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
 var /* const */ varPattern = regexp.MustCompile(`^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
 var /* const */ returnPattern = regexp.MustCompile(`^(@return)\s+(\S+)\s*(.*)$`)
-var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*)\s*\)\s*(.*)$`)
+var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*?)\s*?\)\s*(.*)$`)
 var /* const */ globalPattern = regexp.MustCompile(`^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
 
 func typeTag(tagName string, typeString string, name string, description string) tag {
