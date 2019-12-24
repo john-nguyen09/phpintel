@@ -137,6 +137,7 @@ func (s *Store) Migrate(newVersion string) {
 	if sv.LessThan(targetV) {
 		log.Println("Clearing database for upgrade.")
 		s.Clear()
+		s.PutVersion(newVersion)
 	}
 }
 
