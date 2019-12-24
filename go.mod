@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/GeertJohan/go.rice v1.0.0
+	github.com/Masterminds/semver v1.5.0
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/evorts/html-to-markdown v0.0.3

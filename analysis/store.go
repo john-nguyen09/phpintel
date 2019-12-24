@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/Masterminds/semver"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
@@ -38,6 +39,8 @@ const (
 	propertyCompletionIndex   string = "propertyCompletionIndex"
 	classConstCompletionIndex string = "classConstCompletionIndex"
 )
+
+var /* const */ versionKey = []byte("Version")
 
 const scopeSep = "::"
 
@@ -104,6 +107,37 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 
 func (s *Store) Close() error {
 	return s.db.Close()
+}
+
+func (s *Store) GetStoreVersion() string {
+	v, err := s.db.Get(versionKey, nil)
+	if err != nil {
+		return "v0.0.0"
+	}
+	return string(v)
+}
+
+func (s *Store) PutVersion(version string) {
+	s.db.Put(versionKey, []byte(version), nil)
+}
+
+func (s *Store) Clear() {
+	it := s.db.NewIterator(nil, nil)
+	for it.Next() {
+		s.db.Delete(it.Key(), nil)
+	}
+	it.Release()
+}
+
+func (s *Store) Migrate(newVersion string) {
+	storeVersion := s.GetStoreVersion()
+	sv, _ := semver.NewVersion(storeVersion)
+
+	targetV, _ := semver.NewVersion("v0.0.12")
+	if sv.LessThan(targetV) {
+		log.Println("Clearing database for upgrade.")
+		s.Clear()
+	}
 }
 
 func (s *Store) LoadStubs() {
