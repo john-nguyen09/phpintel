@@ -53,6 +53,9 @@ func hasParamToSignatureInformation(hasParam analysis.HasParams) protocol.Signat
 			label += param.Type.ToString() + " "
 		}
 		label += param.Name
+		if param.Value != "" {
+			label += " = " + param.Value
+		}
 		paramLabels = append(paramLabels, label)
 		parameters = append(parameters, protocol.ParameterInformation{
 			Label:         label,

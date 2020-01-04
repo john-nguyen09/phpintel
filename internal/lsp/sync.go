@@ -16,7 +16,10 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 	if store == nil {
 		return StoreNotFound(uri)
 	}
-	store.OpenDocument(uri)
+	document := store.OpenDocument(uri)
+	if document != nil {
+		s.provideDiagnostics(ctx, document)
+	}
 	return nil
 }
 
@@ -46,7 +49,9 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 		matched := strings.HasSuffix(filePath, ".php")
 
 		if matched {
-			s.store.createJobs <- filePath
+			s.store.createJobs <- CreatorJob{
+				filePath: filePath,
+			}
 			continue
 		}
 
@@ -62,7 +67,9 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 			godirwalk.Walk(filePath, &godirwalk.Options{
 				Callback: func(path string, de *godirwalk.Dirent) error {
 					if !de.IsDir() && strings.HasSuffix(path, ".php") {
-						s.store.createJobs <- path
+						s.store.createJobs <- CreatorJob{
+							filePath: path,
+						}
 					}
 					return nil
 				},

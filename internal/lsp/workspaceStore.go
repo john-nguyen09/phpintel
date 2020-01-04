@@ -8,6 +8,7 @@ import (
 	"log"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis"
@@ -19,11 +20,16 @@ import (
 const numCreators int = 2
 const numDeletors int = 1
 
+type CreatorJob struct {
+	filePath  string
+	waitGroup *sync.WaitGroup
+}
+
 type workspaceStore struct {
 	server     *Server
 	ctx        context.Context
 	stores     []*analysis.Store
-	createJobs chan string
+	createJobs chan CreatorJob
 	deleteJobs chan string
 }
 
@@ -32,7 +38,7 @@ func newWorkspaceStore(server *Server, ctx context.Context) *workspaceStore {
 		server:     server,
 		ctx:        ctx,
 		stores:     []*analysis.Store{},
-		createJobs: make(chan string),
+		createJobs: make(chan CreatorJob),
 		deleteJobs: make(chan string),
 	}
 	for i := 0; i < numCreators; i++ {
@@ -45,13 +51,19 @@ func newWorkspaceStore(server *Server, ctx context.Context) *workspaceStore {
 }
 
 func (s *workspaceStore) newCreator(id int) {
-	for filePath := range s.createJobs {
-		uri := util.PathToUri(filePath)
+	for job := range s.createJobs {
+		uri := util.PathToUri(job.filePath)
 		store := s.getStore(uri)
 		if store == nil {
+			if job.waitGroup != nil {
+				job.waitGroup.Done()
+			}
 			continue
 		}
-		s.addDocument(store, filePath)
+		s.addDocument(store, job.filePath)
+		if job.waitGroup != nil {
+			job.waitGroup.Done()
+		}
 	}
 }
 
@@ -111,6 +123,7 @@ func (s *workspaceStore) registerFileWatcher(path string, server *Server, ctx co
 }
 
 func (s *workspaceStore) indexFolder(store *analysis.Store, folderPath string) {
+	var waitGroup sync.WaitGroup
 	store.PrepareForIndexing()
 	go func() {
 		log.Println("Start indexing")
@@ -120,12 +133,17 @@ func (s *workspaceStore) indexFolder(store *analysis.Store, folderPath string) {
 			Callback: func(path string, de *godirwalk.Dirent) error {
 				if !de.IsDir() && strings.HasSuffix(path, ".php") {
 					count++
-					s.createJobs <- path
+					waitGroup.Add(1)
+					s.createJobs <- CreatorJob{
+						filePath:  path,
+						waitGroup: &waitGroup,
+					}
 				}
 				return nil
 			},
 			Unsorted: true,
 		})
+		waitGroup.Wait()
 		store.FinishIndexing()
 		elapsed := time.Since(start)
 		log.Printf("Finished indexing %d files in %s", count, elapsed)
@@ -142,10 +160,7 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 }
 
 func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
-	document := store.CompareAndIndexDocument(filePath)
-	if document != nil {
-		s.server.provideDiagnostics(s.ctx, document)
-	}
+	store.CompareAndIndexDocument(filePath)
 }
 
 func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {

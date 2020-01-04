@@ -172,15 +172,16 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	return document
 }
 
-func (s *Store) OpenDocument(uri protocol.DocumentURI) {
+func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
 		log.Printf("Document %s not found", uri)
-		return
+		return nil
 	}
 	document.Open()
 	document.Load()
 	s.SyncDocument(document)
+	return document
 }
 
 func (s *Store) CloseDocument(uri protocol.DocumentURI) {
