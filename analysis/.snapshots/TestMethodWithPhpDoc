@@ -28,6 +28,74 @@
       uniqueFQNs: (map[string]bool) <nil>
     }
   }),
+  (*analysis.Method)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:1-25:2
+    },
+    Name: (string) (len=30) "save_post_data_and_attachments",
+    Params: ([]*analysis.Parameter) (len=2) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 11:49-11:60
+        },
+        description: (string) (len=9) "post data",
+        Name: (string) (len=5) "$data",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "array",
+              original: (string) (len=5) "array"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=5) "array": (bool) true
+          }
+        },
+        Value: (string) ""
+      }),
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 11:62-11:75
+        },
+        description: (string) (len=11) "attachments",
+        Name: (string) (len=6) "$files",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "array",
+              original: (string) (len=5) "array"
+            }
+          },
+          uniqueFQNs: (map[string]bool) (len=1) {
+            (string) (len=5) "array": (bool) true
+          }
+        },
+        Value: (string) (len=4) "null"
+      })
+    },
+    returnTypes: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) (len=1) {
+        (analysis.TypeString) {
+          fqn: (string) (len=12) "\\bscitl\\post",
+          original: (string) (len=12) "\\bscitl\\post"
+        }
+      },
+      uniqueFQNs: (map[string]bool) (len=1) {
+        (string) (len=12) "\\bscitl\\post": (bool) true
+      }
+    },
+    description: (string) (len=30) "Save post data and attachments",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=16) "\\bscitl\\sss_user",
+      original: (string) (len=8) "sss_user"
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 2,
+    IsStatic: (bool) false,
+    ClassModifier: (analysis.ClassModifierValue) 0
+  }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -1147,73 +1215,5 @@
     description: (string) "",
     canReferenceGlobal: (bool) false,
     hasResolved: (bool) false
-  }),
-  (*analysis.Method)({
-    location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 11:1-25:2
-    },
-    Name: (string) (len=30) "save_post_data_and_attachments",
-    Params: ([]*analysis.Parameter) (len=2) {
-      (*analysis.Parameter)({
-        location: (protocol.Location) {
-          URI: (string) (len=5) "test1",
-          Range: (protocol.Range) 11:49-11:60
-        },
-        description: (string) (len=9) "post data",
-        Name: (string) (len=5) "$data",
-        Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=5) "array",
-              original: (string) (len=5) "array"
-            }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=5) "array": (bool) true
-          }
-        },
-        Value: (string) ""
-      }),
-      (*analysis.Parameter)({
-        location: (protocol.Location) {
-          URI: (string) (len=5) "test1",
-          Range: (protocol.Range) 11:62-11:75
-        },
-        description: (string) (len=11) "attachments",
-        Name: (string) (len=6) "$files",
-        Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=5) "array",
-              original: (string) (len=5) "array"
-            }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=5) "array": (bool) true
-          }
-        },
-        Value: (string) (len=4) "null"
-      })
-    },
-    returnTypes: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) (len=1) {
-        (analysis.TypeString) {
-          fqn: (string) (len=12) "\\bscitl\\post",
-          original: (string) (len=12) "\\bscitl\\post"
-        }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=12) "\\bscitl\\post": (bool) true
-      }
-    },
-    description: (string) (len=30) "Save post data and attachments",
-    Scope: (analysis.TypeString) {
-      fqn: (string) (len=16) "\\bscitl\\sss_user",
-      original: (string) (len=8) "sss_user"
-    },
-    VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) false,
-    ClassModifier: (analysis.ClassModifierValue) 0
   })
 }

@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -42,19 +43,42 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func newMethod(document *Document, node *phrase.Phrase) Symbol {
-	symbol := newFunction(document, node)
-	method := &Method{
-		IsStatic: false,
-	}
+func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
+	s.Params = []*Parameter{}
+	s.returnTypes = newTypeComposite()
+	phpDoc := document.getValidPhpDoc(s.location)
+	document.pushVariableTable(node)
 
-	if function, ok := symbol.(*Function); ok {
-		method.Name = function.Name.GetOriginal()
-		method.Params = function.Params
-		method.returnTypes = function.returnTypes
-		method.description = function.description
+	variableTable := document.getCurrentVariableTable()
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := util.IsOfPhraseType(child, phrase.MethodDeclarationHeader); ok {
+			s.analyseHeader(document, p)
+			if phpDoc != nil {
+				s.applyPhpDoc(document, *phpDoc)
+			}
+			document.addSymbol(s)
+			for _, param := range s.Params {
+				variableTable.add(param.ToVariable())
+			}
+		}
+		if p, ok := util.IsOfPhraseType(child, phrase.MethodDeclarationBody); ok {
+			scanForChildren(document, p)
+		}
+		child = traverser.Advance()
 	}
-	method.location = document.GetNodeLocation(node)
+}
+
+func newMethod(document *Document, node *phrase.Phrase) Symbol {
+	method := &Method{
+		IsStatic:    false,
+		location:    document.GetNodeLocation(node),
+		Params:      []*Parameter{},
+		returnTypes: newTypeComposite(),
+	}
+	method.analyseMethodNode(document, node)
+
 	lastClass := document.getLastClass()
 	if theClass, ok := lastClass.(*Class); ok {
 		method.Scope = theClass.Name
@@ -67,23 +91,14 @@ func newMethod(document *Document, node *phrase.Phrase) Symbol {
 		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
 	}
 
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if p, ok := util.IsOfPhraseType(child, phrase.MethodDeclarationHeader); ok {
-			method.analyseHeader(p)
-		}
-		child = traverser.Advance()
-	}
-
-	return method
+	return nil
 }
 
 func (s Method) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
+func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) {
 	traverser := util.NewTraverser(methodHeader)
 	child := traverser.Advance()
 	for child != nil {
@@ -91,10 +106,51 @@ func (s *Method) analyseHeader(methodHeader *phrase.Phrase) {
 			switch p.Type {
 			case phrase.MemberModifierList:
 				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
+			case phrase.ParameterDeclarationList:
+				{
+					s.analyseParameterDeclarationList(document, p)
+				}
+			case phrase.Identifier:
+				s.Name = document.GetPhraseText(p)
+			}
+		} else if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				{
+					s.Name = document.GetTokenText(token)
+				}
 			}
 		}
 		child = traverser.Advance()
 	}
+}
+
+func (s *Method) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
+			param := newParameter(document, p)
+			s.Params = append(s.Params, param)
+		}
+
+		child = traverser.Advance()
+	}
+}
+
+func (s *Method) applyPhpDoc(document *Document, phpDoc phpDocComment) {
+	tags := phpDoc.Returns
+	for _, tag := range tags {
+		s.returnTypes.merge(typesFromPhpDoc(document, tag.TypeString))
+	}
+	for index, param := range s.Params {
+		tag := phpDoc.findParamTag(param.Name)
+		if tag != nil {
+			s.Params[index].Type.merge(typesFromPhpDoc(document, tag.TypeString))
+			s.Params[index].description = tag.Description
+		}
+	}
+	s.description = phpDoc.Description
 }
 
 func (s Method) GetName() string {

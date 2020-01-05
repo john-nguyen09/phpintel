@@ -31,6 +31,7 @@ type Document struct {
 	variableTables     []*VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
+	argLists           []*ArgumentList
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
@@ -327,6 +328,9 @@ func (s *Document) addSymbol(other Symbol) {
 	if other == nil {
 		debug.PrintStack()
 	}
+	if argList, ok := other.(*ArgumentList); ok {
+		s.argLists = append(s.argLists, argList)
+	}
 	s.Children = append(s.Children, other)
 }
 
@@ -426,17 +430,22 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	return nil
 }
 
+// SymbolBeforePos returns a HasTypes before the position
 func (s *Document) SymbolBeforePos(pos protocol.Position) HasTypes {
 	s.loadMu.Lock()
 	defer s.loadMu.Unlock()
+	return s.hasTypesBeforePos(pos)
+}
+
+func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	index := sort.Search(len(s.Children), func(i int) bool {
 		location := s.Children[i].GetLocation()
-		return util.IsInRange(pos, location.Range) == 0
+		return util.IsInRange(pos, location.Range) <= 0
 	})
-	for i := index - 1; i >= 0; i-- {
+	for i := index; i >= 0; i-- {
 		symbol := s.Children[i]
 		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if hasTypes, ok := symbol.(HasTypes); ok && inRange > 0 {
+		if hasTypes, ok := symbol.(HasTypes); ok && (inRange > 0 || (inRange == 0 && pos == symbol.GetLocation().Range.End)) {
 			return hasTypes
 		}
 	}
@@ -461,34 +470,25 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	s.loadMu.Lock()
 	// log.Printf("ArgumentListAndFunctionCallAt: %p", s)
 	defer s.loadMu.Unlock()
-	index := sort.Search(len(s.Children), func(i int) bool {
-		location := s.Children[i].GetLocation()
+	index := sort.Search(len(s.argLists), func(i int) bool {
+		location := s.argLists[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
 	var argumentList *ArgumentList = nil
-	for i := index + 1; i < len(s.Children); i++ {
-		symbol := s.Children[i]
-		isArgumentList := false
-		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if inRange < 0 {
+	for _, argList := range s.argLists[index:] {
+		isInRange := util.IsInRange(pos, argList.GetLocation().Range)
+		if isInRange == 0 {
+			argumentList = argList
+		}
+		if isInRange < 0 {
 			break
 		}
-		if _, isArgumentList = symbol.(*ArgumentList); !isArgumentList {
-			continue
-		}
-		if inRange == 0 {
-			index = i
-			continue
-		}
 	}
-	if index >= 0 && index <= len(s.Children)-1 {
-		symbol := s.Children[index]
-		ok := false
-		if argumentList, ok = symbol.(*ArgumentList); ok && util.IsInRange(pos, symbol.GetLocation().Range) == 0 {
-			if index-1 >= 0 {
-				hasParamsResolvable = s.Children[index-1].(HasParamsResolvable)
-			}
+	if argumentList != nil {
+		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
+		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
+			hasParamsResolvable = resolvable
 		}
 	}
 	return argumentList, hasParamsResolvable
