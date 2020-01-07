@@ -3,7 +3,6 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
-	"log"
 	"regexp"
 	"runtime/debug"
 	"sort"
@@ -494,12 +493,10 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
-		log.Printf("%T", hasTypes)
 		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
 			hasParamsResolvable = resolvable
 		}
 	}
-	log.Printf("ArgumentListAndFunctionCallAt %T %T", argumentList, hasParamsResolvable)
 	return argumentList, hasParamsResolvable
 }
 
