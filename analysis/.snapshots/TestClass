@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=12) {
+([]analysis.Symbol) (len=5) {
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -63,48 +63,6 @@
     },
     Use: ([]analysis.TypeString) <nil>
   }),
-  (*analysis.ClassAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 8:25-8:34
-      },
-      Name: (string) (len=9) "TestClass"
-    }
-  }),
-  (*analysis.InterfaceAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=14) "\\TestInterface",
-            original: (string) (len=13) "TestInterface"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=14) "\\TestInterface": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 8:46-8:59
-      },
-      Name: (string) (len=13) "TestInterface"
-    }
-  }),
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -132,48 +90,6 @@
     },
     Use: ([]analysis.TypeString) <nil>
   }),
-  (*analysis.InterfaceAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=14) "\\TestInterface",
-            original: (string) (len=13) "TestInterface"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=14) "\\TestInterface": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 12:28-12:41
-      },
-      Name: (string) (len=13) "TestInterface"
-    }
-  }),
-  (*analysis.InterfaceAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=15) "\\TestInterface2",
-            original: (string) (len=14) "TestInterface2"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=15) "\\TestInterface2": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 12:43-12:57
-      },
-      Name: (string) (len=14) "TestInterface2"
-    }
-  }),
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -200,68 +116,5 @@
       }
     },
     Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.ClassAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 15:25-15:34
-      },
-      Name: (string) (len=9) "TestClass"
-    }
-  }),
-  (*analysis.InterfaceAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=14) "\\TestInterface",
-            original: (string) (len=13) "TestInterface"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=14) "\\TestInterface": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 15:46-15:59
-      },
-      Name: (string) (len=13) "TestInterface"
-    }
-  }),
-  (*analysis.InterfaceAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=15) "\\TestInterface2",
-            original: (string) (len=14) "TestInterface2"
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=15) "\\TestInterface2": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 15:61-15:75
-      },
-      Name: (string) (len=14) "TestInterface2"
-    }
   })
 }

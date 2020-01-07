@@ -24,7 +24,7 @@ func TestGlobalVariableReference(t *testing.T) {
 	referenceFile, _ := filepath.Abs("../cases/reference/globalVariable.php")
 	document := openDocument(store, referenceFile, "test2")
 
-	symbol := document.SymbolAt(14)
+	symbol := document.HasTypesAt(14)
 	var propAccess *PropertyAccess = nil
 	var ok bool
 	if propAccess, ok = symbol.(*PropertyAccess); !ok {
@@ -47,13 +47,13 @@ func TestGlobalVariableReference(t *testing.T) {
 	}
 	testResult.dbTypes = propAccess.ResolveAndGetScope(store)
 
-	symbol = document.SymbolAt(28)
+	symbol = document.HasTypesAt(28)
 	if propAccess, ok = symbol.(*PropertyAccess); !ok {
 		t.Errorf("At 28, %T is not *PropertyAccess", symbol)
 	}
 	testResult.outputTypes = propAccess.ResolveAndGetScope(store)
 
-	symbol = document.SymbolAt(35)
+	symbol = document.HasTypesAt(35)
 	var variable *Variable = nil
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 35, %T is not *Variable", symbol)
@@ -61,14 +61,14 @@ func TestGlobalVariableReference(t *testing.T) {
 	variable.Resolve(store)
 	testResult.varTypes = variable.GetTypes()
 
-	symbol = document.SymbolAt(109)
+	symbol = document.HasTypesAt(109)
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 109, %T is not *Variable", symbol)
 	}
 	variable.Resolve(store)
 	testResult.insideFunctionNoGlobalTypes = variable.GetTypes()
 
-	symbol = document.SymbolAt(177)
+	symbol = document.HasTypesAt(177)
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 177, %T is not *Variable", symbol)
 	}

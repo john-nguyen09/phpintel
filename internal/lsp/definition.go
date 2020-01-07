@@ -17,7 +17,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 	}
 	document := store.GetOrCreateDocument(uri)
 	document.Load()
-	symbol := document.SymbolAtPos(params.TextDocumentPositionParams.Position)
+	symbol := document.HasTypesAtPos(params.TextDocumentPositionParams.Position)
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:

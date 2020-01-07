@@ -15,5 +15,5 @@ func TestAssignment(t *testing.T) {
 	}
 	document := NewDocument("test1", string(data))
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	cupaloy.SnapshotT(t, document.hasTypesSymbols)
 }

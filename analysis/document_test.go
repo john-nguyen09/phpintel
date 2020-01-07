@@ -55,15 +55,15 @@ func TestSymbolAt(t *testing.T) {
 	data, _ := ioutil.ReadFile(memberAccess)
 	document := NewDocument("test1", string(data))
 	document.Load()
-	symbol := document.SymbolAt(14)
+	symbol := document.HasTypesAt(14)
 	if _, ok := symbol.(*ClassAccess); !ok {
 		t.Errorf("symbolAt(14) is not *ClassAccess but %T", symbol)
 	}
-	symbol = document.SymbolAt(20)
+	symbol = document.HasTypesAt(20)
 	if _, ok := symbol.(*ScopedPropertyAccess); !ok {
 		t.Errorf("symbolAt(20) is not *ScopedPropertyAccess but %T", symbol)
 	}
-	symbol = document.SymbolAt(19)
+	symbol = document.HasTypesAt(19)
 	if symbol != nil {
 		t.Errorf("symbolAt(19) is not nil but %T", symbol)
 	}
@@ -118,7 +118,7 @@ func TestSymbolBefore(t *testing.T) {
 	}
 	document := NewDocument("test1", string(data))
 	document.Load()
-	if reflect.TypeOf(document.SymbolBeforePos(protocol.Position{
+	if reflect.TypeOf(document.HasTypesBeforePos(protocol.Position{
 		Line:      1,
 		Character: 32,
 	})).String() != "*analysis.MethodAccess" {

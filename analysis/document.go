@@ -3,6 +3,7 @@ package analysis
 import (
 	"crypto/md5"
 	"encoding/json"
+	"log"
 	"regexp"
 	"runtime/debug"
 	"sort"
@@ -31,6 +32,7 @@ type Document struct {
 	variableTables     []*VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
+	hasTypesSymbols    []HasTypes
 	argLists           []*ArgumentList
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
@@ -330,6 +332,11 @@ func (s *Document) addSymbol(other Symbol) {
 	}
 	if argList, ok := other.(*ArgumentList); ok {
 		s.argLists = append(s.argLists, argList)
+		return
+	}
+	if h, ok := other.(HasTypes); ok {
+		s.hasTypesSymbols = append(s.hasTypesSymbols, h)
+		return
 	}
 	s.Children = append(s.Children, other)
 }
@@ -404,21 +411,21 @@ func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	return found
 }
 
-// SymbolAt is an interface to SymbolAtPos but with offset
-func (s *Document) SymbolAt(offset int) HasTypes {
+// HasTypesAt is an interface to SymbolAtPos but with offset
+func (s *Document) HasTypesAt(offset int) HasTypes {
 	pos := s.positionAt(offset)
-	return s.SymbolAtPos(pos)
+	return s.HasTypesAtPos(pos)
 }
 
-// SymbolAtPos returns a HasTypes symbol at the position
-func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
+// HasTypesAtPos returns a HasTypes symbol at the position
+func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	s.loadMu.Lock()
 	defer s.loadMu.Unlock()
-	index := sort.Search(len(s.Children), func(i int) bool {
-		location := s.Children[i].GetLocation()
+	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
+		location := s.hasTypesSymbols[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
-	for _, symbol := range s.Children[index:] {
+	for _, symbol := range s.hasTypesSymbols[index:] {
 		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
 		if inRange < 0 {
 			break
@@ -430,22 +437,22 @@ func (s *Document) SymbolAtPos(pos protocol.Position) HasTypes {
 	return nil
 }
 
-// SymbolBeforePos returns a HasTypes before the position
-func (s *Document) SymbolBeforePos(pos protocol.Position) HasTypes {
+// HasTypesBeforePos returns a HasTypes before the position
+func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
 	s.loadMu.Lock()
 	defer s.loadMu.Unlock()
 	return s.hasTypesBeforePos(pos)
 }
 
 func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
-	index := sort.Search(len(s.Children), func(i int) bool {
-		location := s.Children[i].GetLocation()
+	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
+		location := s.hasTypesSymbols[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
 	for i := index; i >= 0; i-- {
-		symbol := s.Children[i]
-		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if hasTypes, ok := symbol.(HasTypes); ok && (inRange > 0 || (inRange == 0 && pos == symbol.GetLocation().Range.End)) {
+		h := s.hasTypesSymbols[i]
+		inRange := util.IsInRange(pos, h.GetLocation().Range)
+		if hasTypes, ok := h.(HasTypes); ok && (inRange > 0 || (inRange == 0 && pos == h.GetLocation().Range.End)) {
 			return hasTypes
 		}
 	}
@@ -487,10 +494,12 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
+		log.Printf("%T", hasTypes)
 		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
 			hasParamsResolvable = resolvable
 		}
 	}
+	log.Printf("ArgumentListAndFunctionCallAt %T %T", argumentList, hasParamsResolvable)
 	return argumentList, hasParamsResolvable
 }
 

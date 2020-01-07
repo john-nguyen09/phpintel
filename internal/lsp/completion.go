@@ -19,7 +19,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	document := store.GetOrCreateDocument(uri)
 	document.Load()
 	var completionList *protocol.CompletionList = nil
-	symbol := document.SymbolAtPos(params.Position)
+	symbol := document.HasTypesAtPos(params.Position)
 	word := document.WordAtPos(params.Position)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
 	parent := nodes.Parent()
@@ -40,14 +40,14 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		nodes.Parent()
 		parent := nodes.Parent()
 		if parent.Type == phrase.ClassConstantAccessExpression {
-			symbol := document.SymbolAt(util.FirstToken(&parent).Offset)
+			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
 			if s, ok := symbol.(*analysis.ClassAccess); ok {
 				s.Resolve(store)
 				completionList = scopedAccessCompletion(store, document, word, s.Type)
 			}
 		}
 	case phrase.PropertyAccessExpression:
-		s := document.SymbolBeforePos(params.Position)
+		s := document.HasTypesBeforePos(params.Position)
 		s.Resolve(store)
 		completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
 	case phrase.MemberName:
@@ -68,7 +68,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 
 func variableCompletion(document *analysis.Document, pos protocol.Position, word string) *protocol.CompletionList {
 	varTable := document.GetVariableTableAt(pos)
-	symbol := document.SymbolAtPos(pos)
+	symbol := document.HasTypesAtPos(pos)
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}

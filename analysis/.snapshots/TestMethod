@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=15) {
+([]analysis.Symbol) (len=14) {
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -39,24 +39,6 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.TypeDeclaration)({
-    location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 7:48-7:71
-    },
-    Name: (string) (len=23) "TestAbstractMethodClass",
-    Type: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) (len=1) {
-        (analysis.TypeString) {
-          fqn: (string) (len=24) "\\TestAbstractMethodClass",
-          original: (string) (len=23) "TestAbstractMethodClass"
-        }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=24) "\\TestAbstractMethodClass": (bool) true
-      }
-    }
   }),
   (*analysis.Method)({
     location: (protocol.Location) {

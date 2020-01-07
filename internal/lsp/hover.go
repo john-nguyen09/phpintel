@@ -19,7 +19,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		return nil, DocumentNotFound(uri)
 	}
 	document.Load()
-	symbol := document.SymbolAtPos(params.TextDocumentPositionParams.Position)
+	symbol := document.HasTypesAtPos(params.TextDocumentPositionParams.Position)
 	var hover *protocol.Hover = nil
 	// log.Printf("Hover: %T\n", symbol)
 

@@ -14,6 +14,6 @@ func TestTraitAccess(t *testing.T) {
 	}
 	document := NewDocument("test1", string(data))
 	document.Load()
-	symbol := document.SymbolAtPos(document.positionAt(312))
+	symbol := document.HasTypesAtPos(document.positionAt(312))
 	cupaloy.SnapshotT(t, document.Children, symbol)
 }
