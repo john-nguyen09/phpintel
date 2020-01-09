@@ -1,0 +1,17 @@
+(*analysis.Variable)({
+  Expression: (analysis.Expression) {
+    Type: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    },
+    Scope: (analysis.HasTypes) <nil>,
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 9:19-10:5
+    },
+    Name: (string) ""
+  },
+  description: (string) "",
+  canReferenceGlobal: (bool) false,
+  hasResolved: (bool) false
+})

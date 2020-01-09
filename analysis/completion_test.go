@@ -45,3 +45,17 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	}
 	cupaloy.SnapshotT(t, items)
 }
+
+func TestDesignatorAndVariable(t *testing.T) {
+	data, err := ioutil.ReadFile("../cases/completion/designatorAndVariable.php")
+	if err != nil {
+		panic(err)
+	}
+	document := NewDocument("test1", string(data))
+	document.Load()
+	symbol := document.HasTypesAtPos(protocol.Position{
+		Line:      9,
+		Character: 20,
+	})
+	cupaloy.SnapshotT(t, symbol)
+}
