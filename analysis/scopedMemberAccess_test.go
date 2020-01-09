@@ -15,7 +15,7 @@ func TestScopedMemberAccess(t *testing.T) {
 	}
 	document := NewDocument("test1", string(data))
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	cupaloy.SnapshotT(t, document.hasTypesSymbols)
 }
 
 func TestScopedAccess(t *testing.T) {
@@ -24,5 +24,5 @@ func TestScopedAccess(t *testing.T) {
 	document := NewDocument("test1", string(data))
 	document.Load()
 
-	cupaloy.SnapshotT(t, document.Children)
+	cupaloy.SnapshotT(t, document.HasTypesAt(24))
 }

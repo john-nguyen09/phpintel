@@ -25,6 +25,8 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
+	document.Lock()
+	defer document.Unlock()
 	pos := params.TextDocumentPositionParams.Position
 	argumentList, hasParamsResolvable := document.ArgumentListAndFunctionCallAt(pos)
 	if argumentList == nil || hasParamsResolvable == nil {

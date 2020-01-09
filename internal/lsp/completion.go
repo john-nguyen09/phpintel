@@ -17,6 +17,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		return nil, StoreNotFound(uri)
 	}
 	document := store.GetOrCreateDocument(uri)
+	document.Lock()
+	defer document.Unlock()
 	document.Load()
 	var completionList *protocol.CompletionList = nil
 	symbol := document.HasTypesAtPos(params.Position)
@@ -32,14 +34,23 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		if nodes.Parent().Type == phrase.ConstantAccessExpression {
 			completionList = nameCompletion(store, document, symbol, word)
 		}
-	case phrase.ErrorScopedAccessExpression:
+	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
+			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+		}
+	case phrase.ScopedCallExpression:
+		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
+			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+		}
+	case phrase.ScopedPropertyAccessExpression:
+		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
 			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
 		}
 	case phrase.Identifier:
 		nodes.Parent()
 		parent := nodes.Parent()
-		if parent.Type == phrase.ClassConstantAccessExpression {
+		switch parent.Type {
+		case phrase.ClassConstantAccessExpression, phrase.ScopedCallExpression:
 			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
 			if s, ok := symbol.(*analysis.ClassAccess); ok {
 				s.Resolve(store)

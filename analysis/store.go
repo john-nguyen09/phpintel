@@ -178,6 +178,8 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 		log.Printf("Document %s not found", uri)
 		return nil
 	}
+	document.Lock()
+	defer document.Unlock()
 	document.Open()
 	document.Load()
 	s.SyncDocument(document)
@@ -190,6 +192,8 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 		log.Printf("document %s not found", uri)
 		return
 	}
+	document.Lock()
+	defer document.Unlock()
 	document.Close()
 	s.SyncDocument(document)
 }

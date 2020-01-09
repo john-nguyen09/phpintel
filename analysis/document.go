@@ -109,21 +109,15 @@ func NewDocument(uri string, text string) *Document {
 
 // Open sets a flag to indicate the document is open
 func (s *Document) Open() {
-	s.loadMu.Lock()
 	s.isOpen = true
-	s.loadMu.Unlock()
 }
 
 // Close unsets the flag
 func (s *Document) Close() {
-	s.loadMu.Lock()
 	s.isOpen = false
-	s.loadMu.Unlock()
 }
 
 func (s *Document) IsOpen() bool {
-	s.loadMu.Lock()
-	defer s.loadMu.Unlock()
 	return s.isOpen
 }
 
@@ -150,6 +144,7 @@ func (s *Document) Load() {
 	if !s.hasChanges {
 		return
 	}
+	s.ResetState()
 	s.hasChanges = false
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
@@ -167,8 +162,6 @@ func (s *Document) GetURI() string {
 
 // SetText is a setter for text, at the same time update line offsets
 func (s *Document) SetText(text string) {
-	s.loadMu.Lock()
-	defer s.loadMu.Unlock()
 	s.text = []rune(text)
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
@@ -420,8 +413,6 @@ func (s *Document) HasTypesAt(offset int) HasTypes {
 
 // HasTypesAtPos returns a HasTypes symbol at the position
 func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
-	s.loadMu.Lock()
-	defer s.loadMu.Unlock()
 	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
 		location := s.hasTypesSymbols[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
@@ -439,10 +430,16 @@ func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	return previousHasTypes
 }
 
+func (s *Document) Lock() {
+	s.loadMu.Lock()
+}
+
+func (s *Document) Unlock() {
+	s.loadMu.Unlock()
+}
+
 // HasTypesBeforePos returns a HasTypes before the position
 func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
-	s.loadMu.Lock()
-	defer s.loadMu.Unlock()
 	return s.hasTypesBeforePos(pos)
 }
 
@@ -476,9 +473,7 @@ func (s *Document) WordAtPos(pos protocol.Position) string {
 
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
 func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
-	s.loadMu.Lock()
 	// log.Printf("ArgumentListAndFunctionCallAt: %p", s)
-	defer s.loadMu.Unlock()
 	index := sort.Search(len(s.argLists), func(i int) bool {
 		location := s.argLists[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
@@ -506,9 +501,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
 	defer util.TimeTrack(time.Now(), "ApplyChanges")
-	s.loadMu.Lock()
 	// log.Printf("ApplyChanges: %p", s)
-	defer s.loadMu.Unlock()
 	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
@@ -539,7 +532,6 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 	}
-	s.ResetState()
 	s.Load()
 }
 
