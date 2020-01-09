@@ -64,6 +64,9 @@ func (i InsertUseContext) GetInsertPosition() (protocol.Position, bool) {
 }
 
 func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias string) *protocol.TextEdit {
+	if typeString.GetFQN() == "" {
+		return nil
+	}
 	if insertedPosition, ok := i.GetInsertPosition(); ok {
 		eol := i.document.detectedEOL
 		afterNode := i.GetInsertAfterNode()

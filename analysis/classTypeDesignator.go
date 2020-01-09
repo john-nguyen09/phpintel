@@ -61,6 +61,10 @@ func (s *ClassTypeDesignator) analyseNode(document *Document, node *phrase.Phras
 			case phrase.RelativeScope:
 				relativeScope := newRelativeScope(document, s.Location)
 				s.Type.merge(relativeScope.Types)
+			case phrase.SimpleVariable:
+				if variable, ok := newVariable(document, p); ok {
+					document.addSymbol(variable)
+				}
 			}
 		}
 		child = traverser.Advance()

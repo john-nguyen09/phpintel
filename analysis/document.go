@@ -129,6 +129,8 @@ func (s *Document) IsOpen() bool {
 
 func (s *Document) ResetState() {
 	s.Children = []Symbol{}
+	s.hasTypesSymbols = []HasTypes{}
+	s.argLists = []*ArgumentList{}
 	s.variableTableLevel = 0
 	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
@@ -424,16 +426,17 @@ func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 		location := s.hasTypesSymbols[i].GetLocation()
 		return util.IsInRange(pos, location.Range) <= 0
 	})
+	var previousHasTypes HasTypes = nil
 	for _, symbol := range s.hasTypesSymbols[index:] {
 		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
 		if inRange < 0 {
 			break
 		}
 		if hasTypes, ok := symbol.(HasTypes); ok && inRange == 0 {
-			return hasTypes
+			previousHasTypes = hasTypes
 		}
 	}
-	return nil
+	return previousHasTypes
 }
 
 // HasTypesBeforePos returns a HasTypes before the position
