@@ -325,6 +325,14 @@ func (s *Document) addSymbol(other Symbol) {
 		debug.PrintStack()
 	}
 	if argList, ok := other.(*ArgumentList); ok {
+		if len(s.argLists) > 0 {
+			i := len(s.argLists)-1
+			lastArgList := s.argLists[i]
+			if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
+				s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
+				return
+			}
+		}
 		s.argLists = append(s.argLists, argList)
 		return
 	}
