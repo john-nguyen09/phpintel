@@ -182,7 +182,7 @@ func (s *Method) GetIndexCollection() string {
 }
 
 func (s *Method) GetPrefixes() []string {
-	return []string{s.GetScope().GetFQN()}
+	return []string{s.GetScope().GetFQN(), ""}
 }
 
 func (s *Method) GetNameLabel() string {

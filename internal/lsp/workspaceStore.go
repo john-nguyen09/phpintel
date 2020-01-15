@@ -2,9 +2,6 @@ package lsp
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
-	"io"
 	"log"
 	"path/filepath"
 	"strings"
@@ -84,10 +81,7 @@ func (s *workspaceStore) close() {
 }
 
 func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
-	h := md5.New()
-	io.WriteString(h, uri)
-	hash := hex.EncodeToString(h.Sum(nil))
-	storagePath := filepath.Join(getDataDir(), hash)
+	storagePath := filepath.Join(getDataDir(), util.GetURIID(uri))
 	store, err := analysis.NewStore(uri, storagePath)
 	if err != nil {
 		// TODO: don't crash the whole server just because 1

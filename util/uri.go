@@ -1,7 +1,10 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
+	"io"
 	"net/url"
 	"strings"
 )
@@ -52,4 +55,27 @@ func PathToUri(path string) string {
 	urlIns.Path = "/" + strings.Join(parts, "/")
 
 	return urlIns.String()
+}
+
+func GetURIID(uri string) string {
+	u, err := url.Parse(uri)
+	h := md5.New()
+	io.WriteString(h, uri)
+	hash := hex.EncodeToString(h.Sum(nil))
+	// Fallback to MD5 only if uri cannot be parsed
+	if err != nil {
+		return hash
+	}
+	parts := strings.Split(u.Path, "/")
+	parts, lastPart := parts[:len(parts)-1], parts[len(parts)-1]
+	result := ""
+	for _, part := range parts[0 : len(parts)-1] {
+		r := []rune(part)
+		if len(r) == 0 {
+			continue
+		}
+		result += string(r[0])
+	}
+	result += "-" + lastPart + "-" + hash[:8]
+	return result
 }

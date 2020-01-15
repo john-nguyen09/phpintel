@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"strings"
+
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -63,12 +65,14 @@ func getCompletionKeys(uri string, indexable NameIndexable, symbolKey string) []
 	tokens := wordtokeniser.Tokenise(indexable.GetIndexableName())
 	keys := []string{}
 	for _, token := range tokens {
+		token = strings.ToLower(token)
 		for _, prefix := range indexable.GetPrefixes() {
+			tokenWithPrefix := token
 			if prefix != "" {
-				token = prefix + scopeSep + token
+				tokenWithPrefix = strings.ToLower(prefix) + scopeSep + token
 			}
 
-			keys = append(keys, getCompletionKey(token, symbolKey))
+			keys = append(keys, getCompletionKey(tokenWithPrefix, symbolKey))
 		}
 	}
 	return keys
@@ -82,7 +86,8 @@ func searchCompletions(db *leveldb.DB, collection string, keyword string, prefix
 	completionValues := []CompletionValue{}
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	for _, prefix := range prefixes {
-		name := keyword
+		name := strings.ToLower(keyword)
+		prefix = strings.ToLower(prefix)
 		if prefix != "" {
 			name = prefix + scopeSep + name
 		}
