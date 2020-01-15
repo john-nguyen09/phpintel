@@ -326,7 +326,7 @@ func (s *Document) addSymbol(other Symbol) {
 	}
 	if argList, ok := other.(*ArgumentList); ok {
 		if len(s.argLists) > 0 {
-			i := len(s.argLists)-1
+			i := len(s.argLists) - 1
 			lastArgList := s.argLists[i]
 			if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
 				s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
@@ -491,14 +491,8 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
 	var argumentList *ArgumentList = nil
-	for _, argList := range s.argLists[index:] {
-		isInRange := util.IsInRange(pos, argList.GetLocation().Range)
-		if isInRange == 0 {
-			argumentList = argList
-		}
-		if isInRange < 0 {
-			break
-		}
+	if index < len(s.argLists) {
+		argumentList = s.argLists[index]
 	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
