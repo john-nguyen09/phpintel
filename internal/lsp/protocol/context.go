@@ -12,6 +12,7 @@ const (
 	clientKey     = contextKey(iota)
 	cpuprofileKey = contextKey(iota)
 	versionKey    = contextKey(iota)
+	memprofileKey = contextKey(iota)
 )
 
 func WithClient(ctx context.Context, client Client) context.Context {
@@ -26,6 +27,10 @@ func WithVersion(ctx context.Context, version string) context.Context {
 	return context.WithValue(ctx, versionKey, version)
 }
 
+func WithMemprofile(ctx context.Context, memprofile string) context.Context {
+	return context.WithValue(ctx, memprofileKey, memprofile)
+}
+
 func HasCpuProfile(ctx context.Context) bool {
 	value := ctx.Value(cpuprofileKey)
 	if cpuprofile, ok := value.(bool); ok {
@@ -38,6 +43,14 @@ func GetVersion(ctx context.Context) string {
 	value := ctx.Value(versionKey)
 	if version, ok := value.(string); ok {
 		return version
+	}
+	return ""
+}
+
+func GetMemprofile(ctx context.Context) string {
+	value := ctx.Value(memprofileKey)
+	if memprofile, ok := value.(string); ok {
+		return memprofile
 	}
 	return ""
 }

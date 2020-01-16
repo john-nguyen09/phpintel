@@ -17,11 +17,13 @@ var (
 	flgVersion bool
 	version    string = "Unknown"
 	cpuprofile string
+	memprofile string
 )
 
 func main() {
 	flag.BoolVar(&flgVersion, "version", false, "Show version of the language server")
 	flag.StringVar(&cpuprofile, "cpuprofile", "", "write cpu profile to `file`")
+	flag.StringVar(&memprofile, "memprofile", "", "write mem profile to `file`")
 	flag.Parse()
 	if cpuprofile != "" {
 		f, err := os.Create(cpuprofile)
@@ -44,6 +46,7 @@ func main() {
 	ctx := context.Background()
 	ctx = protocol.WithCpuProfile(ctx, cpuprofile != "")
 	ctx = protocol.WithVersion(ctx, version)
+	ctx = protocol.WithMemprofile(ctx, memprofile)
 	ctx, srv := lsp.NewServer(ctx, stream)
 	srv.Run(ctx)
 }

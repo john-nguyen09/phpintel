@@ -3,8 +3,10 @@ package lsp
 import (
 	"context"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"runtime/pprof"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
@@ -103,6 +105,18 @@ func (s *Server) shutdown(ctx context.Context) error {
 	s.store.close()
 	if protocol.HasCpuProfile(ctx) {
 		pprof.StopCPUProfile()
+	}
+	memprofile := protocol.GetMemprofile(ctx)
+	if memprofile != "" {
+		f, err := os.Create(memprofile)
+		if err != nil {
+			log.Fatal("Could not create memory profile: ", err)
+		}
+		defer f.Close()
+		runtime.GC()
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not start memory profile: ", err)
+		}
 	}
 	return nil
 }
