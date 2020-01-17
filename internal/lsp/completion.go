@@ -59,8 +59,10 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		}
 	case phrase.PropertyAccessExpression:
 		s := document.HasTypesBeforePos(params.Position)
-		s.Resolve(store)
-		completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
+		if s != nil {
+			s.Resolve(store)
+			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
+		}
 	case phrase.MemberName:
 		if nodes.Parent().Type == phrase.PropertyAccessExpression {
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {

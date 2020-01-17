@@ -491,7 +491,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
 	var argumentList *ArgumentList = nil
-	if index < len(s.argLists) {
+	if index < len(s.argLists) && util.IsInRange(pos, s.argLists[index].GetLocation().Range) == 0 {
 		argumentList = s.argLists[index]
 	}
 	if argumentList != nil {
