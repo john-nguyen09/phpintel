@@ -55,6 +55,9 @@ var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
 	phrase.VariableList:                   true,
 	phrase.TraitMemberDeclarationList:     true,
 	phrase.CastExpression:                 true,
+	phrase.SwitchStatement:                true,
+	phrase.CaseStatementList:              true,
+	phrase.CaseStatement:                  true,
 }
 
 var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{
