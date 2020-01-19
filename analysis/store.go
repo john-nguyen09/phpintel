@@ -775,7 +775,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 }
 
 func (s *Store) GetProperties(scope string, name string) []*Property {
-	entry := newEntry(propertyCollection, scope+KeySep+name)
+	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
 	for it.Next() {
