@@ -12,18 +12,22 @@ func newAssignment(document *Document, node *phrase.Phrase) Symbol {
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
 		if p.Type == phrase.SimpleVariable {
-			analyseVariableAssignment(document, p, traverser.Clone())
+			analyseVariableAssignment(document, p, traverser.Clone(), node)
 		}
 	}
 	scanForChildren(document, node)
 	return nil
 }
 
-func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverser *util.Traverser) {
+func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
 	traverser.Advance()
 	traverser.SkipToken(lexer.Whitespace)
 	traverser.SkipToken(lexer.Equals)
 	traverser.SkipToken(lexer.Whitespace)
+	if parent.Type == phrase.ByRefAssignmentExpression {
+		traverser.SkipToken(lexer.Ampersand)
+		traverser.SkipToken(lexer.Whitespace)
+	}
 	rhs := traverser.Advance()
 	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(node))
 	variable, _ := newVariable(document, node)

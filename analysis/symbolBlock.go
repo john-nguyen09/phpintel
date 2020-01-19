@@ -83,6 +83,7 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 		phrase.MethodDeclaration:          newMethod,
 		phrase.FunctionCallExpression:     tryToNewDefine,
 		phrase.SimpleAssignmentExpression: newAssignment,
+		phrase.ByRefAssignmentExpression:  newAssignment,
 		phrase.PropertyDeclaration:        newPropertyDeclaration,
 		phrase.GlobalDeclaration:          newGlobalDeclaration,
 		phrase.NamespaceUseDeclaration:    processNamespaceUseDeclaration,
