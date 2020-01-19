@@ -85,6 +85,25 @@ type Store struct {
 	syncedDocumentURIs cmap.ConcurrentMap
 }
 
+type SearchOptions struct {
+	predicates []func(s Symbol) bool
+	limit      int
+}
+
+func NewSearchOptions() SearchOptions {
+	return SearchOptions{}
+}
+
+func (s SearchOptions) WithPredicate(predicate func(s Symbol) bool) SearchOptions {
+	s.predicates = append(s.predicates, predicate)
+	return s
+}
+
+func (s SearchOptions) WithLimit(limit int) SearchOptions {
+	s.limit = limit
+	return s
+}
+
 func initStubs() {
 	stubs = append(stubs, NewPhpStormStub())
 }
@@ -367,24 +386,48 @@ func (s *Store) GetClasses(name string) []*Class {
 	return classes
 }
 
-func (s *Store) SearchClasses(keyword string) []*Class {
+func isSymbolValid(symbol Symbol, options SearchOptions) bool {
+	if len(options.predicates) == 0 {
+		return true
+	}
+	for _, predicate := range options.predicates {
+		return predicate(symbol)
+	}
+	return false // Never happen
+}
+
+func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	prefixes := []string{""}
 	if scope != "" {
 		prefixes = append(prefixes, scope)
 	}
-	completionValues := searchCompletions(s.db, classCompletionIndex, keyword, prefixes)
 	classes := []*Class{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(classCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		classes = append(classes, ReadClass(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: classCompletionIndex,
+		prefixes:   prefixes,
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(classCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			class := ReadClass(serialiser)
+			if isSymbolValid(class, options) {
+				classes = append(classes, class)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return classes
+	result := searchCompletions(s.db, query)
+	return classes, result
 }
 
 func (s *Store) GetInterfaces(name string) []*Interface {
@@ -398,24 +441,38 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 	return interfaces
 }
 
-func (s *Store) SearchInterfaces(keyword string) []*Interface {
+func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Interface, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	prefixes := []string{""}
 	if scope != "" {
 		prefixes = append(prefixes, scope)
 	}
-	completionValues := searchCompletions(s.db, interfaceCompletionIndex, keyword, prefixes)
 	interfaces := []*Interface{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(interfaceCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		interfaces = append(interfaces, ReadInterface(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: interfaceCompletionIndex,
+		prefixes:   prefixes,
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(interfaceCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			theInterface := ReadInterface(serialiser)
+			if isSymbolValid(theInterface, options) {
+				interfaces = append(interfaces, theInterface)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return interfaces
+	result := searchCompletions(s.db, query)
+	return interfaces, result
 }
 
 func (s *Store) GetTraits(name string) []*Trait {
@@ -429,24 +486,38 @@ func (s *Store) GetTraits(name string) []*Trait {
 	return traits
 }
 
-func (s *Store) SearchTraits(keyword string) []*Trait {
+func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	prefixes := []string{""}
 	if scope != "" {
 		prefixes = append(prefixes, scope)
 	}
-	completionValues := searchCompletions(s.db, traitCompletionIndex, keyword, prefixes)
 	traits := []*Trait{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(traitCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		traits = append(traits, ReadTrait(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: traitCompletionIndex,
+		prefixes:   prefixes,
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(traitCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			trait := ReadTrait(serialiser)
+			if isSymbolValid(trait, options) {
+				traits = append(traits, trait)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return traits
+	result := searchCompletions(s.db, query)
+	return traits, result
 }
 
 func (s *Store) GetFunctions(name string) []*Function {
@@ -460,19 +531,33 @@ func (s *Store) GetFunctions(name string) []*Function {
 	return functions
 }
 
-func (s *Store) SearchFunctions(keyword string) []*Function {
-	completionValues := searchCompletions(s.db, functionCompletionIndex, keyword, []string{""})
+func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Function, SearchResult) {
 	functions := []*Function{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(functionCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		functions = append(functions, ReadFunction(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: functionCompletionIndex,
+		prefixes:   []string{""},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(functionCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			function := ReadFunction(serialiser)
+			if isSymbolValid(function, options) {
+				functions = append(functions, function)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return functions
+	result := searchCompletions(s.db, query)
+	return functions, result
 }
 
 func (s *Store) GetConsts(name string) []*Const {
@@ -486,19 +571,33 @@ func (s *Store) GetConsts(name string) []*Const {
 	return consts
 }
 
-func (s *Store) SearchConsts(keyword string) []*Const {
-	completionValues := searchCompletions(s.db, constCompletionIndex, keyword, []string{""})
+func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, SearchResult) {
 	consts := []*Const{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(constCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		consts = append(consts, ReadConst(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: constCompletionIndex,
+		prefixes:   []string{},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(constCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			constant := ReadConst(serialiser)
+			if isSymbolValid(constant, options) {
+				consts = append(consts, constant)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return consts
+	result := searchCompletions(s.db, query)
+	return consts, result
 }
 
 func (s *Store) GetDefines(name string) []*Define {
@@ -512,19 +611,33 @@ func (s *Store) GetDefines(name string) []*Define {
 	return defines
 }
 
-func (s *Store) SearchDefines(keyword string) []*Define {
-	completionValues := searchCompletions(s.db, defineCompletionIndex, keyword, []string{""})
+func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define, SearchResult) {
 	defines := []*Define{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(defineCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		defines = append(defines, ReadDefine(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: defineCompletionIndex,
+		prefixes:   []string{""},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(defineCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			define := ReadDefine(serialiser)
+			if isSymbolValid(define, options) {
+				defines = append(defines, define)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
-	return defines
+	result := searchCompletions(s.db, query)
+	return defines, result
 }
 
 func (s *Store) GetMethods(scope string, name string) []*Method {
@@ -557,27 +670,41 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 	return methods
 }
 
-func (s *Store) SearchMethods(scope string, keyword string) []*Method {
+func (s *Store) SearchMethods(scope string, keyword string, options SearchOptions) ([]*Method, SearchResult) {
 	if keyword == "" {
-		return s.GetAllMethods(scope)
+		return s.GetAllMethods(scope), SearchResult{true}
 	}
 
-	completionValues := searchCompletions(s.db, methodCompletionIndex, keyword, []string{scope})
 	methods := []*Method{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(methodCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		methods = append(methods, ReadMethod(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: methodCompletionIndex,
+		prefixes:   []string{scope},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(methodCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			method := ReadMethod(serialiser)
+			if isSymbolValid(method, options) {
+				methods = append(methods, method)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
+	result := searchCompletions(s.db, query)
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
 		methods = append(methods, class.SearchInheritedMethods(s, keyword, methods)...)
 	}
-	return methods
+	return methods, result
 }
 
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
@@ -610,27 +737,41 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	return classConsts
 }
 
-func (s *Store) SearchClassConsts(scope string, keyword string) []*ClassConst {
+func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOptions) ([]*ClassConst, SearchResult) {
 	if keyword == "" {
-		s.GetAllClassConsts(scope)
+		return s.GetAllClassConsts(scope), SearchResult{true}
 	}
 
-	completionValues := searchCompletions(s.db, classConstCompletionIndex, keyword, []string{scope})
 	classConsts := []*ClassConst{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(classConstCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		classConsts = append(classConsts, ReadClassConst(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: classConstCompletionIndex,
+		prefixes:   []string{scope},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(classConstCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			classConst := ReadClassConst(serialiser)
+			if isSymbolValid(classConst, options) {
+				classConsts = append(classConsts, classConst)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
+	result := searchCompletions(s.db, query)
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
 		classConsts = append(classConsts, class.SearchInheritedClassConsts(s, keyword)...)
 	}
-	return classConsts
+	return classConsts, result
 }
 
 func (s *Store) GetProperties(scope string, name string) []*Property {
@@ -663,27 +804,41 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	return properties
 }
 
-func (s *Store) SearchProperties(scope string, keyword string) []*Property {
+func (s *Store) SearchProperties(scope string, keyword string, options SearchOptions) ([]*Property, SearchResult) {
 	if keyword == "" {
-		return s.GetAllProperties(scope)
+		return s.GetAllProperties(scope), SearchResult{true}
 	}
 
-	completionValues := searchCompletions(s.db, propertyCompletionIndex, keyword, []string{scope})
 	properties := []*Property{}
-	for _, completionValue := range completionValues {
-		entry := newEntry(propertyCollection, string(completionValue))
-		theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
-		if err != nil {
-			continue
-		}
-		serialiser := SerialiserFromByteSlice(theBytes)
-		properties = append(properties, ReadProperty(serialiser))
+	count := 0
+	query := searchQuery{
+		collection: propertyCompletionIndex,
+		prefixes:   []string{scope},
+		keyword:    keyword,
+		onData: func(completionValue CompletionValue) onDataResult {
+			entry := newEntry(propertyCollection, string(completionValue))
+			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			if err != nil {
+				return onDataResult{false}
+			}
+			serialiser := SerialiserFromByteSlice(theBytes)
+			property := ReadProperty(serialiser)
+			if isSymbolValid(property, options) {
+				properties = append(properties, property)
+				count++
+			}
+			if options.limit > 0 && count >= options.limit {
+				return onDataResult{true}
+			}
+			return onDataResult{false}
+		},
 	}
+	result := searchCompletions(s.db, query)
 	classes := s.GetClasses(scope)
 	for _, class := range classes {
 		properties = append(properties, class.SearchInheritedProperties(s, keyword, properties)...)
 	}
-	return properties
+	return properties, result
 }
 
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {

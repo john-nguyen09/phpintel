@@ -133,21 +133,24 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 	symbols := []protocol.SymbolInformation{}
 	if params.Query != "" {
 		for _, store := range s.store.stores {
-			for _, class := range store.SearchClasses(params.Query) {
+			classes, _ := store.SearchClasses(params.Query, analysis.NewSearchOptions())
+			for _, class := range classes {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Class,
 					Name:     class.Name.GetFQN(),
 					Location: class.GetLocation(),
 				})
 			}
-			for _, constant := range store.SearchConsts(params.Query) {
+			consts, _ := store.SearchConsts(params.Query, analysis.NewSearchOptions())
+			for _, constant := range consts {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Constant,
 					Name:     constant.Name.GetFQN(),
 					Location: constant.GetLocation(),
 				})
 			}
-			for _, classConst := range store.SearchClassConsts("", params.Query) {
+			classConsts, _ := store.SearchClassConsts("", params.Query, analysis.NewSearchOptions())
+			for _, classConst := range classConsts {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Constant,
 					Name:          classConst.Name,
@@ -155,28 +158,32 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: classConst.Scope.GetFQN(),
 				})
 			}
-			for _, define := range store.SearchDefines(params.Query) {
+			defines, _ := store.SearchDefines(params.Query, analysis.NewSearchOptions())
+			for _, define := range defines {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Constant,
 					Name:     define.Name.GetFQN(),
 					Location: define.GetLocation(),
 				})
 			}
-			for _, function := range store.SearchFunctions(params.Query) {
+			functions, _ := store.SearchFunctions(params.Query, analysis.NewSearchOptions())
+			for _, function := range functions {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Function,
 					Name:     function.Name.GetFQN(),
 					Location: function.GetLocation(),
 				})
 			}
-			for _, theInterface := range store.SearchInterfaces(params.Query) {
+			interfaces, _ := store.SearchInterfaces(params.Query, analysis.NewSearchOptions())
+			for _, theInterface := range interfaces {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Interface,
 					Name:     theInterface.Name.GetFQN(),
 					Location: theInterface.GetLocation(),
 				})
 			}
-			for _, method := range store.SearchMethods("", params.Query) {
+			methods, _ := store.SearchMethods("", params.Query, analysis.NewSearchOptions())
+			for _, method := range methods {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Method,
 					Name:          method.Name,
@@ -184,7 +191,8 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: method.Scope.GetFQN(),
 				})
 			}
-			for _, property := range store.SearchProperties("", params.Query) {
+			properties, _ := store.SearchProperties("", params.Query, analysis.NewSearchOptions())
+			for _, property := range properties {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Property,
 					Name:          property.Name,
@@ -192,7 +200,8 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: property.Scope.GetFQN(),
 				})
 			}
-			for _, trait := range store.SearchTraits(params.Query) {
+			traits, _ := store.SearchTraits(params.Query, analysis.NewSearchOptions())
+			for _, trait := range traits {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Class,
 					Name:     trait.Name.GetFQN(),

@@ -12,5 +12,6 @@ func TestCompletionIndex(t *testing.T) {
 	store, _ := setupStore("test", "TestCompletionIndex")
 	indexDocument(store, testMethodClassTest, "test1")
 
-	cupaloy.SnapshotT(t, store.SearchClasses("T"))
+	classes, _ := store.SearchClasses("T", NewSearchOptions())
+	cupaloy.SnapshotT(t, classes)
 }

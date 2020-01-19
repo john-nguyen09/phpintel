@@ -3,6 +3,7 @@ package lsp
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
@@ -11,6 +12,7 @@ import (
 )
 
 func (s *Server) completion(ctx context.Context, params *protocol.CompletionParams) (*protocol.CompletionList, error) {
+	defer util.TimeTrack(time.Now(), "completion")
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
@@ -110,7 +112,8 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes := store.SearchClasses(word)
+	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := document.GetImportTable()
 	for _, class := range classes {
 		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
@@ -126,7 +129,8 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	consts := store.SearchConsts(word)
+	consts, searchResult := store.SearchConsts(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, constant := range consts {
 		label, textEdit := importTable.ResolveToQualified(document, constant, constant.Name, word)
 		textEdits := []protocol.TextEdit{}
@@ -141,7 +145,8 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(constant.Name, textEdit),
 		})
 	}
-	defines := store.SearchDefines(word)
+	defines, searchResult := store.SearchDefines(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, define := range defines {
 		label, textEdit := importTable.ResolveToQualified(document, define, define.Name, word)
 		textEdits := []protocol.TextEdit{}
@@ -157,7 +162,8 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(define.Name, textEdit),
 		})
 	}
-	functions := store.SearchFunctions(word)
+	functions, searchResult := store.SearchFunctions(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, function := range functions {
 		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)
 		textEdits := []protocol.TextEdit{}
@@ -180,7 +186,8 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	classes := store.SearchClasses(word)
+	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := document.GetImportTable()
 	for _, class := range classes {
 		name, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
@@ -205,7 +212,8 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	}
 	for _, scopeType := range scope.Resolve() {
 		scope := scopeType.GetFQN()
-		properties := store.SearchProperties(scope, word)
+		properties, searchResult := store.SearchProperties(scope, word, baseSearchOptions)
+		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, property := range properties {
 			if !property.IsStatic {
 				continue
@@ -216,7 +224,8 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods := store.SearchMethods(scope, word)
+		methods, searchResult := store.SearchMethods(scope, word, baseSearchOptions)
+		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
 			if !method.IsStatic {
 				continue
@@ -227,7 +236,8 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: method.GetDescription(),
 			})
 		}
-		classConsts := store.SearchClassConsts(scope, word)
+		classConsts, searchResult := store.SearchClassConsts(scope, word, baseSearchOptions)
+		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, classConst := range classConsts {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
 				Kind:          protocol.ConstantCompletion,
@@ -245,7 +255,8 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	}
 	for _, scopeType := range scope.Resolve() {
 		scope := scopeType.GetFQN()
-		properties := store.SearchProperties(scope, word)
+		properties, searchResult := store.SearchProperties(scope, word, baseSearchOptions)
+		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, property := range properties {
 			name := property.GetName()
 			if !property.IsStatic {
@@ -257,7 +268,8 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods := store.SearchMethods(scope, word)
+		methods, searchResult := store.SearchMethods(scope, word, baseSearchOptions)
+		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
 			if method.Name == "__construct" {
 				continue
@@ -277,7 +289,8 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes := store.SearchClasses(word)
+	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := document.GetImportTable()
 	for _, class := range classes {
 		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
@@ -293,7 +306,8 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	interfaces := store.SearchInterfaces(word)
+	interfaces, searchResult := store.SearchInterfaces(word, baseSearchOptions)
+	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, theInterface := range interfaces {
 		label, textEdit := importTable.ResolveToQualified(document, theInterface, theInterface.Name, word)
 		textEdits := []protocol.TextEdit{}

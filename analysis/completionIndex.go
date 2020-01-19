@@ -10,6 +10,21 @@ import (
 // CompletionValue holds references to uri and name
 type CompletionValue string
 
+type onDataResult struct {
+	shouldStop bool
+}
+
+type searchQuery struct {
+	collection string
+	prefixes   []string
+	keyword    string
+	onData     func(CompletionValue) onDataResult
+}
+
+type SearchResult struct {
+	IsComplete bool
+}
+
 // Serialise writes the CompletionValue
 func (cv CompletionValue) Serialise(serialiser *Serialiser) {
 	serialiser.WriteString(string(cv))
@@ -82,26 +97,30 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *leveldb.DB, collection string, keyword string, prefixes []string) []CompletionValue {
-	completionValues := []CompletionValue{}
+func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
-	for _, prefix := range prefixes {
-		name := strings.ToLower(keyword)
+	isComplete := true
+	for _, prefix := range query.prefixes {
+		name := strings.ToLower(query.keyword)
 		prefix = strings.ToLower(prefix)
 		if prefix != "" {
 			name = prefix + scopeSep + name
 		}
-		entry := newEntry(collection, name)
+		entry := newEntry(query.collection, name)
 		it := db.NewIterator(entry.prefixRange(), nil)
 		for it.Next() {
 			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
 				continue
 			}
-			completionValues = append(completionValues, completionValue)
+			result := query.onData(completionValue)
 			uniqueCompletionValues[completionValue] = true
+			if result.shouldStop {
+				isComplete = false
+				break
+			}
 		}
 		it.Release()
 	}
-	return completionValues
+	return SearchResult{isComplete}
 }

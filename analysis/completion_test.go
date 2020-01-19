@@ -29,7 +29,7 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	document := store.GetOrCreateDocument("test2")
 	importTable := document.GetImportTable()
 	word := "testF"
-	functions := store.SearchFunctions(word)
+	functions, _ := store.SearchFunctions(word, NewSearchOptions())
 	items := []protocol.CompletionItem{}
 	for _, function := range functions {
 		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)

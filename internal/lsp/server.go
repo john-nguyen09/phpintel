@@ -10,6 +10,7 @@ import (
 	"net"
 	"sync"
 
+	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
@@ -69,6 +70,9 @@ type Server struct {
 
 	pendingFolders []protocol.WorkspaceFolder
 }
+
+var baseSearchOptions analysis.SearchOptions = analysis.NewSearchOptions().
+	WithLimit(1000)
 
 // General
 

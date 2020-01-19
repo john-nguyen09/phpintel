@@ -103,9 +103,6 @@ func (s *Server) shutdown(ctx context.Context) error {
 		return jsonrpc2.NewErrorf(jsonrpc2.CodeInvalidRequest, "not intialised")
 	}
 	s.store.close()
-	if protocol.HasCpuProfile(ctx) {
-		pprof.StopCPUProfile()
-	}
 	memprofile := protocol.GetMemprofile(ctx)
 	if memprofile != "" {
 		f, err := os.Create(memprofile)
