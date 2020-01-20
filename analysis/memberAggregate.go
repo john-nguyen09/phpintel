@@ -1,17 +1,57 @@
 package analysis
 
-func SearchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
+func searchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	traitMethods, _ := store.SearchMethods(trait.Name.GetFQN(), keyword, options)
 	methods = append(methods, traitMethods...)
 	return methods
 }
 
-func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
+func getAllTraitMethods(store *Store, trait *Trait, options SearchOptions) []*Method {
+	methods := []*Method{}
+	for _, traitMethod := range store.GetAllMethods(trait.Name.GetFQN()) {
+		if isSymbolValid(traitMethod, options) {
+			methods = append(methods, traitMethod)
+		}
+	}
+	return methods
+}
+
+func getTraitMethods(store *Store, trait *Trait, name string, options SearchOptions) []*Method {
+	methods := []*Method{}
+	for _, traitMethod := range store.GetMethods(trait.Name.GetFQN(), name) {
+		if isSymbolValid(traitMethod, options) {
+			methods = append(methods, traitMethod)
+		}
+	}
+	return methods
+}
+
+func searchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
 	options SearchOptions) []*Method {
 	methods := []*Method{}
 	interfaceMethods, _ := store.SearchMethods(theInterface.Name.GetFQN(), keyword, options)
 	methods = append(methods, interfaceMethods...)
+	return methods
+}
+
+func getAllInterfaceMethods(store *Store, theInterface *Interface, options SearchOptions) []*Method {
+	methods := []*Method{}
+	for _, interfaceMethod := range store.GetAllMethods(theInterface.Name.GetFQN()) {
+		if isSymbolValid(interfaceMethod, options) {
+			methods = append(methods, interfaceMethod)
+		}
+	}
+	return methods
+}
+
+func getInterfaceMethods(store *Store, theInterface *Interface, name string, options SearchOptions) []*Method {
+	methods := []*Method{}
+	for _, interfaceMethod := range store.GetMethods(theInterface.Name.GetFQN(), name) {
+		if isSymbolValid(interfaceMethod, options) {
+			methods = append(methods, interfaceMethod)
+		}
+	}
 	return methods
 }
 
@@ -26,7 +66,16 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		excludeNames[method.GetName()] = true
 		return true
 	}
-	classMethods, _ := store.SearchMethods(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+	classMethods := []*Method{}
+	if keyword != "" {
+		classMethods, _ = store.SearchMethods(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+	} else {
+		for _, classMethod := range store.GetAllMethods(class.Name.GetFQN()) {
+			if isSymbolValid(classMethod, options.WithPredicate(noDuplicate)) {
+				classMethods = append(classMethods, classMethod)
+			}
+		}
+	}
 	methods = append(methods, classMethods...)
 
 	for _, traitName := range class.Use {
@@ -35,13 +84,17 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		}
 		traits := store.GetTraits(traitName.GetFQN())
 		for _, trait := range traits {
-			methods = append(methods, SearchTraitMethods(store, trait, keyword,
-				options.WithPredicate(noDuplicate))...)
+			if keyword != "" {
+				methods = append(methods, searchTraitMethods(store, trait, keyword,
+					options.WithPredicate(noDuplicate))...)
+			} else {
+				methods = append(methods, getAllTraitMethods(store, trait, options.WithPredicate(noDuplicate))...)
+			}
 		}
 	}
 
 	if !class.Extends.IsEmpty() {
-		classes := store.GetClasses(class.Name.GetFQN())
+		classes := store.GetClasses(class.Extends.GetFQN())
 		for _, class := range classes {
 			methods = append(methods, SearchClassMethods(store, class, keyword, options)...)
 		}
@@ -53,49 +106,60 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		}
 		interfaces := store.GetInterfaces(typeString.GetFQN())
 		for _, theInterface := range interfaces {
-			methods = append(methods, SearchInterfaceMethods(store, theInterface, keyword,
-				options.WithPredicate(noDuplicate))...)
+			if keyword != "" {
+				methods = append(methods, searchInterfaceMethods(store, theInterface, keyword,
+					options.WithPredicate(noDuplicate))...)
+			} else {
+				methods = append(methods, getAllInterfaceMethods(store, theInterface,
+					options.WithPredicate(noDuplicate))...)
+			}
 		}
 	}
 	return methods
 }
 
-func (s *Class) GetInheritedMethods(store *Store, name string, excludedMethods []*Method) []*Method {
+func GetClassMethods(store *Store, class *Class, name string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	excludeNames := map[string]bool{}
-	for _, excludedMethod := range excludedMethods {
-		excludeNames[excludedMethod.Name] = true
+	noDuplicate := func(symbol Symbol) bool {
+		method := symbol.(*Method)
+		if _, ok := excludeNames[method.GetName()]; ok {
+			return false
+		}
+		excludeNames[method.GetName()] = true
+		return true
 	}
-	for _, typeString := range s.Use {
+	for _, classMethod := range store.GetMethods(class.Name.GetFQN(), name) {
+		if isSymbolValid(classMethod, options.WithPredicate(noDuplicate)) {
+			methods = append(methods, classMethod)
+		}
+	}
+
+	for _, traitName := range class.Use {
+		if traitName.IsEmpty() {
+			continue
+		}
+		traits := store.GetTraits(traitName.GetFQN())
+		for _, trait := range traits {
+			methods = append(methods, getTraitMethods(store, trait, name, options.WithPredicate(noDuplicate))...)
+		}
+	}
+
+	if !class.Extends.IsEmpty() {
+		classes := store.GetClasses(class.Extends.GetFQN())
+		for _, class := range classes {
+			methods = append(methods, GetClassMethods(store, class, name, options)...)
+		}
+	}
+
+	for _, typeString := range class.Interfaces {
 		if typeString.IsEmpty() {
 			continue
 		}
-		for _, method := range store.GetMethods(typeString.GetFQN(), name) {
-			if _, ok := excludeNames[method.Name]; ok {
-				continue
-			}
-			methods = append(methods, method)
-			excludeNames[method.Name] = true
-		}
-	}
-	if !s.Extends.IsEmpty() {
-		for _, method := range store.GetMethods(s.Extends.GetFQN(), name) {
-			if _, ok := excludeNames[method.Name]; ok || method.VisibilityModifier == Private {
-				continue
-			}
-			methods = append(methods, method)
-			excludeNames[method.Name] = true
-		}
-	}
-	for _, typeString := range s.Interfaces {
-		if typeString.IsEmpty() {
-			continue
-		}
-		for _, method := range store.GetMethods(typeString.GetFQN(), name) {
-			if _, ok := excludeNames[method.Name]; ok {
-				continue
-			}
-			methods = append(methods, method)
+		interfaces := store.GetInterfaces(typeString.GetFQN())
+		for _, theInterface := range interfaces {
+			methods = append(methods, getInterfaceMethods(store, theInterface, name,
+				options.WithPredicate(noDuplicate))...)
 		}
 	}
 	return methods

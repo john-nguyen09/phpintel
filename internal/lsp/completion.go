@@ -224,7 +224,10 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods, searchResult := analysis.SearchClassMethods(store, scope, word, analysis.NewSearchOptions())
+		methods := []*analysis.Method{}
+		for _, class := range store.GetClasses(scope) {
+			methods = append(methods, analysis.SearchClassMethods(store, class, word, analysis.NewSearchOptions())...)
+		}
 		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
 			if !method.IsStatic {
@@ -268,7 +271,10 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods, searchResult := store.SearchMethods(scope, word, analysis.NewSearchOptions())
+		methods := []*analysis.Method{}
+		for _, class := range store.GetClasses(scope) {
+			methods = append(methods, analysis.SearchClassMethods(store, class, word, analysis.NewSearchOptions())...)
+		}
 		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
 			if method.Name == "__construct" {
