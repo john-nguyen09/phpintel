@@ -103,11 +103,16 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ScopedMethodAccess:
 		methods := []*analysis.Method{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
-				if !method.IsStatic {
-					continue
-				}
-				methods = append(methods, method)
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
+					analysis.NewSearchOptions().
+						WithPredicate(func(symbol analysis.Symbol) bool {
+							method := symbol.(*analysis.Method)
+							if !method.IsStatic {
+								return false
+							}
+							return true
+						}))...)
 			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])
@@ -144,8 +149,9 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.MethodAccess:
 		methods := []*analysis.Method{}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
-				methods = append(methods, method)
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
+					analysis.NewSearchOptions())...)
 			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])

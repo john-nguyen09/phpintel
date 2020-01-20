@@ -66,10 +66,19 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.ScopedMethodAccess:
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
-				if !method.IsStatic {
-					continue
-				}
+			methods := []*analysis.Method{}
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
+					analysis.NewSearchOptions().
+						WithPredicate(func(symbol analysis.Symbol) bool {
+							method := symbol.(*analysis.Method)
+							if !method.IsStatic {
+								return false
+							}
+							return true
+						}))...)
+			}
+			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
 			}
 		}
@@ -90,7 +99,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.MethodAccess:
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, method := range store.GetMethods(scopeType.GetFQN(), v.Name) {
+			methods := []*analysis.Method{}
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
+					analysis.NewSearchOptions())...)
+			}
+			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
 			}
 		}

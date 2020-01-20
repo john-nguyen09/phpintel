@@ -648,10 +648,6 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
 	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		methods = append(methods, class.GetInheritedMethods(s, name, methods)...)
-	}
 	return methods
 }
 
@@ -663,16 +659,12 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
 	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, "", methods)...)
-	}
 	return methods
 }
 
 func (s *Store) SearchMethods(scope string, keyword string, options SearchOptions) ([]*Method, SearchResult) {
 	if keyword == "" {
-		return s.GetAllMethods(scope), SearchResult{true}
+		return []*Method{}, SearchResult{false}
 	}
 
 	methods := []*Method{}
@@ -700,10 +692,6 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 		},
 	}
 	result := searchCompletions(s.db, query)
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, keyword, methods)...)
-	}
 	return methods, result
 }
 
@@ -715,10 +703,6 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
 	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		classConsts = append(classConsts, class.GetInheritedClassConsts(s, name)...)
-	}
 	return classConsts
 }
 
@@ -729,10 +713,6 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
-	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		classConsts = append(classConsts, class.SearchInheritedClassConsts(s, "")...)
 	}
 	return classConsts
 }
@@ -767,10 +747,6 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 		},
 	}
 	result := searchCompletions(s.db, query)
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		classConsts = append(classConsts, class.SearchInheritedClassConsts(s, keyword)...)
-	}
 	return classConsts, result
 }
 
@@ -782,10 +758,6 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
 	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		properties = append(properties, class.GetInheritedProperties(s, name, properties)...)
-	}
 	return properties
 }
 
@@ -796,10 +768,6 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
-	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		properties = append(properties, class.SearchInheritedProperties(s, "", properties)...)
 	}
 	return properties
 }
@@ -834,10 +802,6 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 		},
 	}
 	result := searchCompletions(s.db, query)
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		properties = append(properties, class.SearchInheritedProperties(s, keyword, properties)...)
-	}
 	return properties, result
 }
 
