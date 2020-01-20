@@ -663,16 +663,12 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
 	}
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, "", methods)...)
-	}
 	return methods
 }
 
 func (s *Store) SearchMethods(scope string, keyword string, options SearchOptions) ([]*Method, SearchResult) {
 	if keyword == "" {
-		return s.GetAllMethods(scope), SearchResult{true}
+		return []*Method{}, SearchResult{false}
 	}
 
 	methods := []*Method{}
@@ -700,10 +696,6 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 		},
 	}
 	result := searchCompletions(s.db, query)
-	classes := s.GetClasses(scope)
-	for _, class := range classes {
-		methods = append(methods, class.SearchInheritedMethods(s, keyword, methods)...)
-	}
 	return methods, result
 }
 

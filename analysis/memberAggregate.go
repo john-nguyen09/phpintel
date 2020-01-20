@@ -1,44 +1,60 @@
 package analysis
 
-func (s *Class) SearchInheritedMethods(store *Store, keyword string, excludedMethods []*Method) []*Method {
+func SearchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
+	methods := []*Method{}
+	traitMethods, _ := store.SearchMethods(trait.Name.GetFQN(), keyword, options)
+	methods = append(methods, traitMethods...)
+	return methods
+}
+
+func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
+	options SearchOptions) []*Method {
+	methods := []*Method{}
+	interfaceMethods, _ := store.SearchMethods(theInterface.Name.GetFQN(), keyword, options)
+	methods = append(methods, interfaceMethods...)
+	return methods
+}
+
+func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	excludeNames := map[string]bool{}
-	for _, excludedMethod := range excludedMethods {
-		excludeNames[excludedMethod.Name] = true
+	noDuplicate := func(symbol Symbol) bool {
+		method := symbol.(*Method)
+		if _, ok := excludeNames[method.GetName()]; ok {
+			return false
+		}
+		excludeNames[method.GetName()] = true
+		return true
 	}
-	for _, typeString := range s.Use {
+	classMethods, _ := store.SearchMethods(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+	methods = append(methods, classMethods...)
+
+	for _, traitName := range class.Use {
+		if traitName.IsEmpty() {
+			continue
+		}
+		traits := store.GetTraits(traitName.GetFQN())
+		for _, trait := range traits {
+			methods = append(methods, SearchTraitMethods(store, trait, keyword,
+				options.WithPredicate(noDuplicate))...)
+		}
+	}
+
+	if !class.Extends.IsEmpty() {
+		classes := store.GetClasses(class.Name.GetFQN())
+		for _, class := range classes {
+			methods = append(methods, SearchClassMethods(store, class, keyword, options)...)
+		}
+	}
+
+	for _, typeString := range class.Interfaces {
 		if typeString.IsEmpty() {
 			continue
 		}
-		methods, _ := store.SearchMethods(typeString.GetFQN(), keyword, NewSearchOptions())
-		for _, method := range methods {
-			if _, ok := excludeNames[method.Name]; ok {
-				continue
-			}
-			methods = append(methods, method)
-			excludeNames[method.Name] = true
-		}
-	}
-	if !s.Extends.IsEmpty() {
-		methods, _ := store.SearchMethods(s.Extends.GetFQN(), keyword, NewSearchOptions())
-		for _, method := range methods {
-			if _, ok := excludeNames[method.Name]; ok || method.VisibilityModifier == Private {
-				continue
-			}
-			methods = append(methods, method)
-			excludeNames[method.Name] = true
-		}
-	}
-	for _, typeString := range s.Interfaces {
-		if typeString.IsEmpty() {
-			continue
-		}
-		methods, _ := store.SearchMethods(typeString.GetFQN(), keyword, NewSearchOptions())
-		for _, method := range methods {
-			if _, ok := excludeNames[method.Name]; ok {
-				continue
-			}
-			methods = append(methods, method)
+		interfaces := store.GetInterfaces(typeString.GetFQN())
+		for _, theInterface := range interfaces {
+			methods = append(methods, SearchInterfaceMethods(store, theInterface, keyword,
+				options.WithPredicate(noDuplicate))...)
 		}
 	}
 	return methods
@@ -92,8 +108,8 @@ func (s *Class) SearchInheritedProperties(store *Store, keyword string, excluded
 		excludeNames[excludedProperty.Name] = true
 	}
 	if !s.Extends.IsEmpty() {
-		methods, _ := store.SearchProperties(s.Extends.GetFQN(), keyword, NewSearchOptions())
-		for _, property := range methods {
+		properties, _ = store.SearchProperties(s.Extends.GetFQN(), keyword, NewSearchOptions())
+		for _, property := range properties {
 			if _, ok := excludeNames[property.Name]; ok {
 				continue
 			}
@@ -105,8 +121,8 @@ func (s *Class) SearchInheritedProperties(store *Store, keyword string, excluded
 		if typeString.IsEmpty() {
 			continue
 		}
-		methods, _ := store.SearchProperties(typeString.GetFQN(), keyword, NewSearchOptions())
-		for _, property := range methods {
+		properties, _ = store.SearchProperties(typeString.GetFQN(), keyword, NewSearchOptions())
+		for _, property := range properties {
 			if _, ok := excludeNames[property.Name]; ok {
 				continue
 			}
@@ -149,8 +165,8 @@ func (s *Class) SearchInheritedClassConsts(store *Store, keyword string) []*Clas
 	classConsts := []*ClassConst{}
 	excludeNames := map[string]bool{}
 	if !s.Extends.IsEmpty() {
-		methods, _ := store.SearchClassConsts(s.Extends.GetFQN(), keyword, NewSearchOptions())
-		for _, classConst := range methods {
+		classConsts, _ = store.SearchClassConsts(s.Extends.GetFQN(), keyword, NewSearchOptions())
+		for _, classConst := range classConsts {
 			if _, ok := excludeNames[classConst.Name]; ok {
 				continue
 			}
@@ -162,8 +178,8 @@ func (s *Class) SearchInheritedClassConsts(store *Store, keyword string) []*Clas
 		if typeString.IsEmpty() {
 			continue
 		}
-		methods, _ := store.SearchClassConsts(typeString.GetFQN(), keyword, NewSearchOptions())
-		for _, classConst := range methods {
+		classConsts, _ = store.SearchClassConsts(typeString.GetFQN(), keyword, NewSearchOptions())
+		for _, classConst := range classConsts {
 			if _, ok := excludeNames[classConst.Name]; ok {
 				continue
 			}
