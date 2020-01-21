@@ -57,21 +57,12 @@ func getInterfaceMethods(store *Store, theInterface *Interface, name string, opt
 
 func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		method := symbol.(*Method)
-		if _, ok := excludeNames[method.GetName()]; ok {
-			return false
-		}
-		excludeNames[method.GetName()] = true
-		return true
-	}
 	classMethods := []*Method{}
 	if keyword != "" {
-		classMethods, _ = store.SearchMethods(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+		classMethods, _ = store.SearchMethods(class.Name.GetFQN(), keyword, options)
 	} else {
 		for _, classMethod := range store.GetAllMethods(class.Name.GetFQN()) {
-			if isSymbolValid(classMethod, options.WithPredicate(noDuplicate)) {
+			if isSymbolValid(classMethod, options) {
 				classMethods = append(classMethods, classMethod)
 			}
 		}
@@ -85,9 +76,9 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
 			if keyword != "" {
 				methods = append(methods, searchTraitMethods(store, trait, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
-				methods = append(methods, getAllTraitMethods(store, trait, options.WithPredicate(noDuplicate))...)
+				methods = append(methods, getAllTraitMethods(store, trait, options)...)
 			}
 		}
 	}
@@ -105,10 +96,10 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			if keyword != "" {
 				methods = append(methods, searchInterfaceMethods(store, theInterface, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
 				methods = append(methods, getAllInterfaceMethods(store, theInterface,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			}
 		}
 	}
@@ -117,17 +108,8 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 
 func GetClassMethods(store *Store, class *Class, name string, options SearchOptions) []*Method {
 	methods := []*Method{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		method := symbol.(*Method)
-		if _, ok := excludeNames[method.GetName()]; ok {
-			return false
-		}
-		excludeNames[method.GetName()] = true
-		return true
-	}
 	for _, classMethod := range store.GetMethods(class.Name.GetFQN(), name) {
-		if isSymbolValid(classMethod, options.WithPredicate(noDuplicate)) {
+		if isSymbolValid(classMethod, options) {
 			methods = append(methods, classMethod)
 		}
 	}
@@ -137,7 +119,7 @@ func GetClassMethods(store *Store, class *Class, name string, options SearchOpti
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			methods = append(methods, getTraitMethods(store, trait, name, options.WithPredicate(noDuplicate))...)
+			methods = append(methods, getTraitMethods(store, trait, name, options)...)
 		}
 	}
 
@@ -153,7 +135,7 @@ func GetClassMethods(store *Store, class *Class, name string, options SearchOpti
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			methods = append(methods, getInterfaceMethods(store, theInterface, name,
-				options.WithPredicate(noDuplicate))...)
+				options)...)
 		}
 	}
 	return methods

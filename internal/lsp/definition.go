@@ -65,18 +65,19 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ScopedMethodAccess:
+		options := newNoDuplicateMethodsOptions().
+			WithPredicate(func(symbol analysis.Symbol) bool {
+				method := symbol.(*analysis.Method)
+				if !method.IsStatic {
+					return false
+				}
+				return true
+			})
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions().
-						WithPredicate(func(symbol analysis.Symbol) bool {
-							method := symbol.(*analysis.Method)
-							if !method.IsStatic {
-								return false
-							}
-							return true
-						}))...)
+					options)...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
@@ -98,11 +99,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.MethodAccess:
+		options := newNoDuplicateMethodsOptions()
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions())...)
+					options)...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())

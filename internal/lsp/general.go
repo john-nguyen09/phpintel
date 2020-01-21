@@ -9,11 +9,26 @@ import (
 	"runtime"
 	"runtime/pprof"
 
+	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
 )
+
+func newNoDuplicateMethodsOptions() analysis.SearchOptions {
+	excludeNames := map[string]bool{}
+	return analysis.NewSearchOptions().
+		WithPredicate(func(symbol analysis.Symbol) bool {
+			method := symbol.(*analysis.Method)
+			methodKey := method.GetName()
+			if _, ok := excludeNames[methodKey]; ok {
+				return false
+			}
+			excludeNames[methodKey] = true
+			return true
+		})
+}
 
 func getDataDir() string {
 	homeDir, err := homedir.Dir()
