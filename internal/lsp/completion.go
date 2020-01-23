@@ -67,12 +67,12 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		s := document.HasTypesBeforePos(params.Position)
 		if s != nil {
 			s.Resolve(store)
-			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
+			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), s, params.Position)
 		}
 	case phrase.MemberName:
 		if nodes.Parent().Type == phrase.PropertyAccessExpression {
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), params.Position)
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), s.Scope, params.Position)
 			}
 		}
 	}
@@ -215,8 +215,6 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	methodOptions := newNoDuplicateMethodsOptions()
-	propOptions := newNoDuplicatePropsOptions()
 	name := ""
 	classScope := ""
 	if hasName, ok := scope.(analysis.HasName); ok {
@@ -231,9 +229,9 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		methods := []*analysis.Method{}
 		for _, class := range store.GetClasses(scopeTypeFQN) {
 			methods = append(methods, analysis.SearchClassMethods(store, class, word,
-				staticMethodsScopeAware(methodOptions, classScope, name))...)
+				analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			props = append(props, analysis.SearchClassProperties(store, class, word,
-				staticPropsScopeAware(propOptions, classScope, name))...)
+				analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 		}
 		for _, property := range props {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
@@ -262,21 +260,20 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite, pos protocol.Position) *protocol.CompletionList {
+func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
+	scopeTypes analysis.TypeComposite, scope analysis.HasTypes, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	methodOptions := newNoDuplicateMethodsOptions()
-	propOptions := newNoDuplicatePropsOptions()
-	for _, scopeType := range scope.Resolve() {
+	for _, scopeType := range scopeTypes.Resolve() {
 		scope := scopeType.GetFQN()
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
 		for _, class := range store.GetClasses(scope) {
 			methods = append(methods, analysis.SearchClassMethods(store, class, word,
-				methodOptions)...)
+				analysis.NewSearchOptions())...)
 			properties = append(properties, analysis.SearchClassProperties(store, class, word,
-				propOptions)...)
+				analysis.NewSearchOptions())...)
 		}
 		for _, property := range properties {
 			name := property.GetName()

@@ -39,8 +39,10 @@ func (s *PropertyAccess) Resolve(store *Store) {
 		return
 	}
 	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+s.Name) {
-			s.Type.merge(property.Types)
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, property := range GetClassProperties(store, class, "$"+s.Name, NewSearchOptions()) {
+				s.Type.merge(property.Types)
+			}
 		}
 	}
 	s.hasResolved = true

@@ -65,27 +65,40 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		options := newNoDuplicateMethodsOptions().
-			WithPredicate(func(symbol analysis.Symbol) bool {
-				method := symbol.(*analysis.Method)
-				if !method.IsStatic {
-					return false
-				}
-				return true
-			})
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					options)...)
+					analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
+			properties := []*analysis.Property{}
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				properties = append(properties, analysis.GetClassProperties(store, class, v.Name,
+					analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+			}
+			for _, property := range properties {
 				if !property.IsStatic {
 					continue
 				}
@@ -99,12 +112,11 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.MethodAccess:
-		options := newNoDuplicateMethodsOptions()
 		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					options)...)
+					analysis.NewSearchOptions())...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())

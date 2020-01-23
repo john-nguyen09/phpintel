@@ -66,8 +66,10 @@ func (s *MethodAccess) Resolve(store *Store) {
 		return
 	}
 	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, method := range store.GetMethods(scopeType.GetFQN(), s.Name) {
-			s.Type.merge(method.returnTypes)
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, method := range GetClassMethods(store, class, s.Name, NewSearchOptions()) {
+				s.Type.merge(method.returnTypes)
+			}
 		}
 	}
 	s.hasResolved = true

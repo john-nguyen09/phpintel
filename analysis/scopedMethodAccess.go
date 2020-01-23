@@ -68,9 +68,20 @@ func (s *ScopedMethodAccess) Resolve(store *Store) {
 		return
 	}
 	s.hasResolved = true
+	name := ""
+	classScope := ""
+	if hasName, ok := s.Scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	if hasScope, ok := s.Scope.(HasScope); ok {
+		classScope = hasScope.GetScope().GetFQN()
+	}
 	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, method := range store.GetMethods(scopeType.GetFQN(), s.Name) {
-			s.Type.merge(method.GetReturnTypes())
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, method := range GetClassMethods(store, class, s.Name,
+				StaticPropsScopeAware(NewSearchOptions(), classScope, name)) {
+				s.Type.merge(method.GetReturnTypes())
+			}
 		}
 	}
 }

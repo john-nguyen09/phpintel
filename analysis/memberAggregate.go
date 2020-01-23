@@ -1,5 +1,19 @@
 package analysis
 
+func withNoDuplicateNamesOptions(opt SearchOptions) SearchOptions {
+	excludeNames := map[string]bool{}
+	return opt.
+		WithPredicate(func(symbol Symbol) bool {
+			hasName := symbol.(HasName)
+			key := hasName.GetName()
+			if _, ok := excludeNames[key]; ok {
+				return false
+			}
+			excludeNames[key] = true
+			return true
+		})
+}
+
 func searchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	traitMethods, _ := store.SearchMethods(trait.Name.GetFQN(), keyword, options)
@@ -58,6 +72,7 @@ func getInterfaceMethods(store *Store, theInterface *Interface, name string, opt
 func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	classMethods := []*Method{}
+	options = withNoDuplicateNamesOptions(options)
 	if keyword != "" {
 		classMethods, _ = store.SearchMethods(class.Name.GetFQN(), keyword, options)
 	} else {
@@ -108,6 +123,7 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 
 func GetClassMethods(store *Store, class *Class, name string, options SearchOptions) []*Method {
 	methods := []*Method{}
+	options = withNoDuplicateNamesOptions(options)
 	for _, classMethod := range store.GetMethods(class.Name.GetFQN(), name) {
 		if isSymbolValid(classMethod, options) {
 			methods = append(methods, classMethod)
@@ -198,6 +214,7 @@ func getInterfaceProps(store *Store, theInterface *Interface, name string, optio
 func SearchClassProperties(store *Store, class *Class, keyword string, options SearchOptions) []*Property {
 	props := []*Property{}
 	classProps := []*Property{}
+	options = withNoDuplicateNamesOptions(options)
 	if keyword != "" {
 		classProps, _ = store.SearchProperties(class.Name.GetFQN(), keyword, options)
 	} else {
@@ -248,17 +265,9 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 
 func GetClassProperties(store *Store, class *Class, name string, options SearchOptions) []*Property {
 	props := []*Property{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		prop := symbol.(*Property)
-		if _, ok := excludeNames[prop.GetName()]; ok {
-			return false
-		}
-		excludeNames[prop.GetName()] = true
-		return true
-	}
+	options = withNoDuplicateNamesOptions(options)
 	for _, classProp := range store.GetProperties(class.Name.GetFQN(), name) {
-		if isSymbolValid(classProp, options.WithPredicate(noDuplicate)) {
+		if isSymbolValid(classProp, options) {
 			props = append(props, classProp)
 		}
 	}
@@ -268,7 +277,7 @@ func GetClassProperties(store *Store, class *Class, name string, options SearchO
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			props = append(props, getTraitProps(store, trait, name, options.WithPredicate(noDuplicate))...)
+			props = append(props, getTraitProps(store, trait, name, options)...)
 		}
 	}
 
@@ -284,7 +293,7 @@ func GetClassProperties(store *Store, class *Class, name string, options SearchO
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			props = append(props, getInterfaceProps(store, theInterface, name,
-				options.WithPredicate(noDuplicate))...)
+				options)...)
 		}
 	}
 	return props
@@ -346,21 +355,13 @@ func getInterfaceClassConsts(store *Store, theInterface *Interface, name string,
 
 func SearchClassClassConsts(store *Store, class *Class, keyword string, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		prop := symbol.(*ClassConst)
-		if _, ok := excludeNames[prop.GetName()]; ok {
-			return false
-		}
-		excludeNames[prop.GetName()] = true
-		return true
-	}
+	options = withNoDuplicateNamesOptions(options)
 	classClassConsts := []*ClassConst{}
 	if keyword != "" {
-		classClassConsts, _ = store.SearchClassConsts(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+		classClassConsts, _ = store.SearchClassConsts(class.Name.GetFQN(), keyword, options)
 	} else {
 		for _, classClassConst := range store.GetAllClassConsts(class.Name.GetFQN()) {
-			if isSymbolValid(classClassConst, options.WithPredicate(noDuplicate)) {
+			if isSymbolValid(classClassConst, options) {
 				classClassConsts = append(classClassConsts, classClassConst)
 			}
 		}
@@ -374,9 +375,9 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
 			if keyword != "" {
 				classConsts = append(classConsts, searchTraitClassConsts(store, trait, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
-				classConsts = append(classConsts, getAllTraitClassConsts(store, trait, options.WithPredicate(noDuplicate))...)
+				classConsts = append(classConsts, getAllTraitClassConsts(store, trait, options)...)
 			}
 		}
 	}
@@ -394,10 +395,10 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			if keyword != "" {
 				classConsts = append(classConsts, searchInterfaceClassConsts(store, theInterface, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
 				classConsts = append(classConsts, getAllInterfaceClassConsts(store, theInterface,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			}
 		}
 	}
@@ -406,17 +407,9 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 
 func GetClassClassConsts(store *Store, class *Class, name string, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		prop := symbol.(*ClassConst)
-		if _, ok := excludeNames[prop.GetName()]; ok {
-			return false
-		}
-		excludeNames[prop.GetName()] = true
-		return true
-	}
+	options = withNoDuplicateNamesOptions(options)
 	for _, classClassConst := range store.GetClassConsts(class.Name.GetFQN(), name) {
-		if isSymbolValid(classClassConst, options.WithPredicate(noDuplicate)) {
+		if isSymbolValid(classClassConst, options) {
 			classConsts = append(classConsts, classClassConst)
 		}
 	}
@@ -426,7 +419,7 @@ func GetClassClassConsts(store *Store, class *Class, name string, options Search
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			classConsts = append(classConsts, getTraitClassConsts(store, trait, name, options.WithPredicate(noDuplicate))...)
+			classConsts = append(classConsts, getTraitClassConsts(store, trait, name, options)...)
 		}
 	}
 
@@ -442,8 +435,60 @@ func GetClassClassConsts(store *Store, class *Class, name string, options Search
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			classConsts = append(classConsts, getInterfaceClassConsts(store, theInterface, name,
-				options.WithPredicate(noDuplicate))...)
+				options)...)
 		}
 	}
 	return classConsts
+}
+
+func StaticMethodsScopeAware(opt SearchOptions, classScope string,
+	name string) SearchOptions {
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		method := symbol.(*Method)
+		if IsNameParent(name) {
+			// parent:: excludes methods from current class
+			if method.GetScope().GetFQN() == classScope {
+				return false
+			}
+			// or from parents but private
+			if method.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		// static:: and self:: exclude private methods that are not from current class
+		if IsNameRelative(name) {
+			if method.GetScope().GetFQN() != classScope &&
+				method.VisibilityModifier == Private {
+				return false
+			}
+			// And also accept non-static
+			return true
+		}
+		// Not parent:: or static:: or self:: so accept only public static
+		return method.IsStatic && method.VisibilityModifier == Public
+	})
+}
+
+func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) SearchOptions {
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		prop := symbol.(*Property)
+		// Properties are different from methods,
+		// and static can only be accessed using :: (static::, self::, parent::, TestClass1::)
+		if !prop.IsStatic {
+			return false
+		}
+		if IsNameParent(name) {
+			if prop.GetScope().GetFQN() == classScope || prop.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		if IsNameRelative(name) {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+				return false
+			}
+		}
+		return prop.VisibilityModifier == Public
+	})
 }

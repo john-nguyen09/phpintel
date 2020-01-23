@@ -152,6 +152,10 @@ func (s *Store) Migrate(newVersion string) {
 	storeVersion := s.GetStoreVersion()
 	sv, _ := semver.NewVersion(storeVersion)
 
+	if sv == nil {
+		return
+	}
+
 	targetV, _ := semver.NewVersion("v0.0.12")
 	if sv.LessThan(targetV) {
 		log.Println("Clearing database for upgrade.")
