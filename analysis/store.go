@@ -390,10 +390,14 @@ func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 	if len(options.predicates) == 0 {
 		return true
 	}
+	allTrue := true
 	for _, predicate := range options.predicates {
-		return predicate(symbol)
+		if !predicate(symbol) {
+			allTrue = false
+			break
+		}
 	}
-	return false // Never happen
+	return allTrue
 }
 
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {

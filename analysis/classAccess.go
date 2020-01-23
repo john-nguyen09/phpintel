@@ -8,6 +8,7 @@ import (
 // ClassAccess represents a reference to the part before ::
 type ClassAccess struct {
 	Expression
+	classScope TypeString
 }
 
 func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
@@ -17,17 +18,26 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 			Name:     document.GetPhraseText(node),
 		},
 	}
+	lastClass := document.getLastClass()
+	if lastClass != nil {
+		switch v := lastClass.(type) {
+		case *Class:
+			classAccess.classScope = v.Name
+		case *Interface:
+			classAccess.classScope = v.Name
+		}
+	}
 	types := newTypeComposite()
 	if node.Type == phrase.QualifiedName || node.Type == phrase.FullyQualifiedName {
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
-	if isNameRelative(classAccess.Name) {
+	if IsNameRelative(classAccess.Name) {
 		relativeScope := newRelativeScope(document, classAccess.Location)
 		types.merge(relativeScope.Types)
 	}
-	if isNameParent(classAccess.Name) {
+	if IsNameParent(classAccess.Name) {
 		parentScope := newParentScope(document, classAccess.Location)
 		types.merge(parentScope.Types)
 	}
@@ -47,12 +57,20 @@ func (s *ClassAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
+func (s *ClassAccess) GetName() string {
+	return s.Name
+}
+
 func (s *ClassAccess) Resolve(store *Store) {
 
 }
 
 func (s *ClassAccess) GetTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *ClassAccess) GetScope() TypeString {
+	return s.classScope
 }
 
 func (s *ClassAccess) Serialise(serialiser *Serialiser) {

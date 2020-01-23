@@ -30,6 +30,72 @@ func newNoDuplicateMethodsOptions() analysis.SearchOptions {
 		})
 }
 
+func staticMethodsScopeAware(opt analysis.SearchOptions, classScope string,
+	name string) analysis.SearchOptions {
+	return opt.WithPredicate(func(symbol analysis.Symbol) bool {
+		method := symbol.(*analysis.Method)
+		if analysis.IsNameParent(name) {
+			// parent:: excludes methods from current class
+			if method.GetScope().GetFQN() == classScope {
+				return false
+			}
+			// or from parents but private
+			if method.VisibilityModifier == analysis.Private {
+				return false
+			}
+			return true
+		}
+		// static:: and self:: exclude private methods that are not from current class
+		if analysis.IsNameRelative(name) {
+			if method.GetScope().GetFQN() != classScope &&
+				method.VisibilityModifier == analysis.Private {
+				return false
+			}
+			// And also accept non-static
+			return true
+		}
+		// Not parent:: or static:: or self:: so accept only public static
+		return method.IsStatic && method.VisibilityModifier == analysis.Public
+	})
+}
+
+func newNoDuplicatePropsOptions() analysis.SearchOptions {
+	excludeNames := map[string]bool{}
+	return analysis.NewSearchOptions().
+		WithPredicate(func(symbol analysis.Symbol) bool {
+			prop := symbol.(*analysis.Property)
+			propKey := prop.GetName()
+			if _, ok := excludeNames[propKey]; ok {
+				return false
+			}
+			excludeNames[propKey] = true
+			return true
+		})
+}
+
+func staticPropsScopeAware(opt analysis.SearchOptions, classScope string, name string) analysis.SearchOptions {
+	return opt.WithPredicate(func(symbol analysis.Symbol) bool {
+		prop := symbol.(*analysis.Property)
+		// Properties are different from methods,
+		// and static can only be accessed using :: (static::, self::, parent::, TestClass1::)
+		if !prop.IsStatic {
+			return false
+		}
+		if analysis.IsNameParent(name) {
+			if prop.GetScope().GetFQN() == classScope || prop.VisibilityModifier == analysis.Private {
+				return false
+			}
+			return true
+		}
+		if analysis.IsNameRelative(name) {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == analysis.Private {
+				return false
+			}
+		}
+		return prop.VisibilityModifier == analysis.Public
+	})
+}
+
 func getDataDir() string {
 	homeDir, err := homedir.Dir()
 	if err != nil {

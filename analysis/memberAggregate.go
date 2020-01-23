@@ -197,21 +197,12 @@ func getInterfaceProps(store *Store, theInterface *Interface, name string, optio
 
 func SearchClassProperties(store *Store, class *Class, keyword string, options SearchOptions) []*Property {
 	props := []*Property{}
-	excludeNames := map[string]bool{}
-	noDuplicate := func(symbol Symbol) bool {
-		prop := symbol.(*Property)
-		if _, ok := excludeNames[prop.GetName()]; ok {
-			return false
-		}
-		excludeNames[prop.GetName()] = true
-		return true
-	}
 	classProps := []*Property{}
 	if keyword != "" {
-		classProps, _ = store.SearchProperties(class.Name.GetFQN(), keyword, options.WithPredicate(noDuplicate))
+		classProps, _ = store.SearchProperties(class.Name.GetFQN(), keyword, options)
 	} else {
 		for _, classProp := range store.GetAllProperties(class.Name.GetFQN()) {
-			if isSymbolValid(classProp, options.WithPredicate(noDuplicate)) {
+			if isSymbolValid(classProp, options) {
 				classProps = append(classProps, classProp)
 			}
 		}
@@ -225,9 +216,9 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
 			if keyword != "" {
 				props = append(props, searchTraitProps(store, trait, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
-				props = append(props, getAllTraitProps(store, trait, options.WithPredicate(noDuplicate))...)
+				props = append(props, getAllTraitProps(store, trait, options)...)
 			}
 		}
 	}
@@ -245,10 +236,10 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			if keyword != "" {
 				props = append(props, searchInterfaceProps(store, theInterface, keyword,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			} else {
 				props = append(props, getAllInterfaceProps(store, theInterface,
-					options.WithPredicate(noDuplicate))...)
+					options)...)
 			}
 		}
 	}

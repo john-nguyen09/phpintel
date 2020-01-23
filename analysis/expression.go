@@ -27,6 +27,10 @@ type HasTypes interface {
 	Resolve(store *Store)
 }
 
+type HasName interface {
+	GetName() string
+}
+
 type CanAddType interface {
 	AddTypes(types TypeComposite)
 }
