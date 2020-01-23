@@ -79,7 +79,7 @@ func (s *ScopedMethodAccess) Resolve(store *Store) {
 	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			for _, method := range GetClassMethods(store, class, s.Name,
-				StaticPropsScopeAware(NewSearchOptions(), classScope, name)) {
+				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
 				s.Type.merge(method.GetReturnTypes())
 			}
 		}
