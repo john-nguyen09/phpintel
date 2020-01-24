@@ -82,7 +82,10 @@ func (s *MethodAccess) GetTypes() TypeComposite {
 func (s *MethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
 	hasParams := []HasParams{}
 	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
-		methods := store.GetMethods(typeString.GetFQN(), s.Name)
+		methods := []*Method{}
+		for _, class := range store.GetClasses(typeString.GetFQN()) {
+			methods = append(methods, GetClassMethods(store, class, s.Name, NewSearchOptions())...)
+		}
 		for _, method := range methods {
 			hasParams = append(hasParams, method)
 		}

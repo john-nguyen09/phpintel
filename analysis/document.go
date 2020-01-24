@@ -493,6 +493,17 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	var argumentList *ArgumentList = nil
 	if index < len(s.argLists) && util.IsInRange(pos, s.argLists[index].GetLocation().Range) == 0 {
 		argumentList = s.argLists[index]
+	} else {
+		for _, arg := range s.argLists[index:] {
+			isInRange := util.IsInRange(pos, arg.GetLocation().Range)
+			if isInRange > 0 {
+				break
+			}
+			if isInRange == 0 {
+				argumentList = arg
+				break
+			}
+		}
 	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
