@@ -33,6 +33,10 @@
           Range: (protocol.Range) 15:26-15:57
         },
         Name: (string) (len=31) "Illuminate\\Support\\Facades\\Hash"
+      },
+      classScope: (analysis.TypeString) {
+        fqn: (string) (len=17) "\\UsersTableSeeder",
+        original: (string) (len=16) "UsersTableSeeder"
       }
     }),
     Location: (protocol.Location) {
