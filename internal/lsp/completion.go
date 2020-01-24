@@ -70,8 +70,14 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), s, params.Position)
 		}
 	case phrase.MemberName:
-		if nodes.Parent().Type == phrase.PropertyAccessExpression {
+		parent := nodes.Parent()
+		switch parent.Type {
+		case phrase.PropertyAccessExpression:
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), s.Scope, params.Position)
+			}
+		case phrase.MethodCallExpression:
+			if s, ok := symbol.(*analysis.MethodAccess); ok {
 				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), s.Scope, params.Position)
 			}
 		}
