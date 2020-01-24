@@ -23,7 +23,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 	case *analysis.ClassTypeDesignator:
 		for _, typeString := range v.Type.Resolve() {
 			for _, theClass := range store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString)) {
-				locations = append(locations, theClass.GetLocation())
+				constructor := theClass.GetConstructor(store)
+				if constructor == nil || constructor.GetScope().GetFQN() != theClass.Name.GetFQN() {
+					locations = append(locations, theClass.GetLocation())
+				} else {
+					locations = append(locations, constructor.GetLocation())
+				}
 			}
 		}
 	case *analysis.ClassAccess:

@@ -25,14 +25,15 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
-		classes := []*analysis.Class{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
+			classes := store.GetClasses(typeString.GetFQN())
 			if len(classes) > 0 {
 				firstClass := classes[0]
 				constructor := firstClass.GetConstructor(store)
 				if constructor != nil {
 					hover = cmd.MethodToHover(v, *constructor)
+				} else {
+					hover = cmd.ClassToHover(v, *firstClass)
 				}
 				break
 			}
