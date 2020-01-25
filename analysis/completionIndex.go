@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
-	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/kezhuw/leveldb"
 )
 
 // CompletionValue holds references to uri and name
@@ -61,8 +61,8 @@ func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]by
 
 func deleteCompletionIndex(db *leveldb.DB, batch *leveldb.Batch, uri string) {
 	entry := newEntry(documentCompletionIndex, uri)
-	it := db.NewIterator(entry.prefixRange(), nil)
-	defer it.Release()
+	it := db.Prefix(entry.prefixRange(), nil)
+	defer it.Close()
 	for it.Next() {
 		batch.Delete(it.Key())
 		serialiser := SerialiserFromByteSlice(it.Value())
@@ -107,7 +107,7 @@ func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
 			name = prefix + scopeSep + name
 		}
 		entry := newEntry(query.collection, name)
-		it := db.NewIterator(entry.prefixRange(), nil)
+		it := db.Prefix(entry.prefixRange(), nil)
 		for it.Next() {
 			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
@@ -120,7 +120,7 @@ func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
 				break
 			}
 		}
-		it.Release()
+		it.Close()
 	}
 	return SearchResult{isComplete}
 }
