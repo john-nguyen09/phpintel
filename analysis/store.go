@@ -241,9 +241,10 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	entry := newEntry(documentCollection, uri)
-	iter := s.db.NewIterator(entry.prefixRange(), nil)
-	for iter.Next() {
-		uri := strings.Split(string(iter.Key()), KeySep)[1]
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
+	for it.Next() {
+		uri := strings.Split(string(it.Key()), KeySep)[1]
 		s.DeleteDocument(uri)
 	}
 }
@@ -308,10 +309,11 @@ func (s *Store) FinishIndexing() {
 func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
-	iterator := s.db.NewIterator(entry.prefixRange(), nil)
-	for iterator.Next() {
-		key := string(iterator.Key())
-		value := iterator.Value()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
+	for it.Next() {
+		key := string(it.Key())
+		value := it.Value()
 		value = append(value[:0:0], value...)
 		documentURIs[strings.Split(key, KeySep)[1]] = value
 	}
@@ -383,6 +385,7 @@ func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classes = append(classes, ReadClass(serialiser))
@@ -442,6 +445,7 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		interfaces = append(interfaces, ReadInterface(serialiser))
@@ -487,6 +491,7 @@ func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		traits = append(traits, ReadTrait(serialiser))
@@ -532,6 +537,7 @@ func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		functions = append(functions, ReadFunction(serialiser))
@@ -572,6 +578,7 @@ func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		consts = append(consts, ReadConst(serialiser))
@@ -612,6 +619,7 @@ func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		defines = append(defines, ReadDefine(serialiser))
@@ -652,6 +660,7 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
@@ -663,6 +672,7 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
@@ -707,6 +717,7 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
@@ -718,6 +729,7 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
@@ -762,6 +774,7 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
@@ -773,6 +786,7 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
@@ -817,6 +831,7 @@ func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
 	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		results = append(results, ReadGlobalVariable(serialiser))
