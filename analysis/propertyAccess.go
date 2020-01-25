@@ -24,7 +24,6 @@ func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool)
 			propertyAccess.Scope = expression
 		}
 	}
-	traverser.Advance()
 
 	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)
 	return propertyAccess, true

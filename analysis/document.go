@@ -462,8 +462,9 @@ func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	for i := index; i >= 0; i-- {
 		h := s.hasTypesSymbols[i]
 		inRange := util.IsInRange(pos, h.GetLocation().Range)
-		if hasTypes, ok := h.(HasTypes); ok && (inRange > 0 || (inRange == 0 && pos == h.GetLocation().Range.End)) {
-			return hasTypes
+		hRange := h.GetLocation().Range
+		if inRange > 0 || (inRange == 0 && pos == hRange.End && hRange.Start != hRange.End) {
+			return h
 		}
 	}
 	return nil
