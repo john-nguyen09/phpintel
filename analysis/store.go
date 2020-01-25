@@ -10,8 +10,7 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/util"
+	"github.com/tecbot/gorocksdb"
 )
 
 const (
@@ -65,8 +64,8 @@ func (s *entry) getSerialiser() *Serialiser {
 	return s.serialiser
 }
 
-func (s *entry) prefixRange() *util.Range {
-	return util.BytesPrefix(s.getKeyBytes())
+func (s *entry) prefixRange() []byte {
+	return s.getKeyBytes()
 }
 
 func (s *entry) getKeyBytes() []byte {
@@ -79,7 +78,7 @@ func (s *entry) getBytes() []byte {
 
 type Store struct {
 	uri       protocol.DocumentURI
-	db        *leveldb.DB
+	db        *gorocksdb.DB
 	documents cmap.ConcurrentMap
 
 	syncedDocumentURIs cmap.ConcurrentMap
@@ -109,7 +108,12 @@ func initStubs() {
 }
 
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
-	db, err := leveldb.OpenFile(storePath, nil)
+	bbto := gorocksdb.NewDefaultBlockBasedTableOptions()
+	bbto.SetBlockCache(gorocksdb.NewLRUCache(3 << 30))
+	opts := gorocksdb.NewDefaultOptions()
+	opts.SetBlockBasedTableFactory(bbto)
+	opts.SetCreateIfMissing(true)
+	db, err := gorocksdb.OpenDb(opts, storePath)
 	initStubs()
 	if err != nil {
 		return nil, err
@@ -124,28 +128,31 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	return store, nil
 }
 
-func (s *Store) Close() error {
-	return s.db.Close()
+func (s *Store) Close() {
+	s.db.Close()
 }
 
 func (s *Store) GetStoreVersion() string {
-	v, err := s.db.Get(versionKey, nil)
+	v, err := s.db.Get(nil, versionKey)
 	if err != nil {
 		return "v0.0.0"
 	}
-	return string(v)
+	defer v.Free()
+	return string(v.Data())
 }
 
 func (s *Store) PutVersion(version string) {
-	s.db.Put(versionKey, []byte(version), nil)
+	s.db.Put(nil, versionKey, []byte(version))
 }
 
 func (s *Store) Clear() {
-	it := s.db.NewIterator(nil, nil)
-	for it.Next() {
-		s.db.Delete(it.Key(), nil)
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it = it; it.Valid(); it.Next() {
+		key := it.Key()
+		s.db.Delete(nil, key.Data())
+		key.Free()
 	}
-	it.Release()
 }
 
 func (s *Store) Migrate(newVersion string) {
@@ -170,10 +177,13 @@ func (s *Store) LoadStubs() {
 			document := NewDocument(stub.GetUri(path), string(data))
 			currentMD5 := document.GetMD5Hash()
 			entry := newEntry(documentCollection, document.GetURI())
-			savedMD5, err := s.db.Get(entry.getKeyBytes(), nil)
-			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
-				document.Load()
-				s.SyncDocument(document)
+			savedMD5, err := s.db.Get(nil, entry.getKeyBytes())
+			if err != nil {
+				if bytes.Compare(currentMD5, savedMD5.Data()) != 0 {
+					document.Load()
+					s.SyncDocument(document)
+				}
+				savedMD5.Free()
 			}
 			return nil
 		})
@@ -231,9 +241,9 @@ func (s *Store) CreateDocument(uri protocol.DocumentURI) {
 }
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
-	batch := new(leveldb.Batch)
+	batch := gorocksdb.NewWriteBatch()
 	s.forgetDocument(batch, uri)
-	err := s.db.Write(batch, nil)
+	err := s.db.Write(nil, batch)
 	if err != nil {
 		log.Println(err)
 	}
@@ -241,10 +251,13 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	entry := newEntry(documentCollection, uri)
-	iter := s.db.NewIterator(entry.prefixRange(), nil)
-	for iter.Next() {
-		uri := strings.Split(string(iter.Key()), KeySep)[1]
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		key := it.Key()
+		uri := strings.Split(string(key.Data()), KeySep)[1]
 		s.DeleteDocument(uri)
+		key.Free()
 	}
 }
 
@@ -270,12 +283,12 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 }
 
 func (s *Store) SyncDocument(document *Document) {
-	batch := new(leveldb.Batch)
+	batch := gorocksdb.NewWriteBatch()
 	s.forgetAllSymbols(batch, document.GetURI())
 	s.writeAllSymbols(batch, document)
 	entry := newEntry(documentCollection, document.GetURI())
 	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
-	err := s.db.Write(batch, nil)
+	err := s.db.Write(nil, batch)
 	if err != nil {
 		log.Print(err)
 	}
@@ -294,12 +307,12 @@ func (s *Store) PrepareForIndexing() {
 }
 
 func (s *Store) FinishIndexing() {
-	batch := new(leveldb.Batch)
+	batch := gorocksdb.NewWriteBatch()
 	for iter := range s.syncedDocumentURIs.Iter() {
 		s.forgetDocument(batch, iter.Key)
 		s.syncedDocumentURIs.Remove(iter.Key)
 	}
-	err := s.db.Write(batch, nil)
+	err := s.db.Write(nil, batch)
 	if err != nil {
 		log.Println(err)
 	}
@@ -308,35 +321,39 @@ func (s *Store) FinishIndexing() {
 func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
-	iterator := s.db.NewIterator(entry.prefixRange(), nil)
-	for iterator.Next() {
-		key := string(iterator.Key())
-		value := iterator.Value()
-		value = append(value[:0:0], value...)
-		documentURIs[strings.Split(key, KeySep)[1]] = value
+	it := s.db.NewIterator(nil)
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		key := it.Key()
+		value := it.Value()
+		valueData := value.Data()
+		documentURIs[strings.Split(string(key.Data()), KeySep)[1]] = append(valueData[:0:0], valueData...)
+		key.Free()
+		value.Free()
 	}
 	return documentURIs
 }
 
-func (s *Store) forgetDocument(batch *leveldb.Batch, uri string) {
+func (s *Store) forgetDocument(batch *gorocksdb.WriteBatch, uri string) {
 	s.forgetAllSymbols(batch, uri)
 	entry := newEntry(documentCollection, uri)
 	batch.Delete(entry.getKeyBytes())
 }
 
-func (s *Store) forgetAllSymbols(batch *leveldb.Batch, uri string) {
+func (s *Store) forgetAllSymbols(batch *gorocksdb.WriteBatch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	defer it.Release()
-	for it.Next() {
-		keyInfo := strings.Split(string(it.Key()), KeySep)
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		key := it.Key()
+		keyInfo := strings.Split(string(key.Data()), KeySep)
 		toBeDelete := newEntry(keyInfo[2], strings.Join(keyInfo[3:], KeySep))
 		deleteEntry(batch, toBeDelete)
+		key.Free()
 	}
 	deleteCompletionIndex(s.db, batch, uri)
 }
 
-func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
+func (s *Store) writeAllSymbols(batch *gorocksdb.WriteBatch, document *Document) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			key := serialisable.GetKey()
@@ -355,23 +372,23 @@ func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
 	}
 }
 
-func rememberSymbol(batch *leveldb.Batch, document *Document, serialisable Serialisable) {
+func rememberSymbol(batch *gorocksdb.WriteBatch, document *Document, serialisable Serialisable) {
 	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
 	writeEntry(batch, entry)
 }
 
-func indexName(batch *leveldb.Batch, document *Document, indexable NameIndexable, key string) {
+func indexName(batch *gorocksdb.WriteBatch, document *Document, indexable NameIndexable, key string) {
 	entries := createCompletionEntries(document.GetURI(), indexable, key)
 	for _, entry := range entries {
 		writeEntry(batch, entry)
 	}
 }
 
-func writeEntry(batch *leveldb.Batch, entry *entry) {
+func writeEntry(batch *gorocksdb.WriteBatch, entry *entry) {
 	batch.Put(entry.getKeyBytes(), entry.getBytes())
 }
 
-func deleteEntry(batch *leveldb.Batch, entry *entry) {
+func deleteEntry(batch *gorocksdb.WriteBatch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 
@@ -382,10 +399,13 @@ func (s *Store) GetURI() protocol.DocumentURI {
 func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		classes = append(classes, ReadClass(serialiser))
+		value.Free()
 	}
 	return classes
 }
@@ -418,11 +438,12 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			class := ReadClass(serialiser)
 			if isSymbolValid(class, options) {
 				classes = append(classes, class)
@@ -441,10 +462,13 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		interfaces = append(interfaces, ReadInterface(serialiser))
+		value.Free()
 	}
 	return interfaces
 }
@@ -463,11 +487,12 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(interfaceCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			theInterface := ReadInterface(serialiser)
 			if isSymbolValid(theInterface, options) {
 				interfaces = append(interfaces, theInterface)
@@ -486,10 +511,13 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		traits = append(traits, ReadTrait(serialiser))
+		value.Free()
 	}
 	return traits
 }
@@ -508,11 +536,12 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(traitCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			trait := ReadTrait(serialiser)
 			if isSymbolValid(trait, options) {
 				traits = append(traits, trait)
@@ -531,10 +560,13 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		functions = append(functions, ReadFunction(serialiser))
+		value.Free()
 	}
 	return functions
 }
@@ -548,11 +580,12 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(functionCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			function := ReadFunction(serialiser)
 			if isSymbolValid(function, options) {
 				functions = append(functions, function)
@@ -571,10 +604,13 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		consts = append(consts, ReadConst(serialiser))
+		value.Free()
 	}
 	return consts
 }
@@ -588,11 +624,12 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(constCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			constant := ReadConst(serialiser)
 			if isSymbolValid(constant, options) {
 				consts = append(consts, constant)
@@ -611,10 +648,13 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		defines = append(defines, ReadDefine(serialiser))
+		value.Free()
 	}
 	return defines
 }
@@ -628,11 +668,12 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(defineCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			define := ReadDefine(serialiser)
 			if isSymbolValid(define, options) {
 				defines = append(defines, define)
@@ -651,10 +692,13 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.Valid(); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		methods = append(methods, ReadMethod(serialiser))
+		value.Free()
 	}
 	return methods
 }
@@ -662,10 +706,13 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		methods = append(methods, ReadMethod(serialiser))
+		value.Free()
 	}
 	return methods
 }
@@ -683,11 +730,12 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(methodCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			method := ReadMethod(serialiser)
 			if isSymbolValid(method, options) {
 				methods = append(methods, method)
@@ -706,10 +754,13 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
+		value.Free()
 	}
 	return classConsts
 }
@@ -717,10 +768,13 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
+		value.Free()
 	}
 	return classConsts
 }
@@ -738,11 +792,12 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classConstCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			classConst := ReadClassConst(serialiser)
 			if isSymbolValid(classConst, options) {
 				classConsts = append(classConsts, classConst)
@@ -761,10 +816,13 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		properties = append(properties, ReadProperty(serialiser))
+		value.Free()
 	}
 	return properties
 }
@@ -772,10 +830,13 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		properties = append(properties, ReadProperty(serialiser))
+		value.Free()
 	}
 	return properties
 }
@@ -793,11 +854,12 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(propertyCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(nil, entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value.Data())
+			value.Free()
 			property := ReadProperty(serialiser)
 			if isSymbolValid(property, options) {
 				properties = append(properties, property)
@@ -816,10 +878,13 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
-	it := s.db.NewIterator(entry.prefixRange(), nil)
-	for it.Next() {
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := s.db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		value := it.Value()
+		serialiser := SerialiserFromByteSlice(value.Data())
 		results = append(results, ReadGlobalVariable(serialiser))
+		value.Free()
 	}
 	return results
 }

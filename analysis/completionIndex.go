@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
-	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/tecbot/gorocksdb"
 )
 
 // CompletionValue holds references to uri and name
@@ -59,20 +59,24 @@ func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]by
 	return entry
 }
 
-func deleteCompletionIndex(db *leveldb.DB, batch *leveldb.Batch, uri string) {
+func deleteCompletionIndex(db *gorocksdb.DB, batch *gorocksdb.WriteBatch, uri string) {
 	entry := newEntry(documentCompletionIndex, uri)
-	it := db.NewIterator(entry.prefixRange(), nil)
-	defer it.Release()
-	for it.Next() {
-		batch.Delete(it.Key())
-		serialiser := SerialiserFromByteSlice(it.Value())
+	it := db.NewIterator(nil)
+	defer it.Close()
+	for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+		key := it.Key()
+		value := it.Value()
+		batch.Delete(key.Data())
+		serialiser := SerialiserFromByteSlice(value.Data())
 		len := serialiser.ReadInt()
 		if len > 0 {
 			for i := 0; i < len-1; i++ {
 				key := serialiser.ReadBytes()
-				db.Delete(key, nil)
+				batch.Delete(key)
 			}
 		}
+		key.Free()
+		value.Free()
 	}
 }
 
@@ -97,7 +101,7 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
+func searchCompletions(db *gorocksdb.DB, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	isComplete := true
 	for _, prefix := range query.prefixes {
@@ -107,20 +111,24 @@ func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
 			name = prefix + scopeSep + name
 		}
 		entry := newEntry(query.collection, name)
-		it := db.NewIterator(entry.prefixRange(), nil)
-		for it.Next() {
-			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
+		it := db.NewIterator(nil)
+		for it.Seek(entry.prefixRange()); it.ValidForPrefix(entry.prefixRange()); it.Next() {
+			value := it.Value()
+			completionValue := readCompletionValue(SerialiserFromByteSlice(value.Data()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
+				value.Free()
 				continue
 			}
 			result := query.onData(completionValue)
 			uniqueCompletionValues[completionValue] = true
 			if result.shouldStop {
 				isComplete = false
+				value.Free()
 				break
 			}
+			value.Free()
 		}
-		it.Release()
+		it.Close()
 	}
 	return SearchResult{isComplete}
 }
