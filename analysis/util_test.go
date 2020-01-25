@@ -23,10 +23,6 @@ func setupStore(uri string, name string) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	it := store.db.NewIterator(nil, nil)
-	for it.Next() {
-		store.db.Delete(it.Key(), nil)
-	}
-	it.Release()
+	store.Clear()
 	return store, nil
 }
