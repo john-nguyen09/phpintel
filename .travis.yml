@@ -13,7 +13,8 @@ notifications:
   email: false
 
 before_install:
-  - sudo apt-get -y install upx-ucl
+  - sudo apt-get -y install upx-ucl mingw-w64 && sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+  - ./scripts/build_leveldb.sh
 
 script:
   - go get -t -v ./...
