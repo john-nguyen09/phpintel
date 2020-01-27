@@ -93,12 +93,19 @@ func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 func (s *ScopedMethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
 	hasParams := []HasParams{}
 	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
-		methods := store.GetMethods(typeString.GetFQN(), s.Name)
-		for _, method := range methods {
-			if !method.IsStatic {
-				continue
+		name := ""
+		classScope := ""
+		if hasName, ok := s.Scope.(HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := s.Scope.(HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, class := range store.GetClasses(typeString.GetFQN()) {
+			for _, method := range GetClassMethods(store, class, s.Name,
+				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
+				hasParams = append(hasParams, method)
 			}
-			hasParams = append(hasParams, method)
 		}
 	}
 	return hasParams
