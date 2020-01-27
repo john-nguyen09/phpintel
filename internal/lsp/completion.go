@@ -19,10 +19,14 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		return nil, StoreNotFound(uri)
 	}
 	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return nil, DocumentNotFound(uri)
+	}
 	document.Lock()
 	defer document.Unlock()
 	document.Load()
 	var completionList *protocol.CompletionList = nil
+	resolveCtx := analysis.NewResolveContext(store, document)
 	symbol := document.HasTypesAtPos(params.Position)
 	word := document.WordAtPos(params.Position)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
@@ -39,17 +43,17 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
 			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(store), s.Scope)
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.ScopedCallExpression:
 		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
 			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(store), s.Scope)
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.ScopedPropertyAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
 			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(store), s.Scope)
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.Identifier:
 		nodes.Parent()
@@ -58,7 +62,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case phrase.ClassConstantAccessExpression, phrase.ScopedCallExpression:
 			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
 			if s, ok := symbol.(*analysis.ClassAccess); ok {
-				s.Resolve(store)
+				s.Resolve(resolveCtx)
 				completionList = scopedAccessCompletion(store, document, word,
 					s.Type, s)
 			}
@@ -66,7 +70,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case phrase.PropertyAccessExpression:
 		s := document.HasTypesBeforePos(params.Position)
 		if s != nil {
-			s.Resolve(store)
+			s.Resolve(resolveCtx)
 			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), s, params.Position)
 		}
 	case phrase.MemberName:
@@ -74,11 +78,11 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		switch parent.Type {
 		case phrase.PropertyAccessExpression:
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), s.Scope, params.Position)
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
 			}
 		case phrase.MethodCallExpression:
 			if s, ok := symbol.(*analysis.MethodAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), s.Scope, params.Position)
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
 			}
 		}
 	}
@@ -272,12 +276,11 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		IsIncomplete: false,
 	}
 	for _, scopeType := range scopeTypes.Resolve() {
-		scope := scopeType.GetFQN()
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
-		for _, class := range store.GetClasses(scope) {
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			methods = append(methods, analysis.SearchClassMethods(store, class, word,
-				analysis.NewSearchOptions())...)
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
 			properties = append(properties, analysis.SearchClassProperties(store, class, word,
 				analysis.NewSearchOptions())...)
 		}

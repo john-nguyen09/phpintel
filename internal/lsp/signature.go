@@ -37,7 +37,7 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if argumentList == nil || hasParamsResolvable == nil {
 		return nil, nil
 	}
-	hasParams := hasParamsResolvable.ResolveToHasParams(store, document)
+	hasParams := hasParamsResolvable.ResolveToHasParams(analysis.NewResolveContext(store, document))
 	for _, hasParam := range hasParams {
 		signatureHelp.Signatures = append(signatureHelp.Signatures, hasParamToSignatureInformation(hasParam))
 	}

@@ -33,10 +33,6 @@
           Range: (protocol.Range) 20:0-20:4
         },
         Name: (string) (len=4) "User"
-      },
-      classScope: (analysis.TypeString) {
-        fqn: (string) (len=17) "\\UsersTableSeeder",
-        original: (string) (len=16) "UsersTableSeeder"
       }
     }),
     Location: (protocol.Location) {

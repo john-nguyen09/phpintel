@@ -8,15 +8,14 @@ import (
 
 // TypeDeclaration is type declaration for a symbol
 type TypeDeclaration struct {
-	location protocol.Location
-
-	Name string
-	Type TypeComposite
+	Expression
 }
 
 func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaration {
 	typeDeclaration := &TypeDeclaration{
-		location: document.GetNodeLocation(node),
+		Expression: Expression{
+			Location: document.GetNodeLocation(node),
+		},
 	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -37,11 +36,7 @@ func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaratio
 }
 
 func (s *TypeDeclaration) GetLocation() protocol.Location {
-	return s.location
-}
-
-func (s *TypeDeclaration) Resolve(store *Store) {
-
+	return s.Location
 }
 
 func (s *TypeDeclaration) GetTypes() TypeComposite {

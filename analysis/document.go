@@ -400,6 +400,31 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
+func (s *Document) getClassScopeAtSymbol(symbol Symbol) string {
+	class := s.getClassAtPos(symbol.GetLocation().Range.Start)
+	if class == nil {
+		return ""
+	}
+
+	switch v := class.(type) {
+	case *Class:
+		return v.Name.GetFQN()
+	case *Interface:
+		return v.Name.GetFQN()
+	}
+	return ""
+}
+
+func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
+	index := sort.Search(len(s.classStack), func(i int) bool {
+		return util.IsInRange(pos, s.classStack[i].GetLocation().Range) <= 0
+	})
+	if index >= len(s.classStack) {
+		return nil
+	}
+	return s.classStack[index]
+}
+
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	found := util.NodeStack{}
 	traverser := util.NewTraverser(s.GetRootNode())

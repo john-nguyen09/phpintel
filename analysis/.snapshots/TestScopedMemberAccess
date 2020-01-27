@@ -18,10 +18,6 @@
         Range: (protocol.Range) 2:0-2:9
       },
       Name: (string) (len=9) "TestClass"
-    },
-    classScope: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
     }
   }),
   (*analysis.ScopedPropertyAccess)({
@@ -49,10 +45,6 @@
             Range: (protocol.Range) 2:0-2:9
           },
           Name: (string) (len=9) "TestClass"
-        },
-        classScope: (analysis.TypeString) {
-          fqn: (string) "",
-          original: (string) ""
         }
       }),
       Location: (protocol.Location) {
@@ -82,10 +74,6 @@
         Range: (protocol.Range) 3:0-3:9
       },
       Name: (string) (len=9) "TestClass"
-    },
-    classScope: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
     }
   }),
   (*analysis.ScopedConstantAccess)({
@@ -113,10 +101,6 @@
             Range: (protocol.Range) 3:0-3:9
           },
           Name: (string) (len=9) "TestClass"
-        },
-        classScope: (analysis.TypeString) {
-          fqn: (string) "",
-          original: (string) ""
         }
       }),
       Location: (protocol.Location) {
@@ -145,10 +129,6 @@
         Range: (protocol.Range) 4:0-4:9
       },
       Name: (string) (len=9) "TestClass"
-    },
-    classScope: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) ""
     }
   }),
   (*analysis.ScopedMethodAccess)({
@@ -176,10 +156,6 @@
             Range: (protocol.Range) 4:0-4:9
           },
           Name: (string) (len=9) "TestClass"
-        },
-        classScope: (analysis.TypeString) {
-          fqn: (string) "",
-          original: (string) ""
         }
       }),
       Location: (protocol.Location) {

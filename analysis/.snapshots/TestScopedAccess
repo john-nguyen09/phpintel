@@ -23,10 +23,6 @@
           Range: (protocol.Range) 1:0-1:15
         },
         Name: (string) (len=15) "TestMethodClass"
-      },
-      classScope: (analysis.TypeString) {
-        fqn: (string) "",
-        original: (string) ""
       }
     }),
     Location: (protocol.Location) {

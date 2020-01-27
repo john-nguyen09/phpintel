@@ -441,8 +441,7 @@ func GetClassClassConsts(store *Store, class *Class, name string, options Search
 	return classConsts
 }
 
-func StaticMethodsScopeAware(opt SearchOptions, classScope string,
-	name string) SearchOptions {
+func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) SearchOptions {
 	return opt.WithPredicate(func(symbol Symbol) bool {
 		method := symbol.(*Method)
 		if IsNameParent(name) {
@@ -467,6 +466,39 @@ func StaticMethodsScopeAware(opt SearchOptions, classScope string,
 		}
 		// Not parent:: or static:: or self:: so accept only public static
 		return method.IsStatic && method.VisibilityModifier == Public
+	})
+}
+
+func MethodsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
+	name := ""
+	classScope := document.getClassScopeAtSymbol(scope)
+	if hasName, ok := scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		method := symbol.(*Method)
+		// $this allows excludes private methods from parents
+		if name == "$this" {
+			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		// The same goes for the type of the same class not just $this
+		isSameClass := false
+		for _, typeString := range scope.GetTypes().Resolve() {
+			if typeString.GetFQN() == classScope {
+				isSameClass = true
+				break
+			}
+		}
+		if isSameClass {
+			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		return method.VisibilityModifier == Public
 	})
 }
 

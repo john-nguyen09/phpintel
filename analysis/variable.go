@@ -72,10 +72,11 @@ func (s *Variable) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	}
 }
 
-func (s *Variable) Resolve(store *Store) {
+func (s *Variable) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
+	store := ctx.store
 	s.hasResolved = true
 	if s.canReferenceGlobal {
 		globalVariables := store.GetGlobalVariables(s.Name)
@@ -84,7 +85,7 @@ func (s *Variable) Resolve(store *Store) {
 		}
 	}
 	if s.Scope != nil {
-		s.Scope.Resolve(store)
+		s.Scope.Resolve(ctx)
 	}
 }
 
@@ -109,6 +110,10 @@ func (s *Variable) GetDescription() string {
 
 func (s *Variable) GetDetail() string {
 	return s.Type.ToString()
+}
+
+func (s *Variable) GetName() string {
+	return s.Name
 }
 
 func (s *Variable) MarshalJSON() ([]byte, error) {
