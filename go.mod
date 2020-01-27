@@ -9,8 +9,10 @@ require (
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/evorts/html-to-markdown v0.0.3
 	github.com/golang/protobuf v1.3.2 // indirect
+	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/john-nguyen09/go-phpparser v0.0.0-20191214130445-ec1858e53b7e
 	github.com/karrick/godirwalk v1.12.0
+	github.com/kezhuw/leveldb v0.0.0-20190706033135-fad8df552b69
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.11.0 // indirect
