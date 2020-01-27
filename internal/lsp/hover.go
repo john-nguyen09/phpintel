@@ -165,6 +165,14 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
 					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
+			for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetInterfaceMethods(store, theInterface, v.Name,
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			}
+			for _, trait := range store.GetTraits(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetTraitMethods(store, trait, v.Name,
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])
 				break

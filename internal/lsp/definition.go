@@ -130,6 +130,14 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
 					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
+			for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetInterfaceMethods(store, theInterface, v.Name,
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			}
+			for _, trait := range store.GetTraits(scopeType.GetFQN()) {
+				methods = append(methods, analysis.GetTraitMethods(store, trait, v.Name,
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
 			}

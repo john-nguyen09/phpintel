@@ -284,6 +284,14 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			properties = append(properties, analysis.SearchClassProperties(store, class, word,
 				analysis.PropsScopeAware(analysis.NewSearchOptions(), document, scope))...)
 		}
+		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
+			methods = append(methods, analysis.SearchInterfaceMethods(store, theInterface, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+		}
+		for _, trait := range store.GetTraits(scopeType.GetFQN()) {
+			methods = append(methods, analysis.GetTraitMethods(store, trait, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+		}
 		for _, property := range properties {
 			name := property.GetName()
 			if !property.IsStatic {
