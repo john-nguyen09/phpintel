@@ -22,7 +22,11 @@ func newAssignment(document *Document, node *phrase.Phrase) Symbol {
 func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
 	traverser.Advance()
 	traverser.SkipToken(lexer.Whitespace)
-	traverser.SkipToken(lexer.Equals)
+	if parent.Type == phrase.CompoundAssignmentExpression {
+		traverser.SkipToken(lexer.DotEquals)
+	} else {
+		traverser.SkipToken(lexer.Equals)
+	}
 	traverser.SkipToken(lexer.Whitespace)
 	if parent.Type == phrase.ByRefAssignmentExpression {
 		traverser.SkipToken(lexer.Ampersand)

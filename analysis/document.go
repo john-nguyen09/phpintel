@@ -400,6 +400,31 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
+func (s *Document) getClassScopeAtSymbol(symbol Symbol) string {
+	class := s.getClassAtPos(symbol.GetLocation().Range.Start)
+	if class == nil {
+		return ""
+	}
+
+	switch v := class.(type) {
+	case *Class:
+		return v.Name.GetFQN()
+	case *Interface:
+		return v.Name.GetFQN()
+	}
+	return ""
+}
+
+func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
+	index := sort.Search(len(s.classStack), func(i int) bool {
+		return util.IsInRange(pos, s.classStack[i].GetLocation().Range) <= 0
+	})
+	if index >= len(s.classStack) {
+		return nil
+	}
+	return s.classStack[index]
+}
+
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	found := util.NodeStack{}
 	traverser := util.NewTraverser(s.GetRootNode())
@@ -462,8 +487,9 @@ func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	for i := index; i >= 0; i-- {
 		h := s.hasTypesSymbols[i]
 		inRange := util.IsInRange(pos, h.GetLocation().Range)
-		if hasTypes, ok := h.(HasTypes); ok && (inRange > 0 || (inRange == 0 && pos == h.GetLocation().Range.End)) {
-			return hasTypes
+		hRange := h.GetLocation().Range
+		if inRange > 0 || (inRange == 0 && pos == hRange.End && hRange.Start != hRange.End) {
+			return h
 		}
 	}
 	return nil
@@ -493,6 +519,17 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	var argumentList *ArgumentList = nil
 	if index < len(s.argLists) && util.IsInRange(pos, s.argLists[index].GetLocation().Range) == 0 {
 		argumentList = s.argLists[index]
+	} else {
+		for _, arg := range s.argLists[index:] {
+			isInRange := util.IsInRange(pos, arg.GetLocation().Range)
+			if isInRange > 0 {
+				break
+			}
+			if isInRange == 0 {
+				argumentList = arg
+				break
+			}
+		}
 	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)

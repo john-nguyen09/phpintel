@@ -23,6 +23,7 @@ func TestGlobalVariableReference(t *testing.T) {
 
 	referenceFile, _ := filepath.Abs("../cases/reference/globalVariable.php")
 	document := openDocument(store, referenceFile, "test2")
+	resolveCtx := NewResolveContext(store, document)
 
 	symbol := document.HasTypesAt(14)
 	var propAccess *PropertyAccess = nil
@@ -45,34 +46,34 @@ func TestGlobalVariableReference(t *testing.T) {
 		insideFunctionNoGlobalTypes:  newTypeComposite(),
 		insideFunctionHasGlobalTypes: newTypeComposite(),
 	}
-	testResult.dbTypes = propAccess.ResolveAndGetScope(store)
+	testResult.dbTypes = propAccess.ResolveAndGetScope(resolveCtx)
 
 	symbol = document.HasTypesAt(28)
 	if propAccess, ok = symbol.(*PropertyAccess); !ok {
 		t.Errorf("At 28, %T is not *PropertyAccess", symbol)
 	}
-	testResult.outputTypes = propAccess.ResolveAndGetScope(store)
+	testResult.outputTypes = propAccess.ResolveAndGetScope(resolveCtx)
 
 	symbol = document.HasTypesAt(35)
 	var variable *Variable = nil
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 35, %T is not *Variable", symbol)
 	}
-	variable.Resolve(store)
+	variable.Resolve(resolveCtx)
 	testResult.varTypes = variable.GetTypes()
 
 	symbol = document.HasTypesAt(109)
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 109, %T is not *Variable", symbol)
 	}
-	variable.Resolve(store)
+	variable.Resolve(resolveCtx)
 	testResult.insideFunctionNoGlobalTypes = variable.GetTypes()
 
 	symbol = document.HasTypesAt(177)
 	if variable, ok = symbol.(*Variable); !ok {
 		t.Errorf("At 177, %T is not *Variable", symbol)
 	}
-	variable.Resolve(store)
+	variable.Resolve(resolveCtx)
 	testResult.insideFunctionHasGlobalTypes = variable.GetTypes()
 
 	cupaloy.SnapshotT(t, testResult)

@@ -18,21 +18,24 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
+	resolveCtx := analysis.NewResolveContext(store, document)
 	document.Load()
-	symbol := document.HasTypesAtPos(params.TextDocumentPositionParams.Position)
+	pos := params.TextDocumentPositionParams.Position
+	symbol := document.HasTypesAtPos(pos)
 	var hover *protocol.Hover = nil
 	// log.Printf("Hover: %T\n", symbol)
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
-		classes := []*analysis.Class{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
+			classes := store.GetClasses(typeString.GetFQN())
 			if len(classes) > 0 {
 				firstClass := classes[0]
 				constructor := firstClass.GetConstructor(store)
 				if constructor != nil {
 					hover = cmd.MethodToHover(v, *constructor)
+				} else {
+					hover = cmd.ClassToHover(v, *firstClass)
 				}
 				break
 			}
@@ -92,7 +95,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.ScopedConstantAccess:
 		classConsts := []*analysis.ClassConst{}
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			classConsts = append(classConsts, store.GetClassConsts(
 				scopeType.GetFQN(), v.Name)...)
 			if len(classConsts) > 0 {
@@ -101,18 +104,19 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		methods := []*analysis.Method{}
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions().
-						WithPredicate(func(symbol analysis.Symbol) bool {
-							method := symbol.(*analysis.Method)
-							if !method.IsStatic {
-								return false
-							}
-							return true
-						}))...)
+					analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])
@@ -120,12 +124,19 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
-		properties := []*analysis.Property{}
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
-				if !property.IsStatic {
-				}
-				properties = append(properties, property)
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			properties := []*analysis.Property{}
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				properties = append(properties, analysis.GetClassProperties(store, class, v.Name,
+					analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			if len(properties) > 0 {
 				hover = cmd.PropertyToHover(symbol, *properties[0])
@@ -133,13 +144,14 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			}
 		}
 	case *analysis.Variable:
-		v.Resolve(store)
+		v.Resolve(resolveCtx)
 		hover = cmd.VariableToHover(v)
 	case *analysis.PropertyAccess:
 		properties := []*analysis.Property{}
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
-				properties = append(properties, property)
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				properties = append(properties, analysis.GetClassProperties(store, class, "$"+v.Name,
+					analysis.NewSearchOptions())...)
 			}
 			if len(properties) > 0 {
 				hover = cmd.PropertyToHover(symbol, *properties[0])
@@ -148,10 +160,10 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.MethodAccess:
 		methods := []*analysis.Method{}
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions())...)
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
 			if len(methods) > 0 {
 				hover = cmd.MethodToHover(symbol, *methods[0])

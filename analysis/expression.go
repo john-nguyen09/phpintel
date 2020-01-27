@@ -13,9 +13,22 @@ type Expression struct {
 	Name     string
 }
 
-func (e *Expression) ResolveAndGetScope(store *Store) TypeComposite {
+type ResolveContext struct {
+	store    *Store
+	document *Document
+}
+
+func NewResolveContext(store *Store, document *Document) ResolveContext {
+	return ResolveContext{store, document}
+}
+
+func (e *Expression) Resolve(ctx ResolveContext) {
+
+}
+
+func (e *Expression) ResolveAndGetScope(ctx ResolveContext) TypeComposite {
 	if e.Scope != nil {
-		e.Scope.Resolve(store)
+		e.Scope.Resolve(ctx)
 		return e.Scope.GetTypes()
 	}
 	return newTypeComposite()
@@ -24,7 +37,11 @@ func (e *Expression) ResolveAndGetScope(store *Store) TypeComposite {
 type HasTypes interface {
 	GetLocation() protocol.Location
 	GetTypes() TypeComposite
-	Resolve(store *Store)
+	Resolve(ctx ResolveContext)
+}
+
+type HasName interface {
+	GetName() string
 }
 
 type CanAddType interface {

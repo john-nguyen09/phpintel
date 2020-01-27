@@ -38,14 +38,26 @@ func (s *ScopedPropertyAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedPropertyAccess) Resolve(store *Store) {
+func (s *ScopedPropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
+	store := ctx.store
 	s.hasResolved = true
-	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, property := range store.GetProperties(scopeType.GetFQN(), s.Name) {
-			s.Type.merge(property.Types)
+	name := ""
+	classScope := ""
+	if hasName, ok := s.Scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	if hasScope, ok := s.Scope.(HasScope); ok {
+		classScope = hasScope.GetScope().GetFQN()
+	}
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, property := range GetClassProperties(store, class, s.Name,
+				StaticPropsScopeAware(NewSearchOptions(), classScope, name)) {
+				s.Type.merge(property.Types)
+			}
 		}
 	}
 }

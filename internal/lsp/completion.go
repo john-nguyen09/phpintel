@@ -19,10 +19,14 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		return nil, StoreNotFound(uri)
 	}
 	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return nil, DocumentNotFound(uri)
+	}
 	document.Lock()
 	defer document.Unlock()
 	document.Load()
 	var completionList *protocol.CompletionList = nil
+	resolveCtx := analysis.NewResolveContext(store, document)
 	symbol := document.HasTypesAtPos(params.Position)
 	word := document.WordAtPos(params.Position)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
@@ -38,15 +42,18 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		}
 	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+			completionList = scopedAccessCompletion(store, document, word,
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.ScopedCallExpression:
 		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+			completionList = scopedAccessCompletion(store, document, word,
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.ScopedPropertyAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word, s.ResolveAndGetScope(store))
+			completionList = scopedAccessCompletion(store, document, word,
+				s.ResolveAndGetScope(resolveCtx), s.Scope)
 		}
 	case phrase.Identifier:
 		nodes.Parent()
@@ -55,20 +62,27 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case phrase.ClassConstantAccessExpression, phrase.ScopedCallExpression:
 			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
 			if s, ok := symbol.(*analysis.ClassAccess); ok {
-				s.Resolve(store)
-				completionList = scopedAccessCompletion(store, document, word, s.Type)
+				s.Resolve(resolveCtx)
+				completionList = scopedAccessCompletion(store, document, word,
+					s.Type, s)
 			}
 		}
 	case phrase.PropertyAccessExpression:
 		s := document.HasTypesBeforePos(params.Position)
 		if s != nil {
-			s.Resolve(store)
-			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), params.Position)
+			s.Resolve(resolveCtx)
+			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), s, params.Position)
 		}
 	case phrase.MemberName:
-		if nodes.Parent().Type == phrase.PropertyAccessExpression {
+		parent := nodes.Parent()
+		switch parent.Type {
+		case phrase.PropertyAccessExpression:
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(store), params.Position)
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
+			}
+		case phrase.MethodCallExpression:
+			if s, ok := symbol.(*analysis.MethodAccess); ok {
+				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
 			}
 		}
 	}
@@ -206,40 +220,44 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	return completionList
 }
 
-func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite) *protocol.CompletionList {
+func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
+	scopeTypes analysis.TypeComposite, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
-		IsIncomplete: true,
+		IsIncomplete: false,
 	}
-	for _, scopeType := range scope.Resolve() {
-		scope := scopeType.GetFQN()
-		properties, searchResult := store.SearchProperties(scope, word, baseSearchOptions)
-		completionList.IsIncomplete = !searchResult.IsComplete
-		for _, property := range properties {
-			if !property.IsStatic {
-				continue
-			}
+	name := ""
+	classScope := ""
+	if hasName, ok := scope.(analysis.HasName); ok {
+		name = hasName.GetName()
+	}
+	if hasScope, ok := scope.(analysis.HasScope); ok {
+		classScope = hasScope.GetScope().GetFQN()
+	}
+	for _, scopeType := range scopeTypes.Resolve() {
+		scopeTypeFQN := scopeType.GetFQN()
+		props := []*analysis.Property{}
+		methods := []*analysis.Method{}
+		for _, class := range store.GetClasses(scopeTypeFQN) {
+			methods = append(methods, analysis.SearchClassMethods(store, class, word,
+				analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+			props = append(props, analysis.SearchClassProperties(store, class, word,
+				analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+		}
+		for _, property := range props {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
 				Kind:          protocol.PropertyCompletion,
 				Label:         property.GetName(),
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods := []*analysis.Method{}
-		for _, class := range store.GetClasses(scope) {
-			methods = append(methods, analysis.SearchClassMethods(store, class, word, analysis.NewSearchOptions())...)
-		}
-		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
-			if !method.IsStatic {
-				continue
-			}
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
 				Kind:          protocol.MethodCompletion,
 				Label:         method.GetName(),
 				Documentation: method.GetDescription(),
 			})
 		}
-		classConsts, searchResult := store.SearchClassConsts(scope, word, baseSearchOptions)
+		classConsts, searchResult := store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
 		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, classConst := range classConsts {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
@@ -252,14 +270,20 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.TypeComposite, pos protocol.Position) *protocol.CompletionList {
+func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
+	scopeTypes analysis.TypeComposite, scope analysis.HasTypes, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
-		IsIncomplete: true,
+		IsIncomplete: false,
 	}
-	for _, scopeType := range scope.Resolve() {
-		scope := scopeType.GetFQN()
-		properties, searchResult := store.SearchProperties(scope, word, baseSearchOptions)
-		completionList.IsIncomplete = !searchResult.IsComplete
+	for _, scopeType := range scopeTypes.Resolve() {
+		properties := []*analysis.Property{}
+		methods := []*analysis.Method{}
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			methods = append(methods, analysis.SearchClassMethods(store, class, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+			properties = append(properties, analysis.SearchClassProperties(store, class, word,
+				analysis.NewSearchOptions())...)
+		}
 		for _, property := range properties {
 			name := property.GetName()
 			if !property.IsStatic {
@@ -271,11 +295,6 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Documentation: property.GetDescription(),
 			})
 		}
-		methods := []*analysis.Method{}
-		for _, class := range store.GetClasses(scope) {
-			methods = append(methods, analysis.SearchClassMethods(store, class, word, analysis.NewSearchOptions())...)
-		}
-		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, method := range methods {
 			if method.Name == "__construct" {
 				continue

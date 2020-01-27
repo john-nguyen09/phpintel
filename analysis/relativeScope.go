@@ -7,11 +7,11 @@ type RelativeScope struct {
 	Types    TypeComposite
 }
 
-func isNameRelative(name string) bool {
+func IsNameRelative(name string) bool {
 	return name == "static" || name == "self"
 }
 
-func isNameParent(name string) bool {
+func IsNameParent(name string) bool {
 	return name == "parent"
 }
 
@@ -57,6 +57,6 @@ func (s *RelativeScope) GetTypes() TypeComposite {
 	return s.Types
 }
 
-func (s *RelativeScope) Resolve(store *Store) {
+func (s *RelativeScope) Resolve(ctx ResolveContext) {
 
 }

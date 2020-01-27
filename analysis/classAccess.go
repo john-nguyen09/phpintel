@@ -23,11 +23,11 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
-	if isNameRelative(classAccess.Name) {
+	if IsNameRelative(classAccess.Name) {
 		relativeScope := newRelativeScope(document, classAccess.Location)
 		types.merge(relativeScope.Types)
 	}
-	if isNameParent(classAccess.Name) {
+	if IsNameParent(classAccess.Name) {
 		parentScope := newParentScope(document, classAccess.Location)
 		types.merge(parentScope.Types)
 	}
@@ -47,8 +47,8 @@ func (s *ClassAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ClassAccess) Resolve(store *Store) {
-
+func (s *ClassAccess) GetName() string {
+	return s.Name
 }
 
 func (s *ClassAccess) GetTypes() TypeComposite {

@@ -24,7 +24,6 @@ func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool)
 			propertyAccess.Scope = expression
 		}
 	}
-	traverser.Advance()
 
 	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)
 	return propertyAccess, true
@@ -34,13 +33,16 @@ func (s *PropertyAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *PropertyAccess) Resolve(store *Store) {
+func (s *PropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+s.Name) {
-			s.Type.merge(property.Types)
+	store := ctx.store
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, property := range GetClassProperties(store, class, "$"+s.Name, NewSearchOptions()) {
+				s.Type.merge(property.Types)
+			}
 		}
 	}
 	s.hasResolved = true

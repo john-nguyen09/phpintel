@@ -35,10 +35,6 @@ func (s *ScopedConstantAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedConstantAccess) Resolve(store *Store) {
-
-}
-
 func (s *ScopedConstantAccess) GetTypes() TypeComposite {
 	// TODO: Look up constant types
 	return s.Type

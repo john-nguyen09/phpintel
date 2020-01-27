@@ -68,15 +68,13 @@ func (s *FunctionCall) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *FunctionCall) Resolve(store *Store) {
+func (s *FunctionCall) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
+	document := ctx.document
+	store := ctx.store
 	s.hasResolved = true
-	document := store.GetOrCreateDocument(s.GetLocation().URI)
-	if document == nil {
-		return
-	}
 	typeString := NewTypeString(s.Name)
 	functions := store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range functions {
@@ -88,9 +86,11 @@ func (s *FunctionCall) GetTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *FunctionCall) ResolveToHasParams(store *Store, document *Document) []HasParams {
+func (s *FunctionCall) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	functions := []HasParams{}
 	typeString := NewTypeString(s.Name)
+	store := ctx.store
+	document := ctx.document
 	typeString.SetFQN(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range store.GetFunctions(typeString.GetFQN()) {
 		functions = append(functions, function)

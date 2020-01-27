@@ -144,7 +144,7 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 	parts := strings.Split(text, "|")
 	types := newTypeComposite()
 	for _, part := range parts {
-		if isNameRelative(part) {
+		if IsNameRelative(part) {
 			currentClass := document.getLastClass()
 			switch v := currentClass.(type) {
 			case *Class:

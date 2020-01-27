@@ -16,14 +16,24 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		return nil, StoreNotFound(uri)
 	}
 	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return nil, DocumentNotFound(uri)
+	}
 	document.Load()
-	symbol := document.HasTypesAtPos(params.TextDocumentPositionParams.Position)
+	resolveCtx := analysis.NewResolveContext(store, document)
+	pos := params.TextDocumentPositionParams.Position
+	symbol := document.HasTypesAtPos(pos)
 
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
 		for _, typeString := range v.Type.Resolve() {
 			for _, theClass := range store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString)) {
-				locations = append(locations, theClass.GetLocation())
+				constructor := theClass.GetConstructor(store)
+				if constructor == nil || constructor.GetScope().GetFQN() != theClass.Name.GetFQN() {
+					locations = append(locations, theClass.GetLocation())
+				} else {
+					locations = append(locations, constructor.GetLocation())
+				}
 			}
 		}
 	case *analysis.ClassAccess:
@@ -45,13 +55,12 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ConstantAccess:
-		for _, typeString := range v.Type.Resolve() {
-			for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, typeString)) {
-				locations = append(locations, theConst.GetLocation())
-			}
-			for _, define := range store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, typeString)) {
-				locations = append(locations, define.GetLocation())
-			}
+		name := analysis.NewTypeString(v.Name)
+		for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name)) {
+			locations = append(locations, theConst.GetLocation())
+		}
+		for _, define := range store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name)) {
+			locations = append(locations, define.GetLocation())
 		}
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
@@ -59,32 +68,46 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			for _, classConst := range store.GetClassConsts(scopeType.GetFQN(), v.Name) {
 				locations = append(locations, classConst.GetLocation())
 			}
 		}
 	case *analysis.ScopedMethodAccess:
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions().
-						WithPredicate(func(symbol analysis.Symbol) bool {
-							method := symbol.(*analysis.Method)
-							if !method.IsStatic {
-								return false
-							}
-							return true
-						}))...)
+					analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())
 			}
 		}
 	case *analysis.ScopedPropertyAccess:
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
-			for _, property := range store.GetProperties(scopeType.GetFQN(), v.Name) {
+		name := ""
+		classScope := ""
+		if hasName, ok := v.Scope.(analysis.HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			properties := []*analysis.Property{}
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				properties = append(properties, analysis.GetClassProperties(store, class, v.Name,
+					analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+			}
+			for _, property := range properties {
 				if !property.IsStatic {
 					continue
 				}
@@ -92,17 +115,17 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.PropertyAccess:
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
 				locations = append(locations, property.GetLocation())
 			}
 		}
 	case *analysis.MethodAccess:
-		for _, scopeType := range v.ResolveAndGetScope(store).Resolve() {
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			methods := []*analysis.Method{}
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.NewSearchOptions())...)
+					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
 			for _, method := range methods {
 				locations = append(locations, method.GetLocation())

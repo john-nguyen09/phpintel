@@ -61,13 +61,16 @@ func (s *MethodAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *MethodAccess) Resolve(store *Store) {
+func (s *MethodAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
-		for _, method := range store.GetMethods(scopeType.GetFQN(), s.Name) {
-			s.Type.merge(method.returnTypes)
+	store := ctx.store
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
+		for _, class := range store.GetClasses(scopeType.GetFQN()) {
+			for _, method := range GetClassMethods(store, class, s.Name, NewSearchOptions()) {
+				s.Type.merge(method.returnTypes)
+			}
 		}
 	}
 	s.hasResolved = true
@@ -77,10 +80,15 @@ func (s *MethodAccess) GetTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *MethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
+func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
-	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
-		methods := store.GetMethods(typeString.GetFQN(), s.Name)
+	store := ctx.store
+	for _, typeString := range s.ResolveAndGetScope(ctx).Resolve() {
+		methods := []*Method{}
+		for _, class := range store.GetClasses(typeString.GetFQN()) {
+			methods = append(methods, GetClassMethods(store, class, s.Name,
+				MethodsScopeAware(NewSearchOptions(), ctx.document, s.Scope))...)
+		}
 		for _, method := range methods {
 			hasParams = append(hasParams, method)
 		}

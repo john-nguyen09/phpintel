@@ -67,10 +67,6 @@ func (s *TraitAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *TraitAccess) Resolve(store *Store) {
-
-}
-
 func (s *TraitAccess) GetTypes() TypeComposite {
 	return s.Type
 }
