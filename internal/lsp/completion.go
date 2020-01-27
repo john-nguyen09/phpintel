@@ -282,7 +282,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			methods = append(methods, analysis.SearchClassMethods(store, class, word,
 				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
 			properties = append(properties, analysis.SearchClassProperties(store, class, word,
-				analysis.NewSearchOptions())...)
+				analysis.PropsScopeAware(analysis.NewSearchOptions(), document, scope))...)
 		}
 		for _, property := range properties {
 			name := property.GetName()

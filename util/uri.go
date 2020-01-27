@@ -67,6 +67,9 @@ func GetURIID(uri string) string {
 		return hash
 	}
 	parts := strings.Split(u.Path, "/")
+	if parts[len(parts)-1] == "" {
+		parts = parts[:len(parts)-1]
+	}
 	parts, lastPart := parts[:len(parts)-1], parts[len(parts)-1]
 	result := ""
 	for _, part := range parts[0 : len(parts)-1] {

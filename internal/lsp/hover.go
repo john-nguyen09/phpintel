@@ -151,7 +151,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			for _, class := range store.GetClasses(scopeType.GetFQN()) {
 				properties = append(properties, analysis.GetClassProperties(store, class, "$"+v.Name,
-					analysis.NewSearchOptions())...)
+					analysis.PropsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
 			if len(properties) > 0 {
 				hover = cmd.PropertyToHover(symbol, *properties[0])

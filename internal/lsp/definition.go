@@ -116,8 +116,11 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.PropertyAccess:
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, property := range store.GetProperties(scopeType.GetFQN(), "$"+v.Name) {
-				locations = append(locations, property.GetLocation())
+			for _, class := range store.GetClasses(scopeType.GetFQN()) {
+				for _, property := range analysis.GetClassProperties(store, class, "$"+v.Name,
+					analysis.PropsScopeAware(analysis.NewSearchOptions(), document, v.Scope)) {
+					locations = append(locations, property.GetLocation())
+				}
 			}
 		}
 	case *analysis.MethodAccess:

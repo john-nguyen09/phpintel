@@ -524,3 +524,34 @@ func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) Se
 		return prop.VisibilityModifier == Public
 	})
 }
+
+func PropsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
+	name := ""
+	classScope := document.getClassScopeAtSymbol(scope)
+	if hasName, ok := scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		prop := symbol.(*Property)
+		if name == "$this" {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		isSameClass := false
+		for _, typeString := range scope.GetTypes().Resolve() {
+			if typeString.GetFQN() == classScope {
+				isSameClass = true
+				break
+			}
+		}
+		if isSameClass {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		return prop.VisibilityModifier == Public
+	})
+}
