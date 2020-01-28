@@ -127,9 +127,15 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 		}
 		return firstPart, nil
 	}
-	namespace := "\\" + i.namespace
+	namespace := i.namespace
+	if strings.Index(namespace, "\\") != 0 {
+		namespace = "\\" + namespace
+	}
 	if namespace != "\\" && strings.Index(name.GetFQN(), namespace) == 0 {
 		return name.GetFQN()[len(namespace)+1:], nil
+	}
+	if namespace == name.GetNamespace() {
+		return name.GetOriginal(), nil
 	}
 	for alias, fqn := range i.classes {
 		if "\\"+fqn == name.GetFQN() {

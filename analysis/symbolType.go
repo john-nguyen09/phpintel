@@ -70,6 +70,11 @@ func (t TypeString) GetFQN() string {
 	return t.fqn
 }
 
+func (t TypeString) GetNamespace() string {
+	lastBackslashIndex := strings.LastIndex(t.GetFQN(), "\\")
+	return t.GetFQN()[:lastBackslashIndex+1]
+}
+
 func (t *TypeString) SetFQN(fqn string) {
 	t.fqn = fqn
 }
