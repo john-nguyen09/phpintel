@@ -35,6 +35,7 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 		}
 		child = traverser.Advance()
 	}
+	document.popVariableTable()
 	return nil
 }
 

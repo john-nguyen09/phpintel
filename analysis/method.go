@@ -68,6 +68,7 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 		}
 		child = traverser.Advance()
 	}
+	document.popVariableTable()
 }
 
 func newMethod(document *Document, node *phrase.Phrase) Symbol {

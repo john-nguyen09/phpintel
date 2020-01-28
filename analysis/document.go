@@ -45,6 +45,7 @@ type VariableTable struct {
 	variables      map[string]*Variable
 	globalDeclares map[string]bool
 	level          int
+	children       []*VariableTable
 }
 
 func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
@@ -81,6 +82,10 @@ func (vt VariableTable) setReferenceGlobal(name string) {
 // GetVariables returns all the variables in the table
 func (vt *VariableTable) GetVariables() map[string]*Variable {
 	return vt.variables
+}
+
+func (vt *VariableTable) addChild(child *VariableTable) {
+	vt.children = append(vt.children, child)
 }
 
 // MarshalJSON is used for json.Marshal
@@ -344,8 +349,19 @@ func (s *Document) addSymbol(other Symbol) {
 }
 
 func (s *Document) pushVariableTable(node *phrase.Phrase) {
-	s.variableTables = append(s.variableTables, newVariableTable(s.nodeRange(node), s.variableTableLevel))
+	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
+	if s.variableTableLevel > 0 {
+		s.getCurrentVariableTable().addChild(newVarTable)
+	}
+	s.variableTables = append(s.variableTables, newVarTable)
 	s.variableTableLevel++
+}
+
+func (s *Document) popVariableTable() *VariableTable {
+	length := len(s.variableTables)
+	last, poppedVariableTables := s.variableTables[length-1], s.variableTables[:length-1]
+	s.variableTables = poppedVariableTables
+	return last
 }
 
 func (s *Document) getCurrentVariableTable() *VariableTable {
@@ -354,18 +370,15 @@ func (s *Document) getCurrentVariableTable() *VariableTable {
 
 // GetVariableTableAt returns the closest variable table which is in range
 func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
-	// The algorithm is going reverse until found one, since parent tables
-	// are appear first therefore going backward makes sure that parent is
-	// the last to be considered
-	for i := range s.variableTables {
-		varTable := s.variableTables[len(s.variableTables)-1-i]
+	// The first element is supposed to always be there because it represents
+	// the scope of the whole document
+	lastFoundVarTable := s.variableTables[0]
+	for _, varTable := range lastFoundVarTable.children {
 		if util.IsInRange(pos, varTable.locationRange) == 0 {
-			return varTable
+			lastFoundVarTable = varTable
 		}
 	}
-	// This might not be position because the whole file is a variable table
-	// so only if the pos is outside of the file
-	return nil
+	return lastFoundVarTable
 }
 
 func (s *Document) pushVariable(variable *Variable) {
