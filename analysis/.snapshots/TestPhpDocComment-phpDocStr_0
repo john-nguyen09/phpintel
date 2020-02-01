@@ -1,0 +1,119 @@
+(analysis.phpDocComment) {
+  Description: (string) (len=429) "Information about a course that is cached in the course table 'modinfo' field (and then in\nmemory) in order to reduce the need for other database queries.\n\nThis includes information about the course-modules and the sections on the course. It can also\ninclude dynamic data that has been updated for the current user.\n\nUse {@link get_fast_modinfo()} to retrieve the instance of the object for particular course\nand particular user.",
+  tags: ([]analysis.tag) (len=6) {
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=9) "$courseid",
+      Description: (string) (len=9) "Course ID",
+      TypeString: (string) (len=3) "int",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=7) "$userid",
+      Description: (string) (len=7) "User ID",
+      TypeString: (string) (len=3) "int",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=9) "$sections",
+      Description: (string) (len=72) "Array from section number (e.g. 0) to array of course-module IDs in that",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=4) "$cms",
+      Description: (string) (len=74) "Array from course-module instance to cm_info object within this course, in",
+      TypeString: (string) (len=9) "cm_info[]",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=10) "$instances",
+      Description: (string) (len=66) "Array from string (modname) => int (instance id) => cm_info object",
+      TypeString: (string) (len=11) "cm_info[][]",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=7) "$groups",
+      Description: (string) (len=73) "Groups that the current user belongs to. Calculated on the first request.",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    }
+  },
+  Returns: ([]analysis.tag) {
+  },
+  Properties: ([]analysis.tag) {
+  },
+  Methods: ([]analysis.tag) {
+  },
+  Vars: ([]analysis.tag) {
+  },
+  Globals: ([]analysis.tag) {
+  },
+  location: (protocol.Location) {
+    URI: (string) "",
+    Range: (protocol.Range) 0:0-0:0
+  },
+  PropertyReads: ([]analysis.tag) (len=6) {
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=9) "$courseid",
+      Description: (string) (len=9) "Course ID",
+      TypeString: (string) (len=3) "int",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=7) "$userid",
+      Description: (string) (len=7) "User ID",
+      TypeString: (string) (len=3) "int",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=9) "$sections",
+      Description: (string) (len=72) "Array from section number (e.g. 0) to array of course-module IDs in that",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=4) "$cms",
+      Description: (string) (len=74) "Array from course-module instance to cm_info object within this course, in",
+      TypeString: (string) (len=9) "cm_info[]",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=10) "$instances",
+      Description: (string) (len=66) "Array from string (modname) => int (instance id) => cm_info object",
+      TypeString: (string) (len=11) "cm_info[][]",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    },
+    (analysis.tag) {
+      TagName: (string) (len=14) "@property-read",
+      Name: (string) (len=7) "$groups",
+      Description: (string) (len=73) "Groups that the current user belongs to. Calculated on the first request.",
+      TypeString: (string) (len=5) "array",
+      Parameters: ([]analysis.methodTagParam) <nil>,
+      IsStatic: (bool) false
+    }
+  },
+  PropertyWrites: ([]analysis.tag) {
+  }
+}

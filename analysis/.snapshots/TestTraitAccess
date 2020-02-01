@@ -8,25 +8,30 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=32) "\\App\\Http\\Controllers\\Controller",
-      original: (string) (len=10) "Controller"
+      original: (string) (len=10) "Controller",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) (len=30) "\\Illuminate\\Routing\\Controller",
-      original: (string) (len=14) "BaseController"
+      original: (string) (len=14) "BaseController",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) (len=3) {
       (analysis.TypeString) {
         fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
-        original: (string) (len=18) "AuthorizesRequests"
+        original: (string) (len=18) "AuthorizesRequests",
+        arrayLevel: (int) 0
       },
       (analysis.TypeString) {
         fqn: (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs",
-        original: (string) (len=14) "DispatchesJobs"
+        original: (string) (len=14) "DispatchesJobs",
+        arrayLevel: (int) 0
       },
       (analysis.TypeString) {
         fqn: (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests",
-        original: (string) (len=17) "ValidatesRequests"
+        original: (string) (len=17) "ValidatesRequests",
+        arrayLevel: (int) 0
       }
     }
   })
@@ -37,7 +42,8 @@
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
           fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
-          original: (string) (len=18) "AuthorizesRequests"
+          original: (string) (len=18) "AuthorizesRequests",
+          arrayLevel: (int) 0
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {

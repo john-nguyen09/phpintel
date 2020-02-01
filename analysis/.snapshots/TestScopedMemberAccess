@@ -5,7 +5,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -32,7 +33,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -61,7 +63,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -88,7 +91,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -116,7 +120,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -143,7 +148,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -178,7 +184,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -209,7 +216,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -230,7 +238,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -243,7 +252,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -274,7 +284,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -295,7 +306,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -308,7 +320,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -345,7 +358,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -358,7 +372,8 @@
                 typeStrings: ([]analysis.TypeString) (len=1) {
                   (analysis.TypeString) {
                     fqn: (string) (len=10) "\\TestClass",
-                    original: (string) (len=9) "TestClass"
+                    original: (string) (len=9) "TestClass",
+                    arrayLevel: (int) 0
                   }
                 },
                 uniqueFQNs: (map[string]bool) (len=1) {
@@ -397,7 +412,8 @@
         typeStrings: ([]analysis.TypeString) (len=1) {
           (analysis.TypeString) {
             fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass"
+            original: (string) (len=9) "TestClass",
+            arrayLevel: (int) 0
           }
         },
         uniqueFQNs: (map[string]bool) (len=1) {
@@ -410,7 +426,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -447,7 +464,8 @@
             typeStrings: ([]analysis.TypeString) (len=1) {
               (analysis.TypeString) {
                 fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass"
+                original: (string) (len=9) "TestClass",
+                arrayLevel: (int) 0
               }
             },
             uniqueFQNs: (map[string]bool) (len=1) {
@@ -460,7 +478,8 @@
                 typeStrings: ([]analysis.TypeString) (len=1) {
                   (analysis.TypeString) {
                     fqn: (string) (len=10) "\\TestClass",
-                    original: (string) (len=9) "TestClass"
+                    original: (string) (len=9) "TestClass",
+                    arrayLevel: (int) 0
                   }
                 },
                 uniqueFQNs: (map[string]bool) (len=1) {

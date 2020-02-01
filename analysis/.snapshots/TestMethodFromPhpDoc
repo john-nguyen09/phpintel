@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
-      original: (string) (len=20) "TestMethodFromPhpDoc"
+      original: (string) (len=20) "TestMethodFromPhpDoc",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -35,7 +37,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=6) "string",
-              original: (string) (len=6) "string"
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -55,7 +58,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=8) "\\Closure",
-              original: (string) (len=8) "\\Closure"
+              original: (string) (len=8) "\\Closure",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -69,7 +73,8 @@
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
           fqn: (string) (len=8) "\\Builder",
-          original: (string) (len=7) "Builder"
+          original: (string) (len=7) "Builder",
+          arrayLevel: (int) 0
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {
@@ -79,7 +84,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
-      original: (string) (len=20) "TestMethodFromPhpDoc"
+      original: (string) (len=20) "TestMethodFromPhpDoc",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
@@ -103,7 +109,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=6) "string",
-              original: (string) (len=6) "string"
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -123,7 +130,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=6) "string",
-              original: (string) (len=6) "string"
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -143,7 +151,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=6) "string",
-              original: (string) (len=6) "string"
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -157,7 +166,8 @@
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
           fqn: (string) (len=4) "void",
-          original: (string) (len=4) "void"
+          original: (string) (len=4) "void",
+          arrayLevel: (int) 0
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {
@@ -167,7 +177,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
-      original: (string) (len=20) "TestMethodFromPhpDoc"
+      original: (string) (len=20) "TestMethodFromPhpDoc",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,

@@ -37,7 +37,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=10) "\\Blueprint",
-              original: (string) (len=9) "Blueprint"
+              original: (string) (len=9) "Blueprint",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {

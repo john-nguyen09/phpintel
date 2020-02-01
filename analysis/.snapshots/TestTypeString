@@ -1,0 +1,27 @@
+([]analysis.TypeString) (len=5) {
+  (analysis.TypeString) {
+    fqn: (string) (len=6) "string",
+    original: (string) (len=6) "string",
+    arrayLevel: (int) 0
+  },
+  (analysis.TypeString) {
+    fqn: (string) (len=6) "string",
+    original: (string) (len=6) "string",
+    arrayLevel: (int) 1
+  },
+  (analysis.TypeString) {
+    fqn: (string) (len=6) "string",
+    original: (string) (len=6) "string",
+    arrayLevel: (int) 2
+  },
+  (analysis.TypeString) {
+    fqn: (string) (len=3) "int",
+    original: (string) (len=3) "int",
+    arrayLevel: (int) 0
+  },
+  (analysis.TypeString) {
+    fqn: (string) (len=3) "int",
+    original: (string) (len=3) "int",
+    arrayLevel: (int) 1
+  }
+}

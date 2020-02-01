@@ -20,7 +20,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=5) "\\User",
-              original: (string) (len=4) "User"
+              original: (string) (len=4) "User",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {

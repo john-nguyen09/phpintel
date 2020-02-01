@@ -16,7 +16,6 @@ type Serialisable interface {
 }
 
 const uIntSize = 32 << (^uint(0) >> 32 & 1)
-const bufferSize int = 1024 // Grow size by bufferSize bytes
 
 // int is same size as uint
 const intSize = uIntSize

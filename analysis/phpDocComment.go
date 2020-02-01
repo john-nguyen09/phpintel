@@ -28,11 +28,11 @@ var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[
 var /* const */ tagBoundaryPattern = regexp.MustCompile(`(?:\r\n|\r|\n)@`)
 var /* const */ whitespacePattern = regexp.MustCompile(`\s+`)
 
-var /* const */ paramOrPropPattern = regexp.MustCompile(`^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
-var /* const */ varPattern = regexp.MustCompile(`^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
-var /* const */ returnPattern = regexp.MustCompile(`^(@return)\s+(\S+)\s*(.*)$`)
-var /* const */ methodPattern = regexp.MustCompile(`^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*?)\s*?\)\s*(.*)$`)
-var /* const */ globalPattern = regexp.MustCompile(`^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
+var /* const */ paramOrPropPattern = regexp.MustCompile(`(?m)^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
+var /* const */ varPattern = regexp.MustCompile(`(?m)^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
+var /* const */ returnPattern = regexp.MustCompile(`(?m)^(@return)\s+(\S+)\s*(.*)$`)
+var /* const */ methodPattern = regexp.MustCompile(`(?m)^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*?)\s*?\)\s*(.*)$`)
+var /* const */ globalPattern = regexp.MustCompile(`(?m)^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
 
 func typeTag(tagName string, typeString string, name string, description string) tag {
 	return tag{
