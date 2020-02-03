@@ -234,6 +234,7 @@ func (s *Store) CreateDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	batch := levigo.NewWriteBatch()
+	defer batch.Close()
 	s.forgetDocument(batch, uri)
 	err := s.db.Write(levigo.NewWriteOptions(), batch)
 	if err != nil {
@@ -277,6 +278,7 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 
 func (s *Store) SyncDocument(document *Document) {
 	batch := levigo.NewWriteBatch()
+	defer batch.Close()
 	s.forgetAllSymbols(batch, document.GetURI())
 	s.writeAllSymbols(batch, document)
 	entry := newEntry(documentCollection, document.GetURI())
@@ -301,6 +303,7 @@ func (s *Store) PrepareForIndexing() {
 
 func (s *Store) FinishIndexing() {
 	batch := levigo.NewWriteBatch()
+	defer batch.Close()
 	for iter := range s.syncedDocumentURIs.Iter() {
 		s.forgetDocument(batch, iter.Key)
 		s.syncedDocumentURIs.Remove(iter.Key)
@@ -315,6 +318,7 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
 	it := s.db.NewIterator(levigo.NewReadOptions())
+	defer it.Close()
 	for it.Seek(entry.prefixRange()); it.Valid(); it.Next() {
 		if !bytes.HasPrefix(it.Key(), entry.prefixRange()) {
 			break
