@@ -60,7 +60,14 @@ func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]by
 	return entry
 }
 
-func deleteCompletionIndex(db *levigo.DB, batch *levigo.WriteBatch, uri string) {
+type completionIndexDeletor struct {
+	indexKeys map[string]bool
+	keys      map[string]bool
+}
+
+func newCompletionIndexDeletor(db *levigo.DB, uri string) *completionIndexDeletor {
+	indexKeys := map[string]bool{}
+	keys := map[string]bool{}
 	entry := newEntry(documentCompletionIndex, uri)
 	it := db.NewIterator(levigo.NewReadOptions())
 	defer it.Close()
@@ -68,15 +75,35 @@ func deleteCompletionIndex(db *levigo.DB, batch *levigo.WriteBatch, uri string) 
 		if !bytes.HasPrefix(it.Key(), entry.prefixRange()) {
 			break
 		}
-		batch.Delete(it.Key())
+		keys[string(it.Key())] = true
 		serialiser := SerialiserFromByteSlice(it.Value())
 		len := serialiser.ReadInt()
 		if len > 0 {
-			for i := 0; i < len-1; i++ {
+			for i := 0; i < len; i++ {
 				key := serialiser.ReadBytes()
-				batch.Delete(key)
+				indexKeys[string(key)] = true
 			}
 		}
+	}
+	return &completionIndexDeletor{indexKeys, keys}
+}
+
+func (d *completionIndexDeletor) MarkNotDelete(uri string, indexable NameIndexable, symbolKey string) {
+	keys := getCompletionKeys(uri, indexable, symbolKey)
+	for _, key := range keys {
+		entry := newEntry(indexable.GetIndexCollection(), key)
+		delete(d.indexKeys, string(entry.getKeyBytes()))
+	}
+	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
+	delete(d.keys, string(entry.getKeyBytes()))
+}
+
+func (d *completionIndexDeletor) Delete(batch *levigo.WriteBatch) {
+	for indexKey := range d.indexKeys {
+		batch.Delete([]byte(indexKey))
+	}
+	for key := range d.keys {
+		batch.Delete([]byte(key))
 	}
 }
 

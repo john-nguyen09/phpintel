@@ -235,6 +235,8 @@ func (s *Store) CreateDocument(uri protocol.DocumentURI) {
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	batch := levigo.NewWriteBatch()
 	defer batch.Close()
+	deletor := newCompletionIndexDeletor(s.db, uri)
+	deletor.Delete(batch)
 	s.forgetDocument(batch, uri)
 	err := s.db.Write(levigo.NewWriteOptions(), batch)
 	if err != nil {
@@ -279,8 +281,10 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 func (s *Store) SyncDocument(document *Document) {
 	batch := levigo.NewWriteBatch()
 	defer batch.Close()
+	deletor := newCompletionIndexDeletor(s.db, document.GetURI())
 	s.forgetAllSymbols(batch, document.GetURI())
-	s.writeAllSymbols(batch, document)
+	s.writeAllSymbols(batch, document, deletor)
+	deletor.Delete(batch)
 	entry := newEntry(documentCollection, document.GetURI())
 	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
 	err := s.db.Write(levigo.NewWriteOptions(), batch)
@@ -305,7 +309,9 @@ func (s *Store) FinishIndexing() {
 	batch := levigo.NewWriteBatch()
 	defer batch.Close()
 	for iter := range s.syncedDocumentURIs.Iter() {
+		deletor := newCompletionIndexDeletor(s.db, iter.Key)
 		s.forgetDocument(batch, iter.Key)
+		deletor.Delete(batch)
 		s.syncedDocumentURIs.Remove(iter.Key)
 	}
 	err := s.db.Write(levigo.NewWriteOptions(), batch)
@@ -347,10 +353,9 @@ func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 		toBeDelete := newEntry(keyInfo[2], strings.Join(keyInfo[3:], KeySep))
 		deleteEntry(batch, toBeDelete)
 	}
-	deleteCompletionIndex(s.db, batch, uri)
 }
 
-func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document) {
+func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document, deletor *completionIndexDeletor) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			key := serialisable.GetKey()
@@ -364,6 +369,7 @@ func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document) {
 
 			if indexable, ok := child.(NameIndexable); ok {
 				indexName(batch, document, indexable, key)
+				deletor.MarkNotDelete(document.GetURI(), indexable, key)
 			}
 		}
 	}
