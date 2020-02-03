@@ -9,8 +9,9 @@ import (
 	"github.com/Masterminds/semver"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
-	"github.com/kezhuw/leveldb"
 	cmap "github.com/orcaman/concurrent-map"
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/util"
 )
 
 const (
@@ -64,8 +65,8 @@ func (s *entry) getSerialiser() *Serialiser {
 	return s.serialiser
 }
 
-func (s *entry) prefixRange() []byte {
-	return s.getKeyBytes()
+func (s *entry) prefixRange() *util.Range {
+	return util.BytesPrefix(s.getKeyBytes())
 }
 
 func (s *entry) getKeyBytes() []byte {
@@ -108,11 +109,7 @@ func initStubs() {
 }
 
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
-	options := &leveldb.Options{
-		CreateIfMissing: true,
-		// Filter:          leveldb.NewBloomFilter(16),
-	}
-	db, err := leveldb.Open(storePath, options)
+	db, err := leveldb.OpenFile(storePath, nil)
 	initStubs()
 	if err != nil {
 		return nil, err
@@ -144,11 +141,11 @@ func (s *Store) PutVersion(version string) {
 }
 
 func (s *Store) Clear() {
-	it := s.db.All(nil)
+	it := s.db.NewIterator(nil, nil)
 	for it.Next() {
 		s.db.Delete(it.Key(), nil)
 	}
-	it.Close()
+	it.Release()
 }
 
 func (s *Store) Migrate(newVersion string) {
@@ -236,7 +233,7 @@ func (s *Store) CreateDocument(uri protocol.DocumentURI) {
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	batch := new(leveldb.Batch)
 	s.forgetDocument(batch, uri)
-	err := s.db.Write(*batch, nil)
+	err := s.db.Write(batch, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -244,8 +241,8 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	entry := newEntry(documentCollection, uri)
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		uri := strings.Split(string(it.Key()), KeySep)[1]
 		s.DeleteDocument(uri)
@@ -279,9 +276,9 @@ func (s *Store) SyncDocument(document *Document) {
 	s.writeAllSymbols(batch, document)
 	entry := newEntry(documentCollection, document.GetURI())
 	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
-	err := s.db.Write(*batch, nil)
+	err := s.db.Write(batch, nil)
 	if err != nil {
-		log.Println(err)
+		log.Print(err)
 	}
 	if document.IsOpen() {
 		s.documents.Set(document.uri, document)
@@ -303,7 +300,7 @@ func (s *Store) FinishIndexing() {
 		s.forgetDocument(batch, iter.Key)
 		s.syncedDocumentURIs.Remove(iter.Key)
 	}
-	err := s.db.Write(*batch, nil)
+	err := s.db.Write(batch, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -312,8 +309,8 @@ func (s *Store) FinishIndexing() {
 func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		key := string(it.Key())
 		value := it.Value()
@@ -331,8 +328,8 @@ func (s *Store) forgetDocument(batch *leveldb.Batch, uri string) {
 
 func (s *Store) forgetAllSymbols(batch *leveldb.Batch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
 		toBeDelete := newEntry(keyInfo[2], strings.Join(keyInfo[3:], KeySep))
@@ -387,8 +384,8 @@ func (s *Store) GetURI() protocol.DocumentURI {
 func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classes = append(classes, ReadClass(serialiser))
@@ -447,8 +444,8 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		interfaces = append(interfaces, ReadInterface(serialiser))
@@ -493,8 +490,8 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		traits = append(traits, ReadTrait(serialiser))
@@ -539,8 +536,8 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		functions = append(functions, ReadFunction(serialiser))
@@ -580,8 +577,8 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		consts = append(consts, ReadConst(serialiser))
@@ -621,8 +618,8 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		defines = append(defines, ReadDefine(serialiser))
@@ -662,8 +659,8 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
@@ -674,8 +671,8 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
@@ -719,8 +716,8 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
@@ -731,8 +728,8 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
@@ -776,8 +773,8 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
@@ -788,8 +785,8 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
@@ -833,8 +830,8 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
+	it := s.db.NewIterator(entry.prefixRange(), nil)
+	defer it.Release()
 	for it.Next() {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		results = append(results, ReadGlobalVariable(serialiser))

@@ -55,12 +55,13 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			}
 		}
 	case *analysis.ConstantAccess:
-		name := analysis.NewTypeString(v.Name)
-		for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name)) {
-			locations = append(locations, theConst.GetLocation())
-		}
-		for _, define := range store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name)) {
-			locations = append(locations, define.GetLocation())
+		for _, typeString := range v.Type.Resolve() {
+			for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, typeString)) {
+				locations = append(locations, theConst.GetLocation())
+			}
+			for _, define := range store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, typeString)) {
+				locations = append(locations, define.GetLocation())
+			}
 		}
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
