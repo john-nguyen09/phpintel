@@ -87,7 +87,7 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 		if alias != "" {
 			text += " as " + alias
 		}
-		text += ";"
+		text += ";\n"
 
 		return &protocol.TextEdit{
 			Range: protocol.Range{

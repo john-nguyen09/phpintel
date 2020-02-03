@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -26,7 +28,8 @@
     Name: (string) (len=12) "$staticProp1",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
@@ -44,7 +47,8 @@
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) true,
@@ -62,7 +66,8 @@
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
@@ -80,7 +85,8 @@
     Name: (string) (len=12) "$staticProp4",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
@@ -98,7 +104,8 @@
     Name: (string) (len=12) "$staticProp6",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
@@ -116,7 +123,8 @@
     Name: (string) (len=6) "$prop1",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
@@ -134,7 +142,8 @@
     Name: (string) (len=6) "$prop2",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
@@ -152,7 +161,8 @@
     Name: (string) (len=6) "$prop3",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
@@ -170,7 +180,8 @@
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
@@ -188,7 +199,8 @@
     Name: (string) (len=6) "$prop7",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
@@ -206,7 +218,8 @@
     Name: (string) (len=6) "$prop5",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=20) "\\ClassWithProperties",
-      original: (string) (len=19) "ClassWithProperties"
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
@@ -214,7 +227,8 @@
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
           fqn: (string) (len=20) "\\ClassWithProperties",
-          original: (string) (len=19) "ClassWithProperties"
+          original: (string) (len=19) "ClassWithProperties",
+          arrayLevel: (int) 0
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {

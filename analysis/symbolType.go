@@ -16,6 +16,8 @@ var /* const */ Natives = map[string]bool{
 	"mixed":    true,
 	"null":     true,
 	"bool":     true,
+	"true":     true,
+	"false":    true,
 	"int":      true,
 	"float":    true,
 	"real":     true,
@@ -33,19 +35,21 @@ var /* const */ Natives = map[string]bool{
 
 // TypeString contains fqn and original name of type
 type TypeString struct {
-	fqn      string
-	original string
+	fqn        string
+	original   string
+	arrayLevel int
 }
 
 func NewTypeString(typeString string) TypeString {
 	symbolTypeString := TypeString{
 		original: typeString,
 	}
+	symbolTypeString = symbolTypeString.resolveRawWithArrayLevel()
 
-	if alias, ok := Aliases[typeString]; ok {
-		typeString = alias
+	if alias, ok := Aliases[symbolTypeString.original]; ok {
+		symbolTypeString.original = alias
 	}
-	symbolTypeString.fqn = typeString
+	symbolTypeString.fqn = symbolTypeString.original
 
 	return symbolTypeString
 }
@@ -53,6 +57,26 @@ func NewTypeString(typeString string) TypeString {
 // MarshalJSON is used for json.Marshal
 func (t *TypeString) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.fqn)
+}
+
+func (t TypeString) resolveRawWithArrayLevel() TypeString {
+	o := t.original
+	for i := len(o) - 1; i >= 0; i -= 2 {
+		if o[i] != ']' || o[i-1] != '[' {
+			t.original = o[:i+1]
+			break
+		}
+		t.arrayLevel++
+	}
+	return t
+}
+
+func (t TypeString) Dearray() (TypeString, bool) {
+	if t.arrayLevel == 0 {
+		return t, false
+	}
+	t.arrayLevel--
+	return t, true
 }
 
 // IsEmpty checks whether TypeString is empty
@@ -68,6 +92,20 @@ func (t TypeString) GetOriginal() string {
 // GetFQN gets the FQN converted name
 func (t TypeString) GetFQN() string {
 	return t.fqn
+}
+
+// ToString returns the string representation of the type
+func (t TypeString) ToString() string {
+	arraySuffices := []string{}
+	for i := 0; i < t.arrayLevel; i++ {
+		arraySuffices = append(arraySuffices, "[]")
+	}
+	return t.GetFQN() + strings.Join(arraySuffices, "")
+}
+
+func (t TypeString) GetNamespace() string {
+	lastBackslashIndex := strings.LastIndex(t.GetFQN(), "\\")
+	return t.GetFQN()[:lastBackslashIndex+1]
 }
 
 func (t *TypeString) SetFQN(fqn string) {
@@ -110,20 +148,17 @@ func isFQN(name string) bool {
 	return name[0] == '\\'
 }
 
-// GetType gets the FQN of type
-func (t TypeString) GetType() string {
-	return t.fqn
-}
-
-func (t *TypeString) Write(serialiser *Serialiser) {
+func (t TypeString) Write(serialiser *Serialiser) {
 	serialiser.WriteString(t.original)
 	serialiser.WriteString(t.fqn)
+	serialiser.WriteInt(t.arrayLevel)
 }
 
 func ReadTypeString(serialiser *Serialiser) TypeString {
 	return TypeString{
-		original: serialiser.ReadString(),
-		fqn:      serialiser.ReadString(),
+		original:   serialiser.ReadString(),
+		fqn:        serialiser.ReadString(),
+		arrayLevel: serialiser.ReadInt(),
 	}
 }
 
@@ -228,7 +263,7 @@ func (t TypeComposite) ToString() string {
 			if typeString.IsEmpty() {
 				continue
 			}
-			contents = append(contents, typeString.GetFQN())
+			contents = append(contents, typeString.ToString())
 		}
 	}
 	return strings.Join(contents, "|")

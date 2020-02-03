@@ -73,7 +73,7 @@ type HasScope interface {
 }
 
 type HasParamsResolvable interface {
-	ResolveToHasParams(store *Store, document *Document) []HasParams
+	ResolveToHasParams(ctx ResolveContext) []HasParams
 }
 
 func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {

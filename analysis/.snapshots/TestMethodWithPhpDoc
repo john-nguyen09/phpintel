@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=16) "\\bscitl\\sss_user",
-      original: (string) (len=8) "sss_user"
+      original: (string) (len=8) "sss_user",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -35,7 +37,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=5) "array",
-              original: (string) (len=5) "array"
+              original: (string) (len=5) "array",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -55,7 +58,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=5) "array",
-              original: (string) (len=5) "array"
+              original: (string) (len=5) "array",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -69,7 +73,8 @@
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
           fqn: (string) (len=12) "\\bscitl\\post",
-          original: (string) (len=12) "\\bscitl\\post"
+          original: (string) (len=12) "\\bscitl\\post",
+          arrayLevel: (int) 0
         }
       },
       uniqueFQNs: (map[string]bool) (len=1) {
@@ -79,7 +84,8 @@
     description: (string) (len=30) "Save post data and attachments",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\bscitl\\sss_user",
-      original: (string) (len=8) "sss_user"
+      original: (string) (len=8) "sss_user",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,

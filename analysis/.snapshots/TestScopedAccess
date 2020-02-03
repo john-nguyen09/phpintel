@@ -10,7 +10,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=16) "\\TestMethodClass",
-              original: (string) (len=15) "TestMethodClass"
+              original: (string) (len=15) "TestMethodClass",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -23,10 +24,6 @@
           Range: (protocol.Range) 1:0-1:15
         },
         Name: (string) (len=15) "TestMethodClass"
-      },
-      classScope: (analysis.TypeString) {
-        fqn: (string) "",
-        original: (string) ""
       }
     }),
     Location: (protocol.Location) {

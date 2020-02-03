@@ -75,16 +75,13 @@ func (s *ClassTypeDesignator) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ClassTypeDesignator) Resolve(store *Store) {
-
-}
-
 func (s *ClassTypeDesignator) GetTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ClassTypeDesignator) ResolveToHasParams(store *Store, document *Document) []HasParams {
+func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
+	store := ctx.store
 	for _, typeString := range s.GetTypes().Resolve() {
 		methods := store.GetMethods(typeString.GetFQN(), "__construct")
 		for _, method := range methods {

@@ -1,0 +1,12 @@
+(analysis.TypeComposite) {
+  typeStrings: ([]analysis.TypeString) (len=1) {
+    (analysis.TypeString) {
+      fqn: (string) (len=6) "string",
+      original: (string) (len=6) "string",
+      arrayLevel: (int) 0
+    }
+  },
+  uniqueFQNs: (map[string]bool) (len=1) {
+    (string) (len=6) "string": (bool) true
+  }
+}

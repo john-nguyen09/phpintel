@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=16) "\\ClassConstTest1",
-      original: (string) (len=15) "ClassConstTest1"
+      original: (string) (len=15) "ClassConstTest1",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -26,7 +28,8 @@
     Value: (string) (len=1) "5",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\ClassConstTest1",
-      original: (string) (len=15) "ClassConstTest1"
+      original: (string) (len=15) "ClassConstTest1",
+      arrayLevel: (int) 0
     }
   })
 }

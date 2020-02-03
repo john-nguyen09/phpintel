@@ -3,7 +3,8 @@
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=16) "\\TestMethodClass",
-        original: (string) (len=15) "TestMethodClass"
+        original: (string) (len=15) "TestMethodClass",
+        arrayLevel: (int) 0
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
@@ -14,7 +15,8 @@
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=16) "\\TestMethodClass",
-        original: (string) (len=15) "TestMethodClass"
+        original: (string) (len=15) "TestMethodClass",
+        arrayLevel: (int) 0
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
@@ -25,7 +27,8 @@
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=16) "\\TestMethodClass",
-        original: (string) (len=15) "TestMethodClass"
+        original: (string) (len=15) "TestMethodClass",
+        arrayLevel: (int) 0
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {
@@ -40,7 +43,8 @@
     typeStrings: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=16) "\\TestMethodClass",
-        original: (string) (len=15) "TestMethodClass"
+        original: (string) (len=15) "TestMethodClass",
+        arrayLevel: (int) 0
       }
     },
     uniqueFQNs: (map[string]bool) (len=1) {

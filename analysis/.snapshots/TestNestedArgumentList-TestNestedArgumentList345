@@ -20,7 +20,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=5) "\\User",
-              original: (string) (len=4) "User"
+              original: (string) (len=4) "User",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -33,10 +34,6 @@
           Range: (protocol.Range) 20:0-20:4
         },
         Name: (string) (len=4) "User"
-      },
-      classScope: (analysis.TypeString) {
-        fqn: (string) (len=17) "\\UsersTableSeeder",
-        original: (string) (len=16) "UsersTableSeeder"
       }
     }),
     Location: (protocol.Location) {

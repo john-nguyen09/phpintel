@@ -14,7 +14,7 @@ func withNoDuplicateNamesOptions(opt SearchOptions) SearchOptions {
 		})
 }
 
-func searchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
+func SearchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	traitMethods, _ := store.SearchMethods(trait.Name.GetFQN(), keyword, options)
 	methods = append(methods, traitMethods...)
@@ -31,7 +31,7 @@ func getAllTraitMethods(store *Store, trait *Trait, options SearchOptions) []*Me
 	return methods
 }
 
-func getTraitMethods(store *Store, trait *Trait, name string, options SearchOptions) []*Method {
+func GetTraitMethods(store *Store, trait *Trait, name string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	for _, traitMethod := range store.GetMethods(trait.Name.GetFQN(), name) {
 		if isSymbolValid(traitMethod, options) {
@@ -41,7 +41,7 @@ func getTraitMethods(store *Store, trait *Trait, name string, options SearchOpti
 	return methods
 }
 
-func searchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
+func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
 	options SearchOptions) []*Method {
 	methods := []*Method{}
 	interfaceMethods, _ := store.SearchMethods(theInterface.Name.GetFQN(), keyword, options)
@@ -59,7 +59,7 @@ func getAllInterfaceMethods(store *Store, theInterface *Interface, options Searc
 	return methods
 }
 
-func getInterfaceMethods(store *Store, theInterface *Interface, name string, options SearchOptions) []*Method {
+func GetInterfaceMethods(store *Store, theInterface *Interface, name string, options SearchOptions) []*Method {
 	methods := []*Method{}
 	for _, interfaceMethod := range store.GetMethods(theInterface.Name.GetFQN(), name) {
 		if isSymbolValid(interfaceMethod, options) {
@@ -90,7 +90,7 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
 			if keyword != "" {
-				methods = append(methods, searchTraitMethods(store, trait, keyword,
+				methods = append(methods, SearchTraitMethods(store, trait, keyword,
 					options)...)
 			} else {
 				methods = append(methods, getAllTraitMethods(store, trait, options)...)
@@ -110,7 +110,7 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
 			if keyword != "" {
-				methods = append(methods, searchInterfaceMethods(store, theInterface, keyword,
+				methods = append(methods, SearchInterfaceMethods(store, theInterface, keyword,
 					options)...)
 			} else {
 				methods = append(methods, getAllInterfaceMethods(store, theInterface,
@@ -135,7 +135,7 @@ func GetClassMethods(store *Store, class *Class, name string, options SearchOpti
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			methods = append(methods, getTraitMethods(store, trait, name, options)...)
+			methods = append(methods, GetTraitMethods(store, trait, name, options)...)
 		}
 	}
 
@@ -150,7 +150,7 @@ func GetClassMethods(store *Store, class *Class, name string, options SearchOpti
 			continue
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			methods = append(methods, getInterfaceMethods(store, theInterface, name,
+			methods = append(methods, GetInterfaceMethods(store, theInterface, name,
 				options)...)
 		}
 	}
@@ -441,8 +441,7 @@ func GetClassClassConsts(store *Store, class *Class, name string, options Search
 	return classConsts
 }
 
-func StaticMethodsScopeAware(opt SearchOptions, classScope string,
-	name string) SearchOptions {
+func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) SearchOptions {
 	return opt.WithPredicate(func(symbol Symbol) bool {
 		method := symbol.(*Method)
 		if IsNameParent(name) {
@@ -470,6 +469,39 @@ func StaticMethodsScopeAware(opt SearchOptions, classScope string,
 	})
 }
 
+func MethodsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
+	name := ""
+	classScope := document.getClassScopeAtSymbol(scope)
+	if hasName, ok := scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		method := symbol.(*Method)
+		// $this allows excludes private methods from parents
+		if name == "$this" {
+			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		// The same goes for the type of the same class not just $this
+		isSameClass := false
+		for _, typeString := range scope.GetTypes().Resolve() {
+			if typeString.GetFQN() == classScope {
+				isSameClass = true
+				break
+			}
+		}
+		if isSameClass {
+			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		return method.VisibilityModifier == Public
+	})
+}
+
 func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) SearchOptions {
 	return opt.WithPredicate(func(symbol Symbol) bool {
 		prop := symbol.(*Property)
@@ -488,6 +520,37 @@ func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) Se
 			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
 				return false
 			}
+		}
+		return prop.VisibilityModifier == Public
+	})
+}
+
+func PropsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
+	name := ""
+	classScope := document.getClassScopeAtSymbol(scope)
+	if hasName, ok := scope.(HasName); ok {
+		name = hasName.GetName()
+	}
+	return opt.WithPredicate(func(symbol Symbol) bool {
+		prop := symbol.(*Property)
+		if name == "$this" {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+				return false
+			}
+			return true
+		}
+		isSameClass := false
+		for _, typeString := range scope.GetTypes().Resolve() {
+			if typeString.GetFQN() == classScope {
+				isSameClass = true
+				break
+			}
+		}
+		if isSameClass {
+			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+				return false
+			}
+			return true
 		}
 		return prop.VisibilityModifier == Public
 	})

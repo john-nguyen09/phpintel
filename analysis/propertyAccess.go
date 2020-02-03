@@ -33,11 +33,12 @@ func (s *PropertyAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *PropertyAccess) Resolve(store *Store) {
+func (s *PropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
+	store := ctx.store
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			for _, property := range GetClassProperties(store, class, "$"+s.Name, NewSearchOptions()) {
 				s.Type.merge(property.Types)

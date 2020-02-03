@@ -9,7 +9,7 @@ require (
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/evorts/html-to-markdown v0.0.3
 	github.com/jmhodges/levigo v1.0.0
-	github.com/john-nguyen09/go-phpparser v0.0.0-20191214130445-ec1858e53b7e
+	github.com/john-nguyen09/go-phpparser v0.0.0-20191231012410-e37ecaa65dee
 	github.com/karrick/godirwalk v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6

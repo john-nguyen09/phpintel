@@ -31,10 +31,6 @@ func (s *InterfaceAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *InterfaceAccess) Resolve(store *Store) {
-
-}
-
 func (s *InterfaceAccess) GetTypes() TypeComposite {
 	return s.Type
 }

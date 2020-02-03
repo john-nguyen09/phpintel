@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass"
+      original: (string) (len=23) "TestAbstractMethodClass",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -26,11 +28,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>

@@ -51,6 +51,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 		child = traverser.Advance()
 	}
 	function.Name.SetNamespace(document.importTable.namespace)
+	document.popVariableTable()
 	return function
 }
 

@@ -8,16 +8,19 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=11) "\\TestClass1",
-      original: (string) (len=10) "TestClass1"
+      original: (string) (len=10) "TestClass1",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) (len=10) "\\TestClass",
-      original: (string) (len=9) "TestClass"
+      original: (string) (len=9) "TestClass",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=14) "\\TestInterface",
-        original: (string) (len=13) "TestInterface"
+        original: (string) (len=13) "TestInterface",
+        arrayLevel: (int) 0
       }
     },
     Use: ([]analysis.TypeString) <nil>

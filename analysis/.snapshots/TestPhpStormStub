@@ -6,7 +6,8 @@
     },
     Name: (analysis.TypeString) {
       fqn: (string) (len=11) "\\preg_match",
-      original: (string) (len=10) "preg_match"
+      original: (string) (len=10) "preg_match",
+      arrayLevel: (int) 0
     },
     Params: ([]*analysis.Parameter) (len=5) {
       (*analysis.Parameter)({
@@ -17,7 +18,13 @@
         description: (string) "",
         Name: (string) (len=8) "$pattern",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
+            }
+          },
           uniqueFQNs: (map[string]bool) <nil>
         },
         Value: (string) ""
@@ -30,7 +37,13 @@
         description: (string) "",
         Name: (string) (len=8) "$subject",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 0
+            }
+          },
           uniqueFQNs: (map[string]bool) <nil>
         },
         Value: (string) ""
@@ -43,7 +56,13 @@
         description: (string) "",
         Name: (string) (len=8) "$matches",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=6) "string",
+              original: (string) (len=6) "string",
+              arrayLevel: (int) 1
+            }
+          },
           uniqueFQNs: (map[string]bool) <nil>
         },
         Value: (string) (len=4) "null"
@@ -56,7 +75,13 @@
         description: (string) "",
         Name: (string) (len=6) "$flags",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=3) "int",
+              original: (string) (len=3) "int",
+              arrayLevel: (int) 0
+            }
+          },
           uniqueFQNs: (map[string]bool) <nil>
         },
         Value: (string) ""
@@ -69,14 +94,31 @@
         description: (string) "",
         Name: (string) (len=7) "$offset",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
+          typeStrings: ([]analysis.TypeString) (len=1) {
+            (analysis.TypeString) {
+              fqn: (string) (len=3) "int",
+              original: (string) (len=3) "int",
+              arrayLevel: (int) 0
+            }
+          },
           uniqueFQNs: (map[string]bool) <nil>
         },
         Value: (string) ""
       })
     },
     returnTypes: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>,
+      typeStrings: ([]analysis.TypeString) (len=2) {
+        (analysis.TypeString) {
+          fqn: (string) (len=3) "int",
+          original: (string) (len=3) "int",
+          arrayLevel: (int) 0
+        },
+        (analysis.TypeString) {
+          fqn: (string) (len=5) "false",
+          original: (string) (len=5) "false",
+          arrayLevel: (int) 0
+        }
+      },
       uniqueFQNs: (map[string]bool) <nil>
     },
     description: (string) (len=34) "Perform a regular expression match"

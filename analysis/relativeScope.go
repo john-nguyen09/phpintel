@@ -57,6 +57,6 @@ func (s *RelativeScope) GetTypes() TypeComposite {
 	return s.Types
 }
 
-func (s *RelativeScope) Resolve(store *Store) {
+func (s *RelativeScope) Resolve(ctx ResolveContext) {
 
 }

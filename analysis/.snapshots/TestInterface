@@ -7,7 +7,8 @@
     description: (string) "",
     Name: (analysis.TypeString) {
       fqn: (string) (len=14) "\\TestInterface",
-      original: (string) (len=13) "TestInterface"
+      original: (string) (len=13) "TestInterface",
+      arrayLevel: (int) 0
     },
     Extends: ([]analysis.TypeString) <nil>
   }),
@@ -19,12 +20,14 @@
     description: (string) "",
     Name: (analysis.TypeString) {
       fqn: (string) (len=15) "\\TestInterface2",
-      original: (string) (len=14) "TestInterface2"
+      original: (string) (len=14) "TestInterface2",
+      arrayLevel: (int) 0
     },
     Extends: ([]analysis.TypeString) (len=1) {
       (analysis.TypeString) {
         fqn: (string) (len=13) "TestInterface",
-        original: (string) (len=13) "TestInterface"
+        original: (string) (len=13) "TestInterface",
+        arrayLevel: (int) 0
       }
     }
   })

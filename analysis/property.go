@@ -111,7 +111,7 @@ func (s *Property) GetCollection() string {
 }
 
 func (s *Property) GetKey() string {
-	return s.Scope.fqn + KeySep + s.Name + KeySep + s.location.URI
+	return s.Scope.GetFQN() + KeySep + s.Name + KeySep + s.location.URI + s.location.Range.String()
 }
 
 func (s *Property) GetIndexableName() string {

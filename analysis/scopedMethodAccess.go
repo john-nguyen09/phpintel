@@ -63,10 +63,11 @@ func (s *ScopedMethodAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ScopedMethodAccess) Resolve(store *Store) {
+func (s *ScopedMethodAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
+	store := ctx.store
 	s.hasResolved = true
 	name := ""
 	classScope := ""
@@ -76,7 +77,7 @@ func (s *ScopedMethodAccess) Resolve(store *Store) {
 	if hasScope, ok := s.Scope.(HasScope); ok {
 		classScope = hasScope.GetScope().GetFQN()
 	}
-	for _, scopeType := range s.ResolveAndGetScope(store).Resolve() {
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			for _, method := range GetClassMethods(store, class, s.Name,
 				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
@@ -90,15 +91,23 @@ func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ScopedMethodAccess) ResolveToHasParams(store *Store, document *Document) []HasParams {
+func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
-	for _, typeString := range s.ResolveAndGetScope(store).Resolve() {
-		methods := store.GetMethods(typeString.GetFQN(), s.Name)
-		for _, method := range methods {
-			if !method.IsStatic {
-				continue
+	store := ctx.store
+	for _, typeString := range s.ResolveAndGetScope(ctx).Resolve() {
+		name := ""
+		classScope := ""
+		if hasName, ok := s.Scope.(HasName); ok {
+			name = hasName.GetName()
+		}
+		if hasScope, ok := s.Scope.(HasScope); ok {
+			classScope = hasScope.GetScope().GetFQN()
+		}
+		for _, class := range store.GetClasses(typeString.GetFQN()) {
+			for _, method := range GetClassMethods(store, class, s.Name,
+				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
+				hasParams = append(hasParams, method)
 			}
-			hasParams = append(hasParams, method)
 		}
 	}
 	return hasParams

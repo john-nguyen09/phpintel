@@ -8,11 +8,13 @@
     Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -34,7 +36,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
@@ -71,7 +74,8 @@
           typeStrings: ([]analysis.TypeString) (len=1) {
             (analysis.TypeString) {
               fqn: (string) (len=24) "\\TestAbstractMethodClass",
-              original: (string) (len=23) "TestAbstractMethodClass"
+              original: (string) (len=23) "TestAbstractMethodClass",
+              arrayLevel: (int) 0
             }
           },
           uniqueFQNs: (map[string]bool) (len=1) {
@@ -90,7 +94,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
@@ -113,7 +118,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
@@ -136,7 +142,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
@@ -159,7 +166,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) true,
@@ -182,7 +190,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
@@ -205,7 +214,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
@@ -228,7 +238,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
@@ -251,7 +262,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass"
+      original: (string) (len=15) "TestMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
@@ -266,11 +278,13 @@
     Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass"
+      original: (string) (len=23) "TestAbstractMethodClass",
+      arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
       fqn: (string) "",
-      original: (string) ""
+      original: (string) "",
+      arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
@@ -292,7 +306,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass"
+      original: (string) (len=23) "TestAbstractMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
@@ -315,7 +330,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass"
+      original: (string) (len=23) "TestAbstractMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
@@ -338,7 +354,8 @@
     description: (string) "",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass"
+      original: (string) (len=23) "TestAbstractMethodClass",
+      arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
