@@ -80,6 +80,7 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		phrase.PropertyAccessExpression:       newPropertyAccess,
 		phrase.MethodCallExpression:           newMethodAccess,
 		phrase.ForeachStatement:               analyseForeachStatement,
+		phrase.EncapsulatedExpression:         analyseEncapsulatedExpression,
 	}
 	var expression HasTypes = nil
 	shouldAdd := false
