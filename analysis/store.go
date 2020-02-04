@@ -173,7 +173,7 @@ func (s *Store) LoadStubs() {
 			currentMD5 := document.GetMD5Hash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(levigo.NewReadOptions(), entry.getKeyBytes())
-			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
+			if err != nil || bytes.Compare(currentMD5, savedMD5) != 0 {
 				document.Load()
 				s.SyncDocument(document)
 			}
