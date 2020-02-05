@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"bytes"
 	"strings"
 
 	"github.com/jmhodges/levigo"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
 )
 
@@ -65,16 +65,11 @@ type completionIndexDeletor struct {
 	keys      map[string]bool
 }
 
-func newCompletionIndexDeletor(db *levigo.DB, uri string) *completionIndexDeletor {
+func newCompletionIndexDeletor(db *storage.Storage, uri string) *completionIndexDeletor {
 	indexKeys := map[string]bool{}
 	keys := map[string]bool{}
 	entry := newEntry(documentCompletionIndex, uri)
-	it := db.NewIterator(levigo.NewReadOptions())
-	defer it.Close()
-	for it.Seek(entry.prefixRange()); it.Valid(); it.Next() {
-		if !bytes.HasPrefix(it.Key(), entry.prefixRange()) {
-			break
-		}
+	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		keys[string(it.Key())] = true
 		serialiser := SerialiserFromByteSlice(it.Value())
 		len := serialiser.ReadInt()
@@ -84,7 +79,7 @@ func newCompletionIndexDeletor(db *levigo.DB, uri string) *completionIndexDeleto
 				indexKeys[string(key)] = true
 			}
 		}
-	}
+	})
 	return &completionIndexDeletor{indexKeys, keys}
 }
 
@@ -128,7 +123,7 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *levigo.DB, query searchQuery) SearchResult {
+func searchCompletions(db *storage.Storage, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	isComplete := true
 	for _, prefix := range query.prefixes {
@@ -138,23 +133,18 @@ func searchCompletions(db *levigo.DB, query searchQuery) SearchResult {
 			name = prefix + scopeSep + name
 		}
 		entry := newEntry(query.collection, name)
-		it := db.NewIterator(levigo.NewReadOptions())
-		for it.Seek(entry.prefixRange()); it.Valid(); it.Next() {
-			if !bytes.HasPrefix(it.Key(), entry.prefixRange()) {
-				break
-			}
+		db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
-				continue
+				return
 			}
 			result := query.onData(completionValue)
 			uniqueCompletionValues[completionValue] = true
 			if result.shouldStop {
 				isComplete = false
-				break
+				it.Stop()
 			}
-		}
-		it.Close()
+		})
 	}
 	return SearchResult{isComplete}
 }
