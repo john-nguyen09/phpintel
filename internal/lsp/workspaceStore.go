@@ -99,6 +99,22 @@ func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protoc
 	}
 }
 
+func (s *workspaceStore) removeView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
+	store := s.getStore(uri)
+	if store == nil {
+		log.Println(StoreNotFound(uri))
+		return
+	}
+	defer store.Close()
+	s.removeStore(store.GetURI())
+	folderPath := util.UriToPath(uri)
+	s.unregisterFileWatcher(folderPath, server, ctx)
+}
+
+func getFileWatcherID(path string) string {
+	return path + "-fileWatcher"
+}
+
 func (s *workspaceStore) registerFileWatcher(path string, server *Server, ctx context.Context) error {
 	// fileExtensions := "php"
 	regParams := protocol.DidChangeWatchedFilesRegistrationOptions{
@@ -110,7 +126,17 @@ func (s *workspaceStore) registerFileWatcher(path string, server *Server, ctx co
 	return server.client.RegisterCapability(ctx, &protocol.RegistrationParams{
 		Registrations: []protocol.Registration{
 			protocol.Registration{
-				ID: path + "-fileWatcher", Method: "workspace/didChangeWatchedFiles", RegisterOptions: regParams,
+				ID: getFileWatcherID(path), Method: "workspace/didChangeWatchedFiles", RegisterOptions: regParams,
+			},
+		},
+	})
+}
+
+func (s *workspaceStore) unregisterFileWatcher(path string, server *Server, ctx context.Context) error {
+	return server.client.UnregisterCapability(ctx, &protocol.UnregistrationParams{
+		Unregisterations: []protocol.Unregistration{
+			protocol.Unregistration{
+				ID: getFileWatcherID(path), Method: "workspace/didChangeWatchedFiles",
 			},
 		},
 	})
@@ -151,6 +177,15 @@ func (s *workspaceStore) getStore(uri protocol.DocumentURI) *analysis.Store {
 		}
 	}
 	return nil
+}
+
+func (s *workspaceStore) removeStore(uri protocol.DocumentURI) {
+	for i, store := range s.stores {
+		if store.GetURI() == uri {
+			s.stores = append(s.stores[:i], s.stores[i+1:]...)
+			break
+		}
+	}
 }
 
 func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
