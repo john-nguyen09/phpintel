@@ -181,6 +181,7 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, string(data))
+		s.documents.Set(uri, document)
 	} else {
 		document = value.(*Document)
 	}
@@ -194,7 +195,10 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 		return nil
 	}
 	document.Lock()
-	defer document.Unlock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 	document.Open()
 	document.Load()
 	s.SyncDocument(document)
@@ -208,17 +212,11 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 		return
 	}
 	document.Lock()
-	defer document.Unlock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 	document.Close()
-	s.SyncDocument(document)
-}
-
-func (s *Store) CreateDocument(uri protocol.DocumentURI) {
-	document := s.GetOrCreateDocument(uri)
-	if document == nil {
-		return
-	}
-	document.Load()
 	s.SyncDocument(document)
 }
 
@@ -248,13 +246,24 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	if document == nil {
 		return nil
 	}
+	document.Lock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 
 	currentMD5 := document.GetMD5Hash()
 	savedMD5, ok := s.syncedDocumentURIs.Get(uri)
 	if ok {
 		s.syncedDocumentURIs.Remove(uri)
+	} else {
+		entry := newEntry(documentCollection, document.GetURI())
+		value, err := s.db.Get(entry.getKeyBytes())
+		if err == nil {
+			savedMD5 = value
+		}
 	}
-	if ok && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
+	if savedMD5 != nil && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
 		return document
 	}
 
@@ -276,9 +285,10 @@ func (s *Store) SyncDocument(document *Document) {
 	if err != nil {
 		log.Print(err)
 	}
-	if document.IsOpen() {
-		s.documents.Set(document.uri, document)
-	} else {
+}
+
+func (s *Store) releaseDocIfNotOpen(document *Document) {
+	if !document.IsOpen() {
 		s.documents.Remove(document.uri)
 	}
 }
@@ -309,8 +319,7 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		valueData := it.Value()
-		documentURIs[strings.Split(string(it.Key()), KeySep)[1]] = append(valueData[:0:0], valueData...)
+		documentURIs[strings.Split(string(it.Key()), KeySep)[1]] = it.Value()
 	})
 	return documentURIs
 }
