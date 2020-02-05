@@ -1,21 +1,20 @@
 package storage
 
-import "github.com/jmhodges/levigo"
+import (
+	"bytes"
 
-import "bytes"
+	"github.com/kezhuw/leveldb"
+)
 
 type PrefixIterator struct {
-	ro         *levigo.ReadOptions
-	it         *levigo.Iterator
+	it         leveldb.Iterator
 	prefix     []byte
 	shouldStop bool
 }
 
-func NewPrefixIterator(db *levigo.DB, prefix []byte) *PrefixIterator {
-	ro := levigo.NewReadOptions()
-	it := db.NewIterator(ro)
-	it.Seek(prefix)
-	return &PrefixIterator{ro, it, prefix, false}
+func NewPrefixIterator(db *leveldb.DB, prefix []byte) *PrefixIterator {
+	it := db.Prefix(prefix, nil)
+	return &PrefixIterator{it, prefix, false}
 }
 
 func (pi *PrefixIterator) valid() bool {
@@ -31,15 +30,16 @@ func (pi *PrefixIterator) next() {
 
 func (pi *PrefixIterator) close() {
 	pi.it.Close()
-	pi.ro.Close()
 }
 
 func (pi *PrefixIterator) Key() []byte {
-	return pi.it.Key()
+	key := pi.it.Key()
+	return append(key[:0:0], key...)
 }
 
 func (pi *PrefixIterator) Value() []byte {
-	return pi.it.Value()
+	value := pi.it.Value()
+	return append(value[:0:0], value...)
 }
 
 func (pi *PrefixIterator) Stop() {

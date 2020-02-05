@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
-	"github.com/jmhodges/levigo"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
+	"github.com/kezhuw/leveldb"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -221,7 +221,7 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 }
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(wb *leveldb.Batch) error {
 		deletor := newCompletionIndexDeletor(s.db, uri)
 		deletor.Delete(wb)
 		s.forgetDocument(wb, uri)
@@ -273,7 +273,7 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 }
 
 func (s *Store) SyncDocument(document *Document) {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(wb *leveldb.Batch) error {
 		deletor := newCompletionIndexDeletor(s.db, document.GetURI())
 		s.forgetAllSymbols(wb, document.GetURI())
 		s.writeAllSymbols(wb, document, deletor)
@@ -301,7 +301,7 @@ func (s *Store) PrepareForIndexing() {
 }
 
 func (s *Store) FinishIndexing() {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(wb *leveldb.Batch) error {
 		for iter := range s.syncedDocumentURIs.Iter() {
 			deletor := newCompletionIndexDeletor(s.db, iter.Key)
 			deletor.Delete(wb)
@@ -324,13 +324,13 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	return documentURIs
 }
 
-func (s *Store) forgetDocument(batch *levigo.WriteBatch, uri string) {
+func (s *Store) forgetDocument(batch *leveldb.Batch, uri string) {
 	s.forgetAllSymbols(batch, uri)
 	entry := newEntry(documentCollection, uri)
 	batch.Delete(entry.getKeyBytes())
 }
 
-func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
+func (s *Store) forgetAllSymbols(batch *leveldb.Batch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
@@ -339,7 +339,7 @@ func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 	})
 }
 
-func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document, deletor *completionIndexDeletor) {
+func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document, deletor *completionIndexDeletor) {
 	for _, child := range document.Children {
 		if serialisable, ok := child.(Serialisable); ok {
 			key := serialisable.GetKey()
@@ -359,23 +359,23 @@ func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document, de
 	}
 }
 
-func rememberSymbol(batch *levigo.WriteBatch, document *Document, serialisable Serialisable) {
+func rememberSymbol(batch *leveldb.Batch, document *Document, serialisable Serialisable) {
 	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
 	writeEntry(batch, entry)
 }
 
-func indexName(batch *levigo.WriteBatch, document *Document, indexable NameIndexable, key string) {
+func indexName(batch *leveldb.Batch, document *Document, indexable NameIndexable, key string) {
 	entries := createCompletionEntries(document.GetURI(), indexable, key)
 	for _, entry := range entries {
 		writeEntry(batch, entry)
 	}
 }
 
-func writeEntry(batch *levigo.WriteBatch, entry *entry) {
+func writeEntry(batch *leveldb.Batch, entry *entry) {
 	batch.Put(entry.getKeyBytes(), entry.getBytes())
 }
 
-func deleteEntry(batch *levigo.WriteBatch, entry *entry) {
+func deleteEntry(batch *leveldb.Batch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 

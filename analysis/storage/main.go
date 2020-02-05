@@ -1,9 +1,11 @@
 package storage
 
-import "github.com/jmhodges/levigo"
+import (
+	"github.com/kezhuw/leveldb"
+)
 
 type Storage struct {
-	db *levigo.DB
+	db *leveldb.DB
 }
 
 type StreamOptions struct {
@@ -12,10 +14,10 @@ type StreamOptions struct {
 }
 
 func NewStorage(path string) (*Storage, error) {
-	opts := levigo.NewOptions()
-	opts.SetCache(levigo.NewLRUCache(3 << 30))
-	opts.SetCreateIfMissing(true)
-	db, err := levigo.Open(path, opts)
+	opts := &leveldb.Options{
+		CreateIfMissing: true,
+	}
+	db, err := leveldb.Open(path, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -27,31 +29,22 @@ func (s *Storage) Close() {
 }
 
 func (s *Storage) Delete(key []byte) error {
-	wo := levigo.NewWriteOptions()
-	defer wo.Close()
-	return s.db.Delete(wo, key)
+	return s.db.Delete(key, nil)
 }
 
 func (s *Storage) Put(key []byte, value []byte) error {
-	wo := levigo.NewWriteOptions()
-	defer wo.Close()
-	return s.db.Put(wo, key, value)
+	return s.db.Put(key, value, nil)
 }
 
 func (s *Storage) Get(key []byte) ([]byte, error) {
-	ro := levigo.NewReadOptions()
-	defer ro.Close()
-	return s.db.Get(ro, key)
+	return s.db.Get(key, nil)
 }
 
-func (s *Storage) WriteBatch(f func(*levigo.WriteBatch) error) error {
-	wb := levigo.NewWriteBatch()
-	defer wb.Close()
-	err := f(wb)
+func (s *Storage) WriteBatch(f func(*leveldb.Batch) error) error {
+	var wb leveldb.Batch
+	err := f(&wb)
 	if err == nil {
-		wo := levigo.NewWriteOptions()
-		err = s.db.Write(wo, wb)
-		wo.Close()
+		err = s.db.Write(wb, nil)
 	}
 	return err
 }
@@ -65,7 +58,7 @@ func (s *Storage) PrefixStream(prefix []byte, onData func(*PrefixIterator)) {
 }
 
 func (s *Storage) Clear() {
-	s.WriteBatch(func(wb *levigo.WriteBatch) error {
+	s.WriteBatch(func(wb *leveldb.Batch) error {
 		s.PrefixStream(nil, func(it *PrefixIterator) {
 			wb.Delete(it.Key())
 		})
