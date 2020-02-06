@@ -29,7 +29,7 @@ func paramsToString(params []*analysis.Parameter) string {
 				paramContent += param.Type.ToString() + " "
 			}
 			paramContent += param.Name
-			if len(param.Value) > 0 {
+			if param.HasValue() {
 				paramContent += " = " + param.Value
 			}
 			paramContents = append(paramContents, paramContent)
