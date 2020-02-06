@@ -1,31 +1,21 @@
 package storage
 
 import (
-	"bytes"
-
 	"github.com/kezhuw/leveldb"
 )
 
 type PrefixIterator struct {
 	it         leveldb.Iterator
-	prefix     []byte
 	shouldStop bool
 }
 
 func NewPrefixIterator(db *leveldb.DB, prefix []byte) *PrefixIterator {
 	it := db.Prefix(prefix, nil)
-	return &PrefixIterator{it, prefix, false}
+	return &PrefixIterator{it, false}
 }
 
-func (pi *PrefixIterator) valid() bool {
-	if pi.shouldStop {
-		return false
-	}
-	return pi.it.Valid() && bytes.HasPrefix(pi.it.Key(), pi.prefix)
-}
-
-func (pi *PrefixIterator) next() {
-	pi.it.Next()
+func (pi *PrefixIterator) next() bool {
+	return pi.it.Next()
 }
 
 func (pi *PrefixIterator) close() {

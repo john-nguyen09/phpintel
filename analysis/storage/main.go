@@ -52,7 +52,7 @@ func (s *Storage) WriteBatch(f func(*leveldb.Batch) error) error {
 func (s *Storage) PrefixStream(prefix []byte, onData func(*PrefixIterator)) {
 	it := NewPrefixIterator(s.db, prefix)
 	defer it.close()
-	for ; it.valid(); it.next() {
+	for it.next() {
 		onData(it)
 	}
 }
