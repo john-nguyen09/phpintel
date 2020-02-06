@@ -3,9 +3,9 @@ package analysis
 import (
 	"strings"
 
+	"github.com/jmhodges/levigo"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
-	"github.com/kezhuw/leveldb"
 )
 
 // CompletionValue holds references to uri and name
@@ -93,7 +93,7 @@ func (d *completionIndexDeletor) MarkNotDelete(uri string, indexable NameIndexab
 	delete(d.keys, string(entry.getKeyBytes()))
 }
 
-func (d *completionIndexDeletor) Delete(batch *leveldb.Batch){
+func (d *completionIndexDeletor) Delete(batch *levigo.WriteBatch) {
 	for indexKey := range d.indexKeys {
 		batch.Delete([]byte(indexKey))
 	}

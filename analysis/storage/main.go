@@ -1,11 +1,11 @@
 package storage
 
 import (
-	"github.com/kezhuw/leveldb"
+	"github.com/jmhodges/levigo"
 )
 
 type Storage struct {
-	db *leveldb.DB
+	db *levigo.DB
 }
 
 type StreamOptions struct {
@@ -14,10 +14,10 @@ type StreamOptions struct {
 }
 
 func NewStorage(path string) (*Storage, error) {
-	opts := &leveldb.Options{
-		CreateIfMissing: true,
-	}
-	db, err := leveldb.Open(path, opts)
+	opts := levigo.NewOptions()
+	opts.SetCache(levigo.NewLRUCache(3 << 30))
+	opts.SetCreateIfMissing(true)
+	db, err := levigo.Open(path, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -29,22 +29,31 @@ func (s *Storage) Close() {
 }
 
 func (s *Storage) Delete(key []byte) error {
-	return s.db.Delete(key, nil)
+	wo := levigo.NewWriteOptions()
+	defer wo.Close()
+	return s.db.Delete(wo, key)
 }
 
 func (s *Storage) Put(key []byte, value []byte) error {
-	return s.db.Put(key, value, nil)
+	wo := levigo.NewWriteOptions()
+	defer wo.Close()
+	return s.db.Put(wo, key, value)
 }
 
 func (s *Storage) Get(key []byte) ([]byte, error) {
-	return s.db.Get(key, nil)
+	ro := levigo.NewReadOptions()
+	defer ro.Close()
+	return s.db.Get(ro, key)
 }
 
-func (s *Storage) WriteBatch(f func(*leveldb.Batch) error) error {
-	var wb leveldb.Batch
-	err := f(&wb)
+func (s *Storage) WriteBatch(f func(*levigo.WriteBatch) error) error {
+	wb := levigo.NewWriteBatch()
+	opts := levigo.NewWriteOptions()
+	defer wb.Close()
+	defer opts.Close()
+	err := f(wb)
 	if err == nil {
-		err = s.db.Write(wb, nil)
+		err = s.db.Write(opts, wb)
 	}
 	return err
 }
@@ -52,13 +61,13 @@ func (s *Storage) WriteBatch(f func(*leveldb.Batch) error) error {
 func (s *Storage) PrefixStream(prefix []byte, onData func(*PrefixIterator)) {
 	it := NewPrefixIterator(s.db, prefix)
 	defer it.close()
-	for it.next() {
+	for ; it.valid(); it.next() {
 		onData(it)
 	}
 }
 
 func (s *Storage) Clear() {
-	s.WriteBatch(func(wb *leveldb.Batch) error {
+	s.WriteBatch(func(wb *levigo.WriteBatch) error {
 		s.PrefixStream(nil, func(it *PrefixIterator) {
 			wb.Delete(it.Key())
 		})
