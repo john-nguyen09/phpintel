@@ -9,7 +9,7 @@ type Serialiser struct {
 	buf   []byte
 }
 
-type Serialisable interface {
+type serialisable interface {
 	GetCollection() string
 	GetKey() string
 	Serialise(serialiser *Serialiser)

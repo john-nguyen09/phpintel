@@ -81,6 +81,35 @@ type Store struct {
 	syncedDocumentURIs cmap.ConcurrentMap
 }
 
+type symbolDeletor struct {
+	uri     string
+	symbols map[string]bool
+}
+
+func newSymbolDeletor(db *storage.Storage, uri string) *symbolDeletor {
+	entry := newEntry(documentSymbols, uri+KeySep)
+	deletor := &symbolDeletor{
+		uri:     uri,
+		symbols: map[string]bool{},
+	}
+	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		keyInfo := strings.Split(string(it.Key()), KeySep)
+		deletor.symbols[strings.Join(keyInfo[2:], KeySep)] = true
+	})
+	return deletor
+}
+
+func (d *symbolDeletor) MarkNotDelete(ser serialisable) {
+	delete(d.symbols, ser.GetCollection()+KeySep+ser.GetKey())
+}
+
+func (d *symbolDeletor) Delete(batch *levigo.WriteBatch) {
+	for key := range d.symbols {
+		batch.Delete([]byte(key))
+		batch.Delete([]byte(documentSymbols + KeySep + d.uri + key))
+	}
+}
+
 type SearchOptions struct {
 	predicates []func(s Symbol) bool
 	limit      int
@@ -222,9 +251,10 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
-		deletor := newCompletionIndexDeletor(s.db, uri)
-		deletor.Delete(wb)
-		s.forgetDocument(wb, uri)
+		ciDeletor := newCompletionIndexDeletor(s.db, uri)
+		ciDeletor.Delete(wb)
+		syDeletor := newSymbolDeletor(s.db, uri)
+		syDeletor.Delete(wb)
 		return nil
 	})
 	if err != nil {
@@ -274,10 +304,13 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 
 func (s *Store) SyncDocument(document *Document) {
 	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
-		deletor := newCompletionIndexDeletor(s.db, document.GetURI())
-		s.forgetAllSymbols(wb, document.GetURI())
-		s.writeAllSymbols(wb, document, deletor)
-		deletor.Delete(wb)
+		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
+		syDeletor := newSymbolDeletor(s.db, document.GetURI())
+
+		s.writeAllSymbols(wb, document, ciDeletor, syDeletor)
+
+		ciDeletor.Delete(wb)
+		syDeletor.Delete(wb)
 		entry := newEntry(documentCollection, document.GetURI())
 		wb.Put(entry.getKeyBytes(), document.GetMD5Hash())
 		return nil
@@ -303,9 +336,7 @@ func (s *Store) PrepareForIndexing() {
 func (s *Store) FinishIndexing() {
 	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
 		for iter := range s.syncedDocumentURIs.Iter() {
-			deletor := newCompletionIndexDeletor(s.db, iter.Key)
-			deletor.Delete(wb)
-			s.forgetDocument(wb, iter.Key)
+			s.DeleteDocument(iter.Key)
 			s.syncedDocumentURIs.Remove(iter.Key)
 		}
 		return nil
@@ -324,12 +355,6 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	return documentURIs
 }
 
-func (s *Store) forgetDocument(batch *levigo.WriteBatch, uri string) {
-	s.forgetAllSymbols(batch, uri)
-	entry := newEntry(documentCollection, uri)
-	batch.Delete(entry.getKeyBytes())
-}
-
 func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
@@ -339,28 +364,30 @@ func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 	})
 }
 
-func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document, deletor *completionIndexDeletor) {
+func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document,
+	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
 	for _, child := range document.Children {
-		if serialisable, ok := child.(Serialisable); ok {
-			key := serialisable.GetKey()
+		if ser, ok := child.(serialisable); ok {
+			key := ser.GetKey()
 			if key == "" {
 				continue
 			}
-			entry := newEntry(serialisable.GetCollection(), key)
-			serialisable.Serialise(entry.serialiser)
+			entry := newEntry(ser.GetCollection(), key)
+			ser.Serialise(entry.serialiser)
 			writeEntry(batch, entry)
-			rememberSymbol(batch, document, serialisable)
+			rememberSymbol(batch, document, ser)
+			syDeletor.MarkNotDelete(ser)
 
 			if indexable, ok := child.(NameIndexable); ok {
 				indexName(batch, document, indexable, key)
-				deletor.MarkNotDelete(document.GetURI(), indexable, key)
+				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
 			}
 		}
 	}
 }
 
-func rememberSymbol(batch *levigo.WriteBatch, document *Document, serialisable Serialisable) {
-	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
+func rememberSymbol(batch *levigo.WriteBatch, document *Document, ser serialisable) {
+	entry := newEntry(documentSymbols, document.GetURI()+KeySep+ser.GetCollection()+KeySep+ser.GetKey())
 	writeEntry(batch, entry)
 }
 
