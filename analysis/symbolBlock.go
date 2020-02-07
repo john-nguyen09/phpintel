@@ -67,10 +67,10 @@ var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorF
 	lexer.DirectoryConstant: newDirectoryConstantAccess,
 	lexer.DocumentComment:   newPhpDocFromNode,
 }
+var phraseToSymbolConstructor map[phrase.PhraseType]symbolConstructorForPhrase
 
-func scanForChildren(document *Document, node *phrase.Phrase) {
-	var phraseToSymbolConstructor = map[phrase.PhraseType]symbolConstructorForPhrase{
-		// Symbols
+func init() {
+	phraseToSymbolConstructor = map[phrase.PhraseType]symbolConstructorForPhrase{
 		phrase.InterfaceDeclaration:         newInterface,
 		phrase.ClassDeclaration:             newClass,
 		phrase.FunctionDeclaration:          newFunction,
@@ -92,6 +92,9 @@ func scanForChildren(document *Document, node *phrase.Phrase) {
 
 		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
 	}
+}
+
+func scanForChildren(document *Document, node *phrase.Phrase) {
 	for _, child := range node.Children {
 		var childSymbol Symbol = nil
 		shouldSkipAdding := false
