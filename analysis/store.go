@@ -215,7 +215,7 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, string(data))
-		s.retainDocIfOpen(document)
+		s.saveDocOnStore(document)
 	} else {
 		document = value.(*Document)
 	}
@@ -333,10 +333,8 @@ func (s *Store) releaseDocIfNotOpen(document *Document) {
 	}
 }
 
-func (s *Store) retainDocIfOpen(document *Document) {
-	if document.IsOpen() {
-		s.documents.Set(document.GetURI(), document)
-	}
+func (s *Store) saveDocOnStore(document *Document) {
+	s.documents.Set(document.GetURI(), document)
 }
 
 func (s *Store) PrepareForIndexing() {
