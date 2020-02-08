@@ -260,6 +260,8 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 		ciDeletor.Delete(wb)
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(wb)
+		entry := newEntry(documentCollection, uri)
+		wb.Delete(entry.getKeyBytes())
 		return nil
 	})
 	if err != nil {
