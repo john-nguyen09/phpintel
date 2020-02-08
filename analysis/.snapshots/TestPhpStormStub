@@ -16,6 +16,7 @@
           Range: (protocol.Range) 158:21-158:29
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=8) "$pattern",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -35,6 +36,7 @@
           Range: (protocol.Range) 158:31-158:39
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=8) "$subject",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -54,6 +56,7 @@
           Range: (protocol.Range) 158:41-158:63
         },
         description: (string) "",
+        hasValue: (bool) true,
         Name: (string) (len=8) "$matches",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -73,6 +76,7 @@
           Range: (protocol.Range) 158:65-158:75
         },
         description: (string) "",
+        hasValue: (bool) true,
         Name: (string) (len=6) "$flags",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -84,7 +88,7 @@
           },
           uniqueFQNs: (map[string]bool) <nil>
         },
-        Value: (string) ""
+        Value: (string) (len=1) "0"
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
@@ -92,6 +96,7 @@
           Range: (protocol.Range) 158:77-158:88
         },
         description: (string) "",
+        hasValue: (bool) true,
         Name: (string) (len=7) "$offset",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -103,7 +108,7 @@
           },
           uniqueFQNs: (map[string]bool) <nil>
         },
-        Value: (string) ""
+        Value: (string) (len=1) "0"
       })
     },
     returnTypes: (analysis.TypeComposite) {

@@ -56,12 +56,13 @@
           Range: (protocol.Range) 7:35-7:46
         },
         description: (string) "",
+        hasValue: (bool) true,
         Name: (string) (len=7) "$param1",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) <nil>,
           uniqueFQNs: (map[string]bool) <nil>
         },
-        Value: (string) ""
+        Value: (string) (len=1) "0"
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
@@ -69,6 +70,7 @@
           Range: (protocol.Range) 7:48-7:79
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=7) "$param2",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {

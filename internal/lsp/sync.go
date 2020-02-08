@@ -2,8 +2,11 @@ package lsp
 
 import (
 	"context"
+	"log"
 	"os"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -39,43 +42,59 @@ func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocu
 }
 
 func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.DidChangeWatchedFilesParams) error {
-	for _, change := range params.Changes {
-		if change.Type == protocol.Deleted {
-			s.store.deleteJobs <- change.URI
-			continue
-		}
-
-		filePath := util.UriToPath(change.URI)
-		matched := strings.HasSuffix(filePath, ".php")
-
-		if matched {
-			s.store.createJobs <- CreatorJob{
-				filePath: filePath,
+	go func() {
+		start := time.Now()
+		var wg sync.WaitGroup
+		changes := append(params.Changes[:0:0], params.Changes...)
+		log.Printf("Length before: %d", len(changes))
+		for _, change := range changes {
+			if change.Type == protocol.Deleted {
+				s.store.deleteJobs <- change.URI
+				continue
 			}
-			continue
-		}
 
-		stats, err := os.Stat(filePath)
-		if err != nil {
-			continue
-		}
-		if !stats.IsDir() {
-			continue
-		}
+			filePath, err := util.UriToPath(change.URI)
+			if err != nil {
+				log.Printf("didChangeWatchedFiles error: %v", err)
+				continue
+			}
+			stats, err := os.Stat(filePath)
+			if err != nil {
+				log.Printf("didChangeWatchedFiles error: %v", err)
+				continue
+			}
+			matched := strings.HasSuffix(filePath, ".php")
 
-		go func(change protocol.FileEvent) {
+			if matched && !stats.IsDir() {
+				wg.Add(1)
+				s.store.createJobs <- CreatorJob{
+					filePath:  filePath,
+					waitGroup: &wg,
+				}
+				continue
+			}
+
+			if !stats.IsDir() {
+				continue
+			}
+
 			godirwalk.Walk(filePath, &godirwalk.Options{
 				Callback: func(path string, de *godirwalk.Dirent) error {
 					if !de.IsDir() && strings.HasSuffix(path, ".php") {
+						wg.Add(1)
 						s.store.createJobs <- CreatorJob{
-							filePath: path,
+							filePath:  path,
+							waitGroup: &wg,
 						}
 					}
 					return nil
 				},
 				Unsorted: true,
 			})
-		}(change)
-	}
+		}
+		wg.Wait()
+		elapsed := time.Since(start)
+		log.Printf("%d changes took %s", len(changes), elapsed)
+	}()
 	return nil
 }

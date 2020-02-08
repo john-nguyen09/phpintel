@@ -11,6 +11,7 @@ import (
 type Parameter struct {
 	location    protocol.Location
 	description string
+	hasValue    bool
 
 	Name  string        `json:"Name"`
 	Type  TypeComposite `json:"Type"`
@@ -35,9 +36,14 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 					}
 					document.addSymbol(typeDeclaration)
 				}
+			case phrase.ConstantAccessExpression:
+				if constAccess, shouldAdd := newConstantAccess(document, p); shouldAdd {
+					document.addSymbol(constAccess)
+				}
 			}
 
 			if hasEqual {
+				param.hasValue = true
 				param.Value += document.GetPhraseText(p)
 			}
 		} else if token, ok := child.(*lexer.Token); ok {
@@ -45,10 +51,16 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 			case lexer.Equals:
 				{
 					hasEqual = true
+					traverser.SkipToken(lexer.Whitespace)
 				}
 			case lexer.VariableName:
 				{
 					param.Name = document.GetTokenText(token)
+				}
+			default:
+				if hasEqual {
+					param.hasValue = true
+					param.Value += document.GetTokenText(token)
 				}
 			}
 		}
@@ -75,8 +87,13 @@ func (s Parameter) ToVariable() *Variable {
 	}
 }
 
+func (s Parameter) HasValue() bool {
+	return s.hasValue
+}
+
 func (s *Parameter) Write(serialiser *Serialiser) {
 	serialiser.WriteLocation(s.location)
+	serialiser.WriteBool(s.hasValue)
 	serialiser.WriteString(s.Name)
 	s.Type.Write(serialiser)
 	serialiser.WriteString(s.Value)
@@ -85,6 +102,7 @@ func (s *Parameter) Write(serialiser *Serialiser) {
 func ReadParameter(serialiser *Serialiser) *Parameter {
 	return &Parameter{
 		location: serialiser.ReadLocation(),
+		hasValue: serialiser.ReadBool(),
 		Name:     serialiser.ReadString(),
 		Type:     ReadTypeComposite(serialiser),
 		Value:    serialiser.ReadString(),

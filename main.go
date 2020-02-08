@@ -4,6 +4,9 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
@@ -26,6 +29,10 @@ func main() {
 		fmt.Println(version)
 		return
 	}
+
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 
 	stream := jsonrpc2.NewHeaderStream(os.Stdin, os.Stdout)
 	ctx := context.Background()

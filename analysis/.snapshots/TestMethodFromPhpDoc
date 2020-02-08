@@ -32,6 +32,7 @@
           Range: (protocol.Range) 1:0-4:3
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=6) "$table",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -53,6 +54,7 @@
           Range: (protocol.Range) 1:0-4:3
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=9) "$callback",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -104,6 +106,7 @@
           Range: (protocol.Range) 1:0-4:3
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=6) "$class",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -125,6 +128,7 @@
           Range: (protocol.Range) 1:0-4:3
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=5) "$name",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -146,6 +150,7 @@
           Range: (protocol.Range) 1:0-4:3
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=5) "$type",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {

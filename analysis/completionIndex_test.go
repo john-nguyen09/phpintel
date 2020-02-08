@@ -9,7 +9,10 @@ import (
 
 func TestCompletionIndex(t *testing.T) {
 	testMethodClassTest, _ := filepath.Abs("../cases/method.php")
-	store, _ := setupStore("test", "TestCompletionIndex")
+	store, err := setupStore("test", "TestCompletionIndex")
+	if err != nil {
+		panic(err)
+	}
 	indexDocument(store, testMethodClassTest, "test1")
 
 	classes, _ := store.SearchClasses("T", NewSearchOptions())

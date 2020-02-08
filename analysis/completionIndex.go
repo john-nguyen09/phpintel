@@ -3,8 +3,9 @@ package analysis
 import (
 	"strings"
 
+	"github.com/jmhodges/levigo"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
-	"github.com/kezhuw/leveldb"
 )
 
 // CompletionValue holds references to uri and name
@@ -59,20 +60,45 @@ func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]by
 	return entry
 }
 
-func deleteCompletionIndex(db *leveldb.DB, batch *leveldb.Batch, uri string) {
+type completionIndexDeletor struct {
+	indexKeys map[string]bool
+	keys      map[string]bool
+}
+
+func newCompletionIndexDeletor(db *storage.Storage, uri string) *completionIndexDeletor {
+	indexKeys := map[string]bool{}
+	keys := map[string]bool{}
 	entry := newEntry(documentCompletionIndex, uri)
-	it := db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
-		batch.Delete(it.Key())
+	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		keys[string(it.Key())] = true
 		serialiser := SerialiserFromByteSlice(it.Value())
 		len := serialiser.ReadInt()
 		if len > 0 {
-			for i := 0; i < len-1; i++ {
+			for i := 0; i < len; i++ {
 				key := serialiser.ReadBytes()
-				db.Delete(key, nil)
+				indexKeys[string(key)] = true
 			}
 		}
+	})
+	return &completionIndexDeletor{indexKeys, keys}
+}
+
+func (d *completionIndexDeletor) MarkNotDelete(uri string, indexable NameIndexable, symbolKey string) {
+	keys := getCompletionKeys(uri, indexable, symbolKey)
+	for _, key := range keys {
+		entry := newEntry(indexable.GetIndexCollection(), key)
+		delete(d.indexKeys, string(entry.getKeyBytes()))
+	}
+	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
+	delete(d.keys, string(entry.getKeyBytes()))
+}
+
+func (d *completionIndexDeletor) Delete(batch *levigo.WriteBatch) {
+	for indexKey := range d.indexKeys {
+		batch.Delete([]byte(indexKey))
+	}
+	for key := range d.keys {
+		batch.Delete([]byte(key))
 	}
 }
 
@@ -97,7 +123,7 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
+func searchCompletions(db *storage.Storage, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	isComplete := true
 	for _, prefix := range query.prefixes {
@@ -107,20 +133,18 @@ func searchCompletions(db *leveldb.DB, query searchQuery) SearchResult {
 			name = prefix + scopeSep + name
 		}
 		entry := newEntry(query.collection, name)
-		it := db.Prefix(entry.prefixRange(), nil)
-		for it.Next() {
+		db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
-				continue
+				return
 			}
 			result := query.onData(completionValue)
 			uniqueCompletionValues[completionValue] = true
 			if result.shouldStop {
 				isComplete = false
-				break
+				it.Stop()
 			}
-		}
-		it.Close()
+		})
 	}
 	return SearchResult{isComplete}
 }

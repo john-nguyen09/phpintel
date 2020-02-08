@@ -7,9 +7,10 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
+	"github.com/jmhodges/levigo"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
-	"github.com/kezhuw/leveldb"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -64,10 +65,6 @@ func (s *entry) getSerialiser() *Serialiser {
 	return s.serialiser
 }
 
-func (s *entry) prefixRange() []byte {
-	return s.getKeyBytes()
-}
-
 func (s *entry) getKeyBytes() []byte {
 	return s.key
 }
@@ -78,10 +75,39 @@ func (s *entry) getBytes() []byte {
 
 type Store struct {
 	uri       protocol.DocumentURI
-	db        *leveldb.DB
+	db        *storage.Storage
 	documents cmap.ConcurrentMap
 
 	syncedDocumentURIs cmap.ConcurrentMap
+}
+
+type symbolDeletor struct {
+	uri     string
+	symbols map[string]bool
+}
+
+func newSymbolDeletor(db *storage.Storage, uri string) *symbolDeletor {
+	entry := newEntry(documentSymbols, uri+KeySep)
+	deletor := &symbolDeletor{
+		uri:     uri,
+		symbols: map[string]bool{},
+	}
+	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		keyInfo := strings.Split(string(it.Key()), KeySep)
+		deletor.symbols[strings.Join(keyInfo[2:], KeySep)] = true
+	})
+	return deletor
+}
+
+func (d *symbolDeletor) MarkNotDelete(ser serialisable) {
+	delete(d.symbols, ser.GetCollection()+KeySep+ser.GetKey())
+}
+
+func (d *symbolDeletor) Delete(batch *levigo.WriteBatch) {
+	for key := range d.symbols {
+		batch.Delete([]byte(key))
+		batch.Delete([]byte(documentSymbols + KeySep + d.uri + key))
+	}
 }
 
 type SearchOptions struct {
@@ -108,11 +134,7 @@ func initStubs() {
 }
 
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
-	options := &leveldb.Options{
-		CreateIfMissing: true,
-		// Filter:          leveldb.NewBloomFilter(16),
-	}
-	db, err := leveldb.Open(storePath, options)
+	db, err := storage.NewStorage(storePath)
 	initStubs()
 	if err != nil {
 		return nil, err
@@ -127,12 +149,12 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	return store, nil
 }
 
-func (s *Store) Close() error {
-	return s.db.Close()
+func (s *Store) Close() {
+	s.db.Close()
 }
 
 func (s *Store) GetStoreVersion() string {
-	v, err := s.db.Get(versionKey, nil)
+	v, err := s.db.Get(versionKey)
 	if err != nil {
 		return "v0.0.0"
 	}
@@ -140,15 +162,11 @@ func (s *Store) GetStoreVersion() string {
 }
 
 func (s *Store) PutVersion(version string) {
-	s.db.Put(versionKey, []byte(version), nil)
+	s.db.Put(versionKey, []byte(version))
 }
 
 func (s *Store) Clear() {
-	it := s.db.All(nil)
-	for it.Next() {
-		s.db.Delete(it.Key(), nil)
-	}
-	it.Close()
+	s.db.Clear()
 }
 
 func (s *Store) Migrate(newVersion string) {
@@ -173,8 +191,8 @@ func (s *Store) LoadStubs() {
 			document := NewDocument(stub.GetUri(path), string(data))
 			currentMD5 := document.GetMD5Hash()
 			entry := newEntry(documentCollection, document.GetURI())
-			savedMD5, err := s.db.Get(entry.getKeyBytes(), nil)
-			if err != nil && bytes.Compare(currentMD5, savedMD5) != 0 {
+			savedMD5, err := s.db.Get(entry.getKeyBytes())
+			if err != nil || bytes.Compare(currentMD5, savedMD5) != 0 {
 				document.Load()
 				s.SyncDocument(document)
 			}
@@ -186,12 +204,18 @@ func (s *Store) LoadStubs() {
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	if value, ok := s.documents.Get(uri); !ok {
-		filePath := putil.UriToPath(uri)
+		filePath, err := putil.UriToPath(uri)
+		if err != nil {
+			log.Printf("GetOrCreateDocument error: %v", err)
+			return nil
+		}
 		data, err := ioutil.ReadFile(filePath)
 		if err != nil {
+			log.Printf("GetOrCreateDocument error: %v", err)
 			return nil
 		}
 		document = NewDocument(uri, string(data))
+		s.saveDocOnStore(document)
 	} else {
 		document = value.(*Document)
 	}
@@ -205,7 +229,10 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 		return nil
 	}
 	document.Lock()
-	defer document.Unlock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 	document.Open()
 	document.Load()
 	s.SyncDocument(document)
@@ -219,24 +246,24 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 		return
 	}
 	document.Lock()
-	defer document.Unlock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 	document.Close()
 	s.SyncDocument(document)
 }
 
-func (s *Store) CreateDocument(uri protocol.DocumentURI) {
-	document := s.GetOrCreateDocument(uri)
-	if document == nil {
-		return
-	}
-	document.Load()
-	s.SyncDocument(document)
-}
-
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
-	batch := new(leveldb.Batch)
-	s.forgetDocument(batch, uri)
-	err := s.db.Write(*batch, nil)
+	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+		ciDeletor := newCompletionIndexDeletor(s.db, uri)
+		ciDeletor.Delete(wb)
+		syDeletor := newSymbolDeletor(s.db, uri)
+		syDeletor.Delete(wb)
+		entry := newEntry(documentCollection, uri)
+		wb.Delete(entry.getKeyBytes())
+		return nil
+	})
 	if err != nil {
 		log.Println(err)
 	}
@@ -244,12 +271,10 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	entry := newEntry(documentCollection, uri)
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		uri := strings.Split(string(it.Key()), KeySep)[1]
 		s.DeleteDocument(uri)
-	}
+	})
 }
 
 func (s *Store) CompareAndIndexDocument(filePath string) *Document {
@@ -258,13 +283,24 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	if document == nil {
 		return nil
 	}
+	document.Lock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 
 	currentMD5 := document.GetMD5Hash()
 	savedMD5, ok := s.syncedDocumentURIs.Get(uri)
 	if ok {
 		s.syncedDocumentURIs.Remove(uri)
+	} else {
+		entry := newEntry(documentCollection, document.GetURI())
+		value, err := s.db.Get(entry.getKeyBytes())
+		if err == nil {
+			savedMD5 = value
+		}
 	}
-	if ok && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
+	if savedMD5 != nil && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
 		return document
 	}
 
@@ -274,20 +310,31 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 }
 
 func (s *Store) SyncDocument(document *Document) {
-	batch := new(leveldb.Batch)
-	s.forgetAllSymbols(batch, document.GetURI())
-	s.writeAllSymbols(batch, document)
-	entry := newEntry(documentCollection, document.GetURI())
-	batch.Put(entry.getKeyBytes(), document.GetMD5Hash())
-	err := s.db.Write(*batch, nil)
+	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
+		syDeletor := newSymbolDeletor(s.db, document.GetURI())
+
+		s.writeAllSymbols(wb, document, ciDeletor, syDeletor)
+
+		ciDeletor.Delete(wb)
+		syDeletor.Delete(wb)
+		entry := newEntry(documentCollection, document.GetURI())
+		wb.Put(entry.getKeyBytes(), document.GetMD5Hash())
+		return nil
+	})
 	if err != nil {
-		log.Println(err)
+		log.Print(err)
 	}
-	if document.IsOpen() {
-		s.documents.Set(document.uri, document)
-	} else {
+}
+
+func (s *Store) releaseDocIfNotOpen(document *Document) {
+	if !document.IsOpen() {
 		s.documents.Remove(document.uri)
 	}
+}
+
+func (s *Store) saveDocOnStore(document *Document) {
+	s.documents.Set(document.GetURI(), document)
 }
 
 func (s *Store) PrepareForIndexing() {
@@ -298,12 +345,13 @@ func (s *Store) PrepareForIndexing() {
 }
 
 func (s *Store) FinishIndexing() {
-	batch := new(leveldb.Batch)
-	for iter := range s.syncedDocumentURIs.Iter() {
-		s.forgetDocument(batch, iter.Key)
-		s.syncedDocumentURIs.Remove(iter.Key)
-	}
-	err := s.db.Write(*batch, nil)
+	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+		for iter := range s.syncedDocumentURIs.Iter() {
+			s.DeleteDocument(iter.Key)
+			s.syncedDocumentURIs.Remove(iter.Key)
+		}
+		return nil
+	})
 	if err != nil {
 		log.Println(err)
 	}
@@ -312,71 +360,60 @@ func (s *Store) FinishIndexing() {
 func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	documentURIs := make(map[string][]byte)
 	entry := newEntry(documentCollection, "file://")
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
-		key := string(it.Key())
-		value := it.Value()
-		value = append(value[:0:0], value...)
-		documentURIs[strings.Split(key, KeySep)[1]] = value
-	}
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		documentURIs[strings.Split(string(it.Key()), KeySep)[1]] = it.Value()
+	})
 	return documentURIs
 }
 
-func (s *Store) forgetDocument(batch *leveldb.Batch, uri string) {
-	s.forgetAllSymbols(batch, uri)
-	entry := newEntry(documentCollection, uri)
-	batch.Delete(entry.getKeyBytes())
-}
-
-func (s *Store) forgetAllSymbols(batch *leveldb.Batch, uri string) {
+func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
 		toBeDelete := newEntry(keyInfo[2], strings.Join(keyInfo[3:], KeySep))
 		deleteEntry(batch, toBeDelete)
-	}
-	deleteCompletionIndex(s.db, batch, uri)
+	})
 }
 
-func (s *Store) writeAllSymbols(batch *leveldb.Batch, document *Document) {
+func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document,
+	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
 	for _, child := range document.Children {
-		if serialisable, ok := child.(Serialisable); ok {
-			key := serialisable.GetKey()
+		if ser, ok := child.(serialisable); ok {
+			key := ser.GetKey()
 			if key == "" {
 				continue
 			}
-			entry := newEntry(serialisable.GetCollection(), key)
-			serialisable.Serialise(entry.serialiser)
+			entry := newEntry(ser.GetCollection(), key)
+			ser.Serialise(entry.serialiser)
 			writeEntry(batch, entry)
-			rememberSymbol(batch, document, serialisable)
+			rememberSymbol(batch, document, ser)
+			syDeletor.MarkNotDelete(ser)
 
 			if indexable, ok := child.(NameIndexable); ok {
 				indexName(batch, document, indexable, key)
+				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
 			}
 		}
 	}
 }
 
-func rememberSymbol(batch *leveldb.Batch, document *Document, serialisable Serialisable) {
-	entry := newEntry(documentSymbols, document.GetURI()+KeySep+serialisable.GetCollection()+KeySep+serialisable.GetKey())
+func rememberSymbol(batch *levigo.WriteBatch, document *Document, ser serialisable) {
+	entry := newEntry(documentSymbols, document.GetURI()+KeySep+ser.GetCollection()+KeySep+ser.GetKey())
 	writeEntry(batch, entry)
 }
 
-func indexName(batch *leveldb.Batch, document *Document, indexable NameIndexable, key string) {
+func indexName(batch *levigo.WriteBatch, document *Document, indexable NameIndexable, key string) {
 	entries := createCompletionEntries(document.GetURI(), indexable, key)
 	for _, entry := range entries {
 		writeEntry(batch, entry)
 	}
 }
 
-func writeEntry(batch *leveldb.Batch, entry *entry) {
+func writeEntry(batch *levigo.WriteBatch, entry *entry) {
 	batch.Put(entry.getKeyBytes(), entry.getBytes())
 }
 
-func deleteEntry(batch *leveldb.Batch, entry *entry) {
+func deleteEntry(batch *levigo.WriteBatch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 
@@ -387,12 +424,10 @@ func (s *Store) GetURI() protocol.DocumentURI {
 func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classes = append(classes, ReadClass(serialiser))
-	}
+	})
 	return classes
 }
 
@@ -424,11 +459,11 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			class := ReadClass(serialiser)
 			if isSymbolValid(class, options) {
 				classes = append(classes, class)
@@ -447,12 +482,10 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		interfaces = append(interfaces, ReadInterface(serialiser))
-	}
+	})
 	return interfaces
 }
 
@@ -470,11 +503,11 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(interfaceCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			theInterface := ReadInterface(serialiser)
 			if isSymbolValid(theInterface, options) {
 				interfaces = append(interfaces, theInterface)
@@ -493,12 +526,10 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		traits = append(traits, ReadTrait(serialiser))
-	}
+	})
 	return traits
 }
 
@@ -516,11 +547,11 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(traitCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			trait := ReadTrait(serialiser)
 			if isSymbolValid(trait, options) {
 				traits = append(traits, trait)
@@ -539,12 +570,10 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		functions = append(functions, ReadFunction(serialiser))
-	}
+	})
 	return functions
 }
 
@@ -557,11 +586,11 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(functionCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			function := ReadFunction(serialiser)
 			if isSymbolValid(function, options) {
 				functions = append(functions, function)
@@ -580,12 +609,10 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		consts = append(consts, ReadConst(serialiser))
-	}
+	})
 	return consts
 }
 
@@ -598,11 +625,11 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(constCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			constant := ReadConst(serialiser)
 			if isSymbolValid(constant, options) {
 				consts = append(consts, constant)
@@ -621,12 +648,10 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		defines = append(defines, ReadDefine(serialiser))
-	}
+	})
 	return defines
 }
 
@@ -639,11 +664,11 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(defineCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			define := ReadDefine(serialiser)
 			if isSymbolValid(define, options) {
 				defines = append(defines, define)
@@ -662,24 +687,20 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
-	}
+	})
 	return methods
 }
 
 func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		methods = append(methods, ReadMethod(serialiser))
-	}
+	})
 	return methods
 }
 
@@ -696,11 +717,11 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(methodCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			method := ReadMethod(serialiser)
 			if isSymbolValid(method, options) {
 				methods = append(methods, method)
@@ -719,24 +740,20 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
-	}
+	})
 	return classConsts
 }
 
 func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		classConsts = append(classConsts, ReadClassConst(serialiser))
-	}
+	})
 	return classConsts
 }
 
@@ -753,11 +770,11 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classConstCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			classConst := ReadClassConst(serialiser)
 			if isSymbolValid(classConst, options) {
 				classConsts = append(classConsts, classConst)
@@ -776,24 +793,20 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
-	}
+	})
 	return properties
 }
 
 func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		properties = append(properties, ReadProperty(serialiser))
-	}
+	})
 	return properties
 }
 
@@ -810,11 +823,11 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(propertyCollection, string(completionValue))
-			theBytes, err := s.db.Get(entry.getKeyBytes(), nil)
+			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(theBytes)
+			serialiser := SerialiserFromByteSlice(value)
 			property := ReadProperty(serialiser)
 			if isSymbolValid(property, options) {
 				properties = append(properties, property)
@@ -833,11 +846,9 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
-	it := s.db.Prefix(entry.prefixRange(), nil)
-	defer it.Close()
-	for it.Next() {
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		serialiser := SerialiserFromByteSlice(it.Value())
 		results = append(results, ReadGlobalVariable(serialiser))
-	}
+	})
 	return results
 }

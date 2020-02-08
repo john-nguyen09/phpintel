@@ -95,7 +95,13 @@ func (s *Server) Exit(ctx context.Context) error {
 // Workspace
 
 func (s *Server) DidChangeWorkspaceFolders(ctx context.Context, params *protocol.DidChangeWorkspaceFoldersParams) error {
-	return notImplemented("DidChangeWorkspaceFolders")
+	for _, added := range params.Event.Added {
+		s.store.addView(s, ctx, added.URI)
+	}
+	for _, removed := range params.Event.Removed {
+		s.store.removeView(s, ctx, removed.URI)
+	}
+	return nil
 }
 
 func (s *Server) DidChangeConfiguration(context.Context, *protocol.DidChangeConfigurationParams) error {

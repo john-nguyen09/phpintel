@@ -15,7 +15,10 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 	}
 	document := NewDocument(uri, string(data))
 	document.Load()
-	document.isOpen = isOpen
+	if isOpen {
+		document.Open()
+	}
+	store.saveDocOnStore(document)
 	store.SyncDocument(document)
 }
 
