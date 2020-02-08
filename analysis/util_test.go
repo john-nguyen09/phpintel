@@ -1,6 +1,9 @@
 package analysis
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+	"os"
+)
 
 func indexDocument(store *Store, filePath string, uri string) {
 	data, _ := ioutil.ReadFile(filePath)
@@ -19,7 +22,11 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 }
 
 func setupStore(uri string, name string) (*Store, error) {
-	store, err := NewStore(uri, "./testData/"+name)
+	testDir := "./testData/"
+	if _, err := os.Stat(testDir); os.IsNotExist(err) {
+		os.Mkdir(testDir, os.ModePerm)
+	}
+	store, err := NewStore(uri, testDir+name)
 	if err != nil {
 		return nil, err
 	}

@@ -204,13 +204,18 @@ func (s *Store) LoadStubs() {
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	if value, ok := s.documents.Get(uri); !ok {
-		filePath := putil.UriToPath(uri)
+		filePath, err := putil.UriToPath(uri)
+		if err != nil {
+			log.Printf("GetOrCreateDocument error: %v", err)
+			return nil
+		}
 		data, err := ioutil.ReadFile(filePath)
 		if err != nil {
+			log.Printf("GetOrCreateDocument error: %v", err)
 			return nil
 		}
 		document = NewDocument(uri, string(data))
-		s.documents.Set(uri, document)
+		s.retainDocIfOpen(document)
 	} else {
 		document = value.(*Document)
 	}
@@ -323,6 +328,12 @@ func (s *Store) SyncDocument(document *Document) {
 func (s *Store) releaseDocIfNotOpen(document *Document) {
 	if !document.IsOpen() {
 		s.documents.Remove(document.uri)
+	}
+}
+
+func (s *Store) retainDocIfOpen(document *Document) {
+	if document.IsOpen() {
+		s.documents.Set(document.GetURI(), document)
 	}
 }
 

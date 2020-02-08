@@ -11,6 +11,7 @@
           Range: (protocol.Range) 2:19-2:24
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=5) "$var1",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) <nil>,
@@ -32,6 +33,7 @@
           Range: (protocol.Range) 6:39-6:55
         },
         description: (string) "",
+        hasValue: (bool) false,
         Name: (string) (len=6) "$table",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {

@@ -51,6 +51,7 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 			case lexer.Equals:
 				{
 					hasEqual = true
+					traverser.SkipToken(lexer.Whitespace)
 				}
 			case lexer.VariableName:
 				{

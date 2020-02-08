@@ -91,11 +91,15 @@ func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protoc
 	store.Migrate(protocol.GetVersion(ctx))
 	store.LoadStubs()
 	s.stores = append(s.stores, store)
-	folderPath := util.UriToPath(uri)
+	folderPath, err := util.UriToPath(uri)
+	if err != nil {
+		log.Printf("addView error: %v", err)
+		return
+	}
 	s.indexFolder(store, folderPath)
 	err = s.registerFileWatcher(folderPath, server, ctx)
 	if err != nil {
-		log.Println(err)
+		log.Printf("addView error: %v", err)
 	}
 }
 
@@ -107,7 +111,10 @@ func (s *workspaceStore) removeView(server *Server, ctx context.Context, uri pro
 	}
 	defer store.Close()
 	s.removeStore(store.GetURI())
-	folderPath := util.UriToPath(uri)
+	folderPath, err := util.UriToPath(uri)
+	if err != nil {
+		log.Printf("removeView error: %v", err)
+	}
 	s.unregisterFileWatcher(folderPath, server, ctx)
 }
 

@@ -9,11 +9,11 @@ import (
 	"strings"
 )
 
-func UriToPath(uri string) string {
+func UriToPath(uri string) (string, error) {
 	urlIns, err := url.ParseRequestURI(uri)
 
 	if err != nil {
-		HandleError(err)
+		return "", err
 	}
 
 	if urlIns.Scheme != "file" {
@@ -22,7 +22,7 @@ func UriToPath(uri string) string {
 	filePath, err := url.QueryUnescape(urlIns.Path)
 
 	if err != nil {
-		HandleError(err)
+		return "", err
 	}
 
 	if strings.Contains(filePath, ":") {
@@ -32,7 +32,7 @@ func UriToPath(uri string) string {
 		filePath = strings.Replace(filePath, "/", "\\", -1)
 	}
 
-	return filePath
+	return filePath, nil
 }
 
 func PathToUri(path string) string {

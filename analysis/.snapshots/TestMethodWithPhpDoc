@@ -32,6 +32,7 @@
           Range: (protocol.Range) 11:49-11:60
         },
         description: (string) (len=9) "post data",
+        hasValue: (bool) false,
         Name: (string) (len=5) "$data",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
@@ -53,6 +54,7 @@
           Range: (protocol.Range) 11:62-11:75
         },
         description: (string) (len=11) "attachments",
+        hasValue: (bool) true,
         Name: (string) (len=6) "$files",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {

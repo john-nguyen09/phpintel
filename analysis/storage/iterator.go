@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bytes"
+
 	"github.com/jmhodges/levigo"
 )
 
@@ -15,7 +16,9 @@ type PrefixIterator struct {
 func NewPrefixIterator(db *levigo.DB, prefix []byte) *PrefixIterator {
 	ro := levigo.NewReadOptions()
 	it := db.NewIterator(ro)
-	it.Seek(prefix)
+	if len(prefix) > 0 {
+		it.Seek(prefix)
+	}
 	return &PrefixIterator{ro, it, prefix, false}
 }
 

@@ -13,8 +13,8 @@ notifications:
   email: false
 
 before_install:
-  - sudo apt-get -y install upx-ucl mingw-w64 && sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
-  - ./scripts/build_leveldb.sh
+  - sudo apt-get -y install upx-ucl mingw-w64 libleveldb-dev && sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+  # - ./scripts/build_leveldb.sh
 
 script:
   - go get -t -v ./...
@@ -23,10 +23,10 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
-deploy:
-- provider: script
-  skip_cleanup: true
-  script: curl -sL https://git.io/goreleaser | bash
-  on:
-    tags: true
-    condition: $TRAVIS_OS_NAME = linux
+# deploy:
+# - provider: script
+#   skip_cleanup: true
+#   script: curl -sL https://git.io/goreleaser | bash
+#   on:
+#     tags: true
+#     condition: $TRAVIS_OS_NAME = linux

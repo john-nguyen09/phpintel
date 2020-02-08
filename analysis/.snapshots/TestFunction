@@ -16,6 +16,7 @@
           Range: (protocol.Range) 2:22-2:46
         },
         description: (string) "",
+        hasValue: (bool) true,
         Name: (string) (len=7) "$param1",
         Type: (analysis.TypeComposite) {
           typeStrings: ([]analysis.TypeString) (len=1) {
