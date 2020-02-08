@@ -18,7 +18,7 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 	if isOpen {
 		document.Open()
 	}
-	store.retainDocIfOpen(document)
+	store.saveDocOnStore(document)
 	store.SyncDocument(document)
 }
 
