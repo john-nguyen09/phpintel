@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -119,23 +120,23 @@ func (s *Interface) GetPrefixes() []string {
 	return prefixes
 }
 
-func (s *Interface) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	s.Name.Write(serialiser)
-	serialiser.WriteInt(len(s.Extends))
+func (s *Interface) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	s.Name.Write(e)
+	e.WriteInt(len(s.Extends))
 	for _, extend := range s.Extends {
-		extend.Write(serialiser)
+		extend.Write(e)
 	}
 }
 
-func ReadInterface(serialiser *Serialiser) *Interface {
+func ReadInterface(d *storage.Decoder) *Interface {
 	theInterface := &Interface{
-		location: serialiser.ReadLocation(),
-		Name:     ReadTypeString(serialiser),
+		location: d.ReadLocation(),
+		Name:     ReadTypeString(d),
 	}
-	countExtends := serialiser.ReadInt()
+	countExtends := d.ReadInt()
 	for i := 0; i < countExtends; i++ {
-		theInterface.Extends = append(theInterface.Extends, ReadTypeString(serialiser))
+		theInterface.Extends = append(theInterface.Extends, ReadTypeString(d))
 	}
 	return theInterface
 }

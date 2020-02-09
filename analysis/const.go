@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -99,16 +100,16 @@ func (s *Const) GetPrefixes() []string {
 	return []string{""}
 }
 
-func (s *Const) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	s.Name.Write(serialiser)
-	serialiser.WriteString(s.Value)
+func (s *Const) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	s.Name.Write(e)
+	e.WriteString(s.Value)
 }
 
-func ReadConst(serialiser *Serialiser) *Const {
+func ReadConst(d *storage.Decoder) *Const {
 	return &Const{
-		location: serialiser.ReadLocation(),
-		Name:     ReadTypeString(serialiser),
-		Value:    serialiser.ReadString(),
+		location: d.ReadLocation(),
+		Name:     ReadTypeString(d),
+		Value:    d.ReadString(),
 	}
 }

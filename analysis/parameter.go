@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -91,20 +92,20 @@ func (s Parameter) HasValue() bool {
 	return s.hasValue
 }
 
-func (s *Parameter) Write(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	serialiser.WriteBool(s.hasValue)
-	serialiser.WriteString(s.Name)
-	s.Type.Write(serialiser)
-	serialiser.WriteString(s.Value)
+func (s *Parameter) Write(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	e.WriteBool(s.hasValue)
+	e.WriteString(s.Name)
+	s.Type.Write(e)
+	e.WriteString(s.Value)
 }
 
-func ReadParameter(serialiser *Serialiser) *Parameter {
+func ReadParameter(d *storage.Decoder) *Parameter {
 	return &Parameter{
-		location: serialiser.ReadLocation(),
-		hasValue: serialiser.ReadBool(),
-		Name:     serialiser.ReadString(),
-		Type:     ReadTypeComposite(serialiser),
-		Value:    serialiser.ReadString(),
+		location: d.ReadLocation(),
+		hasValue: d.ReadBool(),
+		Name:     d.ReadString(),
+		Type:     ReadTypeComposite(d),
+		Value:    d.ReadString(),
 	}
 }

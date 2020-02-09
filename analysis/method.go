@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -203,39 +204,39 @@ func (s *Method) GetScope() TypeString {
 	return s.Scope
 }
 
-func (s *Method) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
-	serialiser.WriteInt(len(s.Params))
+func (s *Method) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	e.WriteString(s.Name)
+	e.WriteInt(len(s.Params))
 	for _, param := range s.Params {
-		param.Write(serialiser)
+		param.Write(e)
 	}
-	s.returnTypes.Write(serialiser)
-	serialiser.WriteString(s.description)
+	s.returnTypes.Write(e)
+	e.WriteString(s.description)
 
-	s.Scope.Write(serialiser)
-	serialiser.WriteInt(int(s.VisibilityModifier))
-	serialiser.WriteBool(s.IsStatic)
-	serialiser.WriteInt(int(s.ClassModifier))
+	s.Scope.Write(e)
+	e.WriteInt(int(s.VisibilityModifier))
+	e.WriteBool(s.IsStatic)
+	e.WriteInt(int(s.ClassModifier))
 }
 
-func ReadMethod(serialiser *Serialiser) *Method {
+func ReadMethod(d *storage.Decoder) *Method {
 	method := Method{
-		location: serialiser.ReadLocation(),
-		Name:     serialiser.ReadString(),
+		location: d.ReadLocation(),
+		Name:     d.ReadString(),
 		Params:   make([]*Parameter, 0),
 	}
-	countParams := serialiser.ReadInt()
+	countParams := d.ReadInt()
 	for i := 0; i < countParams; i++ {
-		method.Params = append(method.Params, ReadParameter(serialiser))
+		method.Params = append(method.Params, ReadParameter(d))
 	}
-	method.returnTypes = ReadTypeComposite(serialiser)
-	method.description = serialiser.ReadString()
+	method.returnTypes = ReadTypeComposite(d)
+	method.description = d.ReadString()
 
-	method.Scope = ReadTypeString(serialiser)
-	method.VisibilityModifier = VisibilityModifierValue(serialiser.ReadInt())
-	method.IsStatic = serialiser.ReadBool()
-	method.ClassModifier = ClassModifierValue(serialiser.ReadInt())
+	method.Scope = ReadTypeString(d)
+	method.VisibilityModifier = VisibilityModifierValue(d.ReadInt())
+	method.IsStatic = d.ReadBool()
+	method.ClassModifier = ClassModifierValue(d.ReadInt())
 
 	return &method
 }

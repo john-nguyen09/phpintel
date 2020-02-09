@@ -5,6 +5,7 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -98,12 +99,12 @@ func (s *FunctionCall) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	return functions
 }
 
-func (s *FunctionCall) Serialise(serialiser *Serialiser) {
-	s.Expression.Serialise(serialiser)
+func (s *FunctionCall) Serialise(e *storage.Encoder) {
+	s.Expression.Serialise(e)
 }
 
-func ReadFunctionCall(serialiser *Serialiser) *FunctionCall {
+func ReadFunctionCall(d *storage.Decoder) *FunctionCall {
 	return &FunctionCall{
-		Expression: ReadExpression(serialiser),
+		Expression: ReadExpression(d),
 	}
 }

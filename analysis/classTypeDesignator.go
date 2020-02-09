@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -91,12 +92,12 @@ func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams
 	return hasParams
 }
 
-func (s *ClassTypeDesignator) Serialise(serialiser *Serialiser) {
-	s.Expression.Serialise(serialiser)
+func (s *ClassTypeDesignator) Serialise(e *storage.Encoder) {
+	s.Expression.Serialise(e)
 }
 
-func ReadClassTypeDesignator(serialiser *Serialiser) *ClassTypeDesignator {
+func ReadClassTypeDesignator(d *storage.Decoder) *ClassTypeDesignator {
 	return &ClassTypeDesignator{
-		Expression: ReadExpression(serialiser),
+		Expression: ReadExpression(d),
 	}
 }

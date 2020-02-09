@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -105,12 +106,12 @@ func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	return hasParams
 }
 
-func (s *MethodAccess) Serialise(serialiser *Serialiser) {
-	s.Expression.Serialise(serialiser)
+func (s *MethodAccess) Serialise(e *storage.Encoder) {
+	s.Expression.Serialise(e)
 }
 
-func ReadMethodAccess(serialiser *Serialiser) *MethodAccess {
+func ReadMethodAccess(d *storage.Decoder) *MethodAccess {
 	return &MethodAccess{
-		Expression: ReadExpression(serialiser),
+		Expression: ReadExpression(d),
 	}
 }

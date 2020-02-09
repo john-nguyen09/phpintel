@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
@@ -110,79 +111,79 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 	return expression
 }
 
-func (s *Expression) Serialise(serialiser *Serialiser) {
-	s.Type.Write(serialiser)
+func (s *Expression) Serialise(e *storage.Encoder) {
+	s.Type.Write(e)
 	switch expression := s.Scope.(type) {
 	case *Variable:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(variableKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(variableKind))
+		expression.Serialise(e)
 	case *ClassAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(classAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(classAccessKind))
+		expression.Serialise(e)
 	case *ClassTypeDesignator:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(classTypeDesignatorKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(classTypeDesignatorKind))
+		expression.Serialise(e)
 	case *ConstantAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(constantAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(constantAccessKind))
+		expression.Serialise(e)
 	case *FunctionCall:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(functionCallKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(functionCallKind))
+		expression.Serialise(e)
 	case *PropertyAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(propertyAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(propertyAccessKind))
+		expression.Serialise(e)
 	case *ScopedConstantAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(scopedConstantAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(scopedConstantAccessKind))
+		expression.Serialise(e)
 	case *ScopedMethodAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(scopedMethodAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(scopedMethodAccessKind))
+		expression.Serialise(e)
 	case *ScopedPropertyAccess:
-		serialiser.WriteBool(true)
-		serialiser.WriteInt(int(scopedPropertyAccessKind))
-		expression.Serialise(serialiser)
+		e.WriteBool(true)
+		e.WriteInt(int(scopedPropertyAccessKind))
+		expression.Serialise(e)
 	default:
-		serialiser.WriteBool(false)
+		e.WriteBool(false)
 	}
-	serialiser.WriteLocation(s.Location)
-	serialiser.WriteString(s.Name)
+	e.WriteLocation(s.Location)
+	e.WriteString(s.Name)
 }
 
-func ReadExpression(serialiser *Serialiser) Expression {
+func ReadExpression(d *storage.Decoder) Expression {
 	expr := Expression{
-		Type: ReadTypeComposite(serialiser),
+		Type: ReadTypeComposite(d),
 	}
-	if serialiser.ReadBool() {
-		switch expressionKind(serialiser.ReadInt()) {
+	if d.ReadBool() {
+		switch expressionKind(d.ReadInt()) {
 		case variableKind:
-			expr.Scope = ReadVariable(serialiser)
+			expr.Scope = ReadVariable(d)
 		case classAccessKind:
-			expr.Scope = ReadClassAccess(serialiser)
+			expr.Scope = ReadClassAccess(d)
 		case classTypeDesignatorKind:
-			expr.Scope = ReadClassTypeDesignator(serialiser)
+			expr.Scope = ReadClassTypeDesignator(d)
 		case constantAccessKind:
-			expr.Scope = ReadConstantAccess(serialiser)
+			expr.Scope = ReadConstantAccess(d)
 		case functionCallKind:
-			expr.Scope = ReadFunctionCall(serialiser)
+			expr.Scope = ReadFunctionCall(d)
 		case propertyAccessKind:
-			expr.Scope = ReadPropertyAccess(serialiser)
+			expr.Scope = ReadPropertyAccess(d)
 		case scopedConstantAccessKind:
-			expr.Scope = ReadScopedConstantAccess(serialiser)
+			expr.Scope = ReadScopedConstantAccess(d)
 		case scopedMethodAccessKind:
-			expr.Scope = ReadScopedMethodAccess(serialiser)
+			expr.Scope = ReadScopedMethodAccess(d)
 		case scopedPropertyAccessKind:
-			expr.Scope = ReadScopedPropertyAccess(serialiser)
+			expr.Scope = ReadScopedPropertyAccess(d)
 		}
 	}
-	expr.Location = serialiser.ReadLocation()
-	expr.Name = serialiser.ReadString()
+	expr.Location = d.ReadLocation()
+	expr.Name = d.ReadString()
 	return expr
 }

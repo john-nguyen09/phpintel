@@ -50,27 +50,27 @@ var stubs = []*PhpStub{}
 const KeySep string = "\x00"
 
 type entry struct {
-	key        []byte
-	serialiser *Serialiser
+	key []byte
+	e   *storage.Encoder
 }
 
 func newEntry(collection string, key string) *entry {
 	return &entry{
-		key:        []byte(collection + KeySep + key),
-		serialiser: NewSerialiser(),
+		key: []byte(collection + KeySep + key),
+		e:   storage.NewEncoder(),
 	}
 }
 
-func (s *entry) getSerialiser() *Serialiser {
-	return s.serialiser
+func (s *entry) getEncoder() *storage.Encoder {
+	return s.e
 }
 
 func (s *entry) getKeyBytes() []byte {
 	return s.key
 }
 
-func (s *entry) getBytes() []byte {
-	return s.serialiser.GetBytes()
+func (s *entry) bytes() []byte {
+	return s.e.Bytes()
 }
 
 type Store struct {
@@ -384,7 +384,7 @@ func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document,
 				continue
 			}
 			entry := newEntry(ser.GetCollection(), key)
-			ser.Serialise(entry.serialiser)
+			ser.Serialise(entry.e)
 			writeEntry(batch, entry)
 			rememberSymbol(batch, document, ser)
 			syDeletor.MarkNotDelete(ser)
@@ -410,7 +410,7 @@ func indexName(batch *levigo.WriteBatch, document *Document, indexable NameIndex
 }
 
 func writeEntry(batch *levigo.WriteBatch, entry *entry) {
-	batch.Put(entry.getKeyBytes(), entry.getBytes())
+	batch.Put(entry.getKeyBytes(), entry.bytes())
 }
 
 func deleteEntry(batch *levigo.WriteBatch, entry *entry) {
@@ -425,8 +425,8 @@ func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		classes = append(classes, ReadClass(serialiser))
+		d := storage.NewDecoder(it.Value())
+		classes = append(classes, ReadClass(d))
 	})
 	return classes
 }
@@ -463,8 +463,8 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			class := ReadClass(serialiser)
+			d := storage.NewDecoder(value)
+			class := ReadClass(d)
 			if isSymbolValid(class, options) {
 				classes = append(classes, class)
 				count++
@@ -483,8 +483,8 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		interfaces = append(interfaces, ReadInterface(serialiser))
+		d := storage.NewDecoder(it.Value())
+		interfaces = append(interfaces, ReadInterface(d))
 	})
 	return interfaces
 }
@@ -507,8 +507,8 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			theInterface := ReadInterface(serialiser)
+			d := storage.NewDecoder(value)
+			theInterface := ReadInterface(d)
 			if isSymbolValid(theInterface, options) {
 				interfaces = append(interfaces, theInterface)
 				count++
@@ -527,8 +527,8 @@ func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		traits = append(traits, ReadTrait(serialiser))
+		d := storage.NewDecoder(it.Value())
+		traits = append(traits, ReadTrait(d))
 	})
 	return traits
 }
@@ -551,8 +551,8 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			trait := ReadTrait(serialiser)
+			d := storage.NewDecoder(value)
+			trait := ReadTrait(d)
 			if isSymbolValid(trait, options) {
 				traits = append(traits, trait)
 				count++
@@ -571,8 +571,8 @@ func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		functions = append(functions, ReadFunction(serialiser))
+		d := storage.NewDecoder(it.Value())
+		functions = append(functions, ReadFunction(d))
 	})
 	return functions
 }
@@ -590,8 +590,8 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			function := ReadFunction(serialiser)
+			d := storage.NewDecoder(value)
+			function := ReadFunction(d)
 			if isSymbolValid(function, options) {
 				functions = append(functions, function)
 				count++
@@ -610,8 +610,8 @@ func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		consts = append(consts, ReadConst(serialiser))
+		d := storage.NewDecoder(it.Value())
+		consts = append(consts, ReadConst(d))
 	})
 	return consts
 }
@@ -629,8 +629,8 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			constant := ReadConst(serialiser)
+			d := storage.NewDecoder(value)
+			constant := ReadConst(d)
 			if isSymbolValid(constant, options) {
 				consts = append(consts, constant)
 				count++
@@ -649,8 +649,8 @@ func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		defines = append(defines, ReadDefine(serialiser))
+		d := storage.NewDecoder(it.Value())
+		defines = append(defines, ReadDefine(d))
 	})
 	return defines
 }
@@ -668,8 +668,8 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			define := ReadDefine(serialiser)
+			d := storage.NewDecoder(value)
+			define := ReadDefine(d)
 			if isSymbolValid(define, options) {
 				defines = append(defines, define)
 				count++
@@ -688,8 +688,8 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		methods = append(methods, ReadMethod(serialiser))
+		d := storage.NewDecoder(it.Value())
+		methods = append(methods, ReadMethod(d))
 	})
 	return methods
 }
@@ -698,8 +698,8 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		methods = append(methods, ReadMethod(serialiser))
+		d := storage.NewDecoder(it.Value())
+		methods = append(methods, ReadMethod(d))
 	})
 	return methods
 }
@@ -721,8 +721,8 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			method := ReadMethod(serialiser)
+			d := storage.NewDecoder(value)
+			method := ReadMethod(d)
 			if isSymbolValid(method, options) {
 				methods = append(methods, method)
 				count++
@@ -741,8 +741,8 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		classConsts = append(classConsts, ReadClassConst(serialiser))
+		d := storage.NewDecoder(it.Value())
+		classConsts = append(classConsts, ReadClassConst(d))
 	})
 	return classConsts
 }
@@ -751,8 +751,8 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		classConsts = append(classConsts, ReadClassConst(serialiser))
+		d := storage.NewDecoder(it.Value())
+		classConsts = append(classConsts, ReadClassConst(d))
 	})
 	return classConsts
 }
@@ -774,8 +774,8 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			classConst := ReadClassConst(serialiser)
+			d := storage.NewDecoder(value)
+			classConst := ReadClassConst(d)
 			if isSymbolValid(classConst, options) {
 				classConsts = append(classConsts, classConst)
 				count++
@@ -794,8 +794,8 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		properties = append(properties, ReadProperty(serialiser))
+		d := storage.NewDecoder(it.Value())
+		properties = append(properties, ReadProperty(d))
 	})
 	return properties
 }
@@ -804,8 +804,8 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		properties = append(properties, ReadProperty(serialiser))
+		d := storage.NewDecoder(it.Value())
+		properties = append(properties, ReadProperty(d))
 	})
 	return properties
 }
@@ -827,8 +827,8 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 			if err != nil {
 				return onDataResult{false}
 			}
-			serialiser := SerialiserFromByteSlice(value)
-			property := ReadProperty(serialiser)
+			d := storage.NewDecoder(value)
+			property := ReadProperty(d)
 			if isSymbolValid(property, options) {
 				properties = append(properties, property)
 				count++
@@ -847,8 +847,8 @@ func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		serialiser := SerialiserFromByteSlice(it.Value())
-		results = append(results, ReadGlobalVariable(serialiser))
+		d := storage.NewDecoder(it.Value())
+		results = append(results, ReadGlobalVariable(d))
 	})
 	return results
 }

@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -156,28 +157,28 @@ func (s *Function) GetParams() []*Parameter {
 	return s.Params
 }
 
-func (s *Function) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	s.Name.Write(serialiser)
-	serialiser.WriteInt(len(s.Params))
+func (s *Function) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	s.Name.Write(e)
+	e.WriteInt(len(s.Params))
 	for _, param := range s.Params {
-		param.Write(serialiser)
+		param.Write(e)
 	}
-	s.returnTypes.Write(serialiser)
-	serialiser.WriteString(s.description)
+	s.returnTypes.Write(e)
+	e.WriteString(s.description)
 }
 
-func ReadFunction(serialiser *Serialiser) *Function {
+func ReadFunction(d *storage.Decoder) *Function {
 	function := Function{
-		location: serialiser.ReadLocation(),
-		Name:     ReadTypeString(serialiser),
+		location: d.ReadLocation(),
+		Name:     ReadTypeString(d),
 		Params:   make([]*Parameter, 0),
 	}
-	countParams := serialiser.ReadInt()
+	countParams := d.ReadInt()
 	for i := 0; i < countParams; i++ {
-		function.Params = append(function.Params, ReadParameter(serialiser))
+		function.Params = append(function.Params, ReadParameter(d))
 	}
-	function.returnTypes = ReadTypeComposite(serialiser)
-	function.description = serialiser.ReadString()
+	function.returnTypes = ReadTypeComposite(d)
+	function.description = d.ReadString()
 	return &function
 }

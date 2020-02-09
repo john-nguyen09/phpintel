@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -40,12 +41,12 @@ func (s *ScopedConstantAccess) GetTypes() TypeComposite {
 	return s.Type
 }
 
-func (s *ScopedConstantAccess) Serialise(serialiser *Serialiser) {
-	s.Expression.Serialise(serialiser)
+func (s *ScopedConstantAccess) Serialise(e *storage.Encoder) {
+	s.Expression.Serialise(e)
 }
 
-func ReadScopedConstantAccess(serialiser *Serialiser) *ScopedConstantAccess {
+func ReadScopedConstantAccess(d *storage.Decoder) *ScopedConstantAccess {
 	return &ScopedConstantAccess{
-		Expression: ReadExpression(serialiser),
+		Expression: ReadExpression(d),
 	}
 }

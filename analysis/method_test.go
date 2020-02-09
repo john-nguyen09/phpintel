@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestMethod(t *testing.T) {
@@ -33,10 +34,10 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 		if method, ok := child.(*Method); ok {
 			jsonData, _ := json.MarshalIndent(method, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			method.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedMethod := ReadMethod(serialiser)
+			e := storage.NewEncoder()
+			method.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedMethod := ReadMethod(d)
 			jsonData, _ = json.MarshalIndent(deserialisedMethod, "", "  ")
 			after := string(jsonData)
 			if after != original {

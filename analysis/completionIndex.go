@@ -27,12 +27,12 @@ type SearchResult struct {
 }
 
 // Serialise writes the CompletionValue
-func (cv CompletionValue) Serialise(serialiser *Serialiser) {
-	serialiser.WriteString(string(cv))
+func (cv CompletionValue) Serialise(e *storage.Encoder) {
+	e.WriteString(string(cv))
 }
 
-func readCompletionValue(serialiser *Serialiser) CompletionValue {
-	return CompletionValue(serialiser.ReadString())
+func readCompletionValue(d *storage.Decoder) CompletionValue {
+	return CompletionValue(d.ReadString())
 }
 
 func createCompletionEntries(uri string, indexable NameIndexable, symbolKey string) []*entry {
@@ -42,7 +42,7 @@ func createCompletionEntries(uri string, indexable NameIndexable, symbolKey stri
 	for _, key := range keys {
 		entry := newEntry(indexable.GetIndexCollection(), key)
 		completionValue := CompletionValue(symbolKey)
-		completionValue.Serialise(entry.serialiser)
+		completionValue.Serialise(entry.e)
 		entries = append(entries, entry)
 
 		completionKeys = append(completionKeys, entry.getKeyBytes())
@@ -53,9 +53,9 @@ func createCompletionEntries(uri string, indexable NameIndexable, symbolKey stri
 
 func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]byte) *entry {
 	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
-	entry.serialiser.WriteInt(len(keys))
+	entry.e.WriteInt(len(keys))
 	for _, key := range keys {
-		entry.serialiser.WriteBytes(key)
+		entry.e.WriteBytes(key)
 	}
 	return entry
 }
@@ -71,11 +71,11 @@ func newCompletionIndexDeletor(db *storage.Storage, uri string) *completionIndex
 	entry := newEntry(documentCompletionIndex, uri)
 	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		keys[string(it.Key())] = true
-		serialiser := SerialiserFromByteSlice(it.Value())
-		len := serialiser.ReadInt()
+		d := storage.NewDecoder(it.Value())
+		len := d.ReadInt()
 		if len > 0 {
 			for i := 0; i < len; i++ {
-				key := serialiser.ReadBytes()
+				key := d.ReadBytes()
 				indexKeys[string(key)] = true
 			}
 		}
@@ -134,7 +134,7 @@ func searchCompletions(db *storage.Storage, query searchQuery) SearchResult {
 		}
 		entry := newEntry(query.collection, name)
 		db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-			completionValue := readCompletionValue(SerialiserFromByteSlice(it.Value()))
+			completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
 			if _, ok := uniqueCompletionValues[completionValue]; ok {
 				return
 			}

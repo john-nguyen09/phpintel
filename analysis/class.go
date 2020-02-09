@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -220,37 +221,37 @@ func (s *Class) GetPrefixes() []string {
 	return prefixes
 }
 
-func (s *Class) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.Location)
-	serialiser.WriteInt(int(s.Modifier))
-	serialiser.WriteString(s.description)
-	s.Name.Write(serialiser)
-	s.Extends.Write(serialiser)
-	serialiser.WriteInt(len(s.Interfaces))
+func (s *Class) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.Location)
+	e.WriteInt(int(s.Modifier))
+	e.WriteString(s.description)
+	s.Name.Write(e)
+	s.Extends.Write(e)
+	e.WriteInt(len(s.Interfaces))
 	for _, theInterface := range s.Interfaces {
-		theInterface.Write(serialiser)
+		theInterface.Write(e)
 	}
-	serialiser.WriteInt(len(s.Use))
+	e.WriteInt(len(s.Use))
 	for _, use := range s.Use {
-		use.Write(serialiser)
+		use.Write(e)
 	}
 }
 
-func ReadClass(serialiser *Serialiser) *Class {
+func ReadClass(d *storage.Decoder) *Class {
 	theClass := &Class{
-		Location:    serialiser.ReadLocation(),
-		Modifier:    ClassModifierValue(serialiser.ReadInt()),
-		description: serialiser.ReadString(),
-		Name:        ReadTypeString(serialiser),
-		Extends:     ReadTypeString(serialiser),
+		Location:    d.ReadLocation(),
+		Modifier:    ClassModifierValue(d.ReadInt()),
+		description: d.ReadString(),
+		Name:        ReadTypeString(d),
+		Extends:     ReadTypeString(d),
 	}
-	numInterfaces := serialiser.ReadInt()
+	numInterfaces := d.ReadInt()
 	for i := 0; i < numInterfaces; i++ {
-		theClass.Interfaces = append(theClass.Interfaces, ReadTypeString(serialiser))
+		theClass.Interfaces = append(theClass.Interfaces, ReadTypeString(d))
 	}
-	numUse := serialiser.ReadInt()
+	numUse := d.ReadInt()
 	for i := 0; i < numUse; i++ {
-		theClass.Use = append(theClass.Use, ReadTypeString(serialiser))
+		theClass.Use = append(theClass.Use, ReadTypeString(d))
 	}
 	return theClass
 }

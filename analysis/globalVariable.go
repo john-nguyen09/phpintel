@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -96,18 +97,18 @@ func (s *GlobalVariable) GetKey() string {
 	return s.Name + KeySep + s.location.URI
 }
 
-func (s *GlobalVariable) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	s.types.Write(serialiser)
-	serialiser.WriteString(s.description)
-	serialiser.WriteString(s.Name)
+func (s *GlobalVariable) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	s.types.Write(e)
+	e.WriteString(s.description)
+	e.WriteString(s.Name)
 }
 
-func ReadGlobalVariable(serialiser *Serialiser) *GlobalVariable {
+func ReadGlobalVariable(d *storage.Decoder) *GlobalVariable {
 	return &GlobalVariable{
-		location:    serialiser.ReadLocation(),
-		types:       ReadTypeComposite(serialiser),
-		description: serialiser.ReadString(),
-		Name:        serialiser.ReadString(),
+		location:    d.ReadLocation(),
+		types:       ReadTypeComposite(d),
+		description: d.ReadString(),
+		Name:        d.ReadString(),
 	}
 }

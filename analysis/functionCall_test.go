@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestFunctionCall(t *testing.T) {
@@ -31,10 +32,10 @@ func TestFunctionCallSerialiseAndDeserialise(t *testing.T) {
 		if functionCall, ok := child.(*FunctionCall); ok {
 			jsonData, _ := json.MarshalIndent(functionCall, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			functionCall.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedFunctionCall := ReadFunctionCall(serialiser)
+			e := storage.NewEncoder()
+			functionCall.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedFunctionCall := ReadFunctionCall(d)
 			jsonData, _ = json.MarshalIndent(deserialisedFunctionCall, "", "  ")
 			after := string(jsonData)
 			if after != original {

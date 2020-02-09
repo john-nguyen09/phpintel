@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestInterface(t *testing.T) {
@@ -33,11 +34,11 @@ func TestInterfaceSerialiseAndDeserialise(t *testing.T) {
 		if theInterface, ok := child.(*Interface); ok {
 			jsonData, _ := json.MarshalIndent(theInterface, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			theInterface.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
+			e := storage.NewEncoder()
+			theInterface.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
 
-			deserialisedInterface := ReadInterface(serialiser)
+			deserialisedInterface := ReadInterface(d)
 			jsonData, _ = json.MarshalIndent(deserialisedInterface, "", "  ")
 			after := string(jsonData)
 			if after != original {

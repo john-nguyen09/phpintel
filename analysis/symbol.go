@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
@@ -70,6 +71,12 @@ type HasParams interface {
 
 type HasScope interface {
 	GetScope() TypeString
+}
+
+type serialisable interface {
+	GetCollection() string
+	GetKey() string
+	Serialise(*storage.Encoder)
 }
 
 type HasParamsResolvable interface {

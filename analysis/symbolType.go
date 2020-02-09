@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"encoding/json"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"strings"
 )
 
@@ -148,17 +149,17 @@ func isFQN(name string) bool {
 	return name[0] == '\\'
 }
 
-func (t TypeString) Write(serialiser *Serialiser) {
-	serialiser.WriteString(t.original)
-	serialiser.WriteString(t.fqn)
-	serialiser.WriteInt(t.arrayLevel)
+func (t TypeString) Write(e *storage.Encoder) {
+	e.WriteString(t.original)
+	e.WriteString(t.fqn)
+	e.WriteInt(t.arrayLevel)
 }
 
-func ReadTypeString(serialiser *Serialiser) TypeString {
+func ReadTypeString(d *storage.Decoder) TypeString {
 	return TypeString{
-		original:   serialiser.ReadString(),
-		fqn:        serialiser.ReadString(),
-		arrayLevel: serialiser.ReadInt(),
+		original:   d.ReadString(),
+		fqn:        d.ReadString(),
+		arrayLevel: d.ReadInt(),
 	}
 }
 
@@ -220,18 +221,18 @@ func (t *TypeComposite) merge(types TypeComposite) {
 	}
 }
 
-func (t *TypeComposite) Write(serialiser *Serialiser) {
-	serialiser.WriteInt(len(t.typeStrings))
+func (t *TypeComposite) Write(e *storage.Encoder) {
+	e.WriteInt(len(t.typeStrings))
 	for _, typeString := range t.typeStrings {
-		typeString.Write(serialiser)
+		typeString.Write(e)
 	}
 }
 
-func ReadTypeComposite(serialiser *Serialiser) TypeComposite {
-	count := serialiser.ReadInt()
+func ReadTypeComposite(d *storage.Decoder) TypeComposite {
+	count := d.ReadInt()
 	types := TypeComposite{}
 	for i := 0; i < count; i++ {
-		types.typeStrings = append(types.typeStrings, ReadTypeString(serialiser))
+		types.typeStrings = append(types.typeStrings, ReadTypeString(d))
 	}
 	return types
 }

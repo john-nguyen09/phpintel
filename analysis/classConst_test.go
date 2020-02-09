@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestClassConst(t *testing.T) {
@@ -33,10 +34,10 @@ func TestClassConstSerialiseAndDeserialise(t *testing.T) {
 		if classConst, ok := child.(*ClassConst); ok {
 			jsonData, _ := json.MarshalIndent(classConst, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			classConst.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedClassConst := ReadClassConst(serialiser)
+			e := storage.NewEncoder()
+			classConst.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedClassConst := ReadClassConst(d)
 			jsonData, _ = json.MarshalIndent(deserialisedClassConst, "", "  ")
 			after := string(jsonData)
 			if after != original {

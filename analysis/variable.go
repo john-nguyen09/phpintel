@@ -5,6 +5,7 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -128,12 +129,12 @@ func (s *Variable) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (s *Variable) Serialise(serialiser *Serialiser) {
-	s.Expression.Serialise(serialiser)
+func (s *Variable) Serialise(e *storage.Encoder) {
+	s.Expression.Serialise(e)
 }
 
-func ReadVariable(serialiser *Serialiser) *Variable {
+func ReadVariable(d *storage.Decoder) *Variable {
 	return &Variable{
-		Expression: ReadExpression(serialiser),
+		Expression: ReadExpression(d),
 	}
 }

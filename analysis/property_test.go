@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestProperty(t *testing.T) {
@@ -33,10 +34,10 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 		if property, ok := child.(*Property); ok {
 			jsonData, _ := json.MarshalIndent(property, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			property.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedProperty := ReadProperty(serialiser)
+			e := storage.NewEncoder()
+			property.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedProperty := ReadProperty(d)
 			jsonData, _ = json.MarshalIndent(deserialisedProperty, "", "  ")
 			after := string(jsonData)
 			if after != original {

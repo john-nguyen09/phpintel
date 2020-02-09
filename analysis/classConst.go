@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -98,18 +99,18 @@ func (s *ClassConst) GetScope() TypeString {
 	return s.Scope
 }
 
-func (s *ClassConst) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
-	serialiser.WriteString(s.Value)
-	s.Scope.Write(serialiser)
+func (s *ClassConst) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	e.WriteString(s.Name)
+	e.WriteString(s.Value)
+	s.Scope.Write(e)
 }
 
-func ReadClassConst(serialiser *Serialiser) *ClassConst {
+func ReadClassConst(d *storage.Decoder) *ClassConst {
 	return &ClassConst{
-		location: serialiser.ReadLocation(),
-		Name:     serialiser.ReadString(),
-		Value:    serialiser.ReadString(),
-		Scope:    ReadTypeString(serialiser),
+		location: d.ReadLocation(),
+		Name:     d.ReadString(),
+		Value:    d.ReadString(),
+		Scope:    ReadTypeString(d),
 	}
 }

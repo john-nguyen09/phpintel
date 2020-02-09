@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestConstantAccess(t *testing.T) {
@@ -31,10 +32,10 @@ func TestConstantAccessSerialiseAndDeserialise(t *testing.T) {
 		if constantAccess, ok := child.(*ConstantAccess); ok {
 			jsonData, _ := json.MarshalIndent(constantAccess, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			constantAccess.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedConstantAccess := ReadConstantAccess(serialiser)
+			e := storage.NewEncoder()
+			constantAccess.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedConstantAccess := ReadConstantAccess(d)
 			jsonData, _ = json.MarshalIndent(deserialisedConstantAccess, "", "  ")
 			after := string(jsonData)
 			if after != original {

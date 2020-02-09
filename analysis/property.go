@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -130,22 +131,22 @@ func (s *Property) GetScope() TypeString {
 	return s.Scope
 }
 
-func (s *Property) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	serialiser.WriteString(s.Name)
-	s.Scope.Write(serialiser)
-	serialiser.WriteInt(int(s.VisibilityModifier))
-	serialiser.WriteBool(s.IsStatic)
-	s.Types.Write(serialiser)
+func (s *Property) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	e.WriteString(s.Name)
+	s.Scope.Write(e)
+	e.WriteInt(int(s.VisibilityModifier))
+	e.WriteBool(s.IsStatic)
+	s.Types.Write(e)
 }
 
-func ReadProperty(serialiser *Serialiser) *Property {
+func ReadProperty(d *storage.Decoder) *Property {
 	return &Property{
-		location:           serialiser.ReadLocation(),
-		Name:               serialiser.ReadString(),
-		Scope:              ReadTypeString(serialiser),
-		VisibilityModifier: VisibilityModifierValue(serialiser.ReadInt()),
-		IsStatic:           serialiser.ReadBool(),
-		Types:              ReadTypeComposite(serialiser),
+		location:           d.ReadLocation(),
+		Name:               d.ReadString(),
+		Scope:              ReadTypeString(d),
+		VisibilityModifier: VisibilityModifierValue(d.ReadInt()),
+		IsStatic:           d.ReadBool(),
+		Types:              ReadTypeComposite(d),
 	}
 }

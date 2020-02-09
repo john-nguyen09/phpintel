@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 func TestConstant(t *testing.T) {
@@ -33,10 +34,10 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		if constant, ok := child.(*Const); ok {
 			jsonData, _ := json.MarshalIndent(constant, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			constant.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedConstant := ReadConst(serialiser)
+			e := storage.NewEncoder()
+			constant.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedConstant := ReadConst(d)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)
 			if after != original {
@@ -45,10 +46,10 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		} else if constant, ok := child.(*Define); ok {
 			jsonData, _ := json.MarshalIndent(constant, "", "  ")
 			original := string(jsonData)
-			serialiser := NewSerialiser()
-			constant.Serialise(serialiser)
-			serialiser = SerialiserFromByteSlice(serialiser.GetBytes())
-			deserialisedConstant := ReadDefine(serialiser)
+			e := storage.NewEncoder()
+			constant.Serialise(e)
+			d := storage.NewDecoder(e.Bytes())
+			deserialisedConstant := ReadDefine(d)
 			jsonData, _ = json.MarshalIndent(deserialisedConstant, "", "  ")
 			after := string(jsonData)
 			if after != original {

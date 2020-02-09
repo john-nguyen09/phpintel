@@ -4,6 +4,7 @@ import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -83,16 +84,16 @@ func (s *Define) GetPrefixes() []string {
 	return []string{""}
 }
 
-func (s *Define) Serialise(serialiser *Serialiser) {
-	serialiser.WriteLocation(s.location)
-	s.Name.Write(serialiser)
-	serialiser.WriteString(s.Value)
+func (s *Define) Serialise(e *storage.Encoder) {
+	e.WriteLocation(s.location)
+	s.Name.Write(e)
+	e.WriteString(s.Value)
 }
 
-func ReadDefine(serialiser *Serialiser) *Define {
+func ReadDefine(d *storage.Decoder) *Define {
 	return &Define{
-		location: serialiser.ReadLocation(),
-		Name:     ReadTypeString(serialiser),
-		Value:    serialiser.ReadString(),
+		location: d.ReadLocation(),
+		Name:     ReadTypeString(d),
+		Value:    d.ReadString(),
 	}
 }
