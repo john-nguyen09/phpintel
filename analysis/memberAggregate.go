@@ -520,6 +520,7 @@ func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) Se
 			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
 				return false
 			}
+			return true
 		}
 		return prop.VisibilityModifier == Public
 	})

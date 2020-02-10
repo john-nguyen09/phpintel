@@ -34,6 +34,13 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	// log.Printf("Completion: %T %v", symbol, parent)
 	switch parent.Type {
 	case phrase.SimpleVariable:
+		if nodes.Parent().Type == phrase.ScopedMemberName {
+			if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
+				completionList = scopedAccessCompletion(store, document, word,
+					s.ResolveAndGetScope(resolveCtx), s.Scope)
+			}
+			break
+		}
 		completionList = variableCompletion(document, params.Position, word)
 	case phrase.NamespaceName:
 		nodes.Parent()
