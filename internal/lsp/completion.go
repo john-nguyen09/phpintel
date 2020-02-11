@@ -7,6 +7,7 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
+	"github.com/john-nguyen09/phpintel/internal/cmd"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -187,16 +188,20 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, function := range functions {
 		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)
+		insertText, textFormat, command := cmd.HasParamsInsertText(function, label)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
 		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
+			InsertText:          insertText,
+			InsertTextFormat:    textFormat,
+			Command:             command,
 			Kind:                protocol.FunctionCompletion,
 			Label:               label,
 			AdditionalTextEdits: textEdits,
 			Documentation:       function.GetDescription(),
-			Detail:              getDetailFromTextEdit(function.Name, textEdit),
+			Detail:              cmd.HasParamsDetailWithTextEdit(function, textEdit),
 		})
 	}
 	return completionList
@@ -258,10 +263,15 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			})
 		}
 		for _, method := range methods {
+			insertText, textFormat, command := cmd.HasParamsInsertText(method, method.GetName())
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
-				Kind:          protocol.MethodCompletion,
-				Label:         method.GetName(),
-				Documentation: method.GetDescription(),
+				Kind:             protocol.MethodCompletion,
+				Label:            method.GetName(),
+				InsertText:       insertText,
+				InsertTextFormat: textFormat,
+				Command:          command,
+				Documentation:    method.GetDescription(),
+				Detail:           cmd.HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 		classConsts, searchResult := store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
@@ -314,10 +324,15 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			if method.Name == "__construct" {
 				continue
 			}
+			insertText, textFormat, command := cmd.HasParamsInsertText(method, method.GetName())
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
-				Kind:          protocol.MethodCompletion,
-				Label:         method.GetName(),
-				Documentation: method.GetDescription(),
+				Kind:             protocol.MethodCompletion,
+				Label:            method.GetName(),
+				InsertText:       insertText,
+				InsertTextFormat: textFormat,
+				Command:          command,
+				Documentation:    method.GetDescription(),
+				Detail:           cmd.HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 	}
@@ -366,8 +381,9 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 }
 
 func getDetailFromTextEdit(name analysis.TypeString, textEdit *protocol.TextEdit) string {
-	if textEdit == nil {
-		return name.GetFQN()
+	detail := name.GetOriginal()
+	if textEdit != nil {
+		detail += "\n\n" + textEdit.NewText
 	}
-	return "use " + name.GetFQN()
+	return detail
 }

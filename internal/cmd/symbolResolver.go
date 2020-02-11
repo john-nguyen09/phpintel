@@ -8,6 +8,11 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
+var /* const */ triggerParameterHintsCommand = protocol.Command{
+	Title:   "Trigger parameter hints",
+	Command: "editor.action.triggerParameterHints",
+}
+
 func concatDescriptionIfAvailable(content string, description string) string {
 	if len(description) > 0 {
 		converter := md.NewConverter("", true, nil)
@@ -254,4 +259,19 @@ func VariableToHover(variable *analysis.Variable) *protocol.Hover {
 		},
 		Range: &theRange,
 	}
+}
+
+func HasParamsInsertText(f analysis.HasParams, label string) (string, protocol.InsertTextFormat, *protocol.Command) {
+	if len(f.GetParams()) == 0 {
+		return label + "()", protocol.PlainTextTextFormat, nil
+	}
+	return label + "($0)", protocol.SnippetTextFormat, &triggerParameterHintsCommand
+}
+
+func HasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEdit) string {
+	detail := f.GetNameLabel() + "(" + paramsToString(f.GetParams()) + ")"
+	if textEdit != nil {
+		detail += "\n" + textEdit.NewText
+	}
+	return detail
 }
