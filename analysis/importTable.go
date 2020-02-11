@@ -121,9 +121,9 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 	insertUse := GetInsertUseContext(document)
 	parts := name.GetParts()
 	firstPart, parts := parts[0], parts[1:]
-	if fqn, ok := i.classes[firstPart]; ok && "\\"+fqn == name.GetFQN() {
+	if fqn, ok := i.classes[firstPart]; ok && strings.Index(word, fqn) == 0 {
 		if len(parts) > 0 {
-			return firstPart + "\\" + strings.Join(parts, "\\"), nil
+			return strings.Join(parts, "\\"), nil
 		}
 		return firstPart, nil
 	}
@@ -150,7 +150,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 	switch symbol.(type) {
 	case *Function, *Const, *Define:
 		scope, _ := GetScopeAndNameFromString(name.GetFQN())
-		if scope == "\\" {
+		if scope == "" {
 			return name.GetOriginal(), nil
 		}
 	}

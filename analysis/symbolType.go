@@ -2,8 +2,9 @@ package analysis
 
 import (
 	"encoding/json"
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"strings"
+
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 // Aliases is a constant to look up aliases (e.g. boolean is bool)
@@ -136,7 +137,11 @@ func (t TypeString) GetFirstAndRestParts() (string, []string) {
 }
 
 func (t TypeString) GetParts() []string {
-	return strings.Split(t.original, "\\")
+	parts := strings.Split(t.GetFQN(), "\\")
+	if len(parts) > 0 && parts[0] == "" {
+		return parts[1:]
+	}
+	return parts
 }
 
 func isFQN(name string) bool {
@@ -284,7 +289,7 @@ func GetNameParts(name string) []string {
 func GetScopeAndNameFromString(name string) (string, string) {
 	parts := GetNameParts(name)
 	if len(parts) == 1 {
-		return "\\", parts[0]
+		return "", parts[0]
 	}
 	return "\\" + strings.Join(parts[:len(parts)-1], "\\"), parts[len(parts)-1]
 }
