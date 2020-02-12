@@ -7,7 +7,6 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
-	"github.com/john-nguyen09/phpintel/internal/cmd"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -188,7 +187,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, function := range functions {
 		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)
-		insertText, textFormat, command := cmd.HasParamsInsertText(function, label)
+		insertText, textFormat, command := HasParamsInsertText(function, label)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -201,7 +200,7 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Label:               label,
 			AdditionalTextEdits: textEdits,
 			Documentation:       function.GetDescription(),
-			Detail:              cmd.HasParamsDetailWithTextEdit(function, textEdit),
+			Detail:              HasParamsDetailWithTextEdit(function, textEdit),
 		})
 	}
 	return completionList
@@ -263,7 +262,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			})
 		}
 		for _, method := range methods {
-			insertText, textFormat, command := cmd.HasParamsInsertText(method, method.GetName())
+			insertText, textFormat, command := HasParamsInsertText(method, method.GetName())
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
 				Kind:             protocol.MethodCompletion,
 				Label:            method.GetName(),
@@ -271,7 +270,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				InsertTextFormat: textFormat,
 				Command:          command,
 				Documentation:    method.GetDescription(),
-				Detail:           cmd.HasParamsDetailWithTextEdit(method, nil),
+				Detail:           HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 		classConsts, searchResult := store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
@@ -324,7 +323,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 			if method.Name == "__construct" {
 				continue
 			}
-			insertText, textFormat, command := cmd.HasParamsInsertText(method, method.GetName())
+			insertText, textFormat, command := HasParamsInsertText(method, method.GetName())
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
 				Kind:             protocol.MethodCompletion,
 				Label:            method.GetName(),
@@ -332,7 +331,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				InsertTextFormat: textFormat,
 				Command:          command,
 				Documentation:    method.GetDescription(),
-				Detail:           cmd.HasParamsDetailWithTextEdit(method, nil),
+				Detail:           HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 	}

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/john-nguyen09/phpintel/analysis"
-	"github.com/john-nguyen09/phpintel/internal/cmd"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
@@ -33,9 +32,9 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 				firstClass := classes[0]
 				constructor := firstClass.GetConstructor(store)
 				if constructor != nil {
-					hover = cmd.MethodToHover(v, *constructor)
+					hover = MethodToHover(v, *constructor)
 				} else {
-					hover = cmd.ClassToHover(v, *firstClass)
+					hover = ClassToHover(v, *firstClass)
 				}
 				break
 			}
@@ -45,12 +44,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		for _, typeString := range v.Type.Resolve() {
 			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
 			if len(classes) > 0 {
-				hover = cmd.ClassToHover(symbol, *classes[0])
+				hover = ClassToHover(symbol, *classes[0])
 				break
 			}
 			interfaces := store.GetInterfaces(typeString.GetFQN())
 			if len(interfaces) > 0 {
-				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
+				hover = InterfaceToHover(symbol, *interfaces[0])
 				break
 			}
 		}
@@ -59,7 +58,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		for _, typeString := range v.Type.Resolve() {
 			interfaces = append(interfaces, store.GetInterfaces(typeString.GetFQN())...)
 			if len(interfaces) > 0 {
-				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
+				hover = InterfaceToHover(symbol, *interfaces[0])
 				break
 			}
 		}
@@ -67,7 +66,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		for _, typeString := range v.GetTypes().Resolve() {
 			traits := store.GetTraits(typeString.GetFQN())
 			if len(traits) > 0 {
-				hover = cmd.TraitToHover(v, *traits[0])
+				hover = TraitToHover(v, *traits[0])
 				break
 			}
 		}
@@ -77,12 +76,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		name := analysis.NewTypeString(v.Name)
 		consts = append(consts, store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name))...)
 		if len(consts) > 0 {
-			hover = cmd.ConstToHover(symbol, *consts[0])
+			hover = ConstToHover(symbol, *consts[0])
 			break
 		}
 		defines = append(defines, store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name))...)
 		if len(defines) > 0 {
-			hover = cmd.DefineToHover(symbol, *defines[0])
+			hover = DefineToHover(symbol, *defines[0])
 			break
 		}
 	case *analysis.FunctionCall:
@@ -90,7 +89,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		name := analysis.NewTypeString(v.Name)
 		functions = append(functions, store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, name))...)
 		if len(functions) > 0 {
-			hover = cmd.FunctionToHover(symbol, *functions[0])
+			hover = FunctionToHover(symbol, *functions[0])
 			break
 		}
 	case *analysis.ScopedConstantAccess:
@@ -99,7 +98,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			classConsts = append(classConsts, store.GetClassConsts(
 				scopeType.GetFQN(), v.Name)...)
 			if len(classConsts) > 0 {
-				hover = cmd.ClassConstToHover(symbol, *classConsts[0])
+				hover = ClassConstToHover(symbol, *classConsts[0])
 				break
 			}
 		}
@@ -119,7 +118,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 					analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			if len(methods) > 0 {
-				hover = cmd.MethodToHover(symbol, *methods[0])
+				hover = MethodToHover(symbol, *methods[0])
 				break
 			}
 		}
@@ -139,13 +138,13 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 					analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 			}
 			if len(properties) > 0 {
-				hover = cmd.PropertyToHover(symbol, *properties[0])
+				hover = PropertyToHover(symbol, *properties[0])
 				break
 			}
 		}
 	case *analysis.Variable:
 		v.Resolve(resolveCtx)
-		hover = cmd.VariableToHover(v)
+		hover = VariableToHover(v)
 	case *analysis.PropertyAccess:
 		properties := []*analysis.Property{}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
@@ -154,7 +153,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 					analysis.PropsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
 			if len(properties) > 0 {
-				hover = cmd.PropertyToHover(symbol, *properties[0])
+				hover = PropertyToHover(symbol, *properties[0])
 				break
 			}
 		}
@@ -174,7 +173,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
 			}
 			if len(methods) > 0 {
-				hover = cmd.MethodToHover(symbol, *methods[0])
+				hover = MethodToHover(symbol, *methods[0])
 				break
 			}
 		}
@@ -182,12 +181,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		for _, typeString := range v.Type.Resolve() {
 			classes := store.GetClasses(typeString.GetFQN())
 			if len(classes) > 0 {
-				hover = cmd.ClassToHover(symbol, *classes[0])
+				hover = ClassToHover(symbol, *classes[0])
 				break
 			}
 			interfaces := store.GetInterfaces(typeString.GetFQN())
 			if len(interfaces) > 0 {
-				hover = cmd.InterfaceToHover(symbol, *interfaces[0])
+				hover = InterfaceToHover(symbol, *interfaces[0])
 				break
 			}
 		}
