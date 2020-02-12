@@ -135,6 +135,7 @@ func (s *Document) ResetState() {
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
 	s.rootNode = nil
+	s.importTable = newImportTable()
 }
 
 func (s *Document) GetRootNode() *phrase.Phrase {
