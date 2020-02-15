@@ -8,7 +8,7 @@ type RelativeScope struct {
 }
 
 func IsNameRelative(name string) bool {
-	return name == "static" || name == "self"
+	return name == "static" || name == "self" || name == "$this"
 }
 
 func IsNameParent(name string) bool {

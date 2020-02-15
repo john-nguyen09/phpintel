@@ -7,6 +7,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMethod(t *testing.T) {
@@ -66,4 +67,25 @@ func TestMethodFromPhpDoc(t *testing.T) {
 	document := NewDocument("test1", string(data))
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
+}
+
+func TestReturnRelativeType(t *testing.T) {
+	doc := NewDocument("test1", `<?php
+class TestClass1 {
+	/**
+	 * @return static
+	 */
+	public function method1() {}
+
+	/**
+	 * @return TestClass2|$this
+	 */
+	public function method2() {}
+}`)
+	doc.Load()
+	method1 := doc.Children[1].(*Method)
+	method2 := doc.Children[2].(*Method)
+
+	assert.Equal(t, method1.GetReturnTypes().ToString(), "\\TestClass1")
+	assert.Equal(t, method2.GetReturnTypes().ToString(), "\\TestClass2|\\TestClass1")
 }
