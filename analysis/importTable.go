@@ -116,10 +116,10 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 	return name.GetFQN()
 }
 
-func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
-	name TypeString, word string) (string, *protocol.TextEdit) {
+func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name TypeString, word string) (string, *protocol.TextEdit) {
 	insertUse := GetInsertUseContext(document)
 	parts := name.GetParts()
+	currentScope := i.ResolveScopeNamespace(word)
 	firstPart, parts := parts[0], parts[1:]
 	if fqn, ok := i.classes[firstPart]; ok && strings.Index(word, fqn) == 0 {
 		if len(parts) > 0 {
@@ -127,14 +127,10 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 		}
 		return firstPart, nil
 	}
-	namespace := i.namespace
-	if strings.Index(namespace, "\\") != 0 {
-		namespace = "\\" + namespace
+	if currentScope != "\\" && strings.Index(name.GetFQN(), currentScope) == 0 {
+		return name.GetFQN()[len(currentScope):], nil
 	}
-	if namespace != "\\" && strings.Index(name.GetFQN(), namespace) == 0 {
-		return name.GetFQN()[len(namespace)+1:], nil
-	}
-	if namespace == name.GetNamespace() {
+	if currentScope == name.GetNamespace() {
 		return name.GetOriginal(), nil
 	}
 	for alias, fqn := range i.classes {
@@ -159,4 +155,10 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol,
 
 func (i ImportTable) GetNamespace() string {
 	return i.namespace
+}
+
+func (i ImportTable) ResolveScopeNamespace(word string) string {
+	name := NewTypeString(word)
+	name.SetNamespace(i.GetNamespace())
+	return name.GetNamespace()
 }
