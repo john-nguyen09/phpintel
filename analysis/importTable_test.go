@@ -62,6 +62,8 @@ namespace TestNamespace2;`)
 		useTestCase{doc3, function, function.Name, "test", useResult{"TestFunction1", "use function TestNamespace1\\TestFunction1;"}},
 		useTestCase{doc3, class, class.Name, "TestNamespace1\\T", useResult{"TestClass1", "use TestNamespace1;"}},
 		useTestCase{doc3, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", "use TestNamespace1;"}},
+		useTestCase{doc3, class, class.Name, "\\TestNamespace1\\Te", useResult{"TestClass1", ""}},
+		useTestCase{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
 	}
 
 	for _, testCase := range cases {
