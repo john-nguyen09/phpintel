@@ -146,7 +146,12 @@ func (s *Function) GetIndexCollection() string {
 }
 
 func (s *Function) GetPrefixes() []string {
-	return []string{""}
+	scope, _ := GetScopeAndNameFromString(s.Name.GetFQN())
+	prefixes := []string{""}
+	if scope != "" {
+		prefixes = append(prefixes, scope)
+	}
+	return prefixes
 }
 
 func (s *Function) GetNameLabel() string {

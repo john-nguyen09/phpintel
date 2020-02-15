@@ -2,8 +2,9 @@ package analysis
 
 import (
 	"encoding/json"
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"strings"
+
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
 // Aliases is a constant to look up aliases (e.g. boolean is bool)
@@ -136,7 +137,11 @@ func (t TypeString) GetFirstAndRestParts() (string, []string) {
 }
 
 func (t TypeString) GetParts() []string {
-	return strings.Split(t.original, "\\")
+	parts := strings.Split(t.GetFQN(), "\\")
+	if len(parts) > 0 && parts[0] == "" {
+		return parts[1:]
+	}
+	return parts
 }
 
 func isFQN(name string) bool {
@@ -180,6 +185,10 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 	parts := strings.Split(text, "|")
 	types := newTypeComposite()
 	for _, part := range parts {
+		part := strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
 		if IsNameRelative(part) {
 			currentClass := document.getLastClass()
 			switch v := currentClass.(type) {
@@ -192,7 +201,7 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 			}
 			continue
 		}
-		typeString := NewTypeString(strings.TrimSpace(part))
+		typeString := NewTypeString(part)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
@@ -284,7 +293,7 @@ func GetNameParts(name string) []string {
 func GetScopeAndNameFromString(name string) (string, string) {
 	parts := GetNameParts(name)
 	if len(parts) == 1 {
-		return "\\", parts[0]
+		return "", parts[0]
 	}
 	return "\\" + strings.Join(parts[:len(parts)-1], "\\"), parts[len(parts)-1]
 }

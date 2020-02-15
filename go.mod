@@ -14,6 +14,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.8.1
+	github.com/stretchr/testify v1.4.0
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 )
 

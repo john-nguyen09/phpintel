@@ -447,15 +447,11 @@ func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
 	classes := []*Class{}
 	count := 0
 	query := searchQuery{
 		collection: classCompletionIndex,
-		prefixes:   prefixes,
+		prefixes:   []string{scope},
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classCollection, string(completionValue))
@@ -578,11 +574,12 @@ func (s *Store) GetFunctions(name string) []*Function {
 }
 
 func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Function, SearchResult) {
+	scope, keyword := GetScopeAndNameFromString(keyword)
 	functions := []*Function{}
 	count := 0
 	query := searchQuery{
 		collection: functionCompletionIndex,
-		prefixes:   []string{""},
+		prefixes:   []string{scope},
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(functionCollection, string(completionValue))
