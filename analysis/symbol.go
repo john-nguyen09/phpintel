@@ -48,14 +48,6 @@ type Symbol interface {
 	GetLocation() protocol.Location
 }
 
-// Definition symbol type is a type of symbol of (classes, interfaces,
-// traits, properties, methods, class consts, defines, consts, functions)
-type Definition interface {
-	GetLocation() protocol.Location
-	GetName() string
-	GetDescription() string
-}
-
 // NameIndexable indicates a symbol is name indexable, i.e. have completion
 type NameIndexable interface {
 	GetIndexableName() string

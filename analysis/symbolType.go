@@ -185,6 +185,10 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 	parts := strings.Split(text, "|")
 	types := newTypeComposite()
 	for _, part := range parts {
+		part := strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
 		if IsNameRelative(part) {
 			currentClass := document.getLastClass()
 			switch v := currentClass.(type) {
@@ -197,7 +201,7 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 			}
 			continue
 		}
-		typeString := NewTypeString(strings.TrimSpace(part))
+		typeString := NewTypeString(part)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
