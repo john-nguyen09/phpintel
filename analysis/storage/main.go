@@ -46,14 +46,11 @@ func (s *Storage) Get(key []byte) ([]byte, error) {
 	return s.db.Get(ro, key)
 }
 
-func (s *Storage) WriteBatch(f func(*levigo.WriteBatch) error) error {
-	wb := levigo.NewWriteBatch()
-	opts := levigo.NewWriteOptions()
-	defer wb.Close()
-	defer opts.Close()
-	err := f(wb)
+func (s *Storage) WriteBatch(f func(*Batch) error) error {
+	b := NewBatch()
+	err := f(&b)
 	if err == nil {
-		err = s.db.Write(opts, wb)
+		err = b.Write(s)
 	}
 	return err
 }
@@ -67,9 +64,9 @@ func (s *Storage) PrefixStream(prefix []byte, onData func(*PrefixIterator)) {
 }
 
 func (s *Storage) Clear() {
-	s.WriteBatch(func(wb *levigo.WriteBatch) error {
+	s.WriteBatch(func(b *Batch) error {
 		s.PrefixStream(nil, func(it *PrefixIterator) {
-			wb.Delete(it.Key())
+			b.Delete(it.Key())
 		})
 		return nil
 	})

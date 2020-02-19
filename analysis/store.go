@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
-	"github.com/jmhodges/levigo"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	putil "github.com/john-nguyen09/phpintel/util"
@@ -103,7 +102,7 @@ func (d *symbolDeletor) MarkNotDelete(ser serialisable) {
 	delete(d.symbols, ser.GetCollection()+KeySep+ser.GetKey())
 }
 
-func (d *symbolDeletor) Delete(batch *levigo.WriteBatch) {
+func (d *symbolDeletor) Delete(batch *storage.Batch) {
 	for key := range d.symbols {
 		batch.Delete([]byte(key))
 		batch.Delete([]byte(documentSymbols + KeySep + d.uri + key))
@@ -255,13 +254,13 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 }
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(b *storage.Batch) error {
 		ciDeletor := newCompletionIndexDeletor(s.db, uri)
-		ciDeletor.Delete(wb)
+		ciDeletor.Delete(b)
 		syDeletor := newSymbolDeletor(s.db, uri)
-		syDeletor.Delete(wb)
+		syDeletor.Delete(b)
 		entry := newEntry(documentCollection, uri)
-		wb.Delete(entry.getKeyBytes())
+		b.Delete(entry.getKeyBytes())
 		return nil
 	})
 	if err != nil {
@@ -310,16 +309,16 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 }
 
 func (s *Store) SyncDocument(document *Document) {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(b *storage.Batch) error {
 		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
 
-		s.writeAllSymbols(wb, document, ciDeletor, syDeletor)
+		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
 
-		ciDeletor.Delete(wb)
-		syDeletor.Delete(wb)
+		ciDeletor.Delete(b)
+		syDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
-		wb.Put(entry.getKeyBytes(), document.GetMD5Hash())
+		b.Put(entry.getKeyBytes(), document.GetMD5Hash())
 		return nil
 	})
 	if err != nil {
@@ -345,7 +344,7 @@ func (s *Store) PrepareForIndexing() {
 }
 
 func (s *Store) FinishIndexing() {
-	err := s.db.WriteBatch(func(wb *levigo.WriteBatch) error {
+	err := s.db.WriteBatch(func(wb *storage.Batch) error {
 		for iter := range s.syncedDocumentURIs.Iter() {
 			s.DeleteDocument(iter.Key)
 			s.syncedDocumentURIs.Remove(iter.Key)
@@ -366,7 +365,7 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	return documentURIs
 }
 
-func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
+func (s *Store) forgetAllSymbols(batch *storage.Batch, uri string) {
 	entry := newEntry(documentSymbols, uri+KeySep)
 	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
@@ -375,7 +374,7 @@ func (s *Store) forgetAllSymbols(batch *levigo.WriteBatch, uri string) {
 	})
 }
 
-func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document,
+func (s *Store) writeAllSymbols(batch *storage.Batch, document *Document,
 	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
 	for _, child := range document.Children {
 		if ser, ok := child.(serialisable); ok {
@@ -397,23 +396,23 @@ func (s *Store) writeAllSymbols(batch *levigo.WriteBatch, document *Document,
 	}
 }
 
-func rememberSymbol(batch *levigo.WriteBatch, document *Document, ser serialisable) {
+func rememberSymbol(batch *storage.Batch, document *Document, ser serialisable) {
 	entry := newEntry(documentSymbols, document.GetURI()+KeySep+ser.GetCollection()+KeySep+ser.GetKey())
 	writeEntry(batch, entry)
 }
 
-func indexName(batch *levigo.WriteBatch, document *Document, indexable NameIndexable, key string) {
+func indexName(batch *storage.Batch, document *Document, indexable NameIndexable, key string) {
 	entries := createCompletionEntries(document.GetURI(), indexable, key)
 	for _, entry := range entries {
 		writeEntry(batch, entry)
 	}
 }
 
-func writeEntry(batch *levigo.WriteBatch, entry *entry) {
+func writeEntry(batch *storage.Batch, entry *entry) {
 	batch.Put(entry.getKeyBytes(), entry.bytes())
 }
 
-func deleteEntry(batch *levigo.WriteBatch, entry *entry) {
+func deleteEntry(batch *storage.Batch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 

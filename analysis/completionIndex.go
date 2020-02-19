@@ -3,7 +3,6 @@ package analysis
 import (
 	"strings"
 
-	"github.com/jmhodges/levigo"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
 )
@@ -92,12 +91,12 @@ func (d *completionIndexDeletor) MarkNotDelete(uri string, indexable NameIndexab
 	delete(d.keys, string(entry.getKeyBytes()))
 }
 
-func (d *completionIndexDeletor) Delete(batch *levigo.WriteBatch) {
+func (d *completionIndexDeletor) Delete(b *storage.Batch) {
 	for indexKey := range d.indexKeys {
-		batch.Delete([]byte(indexKey))
+		b.Delete([]byte(indexKey))
 	}
 	for key := range d.keys {
-		batch.Delete([]byte(key))
+		b.Delete([]byte(key))
 	}
 }
 
