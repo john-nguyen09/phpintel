@@ -61,7 +61,7 @@ type HasParams interface {
 }
 
 type HasScope interface {
-	GetScope() TypeString
+	GetScope() string
 }
 
 type serialisable interface {

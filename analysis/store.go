@@ -445,7 +445,7 @@ func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 	return allTrue
 }
 
-func scopePredicate(scope string) func(s Symbol) bool {
+func namespacePredicate(scope string) func(s Symbol) bool {
 	if scope == "" {
 		return func(s Symbol) bool {
 			return true
@@ -453,8 +453,7 @@ func scopePredicate(scope string) func(s Symbol) bool {
 	}
 	return func(s Symbol) bool {
 		symbolScope := ""
-		switch v := s.(type) {
-		case *Class:
+		if v, ok := s.(HasScope); ok {
 			symbolScope = v.GetScope()
 		}
 		return symbolScope == scope
@@ -465,7 +464,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	classes := []*Class{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: classCompletionIndex,
 		keyword:    keyword,
@@ -509,7 +508,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 	}
 	interfaces := []*Interface{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: interfaceCompletionIndex,
 		keyword:    keyword,
@@ -553,7 +552,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 	}
 	traits := []*Trait{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: traitCompletionIndex,
 		keyword:    keyword,
@@ -593,7 +592,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	functions := []*Function{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: functionCompletionIndex,
 		keyword:    keyword,
@@ -722,7 +721,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 
 	methods := []*Method{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: methodCompletionIndex,
 		keyword:    keyword,
@@ -775,7 +774,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 
 	classConsts := []*ClassConst{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: classConstCompletionIndex,
 		keyword:    keyword,
@@ -828,7 +827,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 
 	properties := []*Property{}
 	count := 0
-	options.predicates = append(options.predicates, scopePredicate(scope))
+	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: propertyCompletionIndex,
 		keyword:    keyword,

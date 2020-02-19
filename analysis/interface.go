@@ -17,6 +17,8 @@ type Interface struct {
 	Extends []TypeString
 }
 
+var _ HasScope = (*Interface)(nil)
+
 func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
 		location: document.GetNodeLocation(node),

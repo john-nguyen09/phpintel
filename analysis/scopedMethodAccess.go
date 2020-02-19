@@ -76,7 +76,7 @@ func (s *ScopedMethodAccess) Resolve(ctx ResolveContext) {
 		name = hasName.GetName()
 	}
 	if hasScope, ok := s.Scope.(HasScope); ok {
-		classScope = hasScope.GetScope().GetFQN()
+		classScope = hasScope.GetScope()
 	}
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
@@ -102,7 +102,7 @@ func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams 
 			name = hasName.GetName()
 		}
 		if hasScope, ok := s.Scope.(HasScope); ok {
-			classScope = hasScope.GetScope().GetFQN()
+			classScope = hasScope.GetScope()
 		}
 		for _, class := range store.GetClasses(typeString.GetFQN()) {
 			for _, method := range GetClassMethods(store, class, s.Name,

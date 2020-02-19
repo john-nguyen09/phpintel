@@ -18,6 +18,8 @@ type Function struct {
 	description string
 }
 
+var _ HasScope = (*Function)(nil)
+
 func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),

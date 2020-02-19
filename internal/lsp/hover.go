@@ -109,7 +109,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			name = hasName.GetName()
 		}
 		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope().GetFQN()
+			classScope = hasScope.GetScope()
 		}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			methods := []*analysis.Method{}
@@ -129,7 +129,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			name = hasName.GetName()
 		}
 		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope().GetFQN()
+			classScope = hasScope.GetScope()
 		}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			properties := []*analysis.Property{}

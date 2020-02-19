@@ -51,7 +51,7 @@ func (s *ScopedPropertyAccess) Resolve(ctx ResolveContext) {
 		name = hasName.GetName()
 	}
 	if hasScope, ok := s.Scope.(HasScope); ok {
-		classScope = hasScope.GetScope().GetFQN()
+		classScope = hasScope.GetScope()
 	}
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {

@@ -242,7 +242,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		name = hasName.GetName()
 	}
 	if hasScope, ok := scope.(analysis.HasScope); ok {
-		classScope = hasScope.GetScope().GetFQN()
+		classScope = hasScope.GetScope()
 	}
 	for _, scopeType := range scopeTypes.Resolve() {
 		scopeTypeFQN := scopeType.GetFQN()

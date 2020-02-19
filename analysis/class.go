@@ -20,6 +20,8 @@ type Class struct {
 	Use        []TypeString
 }
 
+var _ HasScope = (*Class)(nil)
+
 func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()

@@ -22,7 +22,7 @@ func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSy
 	for _, child := range document.Children {
 		switch v := child.(type) {
 		case analysis.HasScope:
-			key := v.GetScope().GetFQN()
+			key := v.GetScope()
 			scopedSymbols[key] = append(scopedSymbols[key], child)
 		}
 	}

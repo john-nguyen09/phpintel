@@ -446,7 +446,7 @@ func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) 
 		method := symbol.(*Method)
 		if IsNameParent(name) {
 			// parent:: excludes methods from current class
-			if method.GetScope().GetFQN() == classScope {
+			if method.GetScope() == classScope {
 				return false
 			}
 			// or from parents but private
@@ -457,7 +457,7 @@ func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) 
 		}
 		// static:: and self:: exclude private methods that are not from current class
 		if IsNameRelative(name) {
-			if method.GetScope().GetFQN() != classScope &&
+			if method.GetScope() != classScope &&
 				method.VisibilityModifier == Private {
 				return false
 			}
@@ -479,7 +479,7 @@ func MethodsScopeAware(opt SearchOptions, document *Document, scope HasTypes) Se
 		method := symbol.(*Method)
 		// $this allows excludes private methods from parents
 		if name == "$this" {
-			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+			if method.GetScope() != classScope && method.VisibilityModifier == Private {
 				return false
 			}
 			return true
@@ -493,7 +493,7 @@ func MethodsScopeAware(opt SearchOptions, document *Document, scope HasTypes) Se
 			}
 		}
 		if isSameClass {
-			if method.GetScope().GetFQN() != classScope && method.VisibilityModifier == Private {
+			if method.GetScope() != classScope && method.VisibilityModifier == Private {
 				return false
 			}
 			return true
@@ -511,13 +511,13 @@ func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) Se
 			return false
 		}
 		if IsNameParent(name) {
-			if prop.GetScope().GetFQN() == classScope || prop.VisibilityModifier == Private {
+			if prop.GetScope() == classScope || prop.VisibilityModifier == Private {
 				return false
 			}
 			return true
 		}
 		if IsNameRelative(name) {
-			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+			if prop.GetScope() != classScope && prop.VisibilityModifier == Private {
 				return false
 			}
 			return true
@@ -535,7 +535,7 @@ func PropsScopeAware(opt SearchOptions, document *Document, scope HasTypes) Sear
 	return opt.WithPredicate(func(symbol Symbol) bool {
 		prop := symbol.(*Property)
 		if name == "$this" {
-			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+			if prop.GetScope() != classScope && prop.VisibilityModifier == Private {
 				return false
 			}
 			return true
@@ -548,7 +548,7 @@ func PropsScopeAware(opt SearchOptions, document *Document, scope HasTypes) Sear
 			}
 		}
 		if isSameClass {
-			if prop.GetScope().GetFQN() != classScope && prop.VisibilityModifier == Private {
+			if prop.GetScope() != classScope && prop.VisibilityModifier == Private {
 				return false
 			}
 			return true

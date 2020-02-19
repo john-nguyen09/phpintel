@@ -20,6 +20,8 @@ type Property struct {
 	Types              TypeComposite
 }
 
+var _ HasScope = (*Property)(nil)
+
 func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
 	property := &Property{
 		location:    location,
@@ -123,8 +125,8 @@ func (s *Property) GetIndexCollection() string {
 	return propertyCompletionIndex
 }
 
-func (s *Property) GetScope() TypeString {
-	return s.Scope
+func (s *Property) GetScope() string {
+	return s.Scope.GetFQN()
 }
 
 func (s *Property) Serialise(e *storage.Encoder) {

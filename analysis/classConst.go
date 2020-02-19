@@ -17,6 +17,8 @@ type ClassConst struct {
 	Scope TypeString
 }
 
+var _ HasScope = (*ClassConst)(nil)
+
 func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
@@ -91,8 +93,8 @@ func (s *ClassConst) GetIndexCollection() string {
 	return classConstCompletionIndex
 }
 
-func (s *ClassConst) GetScope() TypeString {
-	return s.Scope
+func (s *ClassConst) GetScope() string {
+	return s.Scope.GetFQN()
 }
 
 func (s *ClassConst) Serialise(e *storage.Encoder) {

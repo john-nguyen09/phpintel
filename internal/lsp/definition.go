@@ -29,7 +29,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		for _, typeString := range v.Type.Resolve() {
 			for _, theClass := range store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString)) {
 				constructor := theClass.GetConstructor(store)
-				if constructor == nil || constructor.GetScope().GetFQN() != theClass.Name.GetFQN() {
+				if constructor == nil || constructor.GetScope() != theClass.Name.GetFQN() {
 					locations = append(locations, theClass.GetLocation())
 				} else {
 					locations = append(locations, constructor.GetLocation())
@@ -80,7 +80,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			name = hasName.GetName()
 		}
 		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope().GetFQN()
+			classScope = hasScope.GetScope()
 		}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			methods := []*analysis.Method{}
@@ -99,7 +99,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			name = hasName.GetName()
 		}
 		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope().GetFQN()
+			classScope = hasScope.GetScope()
 		}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
 			properties := []*analysis.Property{}

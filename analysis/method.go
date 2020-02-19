@@ -22,6 +22,8 @@ type Method struct {
 	ClassModifier      ClassModifierValue
 }
 
+var _ HasScope = (*Method)(nil)
+
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
 		IsStatic:    methodTag.IsStatic,
@@ -196,8 +198,8 @@ func (s *Method) GetParams() []*Parameter {
 	return s.Params
 }
 
-func (s *Method) GetScope() TypeString {
-	return s.Scope
+func (s *Method) GetScope() string {
+	return s.Scope.GetFQN()
 }
 
 func (s *Method) Serialise(e *storage.Encoder) {
