@@ -76,7 +76,7 @@ class TestClass {}`)
 		store.saveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
 
-		defDoc2 := NewDocument("test2", `<?php class TestClass {}`)
+		defDoc2 := NewDocument("test2", `<?php class TestClassABC {}`)
 		defDoc2.Load()
 		store.saveDocOnStore(defDoc2)
 		store.SyncDocument(defDoc2)
@@ -98,7 +98,7 @@ class TestClass1 {
 	const CLASS_CONST = 1;
 }
 class TestClass2 {
-	const CLASS_CONST = 2;
+	const CLASS_CONST_ABC = 2;
 }`)
 		defDoc1.Load()
 		store.saveDocOnStore(defDoc1)
@@ -111,5 +111,24 @@ class TestClass2 {
 			names = append(names, classConst.Name)
 		}
 		assert.Equal(t, []string{"CLASS_CONST"}, names)
+	})
+	t.Run("Method", func(t *testing.T) {
+		store, err := setupStore("Method", "CompletionWithScope-Method")
+		defer store.Close()
+		assert.NoError(t, err)
+		defDoc1 := NewDocument("test1", `<?php
+class TestClass1 { public function methodABC(); }
+class TestClass2 { public function method(); }`)
+		defDoc1.Load()
+		store.saveDocOnStore(defDoc1)
+		store.SyncDocument(defDoc1)
+
+		methods, _ := store.SearchMethods("\\TestClass2", "me", NewSearchOptions())
+		assert.Equal(t, 1, len(methods))
+		names := []string{}
+		for _, method := range methods {
+			names = append(names, method.Name)
+		}
+		assert.Equal(t, []string{"method"}, names)
 	})
 }
