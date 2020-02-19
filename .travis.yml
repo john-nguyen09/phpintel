@@ -13,7 +13,7 @@ notifications:
   email: false
 
 before_install:
-  - sudo apt-get -y install upx-ucl mingw-w64 libleveldb-dev && sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+  - sudo apt-get -y install libleveldb-dev
   # - ./scripts/build_leveldb.sh
 
 script:
