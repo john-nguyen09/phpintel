@@ -183,10 +183,6 @@ func (s *Method) GetIndexCollection() string {
 	return methodCompletionIndex
 }
 
-func (s *Method) GetPrefixes() []string {
-	return []string{s.GetScope().GetFQN(), ""}
-}
-
 func (s *Method) GetNameLabel() string {
 	label := s.VisibilityModifier.ToString()
 	if s.IsStatic {

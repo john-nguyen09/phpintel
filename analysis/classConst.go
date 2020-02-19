@@ -91,10 +91,6 @@ func (s *ClassConst) GetIndexCollection() string {
 	return classConstCompletionIndex
 }
 
-func (s *ClassConst) GetPrefixes() []string {
-	return []string{s.GetScope().GetFQN()}
-}
-
 func (s *ClassConst) GetScope() TypeString {
 	return s.Scope
 }

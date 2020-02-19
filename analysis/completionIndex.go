@@ -17,7 +17,6 @@ type onDataResult struct {
 
 type searchQuery struct {
 	collection string
-	prefixes   []string
 	keyword    string
 	onData     func(CompletionValue) onDataResult
 }
@@ -107,14 +106,7 @@ func getCompletionKeys(uri string, indexable NameIndexable, symbolKey string) []
 	keys := []string{}
 	for _, token := range tokens {
 		token = strings.ToLower(token)
-		for _, prefix := range indexable.GetPrefixes() {
-			tokenWithPrefix := token
-			if prefix != "" {
-				tokenWithPrefix = strings.ToLower(prefix) + scopeSep + token
-			}
-
-			keys = append(keys, getCompletionKey(tokenWithPrefix, symbolKey))
-		}
+		keys = append(keys, getCompletionKey(token, symbolKey))
 	}
 	return keys
 }
@@ -126,25 +118,19 @@ func getCompletionKey(token string, symbolKey string) string {
 func searchCompletions(db *storage.Storage, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	isComplete := true
-	for _, prefix := range query.prefixes {
-		name := strings.ToLower(query.keyword)
-		prefix = strings.ToLower(prefix)
-		if prefix != "" {
-			name = prefix + scopeSep + name
+	name := strings.ToLower(query.keyword)
+	entry := newEntry(query.collection, name)
+	db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
+		if _, ok := uniqueCompletionValues[completionValue]; ok {
+			return
 		}
-		entry := newEntry(query.collection, name)
-		db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-			completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
-			if _, ok := uniqueCompletionValues[completionValue]; ok {
-				return
-			}
-			result := query.onData(completionValue)
-			uniqueCompletionValues[completionValue] = true
-			if result.shouldStop {
-				isComplete = false
-				it.Stop()
-			}
-		})
-	}
+		result := query.onData(completionValue)
+		uniqueCompletionValues[completionValue] = true
+		if result.shouldStop {
+			isComplete = false
+			it.Stop()
+		}
+	})
 	return SearchResult{isComplete}
 }

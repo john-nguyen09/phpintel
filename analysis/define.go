@@ -80,10 +80,6 @@ func (s *Define) GetIndexCollection() string {
 	return defineCompletionIndex
 }
 
-func (s *Define) GetPrefixes() []string {
-	return []string{""}
-}
-
 func (s *Define) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)

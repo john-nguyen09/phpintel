@@ -127,14 +127,14 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 		}
 		return firstPart, nil
 	}
-	if currentScope != "\\" && strings.Index(name.GetFQN(), currentScope) == 0 {
-		return name.GetFQN()[len(currentScope):], nil
+	if currentScope != "" && strings.Index(name.GetFQN(), currentScope) == 0 {
+		return name.GetFQN()[len(currentScope)+1:], nil
 	}
 	if currentScope == name.GetNamespace() {
 		return name.GetOriginal(), nil
 	}
 	wordScope, _ := GetScopeAndNameFromString(word)
-	scope, _ := GetScopeAndNameFromString(name.GetFQN())
+	scope := name.GetNamespace()
 	if wordScope == scope {
 		return name.GetOriginal(), insertUse.GetUseEdit(NewTypeString(scope), nil, "")
 	}
@@ -150,7 +150,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
 	switch symbol.(type) {
 	case *Function, *Const, *Define:
-		if scope == "" {
+		if scope == "\\" {
 			return name.GetOriginal(), nil
 		}
 	}

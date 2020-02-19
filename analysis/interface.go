@@ -111,13 +111,8 @@ func (s *Interface) GetIndexCollection() string {
 	return interfaceCompletionIndex
 }
 
-func (s *Interface) GetPrefixes() []string {
-	scope, _ := GetScopeAndNameFromString(s.Name.GetFQN())
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
-	return prefixes
+func (s *Interface) GetScope() string {
+	return s.Name.GetNamespace()
 }
 
 func (s *Interface) Serialise(e *storage.Encoder) {

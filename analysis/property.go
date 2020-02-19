@@ -123,10 +123,6 @@ func (s *Property) GetIndexCollection() string {
 	return propertyCompletionIndex
 }
 
-func (s *Property) GetPrefixes() []string {
-	return []string{s.GetScope().GetFQN()}
-}
-
 func (s *Property) GetScope() TypeString {
 	return s.Scope
 }

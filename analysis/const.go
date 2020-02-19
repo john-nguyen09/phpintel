@@ -96,10 +96,6 @@ func (s *Const) GetIndexCollection() string {
 	return constCompletionIndex
 }
 
-func (s *Const) GetPrefixes() []string {
-	return []string{""}
-}
-
 func (s *Const) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)

@@ -3,6 +3,7 @@ package analysis
 import (
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -66,12 +67,14 @@ namespace TestNamespace2;`)
 		useTestCase{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
 	}
 
-	for _, testCase := range cases {
+	for i, testCase := range cases {
 		label, edit := testCase.doc.GetImportTable().ResolveToQualified(testCase.doc, testCase.s, testCase.name, testCase.word)
 		insertText := ""
 		if edit != nil {
 			insertText = strings.TrimSpace(edit.NewText)
 		}
-		assert.Equal(t, useResult{label, insertText}, testCase.result)
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			assert.Equal(t, testCase.result, useResult{label, insertText})
+		})
 	}
 }

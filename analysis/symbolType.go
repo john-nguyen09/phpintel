@@ -107,7 +107,7 @@ func (t TypeString) ToString() string {
 
 func (t TypeString) GetNamespace() string {
 	lastBackslashIndex := strings.LastIndex(t.GetFQN(), "\\")
-	return t.GetFQN()[:lastBackslashIndex+1]
+	return t.GetFQN()[:lastBackslashIndex]
 }
 
 func (t *TypeString) SetFQN(fqn string) {
@@ -279,21 +279,21 @@ func (t TypeComposite) ToString() string {
 	return strings.Join(contents, "|")
 }
 
-func GetNameParts(name string) []string {
-	parts := strings.Split(name, "\\")
-	if len(parts) == 1 {
-		return parts
-	}
-	if parts[0] == "" {
-		return parts[1:]
-	}
-	return parts
-}
-
 func GetScopeAndNameFromString(name string) (string, string) {
-	parts := GetNameParts(name)
+	if name == "" {
+		return "", ""
+	}
+	parts := strings.Split(name, "\\")
+	// Names that are not starting with \ is no scope
 	if len(parts) == 1 {
 		return "", parts[0]
+	}
+	if parts[0] == "" {
+		// \ABC
+		if len(parts) == 2 {
+			return "\\", strings.Join(parts, "\\")
+		}
+		parts = parts[1:]
 	}
 	return "\\" + strings.Join(parts[:len(parts)-1], "\\"), parts[len(parts)-1]
 }

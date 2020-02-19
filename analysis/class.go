@@ -212,13 +212,8 @@ func (s *Class) GetIndexCollection() string {
 	return classCompletionIndex
 }
 
-func (s *Class) GetPrefixes() []string {
-	scope, _ := GetScopeAndNameFromString(s.Name.GetFQN())
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
-	return prefixes
+func (s *Class) GetScope() string {
+	return s.Name.GetNamespace()
 }
 
 func (s *Class) Serialise(e *storage.Encoder) {

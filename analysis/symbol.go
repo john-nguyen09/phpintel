@@ -52,7 +52,6 @@ type Symbol interface {
 type NameIndexable interface {
 	GetIndexableName() string
 	GetIndexCollection() string
-	GetPrefixes() []string
 }
 
 type HasParams interface {

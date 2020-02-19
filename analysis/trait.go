@@ -81,15 +81,6 @@ func (s *Trait) GetIndexCollection() string {
 	return traitCompletionIndex
 }
 
-func (s *Trait) GetPrefixes() []string {
-	scope, _ := GetScopeAndNameFromString(s.Name.GetFQN())
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
-	return prefixes
-}
-
 func (s *Trait) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)
