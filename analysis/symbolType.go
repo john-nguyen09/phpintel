@@ -107,6 +107,9 @@ func (t TypeString) ToString() string {
 
 func (t TypeString) GetNamespace() string {
 	lastBackslashIndex := strings.LastIndex(t.GetFQN(), "\\")
+	if lastBackslashIndex == -1 {
+		return ""
+	}
 	return t.GetFQN()[:lastBackslashIndex]
 }
 

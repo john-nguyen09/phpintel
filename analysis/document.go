@@ -1,7 +1,7 @@
 package analysis
 
 import (
-	"crypto/md5"
+	"crypto/sha1"
 	"encoding/json"
 	"regexp"
 	"runtime/debug"
@@ -636,10 +636,9 @@ func (s *Document) getGlobalVariable(name string) *GlobalVariable {
 	return nil
 }
 
-func (s *Document) GetMD5Hash() []byte {
-	hasher := md5.New()
-	hasher.Write(util.RunesToUTF8(s.GetText()))
-	return hasher.Sum(nil)
+func (s *Document) GetHash() []byte {
+	hash := sha1.Sum(util.RunesToUTF8(s.GetText()))
+	return hash[:]
 }
 
 func (s *Document) GetImportTable() ImportTable {

@@ -5,10 +5,12 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/Masterminds/semver"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	putil "github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
 )
@@ -188,7 +190,7 @@ func (s *Store) LoadStubs() {
 	for _, stub := range stubs {
 		stub.Walk(func(path string, data []byte) error {
 			document := NewDocument(stub.GetUri(path), string(data))
-			currentMD5 := document.GetMD5Hash()
+			currentMD5 := document.GetHash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(entry.getKeyBytes())
 			if err != nil || bytes.Compare(currentMD5, savedMD5) != 0 {
@@ -288,7 +290,7 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 		s.releaseDocIfNotOpen(document)
 	}()
 
-	currentMD5 := document.GetMD5Hash()
+	currentMD5 := document.GetHash()
 	savedMD5, ok := s.syncedDocumentURIs.Get(uri)
 	if ok {
 		s.syncedDocumentURIs.Remove(uri)
@@ -318,7 +320,7 @@ func (s *Store) SyncDocument(document *Document) {
 		ciDeletor.Delete(b)
 		syDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
-		b.Put(entry.getKeyBytes(), document.GetMD5Hash())
+		b.Put(entry.getKeyBytes(), document.GetHash())
 		return nil
 	})
 	if err != nil {
@@ -337,6 +339,7 @@ func (s *Store) saveDocOnStore(document *Document) {
 }
 
 func (s *Store) PrepareForIndexing() {
+	defer util.TimeTrack(time.Now(), "PrepareForIndexing")
 	syncedDocumentURIs := s.getSyncedDocumentURIs()
 	for key, value := range syncedDocumentURIs {
 		s.syncedDocumentURIs.Set(key, value)
