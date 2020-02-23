@@ -191,7 +191,7 @@ func calculateLineOffsets(text []byte, offset int) ([]int, string) {
 		}
 		if r == '\r' {
 			if len(text) > 0 {
-				nextR, nextSize := utf8.DecodeRune(text)
+				nextR, nextSize := utf8.DecodeRune(text[size:])
 				if nextR == '\n' {
 					text = text[size+nextSize:]
 					n += size + nextSize
@@ -199,6 +199,7 @@ func calculateLineOffsets(text []byte, offset int) ([]int, string) {
 						eol = "\r\n"
 						stopDetectingEol = true
 					}
+					lineOffsets = append(lineOffsets, n+offset)
 					continue
 				}
 			} else {

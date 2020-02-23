@@ -41,35 +41,19 @@ func processNamespaceUseDeclaration(document *Document, node *sitter.Node) Symbo
 
 func processNamespaceUseClause(document *Document, useType UseType, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
-	child := traverser.Peek()
+	child := traverser.Advance()
+	name := ""
+	alias := ""
 	for child != nil {
-		var err error = nil
-		traverser, err = traverser.Descend()
-		if err != nil {
-			panic(err) // Should never happen
+		switch child.Type() {
+		case "qualified_name":
+			name = document.GetNodeText(child)
+		case "namespace_aliasing_clause":
+			alias = getAliasFromNode(document, child)
 		}
-
-		name := ""
-		alias := ""
 		child = traverser.Advance()
-		for child != nil {
-			switch child.Type() {
-			case "qualified_name":
-				name = document.GetPhraseText(child)
-			case "namespace_aliasing_clause":
-				alias = getAliasFromNode(document, child)
-			}
-			child = traverser.Advance()
-		}
-		addUseToImportTable(document, useType, alias, name)
-
-		traverser, err = traverser.Ascend()
-		if err != nil {
-			panic(err) // Should never happen
-		}
-		traverser.Advance()
-		child = traverser.Peek()
 	}
+	addUseToImportTable(document, useType, alias, name)
 }
 
 func processNamespaceUseGroupClauseList(document *Document, prefix string, useType UseType, node *sitter.Node) {

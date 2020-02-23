@@ -51,12 +51,13 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	phpDoc := document.getValidPhpDoc(s.location)
 	document.pushVariableTable(node)
 
-	s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(node)
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
+		case "visibility_modifier":
+			s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(child)
 		case "name":
 			s.Name = document.GetNodeText(child)
 		case "formal_parameters":

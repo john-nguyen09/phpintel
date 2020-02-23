@@ -40,9 +40,10 @@ func newPropertyDeclaration(document *Document, node *sitter.Node) Symbol {
 	visibility := Public
 	isStatic := false
 	child := traverser.Advance()
-	visibility, isStatic, _ = getMemberModifier(node)
 	for child != nil {
 		switch child.Type() {
+		case "visibility_modifier":
+			visibility, isStatic, _ = getMemberModifier(child)
 		case "property_element":
 			property := newProperty(document, child, visibility, isStatic)
 			document.addSymbol(property)

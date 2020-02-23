@@ -83,10 +83,8 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 					document.addSymbol(method)
 				}
 			}
-		case "abstract":
-			class.Modifier = Abstract
-		case "final":
-			class.Modifier = Final
+		case "class_modifier":
+			class.analyseClassModifier(document, child)
 		case "class_base_clause":
 			class.extends(document, child)
 		case "class_interface_clause":
@@ -99,6 +97,20 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 	}
 
 	return nil
+}
+
+func (s *Class) analyseClassModifier(document *Document, n *sitter.Node) {
+	traverser := util.NewTraverser(n)
+	child := traverser.Advance()
+	for child != nil {
+		switch child.Type() {
+		case "abstract":
+			s.Modifier = Abstract
+		case "final":
+			s.Modifier = Final
+		}
+		child = traverser.Advance()
+	}
 }
 
 func (s *Class) extends(document *Document, p *sitter.Node) {

@@ -50,20 +50,6 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	cupaloy.SnapshotT(t, items)
 }
 
-func TestDesignatorAndVariable(t *testing.T) {
-	data, err := ioutil.ReadFile("../cases/completion/designatorAndVariable.php")
-	if err != nil {
-		panic(err)
-	}
-	document := NewDocument("test1", data)
-	document.Load()
-	symbol := document.HasTypesAtPos(protocol.Position{
-		Line:      9,
-		Character: 20,
-	})
-	cupaloy.SnapshotT(t, symbol)
-}
-
 func TestCompletionWithScope(t *testing.T) {
 	t.Run("Class", func(t *testing.T) {
 		store, err := setupStore("Class", "CompletionWithScope-Class")

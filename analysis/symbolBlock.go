@@ -44,6 +44,7 @@ func init() {
 		"global_declaration":                     newGlobalDeclaration,
 		"namespace_use_declaration":              processNamespaceUseDeclaration,
 		"anonymous_function_creation_expression": newAnonymousFunction,
+		"comment":                                newPhpDocFromNode,
 	}
 }
 

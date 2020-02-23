@@ -45,11 +45,6 @@ func newParameter(document *Document, node *sitter.Node) *Parameter {
 				param.Value += document.GetNodeText(child)
 			}
 		}
-
-		if hasEqual {
-			param.hasValue = true
-			param.Value += document.GetNodeText(child)
-		}
 		child = traverser.Advance()
 	}
 

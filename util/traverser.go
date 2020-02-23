@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"strings"
 
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -102,4 +103,12 @@ func (s *NodeStack) Parent() *sitter.Node {
 	var p *sitter.Node
 	p, *s = (*s)[len((*s))-1], (*s)[:len((*s))-1]
 	return p
+}
+
+func (s NodeStack) String() string {
+	strs := []string{}
+	for p := s.Parent(); p != nil; p = s.Parent() {
+		strs = append(strs, p.Type())
+	}
+	return strings.Join(strs, ", ")
 }
