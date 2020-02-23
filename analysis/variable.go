@@ -5,7 +5,6 @@ import (
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
@@ -24,20 +23,13 @@ func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, boo
 func newVariable(document *Document, node *sitter.Node) (*Variable, bool) {
 	variable := &Variable{
 		Expression: Expression{
+			Name:     document.GetNodeText(node),
 			Location: document.GetNodeLocation(node),
 		},
 	}
 	phpDoc := document.getValidPhpDoc(variable.Location)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
-	}
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if child.Type() == "variable_name" {
-			variable.Name = document.GetNodeText(child)
-		}
-		child = traverser.Advance()
 	}
 	if variable.Name == "$this" {
 		variable.setExpression(newRelativeScope(document, variable.Location))

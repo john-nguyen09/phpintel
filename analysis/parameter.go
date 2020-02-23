@@ -27,7 +27,7 @@ func newParameter(document *Document, node *sitter.Node) *Parameter {
 	hasEqual := false
 	for child != nil {
 		switch child.Type() {
-		case "type":
+		case "type_name":
 			{
 				typeDeclaration := newTypeDeclaration(document, child)
 				for _, typeString := range typeDeclaration.Type.typeStrings {
@@ -35,7 +35,7 @@ func newParameter(document *Document, node *sitter.Node) *Parameter {
 				}
 				document.addSymbol(typeDeclaration)
 			}
-		case "name":
+		case "variable_name":
 			param.Name = document.GetNodeText(child)
 		case "=":
 			hasEqual = true

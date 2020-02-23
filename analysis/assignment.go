@@ -9,7 +9,7 @@ import (
 func newAssignment(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	if firstChild.Type() == "variable" {
+	if firstChild.Type() == "variable_name" {
 		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
 	}
 	scanForChildren(document, node)

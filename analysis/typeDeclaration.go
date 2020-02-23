@@ -21,7 +21,7 @@ func newTypeDeclaration(document *Document, node *sitter.Node) *TypeDeclaration 
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
-		case "qualified_name":
+		case "name":
 			typeString := transformQualifiedName(child, document)
 			typeDeclaration.Name = typeString.GetOriginal()
 			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))

@@ -22,13 +22,13 @@ func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
-		case "parameters":
+		case "formal_parameters":
 			anonFunc.analyseParameterDeclarationList(document, child)
 			for _, param := range anonFunc.Params {
 				variableTable.add(param.ToVariable())
 			}
 			document.addSymbol(anonFunc)
-		case "body":
+		case "compound_statement":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
