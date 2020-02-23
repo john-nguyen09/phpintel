@@ -16,11 +16,30 @@ type Const struct {
 }
 
 func newConstDeclaration(document *Document, node *sitter.Node) Symbol {
+	class := document.getLastClass()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if child.Type() == "const_element_list" {
-			scanForChildren(document, child)
+		if child.Type() == "const_element" {
+			c := newConst(document, child).(*Const)
+			if class != nil {
+				classConst := &ClassConst{
+					location: c.GetLocation(),
+					Name:     c.Name.GetOriginal(),
+					Value:    c.Value,
+				}
+				switch v := class.(type) {
+				case *Class:
+					classConst.Scope = v.Name
+				case *Interface:
+					classConst.Scope = v.Name
+				case *Trait:
+					classConst.Scope = v.Name
+				}
+				document.addSymbol(classConst)
+			} else {
+				document.addSymbol(c)
+			}
 		}
 		child = traverser.Advance()
 	}
