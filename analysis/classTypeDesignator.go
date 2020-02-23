@@ -22,6 +22,7 @@ func newClassTypeDesignator(document *Document, node *sitter.Node) (HasTypes, bo
 		case "qualified_name":
 			typeString := transformQualifiedName(child, document)
 			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			s.Location = document.GetNodeLocation(child)
 			s.Name = typeString.GetOriginal()
 			s.Type.add(typeString)
 		case "relative_scope":
