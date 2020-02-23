@@ -48,32 +48,22 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
-	phpDoc := document.getValidPhpDoc(s.location)
-	document.pushVariableTable(node)
 
 	s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(node)
-	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
-		case "name":
-			s.Name = document.GetNodeText(child)
-		case "parameters":
-			s.analyseParameterDeclarationList(document, child)
-			if phpDoc != nil {
-				s.applyPhpDoc(document, *phpDoc)
-			}
+		case "function_definition":
+			fn := newFunction(document, child).(*Function)
+			s.Name = fn.Name.GetOriginal()
+			s.Params = fn.Params
+			s.returnTypes.merge(fn.returnTypes)
+			s.description = fn.description
 			document.addSymbol(s)
-			for _, param := range s.Params {
-				variableTable.add(param.ToVariable())
-			}
-		case "body":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
-	document.popVariableTable()
 }
 
 func newMethod(document *Document, node *sitter.Node) Symbol {

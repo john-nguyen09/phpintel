@@ -35,7 +35,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 		switch child.Type() {
 		case "name":
 			function.Name = NewTypeString(document.GetNodeText(child))
-		case "parameters":
+		case "formal_parameters":
 			function.analyseParameterDeclarationList(document, child)
 			if phpDoc != nil {
 				function.applyPhpDoc(document, *phpDoc)
@@ -43,7 +43,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 			for _, param := range function.Params {
 				variableTable.add(param.ToVariable())
 			}
-		case "body":
+		case "compound_statement":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()

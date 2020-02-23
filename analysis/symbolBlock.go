@@ -31,13 +31,10 @@ func init() {
 		"const_element":                          newConst,
 		"arguments":                              newArgumentList,
 		"trait_declaration":                      newTrait,
-		"method_declaration":                     newMethod,
 		"function_call_expression":               tryToNewDefine,
 		"assignment_expression":                  newAssignment,
-		"property_declaration":                   newPropertyDeclaration,
 		"global_declaration":                     newGlobalDeclaration,
 		"namespace_use_declaration":              processNamespaceUseDeclaration,
-		"use_declaration":                        processTraitUseClause,
 		"anonymous_function_creation_expression": newAnonymousFunction,
 	}
 }
