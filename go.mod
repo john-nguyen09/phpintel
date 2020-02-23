@@ -19,4 +19,4 @@ require (
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 )
 
-replace github.com/kezhuw/leveldb => github.com/john-nguyen09/leveldb v0.0.0-20200127075530-c16797ace20e
+replace github.com/smacker/go-tree-sitter => github.com/john-nguyen09/go-tree-sitter v0.0.0-20200223043131-e9dd2bb3a55b

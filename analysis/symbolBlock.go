@@ -7,9 +7,11 @@ import (
 type symbolConstructorForPhrase func(*Document, *sitter.Node) Symbol
 
 var /* const */ scanPhraseTypes = map[string]bool{
-	"expression_statement":   true,
-	"while_statement":        true,
-	"scoped_call_expression": true,
+	"expression_statement":      true,
+	"while_statement":           true,
+	"scoped_call_expression":    true,
+	"array_creation_expression": true,
+	"array_element_initializer": true,
 }
 
 var /* const */ skipAddingSymbol map[string]bool = map[string]bool{

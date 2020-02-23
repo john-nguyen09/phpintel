@@ -41,7 +41,8 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 	child := traverser.Advance()
 	start := argumentList.location.Range.Start
 	for child != nil {
-		if t := child.Type(); t == " " || t == "," {
+		t := child.Type()
+		if t == " " || t == "," {
 			if t == "," {
 				end := util.PointToPosition(child.StartPoint())
 				argumentList.ranges = append(argumentList.ranges, protocol.Range{
@@ -53,7 +54,9 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 			child = traverser.Advance()
 			continue
 		}
-		argumentList.arguments = append(argumentList.arguments, child)
+		if t != "(" && t != ")" {
+			argumentList.arguments = append(argumentList.arguments, child)
+		}
 		child = traverser.Advance()
 	}
 	argumentList.ranges = append(argumentList.ranges, protocol.Range{
