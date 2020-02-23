@@ -27,6 +27,11 @@ func init() {
 	phraseToSymbolConstructor = map[string]symbolConstructorForPhrase{
 		"interface_declaration":                  newInterface,
 		"class_declaration":                      newClass,
+		"property_declaration":                   newPropertyDeclaration,
+		"method_declaration":                     newMethod,
+		"constructor_declaration":                newMethod,
+		"destructor_declaration":                 newMethod,
+		"trait_use_clause":                       processTraitUseClause,
 		"function_definition":                    newFunction,
 		"const_declaration":                      newConstDeclaration,
 		"const_element":                          newConst,

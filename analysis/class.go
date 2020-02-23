@@ -92,15 +92,8 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 		case "class_interface_clause":
 			class.implements(document, child)
 
-		case "const_declaration":
-			classConst := newClassConst(document, child)
-			document.addSymbol(classConst)
-		case "property_declaration":
-			newPropertyDeclaration(document, child)
-		case "method_declaration":
-			newMethod(document, child)
-		case "use_declaration":
-			processTraitUseClause(document, child)
+		case "declaration_list":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
