@@ -416,6 +416,7 @@ func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	traverser.Traverse(func(node *sitter.Node, spine []*sitter.Node) bool {
 		if node.ChildCount() == 0 && offset > int(node.StartByte()) && offset <= int(node.EndByte()) {
 			found = append(spine[:0:0], spine...)
+			found = append(found, node)
 			return false
 		}
 		return true

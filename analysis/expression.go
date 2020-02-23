@@ -73,7 +73,7 @@ var /* const */ skipPhraseTypes = map[string]bool{}
 func init() {
 	nodeTypeToExprConstructor = map[string]exprConstructor{
 		"function_call_expression":          newFunctionCall,
-		"constant_access_expression":        newConstantAccess,
+		"qualified_name":                    newConstantAccess,
 		"scoped_property_access_expression": newScopedPropertyAccess,
 		"scoped_call_expression":            newScopedMethodAccess,
 		"class_constant_access_expression":  newScopedConstantAccess,

@@ -57,7 +57,11 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	for child != nil {
 		switch child.Type() {
 		case "visibility_modifier":
-			s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(child)
+			s.VisibilityModifier = getMemberModifier(child)
+		case "static_modifier":
+			s.IsStatic = true
+		case "class_modifier":
+			s.ClassModifier = getClassModifier(child)
 		case "name":
 			s.Name = document.GetNodeText(child)
 		case "formal_parameters":

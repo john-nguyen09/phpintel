@@ -7,11 +7,38 @@ import (
 type symbolConstructorForPhrase func(*Document, *sitter.Node) Symbol
 
 var /* const */ scanPhraseTypes = map[string]bool{
+	"ERROR":                     true,
 	"expression_statement":      true,
+	"compound_statement":        true,
 	"while_statement":           true,
+	"case_statement":            true,
+	"default_statement":         true,
 	"scoped_call_expression":    true,
 	"array_creation_expression": true,
 	"array_element_initializer": true,
+	"if_statement":              true,
+	"else_if_clause":            true,
+	"else_if_clause_2":          true,
+	"else_clause":               true,
+	"else_clause_2":             true,
+	"include_expression":        true,
+	"include_once_expression":   true,
+	"require_expression":        true,
+	"require_once_expression":   true,
+	"conditional_expression":    true,
+	"subscript_expression":      true,
+	"cast_expression":           true,
+	"unary_op_expression":       true,
+	"binary_expression":         true,
+	"parenthesized_expression":  true,
+	"echo_statement":            true,
+	"unset_statement":           true,
+	"print_intrinsic":           true,
+	"try_statement":             true,
+	"catch_clause":              true,
+	"finally_clause":            true,
+	"return_statement":          true,
+	"throw_statement":           true,
 }
 
 var /* const */ skipAddingSymbol map[string]bool = map[string]bool{

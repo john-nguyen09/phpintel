@@ -16,12 +16,19 @@ type FunctionCall struct {
 }
 
 func tryToNewDefine(document *Document, node *sitter.Node) Symbol {
-	if node.ChildCount() >= 1 {
-		nameLowerCase := strings.ToLower(document.GetNodeText(node.Child(0)))
-		if nameLowerCase == "\\define" || nameLowerCase == "define" {
-			return newDefine(document, node)
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		switch child.Type() {
+		case "qualified_name":
+			name := strings.ToLower(document.GetNodeText(child))
+			if name == "\\define" || name == "define" {
+				return newDefine(document, node)
+			}
+		case "arguments":
+			scanForChildren(document, child)
 		}
-		scanForChildren(document, node)
+		child = traverser.Advance()
 	}
 	return nil
 }

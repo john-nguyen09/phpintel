@@ -22,20 +22,12 @@ type Class struct {
 var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
 
-func getMemberModifier(node *sitter.Node) (VisibilityModifierValue, bool, ClassModifierValue) {
+func getMemberModifier(node *sitter.Node) VisibilityModifierValue {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	visibilityModifier := Public
-	classModifier := NoClassModifier
-	isStatic := false
 	for child != nil {
 		switch child.Type() {
-		case "abstract":
-			classModifier = Abstract
-		case "final":
-			classModifier = Final
-		case "static":
-			isStatic = true
 		case "public":
 			visibilityModifier = Public
 		case "protected":
@@ -46,7 +38,23 @@ func getMemberModifier(node *sitter.Node) (VisibilityModifierValue, bool, ClassM
 		child = traverser.Advance()
 	}
 
-	return visibilityModifier, isStatic, classModifier
+	return visibilityModifier
+}
+
+func getClassModifier(node *sitter.Node) ClassModifierValue {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	c := NoClassModifier
+	for child != nil {
+		switch child.Type() {
+		case "final":
+			c = Final
+		case "abstract":
+			c = Abstract
+		}
+		child = traverser.Advance()
+	}
+	return c
 }
 
 func newClass(document *Document, node *sitter.Node) Symbol {
@@ -100,17 +108,7 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 }
 
 func (s *Class) analyseClassModifier(document *Document, n *sitter.Node) {
-	traverser := util.NewTraverser(n)
-	child := traverser.Advance()
-	for child != nil {
-		switch child.Type() {
-		case "abstract":
-			s.Modifier = Abstract
-		case "final":
-			s.Modifier = Final
-		}
-		child = traverser.Advance()
-	}
+	s.Modifier = getClassModifier(n)
 }
 
 func (s *Class) extends(document *Document, p *sitter.Node) {
