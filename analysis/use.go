@@ -1,9 +1,8 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type UseType int
@@ -14,39 +13,71 @@ const (
 	UseConst            = iota
 )
 
-func processNamespaceUseDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func processNamespaceUseDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	useType := UseClass
 	prefix := ""
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.NamespaceUseClauseList:
-				processNamespaceUseClauseList(document, useType, p)
-			case phrase.NamespaceUseGroupClauseList:
-				processNamespaceUseGroupClauseList(document, prefix, useType, p)
-			case phrase.NamespaceName:
-				prefix = document.GetPhraseText(p)
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			switch t.Type {
-			case lexer.Function:
+		switch child.Type() {
+		case "namespace_function_or_const":
+			switch document.GetNodeText(child) {
+			case "function":
 				useType = UseFunction
-			case lexer.Const:
+			case "const":
 				useType = UseConst
 			}
+		case "namespace_use_clause":
+			processNamespaceUseClause(document, useType, child)
+		case "namespace_use_group":
+			processNamespaceUseGroupClauseList(document, prefix, useType, child)
+		case "namespace_name":
+			prefix = document.GetNodeText(child)
 		}
 		child = traverser.Advance()
 	}
 	return nil
 }
 
-func processNamespaceUseClauseList(document *Document, useType UseType, node *phrase.Phrase) {
+func processNamespaceUseClause(document *Document, useType UseType, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.NamespaceUseClause {
+		var err error = nil
+		traverser, err = traverser.Descend()
+		if err != nil {
+			panic(err) // Should never happen
+		}
+
+		name := ""
+		alias := ""
+		child = traverser.Advance()
+		for child != nil {
+			switch child.Type() {
+			case "qualified_name":
+				name = document.GetPhraseText(child)
+			case "namespace_aliasing_clause":
+				alias = getAliasFromNode(document, child)
+			}
+			child = traverser.Advance()
+		}
+		addUseToImportTable(document, useType, alias, name)
+
+		traverser, err = traverser.Ascend()
+		if err != nil {
+			panic(err) // Should never happen
+		}
+		traverser.Advance()
+		child = traverser.Peek()
+	}
+}
+
+func processNamespaceUseGroupClauseList(document *Document, prefix string, useType UseType, node *sitter.Node) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Peek()
+	for child != nil {
+		switch child.Type() {
+		case "namespace_use_group_clause":
 			var err error = nil
 			traverser, err = traverser.Descend()
 			if err != nil {
@@ -57,16 +88,15 @@ func processNamespaceUseClauseList(document *Document, useType UseType, node *ph
 			alias := ""
 			child = traverser.Advance()
 			for child != nil {
-				if p, ok := child.(*phrase.Phrase); ok {
-					switch p.Type {
-					case phrase.NamespaceName:
-						name = document.GetPhraseText(p)
-					case phrase.NamespaceAliasingClause:
-						alias = getAliasFromNode(document, p)
-					}
+				switch child.Type() {
+				case "namespace_name":
+					name = document.GetNodeText(child)
+				case "namespace_aliasing_clause":
+					alias = getAliasFromNode(document, child)
 				}
 				child = traverser.Advance()
 			}
+			name = prefix + "\\" + name
 			addUseToImportTable(document, useType, alias, name)
 
 			traverser, err = traverser.Ascend()
@@ -79,53 +109,12 @@ func processNamespaceUseClauseList(document *Document, useType UseType, node *ph
 	}
 }
 
-func processNamespaceUseGroupClauseList(document *Document, prefix string, useType UseType, node *phrase.Phrase) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Peek()
-	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.NamespaceUseGroupClause:
-				var err error = nil
-				traverser, err = traverser.Descend()
-				if err != nil {
-					panic(err) // Should never happen
-				}
-
-				name := ""
-				alias := ""
-				child = traverser.Advance()
-				for child != nil {
-					if p, ok = child.(*phrase.Phrase); ok {
-						switch p.Type {
-						case phrase.NamespaceName:
-							name = document.GetPhraseText(p)
-						case phrase.NamespaceAliasingClause:
-							alias = getAliasFromNode(document, p)
-						}
-					}
-					child = traverser.Advance()
-				}
-				name = prefix + "\\" + name
-				addUseToImportTable(document, useType, alias, name)
-
-				traverser, err = traverser.Ascend()
-				if err != nil {
-					panic(err) // Should never happen
-				}
-			}
-		}
-		traverser.Advance()
-		child = traverser.Peek()
-	}
-}
-
-func getAliasFromNode(document *Document, node *phrase.Phrase) string {
+func getAliasFromNode(document *Document, node *sitter.Node) string {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if t, ok := child.(*lexer.Token); ok && t.Type == lexer.Name {
-			return document.GetTokenText(t)
+		if child.Type() == "name" {
+			return document.GetNodeText(child)
 		}
 		child = traverser.Advance()
 	}

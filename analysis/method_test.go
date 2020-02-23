@@ -17,7 +17,7 @@ func TestMethod(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -29,7 +29,7 @@ func TestMethodSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	for _, child := range document.Children {
 		if method, ok := child.(*Method); ok {
@@ -54,7 +54,7 @@ func TestMethodWithPhpDoc(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -64,13 +64,13 @@ func TestMethodFromPhpDoc(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
 
 func TestReturnRelativeType(t *testing.T) {
-	doc := NewDocument("test1", `<?php
+	doc := NewDocument("test1", []byte(`<?php
 class TestClass1 {
 	/**
 	 * @return static
@@ -81,7 +81,7 @@ class TestClass1 {
 	 * @return TestClass2|$this
 	 */
 	public function method2() {}
-}`)
+}`))
 	doc.Load()
 	method1 := doc.Children[1].(*Method)
 	method2 := doc.Children[2].(*Method)

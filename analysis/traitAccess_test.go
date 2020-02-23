@@ -12,7 +12,7 @@ func TestTraitAccess(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	symbol := document.HasTypesAtPos(document.positionAt(312))
 	cupaloy.SnapshotT(t, document.Children, symbol)

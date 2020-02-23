@@ -3,11 +3,10 @@ package analysis
 import (
 	"encoding/json"
 
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Variable represents a reference to the variable
@@ -18,11 +17,11 @@ type Variable struct {
 	hasResolved        bool
 }
 
-func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	return newVariable(document, node)
 }
 
-func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
+func newVariable(document *Document, node *sitter.Node) (*Variable, bool) {
 	variable := &Variable{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -35,10 +34,8 @@ func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if t, ok := child.(*lexer.Token); ok {
-			if t.Type == lexer.VariableName {
-				variable.Name = document.GetTokenText(t)
-			}
+		if child.Type() == "variable_name" {
+			variable.Name = document.GetNodeText(child)
 		}
 		child = traverser.Advance()
 	}

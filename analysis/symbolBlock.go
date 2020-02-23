@@ -1,125 +1,69 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-
-	"github.com/john-nguyen09/go-phpparser/phrase"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
-type symbolConstructorForPhrase func(*Document, *phrase.Phrase) Symbol
-type symbolConstructorForToken func(*Document, *lexer.Token) Symbol
+type symbolConstructorForPhrase func(*Document, *sitter.Node) Symbol
 
-var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
-	phrase.ExpressionStatement:            true,
-	phrase.WhileStatement:                 true,
-	phrase.ClassMemberDeclarationList:     true,
-	phrase.InterfaceMemberDeclarationList: true,
-	phrase.ClassConstElementList:          true,
-	phrase.ClassConstDeclaration:          true,
-	phrase.EncapsulatedExpression:         true,
-	phrase.CompoundStatement:              true,
-	phrase.StatementList:                  true,
-	phrase.AdditiveExpression:             true,
-	phrase.IfStatement:                    true,
-	phrase.ElseClause:                     true,
-	phrase.IncludeExpression:              true,
-	phrase.EchoIntrinsic:                  true,
-	phrase.ExpressionList:                 true,
-	phrase.ClassDeclarationBody:           true,
-	phrase.TryStatement:                   true,
-	phrase.CatchClauseList:                true,
-	phrase.CatchClause:                    true,
-	phrase.ReturnStatement:                true,
-	phrase.ObjectCreationExpression:       true,
-	phrase.ScopedCallExpression:           true,
-	phrase.ArrayCreationExpression:        true,
-	phrase.ArrayInitialiserList:           true,
-	phrase.ArrayElement:                   true,
-	phrase.ArrayValue:                     true,
-	phrase.ArrayKey:                       true,
-	phrase.LogicalExpression:              true,
-	phrase.RelationalExpression:           true,
-	phrase.EqualityExpression:             true,
-	phrase.ForStatement:                   true,
-	phrase.UnaryOpExpression:              true,
-	phrase.ThrowStatement:                 true,
-	phrase.ElseIfClauseList:               true,
-	phrase.ElseIfClause:                   true,
-	phrase.TernaryExpression:              true,
-	phrase.SubscriptExpression:            true,
-	phrase.EmptyIntrinsic:                 true,
-	phrase.UnsetIntrinsic:                 true,
-	phrase.IssetIntrinsic:                 true,
-	phrase.EvalIntrinsic:                  true,
-	phrase.VariableList:                   true,
-	phrase.TraitMemberDeclarationList:     true,
-	phrase.CastExpression:                 true,
-	phrase.SwitchStatement:                true,
-	phrase.CaseStatementList:              true,
-	phrase.CaseStatement:                  true,
+var /* const */ scanPhraseTypes = map[string]bool{
+	"expression_statement": true,
+	"while_statement":      true,
 }
 
-var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{
-	phrase.ArgumentExpressionList: true,
+var /* const */ skipAddingSymbol map[string]bool = map[string]bool{
+	"arguments": true,
 }
-var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
-	// Expressions
-	lexer.DirectoryConstant: newDirectoryConstantAccess,
-	lexer.DocumentComment:   newPhpDocFromNode,
-}
-var phraseToSymbolConstructor map[phrase.PhraseType]symbolConstructorForPhrase
+
+// var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
+// 	// Expressions
+// 	lexer.DirectoryConstant: newDirectoryConstantAccess,
+// 	lexer.DocumentComment:   newPhpDocFromNode,
+// }
+var phraseToSymbolConstructor map[string]symbolConstructorForPhrase
 
 func init() {
-	phraseToSymbolConstructor = map[phrase.PhraseType]symbolConstructorForPhrase{
-		phrase.InterfaceDeclaration:         newInterface,
-		phrase.ClassDeclaration:             newClass,
-		phrase.FunctionDeclaration:          newFunction,
-		phrase.ClassConstElement:            newClassConst,
-		phrase.ConstDeclaration:             newConstDeclaration,
-		phrase.ConstElement:                 newConst,
-		phrase.ArgumentExpressionList:       newArgumentList,
-		phrase.TraitDeclaration:             newTrait,
-		phrase.MethodDeclaration:            newMethod,
-		phrase.FunctionCallExpression:       tryToNewDefine,
-		phrase.SimpleAssignmentExpression:   newAssignment,
-		phrase.ByRefAssignmentExpression:    newAssignment,
-		phrase.CompoundAssignmentExpression: newAssignment,
-		phrase.PropertyDeclaration:          newPropertyDeclaration,
-		phrase.GlobalDeclaration:            newGlobalDeclaration,
-		phrase.NamespaceUseDeclaration:      processNamespaceUseDeclaration,
-		phrase.InstanceOfExpression:         processInstanceofExpression,
-		phrase.TraitUseClause:               processTraitUseClause,
-
-		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
+	phraseToSymbolConstructor = map[string]symbolConstructorForPhrase{
+		"interface_declaration":                  newInterface,
+		"class_declaration":                      newClass,
+		"function_definition":                    newFunction,
+		"const_declaration":                      newConstDeclaration,
+		"const_element":                          newConst,
+		"arguments":                              newArgumentList,
+		"trait_declaration":                      newTrait,
+		"method_declaration":                     newMethod,
+		"function_call_expression":               tryToNewDefine,
+		"assignment_expression":                  newAssignment,
+		"property_declaration":                   newPropertyDeclaration,
+		"global_declaration":                     newGlobalDeclaration,
+		"namespace_use_declaration":              processNamespaceUseDeclaration,
+		"use_declaration":                        processTraitUseClause,
+		"anonymous_function_creation_expression": newAnonymousFunction,
 	}
 }
 
-func scanForChildren(document *Document, node *phrase.Phrase) {
-	for _, child := range node.Children {
+func scanForChildren(document *Document, node *sitter.Node) {
+	childCount := int(node.ChildCount())
+	for i := 0; i < childCount; i++ {
+		child := node.Child(i)
 		var childSymbol Symbol = nil
 		shouldSkipAdding := false
-		if p, ok := child.(*phrase.Phrase); ok {
-			if p.Type == phrase.NamespaceDefinition {
-				namespace := newNamespace(document, p)
-				document.setNamespace(namespace)
-				continue
-			}
+		if child.Type() == "namespace_definition" {
+			namespace := newNamespace(document, child)
+			document.setNamespace(namespace)
+			continue
+		}
 
-			scanForExpression(document, p)
-			if _, ok := scanPhraseTypes[p.Type]; ok {
-				scanForChildren(document, p)
-				continue
-			}
-			if constructor, ok := phraseToSymbolConstructor[p.Type]; ok {
-				childSymbol = constructor(document, p)
-			}
-			if _, ok := skipAddingSymbol[p.Type]; ok {
-				shouldSkipAdding = true
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			if constructor, ok := tokenToSymbolConstructor[t.Type]; ok {
-				childSymbol = constructor(document, t)
-			}
+		scanForExpression(document, child)
+		if _, ok := scanPhraseTypes[child.Type()]; ok {
+			scanForChildren(document, child)
+			continue
+		}
+		if constructor, ok := phraseToSymbolConstructor[child.Type()]; ok {
+			childSymbol = constructor(document, child)
+		}
+		if _, ok := skipAddingSymbol[child.Type()]; ok {
+			shouldSkipAdding = true
 		}
 
 		if !shouldSkipAdding && childSymbol != nil {

@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Property contains information for properties
@@ -36,27 +35,24 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 	return property
 }
 
-func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newPropertyDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	visibility := Public
 	isStatic := false
 	child := traverser.Advance()
+	visibility, isStatic, _ = getMemberModifier(node)
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.MemberModifierList:
-				visibility, isStatic, _ = getMemberModifier(p)
-			case phrase.PropertyElementList:
-				property := newProperty(document, p, visibility, isStatic)
-				document.addSymbol(property)
-			}
+		switch child.Type() {
+		case "property_element":
+			property := newProperty(document, child, visibility, isStatic)
+			document.addSymbol(property)
 		}
 		child = traverser.Advance()
 	}
 	return nil
 }
 
-func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) *Property {
+func newProperty(document *Document, node *sitter.Node, visibility VisibilityModifierValue, isStatic bool) *Property {
 	property := &Property{
 		location:           document.GetNodeLocation(node),
 		VisibilityModifier: visibility,
@@ -69,15 +65,8 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			if p.Type == phrase.PropertyElement {
-				if len(p.Children) > 0 {
-					firstChild := p.Children[0]
-					if t, ok := firstChild.(*lexer.Token); ok && t.Type == lexer.VariableName {
-						property.Name = document.GetTokenText(t)
-					}
-				}
-			}
+		if child.Type() == "variable_name" {
+			property.Name = document.GetNodeText(child)
 		}
 		child = traverser.Advance()
 	}

@@ -1,10 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ConstantAccess represents a reference to constant access
@@ -12,7 +11,7 @@ type ConstantAccess struct {
 	Expression
 }
 
-func newDirectoryConstantAccess(document *Document, token *lexer.Token) Symbol {
+func newDirectoryConstantAccess(document *Document, token *sitter.Node) Symbol {
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(token),
@@ -21,7 +20,7 @@ func newDirectoryConstantAccess(document *Document, token *lexer.Token) Symbol {
 	constantAccess.readName(document, token)
 	return constantAccess
 }
-func newConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newConstantAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -35,7 +34,7 @@ func (s *ConstantAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ConstantAccess) readName(document *Document, node phrase.AstNode) {
+func (s *ConstantAccess) readName(document *Document, node *sitter.Node) {
 	s.Name = document.GetNodeText(node)
 }
 

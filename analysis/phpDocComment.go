@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type methodTagParam struct {
@@ -228,8 +228,8 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 	return d.location
 }
 
-func newPhpDocFromNode(document *Document, token *lexer.Token) Symbol {
-	phpDocComment, err := parse(document.GetTokenText(token))
+func newPhpDocFromNode(document *Document, token *sitter.Node) Symbol {
+	phpDocComment, err := parse(document.GetNodeText(token))
 	if err != nil {
 		return nil
 	}

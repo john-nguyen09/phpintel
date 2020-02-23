@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Interface contains information of interfaces
@@ -18,8 +17,9 @@ type Interface struct {
 }
 
 var _ HasScope = (*Interface)(nil)
+var _ Symbol = (*Interface)(nil)
 
-func newInterface(document *Document, node *phrase.Phrase) Symbol {
+func newInterface(document *Document, node *sitter.Node) Symbol {
 	theInterface := &Interface{
 		location: document.GetNodeLocation(node),
 	}
@@ -28,13 +28,13 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.InterfaceDeclarationHeader:
-				theInterface.analyseHeader(document, p)
-			case phrase.InterfaceDeclarationBody:
-				scanForChildren(document, p)
-			}
+		switch child.Type() {
+		case "name":
+			theInterface.Name = NewTypeString(document.GetNodeText(child))
+		case "interface_base_clause":
+			theInterface.extends(document, child)
+		case "body":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -42,48 +42,13 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Name:
-				{
-					s.Name = NewTypeString(document.GetTokenText(token))
-				}
-			}
-		} else if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.InterfaceBaseClause:
-				{
-					s.extends(document, p)
-				}
-			}
-		}
-
-		child = traverser.Advance()
-	}
-}
-
-func (s *Interface) extends(document *Document, node *phrase.Phrase) {
+func (s *Interface) extends(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedNameList {
-			traverser, _ = traverser.Descend()
-			child = traverser.Advance()
-			for child != nil {
-				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
-					s.Extends = append(s.Extends, transformQualifiedName(p, document))
-				}
-
-				child = traverser.Advance()
-			}
-
-			break
+		if child.Type() == "qualified_name" {
+			s.Extends = append(s.Extends, transformQualifiedName(child, document))
 		}
-
 		traverser.Advance()
 		child = traverser.Peek()
 	}

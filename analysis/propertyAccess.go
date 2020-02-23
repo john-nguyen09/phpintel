@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type PropertyAccess struct {
@@ -13,17 +13,15 @@ type PropertyAccess struct {
 	hasResolved bool
 }
 
-func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newPropertyAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	propertyAccess := &PropertyAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	if p, ok := firstChild.(*phrase.Phrase); ok {
-		expression := scanForExpression(document, p)
-		if expression != nil {
-			propertyAccess.Scope = expression
-		}
+	expression := scanForExpression(document, firstChild)
+	if expression != nil {
+		propertyAccess.Scope = expression
 	}
 
 	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)

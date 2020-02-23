@@ -189,7 +189,7 @@ func (s *Store) Migrate(newVersion string) {
 func (s *Store) LoadStubs() {
 	for _, stub := range stubs {
 		stub.Walk(func(path string, data []byte) error {
-			document := NewDocument(stub.GetUri(path), string(data))
+			document := NewDocument(stub.GetUri(path), data)
 			currentMD5 := document.GetHash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(entry.getKeyBytes())
@@ -215,7 +215,7 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			log.Printf("GetOrCreateDocument error: %v", err)
 			return nil
 		}
-		document = NewDocument(uri, string(data))
+		document = NewDocument(uri, data)
 		s.saveDocOnStore(document)
 	} else {
 		document = value.(*Document)

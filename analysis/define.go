@@ -1,9 +1,8 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
+	sitter "github.com/smacker/go-tree-sitter"
 
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -17,19 +16,17 @@ type Define struct {
 	Value string
 }
 
-func newDefine(document *Document, node *phrase.Phrase) Symbol {
+func newDefine(document *Document, node *sitter.Node) Symbol {
 	define := &Define{
 		location: document.GetNodeLocation(node),
 	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			if p.Type == phrase.ArgumentExpressionList {
-				symbol := newArgumentList(document, p)
-				if args, ok := symbol.(*ArgumentList); ok {
-					define.analyseArgs(document, args)
-				}
+		if child.Type() == "arguments" {
+			symbol := newArgumentList(document, child)
+			if args, ok := symbol.(*ArgumentList); ok {
+				define.analyseArgs(document, args)
 			}
 		}
 		child = traverser.Advance()
@@ -52,11 +49,9 @@ func (s *Define) GetDescription() string {
 
 func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
 	firstArg := args.GetArguments()[0]
-	if token, ok := firstArg.(*lexer.Token); ok {
-		if token.Type == lexer.StringLiteral {
-			stringText := document.GetTokenText(token)
-			s.Name = NewTypeString(stringText[1 : len(stringText)-1])
-		}
+	if firstArg.Type() == "string" {
+		stringText := document.GetNodeText(firstArg)
+		s.Name = NewTypeString(stringText[1 : len(stringText)-1])
 	}
 	if len(args.GetArguments()) >= 2 {
 		secondArg := args.GetArguments()[1]

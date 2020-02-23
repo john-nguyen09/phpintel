@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassAccess represents a reference to the part before ::
@@ -11,15 +11,15 @@ type ClassAccess struct {
 	Expression
 }
 
-func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
+func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     document.GetPhraseText(node),
+			Name:     document.GetNodeText(node),
 		},
 	}
 	types := newTypeComposite()
-	if node.Type == phrase.QualifiedName || node.Type == phrase.FullyQualifiedName {
+	if node.Type() == "qualified_name" {
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
@@ -36,9 +36,9 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	return classAccess
 }
 
-func analyseMemberName(document *Document, node *phrase.Phrase) string {
-	if node.Type == phrase.ScopedMemberName {
-		return document.GetPhraseText(node)
+func analyseMemberName(document *Document, node *sitter.Node) string {
+	if node.Type() == "name" {
+		return document.GetNodeText(node)
 	}
 
 	return ""

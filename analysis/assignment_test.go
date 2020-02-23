@@ -13,7 +13,7 @@ func TestAssignment(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.hasTypesSymbols)
 }

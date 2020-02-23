@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Const contains information of constants
@@ -16,12 +15,12 @@ type Const struct {
 	Value string
 }
 
-func newConstDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newConstDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ConstElementList {
-			scanForChildren(document, p)
+		if child.Type() == "const_element_list" {
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -29,7 +28,7 @@ func newConstDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func newConst(document *Document, node *phrase.Phrase) Symbol {
+func newConst(document *Document, node *sitter.Node) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}
@@ -37,27 +36,14 @@ func newConst(document *Document, node *phrase.Phrase) Symbol {
 	child := traverser.Advance()
 	hasEquals := false
 	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Name:
-				{
-					constant.Name = NewTypeString(document.GetTokenText(token))
-				}
-			case lexer.Equals:
-				{
-					hasEquals = true
-					traverser.SkipToken(lexer.Whitespace)
-				}
-			default:
-				{
-					if hasEquals {
-						constant.Value += document.GetTokenText(token)
-					}
-				}
-			}
-		} else if p, ok := child.(*phrase.Phrase); ok {
+		switch child.Type() {
+		case "name":
+			constant.Name = NewTypeString(document.GetNodeText(child))
+		case "=":
+			hasEquals = true
+		default:
 			if hasEquals {
-				constant.Value += document.GetPhraseText(p)
+				constant.Value += document.GetNodeText(child)
 			}
 		}
 

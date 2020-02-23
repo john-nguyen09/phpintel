@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Expression represents a reference
@@ -64,30 +64,27 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type expressionConstructorForPhrase func(*Document, *phrase.Phrase) (HasTypes, bool)
+type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
 
-var phraseToExpressionConstructor map[phrase.PhraseType]expressionConstructorForPhrase
+var nodeTypeToExprConstructor map[string]exprConstructor
 
-var /* const */ skipPhraseTypes = map[phrase.PhraseType]bool{}
+var /* const */ skipPhraseTypes = map[string]bool{}
 
 func init() {
-	phraseToExpressionConstructor = map[phrase.PhraseType]expressionConstructorForPhrase{
-		phrase.FunctionCallExpression:         newFunctionCall,
-		phrase.ConstantAccessExpression:       newConstantAccess,
-		phrase.ScopedPropertyAccessExpression: newScopedPropertyAccess,
-		phrase.ScopedCallExpression:           newScopedMethodAccess,
-		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
-		phrase.ErrorScopedAccessExpression:    newScopedConstantAccess,
-		phrase.ObjectCreationExpression:       newClassTypeDesignator,
-		phrase.SimpleVariable:                 newVariableExpression,
-		phrase.PropertyAccessExpression:       newPropertyAccess,
-		phrase.MethodCallExpression:           newMethodAccess,
-		phrase.ForeachStatement:               analyseForeachStatement,
-		phrase.EncapsulatedExpression:         analyseEncapsulatedExpression,
+	nodeTypeToExprConstructor = map[string]exprConstructor{
+		"function_call_expression":          newFunctionCall,
+		"constant_access_expression":        newConstantAccess,
+		"scoped_property_access_expression": newScopedPropertyAccess,
+		"scoped_call_expression":            newScopedMethodAccess,
+		"class_constant_access_expression":  newScopedConstantAccess,
+		"object_creation_expression":        newClassTypeDesignator,
+		"variable_name":                     newVariableExpression,
+		"member_access_expression":          newPropertyAccess,
+		"member_call_expression":            newMethodAccess,
 	}
 }
 
-func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
+func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 	var expression HasTypes = nil
 	shouldAdd := false
 	defer func() {
@@ -98,14 +95,14 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 			document.addSymbol(symbol)
 		}
 	}()
-	if _, ok := skipPhraseTypes[node.Type]; ok {
-		for _, child := range node.Children {
-			if p, ok := child.(*phrase.Phrase); ok {
-				return scanForExpression(document, p)
-			}
+	if _, ok := skipPhraseTypes[node.Type()]; ok {
+		childCount := int(node.ChildCount())
+		for i := 0; i < childCount; i++ {
+			child := node.Child(i)
+			return scanForExpression(document, child)
 		}
 	}
-	if constructor, ok := phraseToExpressionConstructor[node.Type]; ok {
+	if constructor, ok := nodeTypeToExprConstructor[node.Type()]; ok {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression

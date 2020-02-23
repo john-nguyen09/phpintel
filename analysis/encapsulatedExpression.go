@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type Encapsulated struct {
@@ -11,7 +11,7 @@ type Encapsulated struct {
 	hasResolved bool
 }
 
-func analyseEncapsulatedExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func analyseEncapsulatedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	en := &Encapsulated{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -20,11 +20,9 @@ func analyseEncapsulatedExpression(document *Document, node *phrase.Phrase) (Has
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			ex := scanForExpression(document, p)
-			if ex != nil {
-				en.Scope = ex
-			}
+		ex := scanForExpression(document, child)
+		if ex != nil {
+			en.Scope = ex
 		}
 		child = traverser.Advance()
 	}

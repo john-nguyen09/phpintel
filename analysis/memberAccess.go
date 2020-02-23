@@ -1,8 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -10,24 +8,19 @@ import (
 func readMemberName(document *Document, traverser *util.Traverser) (string, protocol.Location) {
 	next := traverser.Peek()
 	location := protocol.Location{}
-	for nextToken, ok := next.(*lexer.Token); ok && (nextToken.Type == lexer.Whitespace || nextToken.Type == lexer.Arrow); {
-		if nextToken.Type == lexer.Arrow {
-			location.Range.Start = document.positionAt(nextToken.Offset + nextToken.Length)
+	for next != nil && (next.Type() == " " || next.Type() == "->") {
+		if next.Type() == "->" {
+			location.Range.Start = util.PointToPosition(next.EndPoint())
 			location.Range.End = location.Range.Start
 		}
 		traverser.Advance()
 		next = traverser.Peek()
-		nextToken, ok = next.(*lexer.Token)
 	}
 	memberName := traverser.Advance()
 	name := ""
-	if p, ok := memberName.(*phrase.Phrase); ok && p.Type == phrase.MemberName {
-		for _, child := range p.Children {
-			if t, ok := child.(*lexer.Token); ok && t.Type == lexer.Name {
-				name = document.GetTokenText(t)
-			}
-		}
-		location = document.GetNodeLocation(p)
+	if memberName.Type() == "name" {
+		name = document.GetNodeText(memberName)
+		location = document.GetNodeLocation(memberName)
 	}
 	return name, location
 }

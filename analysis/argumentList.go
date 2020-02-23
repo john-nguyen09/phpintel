@@ -1,30 +1,29 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ArgumentList contains information of arguments in function-like call
 type ArgumentList struct {
 	location protocol.Location
 
-	arguments []phrase.AstNode
+	arguments []*sitter.Node
 	ranges    []protocol.Range
 }
 
-func newEmptyArgumentList(document *Document, open *lexer.Token, close *lexer.Token) *ArgumentList {
-	closePos := document.positionAt(open.Offset)
+func newEmptyArgumentList(document *Document, open *sitter.Node, close *sitter.Node) *ArgumentList {
+	closePos := util.PointToPosition(open.StartPoint())
 	if close != nil {
-		closePos = document.positionAt(close.Offset)
+		closePos = util.PointToPosition(close.StartPoint())
 	}
 	argumentList := &ArgumentList{
 		location: protocol.Location{
 			URI: document.GetURI(),
 			Range: protocol.Range{
-				Start: document.positionAt(open.Offset),
+				Start: util.PointToPosition(open.StartPoint()),
 				End:   closePos,
 			},
 		},
@@ -33,7 +32,7 @@ func newEmptyArgumentList(document *Document, open *lexer.Token, close *lexer.To
 	return argumentList
 }
 
-func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
+func newArgumentList(document *Document, node *sitter.Node) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
@@ -42,19 +41,17 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	child := traverser.Advance()
 	start := argumentList.location.Range.Start
 	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			if token.Type == lexer.Whitespace || token.Type == lexer.Comma {
-				if token.Type == lexer.Comma {
-					end := document.positionAt(token.Offset)
-					argumentList.ranges = append(argumentList.ranges, protocol.Range{
-						Start: start,
-						End:   end,
-					})
-					start = end
-				}
-				child = traverser.Advance()
-				continue
+		if t := child.Type(); t == " " || t == "," {
+			if t == "," {
+				end := util.PointToPosition(child.StartPoint())
+				argumentList.ranges = append(argumentList.ranges, protocol.Range{
+					Start: start,
+					End:   end,
+				})
+				start = end
 			}
+			child = traverser.Advance()
+			continue
 		}
 		argumentList.arguments = append(argumentList.arguments, child)
 		child = traverser.Advance()
@@ -72,7 +69,7 @@ func (s *ArgumentList) GetLocation() protocol.Location {
 }
 
 // GetArguments returns the arguments
-func (s *ArgumentList) GetArguments() []phrase.AstNode {
+func (s *ArgumentList) GetArguments() []*sitter.Node {
 	return s.arguments
 }
 
