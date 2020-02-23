@@ -20,7 +20,12 @@ func newDirectoryConstantAccess(document *Document, token *sitter.Node) Symbol {
 	constantAccess.readName(document, token)
 	return constantAccess
 }
-func newConstantAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func processQualifiedName(document *Document, node *sitter.Node) (HasTypes, bool) {
+	next := node.NextSibling()
+	if next != nil && next.Type() == "::" {
+		c := newClassAccess(document, node)
+		return c, true
+	}
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

@@ -11,6 +11,8 @@ type ClassAccess struct {
 	Expression
 }
 
+var _ (HasTypes) = (*ClassAccess)(nil)
+
 func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
