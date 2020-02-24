@@ -13,7 +13,6 @@ var /* const */ scanPhraseTypes = map[string]bool{
 	"while_statement":           true,
 	"case_statement":            true,
 	"default_statement":         true,
-	"scoped_call_expression":    true,
 	"array_creation_expression": true,
 	"array_element_initializer": true,
 	"if_statement":              true,

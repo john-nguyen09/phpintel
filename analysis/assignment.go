@@ -12,7 +12,6 @@ func newAssignment(document *Document, node *sitter.Node) Symbol {
 	if firstChild.Type() == "variable_name" {
 		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
 	}
-	scanForChildren(document, node)
 	return nil
 }
 
@@ -28,11 +27,13 @@ func analyseVariableAssignment(document *Document, node *sitter.Node, traverser 
 	traverser.SkipToken("&")
 	rhs := traverser.Advance()
 	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(node))
-	variable, _ := newVariable(document, node)
+	variable, shouldAdd := newVariable(document, node)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
 	}
-	document.addSymbol(variable)
+	if shouldAdd {
+		document.addSymbol(variable)
+	}
 
 	var expression HasTypes = nil
 	expression = scanForExpression(document, rhs)
