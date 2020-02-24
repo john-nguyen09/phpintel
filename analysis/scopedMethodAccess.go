@@ -28,24 +28,14 @@ func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, boo
 	methodAccess.Location = document.GetNodeLocation(thirdChild)
 	methodAccess.Name = analyseMemberName(document, thirdChild)
 	child := traverser.Advance()
-	var open *sitter.Node = nil
-	var close *sitter.Node = nil
-	hasArgs := false
 	for child != nil {
 		switch child.Type() {
 		case "arguments":
-			hasArgs = true
+			args := newArgumentList(document, child)
+			document.addSymbol(args)
 			break
-		case "(":
-			open = child
-		case ")":
-			close = child
 		}
 		child = traverser.Advance()
-	}
-	if !hasArgs {
-		args := newEmptyArgumentList(document, open, close)
-		document.addSymbol(args)
 	}
 	return methodAccess, false
 }

@@ -74,32 +74,36 @@ func init() {
 	}
 }
 
+func scanNode(document *Document, node *sitter.Node) {
+	var symbol Symbol = nil
+	shouldSkipAdding := false
+	if node.Type() == "namespace_definition" {
+		namespace := newNamespace(document, node)
+		document.setNamespace(namespace)
+		return
+	}
+
+	scanForExpression(document, node)
+	if _, ok := scanPhraseTypes[node.Type()]; ok {
+		scanForChildren(document, node)
+		return
+	}
+	if constructor, ok := phraseToSymbolConstructor[node.Type()]; ok {
+		symbol = constructor(document, node)
+	}
+	if _, ok := skipAddingSymbol[node.Type()]; ok {
+		shouldSkipAdding = true
+	}
+
+	if !shouldSkipAdding && symbol != nil {
+		document.addSymbol(symbol)
+	}
+}
+
 func scanForChildren(document *Document, node *sitter.Node) {
 	childCount := int(node.ChildCount())
 	for i := 0; i < childCount; i++ {
 		child := node.Child(i)
-		var childSymbol Symbol = nil
-		shouldSkipAdding := false
-		if child.Type() == "namespace_definition" {
-			namespace := newNamespace(document, child)
-			document.setNamespace(namespace)
-			continue
-		}
-
-		scanForExpression(document, child)
-		if _, ok := scanPhraseTypes[child.Type()]; ok {
-			scanForChildren(document, child)
-			continue
-		}
-		if constructor, ok := phraseToSymbolConstructor[child.Type()]; ok {
-			childSymbol = constructor(document, child)
-		}
-		if _, ok := skipAddingSymbol[child.Type()]; ok {
-			shouldSkipAdding = true
-		}
-
-		if !shouldSkipAdding && childSymbol != nil {
-			document.addSymbol(childSymbol)
-		}
+		scanNode(document, child)
 	}
 }

@@ -11,6 +11,18 @@ func newAssignment(document *Document, node *sitter.Node) Symbol {
 	firstChild := traverser.Advance()
 	if firstChild.Type() == "variable_name" {
 		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
+	} else {
+		hasEqual := false
+		child := traverser.Advance()
+		for child != nil {
+			if child.Type() == "=" {
+				hasEqual = true
+				continue
+			}
+			if hasEqual {
+				scanNode(document, child)
+			}
+		}
 	}
 	return nil
 }
@@ -39,6 +51,8 @@ func analyseVariableAssignment(document *Document, node *sitter.Node, traverser 
 	expression = scanForExpression(document, rhs)
 	if expression != nil {
 		variable.setExpression(expression)
+	} else {
+		scanNode(document, rhs)
 	}
 	globalVariable := document.getGlobalVariable(variable.Name)
 	if globalVariable != nil {
