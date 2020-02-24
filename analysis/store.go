@@ -717,36 +717,13 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 }
 
 func (s *Store) SearchMethods(scope string, keyword string, options SearchOptions) ([]*Method, SearchResult) {
-	if keyword == "" {
-		return []*Method{}, SearchResult{false}
-	}
-
 	methods := []*Method{}
-	count := 0
-	options.predicates = append(options.predicates, namespacePredicate(scope))
-	query := searchQuery{
-		collection: methodCompletionIndex,
-		keyword:    keyword,
-		onData: func(completionValue CompletionValue) onDataResult {
-			entry := newEntry(methodCollection, string(completionValue))
-			value, err := s.db.Get(entry.getKeyBytes())
-			if err != nil {
-				return onDataResult{false}
-			}
-			d := storage.NewDecoder(value)
-			method := ReadMethod(d)
-			if isSymbolValid(method, options) {
-				methods = append(methods, method)
-				count++
-			}
-			if options.limit > 0 && count >= options.limit {
-				return onDataResult{true}
-			}
-			return onDataResult{false}
-		},
+	for _, method := range s.GetAllMethods(scope) {
+		if strings.Contains(method.GetName(), keyword) && isSymbolValid(method, options) {
+			methods = append(methods, method)
+		}
 	}
-	result := searchCompletions(s.db, query)
-	return methods, result
+	return methods, SearchResult{true}
 }
 
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
@@ -770,36 +747,13 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 }
 
 func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOptions) ([]*ClassConst, SearchResult) {
-	if keyword == "" {
-		return s.GetAllClassConsts(scope), SearchResult{true}
-	}
-
 	classConsts := []*ClassConst{}
-	count := 0
-	options.predicates = append(options.predicates, namespacePredicate(scope))
-	query := searchQuery{
-		collection: classConstCompletionIndex,
-		keyword:    keyword,
-		onData: func(completionValue CompletionValue) onDataResult {
-			entry := newEntry(classConstCollection, string(completionValue))
-			value, err := s.db.Get(entry.getKeyBytes())
-			if err != nil {
-				return onDataResult{false}
-			}
-			d := storage.NewDecoder(value)
-			classConst := ReadClassConst(d)
-			if isSymbolValid(classConst, options) {
-				classConsts = append(classConsts, classConst)
-				count++
-			}
-			if options.limit > 0 && count >= options.limit {
-				return onDataResult{true}
-			}
-			return onDataResult{false}
-		},
+	for _, classConst := range s.GetAllClassConsts(scope) {
+		if strings.Contains(classConst.GetName(), keyword) && isSymbolValid(classConst, options) {
+			classConsts = append(classConsts, classConst)
+		}
 	}
-	result := searchCompletions(s.db, query)
-	return classConsts, result
+	return classConsts, SearchResult{true}
 }
 
 func (s *Store) GetProperties(scope string, name string) []*Property {
@@ -823,36 +777,13 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 }
 
 func (s *Store) SearchProperties(scope string, keyword string, options SearchOptions) ([]*Property, SearchResult) {
-	if keyword == "" {
-		return s.GetAllProperties(scope), SearchResult{true}
-	}
-
 	properties := []*Property{}
-	count := 0
-	options.predicates = append(options.predicates, namespacePredicate(scope))
-	query := searchQuery{
-		collection: propertyCompletionIndex,
-		keyword:    keyword,
-		onData: func(completionValue CompletionValue) onDataResult {
-			entry := newEntry(propertyCollection, string(completionValue))
-			value, err := s.db.Get(entry.getKeyBytes())
-			if err != nil {
-				return onDataResult{false}
-			}
-			d := storage.NewDecoder(value)
-			property := ReadProperty(d)
-			if isSymbolValid(property, options) {
-				properties = append(properties, property)
-				count++
-			}
-			if options.limit > 0 && count >= options.limit {
-				return onDataResult{true}
-			}
-			return onDataResult{false}
-		},
+	for _, property := range s.GetAllProperties(scope) {
+		if strings.Contains(property.GetName(), keyword) && isSymbolValid(property, options) {
+			properties = append(properties, property)
+		}
 	}
-	result := searchCompletions(s.db, query)
-	return properties, result
+	return properties, SearchResult{true}
 }
 
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {

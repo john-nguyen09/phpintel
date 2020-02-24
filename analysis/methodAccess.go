@@ -23,7 +23,6 @@ func newMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	if expression != nil {
 		methodAccess.Scope = expression
 	}
-	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()

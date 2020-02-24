@@ -48,7 +48,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			prev := parent.PrevSibling()
 			if prev != nil {
 				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
-				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.StartPoint()))
 				if s != nil {
 					s.Resolve(resolveCtx)
 					completionList = memberAccessCompletion(store, document, word, s)
