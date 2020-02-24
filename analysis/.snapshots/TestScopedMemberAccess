@@ -1,4 +1,4 @@
-([]analysis.HasTypes) (len=14) {
+([]analysis.HasTypes) (len=12) {
   (*analysis.ClassAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -177,74 +177,6 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>,
         uniqueFQNs: (map[string]bool) <nil>
-      },
-      Scope: (*analysis.ClassTypeDesignator)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=10) "\\TestClass",
-                original: (string) (len=9) "TestClass",
-                arrayLevel: (int) 0
-              }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 6:16-6:25
-          },
-          Name: (string) (len=9) "TestClass"
-        }
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 6:0-6:9
-      },
-      Name: (string) (len=9) "$instance"
-    },
-    description: (string) "",
-    canReferenceGlobal: (bool) true,
-    hasResolved: (bool) false
-  }),
-  (*analysis.ClassTypeDesignator)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass",
-            arrayLevel: (int) 0
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
-        }
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 6:16-6:25
-      },
-      Name: (string) (len=9) "TestClass"
-    }
-  }),
-  (*analysis.Variable)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) (len=1) {
-          (analysis.TypeString) {
-            fqn: (string) (len=10) "\\TestClass",
-            original: (string) (len=9) "TestClass",
-            arrayLevel: (int) 0
-          }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
-        }
       },
       Scope: (*analysis.ClassTypeDesignator)({
         Expression: (analysis.Expression) {

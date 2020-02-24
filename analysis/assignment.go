@@ -17,11 +17,11 @@ func newAssignment(document *Document, node *sitter.Node) Symbol {
 		for child != nil {
 			if child.Type() == "=" {
 				hasEqual = true
-				continue
 			}
 			if hasEqual {
 				scanNode(document, child)
 			}
+			child = traverser.Advance()
 		}
 	}
 	return nil

@@ -24,7 +24,7 @@ func GetInsertUseContext(document *Document) InsertUseContext {
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
-		case "text":
+		case "php_tag":
 			if insertUseCtx.firstInline == nil {
 				insertUseCtx.firstInline = child
 			}

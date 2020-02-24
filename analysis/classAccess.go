@@ -39,7 +39,8 @@ func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 }
 
 func analyseMemberName(document *Document, node *sitter.Node) string {
-	if node.Type() == "name" {
+	switch node.Type() {
+	case "name", "variable_name":
 		return document.GetNodeText(node)
 	}
 

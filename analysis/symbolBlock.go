@@ -59,7 +59,7 @@ func init() {
 		"method_declaration":                     newMethod,
 		"constructor_declaration":                newMethod,
 		"destructor_declaration":                 newMethod,
-		"trait_use_clause":                       processTraitUseClause,
+		"use_declaration":                        processTraitUseClause,
 		"function_definition":                    newFunction,
 		"const_declaration":                      newConstDeclaration,
 		"const_element":                          newConst,

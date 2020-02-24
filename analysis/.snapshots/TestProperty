@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=12) {
+([]analysis.Symbol) (len=16) {
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -79,7 +79,26 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 6:11-6:37
+      Range: (protocol.Range) 6:11-6:23
+    },
+    description: (string) "",
+    Name: (string) (len=12) "$staticProp3",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\ClassWithProperties",
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 6:25-6:37
     },
     description: (string) "",
     Name: (string) (len=12) "$staticProp4",
@@ -98,7 +117,26 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 7:19-7:45
+      Range: (protocol.Range) 7:19-7:31
+    },
+    description: (string) "",
+    Name: (string) (len=12) "$staticProp5",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\ClassWithProperties",
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 2,
+    IsStatic: (bool) true,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:33-7:45
     },
     description: (string) "",
     Name: (string) (len=12) "$staticProp6",
@@ -174,7 +212,26 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 12:8-12:22
+      Range: (protocol.Range) 12:8-12:14
+    },
+    description: (string) "",
+    Name: (string) (len=6) "$prop4",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\ClassWithProperties",
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 12:16-12:22
     },
     description: (string) "",
     Name: (string) (len=6) "$prop5",
@@ -193,7 +250,26 @@
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 13:14-13:28
+      Range: (protocol.Range) 13:14-13:20
+    },
+    description: (string) "",
+    Name: (string) (len=6) "$prop6",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=20) "\\ClassWithProperties",
+      original: (string) (len=19) "ClassWithProperties",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>,
+      uniqueFQNs: (map[string]bool) <nil>
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 13:22-13:28
     },
     description: (string) "",
     Name: (string) (len=6) "$prop7",
