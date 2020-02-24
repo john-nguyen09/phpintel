@@ -20,6 +20,7 @@ type Property struct {
 }
 
 var _ HasScope = (*Property)(nil)
+var _ Symbol = (*Property)(nil)
 
 func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
 	property := &Property{
@@ -119,6 +120,10 @@ func (s *Property) GetIndexCollection() string {
 
 func (s *Property) GetScope() string {
 	return s.Scope.GetFQN()
+}
+
+func (s *Property) IsScopeSymbol() bool {
+	return true
 }
 
 func (s *Property) Serialise(e *storage.Encoder) {

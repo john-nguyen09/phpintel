@@ -18,6 +18,7 @@ type Function struct {
 }
 
 var _ HasScope = (*Function)(nil)
+var _ Symbol = (*Function)(nil)
 
 func newFunction(document *Document, node *sitter.Node) Symbol {
 	function := &Function{
@@ -119,6 +120,10 @@ func (s *Function) GetIndexCollection() string {
 
 func (s *Function) GetScope() string {
 	return s.Name.GetNamespace()
+}
+
+func (s *Function) IsScopeSymbol() bool {
+	return false
 }
 
 func (s *Function) GetNameLabel() string {

@@ -22,6 +22,7 @@ type Method struct {
 }
 
 var _ HasScope = (*Method)(nil)
+var _ Symbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
@@ -180,6 +181,10 @@ func (s *Method) GetParams() []*Parameter {
 
 func (s *Method) GetScope() string {
 	return s.Scope.GetFQN()
+}
+
+func (s *Method) IsScopeSymbol() bool {
+	return true
 }
 
 func (s *Method) Serialise(e *storage.Encoder) {

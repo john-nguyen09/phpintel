@@ -62,6 +62,7 @@ type HasParams interface {
 
 type HasScope interface {
 	GetScope() string
+	IsScopeSymbol() bool
 }
 
 type serialisable interface {

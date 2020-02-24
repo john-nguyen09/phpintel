@@ -182,6 +182,10 @@ func (s *Class) GetScope() string {
 	return s.Name.GetNamespace()
 }
 
+func (s *Class) IsScopeSymbol() bool {
+	return false
+}
+
 func (s *Class) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.Location)
 	e.WriteInt(int(s.Modifier))

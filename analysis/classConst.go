@@ -85,6 +85,10 @@ func (s *ClassConst) GetScope() string {
 	return s.Scope.GetFQN()
 }
 
+func (s *ClassConst) IsScopeSymbol() bool {
+	return true
+}
+
 func (s *ClassConst) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.Name)

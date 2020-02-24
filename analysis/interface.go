@@ -82,6 +82,10 @@ func (s *Interface) GetScope() string {
 	return s.Name.GetNamespace()
 }
 
+func (s *Interface) IsScopeSymbol() bool {
+	return false
+}
+
 func (s *Interface) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)
