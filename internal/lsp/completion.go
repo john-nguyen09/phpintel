@@ -2,14 +2,12 @@ package lsp
 
 import (
 	"context"
-	"log"
 	"strings"
 	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 func (s *Server) completion(ctx context.Context, params *protocol.CompletionParams) (*protocol.CompletionList, error) {
@@ -27,21 +25,33 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	defer document.Unlock()
 	document.Load()
 	var completionList *protocol.CompletionList = nil
+	pos := params.Position
 	resolveCtx := analysis.NewResolveContext(store, document)
-	symbol := document.HasTypesAtPos(params.Position)
-	word := document.WordAtPos(params.Position)
-	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
-	log.Printf("Completion: %s %v %T %s", word, params.Position, symbol, nodes)
+	symbol := document.HasTypesAtPos(pos)
+	word := document.WordAtPos(pos)
+	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
+	// log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
 	parent := nodes.Parent()
 	if parent != nil {
 		switch parent.Type() {
 		case "::":
-			cursor := sitter.NewTreeCursor(nodes.Parent())
-			if cursor.GoToFirstChild() {
-				s := document.HasTypesAt(int(cursor.CurrentNode().EndByte()))
-				log.Printf("%T %v", s, s)
+			prev := parent.PrevSibling()
+			if prev != nil {
+				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
+				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.StartPoint()))
 				if s != nil {
+					s.Resolve(resolveCtx)
 					completionList = scopedAccessCompletion(store, document, word, s)
+				}
+			}
+		case "->":
+			prev := parent.PrevSibling()
+			if prev != nil {
+				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
+				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				if s != nil {
+					s.Resolve(resolveCtx)
+					completionList = memberAccessCompletion(store, document, word, s)
 				}
 			}
 		case "name":
@@ -53,10 +63,29 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						s.Scope.Resolve(resolveCtx)
 						completionList = scopedAccessCompletion(store, document, word, s.Scope)
 					}
+				case "scoped_call_expression":
+					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = scopedAccessCompletion(store, document, word, s.Scope)
+					}
+				case "member_access_expression":
+					if s, ok := symbol.(*analysis.PropertyAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = memberAccessCompletion(store, document, word, s.Scope)
+					}
+				case "member_call_expression":
+					if s, ok := symbol.(*analysis.MethodAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = memberAccessCompletion(store, document, word, s.Scope)
+					}
 				case "ERROR":
 					completionList = nameCompletion(store, document, symbol, word)
+				case "variable_name":
+					completionList = variableCompletion(document, pos, word)
 				}
 			}
+		case "$":
+			completionList = variableCompletion(document, pos, word)
 		case "named_label_statement":
 			completionList = nameCompletion(store, document, symbol, word)
 		}
@@ -253,12 +282,11 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
-	scopeTypes analysis.TypeComposite, scope analysis.HasTypes, pos protocol.Position) *protocol.CompletionList {
+func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	for _, scopeType := range scopeTypes.Resolve() {
+	for _, scopeType := range scope.GetTypes().Resolve() {
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
