@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -61,14 +60,4 @@ func (s *ScopedPropertyAccess) Resolve(ctx ResolveContext) {
 
 func (s *ScopedPropertyAccess) GetTypes() TypeComposite {
 	return s.Type
-}
-
-func (s *ScopedPropertyAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadScopedPropertyAccess(d *storage.Decoder) *ScopedPropertyAccess {
-	return &ScopedPropertyAccess{
-		Expression: ReadExpression(d),
-	}
 }

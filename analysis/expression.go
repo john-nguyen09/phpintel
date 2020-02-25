@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -106,81 +105,4 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
-}
-
-func (s *Expression) Serialise(e *storage.Encoder) {
-	s.Type.Write(e)
-	switch expression := s.Scope.(type) {
-	case *Variable:
-		e.WriteBool(true)
-		e.WriteInt(int(variableKind))
-		expression.Serialise(e)
-	case *ClassAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(classAccessKind))
-		expression.Serialise(e)
-	case *ClassTypeDesignator:
-		e.WriteBool(true)
-		e.WriteInt(int(classTypeDesignatorKind))
-		expression.Serialise(e)
-	case *ConstantAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(constantAccessKind))
-		expression.Serialise(e)
-	case *FunctionCall:
-		e.WriteBool(true)
-		e.WriteInt(int(functionCallKind))
-		expression.Serialise(e)
-	case *PropertyAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(propertyAccessKind))
-		expression.Serialise(e)
-	case *ScopedConstantAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(scopedConstantAccessKind))
-		expression.Serialise(e)
-	case *ScopedMethodAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(scopedMethodAccessKind))
-		expression.Serialise(e)
-	case *ScopedPropertyAccess:
-		e.WriteBool(true)
-		e.WriteInt(int(scopedPropertyAccessKind))
-		expression.Serialise(e)
-	default:
-		e.WriteBool(false)
-	}
-	e.WriteLocation(s.Location)
-	e.WriteString(s.Name)
-}
-
-func ReadExpression(d *storage.Decoder) Expression {
-	expr := Expression{
-		Type: ReadTypeComposite(d),
-	}
-	if d.ReadBool() {
-		switch expressionKind(d.ReadInt()) {
-		case variableKind:
-			expr.Scope = ReadVariable(d)
-		case classAccessKind:
-			expr.Scope = ReadClassAccess(d)
-		case classTypeDesignatorKind:
-			expr.Scope = ReadClassTypeDesignator(d)
-		case constantAccessKind:
-			expr.Scope = ReadConstantAccess(d)
-		case functionCallKind:
-			expr.Scope = ReadFunctionCall(d)
-		case propertyAccessKind:
-			expr.Scope = ReadPropertyAccess(d)
-		case scopedConstantAccessKind:
-			expr.Scope = ReadScopedConstantAccess(d)
-		case scopedMethodAccessKind:
-			expr.Scope = ReadScopedMethodAccess(d)
-		case scopedPropertyAccessKind:
-			expr.Scope = ReadScopedPropertyAccess(d)
-		}
-	}
-	expr.Location = d.ReadLocation()
-	expr.Name = d.ReadString()
-	return expr
 }

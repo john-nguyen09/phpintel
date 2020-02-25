@@ -3,7 +3,6 @@ package analysis
 import (
 	"encoding/json"
 
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -116,14 +115,4 @@ func (s *Variable) MarshalJSON() ([]byte, error) {
 		Location: s.GetLocation(),
 		Types:    s.GetTypes(),
 	})
-}
-
-func (s *Variable) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadVariable(d *storage.Decoder) *Variable {
-	return &Variable{
-		Expression: ReadExpression(d),
-	}
 }

@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -34,14 +33,4 @@ func (s *InterfaceAccess) GetLocation() protocol.Location {
 
 func (s *InterfaceAccess) GetTypes() TypeComposite {
 	return s.Type
-}
-
-func (s *InterfaceAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadInterfaceAccess(d *storage.Decoder) *InterfaceAccess {
-	return &InterfaceAccess{
-		Expression: ReadExpression(d),
-	}
 }

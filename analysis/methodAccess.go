@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -83,14 +82,4 @@ func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 		}
 	}
 	return hasParams
-}
-
-func (s *MethodAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadMethodAccess(d *storage.Decoder) *MethodAccess {
-	return &MethodAccess{
-		Expression: ReadExpression(d),
-	}
 }

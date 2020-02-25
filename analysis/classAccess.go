@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -57,14 +56,4 @@ func (s *ClassAccess) GetName() string {
 
 func (s *ClassAccess) GetTypes() TypeComposite {
 	return s.Type
-}
-
-func (s *ClassAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadClassAccess(d *storage.Decoder) *ClassAccess {
-	return &ClassAccess{
-		Expression: ReadExpression(d),
-	}
 }

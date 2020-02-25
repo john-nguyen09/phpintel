@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -58,14 +57,4 @@ func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams
 		}
 	}
 	return hasParams
-}
-
-func (s *ClassTypeDesignator) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadClassTypeDesignator(d *storage.Decoder) *ClassTypeDesignator {
-	return &ClassTypeDesignator{
-		Expression: ReadExpression(d),
-	}
 }

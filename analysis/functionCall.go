@@ -3,7 +3,6 @@ package analysis
 import (
 	"strings"
 
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -45,24 +44,14 @@ func newFunctionCall(document *Document, node *sitter.Node) (HasTypes, bool) {
 		functionCall.Location = document.GetNodeLocation(node.Child(0))
 		functionCall.Name = document.GetNodeText(node.Child(0))
 	}
-	var open *sitter.Node = nil
-	var close *sitter.Node = nil
-	hasArgs := false
 	for child != nil {
 		switch child.Type() {
 		case "arguments":
-			hasArgs = true
+			args := newArgumentList(document, child)
+			document.addSymbol(args)
 			break
-		case "(":
-			open = child
-		case ")":
-			close = child
 		}
 		child = traverser.Advance()
-	}
-	if !hasArgs {
-		args := newEmptyArgumentList(document, open, close)
-		document.addSymbol(args)
 	}
 	return functionCall, false
 }
@@ -99,14 +88,4 @@ func (s *FunctionCall) ResolveToHasParams(ctx ResolveContext) []HasParams {
 		functions = append(functions, function)
 	}
 	return functions
-}
-
-func (s *FunctionCall) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadFunctionCall(d *storage.Decoder) *FunctionCall {
-	return &FunctionCall{
-		Expression: ReadExpression(d),
-	}
 }

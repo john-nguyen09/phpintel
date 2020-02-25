@@ -14,24 +14,6 @@ type ArgumentList struct {
 	ranges    []protocol.Range
 }
 
-func newEmptyArgumentList(document *Document, open *sitter.Node, close *sitter.Node) *ArgumentList {
-	closePos := util.PointToPosition(open.StartPoint())
-	if close != nil {
-		closePos = util.PointToPosition(close.StartPoint())
-	}
-	argumentList := &ArgumentList{
-		location: protocol.Location{
-			URI: document.GetURI(),
-			Range: protocol.Range{
-				Start: util.PointToPosition(open.StartPoint()),
-				End:   closePos,
-			},
-		},
-	}
-	argumentList.ranges = append(argumentList.ranges, argumentList.location.Range)
-	return argumentList
-}
-
 func newArgumentList(document *Document, node *sitter.Node) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),

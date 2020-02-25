@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -46,14 +45,4 @@ func (s *ConstantAccess) readName(document *Document, node *sitter.Node) {
 func (s *ConstantAccess) GetTypes() TypeComposite {
 	// TODO: look up constant type
 	return s.Type
-}
-
-func (s *ConstantAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadConstantAccess(d *storage.Decoder) *ConstantAccess {
-	return &ConstantAccess{
-		Expression: ReadExpression(d),
-	}
 }

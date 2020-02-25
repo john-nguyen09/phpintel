@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -34,14 +33,4 @@ func (s *ScopedConstantAccess) GetLocation() protocol.Location {
 func (s *ScopedConstantAccess) GetTypes() TypeComposite {
 	// TODO: Look up constant types
 	return s.Type
-}
-
-func (s *ScopedConstantAccess) Serialise(e *storage.Encoder) {
-	s.Expression.Serialise(e)
-}
-
-func ReadScopedConstantAccess(d *storage.Decoder) *ScopedConstantAccess {
-	return &ScopedConstantAccess{
-		Expression: ReadExpression(d),
-	}
 }
