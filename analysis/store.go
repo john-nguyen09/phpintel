@@ -311,6 +311,7 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 }
 
 func (s *Store) SyncDocument(document *Document) {
+	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b *storage.Batch) error {
 		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())

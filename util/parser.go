@@ -48,3 +48,10 @@ func PointToPosition(p sitter.Point) protocol.Position {
 		Character: int(p.Column),
 	}
 }
+
+func PositionToPoint(p protocol.Position) sitter.Point {
+	return sitter.Point{
+		Row:    uint32(p.Line),
+		Column: uint32(p.Character),
+	}
+}

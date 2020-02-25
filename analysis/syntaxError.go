@@ -11,7 +11,9 @@ func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
 	diagnostics := []protocol.Diagnostic{}
 	traverser := util.NewTraverser(rootNode)
 	traverser.Traverse(func(node *sitter.Node, _ []*sitter.Node) bool {
-		if node.Type() == "ERROR" {
+		t := node.Type()
+		switch {
+		case t == "ERROR" || node.IsMissing():
 			diagnostics = append(diagnostics, parserErrorToDiagnostic(document, node))
 		}
 		return true
@@ -21,7 +23,10 @@ func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
 }
 
 func parserErrorToDiagnostic(document *Document, err *sitter.Node) protocol.Diagnostic {
-	message := "Unexpected " + err.Type() + "."
+	message := err.Type() + "."
+	if err.IsMissing() {
+		message = "Missing: " + err.Type() + "."
+	}
 
 	return protocol.Diagnostic{
 		Range:    document.errorRange(err),

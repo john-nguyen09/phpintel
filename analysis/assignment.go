@@ -12,6 +12,7 @@ func newAssignment(document *Document, node *sitter.Node) Symbol {
 	if firstChild.Type() == "variable_name" {
 		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
 	} else {
+		scanNode(document, firstChild)
 		hasEqual := false
 		child := traverser.Advance()
 		for child != nil {

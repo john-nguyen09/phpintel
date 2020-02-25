@@ -134,7 +134,6 @@ func (s *Document) ResetState() {
 	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
-	s.tree = nil
 	s.importTable = newImportTable()
 }
 
@@ -528,8 +527,8 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
-	defer util.TimeTrack(time.Now(), "ApplyChanges")
 	// log.Printf("ApplyChanges: %p", s)
+	start := time.Now()
 	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
@@ -560,7 +559,33 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 	}
+	util.TimeTrack(start, "contentChanges")
+	start = time.Now()
+	for _, change := range changes {
+		start := change.Range.Start
+		end := change.Range.End
+		text := []byte(change.Text)
+		startOffset := s.OffsetAtPosition(start)
+		endOffset := s.OffsetAtPosition(end)
+		rangeLength := endOffset - startOffset
+
+		s.tree.Edit(sitter.EditInput{
+			StartIndex:  uint32(startOffset),
+			OldEndIndex: uint32(startOffset) + uint32(rangeLength),
+			NewEndIndex: uint32(startOffset) + uint32(len(text)),
+			StartPoint:  util.PositionToPoint(start),
+			OldEndPoint: util.PositionToPoint(s.positionAt(startOffset + rangeLength)),
+			NewEndPoint: util.PositionToPoint(s.positionAt(startOffset + len(text))),
+		})
+	}
+	p := sitter.NewParser()
+	p.SetLanguage(php.GetLanguage())
+	oldTree := s.tree
+	s.tree = p.Parse(oldTree, s.GetText())
+	util.TimeTrack(start, "editASTTree")
+	start = time.Now()
 	s.Load()
+	util.TimeTrack(start, "Load")
 }
 
 func (s *Document) getLines() []string {
