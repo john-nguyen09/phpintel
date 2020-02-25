@@ -1,51 +1,59 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
+	sitter "github.com/smacker/go-tree-sitter"
 
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func newAssignment(document *Document, node *phrase.Phrase) Symbol {
+func newAssignment(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	if p, ok := firstChild.(*phrase.Phrase); ok {
-		if p.Type == phrase.SimpleVariable {
-			analyseVariableAssignment(document, p, traverser.Clone(), node)
+	if firstChild.Type() == "variable_name" {
+		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
+	} else {
+		scanNode(document, firstChild)
+		hasEqual := false
+		child := traverser.Advance()
+		for child != nil {
+			if child.Type() == "=" {
+				hasEqual = true
+			}
+			if hasEqual {
+				scanNode(document, child)
+			}
+			child = traverser.Advance()
 		}
 	}
-	scanForChildren(document, node)
 	return nil
 }
 
-func analyseVariableAssignment(document *Document, node *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
+func analyseVariableAssignment(document *Document, node *sitter.Node, traverser *util.Traverser, parent *sitter.Node) {
 	traverser.Advance()
-	traverser.SkipToken(lexer.Whitespace)
-	if parent.Type == phrase.CompoundAssignmentExpression {
-		traverser.SkipToken(lexer.DotEquals)
+	traverser.SkipToken(" ")
+	if parent.Type() == "augmented_assignment_expression" {
+		traverser.SkipToken("operator")
 	} else {
-		traverser.SkipToken(lexer.Equals)
+		traverser.SkipToken("=")
 	}
-	traverser.SkipToken(lexer.Whitespace)
-	if parent.Type == phrase.ByRefAssignmentExpression {
-		traverser.SkipToken(lexer.Ampersand)
-		traverser.SkipToken(lexer.Whitespace)
-	}
+	traverser.SkipToken(" ")
+	traverser.SkipToken("&")
 	rhs := traverser.Advance()
 	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(node))
-	variable, _ := newVariable(document, node)
+	variable, shouldAdd := newVariable(document, node)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
 	}
-	document.addSymbol(variable)
+	if shouldAdd {
+		document.addSymbol(variable)
+	}
 
 	var expression HasTypes = nil
-	if p, ok := rhs.(*phrase.Phrase); ok {
-		expression = scanForExpression(document, p)
-	}
+	expression = scanForExpression(document, rhs)
 	if expression != nil {
 		variable.setExpression(expression)
+	} else {
+		scanNode(document, rhs)
 	}
 	globalVariable := document.getGlobalVariable(variable.Name)
 	if globalVariable != nil {

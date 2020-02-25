@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // TypeDeclaration is type declaration for a symbol
@@ -11,7 +11,7 @@ type TypeDeclaration struct {
 	Expression
 }
 
-func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaration {
+func newTypeDeclaration(document *Document, node *sitter.Node) *TypeDeclaration {
 	typeDeclaration := &TypeDeclaration{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -20,14 +20,12 @@ func newTypeDeclaration(document *Document, node *phrase.Phrase) *TypeDeclaratio
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.QualifiedName, phrase.FullyQualifiedName:
-				typeString := transformQualifiedName(p, document)
-				typeDeclaration.Name = typeString.GetOriginal()
-				typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
-				typeDeclaration.Type.add(typeString)
-			}
+		switch child.Type() {
+		case "name":
+			typeString := transformQualifiedName(child, document)
+			typeDeclaration.Name = typeString.GetOriginal()
+			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			typeDeclaration.Type.add(typeString)
 		}
 		child = traverser.Advance()
 	}

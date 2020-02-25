@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassConst contains information of class constants
@@ -18,8 +17,9 @@ type ClassConst struct {
 }
 
 var _ HasScope = (*ClassConst)(nil)
+var _ Symbol = (*ClassConst)(nil)
 
-func newClassConst(document *Document, node *phrase.Phrase) Symbol {
+func newClassConst(document *Document, node *sitter.Node) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}
@@ -33,31 +33,19 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	child := traverser.Advance()
 	hasEquals := false
 	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Equals:
-				{
-					hasEquals = true
-					traverser.SkipToken(lexer.Whitespace)
-				}
-			default:
-				if hasEquals {
-					classConst.Value += document.GetTokenText(token)
-				}
-			}
-		} else if p, ok := child.(*phrase.Phrase); ok {
+		switch child.Type() {
+		case "=":
+			hasEquals = true
+			traverser.SkipToken(" ")
+		default:
 			if hasEquals {
-				classConst.Value += document.GetPhraseText(p)
+				classConst.Value += document.GetNodeText(child)
 			} else {
-				switch p.Type {
-				case phrase.Identifier:
-					{
-						classConst.Name = document.GetPhraseText(p)
-					}
+				if child.Type() == "name" {
+					classConst.Name = document.GetNodeText(child)
 				}
 			}
 		}
-
 		child = traverser.Advance()
 	}
 
@@ -95,6 +83,10 @@ func (s *ClassConst) GetIndexCollection() string {
 
 func (s *ClassConst) GetScope() string {
 	return s.Scope.GetFQN()
+}
+
+func (s *ClassConst) IsScopeSymbol() bool {
+	return true
 }
 
 func (s *ClassConst) Serialise(e *storage.Encoder) {

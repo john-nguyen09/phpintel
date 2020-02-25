@@ -16,7 +16,7 @@ func TestConstant(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +28,7 @@ func TestConstantSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	for _, child := range document.Children {
 		if constant, ok := child.(*Const); ok {

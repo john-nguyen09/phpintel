@@ -17,7 +17,7 @@ func TestNamespace(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("references2", string(data))
+	document := NewDocument("references2", data)
 	document.Load()
 
 	cupaloy.SnapshotT(t, document.importTable)
@@ -37,20 +37,20 @@ type useTestCase struct {
 }
 
 func TestNamespaceAndUse(t *testing.T) {
-	doc1 := NewDocument("importTable1", `<?php
+	doc1 := NewDocument("importTable1", []byte(`<?php
 namespace TestNamespace1;
 
 class TestClass1 {}
 
-function TestFunction1() {}`)
+function TestFunction1() {}`))
 	doc1.Load()
 
-	doc2 := NewDocument("importTable2", `<?php
-`)
+	doc2 := NewDocument("importTable2", []byte(`<?php
+`))
 	doc2.Load()
 
-	doc3 := NewDocument("importTable3", `<?php
-namespace TestNamespace2;`)
+	doc3 := NewDocument("importTable3", []byte(`<?php
+namespace TestNamespace2;`))
 	doc3.Load()
 
 	class := doc1.Children[0].(*Class)

@@ -1,129 +1,109 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-
-	"github.com/john-nguyen09/go-phpparser/phrase"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
-type symbolConstructorForPhrase func(*Document, *phrase.Phrase) Symbol
-type symbolConstructorForToken func(*Document, *lexer.Token) Symbol
+type symbolConstructorForPhrase func(*Document, *sitter.Node) Symbol
 
-var /* const */ scanPhraseTypes = map[phrase.PhraseType]bool{
-	phrase.ExpressionStatement:            true,
-	phrase.WhileStatement:                 true,
-	phrase.ClassMemberDeclarationList:     true,
-	phrase.InterfaceMemberDeclarationList: true,
-	phrase.ClassConstElementList:          true,
-	phrase.ClassConstDeclaration:          true,
-	phrase.EncapsulatedExpression:         true,
-	phrase.CompoundStatement:              true,
-	phrase.StatementList:                  true,
-	phrase.AdditiveExpression:             true,
-	phrase.IfStatement:                    true,
-	phrase.ElseClause:                     true,
-	phrase.IncludeExpression:              true,
-	phrase.EchoIntrinsic:                  true,
-	phrase.ExpressionList:                 true,
-	phrase.ClassDeclarationBody:           true,
-	phrase.TryStatement:                   true,
-	phrase.CatchClauseList:                true,
-	phrase.CatchClause:                    true,
-	phrase.ReturnStatement:                true,
-	phrase.ObjectCreationExpression:       true,
-	phrase.ScopedCallExpression:           true,
-	phrase.ArrayCreationExpression:        true,
-	phrase.ArrayInitialiserList:           true,
-	phrase.ArrayElement:                   true,
-	phrase.ArrayValue:                     true,
-	phrase.ArrayKey:                       true,
-	phrase.LogicalExpression:              true,
-	phrase.RelationalExpression:           true,
-	phrase.EqualityExpression:             true,
-	phrase.ForStatement:                   true,
-	phrase.UnaryOpExpression:              true,
-	phrase.ThrowStatement:                 true,
-	phrase.ElseIfClauseList:               true,
-	phrase.ElseIfClause:                   true,
-	phrase.TernaryExpression:              true,
-	phrase.SubscriptExpression:            true,
-	phrase.EmptyIntrinsic:                 true,
-	phrase.UnsetIntrinsic:                 true,
-	phrase.IssetIntrinsic:                 true,
-	phrase.EvalIntrinsic:                  true,
-	phrase.VariableList:                   true,
-	phrase.TraitMemberDeclarationList:     true,
-	phrase.CastExpression:                 true,
-	phrase.SwitchStatement:                true,
-	phrase.CaseStatementList:              true,
-	phrase.CaseStatement:                  true,
+var /* const */ scanPhraseTypes = map[string]bool{
+	"ERROR":                     true,
+	"expression_statement":      true,
+	"compound_statement":        true,
+	"while_statement":           true,
+	"case_statement":            true,
+	"default_statement":         true,
+	"array_creation_expression": true,
+	"array_element_initializer": true,
+	"if_statement":              true,
+	"else_if_clause":            true,
+	"else_if_clause_2":          true,
+	"else_clause":               true,
+	"else_clause_2":             true,
+	"include_expression":        true,
+	"include_once_expression":   true,
+	"require_expression":        true,
+	"require_once_expression":   true,
+	"conditional_expression":    true,
+	"subscript_expression":      true,
+	"cast_expression":           true,
+	"unary_op_expression":       true,
+	"binary_expression":         true,
+	"parenthesized_expression":  true,
+	"echo_statement":            true,
+	"unset_statement":           true,
+	"print_intrinsic":           true,
+	"try_statement":             true,
+	"catch_clause":              true,
+	"finally_clause":            true,
+	"return_statement":          true,
+	"throw_statement":           true,
 }
 
-var /* const */ skipAddingSymbol map[phrase.PhraseType]bool = map[phrase.PhraseType]bool{
-	phrase.ArgumentExpressionList: true,
+var /* const */ skipAddingSymbol map[string]bool = map[string]bool{
+	"arguments": true,
 }
-var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
-	// Expressions
-	lexer.DirectoryConstant: newDirectoryConstantAccess,
-	lexer.DocumentComment:   newPhpDocFromNode,
-}
-var phraseToSymbolConstructor map[phrase.PhraseType]symbolConstructorForPhrase
+
+// var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
+// 	// Expressions
+// 	lexer.DirectoryConstant: newDirectoryConstantAccess,
+// 	lexer.DocumentComment:   newPhpDocFromNode,
+// }
+var phraseToSymbolConstructor map[string]symbolConstructorForPhrase
 
 func init() {
-	phraseToSymbolConstructor = map[phrase.PhraseType]symbolConstructorForPhrase{
-		phrase.InterfaceDeclaration:         newInterface,
-		phrase.ClassDeclaration:             newClass,
-		phrase.FunctionDeclaration:          newFunction,
-		phrase.ClassConstElement:            newClassConst,
-		phrase.ConstDeclaration:             newConstDeclaration,
-		phrase.ConstElement:                 newConst,
-		phrase.ArgumentExpressionList:       newArgumentList,
-		phrase.TraitDeclaration:             newTrait,
-		phrase.MethodDeclaration:            newMethod,
-		phrase.FunctionCallExpression:       tryToNewDefine,
-		phrase.SimpleAssignmentExpression:   newAssignment,
-		phrase.ByRefAssignmentExpression:    newAssignment,
-		phrase.CompoundAssignmentExpression: newAssignment,
-		phrase.PropertyDeclaration:          newPropertyDeclaration,
-		phrase.GlobalDeclaration:            newGlobalDeclaration,
-		phrase.NamespaceUseDeclaration:      processNamespaceUseDeclaration,
-		phrase.InstanceOfExpression:         processInstanceofExpression,
-		phrase.TraitUseClause:               processTraitUseClause,
-
-		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
+	phraseToSymbolConstructor = map[string]symbolConstructorForPhrase{
+		"interface_declaration":                  newInterface,
+		"class_declaration":                      newClass,
+		"property_declaration":                   newPropertyDeclaration,
+		"method_declaration":                     newMethod,
+		"constructor_declaration":                newMethod,
+		"destructor_declaration":                 newMethod,
+		"use_declaration":                        processTraitUseClause,
+		"function_definition":                    newFunction,
+		"const_declaration":                      newConstDeclaration,
+		"const_element":                          newConst,
+		"arguments":                              newArgumentList,
+		"trait_declaration":                      newTrait,
+		"function_call_expression":               tryToNewDefine,
+		"assignment_expression":                  newAssignment,
+		"global_declaration":                     newGlobalDeclaration,
+		"namespace_use_declaration":              processNamespaceUseDeclaration,
+		"anonymous_function_creation_expression": newAnonymousFunction,
+		"comment":                                newPhpDocFromNode,
 	}
 }
 
-func scanForChildren(document *Document, node *phrase.Phrase) {
-	for _, child := range node.Children {
-		var childSymbol Symbol = nil
-		shouldSkipAdding := false
-		if p, ok := child.(*phrase.Phrase); ok {
-			if p.Type == phrase.NamespaceDefinition {
-				namespace := newNamespace(document, p)
-				document.setNamespace(namespace)
-				continue
-			}
+func scanNode(document *Document, node *sitter.Node) {
+	var symbol Symbol = nil
+	shouldSkipAdding := false
+	if node.Type() == "namespace_definition" {
+		namespace := newNamespace(document, node)
+		document.setNamespace(namespace)
+		return
+	}
 
-			scanForExpression(document, p)
-			if _, ok := scanPhraseTypes[p.Type]; ok {
-				scanForChildren(document, p)
-				continue
-			}
-			if constructor, ok := phraseToSymbolConstructor[p.Type]; ok {
-				childSymbol = constructor(document, p)
-			}
-			if _, ok := skipAddingSymbol[p.Type]; ok {
-				shouldSkipAdding = true
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			if constructor, ok := tokenToSymbolConstructor[t.Type]; ok {
-				childSymbol = constructor(document, t)
-			}
-		}
+	scanForExpression(document, node)
+	if _, ok := scanPhraseTypes[node.Type()]; ok {
+		scanForChildren(document, node)
+		return
+	}
+	if constructor, ok := phraseToSymbolConstructor[node.Type()]; ok {
+		symbol = constructor(document, node)
+	}
+	if _, ok := skipAddingSymbol[node.Type()]; ok {
+		shouldSkipAdding = true
+	}
 
-		if !shouldSkipAdding && childSymbol != nil {
-			document.addSymbol(childSymbol)
-		}
+	if !shouldSkipAdding && symbol != nil {
+		document.addSymbol(symbol)
+	}
+}
+
+func scanForChildren(document *Document, node *sitter.Node) {
+	childCount := int(node.ChildCount())
+	for i := 0; i < childCount; i++ {
+		child := node.Child(i)
+		scanNode(document, child)
 	}
 }

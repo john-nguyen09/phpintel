@@ -14,7 +14,7 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument(uri, string(data))
+	document := NewDocument(uri, data)
 	document.Load()
 	if isOpen {
 		document.Open()
@@ -50,33 +50,19 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	cupaloy.SnapshotT(t, items)
 }
 
-func TestDesignatorAndVariable(t *testing.T) {
-	data, err := ioutil.ReadFile("../cases/completion/designatorAndVariable.php")
-	if err != nil {
-		panic(err)
-	}
-	document := NewDocument("test1", string(data))
-	document.Load()
-	symbol := document.HasTypesAtPos(protocol.Position{
-		Line:      9,
-		Character: 20,
-	})
-	cupaloy.SnapshotT(t, symbol)
-}
-
 func TestCompletionWithScope(t *testing.T) {
 	t.Run("Class", func(t *testing.T) {
 		store, err := setupStore("Class", "CompletionWithScope-Class")
 		defer store.Close()
 		assert.NoError(t, err)
-		defDoc1 := NewDocument("test1", `<?php
+		defDoc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1;
-class TestClass {}`)
+class TestClass {}`))
 		defDoc1.Load()
 		store.saveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
 
-		defDoc2 := NewDocument("test2", `<?php class TestClassABC {}`)
+		defDoc2 := NewDocument("test2", []byte(`<?php class TestClassABC {}`))
 		defDoc2.Load()
 		store.saveDocOnStore(defDoc2)
 		store.SyncDocument(defDoc2)
@@ -93,13 +79,13 @@ class TestClass {}`)
 		store, err := setupStore("ClassConst", "CompletionWithScope-ClassConst")
 		defer store.Close()
 		assert.NoError(t, err)
-		defDoc1 := NewDocument("test1", `<?php
+		defDoc1 := NewDocument("test1", []byte(`<?php
 class TestClass1 {
 	const CLASS_CONST = 1;
 }
 class TestClass2 {
 	const CLASS_CONST_ABC = 2;
-}`)
+}`))
 		defDoc1.Load()
 		store.saveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
@@ -116,9 +102,9 @@ class TestClass2 {
 		store, err := setupStore("Method", "CompletionWithScope-Method")
 		defer store.Close()
 		assert.NoError(t, err)
-		defDoc1 := NewDocument("test1", `<?php
+		defDoc1 := NewDocument("test1", []byte(`<?php
 class TestClass1 { public function methodABC(); }
-class TestClass2 { public function method(); }`)
+class TestClass2 { public function method(); }`))
 		defDoc1.Load()
 		store.saveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)

@@ -16,7 +16,7 @@ func TestProperty(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +28,7 @@ func TestPropertySerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	for _, child := range document.Children {
 		if property, ok := child.(*Property); ok {
@@ -54,7 +54,7 @@ func TestPropertyPhpDoc(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

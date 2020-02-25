@@ -16,7 +16,7 @@ func TestLineOffset(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	line := document.lineAt(39)
 	if line != 3 {
@@ -38,7 +38,7 @@ func TestPosition(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	position := document.positionAt(9)
 	if position.Line != 2 || position.Character != 0 {
@@ -53,7 +53,7 @@ func TestPosition(t *testing.T) {
 func TestSymbolAt(t *testing.T) {
 	memberAccess := "../cases/memberAccess.php"
 	data, _ := ioutil.ReadFile(memberAccess)
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	symbol := document.HasTypesAt(14)
 	if _, ok := symbol.(*ClassAccess); !ok {
@@ -70,7 +70,7 @@ func TestSymbolAt(t *testing.T) {
 }
 
 func TestApplyChanges(t *testing.T) {
-	document := NewDocument("test1", "<?php\necho 'Hello world';")
+	document := NewDocument("test1", []byte("<?php\necho 'Hello world';"))
 	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
 		protocol.TextDocumentContentChangeEvent{
 			Range: &protocol.Range{
@@ -96,7 +96,7 @@ func TestIntrinsics(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -106,7 +106,7 @@ func TestChainedMethodCalls(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -116,7 +116,7 @@ func TestSymbolBefore(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	if reflect.TypeOf(document.HasTypesBeforePos(protocol.Position{
 		Line:      1,

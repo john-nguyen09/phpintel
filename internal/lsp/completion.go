@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -26,71 +25,69 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	defer document.Unlock()
 	document.Load()
 	var completionList *protocol.CompletionList = nil
+	pos := params.Position
 	resolveCtx := analysis.NewResolveContext(store, document)
-	symbol := document.HasTypesAtPos(params.Position)
-	word := document.WordAtPos(params.Position)
-	nodes := document.NodeSpineAt(document.OffsetAtPosition(params.Position))
+	symbol := document.HasTypesAtPos(pos)
+	word := document.WordAtPos(pos)
+	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
+	// log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
 	parent := nodes.Parent()
-	// log.Printf("Completion: %T %v", symbol, parent)
-	switch parent.Type {
-	case phrase.SimpleVariable:
-		if nodes.Parent().Type == phrase.ScopedMemberName {
-			if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
-				completionList = scopedAccessCompletion(store, document, word,
-					s.ResolveAndGetScope(resolveCtx), s.Scope)
+	if parent != nil {
+		switch parent.Type() {
+		case "::":
+			prev := parent.PrevSibling()
+			if prev != nil {
+				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
+				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				if s != nil {
+					s.Resolve(resolveCtx)
+					completionList = scopedAccessCompletion(store, document, word, s)
+				}
 			}
-			break
-		}
-		completionList = variableCompletion(document, params.Position, word)
-	case phrase.NamespaceName:
-		nodes.Parent()
-		if nodes.Parent().Type == phrase.ConstantAccessExpression {
+		case "->":
+			prev := parent.PrevSibling()
+			if prev != nil {
+				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
+				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				if s != nil {
+					s.Resolve(resolveCtx)
+					completionList = memberAccessCompletion(store, document, word, s)
+				}
+			}
+		case "name":
+			par := nodes.Parent()
+			if par != nil {
+				switch par.Type() {
+				case "class_constant_access_expression":
+					if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = scopedAccessCompletion(store, document, word, s.Scope)
+					}
+				case "scoped_call_expression":
+					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = scopedAccessCompletion(store, document, word, s.Scope)
+					}
+				case "member_access_expression":
+					if s, ok := symbol.(*analysis.PropertyAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = memberAccessCompletion(store, document, word, s.Scope)
+					}
+				case "member_call_expression":
+					if s, ok := symbol.(*analysis.MethodAccess); ok {
+						s.Scope.Resolve(resolveCtx)
+						completionList = memberAccessCompletion(store, document, word, s.Scope)
+					}
+				case "ERROR":
+					completionList = nameCompletion(store, document, symbol, word)
+				case "variable_name":
+					completionList = variableCompletion(document, pos, word)
+				}
+			}
+		case "$":
+			completionList = variableCompletion(document, pos, word)
+		case "named_label_statement":
 			completionList = nameCompletion(store, document, symbol, word)
-		}
-	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
-		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(resolveCtx), s.Scope)
-		}
-	case phrase.ScopedCallExpression:
-		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(resolveCtx), s.Scope)
-		}
-	case phrase.ScopedPropertyAccessExpression:
-		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
-			completionList = scopedAccessCompletion(store, document, word,
-				s.ResolveAndGetScope(resolveCtx), s.Scope)
-		}
-	case phrase.Identifier:
-		nodes.Parent()
-		parent := nodes.Parent()
-		switch parent.Type {
-		case phrase.ClassConstantAccessExpression, phrase.ScopedCallExpression:
-			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
-			if s, ok := symbol.(*analysis.ClassAccess); ok {
-				s.Resolve(resolveCtx)
-				completionList = scopedAccessCompletion(store, document, word,
-					s.Type, s)
-			}
-		}
-	case phrase.PropertyAccessExpression:
-		s := document.HasTypesBeforePos(params.Position)
-		if s != nil {
-			s.Resolve(resolveCtx)
-			completionList = memberAccessCompletion(store, document, word, s.GetTypes(), s, params.Position)
-		}
-	case phrase.MemberName:
-		parent := nodes.Parent()
-		switch parent.Type {
-		case phrase.PropertyAccessExpression:
-			if s, ok := symbol.(*analysis.PropertyAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
-			}
-		case phrase.MethodCallExpression:
-			if s, ok := symbol.(*analysis.MethodAccess); ok {
-				completionList = memberAccessCompletion(store, document, word, s.ResolveAndGetScope(resolveCtx), s.Scope, params.Position)
-			}
 		}
 	}
 	switch s := symbol.(type) {
@@ -231,8 +228,7 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	return completionList
 }
 
-func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
-	scopeTypes analysis.TypeComposite, scope analysis.HasTypes) *protocol.CompletionList {
+func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
@@ -244,7 +240,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	if hasScope, ok := scope.(analysis.HasScope); ok {
 		classScope = hasScope.GetScope()
 	}
-	for _, scopeType := range scopeTypes.Resolve() {
+	for _, scopeType := range scope.GetTypes().Resolve() {
 		scopeTypeFQN := scopeType.GetFQN()
 		props := []*analysis.Property{}
 		methods := []*analysis.Method{}
@@ -286,12 +282,11 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string,
-	scopeTypes analysis.TypeComposite, scope analysis.HasTypes, pos protocol.Position) *protocol.CompletionList {
+func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	for _, scopeType := range scopeTypes.Resolve() {
+	for _, scopeType := range scope.GetTypes().Resolve() {
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {

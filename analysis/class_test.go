@@ -16,7 +16,7 @@ func TestClass(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -28,7 +28,7 @@ func TestClassSerialiseAndDeserialise(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	for _, child := range document.Children {
 		if theClass, ok := child.(*Class); ok {
@@ -55,7 +55,7 @@ func TestClassDescription(t *testing.T) {
 		panic(err)
 	}
 
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }

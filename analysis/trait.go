@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Trait contains information of a trait
@@ -15,7 +14,7 @@ type Trait struct {
 	Name TypeString
 }
 
-func newTrait(document *Document, node *phrase.Phrase) Symbol {
+func newTrait(document *Document, node *sitter.Node) Symbol {
 	trait := &Trait{
 		location: document.GetNodeLocation(node),
 	}
@@ -23,33 +22,17 @@ func newTrait(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.TraitDeclarationHeader:
-				document.addSymbol(trait)
-				trait.analyseHeader(document, p)
-			case phrase.TraitDeclarationBody:
-				scanForChildren(document, p)
-			}
+		switch child.Type() {
+		case "name":
+			document.addSymbol(trait)
+			trait.Name = NewTypeString(document.GetNodeText(child))
+			trait.Name.SetNamespace(document.GetImportTable().namespace)
+		case "body":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
 	return nil
-}
-
-func (s *Trait) analyseHeader(document *Document, traitHeader *phrase.Phrase) {
-	traverser := util.NewTraverser(traitHeader)
-	child := traverser.Advance()
-	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			if token.Type == lexer.Name {
-				s.Name = NewTypeString(document.GetTokenText(token))
-				s.Name.SetNamespace(document.GetImportTable().namespace)
-			}
-		}
-
-		child = traverser.Advance()
-	}
 }
 
 func (s *Trait) GetLocation() protocol.Location {

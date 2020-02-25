@@ -8,12 +8,12 @@ import (
 	"sort"
 	"sync"
 	"time"
+	"unicode/utf8"
 
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/parser"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/smacker/go-tree-sitter/php"
 )
 
 var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
@@ -21,8 +21,8 @@ var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\
 // Document contains information of documents
 type Document struct {
 	uri         string
-	rootNode    *phrase.Phrase
-	text        []rune
+	tree        *sitter.Tree
+	text        []byte
 	lineOffsets []int
 	loadMu      sync.Mutex
 	isOpen      bool
@@ -99,7 +99,7 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewDocument(uri string, text string) *Document {
+func NewDocument(uri string, text []byte) *Document {
 	document := &Document{
 		uri:                uri,
 		Children:           []Symbol{},
@@ -134,15 +134,16 @@ func (s *Document) ResetState() {
 	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
-	s.rootNode = nil
 	s.importTable = newImportTable()
 }
 
-func (s *Document) GetRootNode() *phrase.Phrase {
-	if s.rootNode == nil {
-		s.rootNode = parser.Parse(string(s.GetText()))
+func (s *Document) GetRootNode() *sitter.Node {
+	if s.tree == nil {
+		p := sitter.NewParser()
+		p.SetLanguage(php.GetLanguage())
+		s.tree = p.Parse(nil, s.GetText())
 	}
-	return s.rootNode
+	return s.tree.RootNode()
 }
 
 // Load makes sure that symbols are available
@@ -167,33 +168,38 @@ func (s *Document) GetURI() string {
 }
 
 // SetText is a setter for text, at the same time update line offsets
-func (s *Document) SetText(text string) {
-	s.text = []rune(text)
+func (s *Document) SetText(text []byte) {
+	s.text = text
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
 
-func calculateLineOffsets(text []rune, offset int) ([]int, string) {
+func calculateLineOffsets(text []byte, offset int) ([]int, string) {
 	n := 0
-	length := len(text)
 	isLineStart := true
 	lineOffsets := []int{}
-	var c rune
+	var r rune
+	var size int
 	eol := "\n"
 	stopDetectingEol := false
 
-	for n := 0; n < length; n++ {
-		c = text[n]
+	for len(text) > 0 {
+		r, size = utf8.DecodeRune(text)
 		if isLineStart {
 			lineOffsets = append(lineOffsets, n)
 			isLineStart = false
 		}
-		if c == '\r' {
-			n++
-			if n < length && text[n] == '\n' {
-				n++
-				if !stopDetectingEol {
-					eol = "\r\n"
-					stopDetectingEol = true
+		if r == '\r' {
+			if len(text) > 0 {
+				nextR, nextSize := utf8.DecodeRune(text[size:])
+				if nextR == '\n' {
+					text = text[size+nextSize:]
+					n += size + nextSize
+					if !stopDetectingEol {
+						eol = "\r\n"
+						stopDetectingEol = true
+					}
+					lineOffsets = append(lineOffsets, n+offset)
+					continue
 				}
 			} else {
 				if !stopDetectingEol {
@@ -202,9 +208,11 @@ func calculateLineOffsets(text []rune, offset int) ([]int, string) {
 				}
 			}
 			lineOffsets = append(lineOffsets, n+offset)
-		} else if c == '\n' {
+		} else if r == '\n' {
 			lineOffsets = append(lineOffsets, n+offset+1)
 		}
+		text = text[size:]
+		n += size
 	}
 	if isLineStart {
 		lineOffsets = append(lineOffsets, n)
@@ -250,75 +258,37 @@ func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	return min
 }
 
-func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
-	var start, end int
-
-	switch node := node.(type) {
-	case *lexer.Token:
-		start = node.Offset
-		end = node.Offset + node.Length
-	case *phrase.Phrase:
-		firstToken, lastToken := util.FirstToken(node), util.LastToken(node)
-		if firstToken != nil || lastToken != nil {
-			start = firstToken.Offset
-			end = lastToken.Offset + lastToken.Length
-		}
-	}
-
-	return protocol.Range{Start: s.positionAt(start), End: s.positionAt(end)}
+func (s *Document) nodeRange(node *sitter.Node) protocol.Range {
+	return protocol.Range{Start: util.PointToPosition(node.StartPoint()), End: util.PointToPosition(node.EndPoint())}
 }
 
-func (s *Document) errorRange(err *phrase.ParseError) protocol.Range {
-	if len(err.Children) == 0 {
-		return protocol.Range{
-			Start: s.positionAt(err.Unexpected.Offset),
-			End:   s.positionAt(err.Unexpected.Offset + err.Unexpected.Length),
-		}
-	}
-
-	firstToken := err.Children[0].(*lexer.Token)
-	lastToken := err.Children[len(err.Children)-1].(*lexer.Token)
-	return protocol.Range{
-		Start: s.positionAt(firstToken.Offset),
-		End:   s.positionAt(lastToken.Offset + lastToken.Length),
-	}
+func (s *Document) errorRange(err *sitter.Node) protocol.Range {
+	return s.nodeRange(err)
 }
 
 // GetText is a getter for text
-func (s *Document) GetText() []rune {
+func (s *Document) GetText() []byte {
 	return s.text
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node phrase.AstNode) protocol.Location {
+func (s *Document) GetNodeLocation(node *sitter.Node) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
 		Range: s.nodeRange(node),
 	}
 }
 
-func (s *Document) GetNodeText(node phrase.AstNode) string {
-	switch node := node.(type) {
-	case *lexer.Token:
-		return s.GetTokenText(node)
-	case *phrase.Phrase:
-		return s.GetPhraseText(node)
-	}
-
-	return ""
+func (s *Document) GetNodeText(node *sitter.Node) string {
+	return node.Content(s.GetText())
 }
 
-func (s *Document) GetPhraseText(phrase *phrase.Phrase) string {
-	firstToken, lastToken := util.FirstToken(phrase), util.LastToken(phrase)
-	if firstToken == nil || lastToken == nil {
-		return ""
-	}
-
-	return string(s.text[firstToken.Offset : lastToken.Offset+lastToken.Length])
+func (s *Document) GetPhraseText(phrase *sitter.Node) string {
+	return s.GetNodeText(phrase)
 }
 
-func (s *Document) GetTokenText(token *lexer.Token) string {
-	return string(s.text[token.Offset : token.Offset+token.Length])
+func (s *Document) GetTokenText(token *sitter.Node) string {
+	return s.GetNodeText(token)
 }
 
 func (s *Document) addSymbol(other Symbol) {
@@ -349,7 +319,7 @@ func (s *Document) addSymbol(other Symbol) {
 	s.Children = append(s.Children, other)
 }
 
-func (s *Document) pushVariableTable(node *phrase.Phrase) {
+func (s *Document) pushVariableTable(node *sitter.Node) {
 	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
 	if s.variableTableLevel > 0 {
 		s.getCurrentVariableTable().addChild(newVarTable)
@@ -442,9 +412,10 @@ func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	found := util.NodeStack{}
 	traverser := util.NewTraverser(s.GetRootNode())
-	traverser.Traverse(func(node phrase.AstNode, spine []*phrase.Phrase) bool {
-		if t, ok := node.(*lexer.Token); ok && offset > t.Offset && offset <= (t.Offset+t.Length) {
+	traverser.Traverse(func(node *sitter.Node, spine []*sitter.Node) bool {
+		if node.ChildCount() == 0 && offset > int(node.StartByte()) && offset <= int(node.EndByte()) {
 			found = append(spine[:0:0], spine...)
+			found = append(found, node)
 			return false
 		}
 		return true
@@ -556,13 +527,13 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 
 // ApplyChanges applies the changes to line offsets and text
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
-	defer util.TimeTrack(time.Now(), "ApplyChanges")
 	// log.Printf("ApplyChanges: %p", s)
+	start := time.Now()
 	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
-		text := []rune(change.Text)
+		text := []byte(change.Text)
 
 		startOffset := s.OffsetAtPosition(start)
 		endOffset := s.OffsetAtPosition(end)
@@ -588,7 +559,35 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 	}
+	util.TimeTrack(start, "contentChanges")
+	if s.tree != nil {
+		start = time.Now()
+		for _, change := range changes {
+			start := change.Range.Start
+			end := change.Range.End
+			text := []byte(change.Text)
+			startOffset := s.OffsetAtPosition(start)
+			endOffset := s.OffsetAtPosition(end)
+			rangeLength := endOffset - startOffset
+
+			s.tree.Edit(sitter.EditInput{
+				StartIndex:  uint32(startOffset),
+				OldEndIndex: uint32(startOffset) + uint32(rangeLength),
+				NewEndIndex: uint32(startOffset) + uint32(len(text)),
+				StartPoint:  util.PositionToPoint(start),
+				OldEndPoint: util.PositionToPoint(s.positionAt(startOffset + rangeLength)),
+				NewEndPoint: util.PositionToPoint(s.positionAt(startOffset + len(text))),
+			})
+		}
+		p := sitter.NewParser()
+		p.SetLanguage(php.GetLanguage())
+		oldTree := s.tree
+		s.tree = p.Parse(oldTree, s.GetText())
+		util.TimeTrack(start, "editASTTree")
+	}
+	start = time.Now()
 	s.Load()
+	util.TimeTrack(start, "Load")
 }
 
 func (s *Document) getLines() []string {
@@ -637,7 +636,7 @@ func (s *Document) getGlobalVariable(name string) *GlobalVariable {
 }
 
 func (s *Document) GetHash() []byte {
-	hash := sha1.Sum(util.RunesToUTF8(s.GetText()))
+	hash := sha1.Sum(s.GetText())
 	return hash[:]
 }
 

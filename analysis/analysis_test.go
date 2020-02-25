@@ -71,7 +71,7 @@ func analyse(context *ParsingContext, id int, filePaths <-chan string) {
 	count := 0
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
-		document := NewDocument("test"+string(id)+string(count), string(data))
+		document := NewDocument("test"+string(id)+string(count), data)
 		document.Load()
 		context.addDocument(document)
 		context.waitGroup.Done()

@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // VisibilityModifierValue is a value of visibility modifier (public, protected, private)
@@ -62,6 +62,7 @@ type HasParams interface {
 
 type HasScope interface {
 	GetScope() string
+	IsScopeSymbol() bool
 }
 
 type serialisable interface {
@@ -74,6 +75,6 @@ type HasParamsResolvable interface {
 	ResolveToHasParams(ctx ResolveContext) []HasParams
 }
 
-func transformQualifiedName(p *phrase.Phrase, document *Document) TypeString {
-	return NewTypeString(string(document.GetNodeText(p)))
+func transformQualifiedName(n *sitter.Node, document *Document) TypeString {
+	return NewTypeString(document.GetNodeText(n))
 }

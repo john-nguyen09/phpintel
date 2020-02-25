@@ -15,7 +15,7 @@ func TestConstantAccess(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	cupaloy.SnapshotT(t, document.Children)
 }
@@ -26,7 +26,7 @@ func TestConstantAccessSerialiseAndDeserialise(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	document := NewDocument("test1", string(data))
+	document := NewDocument("test1", data)
 	document.Load()
 	for _, child := range document.Children {
 		if constantAccess, ok := child.(*ConstantAccess); ok {

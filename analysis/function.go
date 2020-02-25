@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Function contains information of functions
@@ -19,8 +18,9 @@ type Function struct {
 }
 
 var _ HasScope = (*Function)(nil)
+var _ Symbol = (*Function)(nil)
 
-func newFunction(document *Document, node *phrase.Phrase) Symbol {
+func newFunction(document *Document, node *sitter.Node) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),
 		Params:      make([]*Parameter, 0),
@@ -33,23 +33,19 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
-			phrase.FunctionDeclarationHeader,
-			phrase.MethodDeclarationHeader,
-		}); ok {
-			function.analyseHeader(document, p)
+		switch child.Type() {
+		case "name":
+			function.Name = NewTypeString(document.GetNodeText(child))
+		case "formal_parameters":
+			function.analyseParameterDeclarationList(document, child)
 			if phpDoc != nil {
 				function.applyPhpDoc(document, *phpDoc)
 			}
 			for _, param := range function.Params {
 				variableTable.add(param.ToVariable())
 			}
-		}
-		if p, ok := util.IsOfPhraseTypes(child, []phrase.PhraseType{
-			phrase.FunctionDeclarationBody,
-			phrase.MethodDeclarationBody,
-		}); ok {
-			scanForChildren(document, p)
+		case "compound_statement":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -58,37 +54,12 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	return function
 }
 
-func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
+func (s *Function) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Name:
-				{
-					s.Name = NewTypeString(document.GetTokenText(token))
-				}
-			}
-		} else if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.ParameterDeclarationList:
-				{
-					s.analyseParameterDeclarationList(document, p)
-				}
-			case phrase.Identifier:
-				s.Name = NewTypeString(document.GetPhraseText(p))
-			}
-		}
-		child = traverser.Advance()
-	}
-}
-
-func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+		if child.Type() == "simple_parameter" {
+			param := newParameter(document, child)
 			s.Params = append(s.Params, param)
 		}
 
@@ -149,6 +120,10 @@ func (s *Function) GetIndexCollection() string {
 
 func (s *Function) GetScope() string {
 	return s.Name.GetNamespace()
+}
+
+func (s *Function) IsScopeSymbol() bool {
+	return false
 }
 
 func (s *Function) GetNameLabel() string {

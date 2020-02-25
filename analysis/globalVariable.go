@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type GlobalVariable struct {
@@ -15,14 +15,15 @@ type GlobalVariable struct {
 	Name string
 }
 
-func newGlobalDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newGlobalDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.VariableNameList:
-				analyseVariableNameList(document, p)
+		switch child.Type() {
+		case "variable_name":
+			globalVariable := newGlobalVariable(document, child)
+			if globalVariable != nil {
+				document.addSymbol(globalVariable)
 			}
 		}
 		child = traverser.Advance()
@@ -30,24 +31,10 @@ func newGlobalDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func analyseVariableNameList(document *Document, node *phrase.Phrase) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
-			globalVariable := newGlobalVariable(document, p)
-			if globalVariable != nil {
-				document.addSymbol(globalVariable)
-			}
-		}
-		child = traverser.Advance()
-	}
-}
-
-func newGlobalVariable(document *Document, node *phrase.Phrase) Symbol {
+func newGlobalVariable(document *Document, node *sitter.Node) Symbol {
 	globalVariable := &GlobalVariable{
 		location: document.GetNodeLocation(node),
-		Name:     document.GetPhraseText(node),
+		Name:     document.GetNodeText(node),
 		types:    newTypeComposite(),
 	}
 	phpDoc := document.getValidPhpDoc(globalVariable.location)

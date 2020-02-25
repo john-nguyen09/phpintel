@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Method contains information of methods
@@ -23,6 +22,7 @@ type Method struct {
 }
 
 var _ HasScope = (*Method)(nil)
+var _ Symbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
@@ -46,7 +46,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
+func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
@@ -56,8 +56,17 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := util.IsOfPhraseType(child, phrase.MethodDeclarationHeader); ok {
-			s.analyseHeader(document, p)
+		switch child.Type() {
+		case "visibility_modifier":
+			s.VisibilityModifier = getMemberModifier(child)
+		case "static_modifier":
+			s.IsStatic = true
+		case "class_modifier":
+			s.ClassModifier = getClassModifier(child)
+		case "name":
+			s.Name = document.GetNodeText(child)
+		case "formal_parameters":
+			s.analyseParameterDeclarationList(document, child)
 			if phpDoc != nil {
 				s.applyPhpDoc(document, *phpDoc)
 			}
@@ -65,16 +74,15 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 			for _, param := range s.Params {
 				variableTable.add(param.ToVariable())
 			}
-		}
-		if p, ok := util.IsOfPhraseType(child, phrase.MethodDeclarationBody); ok {
-			scanForChildren(document, p)
+		case "compound_statement":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
 	document.popVariableTable()
 }
 
-func newMethod(document *Document, node *phrase.Phrase) Symbol {
+func newMethod(document *Document, node *sitter.Node) Symbol {
 	method := &Method{
 		IsStatic:    false,
 		location:    document.GetNodeLocation(node),
@@ -102,39 +110,12 @@ func (s Method) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) {
-	traverser := util.NewTraverser(methodHeader)
-	child := traverser.Advance()
-	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.MemberModifierList:
-				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
-			case phrase.ParameterDeclarationList:
-				{
-					s.analyseParameterDeclarationList(document, p)
-				}
-			case phrase.Identifier:
-				s.Name = document.GetPhraseText(p)
-			}
-		} else if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Name:
-				{
-					s.Name = document.GetTokenText(token)
-				}
-			}
-		}
-		child = traverser.Advance()
-	}
-}
-
-func (s *Method) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+func (s *Method) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+		if child.Type() == "simple_parameter" {
+			param := newParameter(document, child)
 			s.Params = append(s.Params, param)
 		}
 
@@ -200,6 +181,10 @@ func (s *Method) GetParams() []*Parameter {
 
 func (s *Method) GetScope() string {
 	return s.Scope.GetFQN()
+}
+
+func (s *Method) IsScopeSymbol() bool {
+	return true
 }
 
 func (s *Method) Serialise(e *storage.Encoder) {

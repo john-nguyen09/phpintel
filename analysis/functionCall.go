@@ -3,11 +3,10 @@ package analysis
 import (
 	"strings"
 
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // FunctionCall represents a reference to function call
@@ -16,18 +15,25 @@ type FunctionCall struct {
 	hasResolved bool
 }
 
-func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
-	if len(node.Children) >= 1 {
-		nameLowerCase := strings.ToLower(document.GetNodeText(node.Children[0]))
-		if nameLowerCase == "\\define" || nameLowerCase == "define" {
-			return newDefine(document, node)
+func tryToNewDefine(document *Document, node *sitter.Node) Symbol {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		switch child.Type() {
+		case "qualified_name":
+			name := strings.ToLower(document.GetNodeText(child))
+			if name == "\\define" || name == "define" {
+				return newDefine(document, node)
+			}
+		case "arguments":
+			scanForChildren(document, child)
 		}
-		scanForChildren(document, node)
+		child = traverser.Advance()
 	}
 	return nil
 }
 
-func newFunctionCall(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newFunctionCall(document *Document, node *sitter.Node) (HasTypes, bool) {
 	functionCall := &FunctionCall{
 		Expression: Expression{},
 	}
@@ -36,25 +42,21 @@ func newFunctionCall(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	child := traverser.Advance()
 	firstChild := child
 	if firstChild != nil {
-		functionCall.Location = document.GetNodeLocation(node.Children[0])
-		functionCall.Name = document.GetNodeText(node.Children[0])
+		functionCall.Location = document.GetNodeLocation(node.Child(0))
+		functionCall.Name = document.GetNodeText(node.Child(0))
 	}
-	var open *lexer.Token = nil
-	var close *lexer.Token = nil
+	var open *sitter.Node = nil
+	var close *sitter.Node = nil
 	hasArgs := false
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			if p.Type == phrase.ArgumentExpressionList {
-				hasArgs = true
-				break
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			switch t.Type {
-			case lexer.OpenParenthesis:
-				open = t
-			case lexer.CloseParenthesis:
-				close = t
-			}
+		switch child.Type() {
+		case "arguments":
+			hasArgs = true
+			break
+		case "(":
+			open = child
+		case ")":
+			close = child
 		}
 		child = traverser.Advance()
 	}

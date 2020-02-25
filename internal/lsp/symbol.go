@@ -22,14 +22,15 @@ func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSy
 	for _, child := range document.Children {
 		switch v := child.(type) {
 		case analysis.HasScope:
-			key := v.GetScope()
-			scopedSymbols[key] = append(scopedSymbols[key], child)
+			if v.IsScopeSymbol() {
+				key := v.GetScope()
+				scopedSymbols[key] = append(scopedSymbols[key], child)
+			}
 		}
 	}
 
 	for _, child := range document.Children {
-		switch child.(type) {
-		case analysis.HasScope:
+		if v, ok := child.(analysis.HasScope); ok && v.IsScopeSymbol() {
 			continue
 		}
 		symbol, fqn := symbolToProtocolDocumentSymbol(child)

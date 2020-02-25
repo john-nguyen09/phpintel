@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -30,7 +29,7 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	defer document.Unlock()
 	pos := params.TextDocumentPositionParams.Position
 	nodeStack := document.NodeSpineAt(document.OffsetAtPosition(pos))
-	if nodeStack.Parent().Type == phrase.ArrayInitialiserList {
+	if par := nodeStack.Parent(); par != nil && par.Type() == "array_element_initializer" {
 		return nil, nil
 	}
 	argumentList, hasParamsResolvable := document.ArgumentListAndFunctionCallAt(pos)

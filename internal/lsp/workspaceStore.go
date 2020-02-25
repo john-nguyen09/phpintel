@@ -205,7 +205,6 @@ func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
 }
 
 func (s *workspaceStore) changeDocument(ctx context.Context, uri string, changes []protocol.TextDocumentContentChangeEvent) error {
-	defer util.TimeTrack(time.Now(), "changeDocument")
 	store := s.getStore(uri)
 	if store == nil {
 		return StoreNotFound(uri)

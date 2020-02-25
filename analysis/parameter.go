@@ -1,11 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
-	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Parameter contains information of a function parameter
@@ -19,7 +18,7 @@ type Parameter struct {
 	Value string        `json:"Value"`
 }
 
-func newParameter(document *Document, node *phrase.Phrase) *Parameter {
+func newParameter(document *Document, node *sitter.Node) *Parameter {
 	param := &Parameter{
 		location: document.GetNodeLocation(node),
 	}
@@ -27,42 +26,23 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 	child := traverser.Advance()
 	hasEqual := false
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			switch p.Type {
-			case phrase.TypeDeclaration:
-				{
-					typeDeclaration := newTypeDeclaration(document, p)
-					for _, typeString := range typeDeclaration.Type.typeStrings {
-						param.Type.add(typeString)
-					}
-					document.addSymbol(typeDeclaration)
+		switch child.Type() {
+		case "type_name":
+			{
+				typeDeclaration := newTypeDeclaration(document, child)
+				for _, typeString := range typeDeclaration.Type.typeStrings {
+					param.Type.add(typeString)
 				}
-			case phrase.ConstantAccessExpression:
-				if constAccess, shouldAdd := newConstantAccess(document, p); shouldAdd {
-					document.addSymbol(constAccess)
-				}
+				document.addSymbol(typeDeclaration)
 			}
-
+		case "variable_name":
+			param.Name = document.GetNodeText(child)
+		case "=":
+			hasEqual = true
+		default:
 			if hasEqual {
 				param.hasValue = true
-				param.Value += document.GetPhraseText(p)
-			}
-		} else if token, ok := child.(*lexer.Token); ok {
-			switch token.Type {
-			case lexer.Equals:
-				{
-					hasEqual = true
-					traverser.SkipToken(lexer.Whitespace)
-				}
-			case lexer.VariableName:
-				{
-					param.Name = document.GetTokenText(token)
-				}
-			default:
-				if hasEqual {
-					param.hasValue = true
-					param.Value += document.GetTokenText(token)
-				}
+				param.Value += document.GetNodeText(child)
 			}
 		}
 		child = traverser.Advance()

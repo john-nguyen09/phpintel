@@ -1,11 +1,11 @@
 (*analysis.ArgumentList)({
   location: (protocol.Location) {
     URI: (string) (len=5) "test1",
-    Range: (protocol.Range) 15:63-15:64
+    Range: (protocol.Range) 15:63-15:65
   },
-  arguments: ([]phrase.AstNode) <nil>,
+  arguments: ([]*sitter.Node) <nil>,
   ranges: ([]protocol.Range) (len=1) {
-    (protocol.Range) 15:63-15:64
+    (protocol.Range) 15:63-15:65
   }
 })
 (*analysis.ScopedMethodAccess)({
