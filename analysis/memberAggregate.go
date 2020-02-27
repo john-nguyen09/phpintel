@@ -1,6 +1,8 @@
 package analysis
 
-import "strings"
+import (
+	"strings"
+)
 
 func withNoDuplicateNamesOptions(opt SearchOptions) SearchOptions {
 	excludeNames := map[string]bool{}
@@ -56,6 +58,16 @@ func searchInterfaceMethods(store *Store, theInterface *Interface, options Searc
 			methods = append(methods, method)
 		}
 	}
+
+	for _, typeString := range theInterface.Extends {
+		if typeString.IsEmpty() {
+			continue
+		}
+		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
+			methods = append(methods, searchInterfaceMethods(store, theInterface, options)...)
+		}
+	}
+
 	return methods
 }
 
@@ -81,13 +93,6 @@ func searchClassMethods(store *Store, class *Class, options SearchOptions) []*Me
 			methods = append(methods, method)
 		}
 	}
-	return methods
-}
-
-func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
-	methods := []*Method{}
-	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
-	methods = append(methods, searchClassMethods(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
@@ -113,6 +118,11 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 		}
 	}
 	return methods
+}
+
+func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	return searchClassMethods(store, class, options)
 }
 
 func GetClassMethods(store *Store, class *Class, name string, options SearchOptions) []*Method {
@@ -198,13 +208,6 @@ func searchClassProperties(store *Store, class *Class, options SearchOptions) []
 			props = append(props, prop)
 		}
 	}
-	return props
-}
-
-func SearchClassProperties(store *Store, class *Class, keyword string, options SearchOptions) []*Property {
-	props := []*Property{}
-	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
-	props = append(props, searchClassProperties(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
@@ -230,6 +233,11 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 		}
 	}
 	return props
+}
+
+func SearchClassProperties(store *Store, class *Class, keyword string, options SearchOptions) []*Property {
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	return searchClassProperties(store, class, options)
 }
 
 func GetClassProperties(store *Store, class *Class, name string, options SearchOptions) []*Property {
@@ -315,13 +323,6 @@ func searchClassClassConsts(store *Store, class *Class, options SearchOptions) [
 			classConsts = append(classConsts, classConst)
 		}
 	}
-	return classConsts
-}
-
-func SearchClassClassConsts(store *Store, class *Class, keyword string, options SearchOptions) []*ClassConst {
-	classConsts := []*ClassConst{}
-	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
-	classConsts = append(classConsts, searchClassClassConsts(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
@@ -347,6 +348,11 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 		}
 	}
 	return classConsts
+}
+
+func SearchClassClassConsts(store *Store, class *Class, keyword string, options SearchOptions) []*ClassConst {
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	return searchClassClassConsts(store, class, options)
 }
 
 func GetClassClassConsts(store *Store, class *Class, name string, options SearchOptions) []*ClassConst {
