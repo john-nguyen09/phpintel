@@ -542,6 +542,19 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newText = append(newText, s.text[endOffset:]...)
 		s.text = newText
 
+		rangeLength := endOffset - startOffset
+		oldEndIndex := startOffset + rangeLength
+		newEndIndex := startOffset + len(text)
+		edit := sitter.EditInput{
+			StartIndex:  uint32(startOffset),
+			OldEndIndex: uint32(oldEndIndex),
+			NewEndIndex: uint32(newEndIndex),
+			StartPoint:  util.PositionToPoint(start),
+			OldEndPoint: util.PositionToPoint(s.positionAt(oldEndIndex)),
+			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
+		}
+		s.tree.Edit(edit)
+
 		min := start.Line + 1
 		if min > len(s.lineOffsets) {
 			min = len(s.lineOffsets)
@@ -558,33 +571,12 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			}
 		}
 		s.lineOffsets = newLineOffsets
-	}
-	util.TimeTrack(start, "contentChanges")
-	if s.tree != nil {
-		start = time.Now()
-		for _, change := range changes {
-			start := change.Range.Start
-			end := change.Range.End
-			text := []byte(change.Text)
-			startOffset := s.OffsetAtPosition(start)
-			endOffset := s.OffsetAtPosition(end)
-			rangeLength := endOffset - startOffset
-
-			s.tree.Edit(sitter.EditInput{
-				StartIndex:  uint32(startOffset),
-				OldEndIndex: uint32(startOffset) + uint32(rangeLength),
-				NewEndIndex: uint32(startOffset) + uint32(len(text)),
-				StartPoint:  util.PositionToPoint(start),
-				OldEndPoint: util.PositionToPoint(s.positionAt(startOffset + rangeLength)),
-				NewEndPoint: util.PositionToPoint(s.positionAt(startOffset + len(text))),
-			})
-		}
 		p := sitter.NewParser()
 		p.SetLanguage(php.GetLanguage())
 		oldTree := s.tree
 		s.tree = p.Parse(oldTree, s.GetText())
-		util.TimeTrack(start, "editASTTree")
 	}
+	util.TimeTrack(start, "contentChanges")
 	start = time.Now()
 	s.Load()
 	util.TimeTrack(start, "Load")
