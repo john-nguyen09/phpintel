@@ -1,5 +1,7 @@
 package analysis
 
+import "strings"
+
 func withNoDuplicateNamesOptions(opt SearchOptions) SearchOptions {
 	excludeNames := map[string]bool{}
 	return opt.
@@ -14,10 +16,26 @@ func withNoDuplicateNamesOptions(opt SearchOptions) SearchOptions {
 		})
 }
 
-func SearchTraitMethods(store *Store, trait *Trait, keyword string, options SearchOptions) []*Method {
+func withKeywordOptions(keyword string, opt SearchOptions) SearchOptions {
+	if keyword == "" {
+		return opt
+	}
+	return opt.
+		WithPredicate(func(symbol Symbol) bool {
+			if v, ok := symbol.(NameIndexable); ok {
+				return strings.Contains(v.GetIndexableName(), keyword)
+			}
+			return true
+		})
+}
+
+func SearchTraitMethods(store *Store, trait *Trait, options SearchOptions) []*Method {
 	methods := []*Method{}
-	traitMethods, _ := store.SearchMethods(trait.Name.GetFQN(), keyword, options)
-	methods = append(methods, traitMethods...)
+	for _, method := range store.GetAllMethods(trait.Name.GetFQN()) {
+		if isSymbolValid(method, options) {
+			methods = append(methods, method)
+		}
+	}
 	return methods
 }
 
@@ -31,12 +49,19 @@ func GetTraitMethods(store *Store, trait *Trait, name string, options SearchOpti
 	return methods
 }
 
-func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword string,
-	options SearchOptions) []*Method {
+func searchInterfaceMethods(store *Store, theInterface *Interface, options SearchOptions) []*Method {
 	methods := []*Method{}
-	interfaceMethods, _ := store.SearchMethods(theInterface.Name.GetFQN(), keyword, options)
-	methods = append(methods, interfaceMethods...)
+	for _, method := range store.GetAllMethods(theInterface.Name.GetFQN()) {
+		if isSymbolValid(method, options) {
+			methods = append(methods, method)
+		}
+	}
 	return methods
+}
+
+func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword string, options SearchOptions) []*Method {
+	options = withKeywordOptions(keyword, options)
+	return searchInterfaceMethods(store, theInterface, options)
 }
 
 func GetInterfaceMethods(store *Store, theInterface *Interface, name string, options SearchOptions) []*Method {
@@ -49,24 +74,33 @@ func GetInterfaceMethods(store *Store, theInterface *Interface, name string, opt
 	return methods
 }
 
+func searchClassMethods(store *Store, class *Class, options SearchOptions) []*Method {
+	methods := []*Method{}
+	for _, method := range store.GetAllMethods(class.Name.GetFQN()) {
+		if isSymbolValid(method, options) {
+			methods = append(methods, method)
+		}
+	}
+	return methods
+}
+
 func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
 	methods := []*Method{}
-	options = withNoDuplicateNamesOptions(options)
-	classMethods, _ := store.SearchMethods(class.Name.GetFQN(), keyword, options)
-	methods = append(methods, classMethods...)
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	methods = append(methods, searchClassMethods(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			methods = append(methods, SearchTraitMethods(store, trait, keyword, options)...)
+			methods = append(methods, SearchTraitMethods(store, trait, options)...)
 		}
 	}
 
 	if !class.Extends.IsEmpty() {
 		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			methods = append(methods, SearchClassMethods(store, class, keyword, options)...)
+			methods = append(methods, searchClassMethods(store, class, options)...)
 		}
 	}
 
@@ -75,7 +109,7 @@ func SearchClassMethods(store *Store, class *Class, keyword string, options Sear
 			continue
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			methods = append(methods, SearchInterfaceMethods(store, theInterface, keyword, options)...)
+			methods = append(methods, searchInterfaceMethods(store, theInterface, options)...)
 		}
 	}
 	return methods
@@ -117,10 +151,13 @@ func GetClassMethods(store *Store, class *Class, name string, options SearchOpti
 	return methods
 }
 
-func searchTraitProps(store *Store, trait *Trait, keyword string, options SearchOptions) []*Property {
+func searchTraitProps(store *Store, trait *Trait, options SearchOptions) []*Property {
 	props := []*Property{}
-	traitProps, _ := store.SearchProperties(trait.Name.GetFQN(), keyword, options)
-	props = append(props, traitProps...)
+	for _, prop := range store.GetAllProperties(trait.Name.GetFQN()) {
+		if isSymbolValid(prop, options) {
+			props = append(props, prop)
+		}
+	}
 	return props
 }
 
@@ -134,10 +171,13 @@ func getTraitProps(store *Store, trait *Trait, name string, options SearchOption
 	return props
 }
 
-func searchInterfaceProps(store *Store, theInterface *Interface, keyword string, options SearchOptions) []*Property {
+func searchInterfaceProps(store *Store, theInterface *Interface, options SearchOptions) []*Property {
 	props := []*Property{}
-	interfaceProps, _ := store.SearchProperties(theInterface.Name.GetFQN(), keyword, options)
-	props = append(props, interfaceProps...)
+	for _, prop := range store.GetAllProperties(theInterface.Name.GetFQN()) {
+		if isSymbolValid(prop, options) {
+			props = append(props, prop)
+		}
+	}
 	return props
 }
 
@@ -151,24 +191,33 @@ func getInterfaceProps(store *Store, theInterface *Interface, name string, optio
 	return props
 }
 
+func searchClassProperties(store *Store, class *Class, options SearchOptions) []*Property {
+	props := []*Property{}
+	for _, prop := range store.GetAllProperties(class.Name.GetFQN()) {
+		if isSymbolValid(prop, options) {
+			props = append(props, prop)
+		}
+	}
+	return props
+}
+
 func SearchClassProperties(store *Store, class *Class, keyword string, options SearchOptions) []*Property {
 	props := []*Property{}
-	options = withNoDuplicateNamesOptions(options)
-	classProps, _ := store.SearchProperties(class.Name.GetFQN(), keyword, options)
-	props = append(props, classProps...)
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	props = append(props, searchClassProperties(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			props = append(props, searchTraitProps(store, trait, keyword, options)...)
+			props = append(props, searchTraitProps(store, trait, options)...)
 		}
 	}
 
 	if !class.Extends.IsEmpty() {
 		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			props = append(props, SearchClassProperties(store, class, keyword, options)...)
+			props = append(props, searchClassProperties(store, class, options)...)
 		}
 	}
 
@@ -177,7 +226,7 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 			continue
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			props = append(props, searchInterfaceProps(store, theInterface, keyword, options)...)
+			props = append(props, searchInterfaceProps(store, theInterface, options)...)
 		}
 	}
 	return props
@@ -219,10 +268,13 @@ func GetClassProperties(store *Store, class *Class, name string, options SearchO
 	return props
 }
 
-func searchTraitClassConsts(store *Store, trait *Trait, keyword string, options SearchOptions) []*ClassConst {
+func searchTraitClassConsts(store *Store, trait *Trait, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
-	traitClassConsts, _ := store.SearchClassConsts(trait.Name.GetFQN(), keyword, options)
-	classConsts = append(classConsts, traitClassConsts...)
+	for _, classConst := range store.GetAllClassConsts(trait.Name.GetFQN()) {
+		if isSymbolValid(classConst, options) {
+			classConsts = append(classConsts, classConst)
+		}
+	}
 	return classConsts
 }
 
@@ -236,10 +288,13 @@ func getTraitClassConsts(store *Store, trait *Trait, name string, options Search
 	return classConsts
 }
 
-func searchInterfaceClassConsts(store *Store, theInterface *Interface, keyword string, options SearchOptions) []*ClassConst {
+func searchInterfaceClassConsts(store *Store, theInterface *Interface, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
-	interfaceClassConsts, _ := store.SearchClassConsts(theInterface.Name.GetFQN(), keyword, options)
-	classConsts = append(classConsts, interfaceClassConsts...)
+	for _, classConst := range store.GetAllClassConsts(theInterface.Name.GetFQN()) {
+		if isSymbolValid(classConst, options) {
+			classConsts = append(classConsts, classConst)
+		}
+	}
 	return classConsts
 }
 
@@ -253,24 +308,33 @@ func getInterfaceClassConsts(store *Store, theInterface *Interface, name string,
 	return classConsts
 }
 
+func searchClassClassConsts(store *Store, class *Class, options SearchOptions) []*ClassConst {
+	classConsts := []*ClassConst{}
+	for _, classConst := range store.GetAllClassConsts(class.Name.GetFQN()) {
+		if isSymbolValid(classConst, options) {
+			classConsts = append(classConsts, classConst)
+		}
+	}
+	return classConsts
+}
+
 func SearchClassClassConsts(store *Store, class *Class, keyword string, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
-	options = withNoDuplicateNamesOptions(options)
-	classClassConsts, _ := store.SearchClassConsts(class.Name.GetFQN(), keyword, options)
-	classConsts = append(classConsts, classClassConsts...)
+	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
+	classConsts = append(classConsts, searchClassClassConsts(store, class, options)...)
 
 	for _, traitName := range class.Use {
 		if traitName.IsEmpty() {
 			continue
 		}
 		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			classConsts = append(classConsts, searchTraitClassConsts(store, trait, keyword, options)...)
+			classConsts = append(classConsts, searchTraitClassConsts(store, trait, options)...)
 		}
 	}
 
 	if !class.Extends.IsEmpty() {
 		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			classConsts = append(classConsts, SearchClassClassConsts(store, class, keyword, options)...)
+			classConsts = append(classConsts, searchClassClassConsts(store, class, options)...)
 		}
 	}
 
@@ -279,7 +343,7 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 			continue
 		}
 		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			classConsts = append(classConsts, searchInterfaceClassConsts(store, theInterface, keyword, options)...)
+			classConsts = append(classConsts, searchInterfaceClassConsts(store, theInterface, options)...)
 		}
 	}
 	return classConsts

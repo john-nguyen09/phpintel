@@ -37,8 +37,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case "::":
 			prev := parent.PrevSibling()
 			if prev != nil {
-				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
-				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
+				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.EndPoint()))
 				if s != nil {
 					s.Resolve(resolveCtx)
 					completionList = scopedAccessCompletion(store, document, word, s)
@@ -47,8 +47,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case "->":
 			prev := parent.PrevSibling()
 			if prev != nil {
-				s := document.HasTypesAtPos(util.PointToPosition(prev.StartPoint()))
-				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.StartPoint()))
+				s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
+				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.EndPoint()))
 				if s != nil {
 					s.Resolve(resolveCtx)
 					completionList = memberAccessCompletion(store, document, word, s)
@@ -60,22 +60,30 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 				switch par.Type() {
 				case "class_constant_access_expression":
 					if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
-						s.Scope.Resolve(resolveCtx)
+						if s.Scope != nil {
+							s.Scope.Resolve(resolveCtx)
+						}
 						completionList = scopedAccessCompletion(store, document, word, s.Scope)
 					}
 				case "scoped_call_expression":
 					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
-						s.Scope.Resolve(resolveCtx)
+						if s.Scope != nil {
+							s.Scope.Resolve(resolveCtx)
+						}
 						completionList = scopedAccessCompletion(store, document, word, s.Scope)
 					}
 				case "member_access_expression":
 					if s, ok := symbol.(*analysis.PropertyAccess); ok {
-						s.Scope.Resolve(resolveCtx)
+						if s.Scope != nil {
+							s.Scope.Resolve(resolveCtx)
+						}
 						completionList = memberAccessCompletion(store, document, word, s.Scope)
 					}
 				case "member_call_expression":
 					if s, ok := symbol.(*analysis.MethodAccess); ok {
-						s.Scope.Resolve(resolveCtx)
+						if s.Scope != nil {
+							s.Scope.Resolve(resolveCtx)
+						}
 						completionList = memberAccessCompletion(store, document, word, s.Scope)
 					}
 				case "ERROR":
