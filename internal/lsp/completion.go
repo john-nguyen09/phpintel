@@ -87,6 +87,19 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						completionList = memberAccessCompletion(store, document, word, s.Scope)
 					}
 				case "ERROR":
+					prev := par.PrevSibling()
+					if prev != nil {
+						t := prev.Type()
+						if t == "php_tag" {
+							completionList = phpTagCompletion(word)
+							break
+						}
+						par = nodes.Parent()
+						if par.Type() == "declaration_list" {
+							completionList = keywordCompletion(store, document, word)
+							break
+						}
+					}
 					completionList = nameCompletion(store, document, symbol, word)
 				case "variable_name":
 					completionList = variableCompletion(document, pos, word)
@@ -378,6 +391,31 @@ func typeCompletion(store *analysis.Store, document *analysis.Document,
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(theInterface.Name, textEdit),
 		})
+	}
+	return completionList
+}
+
+func keywordCompletion(store *analysis.Store, doc *analysis.Document, word string) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
+	}
+	return completionList
+}
+
+func phpTagCompletion(word string) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
+	}
+	completion := "php"
+	word = strings.ToLower(word)
+	for i := 1; i < len(completion); i++ {
+		if word == completion[:i] {
+			completionList.Items = append(completionList.Items, protocol.CompletionItem{
+				Kind:  protocol.KeywordCompletion,
+				Label: completion,
+			})
+			break
+		}
 	}
 	return completionList
 }
