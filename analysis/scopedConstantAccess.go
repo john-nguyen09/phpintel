@@ -17,8 +17,9 @@ func newScopedConstantAccess(document *Document, node *sitter.Node) (HasTypes, b
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	expr := scanForExpression(document, firstChild)
-	constantAccess.Scope = expr
+	classAccess := newClassAccess(document, firstChild)
+	document.addSymbol(classAccess)
+	constantAccess.Scope = classAccess
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	constantAccess.Location = document.GetNodeLocation(thirdChild)

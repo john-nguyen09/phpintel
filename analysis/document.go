@@ -431,8 +431,16 @@ func (s *Document) HasTypesAt(offset int) HasTypes {
 
 // HasTypesAtPos returns a HasTypes symbol at the position
 func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
+	// prev := s.hasTypesSymbols[0]
+	// for i, h := range s.hasTypesSymbols[1:] {
+	// 	if util.CompareRange(prev.GetLocation().Range, h.GetLocation().Range) >= 0 {
+	// 		log.Printf("%d %T(%v) %T(%v)", i, prev, prev.GetLocation().Range, h, h.GetLocation().Range)
+	// 	}
+	// 	prev = h
+	// }
 	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
 		location := s.hasTypesSymbols[i].GetLocation()
+		// log.Printf("%d %T(%v)", i, s.hasTypesSymbols[i], location.Range)
 		return util.IsInRange(pos, location.Range) <= 0
 	})
 	var previousHasTypes HasTypes = nil

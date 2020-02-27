@@ -19,3 +19,13 @@ func IsInRange(position protocol.Position, theRange protocol.Range) int {
 	}
 	return 0
 }
+
+func CompareRange(a protocol.Range, b protocol.Range) int {
+	if IsInRange(a.End, b) < 0 {
+		return -1
+	}
+	if IsInRange(a.Start, b) > 0 {
+		return 1
+	}
+	return 0
+}

@@ -45,7 +45,6 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 		Start: start,
 		End:   argumentList.location.Range.End,
 	})
-	scanForChildren(document, node)
 	return argumentList
 }
 

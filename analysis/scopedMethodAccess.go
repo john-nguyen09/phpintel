@@ -19,19 +19,20 @@ func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, boo
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	expr := scanForExpression(document, firstChild)
-	methodAccess.Scope = expr
-	document.addSymbol(methodAccess)
+	classAccess := newClassAccess(document, firstChild)
+	document.addSymbol(classAccess)
+	methodAccess.Scope = classAccess
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	methodAccess.Location = document.GetNodeLocation(thirdChild)
 	methodAccess.Name = analyseMemberName(document, thirdChild)
+	document.addSymbol(methodAccess)
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
 		case "arguments":
-			args := newArgumentList(document, child)
-			document.addSymbol(args)
+			scanNode(document, child)
+			scanForChildren(document, child)
 			break
 		}
 		child = traverser.Advance()

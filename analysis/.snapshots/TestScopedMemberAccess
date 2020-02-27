@@ -19,7 +19,8 @@
         Range: (protocol.Range) 2:0-2:9
       },
       Name: (string) (len=9) "TestClass"
-    }
+    },
+    isResolved: (bool) false
   }),
   (*analysis.ScopedPropertyAccess)({
     Expression: (analysis.Expression) {
@@ -47,7 +48,8 @@
             Range: (protocol.Range) 2:0-2:9
           },
           Name: (string) (len=9) "TestClass"
-        }
+        },
+        isResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -77,7 +79,8 @@
         Range: (protocol.Range) 3:0-3:9
       },
       Name: (string) (len=9) "TestClass"
-    }
+    },
+    isResolved: (bool) false
   }),
   (*analysis.ScopedConstantAccess)({
     Expression: (analysis.Expression) {
@@ -105,7 +108,8 @@
             Range: (protocol.Range) 3:0-3:9
           },
           Name: (string) (len=9) "TestClass"
-        }
+        },
+        isResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -134,7 +138,8 @@
         Range: (protocol.Range) 4:0-4:9
       },
       Name: (string) (len=9) "TestClass"
-    }
+    },
+    isResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
     Expression: (analysis.Expression) {
@@ -162,7 +167,8 @@
             Range: (protocol.Range) 4:0-4:9
           },
           Name: (string) (len=9) "TestClass"
-        }
+        },
+        isResolved: (bool) false
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",

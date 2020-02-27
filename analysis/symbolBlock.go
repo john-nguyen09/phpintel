@@ -11,6 +11,8 @@ var /* const */ scanPhraseTypes = map[string]bool{
 	"expression_statement":      true,
 	"compound_statement":        true,
 	"while_statement":           true,
+	"switch_statement":          true,
+	"switch_block":              true,
 	"case_statement":            true,
 	"default_statement":         true,
 	"array_creation_expression": true,

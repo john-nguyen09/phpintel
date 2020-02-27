@@ -1,0 +1,51 @@
+([]analysis.HasTypes) (len=3) {
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:0-2:5
+      },
+      Name: (string) (len=5) "isset"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:6-2:11
+      },
+      Name: (string) (len=5) "$var1"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>,
+        uniqueFQNs: (map[string]bool) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:12-2:17
+      },
+      Name: (string) (len=5) "$var2"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  })
+}

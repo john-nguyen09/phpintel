@@ -8,6 +8,8 @@ import (
 // ClassAccess represents a reference to the part before ::
 type ClassAccess struct {
 	Expression
+
+	isResolved bool
 }
 
 var _ (HasTypes) = (*ClassAccess)(nil)
@@ -20,10 +22,16 @@ func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 		},
 	}
 	types := newTypeComposite()
-	if node.Type() == "qualified_name" {
+	switch node.Type() {
+	case "qualified_name":
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
+	case "variable_name":
+		expr := scanForExpression(document, node)
+		if expr != nil {
+			classAccess.Scope = expr
+		}
 	}
 	if IsNameRelative(classAccess.Name) {
 		relativeScope := newRelativeScope(document, classAccess.Location)
@@ -39,7 +47,7 @@ func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 
 func analyseMemberName(document *Document, node *sitter.Node) string {
 	switch node.Type() {
-	case "name", "variable_name":
+	case "name", "variable_name", "qualified_name":
 		return document.GetNodeText(node)
 	}
 
@@ -52,6 +60,14 @@ func (s *ClassAccess) GetLocation() protocol.Location {
 
 func (s *ClassAccess) GetName() string {
 	return s.Name
+}
+
+func (s *ClassAccess) Resolve(ctx ResolveContext) {
+	if s.isResolved {
+		return
+	}
+	s.isResolved = true
+	s.Type.merge(s.ResolveAndGetScope(ctx))
 }
 
 func (s *ClassAccess) GetTypes() TypeComposite {

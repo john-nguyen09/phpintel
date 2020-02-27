@@ -34,7 +34,8 @@
           Range: (protocol.Range) 20:0-20:4
         },
         Name: (string) (len=4) "User"
-      }
+      },
+      isResolved: (bool) false
     }),
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",

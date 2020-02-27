@@ -34,7 +34,8 @@
           Range: (protocol.Range) 15:26-15:57
         },
         Name: (string) (len=31) "Illuminate\\Support\\Facades\\Hash"
-      }
+      },
+      isResolved: (bool) false
     }),
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
