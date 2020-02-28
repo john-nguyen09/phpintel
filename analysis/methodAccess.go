@@ -28,7 +28,7 @@ func newMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	for child != nil {
 		switch child.Type() {
 		case "arguments":
-			newArgumentList(document, child)
+			scanNode(document, child)
 			break
 		}
 		child = traverser.Advance()

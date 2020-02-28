@@ -87,18 +87,23 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						completionList = memberAccessCompletion(store, document, word, s.Scope)
 					}
 				case "ERROR":
-					prev := par.PrevSibling()
-					if prev != nil {
-						t := prev.Type()
+					parPrev := par.PrevSibling()
+					par = nodes.Parent()
+					if parPrev != nil {
+						t := parPrev.Type()
 						if t == "php_tag" {
 							completionList = phpTagCompletion(word)
 							break
 						}
-						par = nodes.Parent()
-						if par.Type() == "declaration_list" {
+						if par != nil && par.Type() == "declaration_list" {
 							completionList = keywordCompletion(store, document, word)
 							break
 						}
+					}
+					prev := parent.PrevSibling()
+					if par.Type() == "formal_parameters" || (prev != nil && prev.Type() == "(") {
+						completionList = typeCompletion(store, document, word, pos)
+						break
 					}
 					completionList = nameCompletion(store, document, symbol, word)
 				case "variable_name":
@@ -115,7 +120,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case *analysis.ClassTypeDesignator:
 		completionList = classCompletion(store, document, s, s.Name, params.Position)
 	case *analysis.TypeDeclaration:
-		completionList = typeCompletion(store, document, s, s.Name, params.Position)
+		completionList = typeCompletion(store, document, s.Name, params.Position)
 	}
 	return completionList, nil
 }
@@ -354,8 +359,7 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func typeCompletion(store *analysis.Store, document *analysis.Document,
-	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+func typeCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}

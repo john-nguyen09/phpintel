@@ -22,6 +22,7 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	start := argumentList.location.Range.Start
+	nodesToScan := []*sitter.Node{}
 	for child != nil {
 		t := child.Type()
 		if t == " " || t == "," {
@@ -38,6 +39,11 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 		}
 		if t != "(" && t != ")" {
 			argumentList.arguments = append(argumentList.arguments, child)
+			switch t {
+			case "subscript_expression":
+			default:
+				nodesToScan = append(nodesToScan, child)
+			}
 		}
 		child = traverser.Advance()
 	}
@@ -45,6 +51,9 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 		Start: start,
 		End:   argumentList.location.Range.End,
 	})
+	for _, n := range nodesToScan {
+		scanNode(document, n)
+	}
 	return argumentList
 }
 

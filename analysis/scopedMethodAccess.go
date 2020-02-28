@@ -32,7 +32,6 @@ func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, boo
 		switch child.Type() {
 		case "arguments":
 			scanNode(document, child)
-			scanForChildren(document, child)
 			break
 		}
 		child = traverser.Advance()

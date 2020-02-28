@@ -47,8 +47,7 @@ func newFunctionCall(document *Document, node *sitter.Node) (HasTypes, bool) {
 	for child != nil {
 		switch child.Type() {
 		case "arguments":
-			args := newArgumentList(document, child)
-			document.addSymbol(args)
+			scanNode(document, child)
 			break
 		}
 		child = traverser.Advance()
