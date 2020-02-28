@@ -33,7 +33,7 @@ func newInterface(document *Document, node *sitter.Node) Symbol {
 			theInterface.Name = NewTypeString(document.GetNodeText(child))
 		case "interface_base_clause":
 			theInterface.extends(document, child)
-		case "body":
+		case "declaration_list":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()

@@ -27,7 +27,7 @@ func newTrait(document *Document, node *sitter.Node) Symbol {
 			document.addSymbol(trait)
 			trait.Name = NewTypeString(document.GetNodeText(child))
 			trait.Name.SetNamespace(document.GetImportTable().namespace)
-		case "body":
+		case "declaration_list":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
