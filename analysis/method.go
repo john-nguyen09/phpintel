@@ -94,13 +94,13 @@ func newMethod(document *Document, node *sitter.Node) Symbol {
 	lastClass := document.getLastClass()
 	if theClass, ok := lastClass.(*Class); ok {
 		method.Scope = theClass.Name
-		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
+		method.Scope.SetNamespace(document.currImportTable().GetNamespace())
 	} else if theInterface, ok := lastClass.(*Interface); ok {
 		method.Scope = theInterface.Name
-		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
+		method.Scope.SetNamespace(document.currImportTable().GetNamespace())
 	} else if trait, ok := lastClass.(*Trait); ok {
 		method.Scope = trait.Name
-		method.Scope.SetNamespace(document.GetImportTable().GetNamespace())
+		method.Scope.SetNamespace(document.currImportTable().GetNamespace())
 	}
 
 	return nil

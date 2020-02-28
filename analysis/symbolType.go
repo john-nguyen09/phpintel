@@ -205,7 +205,7 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 			continue
 		}
 		typeString := NewTypeString(part)
-		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
 	return types

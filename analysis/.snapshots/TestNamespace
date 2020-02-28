@@ -1,5 +1,8 @@
-(analysis.ImportTable) {
-  namespace: (string) (len=14) "TestNamespace1",
+(*analysis.ImportTable)({
+  start: (protocol.Position) 2:0,
+  namespace: (*analysis.Namespace)({
+    Name: (string) (len=14) "TestNamespace1"
+  }),
   classes: (map[string]string) (len=1) {
     (string) (len=13) "RootTestClass": (string) (len=9) "TestClass"
   },
@@ -9,4 +12,4 @@
   },
   constants: (map[string]string) {
   }
-}
+})

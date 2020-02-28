@@ -4,18 +4,22 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type ImportTable struct {
-	namespace string
+	start     protocol.Position
+	namespace *Namespace
 	classes   map[string]string
 	functions map[string]string
 	constants map[string]string
 }
 
-func newImportTable() ImportTable {
-	return ImportTable{
-		namespace: "\\",
+func newImportTable(document *Document, node *sitter.Node) *ImportTable {
+	return &ImportTable{
+		start:     util.PointToPosition(node.StartPoint()),
+		namespace: nil,
 		classes:   map[string]string{},
 		functions: map[string]string{},
 		constants: map[string]string{},
@@ -46,10 +50,7 @@ func (i *ImportTable) addConstName(alias string, name string) {
 }
 
 func (i *ImportTable) setNamespace(namespace *Namespace) {
-	if namespace.Name == "" {
-		return
-	}
-	i.namespace = namespace.Name
+	i.namespace = namespace
 }
 
 func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
@@ -61,7 +62,7 @@ func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 		}
 		name.SetFQN(fqn)
 	} else {
-		name.SetNamespace(i.namespace)
+		name.SetNamespace(i.GetNamespace())
 	}
 	return name.GetFQN()
 }
@@ -84,7 +85,7 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 	if len(functions) > 0 {
 		return fqn
 	}
-	name.SetNamespace(i.namespace)
+	name.SetNamespace(i.GetNamespace())
 	return name.GetFQN()
 }
 
@@ -112,7 +113,7 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 	if len(defines) > 0 {
 		return fqn
 	}
-	name.SetNamespace(i.namespace)
+	name.SetNamespace(i.GetNamespace())
 	return name.GetFQN()
 }
 
@@ -158,7 +159,10 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 }
 
 func (i ImportTable) GetNamespace() string {
-	return i.namespace
+	if i.namespace == nil {
+		return "\\"
+	}
+	return i.namespace.Name
 }
 
 func (i ImportTable) ResolveScopeNamespace(word string) string {

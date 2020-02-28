@@ -81,8 +81,7 @@ func scanNode(document *Document, node *sitter.Node) {
 	var symbol Symbol = nil
 	shouldSkipAdding := false
 	if node.Type() == "namespace_definition" {
-		namespace := newNamespace(document, node)
-		document.setNamespace(namespace)
+		newNamespace(document, node)
 		return
 	}
 

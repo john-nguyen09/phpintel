@@ -7,6 +7,7 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
+	github.com/davecgh/go-spew v1.1.1
 	github.com/evorts/html-to-markdown v0.0.3
 	github.com/jmhodges/levigo v1.0.0
 	github.com/john-nguyen09/go-phpparser v0.0.0-20200204091501-d315e8e7d929

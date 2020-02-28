@@ -31,7 +31,7 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	indexTestCase(store, "test1", "../cases/function.php", false)
 	indexTestCase(store, "test2", "../cases/completion/functionCompletionWithNamespace.php", true)
 	document := store.GetOrCreateDocument("test2")
-	importTable := document.GetImportTable()
+	importTable := document.currImportTable()
 	word := "testF"
 	functions, _ := store.SearchFunctions(word, NewSearchOptions())
 	items := []protocol.CompletionItem{}

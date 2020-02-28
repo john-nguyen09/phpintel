@@ -71,7 +71,7 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 		case "name":
 			document.addSymbol(class)
 			class.Name = NewTypeString(document.GetNodeText(child))
-			class.Name.SetNamespace(document.importTable.namespace)
+			class.Name.SetNamespace(document.currImportTable().GetNamespace())
 			if phpDoc != nil {
 				class.description = phpDoc.Description
 				for _, propertyTag := range phpDoc.Properties {
@@ -120,7 +120,7 @@ func (s *Class) extends(document *Document, p *sitter.Node) {
 		case "qualified_name":
 			{
 				s.Extends = transformQualifiedName(child, document)
-				s.Extends.SetFQN(document.GetImportTable().GetClassReferenceFQN(s.Extends))
+				s.Extends.SetFQN(document.currImportTable().GetClassReferenceFQN(s.Extends))
 				classAccessNode = p
 			}
 		}
@@ -140,7 +140,7 @@ func (s *Class) implements(document *Document, p *sitter.Node) {
 	for child != nil {
 		if child.Type() == "qualified_name" {
 			typeString := transformQualifiedName(child, document)
-			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 			s.Interfaces = append(s.Interfaces, typeString)
 
 			interfaceAccess := newInterfaceAccess(document, child)

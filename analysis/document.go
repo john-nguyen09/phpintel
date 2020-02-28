@@ -36,7 +36,7 @@ type Document struct {
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
-	importTable        ImportTable
+	importTables       []*ImportTable
 }
 
 // VariableTable holds the range and the variables inside
@@ -105,7 +105,7 @@ func NewDocument(uri string, text []byte) *Document {
 		Children:           []Symbol{},
 		variableTableLevel: 0,
 		hasChanges:         true,
-		importTable:        newImportTable(),
+		importTables:       []*ImportTable{},
 	}
 	document.SetText(text)
 
@@ -134,7 +134,7 @@ func (s *Document) ResetState() {
 	s.variableTables = []*VariableTable{}
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
-	s.importTable = newImportTable()
+	s.importTables = []*ImportTable{}
 }
 
 func (s *Document) GetRootNode() *sitter.Node {
@@ -171,6 +171,10 @@ func (s *Document) GetURI() string {
 func (s *Document) SetText(text []byte) {
 	s.text = text
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
+}
+
+func (s *Document) pushImportTable(node *sitter.Node) {
+	s.importTables = append(s.importTables, newImportTable(s, node))
 }
 
 func calculateLineOffsets(text []byte, offset int) ([]int, string) {
@@ -642,10 +646,24 @@ func (s *Document) GetHash() []byte {
 	return hash[:]
 }
 
-func (s *Document) GetImportTable() ImportTable {
-	return s.importTable
+func (s *Document) currImportTable() *ImportTable {
+	if len(s.importTables) == 0 {
+		s.pushImportTable(s.GetRootNode())
+	}
+	return s.importTables[len(s.importTables)-1]
+}
+
+// ImportTableAtPos finds the importTable at the position
+func (s *Document) ImportTableAtPos(pos protocol.Position) *ImportTable {
+	index := sort.Search(len(s.importTables), func(i int) bool {
+		return util.ComparePos(pos, s.importTables[i].start) <= 0
+	})
+	if index == 0 {
+		return s.importTables[0]
+	}
+	return s.importTables[index-1]
 }
 
 func (s *Document) setNamespace(namespace *Namespace) {
-	s.importTable.setNamespace(namespace)
+	s.currImportTable().setNamespace(namespace)
 }

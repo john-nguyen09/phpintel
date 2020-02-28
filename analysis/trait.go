@@ -26,7 +26,7 @@ func newTrait(document *Document, node *sitter.Node) Symbol {
 		case "name":
 			document.addSymbol(trait)
 			trait.Name = NewTypeString(document.GetNodeText(child))
-			trait.Name.SetNamespace(document.GetImportTable().namespace)
+			trait.Name.SetNamespace(document.currImportTable().GetNamespace())
 		case "declaration_list":
 			scanForChildren(document, child)
 		}

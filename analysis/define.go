@@ -31,7 +31,7 @@ func newDefine(document *Document, node *sitter.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
-	define.Name.SetNamespace(document.importTable.namespace)
+	define.Name.SetNamespace(document.currImportTable().GetNamespace())
 	return define
 }
 

@@ -74,12 +74,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}
 		name := analysis.NewTypeString(v.Name)
-		consts = append(consts, store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name))...)
+		consts = append(consts, store.GetConsts(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name))...)
 		if len(consts) > 0 {
 			hover = ConstToHover(symbol, *consts[0])
 			break
 		}
-		defines = append(defines, store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name))...)
+		defines = append(defines, store.GetDefines(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name))...)
 		if len(defines) > 0 {
 			hover = DefineToHover(symbol, *defines[0])
 			break
@@ -87,7 +87,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.FunctionCall:
 		functions := []*analysis.Function{}
 		name := analysis.NewTypeString(v.Name)
-		functions = append(functions, store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, name))...)
+		functions = append(functions, store.GetFunctions(document.ImportTableAtPos(pos).GetFunctionReferenceFQN(store, name))...)
 		if len(functions) > 0 {
 			hover = FunctionToHover(symbol, *functions[0])
 			break

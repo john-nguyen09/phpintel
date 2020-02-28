@@ -108,10 +108,10 @@ func getAliasFromNode(document *Document, node *sitter.Node) string {
 func addUseToImportTable(document *Document, useType UseType, alias string, name string) {
 	switch useType {
 	case UseClass:
-		document.importTable.addClassName(alias, name)
+		document.currImportTable().addClassName(alias, name)
 	case UseFunction:
-		document.importTable.addFunctionName(alias, name)
+		document.currImportTable().addFunctionName(alias, name)
 	case UseConst:
-		document.importTable.addConstName(alias, name)
+		document.currImportTable().addConstName(alias, name)
 	}
 }

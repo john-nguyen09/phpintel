@@ -24,7 +24,7 @@ func newTypeDeclaration(document *Document, node *sitter.Node) *TypeDeclaration 
 		case "name":
 			typeString := transformQualifiedName(child, document)
 			typeDeclaration.Name = typeString.GetOriginal()
-			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 			typeDeclaration.Type.add(typeString)
 		}
 		child = traverser.Advance()

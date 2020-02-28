@@ -68,7 +68,7 @@ func newConst(document *Document, node *sitter.Node) Symbol {
 
 		child = traverser.Advance()
 	}
-	constant.Name.SetNamespace(document.importTable.namespace)
+	constant.Name.SetNamespace(document.currImportTable().GetNamespace())
 
 	return constant
 }

@@ -11,12 +11,16 @@ type Namespace struct {
 
 func newNamespace(document *Document, node *sitter.Node) *Namespace {
 	namespace := &Namespace{}
+	document.pushImportTable(node)
+	document.setNamespace(namespace)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
 		case "namespace_name":
 			namespace.Name = document.GetNodeText(child)
+		case "compound_statement":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}

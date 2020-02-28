@@ -49,7 +49,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
-	function.Name.SetNamespace(document.importTable.namespace)
+	function.Name.SetNamespace(document.currImportTable().GetNamespace())
 	document.popVariableTable()
 	return function
 }

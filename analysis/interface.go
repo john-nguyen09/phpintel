@@ -38,7 +38,7 @@ func newInterface(document *Document, node *sitter.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
-	theInterface.Name.SetNamespace(document.importTable.namespace)
+	theInterface.Name.SetNamespace(document.currImportTable().GetNamespace())
 	return nil
 }
 

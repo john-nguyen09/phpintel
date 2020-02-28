@@ -40,7 +40,7 @@ func newTraitAccess(document *Document, node *sitter.Node) *TraitAccess {
 	types := newTypeComposite()
 	if node.Type() == "qualified_name" {
 		typeString := transformQualifiedName(node, document)
-		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
 	traitAccess.Type = types

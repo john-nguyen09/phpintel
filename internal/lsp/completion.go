@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"log"
 	"strings"
 	"time"
 
@@ -9,6 +10,12 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
+
+type completionContext struct {
+	doc   *analysis.Document
+	store *analysis.Store
+	pos   protocol.Position
+}
 
 func (s *Server) completion(ctx context.Context, params *protocol.CompletionParams) (*protocol.CompletionList, error) {
 	defer util.TimeTrack(time.Now(), "completion")
@@ -27,10 +34,11 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	var completionList *protocol.CompletionList = nil
 	pos := params.Position
 	resolveCtx := analysis.NewResolveContext(store, document)
+	completionCtx := &completionContext{document, store, pos}
 	symbol := document.HasTypesAtPos(pos)
 	word := document.WordAtPos(pos)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
-	// log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
+	log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
 	parent := nodes.Parent()
 	if parent != nil {
 		switch parent.Type() {
@@ -41,7 +49,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.EndPoint()))
 				if s != nil {
 					s.Resolve(resolveCtx)
-					completionList = scopedAccessCompletion(store, document, word, s)
+					completionList = scopedAccessCompletion(completionCtx, word, s)
 				}
 			}
 		case "->":
@@ -51,7 +59,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.EndPoint()))
 				if s != nil {
 					s.Resolve(resolveCtx)
-					completionList = memberAccessCompletion(store, document, word, s)
+					completionList = memberAccessCompletion(completionCtx, word, s)
 				}
 			}
 		case "name":
@@ -63,29 +71,31 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
 						}
-						completionList = scopedAccessCompletion(store, document, word, s.Scope)
+						completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "scoped_call_expression":
 					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
 						}
-						completionList = scopedAccessCompletion(store, document, word, s.Scope)
+						completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "member_access_expression":
 					if s, ok := symbol.(*analysis.PropertyAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
 						}
-						completionList = memberAccessCompletion(store, document, word, s.Scope)
+						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "member_call_expression":
 					if s, ok := symbol.(*analysis.MethodAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
 						}
-						completionList = memberAccessCompletion(store, document, word, s.Scope)
+						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
+				case "named_label_statement":
+					completionList = nameCompletion(completionCtx, symbol, word)
 				case "ERROR":
 					parPrev := par.PrevSibling()
 					par = nodes.Parent()
@@ -96,38 +106,38 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 							break
 						}
 						if par != nil && par.Type() == "declaration_list" {
-							completionList = keywordCompletion(store, document, word)
+							completionList = keywordCompletion(completionCtx, word)
 							break
 						}
 					}
 					prev := parent.PrevSibling()
 					if par.Type() == "formal_parameters" || (prev != nil && prev.Type() == "(") {
-						completionList = typeCompletion(store, document, word, pos)
+						completionList = typeCompletion(completionCtx, word)
 						break
 					}
-					completionList = nameCompletion(store, document, symbol, word)
+					completionList = nameCompletion(completionCtx, symbol, word)
 				case "variable_name":
-					completionList = variableCompletion(document, pos, word)
+					completionList = variableCompletion(completionCtx, word)
 				}
 			}
 		case "$":
-			completionList = variableCompletion(document, pos, word)
+			completionList = variableCompletion(completionCtx, word)
 		case "named_label_statement":
-			completionList = nameCompletion(store, document, symbol, word)
+			completionList = nameCompletion(completionCtx, symbol, word)
 		}
 	}
 	switch s := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
-		completionList = classCompletion(store, document, s, s.Name, params.Position)
+		completionList = classCompletion(completionCtx, s, s.Name)
 	case *analysis.TypeDeclaration:
-		completionList = typeCompletion(store, document, s.Name, params.Position)
+		completionList = typeCompletion(completionCtx, s.Name)
 	}
 	return completionList, nil
 }
 
-func variableCompletion(document *analysis.Document, pos protocol.Position, word string) *protocol.CompletionList {
-	varTable := document.GetVariableTableAt(pos)
-	symbol := document.HasTypesAtPos(pos)
+func variableCompletion(ctx *completionContext, word string) *protocol.CompletionList {
+	varTable := ctx.doc.GetVariableTableAt(ctx.pos)
+	symbol := ctx.doc.HasTypesAtPos(ctx.pos)
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
@@ -152,15 +162,15 @@ func variableCompletion(document *analysis.Document, pos protocol.Position, word
 	return completionList
 }
 
-func nameCompletion(store *analysis.Store, document *analysis.Document, symbol analysis.HasTypes, word string) *protocol.CompletionList {
+func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
-	importTable := document.GetImportTable()
+	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
-		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -173,10 +183,10 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	consts, searchResult := store.SearchConsts(word, baseSearchOptions)
+	consts, searchResult := ctx.store.SearchConsts(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, constant := range consts {
-		label, textEdit := importTable.ResolveToQualified(document, constant, constant.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, constant, constant.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -189,10 +199,10 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(constant.Name, textEdit),
 		})
 	}
-	defines, searchResult := store.SearchDefines(word, baseSearchOptions)
+	defines, searchResult := ctx.store.SearchDefines(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, define := range defines {
-		label, textEdit := importTable.ResolveToQualified(document, define, define.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, define, define.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -206,10 +216,10 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 			Detail:              getDetailFromTextEdit(define.Name, textEdit),
 		})
 	}
-	functions, searchResult := store.SearchFunctions(word, baseSearchOptions)
+	functions, searchResult := ctx.store.SearchFunctions(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, function := range functions {
-		label, textEdit := importTable.ResolveToQualified(document, function, function.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, function, function.Name, word)
 		insertText, textFormat, command := HasParamsInsertText(function, label)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
@@ -229,16 +239,15 @@ func nameCompletion(store *analysis.Store, document *analysis.Document, symbol a
 	return completionList
 }
 
-func classCompletion(store *analysis.Store, document *analysis.Document,
-	symbol analysis.HasTypes, word string, pos protocol.Position) *protocol.CompletionList {
+func classCompletion(ctx *completionContext, symbol analysis.HasTypes, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
-	importTable := document.GetImportTable()
+	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
-		name, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
+		name, textEdit := importTable.ResolveToQualified(ctx.doc, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -254,7 +263,7 @@ func classCompletion(store *analysis.Store, document *analysis.Document,
 	return completionList
 }
 
-func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.HasTypes) *protocol.CompletionList {
+func scopedAccessCompletion(ctx *completionContext, word string, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
@@ -270,10 +279,10 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 		scopeTypeFQN := scopeType.GetFQN()
 		props := []*analysis.Property{}
 		methods := []*analysis.Method{}
-		for _, class := range store.GetClasses(scopeTypeFQN) {
-			methods = append(methods, analysis.SearchClassMethods(store, class, word,
+		for _, class := range ctx.store.GetClasses(scopeTypeFQN) {
+			methods = append(methods, analysis.SearchClassMethods(ctx.store, class, word,
 				analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
-			props = append(props, analysis.SearchClassProperties(store, class, word,
+			props = append(props, analysis.SearchClassProperties(ctx.store, class, word,
 				analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
 		}
 		for _, property := range props {
@@ -295,7 +304,7 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 				Detail:           HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
-		classConsts, searchResult := store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
+		classConsts, searchResult := ctx.store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
 		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, classConst := range classConsts {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
@@ -308,26 +317,26 @@ func scopedAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func memberAccessCompletion(store *analysis.Store, document *analysis.Document, word string, scope analysis.HasTypes) *protocol.CompletionList {
+func memberAccessCompletion(ctx *completionContext, word string, scope analysis.HasTypes) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
 	for _, scopeType := range scope.GetTypes().Resolve() {
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			methods = append(methods, analysis.SearchClassMethods(store, class, word,
-				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
-			properties = append(properties, analysis.SearchClassProperties(store, class, word,
-				analysis.PropsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+		for _, class := range ctx.store.GetClasses(scopeType.GetFQN()) {
+			methods = append(methods, analysis.SearchClassMethods(ctx.store, class, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
+			properties = append(properties, analysis.SearchClassProperties(ctx.store, class, word,
+				analysis.PropsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}
-		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
-			methods = append(methods, analysis.SearchInterfaceMethods(store, theInterface, word,
-				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+		for _, theInterface := range ctx.store.GetInterfaces(scopeType.GetFQN()) {
+			methods = append(methods, analysis.SearchInterfaceMethods(ctx.store, theInterface, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}
-		for _, trait := range store.GetTraits(scopeType.GetFQN()) {
-			methods = append(methods, analysis.GetTraitMethods(store, trait, word,
-				analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, scope))...)
+		for _, trait := range ctx.store.GetTraits(scopeType.GetFQN()) {
+			methods = append(methods, analysis.GetTraitMethods(ctx.store, trait, word,
+				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}
 		for _, property := range properties {
 			name := property.GetName()
@@ -359,15 +368,15 @@ func memberAccessCompletion(store *analysis.Store, document *analysis.Document, 
 	return completionList
 }
 
-func typeCompletion(store *analysis.Store, document *analysis.Document, word string, pos protocol.Position) *protocol.CompletionList {
+func typeCompletion(ctx *completionContext, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes, searchResult := store.SearchClasses(word, baseSearchOptions)
+	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
-	importTable := document.GetImportTable()
+	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
-		label, textEdit := importTable.ResolveToQualified(document, class, class.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, class, class.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -380,10 +389,10 @@ func typeCompletion(store *analysis.Store, document *analysis.Document, word str
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	interfaces, searchResult := store.SearchInterfaces(word, baseSearchOptions)
+	interfaces, searchResult := ctx.store.SearchInterfaces(word, baseSearchOptions)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, theInterface := range interfaces {
-		label, textEdit := importTable.ResolveToQualified(document, theInterface, theInterface.Name, word)
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, theInterface, theInterface.Name, word)
 		textEdits := []protocol.TextEdit{}
 		if textEdit != nil {
 			textEdits = append(textEdits, *textEdit)
@@ -399,7 +408,7 @@ func typeCompletion(store *analysis.Store, document *analysis.Document, word str
 	return completionList
 }
 
-func keywordCompletion(store *analysis.Store, doc *analysis.Document, word string) *protocol.CompletionList {
+func keywordCompletion(ctx *completionContext, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}

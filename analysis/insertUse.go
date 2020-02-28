@@ -1,10 +1,14 @@
 package analysis
 
 import (
+	"index/suffixarray"
+
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
+
+var numLinesAfterUse = 3
 
 type InsertUseContext struct {
 	document     *Document
@@ -55,8 +59,7 @@ func (i InsertUseContext) GetInsertAfterNode() *sitter.Node {
 func (i InsertUseContext) GetInsertPosition() (protocol.Position, bool) {
 	afterNode := i.GetInsertAfterNode()
 	if afterNode != nil {
-		lastToken := util.LastToken(afterNode)
-		return util.PointToPosition(lastToken.EndPoint()), true
+		return util.PointToPosition(afterNode.EndPoint()), true
 	}
 	return protocol.Position{}, false
 }
@@ -85,7 +88,7 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 		if alias != "" {
 			text += " as " + alias
 		}
-		text += ";\n"
+		text += ";" + getNewLine(i.document, afterNode)
 
 		return &protocol.TextEdit{
 			Range: protocol.Range{
@@ -99,5 +102,29 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 }
 
 func getIndentation(document *Document, node *sitter.Node) string {
-	return "\t"
+	nodeStart := util.PointToPosition(node.StartPoint())
+	startOffset := document.OffsetAtPosition(protocol.Position{
+		Line:      nodeStart.Line,
+		Character: 0,
+	})
+	return string(document.GetText()[startOffset:node.StartByte()])
+}
+
+func getNewLine(document *Document, node *sitter.Node) string {
+	next := node.NextSibling()
+	if next == nil {
+		return document.detectedEOL
+	}
+	nodeEnd := node.EndByte()
+	startNext := next.StartByte()
+	index := suffixarray.New(document.GetText()[nodeEnd:startNext])
+	numNewLines := len(index.Lookup([]byte(document.detectedEOL), -1))
+	if numNewLines < numLinesAfterUse {
+		newLines := ""
+		for i := 0; i < (numLinesAfterUse - numNewLines); i++ {
+			newLines += document.detectedEOL
+		}
+		return newLines
+	}
+	return ""
 }

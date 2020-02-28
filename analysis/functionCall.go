@@ -67,7 +67,7 @@ func (s *FunctionCall) Resolve(ctx ResolveContext) {
 	store := ctx.store
 	s.hasResolved = true
 	typeString := NewTypeString(s.Name)
-	functions := store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
+	functions := store.GetFunctions(document.currImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range functions {
 		s.Type.merge(function.returnTypes)
 	}
@@ -82,7 +82,7 @@ func (s *FunctionCall) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	typeString := NewTypeString(s.Name)
 	store := ctx.store
 	document := ctx.document
-	typeString.SetFQN(document.GetImportTable().GetFunctionReferenceFQN(store, typeString))
+	typeString.SetFQN(document.currImportTable().GetFunctionReferenceFQN(store, typeString))
 	for _, function := range store.GetFunctions(typeString.GetFQN()) {
 		functions = append(functions, function)
 	}

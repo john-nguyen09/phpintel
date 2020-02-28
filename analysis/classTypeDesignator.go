@@ -20,7 +20,7 @@ func newClassTypeDesignator(document *Document, node *sitter.Node) (HasTypes, bo
 		switch child.Type() {
 		case "qualified_name":
 			typeString := transformQualifiedName(child, document)
-			typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 			s.Location = document.GetNodeLocation(child)
 			s.Name = typeString.GetOriginal()
 			s.Type.add(typeString)

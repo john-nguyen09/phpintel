@@ -20,7 +20,7 @@ func newInterfaceAccess(document *Document, node *sitter.Node) *InterfaceAccess 
 	types := newTypeComposite()
 	if node.Type() == "qualified_name" {
 		typeString := transformQualifiedName(node, document)
-		typeString.SetFQN(document.GetImportTable().GetClassReferenceFQN(typeString))
+		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
 	}
 	interfaceAccess.Type = types

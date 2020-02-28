@@ -20,7 +20,7 @@ func TestNamespace(t *testing.T) {
 	document := NewDocument("references2", data)
 	document.Load()
 
-	cupaloy.SnapshotT(t, document.importTable)
+	cupaloy.SnapshotT(t, document.currImportTable())
 }
 
 type useResult struct {
@@ -68,7 +68,7 @@ namespace TestNamespace2;`))
 	}
 
 	for i, testCase := range cases {
-		label, edit := testCase.doc.GetImportTable().ResolveToQualified(testCase.doc, testCase.s, testCase.name, testCase.word)
+		label, edit := testCase.doc.currImportTable().ResolveToQualified(testCase.doc, testCase.s, testCase.name, testCase.word)
 		insertText := ""
 		if edit != nil {
 			insertText = strings.TrimSpace(edit.NewText)

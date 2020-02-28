@@ -27,7 +27,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
 		for _, typeString := range v.Type.Resolve() {
-			for _, theClass := range store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString)) {
+			for _, theClass := range store.GetClasses(document.ImportTableAtPos(pos).GetClassReferenceFQN(typeString)) {
 				constructor := theClass.GetConstructor(store)
 				if constructor == nil || constructor.GetScope() != theClass.Name.GetFQN() {
 					locations = append(locations, theClass.GetLocation())
@@ -38,13 +38,13 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.ClassAccess:
 		for _, typeString := range v.Type.Resolve() {
-			for _, theClass := range store.GetClasses(document.GetImportTable().GetClassReferenceFQN(typeString)) {
+			for _, theClass := range store.GetClasses(document.ImportTableAtPos(pos).GetClassReferenceFQN(typeString)) {
 				locations = append(locations, theClass.GetLocation())
 			}
 		}
 	case *analysis.InterfaceAccess:
 		for _, typeString := range v.Type.Resolve() {
-			for _, theInterface := range store.GetInterfaces(document.GetImportTable().GetClassReferenceFQN(typeString)) {
+			for _, theInterface := range store.GetInterfaces(document.ImportTableAtPos(pos).GetClassReferenceFQN(typeString)) {
 				locations = append(locations, theInterface.GetLocation())
 			}
 		}
@@ -56,15 +56,15 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 		}
 	case *analysis.ConstantAccess:
 		name := analysis.NewTypeString(v.Name)
-		for _, theConst := range store.GetConsts(document.GetImportTable().GetConstReferenceFQN(store, name)) {
+		for _, theConst := range store.GetConsts(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name)) {
 			locations = append(locations, theConst.GetLocation())
 		}
-		for _, define := range store.GetDefines(document.GetImportTable().GetConstReferenceFQN(store, name)) {
+		for _, define := range store.GetDefines(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name)) {
 			locations = append(locations, define.GetLocation())
 		}
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
-		for _, function := range store.GetFunctions(document.GetImportTable().GetFunctionReferenceFQN(store, name)) {
+		for _, function := range store.GetFunctions(document.ImportTableAtPos(pos).GetFunctionReferenceFQN(store, name)) {
 			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:
