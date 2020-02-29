@@ -41,9 +41,6 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=6) "string": (bool) true
           }
         },
         Value: (string) ""
@@ -63,9 +60,6 @@
               original: (string) (len=8) "\\Closure",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=8) "\\Closure": (bool) true
           }
         },
         Value: (string) ""
@@ -78,9 +72,6 @@
           original: (string) (len=7) "Builder",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=8) "\\Builder": (bool) true
       }
     },
     description: (string) "",
@@ -115,9 +106,6 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=6) "string": (bool) true
           }
         },
         Value: (string) ""
@@ -137,9 +125,6 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=6) "string": (bool) true
           }
         },
         Value: (string) ""
@@ -159,9 +144,6 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=6) "string": (bool) true
           }
         },
         Value: (string) ""
@@ -174,9 +156,6 @@
           original: (string) (len=4) "void",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=4) "void": (bool) true
       }
     },
     description: (string) "",

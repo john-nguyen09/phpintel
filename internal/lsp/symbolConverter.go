@@ -245,8 +245,8 @@ func PropertyToHover(ref analysis.HasTypes, property analysis.Property) *protoco
 
 func VariableToHover(variable *analysis.Variable) *protocol.Hover {
 	content := "```"
-	if !variable.GetTypes().IsEmpty() {
-		content += variable.GetTypes().ToString() + " "
+	if t := variable.GetTypes(); !t.IsEmpty() {
+		content += t.ToString() + " "
 	}
 	content += variable.Name
 	content += "```"

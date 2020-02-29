@@ -11,8 +11,7 @@
 (*analysis.ScopedMethodAccess)({
   Expression: (analysis.Expression) {
     Type: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>,
-      uniqueFQNs: (map[string]bool) <nil>
+      typeStrings: ([]analysis.TypeString) <nil>
     },
     Scope: (*analysis.ClassAccess)({
       Expression: (analysis.Expression) {
@@ -23,9 +22,6 @@
               original: (string) (len=31) "Illuminate\\Support\\Facades\\Hash",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=32) "\\Illuminate\\Support\\Facades\\Hash": (bool) true
           }
         },
         Scope: (analysis.HasTypes) <nil>,

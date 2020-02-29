@@ -40,9 +40,6 @@
           original: (string) (len=6) "string",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=6) "string": (bool) true
       }
     }
   }),
@@ -74,9 +71,6 @@
           original: (string) (len=4) "void",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=4) "void": (bool) true
       }
     },
     description: (string) (len=55) "Define your route model bindings, pattern filters, etc.",
@@ -104,9 +98,6 @@
           original: (string) (len=4) "void",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=4) "void": (bool) true
       }
     },
     description: (string) (len=38) "Define the routes for the application.",
@@ -134,9 +125,6 @@
           original: (string) (len=4) "void",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=4) "void": (bool) true
       }
     },
     description: (string) (len=107) "Define the \"web\" routes for the application.\n\nThese routes all receive session state, CSRF protection, etc.",
@@ -164,9 +152,6 @@
           original: (string) (len=4) "void",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=4) "void": (bool) true
       }
     },
     description: (string) (len=83) "Define the \"api\" routes for the application.\n\nThese routes are typically stateless.",

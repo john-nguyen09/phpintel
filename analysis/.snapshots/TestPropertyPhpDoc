@@ -40,9 +40,6 @@
           original: (string) (len=10) "navigation",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=11) "\\navigation": (bool) true
       }
     }
   }),
@@ -67,9 +64,6 @@
           original: (string) (len=10) "navigation",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=11) "\\navigation": (bool) true
       }
     }
   }),
@@ -94,9 +88,6 @@
           original: (string) (len=15) "section_manager",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=16) "\\section_manager": (bool) true
       }
     }
   })

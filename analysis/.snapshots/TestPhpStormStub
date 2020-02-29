@@ -25,8 +25,7 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) <nil>
+          }
         },
         Value: (string) ""
       }),
@@ -45,8 +44,7 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) <nil>
+          }
         },
         Value: (string) ""
       }),
@@ -65,8 +63,7 @@
               original: (string) (len=6) "string",
               arrayLevel: (int) 1
             }
-          },
-          uniqueFQNs: (map[string]bool) <nil>
+          }
         },
         Value: (string) (len=4) "null"
       }),
@@ -85,8 +82,7 @@
               original: (string) (len=3) "int",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) <nil>
+          }
         },
         Value: (string) (len=1) "0"
       }),
@@ -105,8 +101,7 @@
               original: (string) (len=3) "int",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) <nil>
+          }
         },
         Value: (string) (len=1) "0"
       })
@@ -123,8 +118,7 @@
           original: (string) (len=5) "false",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) <nil>
+      }
     },
     description: (string) (len=34) "Perform a regular expression match"
   })

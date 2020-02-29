@@ -15,7 +15,7 @@ func TestMultipleNamespaces(t *testing.T) {
 	document := NewDocument("test1", data)
 	document.Load()
 
-	cupaloy.Snapshot(t, document.Children)
+	cupaloy.SnapshotT(t, document.Children)
 	assert.Equal(t, "Namespace1", document.ImportTableAtPos(protocol.Position{
 		Line:      3,
 		Character: 0,

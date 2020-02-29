@@ -41,9 +41,6 @@
               original: (string) (len=5) "array",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=5) "array": (bool) true
           }
         },
         Value: (string) ""
@@ -63,9 +60,6 @@
               original: (string) (len=5) "array",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=5) "array": (bool) true
           }
         },
         Value: (string) (len=4) "null"
@@ -78,9 +72,6 @@
           original: (string) (len=12) "\\bscitl\\post",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=12) "\\bscitl\\post": (bool) true
       }
     },
     description: (string) (len=30) "Save post data and attachments",

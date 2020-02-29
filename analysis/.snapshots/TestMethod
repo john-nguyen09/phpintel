@@ -29,8 +29,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -59,8 +57,7 @@
         hasValue: (bool) true,
         Name: (string) (len=7) "$param1",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
-          uniqueFQNs: (map[string]bool) <nil>
+          typeStrings: ([]analysis.TypeString) <nil>
         },
         Value: (string) (len=1) "0"
       }),
@@ -79,9 +76,6 @@
               original: (string) (len=23) "TestAbstractMethodClass",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=24) "\\TestAbstractMethodClass": (bool) true
           }
         },
         Value: (string) ""
@@ -89,8 +83,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -113,8 +105,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -137,8 +127,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -161,8 +149,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -185,8 +171,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -209,8 +193,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -233,8 +215,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -257,8 +237,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -301,8 +279,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -325,8 +301,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",
@@ -349,8 +323,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) "",

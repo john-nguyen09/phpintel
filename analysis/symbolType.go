@@ -175,13 +175,11 @@ func ReadTypeString(d *storage.Decoder) TypeString {
 // TypeComposite contains multiple type strings
 type TypeComposite struct {
 	typeStrings []TypeString
-	uniqueFQNs  map[string]bool
 }
 
 func newTypeComposite() TypeComposite {
 	return TypeComposite{
 		typeStrings: []TypeString{},
-		uniqueFQNs:  map[string]bool{},
 	}
 }
 
@@ -217,15 +215,20 @@ func (t TypeComposite) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.typeStrings)
 }
 
+func (t *TypeComposite) hasFQN(fqn string) bool {
+	for _, typeString := range t.typeStrings {
+		if typeString.GetFQN() == fqn {
+			return true
+		}
+	}
+	return false
+}
+
 func (t *TypeComposite) add(typeString TypeString) {
-	if _, ok := t.uniqueFQNs[typeString.GetFQN()]; ok {
+	if t.hasFQN(typeString.GetFQN()) {
 		return
 	}
 	t.typeStrings = append(t.typeStrings, typeString)
-	if t.uniqueFQNs == nil {
-		t.uniqueFQNs = map[string]bool{}
-	}
-	t.uniqueFQNs[typeString.GetFQN()] = true
 }
 
 func (t *TypeComposite) merge(types TypeComposite) {

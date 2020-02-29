@@ -1,0 +1,42 @@
+([]analysis.Symbol) (len=2) {
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:0-7:1
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=29) "\\Namespace1\\ClassInNamespace1",
+      original: (string) (len=17) "ClassInNamespace1",
+      arrayLevel: (int) 0
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) "",
+      arrayLevel: (int) 0
+    },
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
+  }),
+  (*analysis.Class)({
+    description: (string) "",
+    Location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 10:4-12:5
+    },
+    Modifier: (analysis.ClassModifierValue) 0,
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=29) "\\Namespace2\\ClassInNamespace2",
+      original: (string) (len=17) "ClassInNamespace2",
+      arrayLevel: (int) 0
+    },
+    Extends: (analysis.TypeString) {
+      fqn: (string) "",
+      original: (string) "",
+      arrayLevel: (int) 0
+    },
+    Interfaces: ([]analysis.TypeString) <nil>,
+    Use: ([]analysis.TypeString) <nil>
+  })
+}

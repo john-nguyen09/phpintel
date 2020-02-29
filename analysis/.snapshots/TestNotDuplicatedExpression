@@ -2,8 +2,7 @@
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -17,8 +16,7 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {
@@ -34,8 +32,7 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (analysis.HasTypes) <nil>,
       Location: (protocol.Location) {

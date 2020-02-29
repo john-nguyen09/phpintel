@@ -57,7 +57,7 @@ func (s *Variable) mergeTypesWithVariable(variable *Variable) {
 
 func (s *Variable) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	for _, varTag := range phpDoc.Vars {
-		s.AddTypes(typesFromPhpDoc(document, varTag.TypeString))
+		s.Type.merge(typesFromPhpDoc(document, varTag.TypeString))
 	}
 }
 
@@ -87,10 +87,6 @@ func (s *Variable) GetTypes() TypeComposite {
 		types.add(typeString)
 	}
 	return types
-}
-
-func (s *Variable) AddTypes(types TypeComposite) {
-	s.Type.merge(types)
 }
 
 func (s *Variable) GetDescription() string {

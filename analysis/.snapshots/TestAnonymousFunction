@@ -14,8 +14,7 @@
         hasValue: (bool) false,
         Name: (string) (len=5) "$var1",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) <nil>,
-          uniqueFQNs: (map[string]bool) <nil>
+          typeStrings: ([]analysis.TypeString) <nil>
         },
         Value: (string) ""
       })
@@ -42,9 +41,6 @@
               original: (string) (len=9) "Blueprint",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=10) "\\Blueprint": (bool) true
           }
         },
         Value: (string) ""

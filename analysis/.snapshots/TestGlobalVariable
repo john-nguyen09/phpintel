@@ -11,9 +11,6 @@
           original: (string) (len=15) "TestMethodClass",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=16) "\\TestMethodClass": (bool) true
       }
     },
     description: (string) "",
@@ -31,9 +28,6 @@
           original: (string) (len=15) "TestMethodClass",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=16) "\\TestMethodClass": (bool) true
       }
     },
     description: (string) "",

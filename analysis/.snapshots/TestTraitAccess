@@ -45,9 +45,6 @@
           original: (string) (len=18) "AuthorizesRequests",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests": (bool) true
       }
     },
     Scope: (analysis.HasTypes) <nil>,

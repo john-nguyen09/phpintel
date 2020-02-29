@@ -8,9 +8,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -25,8 +22,7 @@
   (*analysis.ScopedPropertyAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.ClassAccess)({
         Expression: (analysis.Expression) {
@@ -37,9 +33,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -68,9 +61,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -85,8 +75,7 @@
   (*analysis.ScopedConstantAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.ClassAccess)({
         Expression: (analysis.Expression) {
@@ -97,9 +86,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -127,9 +113,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -144,8 +127,7 @@
   (*analysis.ScopedMethodAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.ClassAccess)({
         Expression: (analysis.Expression) {
@@ -156,9 +138,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -181,8 +160,7 @@
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.ClassTypeDesignator)({
         Expression: (analysis.Expression) {
@@ -193,9 +171,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -225,9 +200,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (analysis.HasTypes) <nil>,
@@ -247,9 +219,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (*analysis.ClassTypeDesignator)({
@@ -261,9 +230,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -287,8 +253,7 @@
   (*analysis.PropertyAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.Variable)({
         Expression: (analysis.Expression) {
@@ -299,9 +264,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (*analysis.ClassTypeDesignator)({
@@ -313,9 +275,6 @@
                     original: (string) (len=9) "TestClass",
                     arrayLevel: (int) 0
                   }
-                },
-                uniqueFQNs: (map[string]bool) (len=1) {
-                  (string) (len=10) "\\TestClass": (bool) true
                 }
               },
               Scope: (analysis.HasTypes) <nil>,
@@ -353,9 +312,6 @@
             original: (string) (len=9) "TestClass",
             arrayLevel: (int) 0
           }
-        },
-        uniqueFQNs: (map[string]bool) (len=1) {
-          (string) (len=10) "\\TestClass": (bool) true
         }
       },
       Scope: (*analysis.ClassTypeDesignator)({
@@ -367,9 +323,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (analysis.HasTypes) <nil>,
@@ -393,8 +346,7 @@
   (*analysis.MethodAccess)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>,
-        uniqueFQNs: (map[string]bool) <nil>
+        typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.Variable)({
         Expression: (analysis.Expression) {
@@ -405,9 +357,6 @@
                 original: (string) (len=9) "TestClass",
                 arrayLevel: (int) 0
               }
-            },
-            uniqueFQNs: (map[string]bool) (len=1) {
-              (string) (len=10) "\\TestClass": (bool) true
             }
           },
           Scope: (*analysis.ClassTypeDesignator)({
@@ -419,9 +368,6 @@
                     original: (string) (len=9) "TestClass",
                     arrayLevel: (int) 0
                   }
-                },
-                uniqueFQNs: (map[string]bool) (len=1) {
-                  (string) (len=10) "\\TestClass": (bool) true
                 }
               },
               Scope: (analysis.HasTypes) <nil>,

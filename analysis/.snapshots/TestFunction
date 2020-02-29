@@ -25,9 +25,6 @@
               original: (string) (len=9) "TestClass",
               arrayLevel: (int) 0
             }
-          },
-          uniqueFQNs: (map[string]bool) (len=1) {
-            (string) (len=10) "\\TestClass": (bool) true
           }
         },
         Value: (string) (len=4) "null"
@@ -35,8 +32,6 @@
     },
     returnTypes: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) {
-      },
-      uniqueFQNs: (map[string]bool) {
       }
     },
     description: (string) ""
@@ -60,9 +55,6 @@
           original: (string) (len=9) "TestClass",
           arrayLevel: (int) 0
         }
-      },
-      uniqueFQNs: (map[string]bool) (len=1) {
-        (string) (len=10) "\\TestClass": (bool) true
       }
     },
     description: (string) (len=23) "function3's description"
