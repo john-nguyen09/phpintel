@@ -86,6 +86,19 @@ class TestClass1 {
 	method1 := doc.Children[1].(*Method)
 	method2 := doc.Children[2].(*Method)
 
-	assert.Equal(t, method1.GetReturnTypes().ToString(), "\\TestClass1")
-	assert.Equal(t, method2.GetReturnTypes().ToString(), "\\TestClass2|\\TestClass1")
+	scopeTypes := newTypeComposite()
+	scopeTypes.add(NewTypeString("\\TestClass1"))
+
+	assert.Equal(t, "\\TestClass1", resolveMemberTypes(method1.GetReturnTypes(),
+		&ClassAccess{
+			Expression: Expression{
+				Type: scopeTypes,
+			},
+		}).ToString())
+	assert.Equal(t, "\\TestClass2|\\TestClass1", resolveMemberTypes(method2.GetReturnTypes(),
+		&ClassAccess{
+			Expression: Expression{
+				Type: scopeTypes,
+			},
+		}).ToString())
 }

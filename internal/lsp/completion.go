@@ -2,7 +2,6 @@ package lsp
 
 import (
 	"context"
-	"log"
 	"strings"
 	"time"
 
@@ -38,7 +37,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	symbol := document.HasTypesAtPos(pos)
 	word := document.WordAtPos(pos)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
-	log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
+	// log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
 	parent := nodes.Parent()
 	if parent != nil {
 		switch parent.Type() {
@@ -113,6 +112,19 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 					prev := parent.PrevSibling()
 					if par.Type() == "formal_parameters" || (prev != nil && prev.Type() == "(") {
 						completionList = typeCompletion(completionCtx, word)
+						break
+					}
+					if par.Type() == "member_access_expression" {
+						if parPrev != nil && parPrev.Type() == "->" {
+							prev = parPrev.PrevSibling()
+							if prev != nil {
+								s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
+								if s != nil {
+									s.Resolve(resolveCtx)
+									completionList = memberAccessCompletion(completionCtx, word, s)
+								}
+							}
+						}
 						break
 					}
 					completionList = nameCompletion(completionCtx, symbol, word)

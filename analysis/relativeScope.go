@@ -15,6 +15,18 @@ func IsNameParent(name string) bool {
 	return name == "parent"
 }
 
+func resolveMemberTypes(types TypeComposite, scope HasTypes) TypeComposite {
+	newTypes := newTypeComposite()
+	for _, t := range types.Resolve() {
+		if t.GetOriginal() == "static" || t.GetOriginal() == "$this" {
+			newTypes.merge(scope.GetTypes())
+			continue
+		}
+		newTypes.add(t)
+	}
+	return newTypes
+}
+
 func newRelativeScope(document *Document, location protocol.Location) *RelativeScope {
 	types := newTypeComposite()
 	lastClass := document.getLastClass()

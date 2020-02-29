@@ -121,7 +121,7 @@ func (s *Class) extends(document *Document, p *sitter.Node) {
 			{
 				s.Extends = transformQualifiedName(child, document)
 				s.Extends.SetFQN(document.currImportTable().GetClassReferenceFQN(s.Extends))
-				classAccessNode = p
+				classAccessNode = child
 			}
 		}
 

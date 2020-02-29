@@ -48,7 +48,12 @@ func (s *MethodAccess) Resolve(ctx ResolveContext) {
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			for _, method := range GetClassMethods(store, class, s.Name, NewSearchOptions()) {
-				s.Type.merge(method.returnTypes)
+				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+			}
+		}
+		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
+			for _, method := range GetInterfaceMethods(store, theInterface, s.Name, NewSearchOptions()) {
+				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
 			}
 		}
 	}

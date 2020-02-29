@@ -30,6 +30,7 @@ var /* const */ Natives = map[string]bool{
 	"object":   true,
 	"callable": true,
 	"void":     true,
+	"static":   true,
 
 	"__DIR__":  true,
 	"__FILE__": true,
@@ -192,7 +193,7 @@ func typesFromPhpDoc(document *Document, text string) TypeComposite {
 		if part == "" {
 			continue
 		}
-		if IsNameRelative(part) {
+		if part == "self" {
 			currentClass := document.getLastClass()
 			switch v := currentClass.(type) {
 			case *Class:

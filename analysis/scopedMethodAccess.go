@@ -61,7 +61,13 @@ func (s *ScopedMethodAccess) Resolve(ctx ResolveContext) {
 		for _, class := range store.GetClasses(scopeType.GetFQN()) {
 			for _, method := range GetClassMethods(store, class, s.Name,
 				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
-				s.Type.merge(method.GetReturnTypes())
+				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+			}
+		}
+		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
+			for _, method := range GetInterfaceMethods(store, theInterface, s.Name,
+				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
+				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
 			}
 		}
 	}
