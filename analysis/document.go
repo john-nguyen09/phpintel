@@ -75,7 +75,7 @@ func (vt *VariableTable) canReferenceGlobal(name string) bool {
 	return false
 }
 
-func (vt VariableTable) setReferenceGlobal(name string) {
+func (vt *VariableTable) setReferenceGlobal(name string) {
 	vt.globalDeclares[name] = true
 }
 
@@ -336,6 +336,7 @@ func (s *Document) popVariableTable() *VariableTable {
 	length := len(s.variableTables)
 	last, poppedVariableTables := s.variableTables[length-1], s.variableTables[:length-1]
 	s.variableTables = poppedVariableTables
+	s.variableTableLevel--
 	return last
 }
 
@@ -345,15 +346,22 @@ func (s *Document) getCurrentVariableTable() *VariableTable {
 
 // GetVariableTableAt returns the closest variable table which is in range
 func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
+	var traverseAndFind func(*VariableTable) *VariableTable
+	traverseAndFind = func(vt *VariableTable) *VariableTable {
+		if len(vt.children) == 0 {
+			return vt
+		}
+		for _, child := range vt.children {
+			if util.IsInRange(pos, child.locationRange) == 0 {
+				return traverseAndFind(child)
+			}
+		}
+		return nil
+	}
 	// The first element is supposed to always be there because it represents
 	// the scope of the whole document
 	lastFoundVarTable := s.variableTables[0]
-	for _, varTable := range lastFoundVarTable.children {
-		if util.IsInRange(pos, varTable.locationRange) == 0 {
-			lastFoundVarTable = varTable
-		}
-	}
-	return lastFoundVarTable
+	return traverseAndFind(lastFoundVarTable)
 }
 
 func (s *Document) pushVariable(variable *Variable) {

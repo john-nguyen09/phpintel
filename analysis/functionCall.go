@@ -24,8 +24,6 @@ func tryToNewDefine(document *Document, node *sitter.Node) Symbol {
 			if name == "\\define" || name == "define" {
 				return newDefine(document, node)
 			}
-		case "arguments":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}

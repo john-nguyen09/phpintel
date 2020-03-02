@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=2) {
+([]analysis.Symbol) (len=3) {
   (*analysis.AnonymousFunction)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -42,6 +42,27 @@
               arrayLevel: (int) 0
             }
           }
+        },
+        Value: (string) ""
+      })
+    }
+  }),
+  (*analysis.AnonymousFunction)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:13-13:1
+    },
+    Params: ([]*analysis.Parameter) (len=1) {
+      (*analysis.Parameter)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 11:22-11:25
+        },
+        description: (string) "",
+        hasValue: (bool) false,
+        Name: (string) (len=3) "$el",
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
         Value: (string) ""
       })

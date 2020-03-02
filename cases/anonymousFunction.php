@@ -8,3 +8,7 @@ Schema::create('checklists', function (Blueprint $table) {
     $table->bigIncrements('id');
     $table->timestamps();
 });
+
+usort($var1, function($el) {
+
+});

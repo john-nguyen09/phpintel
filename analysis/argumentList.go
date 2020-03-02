@@ -40,7 +40,6 @@ func newArgumentList(document *Document, node *sitter.Node) Symbol {
 		if t != "(" && t != ")" {
 			argumentList.arguments = append(argumentList.arguments, child)
 			switch t {
-			case "subscript_expression":
 			default:
 				nodesToScan = append(nodesToScan, child)
 			}
