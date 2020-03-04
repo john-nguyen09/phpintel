@@ -156,6 +156,10 @@ func (s *Document) Load() {
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
 	scanForChildren(s, rootNode)
+
+	if len(s.importTables) == 0 {
+		s.pushImportTable(rootNode)
+	}
 }
 
 func (s *Document) getDocument() *Document {
