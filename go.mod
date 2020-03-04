@@ -19,4 +19,4 @@ require (
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 )
 
-replace github.com/smacker/go-tree-sitter => github.com/john-nguyen09/go-tree-sitter v0.0.0-20200223043131-e9dd2bb3a55b
+replace github.com/smacker/go-tree-sitter => github.com/john-nguyen09/go-tree-sitter v0.0.0-20200304053910-f5724b8f5916

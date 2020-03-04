@@ -6,7 +6,9 @@ import (
 	"strings"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/smacker/go-tree-sitter/phpdoc"
 )
 
 type methodTagParam struct {
@@ -24,78 +26,153 @@ type tag struct {
 	IsStatic    bool
 }
 
+var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
 var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[ \t]*\*[ \t]*`)
-var /* const */ tagBoundaryPattern = regexp.MustCompile(`(?:\r\n|\r|\n)@`)
-var /* const */ whitespacePattern = regexp.MustCompile(`\s+`)
 
-var /* const */ paramOrPropPattern = regexp.MustCompile(`(?m)^(@param|@property|@property-read|@property-write)\s+(\S+)\s+(\$\S+)\s*(.*)$`)
-var /* const */ varPattern = regexp.MustCompile(`(?m)^(@var)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
-var /* const */ returnPattern = regexp.MustCompile(`(?m)^(@return)\s+(\S+)\s*(.*)$`)
-var /* const */ methodPattern = regexp.MustCompile(`(?m)^(@method)\s+(?:(static)\s+)?(?:(\S+)\s+)?(\S+)\(\s*(.*?)\s*?\)\s*(.*)$`)
-var /* const */ globalPattern = regexp.MustCompile(`(?m)^(@global)\s+(\S+)(?:\s+(\$\S+))?\s*(.*)$`)
-
-func typeTag(tagName string, typeString string, name string, description string) tag {
+func paramOrPropTypeTag(tagName string, input []byte, node *sitter.Node) tag {
+	ts := []string{}
+	name := ""
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "description":
+			description = readDescriptionNode(input, child)
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "variable_name":
+			name = child.Content(input)
+		}
+	}
 	return tag{
 		TagName:     tagName,
 		Name:        name,
 		Description: description,
-		TypeString:  typeString,
+		TypeString:  strings.Join(ts, "|"),
 	}
 }
 
-func methodTag(tagName string, visibility string, returnTypeString string, name string, parameters []methodTagParam, description string) tag {
-	if len(returnTypeString) == 0 {
-		returnTypeString = "void"
+func varTag(tagName string, input []byte, node *sitter.Node) tag {
+	ts := []string{}
+	name := ""
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "description":
+			description = readDescriptionNode(input, child)
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "variable_name":
+			name = child.Content(input)
+		}
 	}
-
 	return tag{
 		TagName:     tagName,
-		IsStatic:    visibility == "static",
-		TypeString:  returnTypeString,
 		Name:        name,
-		Parameters:  parameters,
 		Description: description,
+		TypeString:  strings.Join(ts, "|"),
 	}
 }
 
-func methodParams(text string) []methodTagParam {
+func returnTag(tagName string, input []byte, node *sitter.Node) tag {
+	ts := []string{}
+	name := ""
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "description":
+			description = readDescriptionNode(input, child)
+		}
+	}
+	return tag{
+		TagName:     tagName,
+		Name:        name,
+		Description: description,
+		TypeString:  strings.Join(ts, "|"),
+	}
+}
+
+func methodTag(tagName string, input []byte, node *sitter.Node) tag {
+	ts := []string{}
+	isStatic := false
+	name := ""
 	params := []methodTagParam{}
-
-	if len(text) == 0 {
-		return params
-	}
-
-	paramSplit := strings.Split(text, ",")
-
-	for _, paramBit := range paramSplit {
-		var name, typeString, value string
-		param := whitespacePattern.Split(strings.TrimSpace(paramBit), -1)
-
-		switch len(param) {
-		case 1:
-			typeString = "mixed"
-			name = param[0]
-		case 2:
-			typeString = param[0]
-			name = param[1]
-		case 4:
-			typeString = param[0]
-			name = param[1]
-			value = param[3]
-		default:
-			name = ""
-		}
-
-		if len(name) != 0 {
-			params = append(params, methodTagParam{
-				TypeString: typeString,
-				Name:       name,
-				Value:      value,
-			})
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "description":
+			description = readDescriptionNode(input, child)
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "static":
+			isStatic = true
+		case "name":
+			name = child.Content(input)
+		case "param":
+			params = append(params, methodParam(input, child))
 		}
 	}
 
-	return params
+	t := strings.Join(ts, "|")
+	if t == "" {
+		t = "void"
+	}
+	return tag{
+		TagName:     tagName,
+		IsStatic:    isStatic,
+		TypeString:  t,
+		Name:        name,
+		Parameters:  params,
+		Description: description,
+	}
+}
+
+func methodParam(input []byte, node *sitter.Node) methodTagParam {
+	ts := []string{}
+	name := ""
+	value := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "variable_name":
+			name = child.Content(input)
+		case "param_value":
+			value = child.Content(input)
+		}
+	}
+	return methodTagParam{
+		TypeString: strings.Join(ts, "|"),
+		Name:       name,
+		Value:      value,
+	}
+}
+
+func globalTag(tagName string, input []byte, node *sitter.Node) tag {
+	ts := []string{}
+	name := ""
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "type":
+			ts = append(ts, child.Content(input))
+		case "variable_name":
+			name = child.Content(input)
+		}
+	}
+	return tag{
+		TagName:     tagName,
+		TypeString:  strings.Join(ts, "|"),
+		Name:        name,
+		Description: description,
+	}
 }
 
 type phpDocComment struct {
@@ -112,77 +189,64 @@ type phpDocComment struct {
 	PropertyWrites []tag
 }
 
+func readDescriptionNode(input []byte, node *sitter.Node) string {
+	desc := node.Content(input)
+	return strings.TrimSpace(stripPattern.ReplaceAllString(desc, ""))
+}
+
 func parse(text string) (phpDocComment, error) {
 	if len(text) == 0 {
 		return phpDocComment{}, errors.New("Text is zero")
 	}
-
-	stripped := stripPattern.ReplaceAllString(text, "")
-	boundaries := tagBoundaryPattern.FindAllStringIndex(stripped, -1)
-
-	split := []string{}
-	start := 0
-	for _, indexRange := range boundaries {
-		split = append(split, stripped[start:indexRange[0]])
-		start = indexRange[1]
-		if stripped[indexRange[1]-1] == '@' {
-			start--
-		}
-	}
-	if start < len(stripped) {
-		split = append(split, stripped[start:])
-	}
-
 	description := ""
-	if len(split) > 0 && strings.Index(split[0], "@") != 0 {
-		description, split = strings.TrimSpace(split[0]), split[1:]
-	}
-
 	tags := []tag{}
 
-	for _, part := range split {
-		tag, err := parseTag(part)
-		if err == nil {
-			tags = append(tags, tag)
+	parser := sitter.NewParser()
+	parser.SetLanguage(phpdoc.GetLanguage())
+	input := []byte(text)
+	tree := parser.Parse(nil, input)
+	node := tree.RootNode()
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "description":
+			description = readDescriptionNode(input, child)
+		case "tag":
+			tag, err := parseTag(input, child)
+			if err == nil {
+				tags = append(tags, tag)
+			}
 		}
-	}
-
-	if len(description) == 0 && len(tags) == 0 {
-		return phpDocComment{}, errors.New("Invalid PhpDoc syntax")
 	}
 
 	return newPhpDoc(description, tags), nil
 }
 
-func parseTag(text string) (tag, error) {
-	min := 4
-	if min >= len(text) {
-		min = len(text) - 1
-	}
-	substr := text[:min]
-	switch substr {
-	case "@par", "@pro":
-		if matches := paramOrPropPattern.FindStringSubmatch(text); len(matches) > 0 {
-			return typeTag(matches[1], matches[2], matches[3], matches[4]), nil
-		}
-	case "@var":
-		if matches := varPattern.FindStringSubmatch(text); len(matches) > 0 {
-			return typeTag(matches[1], matches[2], matches[3], matches[4]), nil
-		}
-	case "@ret":
-		if matches := returnPattern.FindStringSubmatch(text); len(matches) > 0 {
-			return typeTag(matches[1], matches[2], "", matches[3]), nil
-		}
-	case "@met":
-		if matches := methodPattern.FindStringSubmatch(text); len(matches) > 0 {
-			return methodTag(matches[1], matches[2], matches[3], matches[4], methodParams(matches[5]), matches[6]), nil
-		}
-	case "@glo":
-		if matches := globalPattern.FindStringSubmatch(text); len(matches) > 0 {
-			return typeTag(matches[1], matches[2], matches[3], matches[4]), nil
+func getTagName(input []byte, node *sitter.Node) string {
+	traverser := util.NewTraverser(node)
+	tagName := ""
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		if child.Type() == "tag_name" {
+			tagName = child.Content(input)
 		}
 	}
+	return tagName
+}
 
+func parseTag(input []byte, node *sitter.Node) (tag, error) {
+	tagName := getTagName(input, node)
+	switch tagName {
+	case "@param", "@property", "@property-read", "@property-write":
+		return paramOrPropTypeTag(tagName, input, node), nil
+	case "@var":
+		return varTag(tagName, input, node), nil
+	case "@return":
+		return returnTag(tagName, input, node), nil
+	case "@method":
+		return methodTag(tagName, input, node), nil
+	case "@global":
+		return globalTag(tagName, input, node), nil
+	}
 	return tag{}, errors.New("Unexpected tag")
 }
 
@@ -229,7 +293,11 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 }
 
 func newPhpDocFromNode(document *Document, token *sitter.Node) Symbol {
-	phpDocComment, err := parse(document.GetNodeText(token))
+	text := document.GetNodeText(token)
+	if !phpDocFirstLineRegex.MatchString(text) {
+		return nil
+	}
+	phpDocComment, err := parse(text)
 	if err != nil {
 		return nil
 	}

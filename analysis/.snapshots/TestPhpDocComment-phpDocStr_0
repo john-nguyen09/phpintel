@@ -20,7 +20,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=9) "$sections",
-      Description: (string) (len=72) "Array from section number (e.g. 0) to array of course-module IDs in that",
+      Description: (string) (len=149) "Array from section number (e.g. 0) to array of course-module IDs in that\nsection; this only includes sections that contain at least one course-module",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
@@ -28,7 +28,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=4) "$cms",
-      Description: (string) (len=74) "Array from course-module instance to cm_info object within this course, in",
+      Description: (string) (len=94) "Array from course-module instance to cm_info object within this course, in\norder of appearance",
       TypeString: (string) (len=9) "cm_info[]",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
@@ -44,7 +44,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=7) "$groups",
-      Description: (string) (len=73) "Groups that the current user belongs to. Calculated on the first request.",
+      Description: (string) (len=174) "Groups that the current user belongs to. Calculated on the first request.\nIs an array of grouping id => array of group id => group id. Includes grouping id 0 for 'all groups'",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
@@ -84,7 +84,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=9) "$sections",
-      Description: (string) (len=72) "Array from section number (e.g. 0) to array of course-module IDs in that",
+      Description: (string) (len=149) "Array from section number (e.g. 0) to array of course-module IDs in that\nsection; this only includes sections that contain at least one course-module",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
@@ -92,7 +92,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=4) "$cms",
-      Description: (string) (len=74) "Array from course-module instance to cm_info object within this course, in",
+      Description: (string) (len=94) "Array from course-module instance to cm_info object within this course, in\norder of appearance",
       TypeString: (string) (len=9) "cm_info[]",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
@@ -108,7 +108,7 @@
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
       Name: (string) (len=7) "$groups",
-      Description: (string) (len=73) "Groups that the current user belongs to. Calculated on the first request.",
+      Description: (string) (len=174) "Groups that the current user belongs to. Calculated on the first request.\nIs an array of grouping id => array of group id => group id. Includes grouping id 0 for 'all groups'",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false

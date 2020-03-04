@@ -25,8 +25,8 @@ github.com/jmhodges/levigo v1.0.0 h1:q5EC36kV79HWeTBWsod3mG11EgStG3qArTKcvlksN1U
 github.com/jmhodges/levigo v1.0.0/go.mod h1:Q6Qx+uH3RAqyK4rFQroq9RL7mdkABMcfhEI+nNuzMJQ=
 github.com/john-nguyen09/go-phpparser v0.0.0-20200204091501-d315e8e7d929 h1:fi4Duk10BEgLVAE/yPsYuuhp+gYytPHvscsgTFbtCV0=
 github.com/john-nguyen09/go-phpparser v0.0.0-20200204091501-d315e8e7d929/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
-github.com/john-nguyen09/go-tree-sitter v0.0.0-20200223043131-e9dd2bb3a55b h1:pgul0MasoG2whC48OQiIFqgSeUMfl3lFYxU2fHdUEVg=
-github.com/john-nguyen09/go-tree-sitter v0.0.0-20200223043131-e9dd2bb3a55b/go.mod h1:EiUuVMUfLQj8Sul+S8aKWJwQy7FRYnJCO2EWzf8F5hk=
+github.com/john-nguyen09/go-tree-sitter v0.0.0-20200304053910-f5724b8f5916 h1:m4bbgxePFcAs28mZ3h1/vQCbVWDwomkzrHKQ8s62Lk4=
+github.com/john-nguyen09/go-tree-sitter v0.0.0-20200304053910-f5724b8f5916/go.mod h1:EiUuVMUfLQj8Sul+S8aKWJwQy7FRYnJCO2EWzf8F5hk=
 github.com/karrick/godirwalk v1.12.0 h1:nkS4xxsjiZMvVlazd0mFyiwD4BR9f3m6LXGhM2TUx3Y=
 github.com/karrick/godirwalk v1.12.0/go.mod h1:H5KPZjojv4lE+QYImBI8xVtrBRgYrIVsaRPx4tDPEn4=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
