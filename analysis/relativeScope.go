@@ -19,7 +19,7 @@ func resolveMemberTypes(types TypeComposite, scope HasTypes) TypeComposite {
 	newTypes := newTypeComposite()
 	for _, t := range types.Resolve() {
 		if t.GetOriginal() == "static" || t.GetOriginal() == "$this" {
-			newTypes.merge(scope.GetTypes())
+			newTypes.mergeWithArrayLevel(scope.GetTypes(), t.arrayLevel)
 			continue
 		}
 		newTypes.add(t)

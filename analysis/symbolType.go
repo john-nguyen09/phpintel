@@ -238,6 +238,13 @@ func (t *TypeComposite) merge(types TypeComposite) {
 	}
 }
 
+func (t *TypeComposite) mergeWithArrayLevel(types TypeComposite, arrayLevel int) {
+	for _, typeString := range types.typeStrings {
+		typeString.arrayLevel += arrayLevel
+		t.add(typeString)
+	}
+}
+
 func (t *TypeComposite) Write(e *storage.Encoder) {
 	e.WriteInt(len(t.typeStrings))
 	for _, typeString := range t.typeStrings {
