@@ -93,7 +93,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						}
 						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
-				case "named_label_statement":
+				case "named_label_statement", "qualified_name":
 					completionList = nameCompletion(completionCtx, symbol, word)
 				case "ERROR":
 					parPrev := par.PrevSibling()
@@ -149,10 +149,13 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 
 func variableCompletion(ctx *completionContext, word string) *protocol.CompletionList {
 	varTable := ctx.doc.GetVariableTableAt(ctx.pos)
-	symbol := ctx.doc.HasTypesAtPos(ctx.pos)
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
+	if varTable == nil {
+		return completionList
+	}
+	symbol := ctx.doc.HasTypesAtPos(ctx.pos)
 	for _, variable := range varTable.GetVariables() {
 		if variable.Name == "$" {
 			continue

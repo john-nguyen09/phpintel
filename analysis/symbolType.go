@@ -31,6 +31,7 @@ var /* const */ Natives = map[string]bool{
 	"callable": true,
 	"void":     true,
 	"static":   true,
+	"$this":    true,
 
 	"__DIR__":  true,
 	"__FILE__": true,
