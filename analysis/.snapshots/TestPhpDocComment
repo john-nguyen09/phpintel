@@ -1,4 +1,4 @@
-(analysis.phpDocComment) {
+(*analysis.phpDocComment)({
   Description: (string) (len=55) "Run the validation routine against the given validator.",
   tags: ([]analysis.tag) (len=3) {
     (analysis.tag) {
@@ -45,11 +45,11 @@
   Globals: ([]analysis.tag) {
   },
   location: (protocol.Location) {
-    URI: (string) "",
-    Range: (protocol.Range) 0:0-0:0
+    URI: (string) (len=4) "test",
+    Range: (protocol.Range) 0:6-8:3
   },
   PropertyReads: ([]analysis.tag) {
   },
   PropertyWrites: ([]analysis.tag) {
   }
-}
+})

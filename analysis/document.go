@@ -10,10 +10,10 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
-	"github.com/smacker/go-tree-sitter/php"
 )
 
 var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
@@ -21,7 +21,7 @@ var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\
 // Document contains information of documents
 type Document struct {
 	uri         string
-	tree        *sitter.Tree
+	injector    *ast.Injector
 	text        []byte
 	lineOffsets []int
 	loadMu      sync.Mutex
@@ -135,15 +135,14 @@ func (s *Document) ResetState() {
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
 	s.importTables = []*ImportTable{}
+	s.injector = nil
 }
 
 func (s *Document) GetRootNode() *sitter.Node {
-	if s.tree == nil {
-		p := sitter.NewParser()
-		p.SetLanguage(php.GetLanguage())
-		s.tree = p.Parse(nil, s.GetText())
+	if s.injector == nil {
+		s.injector = ast.NewPHPInjector(nil, s.GetText())
 	}
-	return s.tree.RootNode()
+	return s.injector.MainRootNode()
 }
 
 // Load makes sure that symbols are available
@@ -582,25 +581,6 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			}
 		}
 		s.lineOffsets = newLineOffsets
-
-		if s.tree != nil {
-			rangeLength := endOffset - startOffset
-			oldEndIndex := startOffset + rangeLength
-			newEndIndex := startOffset + len(text)
-			edit := sitter.EditInput{
-				StartIndex:  uint32(startOffset),
-				OldEndIndex: uint32(oldEndIndex),
-				NewEndIndex: uint32(newEndIndex),
-				StartPoint:  util.PositionToPoint(start),
-				OldEndPoint: util.PositionToPoint(s.positionAt(oldEndIndex)),
-				NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
-			}
-			s.tree.Edit(edit)
-			p := sitter.NewParser()
-			p.SetLanguage(php.GetLanguage())
-			oldTree := s.tree
-			s.tree = p.Parse(oldTree, s.GetText())
-		}
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()

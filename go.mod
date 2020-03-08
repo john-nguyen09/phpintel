@@ -18,5 +18,3 @@ require (
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 )
-
-replace github.com/smacker/go-tree-sitter => github.com/john-nguyen09/go-tree-sitter v0.0.0-20200304053910-f5724b8f5916
