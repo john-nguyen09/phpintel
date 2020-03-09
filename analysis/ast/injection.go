@@ -205,8 +205,12 @@ func (i *Injector) MainRootNode() *sitter.Node {
 
 // GetInjection checks if the node has injection
 func (i *Injector) GetInjection(node *sitter.Node) (*sitter.Node, bool) {
-	childNode, ok := i.layers[0].injectedNodes[node]
-	return childNode, ok
+	for _, layer := range i.layers {
+		if childNode, ok := layer.injectedNodes[node]; ok {
+			return childNode, ok
+		}
+	}
+	return nil, false
 }
 
 func createConfig(languageName string) InjectionConfig {
