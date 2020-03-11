@@ -17,6 +17,13 @@ func newTypeDeclaration(document *Document, node *sitter.Node) *TypeDeclaration 
 			Location: document.GetNodeLocation(node),
 		},
 	}
+	if node.Type() == "type" {
+		typeString := transformQualifiedName(node, document)
+		typeDeclaration.Name = typeString.GetOriginal()
+		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
+		typeDeclaration.Type.add(typeString)
+		return typeDeclaration
+	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

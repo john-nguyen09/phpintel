@@ -1,0 +1,173 @@
+([]analysis.HasTypes) (len=9) {
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass1",
+            original: (string) (len=10) "TestClass1",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 3:10-3:20
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass2",
+            original: (string) (len=10) "TestClass2",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 4:10-4:20
+      },
+      Name: (string) (len=10) "TestClass2"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=16) "\\MasterTestClass",
+            original: (string) (len=15) "MasterTestClass",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 5:11-5:26
+      },
+      Name: (string) (len=15) "MasterTestClass"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=16) "\\MasterTestClass",
+            original: (string) (len=15) "MasterTestClass",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 13:11-13:26
+      },
+      Name: (string) (len=15) "MasterTestClass"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass1",
+            original: (string) (len=10) "TestClass1",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 14:13-14:23
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass2",
+            original: (string) (len=10) "TestClass2",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 15:18-15:28
+      },
+      Name: (string) (len=10) "TestClass2"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass1",
+            original: (string) (len=10) "TestClass1",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 16:19-16:29
+      },
+      Name: (string) (len=10) "TestClass1"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=11) "\\TestClass2",
+            original: (string) (len=10) "TestClass2",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 21:12-21:22
+      },
+      Name: (string) (len=10) "TestClass2"
+    }
+  }),
+  (*analysis.TypeDeclaration)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=16) "\\MasterTestClass",
+            original: (string) (len=15) "MasterTestClass",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 27:11-27:26
+      },
+      Name: (string) (len=15) "MasterTestClass"
+    }
+  })
+}
