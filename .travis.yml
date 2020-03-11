@@ -13,6 +13,10 @@ branches:
   only:
   - master
 
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
 notifications:
   email: false
 
