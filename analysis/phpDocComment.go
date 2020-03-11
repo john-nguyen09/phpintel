@@ -193,29 +193,6 @@ func readDescriptionNode(document *Document, node *sitter.Node) string {
 	return strings.TrimSpace(stripPattern.ReplaceAllString(desc, ""))
 }
 
-func parse(document *Document, node *sitter.Node) (phpDocComment, error) {
-	if node == nil {
-		return phpDocComment{}, errors.New("Text is zero")
-	}
-	description := ""
-	tags := []tag{}
-
-	traverser := util.NewTraverser(node)
-	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
-		switch child.Type() {
-		case "description":
-			description = readDescriptionNode(document, child)
-		case "tag":
-			tag, err := parseTag(document, child)
-			if err == nil {
-				tags = append(tags, tag)
-			}
-		}
-	}
-
-	return newPhpDoc(description, tags), nil
-}
-
 func getTagName(document *Document, node *sitter.Node) string {
 	traverser := util.NewTraverser(node)
 	tagName := ""
@@ -242,23 +219,6 @@ func parseTag(document *Document, node *sitter.Node) (tag, error) {
 		return globalTag(tagName, document, node), nil
 	}
 	return tag{}, errors.New("Unexpected tag")
-}
-
-func newPhpDoc(description string, tags []tag) phpDocComment {
-	phpDoc := phpDocComment{
-		Description: description,
-		tags:        tags,
-	}
-
-	phpDoc.Returns = phpDoc.findTagsByTagName("@return")
-	phpDoc.Properties = phpDoc.findTagsByTagName("@property")
-	phpDoc.PropertyReads = phpDoc.findTagsByTagName("@property-read")
-	phpDoc.PropertyWrites = phpDoc.findTagsByTagName("@property-write")
-	phpDoc.Methods = phpDoc.findTagsByTagName("@method")
-	phpDoc.Vars = phpDoc.findTagsByTagName("@var")
-	phpDoc.Globals = phpDoc.findTagsByTagName("@global")
-
-	return phpDoc
 }
 
 func (d phpDocComment) findTagsByTagName(tagName string) []tag {
@@ -288,12 +248,34 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 
 func newPhpDocFromNode(document *Document, node *sitter.Node) Symbol {
 	if node, ok := document.injector.GetInjection(node); ok {
-		phpDocComment, err := parse(document, node)
-		if err != nil {
-			return nil
+		phpDoc := phpDocComment{
+			location:    document.GetNodeLocation(node),
+			Description: "",
+			tags:        []tag{},
 		}
-		phpDocComment.location = document.GetNodeLocation(node)
-		return &phpDocComment
+
+		traverser := util.NewTraverser(node)
+		for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+			switch child.Type() {
+			case "description":
+				phpDoc.Description = readDescriptionNode(document, child)
+			case "tag":
+				tag, err := parseTag(document, child)
+				if err == nil {
+					phpDoc.tags = append(phpDoc.tags, tag)
+				}
+			}
+		}
+
+		phpDoc.Returns = phpDoc.findTagsByTagName("@return")
+		phpDoc.Properties = phpDoc.findTagsByTagName("@property")
+		phpDoc.PropertyReads = phpDoc.findTagsByTagName("@property-read")
+		phpDoc.PropertyWrites = phpDoc.findTagsByTagName("@property-write")
+		phpDoc.Methods = phpDoc.findTagsByTagName("@method")
+		phpDoc.Vars = phpDoc.findTagsByTagName("@var")
+		phpDoc.Globals = phpDoc.findTagsByTagName("@global")
+
+		return &phpDoc
 	}
 	return nil
 }
