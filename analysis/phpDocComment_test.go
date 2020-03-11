@@ -1,10 +1,12 @@
 package analysis
 
 import (
+	"io/ioutil"
 	"strconv"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPhpDocComment(t *testing.T) {
@@ -52,4 +54,12 @@ func TestPhpDocComment(t *testing.T) {
 			cupaloy.SnapshotT(t, phpDoc)
 		})
 	}
+}
+
+func TestPhpDocCommentSymbols(t *testing.T) {
+	data, err := ioutil.ReadFile("../cases/phpDocComment.php")
+	assert.NoError(t, err)
+	doc := NewDocument("test1", data)
+	doc.Load()
+	cupaloy.SnapshotT(t, doc.hasTypesSymbols)
 }
