@@ -10,13 +10,13 @@ func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
 	rootNode := document.GetRootNode()
 	diagnostics := []protocol.Diagnostic{}
 	traverser := util.NewTraverser(rootNode)
-	traverser.Traverse(func(node *sitter.Node, _ []*sitter.Node) bool {
+	traverser.Traverse(func(node *sitter.Node, _ []*sitter.Node) util.VisitorContext {
 		t := node.Type()
 		switch {
 		case t == "ERROR" || node.IsMissing():
 			diagnostics = append(diagnostics, parserErrorToDiagnostic(document, node))
 		}
-		return true
+		return util.VisitorContext{true, nil}
 	})
 
 	return diagnostics

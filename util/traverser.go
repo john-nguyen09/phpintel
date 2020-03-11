@@ -72,7 +72,12 @@ func (s *Traverser) Clone() *Traverser {
 	}
 }
 
-type Visitor func(*sitter.Node, []*sitter.Node) bool
+type VisitorContext struct {
+	ShouldAscend bool
+	AscendNode   *sitter.Node
+}
+
+type Visitor func(*sitter.Node, []*sitter.Node) VisitorContext
 
 func (s *Traverser) Traverse(visit Visitor) {
 	spine := []*sitter.Node{}
@@ -80,9 +85,12 @@ func (s *Traverser) Traverse(visit Visitor) {
 }
 
 func (s *Traverser) realTraverse(node *sitter.Node, spine []*sitter.Node, visit Visitor) {
-	shouldAscend := visit(node, spine)
-	if !shouldAscend {
+	ctx := visit(node, spine)
+	if !ctx.ShouldAscend {
 		return
+	}
+	if ctx.AscendNode != nil {
+		node = ctx.AscendNode
 	}
 	childCount := int(node.ChildCount())
 	if childCount > 0 {

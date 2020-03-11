@@ -132,6 +132,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 					completionList = variableCompletion(completionCtx, word)
 				}
 			}
+		case "type":
+			completionList = nameCompletion(completionCtx, symbol, word)
 		case "$":
 			completionList = variableCompletion(completionCtx, word)
 		case "named_label_statement":

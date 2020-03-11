@@ -427,13 +427,16 @@ func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	found := util.NodeStack{}
 	traverser := util.NewTraverser(s.GetRootNode())
-	traverser.Traverse(func(node *sitter.Node, spine []*sitter.Node) bool {
+	traverser.Traverse(func(node *sitter.Node, spine []*sitter.Node) util.VisitorContext {
+		if injectedNode, ok := s.injector.GetInjection(node); ok {
+			node = injectedNode
+		}
 		if node.ChildCount() == 0 && offset > int(node.StartByte()) && offset <= int(node.EndByte()) {
 			found = append(spine[:0:0], spine...)
 			found = append(found, node)
-			return false
+			return util.VisitorContext{false, nil}
 		}
-		return true
+		return util.VisitorContext{true, node}
 	})
 	return found
 }
