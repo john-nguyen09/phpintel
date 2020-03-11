@@ -1,38 +1,50 @@
 package wordtokeniser
 
-import "unicode"
+import (
+	"unicode"
+	"unicode/utf8"
+)
 
 func casing(name string) []string {
 	tokens := []string{}
-	isPrevUpper := false
-	start := -1
+	lastClass := 0
+	start := 0
 	nameRunes := []rune(name)
 
 	tokens = append(tokens, name)
 	for i, r := range nameRunes {
-		isCurrUpper := unicode.IsUpper(r)
-
-		if isCurrUpper != isPrevUpper {
-			if start == -1 {
-				if isCurrUpper {
-					if i != 0 {
-						start = i
-					}
-				} else {
-					if i != 1 {
-						tokens = append(tokens, string(nameRunes[i-1:]))
-					}
+		if r == utf8.RuneError {
+			if start > 0 && start < i {
+				tokens = append(tokens, string(nameRunes[start:i]))
+			}
+			start = i + 1
+			continue
+		}
+		class := 1
+		switch true {
+		case unicode.IsUpper(r):
+			class = 2
+		case unicode.IsDigit(r):
+			class = 3
+		}
+		if i != 0 && class != lastClass {
+			// It is acceptable when going from UPPERCASE to lowercase for 1 character
+			// e.g. Class -> ["Class"] instead of ["C", "lass"]
+			// But ABClass -> ["AB", "Class"], instead of ["ABC", "lass"] or ["ABClass"]
+			if lastClass == 2 && class == 1 {
+				if start != i-1 {
+					tokens = append(tokens, string(nameRunes[start:i-1]))
 				}
+				start = i - 1
 			} else {
-				tokens = append(tokens, string(nameRunes[start:]))
-				if start != (i-1) && !isCurrUpper {
-					tokens = append(tokens, string(nameRunes[i-1:]))
-				}
-				start = -1
+				tokens = append(tokens, string(nameRunes[start:i]))
+				start = i
 			}
 		}
-
-		isPrevUpper = isCurrUpper
+		lastClass = class
+	}
+	if start > 0 && start < len(nameRunes) {
+		tokens = append(tokens, string(nameRunes[start:]))
 	}
 
 	return tokens
