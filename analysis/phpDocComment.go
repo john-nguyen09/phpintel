@@ -29,9 +29,13 @@ var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
 var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[ \t]*\*[ \t]*`)
 
 func processTypeNode(document *Document, node *sitter.Node) string {
+	text := document.GetNodeText(node)
+	if text == "" {
+		return text
+	}
 	typeDecl := newTypeDeclaration(document, node)
 	document.addSymbol(typeDecl)
-	return document.GetNodeText(node)
+	return text
 }
 
 func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) tag {
@@ -44,7 +48,10 @@ func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) t
 		case "description":
 			description = readDescriptionNode(document, child)
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "variable_name":
 			name = document.GetNodeText(child)
 		}
@@ -67,7 +74,10 @@ func varTag(tagName string, document *Document, node *sitter.Node) tag {
 		case "description":
 			description = readDescriptionNode(document, child)
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "variable_name":
 			name = document.GetNodeText(child)
 		}
@@ -88,7 +98,10 @@ func returnTag(tagName string, document *Document, node *sitter.Node) tag {
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
 		switch child.Type() {
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "description":
 			description = readDescriptionNode(document, child)
 		}
@@ -113,7 +126,10 @@ func methodTag(tagName string, document *Document, node *sitter.Node) tag {
 		case "description":
 			description = readDescriptionNode(document, child)
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "static":
 			isStatic = true
 		case "name":
@@ -145,7 +161,10 @@ func methodParam(document *Document, node *sitter.Node) methodTagParam {
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
 		switch child.Type() {
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "variable_name":
 			name = document.GetNodeText(child)
 		case "param_value":
@@ -167,7 +186,10 @@ func globalTag(tagName string, document *Document, node *sitter.Node) tag {
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
 		switch child.Type() {
 		case "type":
-			ts = append(ts, processTypeNode(document, child))
+			t := processTypeNode(document, child)
+			if t != "" {
+				ts = append(ts, t)
+			}
 		case "variable_name":
 			name = document.GetNodeText(child)
 		}
