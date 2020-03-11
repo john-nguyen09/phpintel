@@ -1,4 +1,4 @@
-(analysis.phpDocComment) {
+(*analysis.phpDocComment)({
   Description: (string) (len=429) "Information about a course that is cached in the course table 'modinfo' field (and then in\nmemory) in order to reduce the need for other database queries.\n\nThis includes information about the course-modules and the sections on the course. It can also\ninclude dynamic data that has been updated for the current user.\n\nUse {@link get_fast_modinfo()} to retrieve the instance of the object for particular course\nand particular user.",
   tags: ([]analysis.tag) (len=6) {
     (analysis.tag) {
@@ -61,8 +61,8 @@
   Globals: ([]analysis.tag) {
   },
   location: (protocol.Location) {
-    URI: (string) "",
-    Range: (protocol.Range) 0:0-0:0
+    URI: (string) (len=4) "test",
+    Range: (protocol.Range) 0:6-19:4
   },
   PropertyReads: ([]analysis.tag) (len=6) {
     (analysis.tag) {
@@ -116,4 +116,4 @@
   },
   PropertyWrites: ([]analysis.tag) {
   }
-}
+})

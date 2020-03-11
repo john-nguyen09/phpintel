@@ -8,7 +8,7 @@ import (
 )
 
 func TestPhpDocComment(t *testing.T) {
-	phpDocStr := `/**
+	phpDocStr := `<?php /**
 	* Run the validation routine against the given validator.
 	*
 	* @param  \\Illuminate\\Contracts\\Validation\\Validator|array  $validator
@@ -17,14 +17,13 @@ func TestPhpDocComment(t *testing.T) {
 	*
 	* @throws \\Illuminate\\Validation\\ValidationException
 	*/`
-	phpDoc, err := parse(phpDocStr)
-	if err != nil {
-		panic(err)
-	}
+	doc := NewDocument("test", []byte(phpDocStr))
+	doc.Load()
+	phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Child(1))
 	cupaloy.SnapshotT(t, phpDoc)
 
 	phpDocStrs := []string{
-		`/**
+		`<?php /**
 		* Information about a course that is cached in the course table 'modinfo' field (and then in
 		* memory) in order to reduce the need for other database queries.
 		*
@@ -46,10 +45,9 @@ func TestPhpDocComment(t *testing.T) {
 		*/`,
 	}
 	for i, phpDocStr := range phpDocStrs {
-		phpDoc, err := parse(phpDocStr)
-		if err != nil {
-			panic(err)
-		}
+		doc := NewDocument("test", []byte(phpDocStr))
+		doc.Load()
+		phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Child(1))
 		t.Run("phpDocStr_"+strconv.Itoa(i), func(t *testing.T) {
 			cupaloy.SnapshotT(t, phpDoc)
 		})
