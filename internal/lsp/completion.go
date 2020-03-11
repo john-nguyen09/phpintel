@@ -37,7 +37,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	symbol := document.HasTypesAtPos(pos)
 	word := document.WordAtPos(pos)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
-	// log.Printf("Completion: %s %v %T %s", word, pos, symbol, nodes)
+	// log.Printf("Completion: %s %v %T %s, kind: %v", word, pos, symbol, nodes, params.Context.TriggerKind)
 	parent := nodes.Parent()
 	if parent != nil {
 		switch parent.Type() {
