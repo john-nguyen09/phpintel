@@ -9,6 +9,10 @@ env:
 git:
   depth: 1
 
+branches:
+  only:
+  - master
+
 notifications:
   email: false
 
