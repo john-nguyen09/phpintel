@@ -135,6 +135,9 @@ func (s SearchOptions) WithLimit(limit int) SearchOptions {
 }
 
 func (s SearchOptions) IsLimitReached() bool {
+	if s.limiter == nil {
+		return false
+	}
 	return s.limiter()
 }
 
