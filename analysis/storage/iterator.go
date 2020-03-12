@@ -23,7 +23,7 @@ func NewPrefixIterator(db *levigo.DB, prefix []byte) *PrefixIterator {
 }
 
 func (pi *PrefixIterator) valid() bool {
-	return pi.it.Valid() && bytes.HasPrefix(pi.it.Key(), pi.prefix)
+	return !pi.shouldStop && pi.it.Valid() && bytes.HasPrefix(pi.it.Key(), pi.prefix)
 }
 
 func (pi *PrefixIterator) next() {
