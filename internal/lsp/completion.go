@@ -183,7 +183,8 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
+	opts := baseSearchOptions()
+	classes, searchResult := ctx.store.SearchClasses(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
@@ -200,7 +201,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	consts, searchResult := ctx.store.SearchConsts(word, baseSearchOptions)
+	consts, searchResult := ctx.store.SearchConsts(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, constant := range consts {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, constant, constant.Name, word)
@@ -216,7 +217,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Detail:              getDetailFromTextEdit(constant.Name, textEdit),
 		})
 	}
-	defines, searchResult := ctx.store.SearchDefines(word, baseSearchOptions)
+	defines, searchResult := ctx.store.SearchDefines(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, define := range defines {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, define, define.Name, word)
@@ -233,7 +234,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Detail:              getDetailFromTextEdit(define.Name, textEdit),
 		})
 	}
-	functions, searchResult := ctx.store.SearchFunctions(word, baseSearchOptions)
+	functions, searchResult := ctx.store.SearchFunctions(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, function := range functions {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, function, function.Name, word)
@@ -260,7 +261,7 @@ func classCompletion(ctx *completionContext, symbol analysis.HasTypes, word stri
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
-	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
+	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions())
 	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
@@ -321,7 +322,7 @@ func scopedAccessCompletion(ctx *completionContext, word string, scope analysis.
 				Detail:           HasParamsDetailWithTextEdit(method, nil),
 			})
 		}
-		classConsts, searchResult := ctx.store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions)
+		classConsts, searchResult := ctx.store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions())
 		completionList.IsIncomplete = !searchResult.IsComplete
 		for _, classConst := range classConsts {
 			completionList.Items = append(completionList.Items, protocol.CompletionItem{
@@ -389,7 +390,8 @@ func typeCompletion(ctx *completionContext, word string) *protocol.CompletionLis
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
 	}
-	classes, searchResult := ctx.store.SearchClasses(word, baseSearchOptions)
+	opts := baseSearchOptions()
+	classes, searchResult := ctx.store.SearchClasses(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
@@ -406,7 +408,7 @@ func typeCompletion(ctx *completionContext, word string) *protocol.CompletionLis
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
 	}
-	interfaces, searchResult := ctx.store.SearchInterfaces(word, baseSearchOptions)
+	interfaces, searchResult := ctx.store.SearchInterfaces(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, theInterface := range interfaces {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, theInterface, theInterface.Name, word)

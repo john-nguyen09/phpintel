@@ -71,8 +71,9 @@ type Server struct {
 	pendingFolders []protocol.WorkspaceFolder
 }
 
-var baseSearchOptions analysis.SearchOptions = analysis.NewSearchOptions().
-	WithLimit(1000)
+func baseSearchOptions() analysis.SearchOptions {
+	return analysis.NewSearchOptions().WithLimit(1000)
+}
 
 // General
 

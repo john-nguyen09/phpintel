@@ -113,7 +113,7 @@ func (d *symbolDeletor) Delete(batch *storage.Batch) {
 
 type SearchOptions struct {
 	predicates []func(s Symbol) bool
-	limit      int
+	limiter    func() bool
 }
 
 func NewSearchOptions() SearchOptions {
@@ -126,8 +126,16 @@ func (s SearchOptions) WithPredicate(predicate func(s Symbol) bool) SearchOption
 }
 
 func (s SearchOptions) WithLimit(limit int) SearchOptions {
-	s.limit = limit
+	count := 0
+	s.limiter = func() bool {
+		count++
+		return count >= limit
+	}
 	return s
+}
+
+func (s SearchOptions) IsLimitReached() bool {
+	return s.limiter()
 }
 
 func initStubs() {
@@ -483,7 +491,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 				classes = append(classes, class)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -527,7 +535,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 				interfaces = append(interfaces, theInterface)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -571,7 +579,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 				traits = append(traits, trait)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -611,7 +619,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 				functions = append(functions, function)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -649,7 +657,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 				consts = append(consts, constant)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -687,7 +695,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 				defines = append(defines, define)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -740,7 +748,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 				methods = append(methods, method)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -793,7 +801,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 				classConsts = append(classConsts, classConst)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}
@@ -846,7 +854,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 				properties = append(properties, property)
 				count++
 			}
-			if options.limit > 0 && count >= options.limit {
+			if options.IsLimitReached() {
 				return onDataResult{true}
 			}
 			return onDataResult{false}

@@ -133,8 +133,9 @@ func symbolToProtocolDocumentSymbol(symbol analysis.Symbol) (protocol.DocumentSy
 func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.WorkspaceSymbolParams) ([]protocol.SymbolInformation, error) {
 	symbols := []protocol.SymbolInformation{}
 	if params.Query != "" {
+		opts := baseSearchOptions()
 		for _, store := range s.store.stores {
-			classes, _ := store.SearchClasses(params.Query, analysis.NewSearchOptions())
+			classes, _ := store.SearchClasses(params.Query, opts)
 			for _, class := range classes {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Class,
@@ -142,7 +143,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					Location: class.GetLocation(),
 				})
 			}
-			consts, _ := store.SearchConsts(params.Query, analysis.NewSearchOptions())
+			consts, _ := store.SearchConsts(params.Query, opts)
 			for _, constant := range consts {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Constant,
@@ -150,7 +151,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					Location: constant.GetLocation(),
 				})
 			}
-			classConsts, _ := store.SearchClassConsts("", params.Query, analysis.NewSearchOptions())
+			classConsts, _ := store.SearchClassConsts("", params.Query, opts)
 			for _, classConst := range classConsts {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Constant,
@@ -159,7 +160,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: classConst.Scope.GetFQN(),
 				})
 			}
-			defines, _ := store.SearchDefines(params.Query, analysis.NewSearchOptions())
+			defines, _ := store.SearchDefines(params.Query, opts)
 			for _, define := range defines {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Constant,
@@ -167,7 +168,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					Location: define.GetLocation(),
 				})
 			}
-			functions, _ := store.SearchFunctions(params.Query, analysis.NewSearchOptions())
+			functions, _ := store.SearchFunctions(params.Query, opts)
 			for _, function := range functions {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Function,
@@ -175,7 +176,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					Location: function.GetLocation(),
 				})
 			}
-			interfaces, _ := store.SearchInterfaces(params.Query, analysis.NewSearchOptions())
+			interfaces, _ := store.SearchInterfaces(params.Query, opts)
 			for _, theInterface := range interfaces {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Interface,
@@ -183,7 +184,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					Location: theInterface.GetLocation(),
 				})
 			}
-			methods, _ := store.SearchMethods("", params.Query, analysis.NewSearchOptions())
+			methods, _ := store.SearchMethods("", params.Query, opts)
 			for _, method := range methods {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Method,
@@ -192,7 +193,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: method.Scope.GetFQN(),
 				})
 			}
-			properties, _ := store.SearchProperties("", params.Query, analysis.NewSearchOptions())
+			properties, _ := store.SearchProperties("", params.Query, opts)
 			for _, property := range properties {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:          protocol.Property,
@@ -201,7 +202,7 @@ func (s *Server) workspaceSymbol(ctx context.Context, params *protocol.Workspace
 					ContainerName: property.Scope.GetFQN(),
 				})
 			}
-			traits, _ := store.SearchTraits(params.Query, analysis.NewSearchOptions())
+			traits, _ := store.SearchTraits(params.Query, opts)
 			for _, trait := range traits {
 				symbols = append(symbols, protocol.SymbolInformation{
 					Kind:     protocol.Class,
