@@ -16,7 +16,7 @@ import (
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
-var /* const */ wordRegex = regexp.MustCompile(`[a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
+var /* const */ wordRegex = regexp.MustCompile(`[\\a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
 
 // Document contains information of documents
 type Document struct {

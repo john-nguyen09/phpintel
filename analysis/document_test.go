@@ -8,6 +8,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLineOffset(t *testing.T) {
@@ -123,5 +124,24 @@ func TestSymbolBefore(t *testing.T) {
 		Character: 32,
 	})).String() != "*analysis.MethodAccess" {
 		t.FailNow()
+	}
+}
+
+type wordTestCase struct {
+	doc      *Document
+	pos      protocol.Position
+	expected string
+}
+
+func TestWordAt(t *testing.T) {
+	doc1 := NewDocument("test1", []byte(`<?php function1(\Modules\`))
+
+	testCases := []wordTestCase{
+		wordTestCase{doc1, protocol.Position{Line: 0, Character: 25}, "\\Modules\\"},
+	}
+
+	for _, testCase := range testCases {
+		actual := testCase.doc.WordAtPos(testCase.pos)
+		assert.Equal(t, testCase.expected, actual)
 	}
 }
