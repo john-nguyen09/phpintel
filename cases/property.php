@@ -18,3 +18,7 @@ class ClassWithProperties {
      */
     public $prop5;
 }
+
+trait HasAttributes {
+    protected $attributes;
+}

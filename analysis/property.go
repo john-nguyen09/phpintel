@@ -63,6 +63,12 @@ func newProperty(document *Document, node *sitter.Node, visibility VisibilityMod
 		IsStatic:           isStatic,
 	}
 	parent := document.getLastClass()
+	switch v := parent.(type) {
+	case *Class:
+		property.Scope = v.Name
+	case *Trait:
+		property.Scope = v.Name
+	}
 	if theClass, ok := parent.(*Class); ok {
 		property.Scope = theClass.Name
 	}

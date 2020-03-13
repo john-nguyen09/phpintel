@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=16) {
+([]analysis.Symbol) (len=18) {
   (*analysis.Class)({
     description: (string) "",
     Location: (protocol.Location) {
@@ -293,6 +293,35 @@
           arrayLevel: (int) 0
         }
       }
+    }
+  }),
+  (*analysis.Trait)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 21:0-23:1
+    },
+    Name: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\HasAttributes",
+      original: (string) (len=13) "HasAttributes",
+      arrayLevel: (int) 0
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 22:14-22:25
+    },
+    description: (string) "",
+    Name: (string) (len=11) "$attributes",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=14) "\\HasAttributes",
+      original: (string) (len=13) "HasAttributes",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
     }
   })
 }
