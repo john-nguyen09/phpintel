@@ -80,6 +80,7 @@ func init() {
 		"variable_name":                     newVariableExpression,
 		"member_access_expression":          newPropertyAccess,
 		"member_call_expression":            newMethodAccess,
+		"parenthesized_expression":          newParenthesised,
 	}
 }
 

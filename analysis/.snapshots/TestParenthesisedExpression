@@ -1,0 +1,98 @@
+([]analysis.HasTypes) (len=3) {
+  (*analysis.ClassTypeDesignator)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=9) "\\DateTime",
+            original: (string) (len=8) "DateTime",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:5-2:13
+      },
+      Name: (string) (len=8) "DateTime"
+    }
+  }),
+  (*analysis.Parenthesised)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=9) "\\DateTime",
+                original: (string) (len=8) "DateTime",
+                arrayLevel: (int) 0
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:5-2:13
+          },
+          Name: (string) (len=8) "DateTime"
+        }
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:0-2:14
+      },
+      Name: (string) ""
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.Parenthesised)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Scope: (*analysis.ClassTypeDesignator)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=9) "\\DateTime",
+                    original: (string) (len=8) "DateTime",
+                    arrayLevel: (int) 0
+                  }
+                }
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 2:5-2:13
+              },
+              Name: (string) (len=8) "DateTime"
+            }
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:0-2:14
+          },
+          Name: (string) ""
+        },
+        hasResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:16-2:22
+      },
+      Name: (string) (len=6) "modify"
+    },
+    hasResolved: (bool) false
+  })
+}
