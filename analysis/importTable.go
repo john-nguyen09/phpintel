@@ -131,12 +131,12 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 	if currentScope != "" && strings.Index(name.GetFQN(), currentScope) == 0 {
 		return name.GetFQN()[len(currentScope)+1:], nil
 	}
-	if currentScope == name.GetNamespace() {
+	if currentScope != "" && currentScope == name.GetNamespace() {
 		return name.GetOriginal(), nil
 	}
 	wordScope, _ := GetScopeAndNameFromString(word)
 	scope := name.GetNamespace()
-	if wordScope == scope {
+	if wordScope != "" && wordScope == scope {
 		return name.GetOriginal(), insertUse.GetUseEdit(NewTypeString(scope), nil, "")
 	}
 	for alias, fqn := range i.classes {
@@ -151,7 +151,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
 	switch symbol.(type) {
 	case *Function, *Const, *Define:
-		if scope == "\\" {
+		if scope == "" {
 			return name.GetOriginal(), nil
 		}
 	}
