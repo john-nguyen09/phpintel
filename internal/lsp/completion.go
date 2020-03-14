@@ -136,7 +136,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			completionList = nameCompletion(completionCtx, symbol, word)
 		case "$":
 			completionList = variableCompletion(completionCtx, word)
-		case "named_label_statement":
+		case "named_label_statement", "\\":
 			completionList = nameCompletion(completionCtx, symbol, word)
 		}
 	}
@@ -253,6 +253,16 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Documentation:       function.GetDescription(),
 			Detail:              HasParamsDetailWithTextEdit(function, textEdit),
 		})
+	}
+	if analysis.IsFQN(word) {
+		namespaces, _ := ctx.store.SearchNamespaces(word, opts)
+		for _, ns := range namespaces {
+			completionList.Items = append(completionList.Items, protocol.CompletionItem{
+				Label:      ns,
+				InsertText: namespaceDiff(ns, word),
+				Kind:       protocol.ModuleCompletion,
+			})
+		}
 	}
 	return completionList
 }

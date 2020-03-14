@@ -161,10 +161,6 @@ func (s *Document) Load() {
 	}
 }
 
-func (s *Document) getDocument() *Document {
-	return s
-}
-
 // GetURI is a getter for uri
 func (s *Document) GetURI() string {
 	return s.uri

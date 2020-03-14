@@ -78,7 +78,7 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 		return "\\" + fqn
 	}
 	fqn := name.GetFQN()
-	if !isFQN(fqn) {
+	if !IsFQN(fqn) {
 		fqn = "\\" + fqn
 	}
 	functions := store.GetFunctions(fqn)
@@ -100,7 +100,7 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 		return "\\" + fqn
 	}
 	fqn := name.GetFQN()
-	if !isFQN(fqn) {
+	if !IsFQN(fqn) {
 		fqn = "\\" + fqn
 	}
 	constants := store.GetConsts(fqn)
@@ -144,7 +144,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 			return alias, nil
 		}
 	}
-	if isFQN(word) {
+	if IsFQN(word) {
 		return name.GetOriginal(), nil
 	}
 	// TODO: Defines do not have implicit namespace except
@@ -160,7 +160,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 
 func (i ImportTable) GetNamespace() string {
 	if i.namespace == nil {
-		return "\\"
+		return ""
 	}
 	return i.namespace.Name
 }

@@ -39,6 +39,7 @@ const (
 	methodCompletionIndex     string = "methodCompletionIndex"
 	propertyCompletionIndex   string = "propertyCompletionIndex"
 	classConstCompletionIndex string = "classConstCompletionIndex"
+	namespaceCompletionIndex  string = "namespaceCompletionIndex"
 )
 
 var /* const */ versionKey = []byte("Version")
@@ -391,6 +392,13 @@ func (s *Store) forgetAllSymbols(batch *storage.Batch, uri string) {
 
 func (s *Store) writeAllSymbols(batch *storage.Batch, document *Document,
 	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
+	for _, impTable := range document.importTables {
+		is := indexablesFromNamespaceName(impTable.GetNamespace())
+		for _, i := range is {
+			indexName(batch, document, i, i.key)
+			ciDeletor.MarkNotDelete(document.GetURI(), i, i.key)
+		}
+	}
 	for _, child := range document.Children {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
@@ -472,6 +480,21 @@ func namespacePredicate(scope string) func(s Symbol) bool {
 		}
 		return symbolScope == scope
 	}
+}
+
+func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]string, SearchResult) {
+	scope, keyword := GetScopeAndNameFromString(keyword)
+	namespaces := []string{}
+	query := searchQuery{
+		collection: namespaceCompletionIndex + KeySep + scope,
+		keyword:    keyword,
+		onData: func(cv CompletionValue) onDataResult {
+			namespaces = append(namespaces, string(cv))
+			return onDataResult{false}
+		},
+	}
+	result := searchCompletions(s.db, query)
+	return namespaces, result
 }
 
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {

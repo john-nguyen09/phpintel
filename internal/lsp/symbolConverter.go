@@ -275,3 +275,19 @@ func HasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEd
 	}
 	return detail
 }
+
+func normaliseNamespaceName(name string) string {
+	if len(name) > 0 && name[0] != '\\' {
+		name = "\\" + name
+	}
+	return name
+}
+
+func namespaceDiff(full string, sub string) string {
+	full = normaliseNamespaceName(full)
+	sub = normaliseNamespaceName(sub)
+	if strings.Index(full, sub) == 0 {
+		return full[strings.LastIndex(full[0:len(sub)], "\\")+1:]
+	}
+	return full
+}
