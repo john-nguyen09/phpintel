@@ -269,10 +269,6 @@ func (s *Document) nodeRange(node *sitter.Node) protocol.Range {
 	return protocol.Range{Start: util.PointToPosition(node.StartPoint()), End: util.PointToPosition(node.EndPoint())}
 }
 
-func (s *Document) errorRange(err *sitter.Node) protocol.Range {
-	return s.nodeRange(err)
-}
-
 // GetText is a getter for text
 func (s *Document) GetText() []byte {
 	return s.text
@@ -292,10 +288,6 @@ func (s *Document) GetNodeText(node *sitter.Node) string {
 
 func (s *Document) GetPhraseText(phrase *sitter.Node) string {
 	return s.GetNodeText(phrase)
-}
-
-func (s *Document) GetTokenText(token *sitter.Node) string {
-	return s.GetNodeText(token)
 }
 
 func (s *Document) addSymbol(other Symbol) {

@@ -29,7 +29,7 @@ func parserErrorToDiagnostic(document *Document, err *sitter.Node) protocol.Diag
 	}
 
 	return protocol.Diagnostic{
-		Range:    document.errorRange(err),
+		Range:    document.nodeRange(err),
 		Message:  message,
 		Severity: protocol.SeverityError,
 		Source:   "phpintel",
