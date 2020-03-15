@@ -301,7 +301,7 @@ func namespaceToCompletionItem(ns string, word string) protocol.CompletionItem {
 }
 
 func getDetailFromTextEdit(name analysis.TypeString, textEdit *protocol.TextEdit) string {
-	detail := name.GetOriginal()
+	detail := name.GetFQN()
 	if textEdit != nil {
 		detail += "\n\n" + textEdit.NewText
 	}

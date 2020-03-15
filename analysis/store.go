@@ -443,16 +443,6 @@ func (s *Store) GetURI() protocol.DocumentURI {
 	return s.uri
 }
 
-func (s *Store) GetClasses(name string) []*Class {
-	entry := newEntry(classCollection, name+KeySep)
-	classes := []*Class{}
-	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		d := storage.NewDecoder(it.Value())
-		classes = append(classes, ReadClass(d))
-	})
-	return classes
-}
-
 func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 	if len(options.predicates) == 0 {
 		return true
@@ -497,9 +487,56 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 	return namespaces, result
 }
 
+func (s *Store) GetClasses(name string) []*Class {
+	entry := newEntry(classCollection, name+KeySep)
+	classes := []*Class{}
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		d := storage.NewDecoder(it.Value())
+		classes = append(classes, ReadClass(d))
+	})
+	return classes
+}
+
+func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onDataResult) {
+	if scope == "" {
+		scope = "\\"
+	}
+	if scope[len(scope)-1] != '\\' {
+		scope += "\\"
+	}
+	entry := newEntry(classCollection, scope)
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		class := ReadClass(storage.NewDecoder(it.Value()))
+		result := onData(class)
+		if result.shouldStop {
+			it.Stop()
+		}
+	})
+}
+
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	classes := []*Class{}
+	if scope != "" {
+		if keyword != "" {
+			options = options.WithPredicate(func(s Symbol) bool {
+				if v, ok := s.(*Class); ok {
+					return strings.Contains(v.Name.GetOriginal(), keyword)
+				}
+				return false
+			})
+		}
+		s.GetClassesByScopeStream(scope, func(class *Class) onDataResult {
+			if isSymbolValid(class, options) {
+				classes = append(classes, class)
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
+			}
+			return onDataResult{false}
+		})
+		return classes, SearchResult{true}
+	}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: classCompletionIndex,

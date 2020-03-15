@@ -98,7 +98,14 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						}
 						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
-				case "named_label_statement", "qualified_name":
+				case "named_label_statement":
+					completionList = nameCompletion(completionCtx, symbol, word)
+				case "qualified_name":
+					par = nodes.Parent()
+					if par != nil && par.Type() == "namespace_use_clause" {
+						completionList = useCompletion(completionCtx, word)
+						break
+					}
 					completionList = nameCompletion(completionCtx, symbol, word)
 				case "ERROR":
 					parPrev := par.PrevSibling()
