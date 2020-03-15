@@ -63,6 +63,11 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 			}
 		case "name":
 			par := nodes.Parent()
+			prev := parent.PrevSibling()
+			if (prev != nil && prev.Type() == "use") || (par != nil && par.Type() == "namespace_name") {
+				completionList = useCompletion(completionCtx, word)
+				break
+			}
 			if par != nil {
 				switch par.Type() {
 				case "class_constant_access_expression":
@@ -137,6 +142,11 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case "$":
 			completionList = variableCompletion(completionCtx, word)
 		case "named_label_statement", "\\":
+			par := parent.Parent()
+			if par != nil && par.Type() == "namespace_name" {
+				completionList = useCompletion(completionCtx, word)
+				break
+			}
 			completionList = nameCompletion(completionCtx, symbol, word)
 		}
 	}
@@ -189,17 +199,12 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
 	for _, class := range classes {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, class, class.Name, word)
-		textEdits := []protocol.TextEdit{}
-		if textEdit != nil {
-			textEdits = append(textEdits, *textEdit)
-		}
-		completionList.Items = append(completionList.Items, protocol.CompletionItem{
-			Kind:                protocol.ClassCompletion,
-			Label:               label,
-			Documentation:       class.GetDescription(),
-			AdditionalTextEdits: textEdits,
-			Detail:              getDetailFromTextEdit(class.Name, textEdit),
-		})
+		completionList.Items = append(completionList.Items, classToCompletionItem(class, label, textEdit))
+	}
+	interfaces, searchResult := ctx.store.SearchInterfaces(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	for _, intf := range interfaces {
+		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, intf.Name.GetOriginal(), nil))
 	}
 	consts, searchResult := ctx.store.SearchConsts(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
@@ -257,11 +262,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 	if analysis.IsFQN(word) {
 		namespaces, _ := ctx.store.SearchNamespaces(word, opts)
 		for _, ns := range namespaces {
-			completionList.Items = append(completionList.Items, protocol.CompletionItem{
-				Label:      ns,
-				InsertText: namespaceDiff(ns, word),
-				Kind:       protocol.ModuleCompletion,
-			})
+			completionList.Items = append(completionList.Items, namespaceToCompletionItem(ns, word))
 		}
 	}
 	return completionList
@@ -462,10 +463,31 @@ func phpTagCompletion(word string) *protocol.CompletionList {
 	return completionList
 }
 
-func getDetailFromTextEdit(name analysis.TypeString, textEdit *protocol.TextEdit) string {
-	detail := name.GetOriginal()
-	if textEdit != nil {
-		detail += "\n\n" + textEdit.NewText
+func useCompletion(ctx *completionContext, word string) *protocol.CompletionList {
+	t := analysis.NewTypeString(word)
+	t.SetNamespace("")
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
 	}
-	return detail
+	opts := baseSearchOptions()
+	namespaces, _ := ctx.store.SearchNamespaces(t.GetFQN(), opts)
+	for _, ns := range namespaces {
+		completionList.Items = append(completionList.Items, namespaceToCompletionItem(ns, word))
+	}
+	classes, searchResult := ctx.store.SearchClasses(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	for _, class := range classes {
+		completionList.Items = append(completionList.Items, classToCompletionItem(class, class.Name.GetOriginal(), nil))
+	}
+	interfaces, searchResult := ctx.store.SearchInterfaces(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	for _, intf := range interfaces {
+		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, intf.Name.GetOriginal(), nil))
+	}
+	traits, searchResult := ctx.store.SearchTraits(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	for _, trait := range traits {
+		completionList.Items = append(completionList.Items, traitToCompletionItem(trait, trait.Name.GetOriginal(), nil))
+	}
+	return completionList
 }
