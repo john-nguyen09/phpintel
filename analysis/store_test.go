@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestStore(t *testing.T) {
@@ -24,4 +25,66 @@ func TestStore(t *testing.T) {
 	store.SyncDocument(document)
 	classes := store.GetClasses("\\TestClass1")
 	cupaloy.Snapshot(classes)
+}
+
+func TestSearchNamespace(t *testing.T) {
+	store, err := setupStore("test", "TestSearchNamespace")
+	assert.NoError(t, err)
+	doc1 := NewDocument("test1", []byte(`<?php namespace Namespace1;`))
+	doc1.Load()
+	store.SyncDocument(doc1)
+	doc2 := NewDocument("test2", []byte(`<?php namespace Namespace2;`))
+	doc2.Load()
+	store.SyncDocument(doc2)
+	doc3 := NewDocument("test3", []byte(`<?php namespace AnotherNamespace3;`))
+	doc3.Load()
+	store.SyncDocument(doc3)
+
+	namespaces, _ := store.SearchNamespaces("\\Name", NewSearchOptions())
+	expected := []string{
+		"\\Namespace1",
+		"\\Namespace2",
+		"\\AnotherNamespace3",
+	}
+	for _, e := range expected {
+		assert.Contains(t, namespaces, e)
+	}
+}
+
+type getClassesByScopeTestCase struct {
+	scope        string
+	expectedFQNs []string
+}
+
+func TestGetClassesByScope(t *testing.T) {
+	store, err := setupStore("test", "TestGetClassesByScope")
+	assert.NoError(t, err)
+	doc1 := NewDocument("test1", []byte(`<?php
+namespace Namespace1 {
+	class Class1UnderNamespace1 {}
+	class Class2UnderNamespace1 {}
+}
+namespace Namespace2 {
+	class Class1UnderNamespace2 {}
+	class Class2UnderNamespace2 {}
+}`))
+	doc1.Load()
+	store.SyncDocument(doc1)
+
+	testCases := []getClassesByScopeTestCase{
+		{"\\Namespace1", []string{"\\Namespace1\\Class1UnderNamespace1", "\\Namespace1\\Class2UnderNamespace1"}},
+		{"\\Namespace2", []string{"\\Namespace2\\Class1UnderNamespace2", "\\Namespace2\\Class2UnderNamespace2"}},
+	}
+	for _, testCase := range testCases {
+		classFQNs := []string{}
+		store.GetClassesByScopeStream(testCase.scope, func(class *Class) onDataResult {
+			classFQNs = append(classFQNs, class.Name.GetFQN())
+			return onDataResult{false}
+		})
+		if assert.Equal(t, len(testCase.expectedFQNs), len(classFQNs)) {
+			for _, fqn := range testCase.expectedFQNs {
+				assert.Contains(t, classFQNs, fqn)
+			}
+		}
+	}
 }

@@ -120,8 +120,8 @@ func (t *TypeString) SetFQN(fqn string) {
 }
 
 func (t *TypeString) SetNamespace(namespace string) {
-	if !isFQN(t.fqn) {
-		if namespace == "" || namespace == "\\" {
+	if !IsFQN(t.fqn) {
+		if namespace == "" {
 			t.fqn = "\\" + t.fqn
 		} else {
 			t.fqn = "\\" + namespace + "\\" + t.fqn
@@ -149,7 +149,7 @@ func (t TypeString) GetParts() []string {
 	return parts
 }
 
-func isFQN(name string) bool {
+func IsFQN(name string) bool {
 	if name == "" {
 		return false
 	}
@@ -306,7 +306,7 @@ func GetScopeAndNameFromString(name string) (string, string) {
 	if parts[0] == "" {
 		// \ABC
 		if len(parts) == 2 {
-			return "\\", strings.Join(parts, "\\")
+			return "", parts[1]
 		}
 		parts = parts[1:]
 	}

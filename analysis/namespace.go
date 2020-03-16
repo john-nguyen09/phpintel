@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"strings"
+
 	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -25,4 +27,52 @@ func newNamespace(document *Document, node *sitter.Node) *Namespace {
 		child = traverser.Advance()
 	}
 	return namespace
+}
+
+type indexableNamespace struct {
+	// The scope of the namespace
+	scope string
+	// The current name of a part
+	name string
+	// key is the namespaceName
+	key string
+}
+
+var _ NameIndexable = (*indexableNamespace)(nil)
+
+func indexablesFromNamespaceName(namespaceName string) []*indexableNamespace {
+	is := []*indexableNamespace{}
+	name := namespaceName
+	if len(name) > 0 && name[0] == '\\' {
+		name = name[1:]
+	}
+	// Empty namespaces don't need index
+	if len(name) > 0 {
+		parts := strings.Split(name, "\\")
+		scope := ""
+		for _, part := range parts {
+			is = append(is, &indexableNamespace{
+				scope: scope,
+				name:  part,
+				key:   "\\" + name,
+			})
+			if scope != "" {
+				scope += "\\"
+			}
+			scope += part
+		}
+	}
+	return is
+}
+
+func (i *indexableNamespace) GetIndexableName() string {
+	return i.name
+}
+
+func (i *indexableNamespace) GetIndexCollection() string {
+	scope := i.scope
+	if len(scope) > 0 && scope != "\\" {
+		scope = "\\" + scope
+	}
+	return namespaceCompletionIndex + KeySep + scope
 }

@@ -39,6 +39,7 @@ const (
 	methodCompletionIndex     string = "methodCompletionIndex"
 	propertyCompletionIndex   string = "propertyCompletionIndex"
 	classConstCompletionIndex string = "classConstCompletionIndex"
+	namespaceCompletionIndex  string = "namespaceCompletionIndex"
 )
 
 var /* const */ versionKey = []byte("Version")
@@ -391,6 +392,13 @@ func (s *Store) forgetAllSymbols(batch *storage.Batch, uri string) {
 
 func (s *Store) writeAllSymbols(batch *storage.Batch, document *Document,
 	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
+	for _, impTable := range document.importTables {
+		is := indexablesFromNamespaceName(impTable.GetNamespace())
+		for _, i := range is {
+			indexName(batch, document, i, i.key)
+			ciDeletor.MarkNotDelete(document.GetURI(), i, i.key)
+		}
+	}
 	for _, child := range document.Children {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
@@ -435,16 +443,6 @@ func (s *Store) GetURI() protocol.DocumentURI {
 	return s.uri
 }
 
-func (s *Store) GetClasses(name string) []*Class {
-	entry := newEntry(classCollection, name+KeySep)
-	classes := []*Class{}
-	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
-		d := storage.NewDecoder(it.Value())
-		classes = append(classes, ReadClass(d))
-	})
-	return classes
-}
-
 func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 	if len(options.predicates) == 0 {
 		return true
@@ -474,10 +472,71 @@ func namespacePredicate(scope string) func(s Symbol) bool {
 	}
 }
 
+func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]string, SearchResult) {
+	scope, keyword := GetScopeAndNameFromString(keyword)
+	namespaces := []string{}
+	query := searchQuery{
+		collection: namespaceCompletionIndex + KeySep + scope,
+		keyword:    keyword,
+		onData: func(cv CompletionValue) onDataResult {
+			namespaces = append(namespaces, string(cv))
+			return onDataResult{false}
+		},
+	}
+	result := searchCompletions(s.db, query)
+	return namespaces, result
+}
+
+func (s *Store) GetClasses(name string) []*Class {
+	entry := newEntry(classCollection, name+KeySep)
+	classes := []*Class{}
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		d := storage.NewDecoder(it.Value())
+		classes = append(classes, ReadClass(d))
+	})
+	return classes
+}
+
+func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onDataResult) {
+	if scope == "" {
+		scope = "\\"
+	}
+	if scope[len(scope)-1] != '\\' {
+		scope += "\\"
+	}
+	entry := newEntry(classCollection, scope)
+	s.db.PrefixStream(entry.getKeyBytes(), func(it *storage.PrefixIterator) {
+		class := ReadClass(storage.NewDecoder(it.Value()))
+		result := onData(class)
+		if result.shouldStop {
+			it.Stop()
+		}
+	})
+}
+
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	classes := []*Class{}
-	count := 0
+	if scope != "" {
+		if keyword != "" {
+			options = options.WithPredicate(func(s Symbol) bool {
+				if v, ok := s.(*Class); ok {
+					return strings.Contains(v.Name.GetOriginal(), keyword)
+				}
+				return false
+			})
+		}
+		s.GetClassesByScopeStream(scope, func(class *Class) onDataResult {
+			if isSymbolValid(class, options) {
+				classes = append(classes, class)
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
+			}
+			return onDataResult{false}
+		})
+		return classes, SearchResult{true}
+	}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: classCompletionIndex,
@@ -492,10 +551,9 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			class := ReadClass(d)
 			if isSymbolValid(class, options) {
 				classes = append(classes, class)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -521,7 +579,6 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 		prefixes = append(prefixes, scope)
 	}
 	interfaces := []*Interface{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: interfaceCompletionIndex,
@@ -536,10 +593,9 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 			theInterface := ReadInterface(d)
 			if isSymbolValid(theInterface, options) {
 				interfaces = append(interfaces, theInterface)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -565,7 +621,6 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 		prefixes = append(prefixes, scope)
 	}
 	traits := []*Trait{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: traitCompletionIndex,
@@ -580,10 +635,9 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 			trait := ReadTrait(d)
 			if isSymbolValid(trait, options) {
 				traits = append(traits, trait)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -605,7 +659,6 @@ func (s *Store) GetFunctions(name string) []*Function {
 func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Function, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	functions := []*Function{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: functionCompletionIndex,
@@ -620,10 +673,9 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			function := ReadFunction(d)
 			if isSymbolValid(function, options) {
 				functions = append(functions, function)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -644,7 +696,6 @@ func (s *Store) GetConsts(name string) []*Const {
 
 func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, SearchResult) {
 	consts := []*Const{}
-	count := 0
 	query := searchQuery{
 		collection: constCompletionIndex,
 		keyword:    keyword,
@@ -658,10 +709,9 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 			constant := ReadConst(d)
 			if isSymbolValid(constant, options) {
 				consts = append(consts, constant)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -682,7 +732,6 @@ func (s *Store) GetDefines(name string) []*Define {
 
 func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define, SearchResult) {
 	defines := []*Define{}
-	count := 0
 	query := searchQuery{
 		collection: defineCompletionIndex,
 		keyword:    keyword,
@@ -696,10 +745,9 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 			define := ReadDefine(d)
 			if isSymbolValid(define, options) {
 				defines = append(defines, define)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -734,7 +782,6 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 	}
 
 	methods := []*Method{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: methodCompletionIndex,
@@ -749,10 +796,9 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			method := ReadMethod(d)
 			if isSymbolValid(method, options) {
 				methods = append(methods, method)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -787,7 +833,6 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 	}
 
 	classConsts := []*ClassConst{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: classConstCompletionIndex,
@@ -802,10 +847,9 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 			classConst := ReadClassConst(d)
 			if isSymbolValid(classConst, options) {
 				classConsts = append(classConsts, classConst)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},
@@ -840,7 +884,6 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 	}
 
 	properties := []*Property{}
-	count := 0
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
 		collection: propertyCompletionIndex,
@@ -855,10 +898,9 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 			property := ReadProperty(d)
 			if isSymbolValid(property, options) {
 				properties = append(properties, property)
-				count++
-			}
-			if options.IsLimitReached() {
-				return onDataResult{true}
+				if options.IsLimitReached() {
+					return onDataResult{true}
+				}
 			}
 			return onDataResult{false}
 		},

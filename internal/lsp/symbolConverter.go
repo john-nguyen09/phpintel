@@ -275,3 +275,77 @@ func HasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEd
 	}
 	return detail
 }
+
+func normaliseNamespaceName(name string) string {
+	if len(name) > 0 && name[0] != '\\' {
+		name = "\\" + name
+	}
+	return name
+}
+
+func namespaceDiff(full string, sub string) string {
+	full = normaliseNamespaceName(full)
+	sub = normaliseNamespaceName(sub)
+	if strings.Index(full, sub) == 0 {
+		return full[strings.LastIndex(full[0:len(sub)], "\\")+1:]
+	}
+	return full
+}
+
+func namespaceToCompletionItem(ns string, word string) protocol.CompletionItem {
+	return protocol.CompletionItem{
+		Kind:       protocol.ModuleCompletion,
+		Label:      ns,
+		InsertText: namespaceDiff(ns, word),
+	}
+}
+
+func getDetailFromTextEdit(name analysis.TypeString, textEdit *protocol.TextEdit) string {
+	detail := name.GetFQN()
+	if textEdit != nil {
+		detail += "\n\n" + textEdit.NewText
+	}
+	return detail
+}
+
+func classToCompletionItem(class *analysis.Class, label string, textEdit *protocol.TextEdit) protocol.CompletionItem {
+	textEdits := []protocol.TextEdit{}
+	if textEdit != nil {
+		textEdits = append(textEdits, *textEdit)
+	}
+	return protocol.CompletionItem{
+		Kind:                protocol.ClassCompletion,
+		Label:               label,
+		Documentation:       class.GetDescription(),
+		AdditionalTextEdits: textEdits,
+		Detail:              getDetailFromTextEdit(class.Name, textEdit),
+	}
+}
+
+func interfaceToCompletionItem(intf *analysis.Interface, label string, textEdit *protocol.TextEdit) protocol.CompletionItem {
+	textEdits := []protocol.TextEdit{}
+	if textEdit != nil {
+		textEdits = append(textEdits, *textEdit)
+	}
+	return protocol.CompletionItem{
+		Kind:                protocol.InterfaceCompletion,
+		Label:               label,
+		Documentation:       intf.GetDescription(),
+		AdditionalTextEdits: textEdits,
+		Detail:              getDetailFromTextEdit(intf.Name, textEdit),
+	}
+}
+
+func traitToCompletionItem(trait *analysis.Trait, label string, textEdit *protocol.TextEdit) protocol.CompletionItem {
+	textEdits := []protocol.TextEdit{}
+	if textEdit != nil {
+		textEdits = append(textEdits, *textEdit)
+	}
+	return protocol.CompletionItem{
+		Kind:                protocol.ClassCompletion,
+		Label:               label,
+		Documentation:       trait.GetDescription(),
+		AdditionalTextEdits: textEdits,
+		Detail:              getDetailFromTextEdit(trait.Name, textEdit),
+	}
+}
