@@ -139,6 +139,10 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						}
 						break
 					}
+					if par != nil && par.Type() == "dynamic_variable_name" {
+						completionList = variableCompletion(completionCtx, word)
+						break
+					}
 					completionList = nameCompletion(completionCtx, symbol, word)
 				case "variable_name":
 					completionList = variableCompletion(completionCtx, word)
@@ -441,6 +445,12 @@ func typeCompletion(ctx *completionContext, word string) *protocol.CompletionLis
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(theInterface.Name, textEdit),
 		})
+	}
+	if analysis.IsFQN(word) {
+		namespaces, _ := ctx.store.SearchNamespaces(word, opts)
+		for _, ns := range namespaces {
+			completionList.Items = append(completionList.Items, namespaceToCompletionItem(ns, word))
+		}
 	}
 	return completionList
 }
