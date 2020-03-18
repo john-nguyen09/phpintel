@@ -144,7 +144,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 			return alias, nil
 		}
 	}
-	if IsFQN(word) {
+	if IsFQN(word) || (wordScope == "" && scope == "") {
 		return name.GetOriginal(), nil
 	}
 	// TODO: Defines do not have implicit namespace except

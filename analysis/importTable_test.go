@@ -70,7 +70,7 @@ class DateTime {}`))
 		useTestCase{doc3, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", "use TestNamespace1;"}},
 		useTestCase{doc3, class, class.Name, "\\TestNamespace1\\Te", useResult{"TestClass1", ""}},
 		useTestCase{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
-		useTestCase{doc2, class2, class2.Name, "Dat", useResult{"DateTime", "use DateTime;"}},
+		useTestCase{doc2, class2, class2.Name, "Dat", useResult{"DateTime", ""}},
 	}
 
 	for i, testCase := range cases {
