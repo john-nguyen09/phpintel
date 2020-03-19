@@ -8,7 +8,7 @@ import (
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
-var numLinesAfterUse = 3
+var numLinesAfterUse = 2
 
 type InsertUseContext struct {
 	document     *Document

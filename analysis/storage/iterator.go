@@ -18,6 +18,8 @@ func NewPrefixIterator(db *levigo.DB, prefix []byte) *PrefixIterator {
 	it := db.NewIterator(ro)
 	if len(prefix) > 0 {
 		it.Seek(prefix)
+	} else {
+		it.SeekToFirst()
 	}
 	return &PrefixIterator{ro, it, prefix, false}
 }

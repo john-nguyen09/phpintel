@@ -40,6 +40,14 @@ func TestSearchNamespace(t *testing.T) {
 	doc3.Load()
 	store.SyncDocument(doc3)
 
+	doc4 := NewDocument("test4", []byte(`<?php namespace A\B\ class Test {}`))
+	doc4.Load()
+	store.SyncDocument(doc4)
+	doc4.hasChanges = true
+	doc4.SetText([]byte(`<?php namespace A\B; class Test {}`))
+	doc4.Load()
+	store.SyncDocument(doc4)
+
 	namespaces, _ := store.SearchNamespaces("\\Name", NewSearchOptions())
 	expected := []string{
 		"\\Namespace1",
@@ -49,6 +57,18 @@ func TestSearchNamespace(t *testing.T) {
 	for _, e := range expected {
 		assert.Contains(t, namespaces, e)
 	}
+
+	deletedKeys := []string{
+		namespaceCompletionIndex + KeySep + "" + KeySep + "a" + KeySep + "\\A\\B\\class" + KeySep + "0",
+		namespaceCompletionIndex + KeySep + "\\A" + KeySep + "b" + KeySep + "\\A\\B\\class" + KeySep + "1",
+		namespaceCompletionIndex + KeySep + "\\A\\B" + KeySep + "class" + KeySep + "\\A\\B\\class" + KeySep + "2",
+	}
+	for _, key := range deletedKeys {
+		b, _ := store.db.Get([]byte(key))
+		assert.Equal(t, []byte(nil), b)
+	}
+	namespaces, _ = store.SearchNamespaces("\\A\\B", NewSearchOptions())
+	assert.NotContains(t, namespaces, "\\A\\B\\class")
 }
 
 type getClassesByScopeTestCase struct {

@@ -20,13 +20,25 @@ func newNamespace(document *Document, node *sitter.Node) *Namespace {
 	for child != nil {
 		switch child.Type() {
 		case "namespace_name":
-			namespace.Name = document.GetNodeText(child)
+			namespace.Name = readNamespaceExcludeError(document, child)
 		case "compound_statement":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
 	return namespace
+}
+
+func readNamespaceExcludeError(document *Document, node *sitter.Node) string {
+	traverser := util.NewTraverser(node)
+	parts := []string{}
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		switch child.Type() {
+		case "name":
+			parts = append(parts, document.GetNodeText(child))
+		}
+	}
+	return strings.Join(parts, "\\")
 }
 
 type indexableNamespace struct {

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
@@ -394,9 +395,10 @@ func (s *Store) writeAllSymbols(batch *storage.Batch, document *Document,
 	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
 	for _, impTable := range document.importTables {
 		is := indexablesFromNamespaceName(impTable.GetNamespace())
-		for _, i := range is {
-			indexName(batch, document, i, i.key)
-			ciDeletor.MarkNotDelete(document.GetURI(), i, i.key)
+		for index, i := range is {
+			key := i.key + KeySep + strconv.Itoa(index)
+			indexName(batch, document, i, key)
+			ciDeletor.MarkNotDelete(document.GetURI(), i, key)
 		}
 	}
 	for _, child := range document.Children {
@@ -479,7 +481,8 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 		collection: namespaceCompletionIndex + KeySep + scope,
 		keyword:    keyword,
 		onData: func(cv CompletionValue) onDataResult {
-			namespaces = append(namespaces, string(cv))
+			parts := strings.Split(string(cv), KeySep)
+			namespaces = append(namespaces, parts[0])
 			return onDataResult{false}
 		},
 	}
