@@ -41,6 +41,7 @@ var /* const */ scanPhraseTypes = map[string]bool{
 	"return_statement":          true,
 	"throw_statement":           true,
 	"foreach_statement":         true,
+	"for_statement":             true,
 }
 
 var /* const */ skipAddingSymbol map[string]bool = map[string]bool{

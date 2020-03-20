@@ -215,7 +215,8 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 	interfaces, searchResult := ctx.store.SearchInterfaces(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, intf := range interfaces {
-		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, intf.Name.GetOriginal(), nil))
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, intf, intf.Name, word)
+		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, label, textEdit))
 	}
 	consts, searchResult := ctx.store.SearchConsts(word, opts)
 	completionList.IsIncomplete = !searchResult.IsComplete
