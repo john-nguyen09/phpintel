@@ -75,8 +75,11 @@ func newProperty(document *Document, node *sitter.Node, visibility VisibilityMod
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if child.Type() == "variable_name" {
+		switch child.Type() {
+		case "variable_name":
 			property.Name = document.GetNodeText(child)
+		case "property_initializer":
+			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
