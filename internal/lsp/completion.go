@@ -74,29 +74,29 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 					if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
+							completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 						}
-						completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "scoped_call_expression":
 					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
+							completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 						}
-						completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "member_access_expression":
 					if s, ok := symbol.(*analysis.PropertyAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
+							completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 						}
-						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "member_call_expression":
 					if s, ok := symbol.(*analysis.MethodAccess); ok {
 						if s.Scope != nil {
 							s.Scope.Resolve(resolveCtx)
+							completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 						}
-						completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 					}
 				case "named_label_statement":
 					completionList = nameCompletion(completionCtx, symbol, word)
