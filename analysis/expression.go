@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
@@ -81,6 +82,7 @@ func init() {
 		"member_access_expression":          newPropertyAccess,
 		"member_call_expression":            newMethodAccess,
 		"parenthesized_expression":          newParenthesised,
+		"clone_expression":                  newCloneExpression,
 	}
 }
 
@@ -106,4 +108,51 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
+}
+
+type cloneExpression struct {
+	Expression
+	hasResolved bool
+}
+
+var _ HasTypes = (*cloneExpression)(nil)
+
+func newCloneExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+	cloneExpr := &cloneExpression{
+		Expression: Expression{
+			Location: document.GetNodeLocation(node),
+		},
+	}
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		expr := scanForExpression(document, child)
+		if expr != nil {
+			cloneExpr.Scope = expr
+			break
+		}
+		child = traverser.Advance()
+	}
+	return cloneExpr, true
+}
+
+func (s *cloneExpression) GetLocation() protocol.Location {
+	return s.Location
+}
+
+func (s *cloneExpression) GetTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return s.Type
+}
+
+func (s *cloneExpression) Resolve(ctx ResolveContext) {
+	if s.hasResolved {
+		return
+	}
+	s.hasResolved = true
+	if s.Scope != nil {
+		s.Scope.Resolve(ctx)
+	}
 }
