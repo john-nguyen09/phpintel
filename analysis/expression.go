@@ -68,8 +68,6 @@ type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[string]exprConstructor
 
-var /* const */ skipPhraseTypes = map[string]bool{}
-
 func init() {
 	nodeTypeToExprConstructor = map[string]exprConstructor{
 		"function_call_expression":          newFunctionCall,
@@ -98,12 +96,6 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 			document.addSymbol(symbol)
 		}
 	}()
-	if _, ok := skipPhraseTypes[node.Type()]; ok {
-		childCount := int(node.ChildCount())
-		for i := 0; i < childCount; i++ {
-			return scanForExpression(document, node.Child(i))
-		}
-	}
 	if constructor, ok := nodeTypeToExprConstructor[node.Type()]; ok {
 		expression, shouldAdd = constructor(document, node)
 	}
