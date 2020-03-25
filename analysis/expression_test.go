@@ -7,6 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestClone(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$var1 = new DateTime();
+$var2 = clone $var1;`))
+	doc.Load()
+	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols[2]).String())
+	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols[2].GetTypes().ToString())
+}
+
 func TestInstanceOf(t *testing.T) {
 	doc := NewDocument("test1", []byte(`<?php
 if ($var1 instanceof DateTime) {
