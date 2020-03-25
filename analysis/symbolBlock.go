@@ -31,7 +31,6 @@ var /* const */ scanPhraseTypes = map[string]bool{
 	"cast_expression":           true,
 	"unary_op_expression":       true,
 	"binary_expression":         true,
-	"parenthesized_expression":  true,
 	"echo_statement":            true,
 	"unset_statement":           true,
 	"print_intrinsic":           true,

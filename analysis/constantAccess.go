@@ -11,6 +11,10 @@ type ConstantAccess struct {
 }
 
 func processQualifiedName(document *Document, node *sitter.Node) (HasTypes, bool) {
+	prev := node.PrevSibling()
+	if prev != nil && prev.Type() == "instanceof" {
+		return newTypeDeclaration(document, node), true
+	}
 	next := node.NextSibling()
 	if next != nil && next.Type() == "::" {
 		c := newClassAccess(document, node)

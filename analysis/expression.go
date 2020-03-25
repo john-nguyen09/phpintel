@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
@@ -67,8 +68,6 @@ type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[string]exprConstructor
 
-var /* const */ skipPhraseTypes = map[string]bool{}
-
 func init() {
 	nodeTypeToExprConstructor = map[string]exprConstructor{
 		"function_call_expression":          newFunctionCall,
@@ -80,7 +79,9 @@ func init() {
 		"variable_name":                     newVariableExpression,
 		"member_access_expression":          newPropertyAccess,
 		"member_call_expression":            newMethodAccess,
-		"parenthesized_expression":          newParenthesised,
+		"parenthesized_expression":          newDerivedExpression,
+		"clone_expression":                  newDerivedExpression,
+		"binary_expression":                 processBinaryExpression,
 	}
 }
 
@@ -95,15 +96,55 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 			document.addSymbol(symbol)
 		}
 	}()
-	if _, ok := skipPhraseTypes[node.Type()]; ok {
-		childCount := int(node.ChildCount())
-		for i := 0; i < childCount; i++ {
-			child := node.Child(i)
-			return scanForExpression(document, child)
-		}
-	}
 	if constructor, ok := nodeTypeToExprConstructor[node.Type()]; ok {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
+}
+
+type derivedExpression struct {
+	Expression
+	hasResolved bool
+}
+
+var _ HasTypes = (*derivedExpression)(nil)
+
+func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+	derivedExpr := &derivedExpression{
+		Expression: Expression{
+			Location: document.GetNodeLocation(node),
+		},
+	}
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		expr := scanForExpression(document, child)
+		if expr != nil {
+			derivedExpr.Scope = expr
+			break
+		}
+		child = traverser.Advance()
+	}
+	return derivedExpr, true
+}
+
+func (s *derivedExpression) GetLocation() protocol.Location {
+	return s.Location
+}
+
+func (s *derivedExpression) GetTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return s.Type
+}
+
+func (s *derivedExpression) Resolve(ctx ResolveContext) {
+	if s.hasResolved {
+		return
+	}
+	s.hasResolved = true
+	if s.Scope != nil {
+		s.Scope.Resolve(ctx)
+	}
 }
