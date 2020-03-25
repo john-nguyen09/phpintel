@@ -1,8 +1,6 @@
 package analysis
 
 import (
-	"encoding/json"
-
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -14,6 +12,8 @@ type Variable struct {
 	canReferenceGlobal bool
 	hasResolved        bool
 }
+
+var _ CanAddType = (*Variable)(nil)
 
 func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	return newVariable(document, node)
@@ -101,14 +101,6 @@ func (s *Variable) GetName() string {
 	return s.Name
 }
 
-func (s *Variable) MarshalJSON() ([]byte, error) {
-	return json.Marshal(struct {
-		Name     string
-		Location protocol.Location
-		Types    TypeComposite
-	}{
-		Name:     s.Name,
-		Location: s.GetLocation(),
-		Types:    s.GetTypes(),
-	})
+func (s *Variable) AddTypes(t TypeComposite) {
+	s.Type.merge(t)
 }

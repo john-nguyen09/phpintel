@@ -81,8 +81,9 @@ func init() {
 		"variable_name":                     newVariableExpression,
 		"member_access_expression":          newPropertyAccess,
 		"member_call_expression":            newMethodAccess,
-		"parenthesized_expression":          newParenthesised,
-		"clone_expression":                  newCloneExpression,
+		"parenthesized_expression":          newDerivedExpression,
+		"clone_expression":                  newDerivedExpression,
+		"binary_expression":                 processBinaryExpression,
 	}
 }
 
@@ -100,8 +101,7 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 	if _, ok := skipPhraseTypes[node.Type()]; ok {
 		childCount := int(node.ChildCount())
 		for i := 0; i < childCount; i++ {
-			child := node.Child(i)
-			return scanForExpression(document, child)
+			return scanForExpression(document, node.Child(i))
 		}
 	}
 	if constructor, ok := nodeTypeToExprConstructor[node.Type()]; ok {
@@ -110,15 +110,15 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 	return expression
 }
 
-type cloneExpression struct {
+type derivedExpression struct {
 	Expression
 	hasResolved bool
 }
 
-var _ HasTypes = (*cloneExpression)(nil)
+var _ HasTypes = (*derivedExpression)(nil)
 
-func newCloneExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
-	cloneExpr := &cloneExpression{
+func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+	derivedExpr := &derivedExpression{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
 		},
@@ -128,26 +128,26 @@ func newCloneExpression(document *Document, node *sitter.Node) (HasTypes, bool) 
 	for child != nil {
 		expr := scanForExpression(document, child)
 		if expr != nil {
-			cloneExpr.Scope = expr
+			derivedExpr.Scope = expr
 			break
 		}
 		child = traverser.Advance()
 	}
-	return cloneExpr, true
+	return derivedExpr, true
 }
 
-func (s *cloneExpression) GetLocation() protocol.Location {
+func (s *derivedExpression) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *cloneExpression) GetTypes() TypeComposite {
+func (s *derivedExpression) GetTypes() TypeComposite {
 	if s.Scope != nil {
 		return s.Scope.GetTypes()
 	}
 	return s.Type
 }
 
-func (s *cloneExpression) Resolve(ctx ResolveContext) {
+func (s *derivedExpression) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}

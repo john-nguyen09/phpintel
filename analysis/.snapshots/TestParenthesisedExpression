@@ -18,7 +18,7 @@
       Name: (string) (len=8) "DateTime"
     }
   }),
-  (*analysis.Parenthesised)({
+  (*analysis.derivedExpression)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
@@ -55,7 +55,7 @@
       Type: (analysis.TypeComposite) {
         typeStrings: ([]analysis.TypeString) <nil>
       },
-      Scope: (*analysis.Parenthesised)({
+      Scope: (*analysis.derivedExpression)({
         Expression: (analysis.Expression) {
           Type: (analysis.TypeComposite) {
             typeStrings: ([]analysis.TypeString) <nil>
