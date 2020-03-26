@@ -145,3 +145,28 @@ func TestWordAt(t *testing.T) {
 		assert.Equal(t, testCase.expected, actual)
 	}
 }
+
+func TestVarTableAt(t *testing.T) {
+	doc1 := NewDocument("test1", []byte(`<?php
+function func1($param1) {
+
+	DB::transaction(function() use ($param1) {
+	});
+}`))
+	doc1.Load()
+	varTable := doc1.GetVariableTableAt(protocol.Position{
+		Line:      2,
+		Character: 4,
+	})
+	assert.NotNil(t, varTable)
+	assert.Equal(t, protocol.Range{
+		Start: protocol.Position{
+			Line:      1,
+			Character: 0,
+		},
+		End: protocol.Position{
+			Line:      5,
+			Character: 1,
+		},
+	}, varTable.locationRange)
+}

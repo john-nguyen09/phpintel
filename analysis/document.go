@@ -347,7 +347,7 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 				return traverseAndFind(child)
 			}
 		}
-		return nil
+		return vt
 	}
 	// The first element is supposed to always be there because it represents
 	// the scope of the whole document
