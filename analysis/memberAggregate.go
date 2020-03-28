@@ -22,10 +22,11 @@ func withKeywordOptions(keyword string, opt SearchOptions) SearchOptions {
 	if keyword == "" {
 		return opt
 	}
+	keyword = strings.ToLower(keyword)
 	return opt.
 		WithPredicate(func(symbol Symbol) bool {
 			if v, ok := symbol.(NameIndexable); ok {
-				return strings.Contains(v.GetIndexableName(), keyword)
+				return strings.Contains(strings.ToLower(v.GetIndexableName()), keyword)
 			}
 			return true
 		})
