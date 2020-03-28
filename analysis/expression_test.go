@@ -29,6 +29,6 @@ func TestInstanceOf(t *testing.T) {
 if ($var1 instanceof DateTime) {
 }`))
 	doc.Load()
-	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols[0]).String())
-	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols[0].GetTypes().ToString())
+	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols[1]).String())
+	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols[1].GetTypes().ToString())
 }
