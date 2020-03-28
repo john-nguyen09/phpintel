@@ -115,10 +115,7 @@ func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool
 			Location: document.GetNodeLocation(node),
 		},
 	}
-	shouldAdd := true
-	if node.Parent().Type() == "if_statement" {
-		shouldAdd = false
-	}
+	document.addSymbol(derivedExpr)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -129,7 +126,7 @@ func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool
 		}
 		child = traverser.Advance()
 	}
-	return derivedExpr, shouldAdd
+	return derivedExpr, false
 }
 
 func (s *derivedExpression) GetLocation() protocol.Location {
