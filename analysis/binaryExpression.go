@@ -6,6 +6,9 @@ import (
 
 func processBinaryExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	op := node.ChildByFieldName("operator")
+	if op == nil {
+		return nil, false
+	}
 	switch op.Type() {
 	case "instanceof":
 		lhs := node.ChildByFieldName("left")
