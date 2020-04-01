@@ -28,7 +28,8 @@ type DB interface {
 
 // Combined is a combination of storage modes
 type Combined struct {
-	dbs []DB
+	dbs     []DB
+	memOnly bool
 }
 
 // DBMode is the mode of the DB
@@ -56,24 +57,36 @@ func NewCombined(path string) (*Combined, error) {
 	}, nil
 }
 
-func (c *Combined) Close() {
-	c.GetMode(ModeMemory).Close()
+func NewMemOnly() *Combined {
+	return &Combined{
+		dbs: []DB{
+			newMemory(),
+		},
+		memOnly: true,
+	}
 }
 
-func (c *Combined) GetMode(mode DBMode) DB {
+func (c *Combined) mode(mode DBMode) DB {
+	if c.memOnly {
+		return c.dbs[0]
+	}
 	return c.dbs[mode]
 }
 
+func (c *Combined) Close() {
+	c.mode(ModeMemory).Close()
+}
+
 func (c *Combined) Clear(mode DBMode) {
-	c.GetMode(mode).Clear()
+	c.mode(mode).Clear()
 }
 
 func (c *Combined) Delete(mode DBMode, key []byte) error {
-	return c.GetMode(mode).Delete(key)
+	return c.mode(mode).Delete(key)
 }
 
 func (c *Combined) Get(mode DBMode, key []byte) ([]byte, error) {
-	return c.GetMode(mode).Get(key)
+	return c.mode(mode).Get(key)
 }
 
 func (c *Combined) GetFromAll(key []byte) ([]byte, error) {
@@ -86,19 +99,19 @@ func (c *Combined) GetFromAll(key []byte) ([]byte, error) {
 }
 
 func (c *Combined) PrefixStream(mode DBMode, prefix []byte, onData func(Iterator)) {
-	c.GetMode(mode).PrefixStream(prefix, onData)
+	c.mode(mode).PrefixStream(prefix, onData)
 }
 
-func (c *Combined) PrefixStreamAll(prefix []byte, onData func(Iterator)) {
+func (c *Combined) PrefixStreamFromAll(prefix []byte, onData func(Iterator)) {
 	for _, db := range c.dbs {
 		db.PrefixStream(prefix, onData)
 	}
 }
 
 func (c *Combined) Put(mode DBMode, key []byte, value []byte) error {
-	return c.GetMode(mode).Put(key, value)
+	return c.mode(mode).Put(key, value)
 }
 
 func (c *Combined) WriteBatch(mode DBMode, f func(Batch) error) error {
-	return c.GetMode(mode).WriteBatch(f)
+	return c.mode(mode).WriteBatch(f)
 }

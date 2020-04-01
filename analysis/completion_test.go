@@ -24,10 +24,7 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 }
 
 func TestFunctionCompletionWithNamespace(t *testing.T) {
-	store, err := setupStore("test", "TestFunctionCompletionWithNamespace")
-	if err != nil {
-		panic(err)
-	}
+	store := setupStore("test", "TestFunctionCompletionWithNamespace")
 	indexTestCase(store, "test1", "../cases/function.php", false)
 	indexTestCase(store, "test2", "../cases/completion/functionCompletionWithNamespace.php", true)
 	document := store.GetOrCreateDocument("test2")
@@ -52,9 +49,7 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 
 func TestCompletionWithScope(t *testing.T) {
 	t.Run("Class", func(t *testing.T) {
-		store, err := setupStore("Class", "CompletionWithScope-Class")
-		defer store.Close()
-		assert.NoError(t, err)
+		store := setupStore("Class", "CompletionWithScope-Class")
 		defDoc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1;
 class TestClass {}`))
@@ -76,9 +71,7 @@ class TestClass {}`))
 		assert.Equal(t, []string{"\\Namespace1\\TestClass"}, names)
 	})
 	t.Run("ClassConst", func(t *testing.T) {
-		store, err := setupStore("ClassConst", "CompletionWithScope-ClassConst")
-		defer store.Close()
-		assert.NoError(t, err)
+		store := setupStore("ClassConst", "CompletionWithScope-ClassConst")
 		defDoc1 := NewDocument("test1", []byte(`<?php
 class TestClass1 {
 	const CLASS_CONST = 1;
@@ -99,9 +92,7 @@ class TestClass2 {
 		assert.Equal(t, []string{"CLASS_CONST"}, names)
 	})
 	t.Run("Method", func(t *testing.T) {
-		store, err := setupStore("Method", "CompletionWithScope-Method")
-		defer store.Close()
-		assert.NoError(t, err)
+		store := setupStore("Method", "CompletionWithScope-Method")
 		defDoc1 := NewDocument("test1", []byte(`<?php
 class TestClass1 { public function methodABC(); }
 class TestClass2 { public function method(); }`))

@@ -92,8 +92,7 @@ type functionReferenceFQNTestCase struct {
 }
 
 func TestFunctionReferenceFQN(t *testing.T) {
-	store, err := setupStore("test", "TestFunctionReferenceFQN")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestFunctionReferenceFQN")
 	doc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1;
 

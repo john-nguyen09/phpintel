@@ -18,19 +18,14 @@ func TestStore(t *testing.T) {
 
 	document := NewDocument("test1", data)
 	document.Load()
-	store, err := setupStore("test", "TestStore")
-	defer store.Close()
-	if err != nil {
-		panic(err)
-	}
+	store := setupStore("test", "TestStore")
 	store.SyncDocument(document)
 	classes := store.GetClasses("\\TestClass1")
 	cupaloy.Snapshot(classes)
 }
 
 func TestSearchNamespace(t *testing.T) {
-	store, err := setupStore("test", "TestSearchNamespace")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestSearchNamespace")
 	doc1 := NewDocument("test1", []byte(`<?php namespace Namespace1;`))
 	doc1.Load()
 	store.SyncDocument(doc1)
@@ -78,8 +73,7 @@ type getClassesByScopeTestCase struct {
 }
 
 func TestGetClassesByScope(t *testing.T) {
-	store, err := setupStore("test", "TestGetClassesByScope")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestGetClassesByScope")
 	doc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1 {
 	class Class1UnderNamespace1 {}

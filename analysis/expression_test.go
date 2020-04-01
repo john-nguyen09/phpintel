@@ -8,8 +8,7 @@ import (
 )
 
 func TestClone(t *testing.T) {
-	store, err := setupStore("test", "TestClone")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestClone")
 	doc := NewDocument("test1", []byte(`<?php
 $var1 = new DateTime();
 $var2 = clone $var1;

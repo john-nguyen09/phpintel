@@ -488,7 +488,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		classes = append(classes, ReadClass(d))
 	})
@@ -503,7 +503,7 @@ func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onData
 		scope += "\\"
 	}
 	entry := newEntry(classCollection, scope)
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		class := ReadClass(storage.NewDecoder(it.Value()))
 		result := onData(class)
 		if result.shouldStop {
@@ -563,7 +563,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		interfaces = append(interfaces, ReadInterface(d))
 	})
@@ -605,7 +605,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		traits = append(traits, ReadTrait(d))
 	})
@@ -647,7 +647,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		functions = append(functions, ReadFunction(d))
 	})
@@ -685,7 +685,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		consts = append(consts, ReadConst(d))
 	})
@@ -721,7 +721,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		defines = append(defines, ReadDefine(d))
 	})
@@ -757,7 +757,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		methods = append(methods, ReadMethod(d))
 	})
@@ -767,7 +767,7 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		methods = append(methods, ReadMethod(d))
 	})
@@ -808,7 +808,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		classConsts = append(classConsts, ReadClassConst(d))
 	})
@@ -818,7 +818,7 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		classConsts = append(classConsts, ReadClassConst(d))
 	})
@@ -859,7 +859,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		properties = append(properties, ReadProperty(d))
 	})
@@ -869,7 +869,7 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		properties = append(properties, ReadProperty(d))
 	})
@@ -910,7 +910,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}
-	s.db.PrefixStreamAll(entry.getKeyBytes(), func(it storage.Iterator) {
+	s.db.PrefixStreamFromAll(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())
 		results = append(results, ReadGlobalVariable(d))
 	})
