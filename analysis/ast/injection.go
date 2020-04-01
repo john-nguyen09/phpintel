@@ -66,18 +66,23 @@ type languageContentNodesTuple struct {
 
 // NewInjectionLayer creates all the injection layers
 func NewInjectionLayer(source []byte,
-	injector *Injector,
-	configCreator InjectionConfigCreator,
-	config InjectionConfig,
-	ranges []sitter.Range) []*InjectionLayer {
+	oldLayers []*InjectionLayer, edits []sitter.EditInput, injector *Injector,
+	configCreator InjectionConfigCreator, config InjectionConfig, ranges []sitter.Range) []*InjectionLayer {
 	result := []*InjectionLayer{}
 	queue := []configRangesTuple{}
 	var prevLayer *InjectionLayer = nil
 	prevInjectedNodes := map[string]*sitter.Node{}
-	for {
+	for i := 0; ; i++ {
+		var oldTree *sitter.Tree = nil
+		if i < len(oldLayers) && oldLayers[i].config.lang == config.lang {
+			oldTree = oldLayers[i].tree
+			for _, edit := range edits {
+				oldTree.Edit(edit)
+			}
+		}
 		injector.parser.SetIncludedRanges(ranges)
 		injector.parser.SetLanguage(config.lang)
-		tree := injector.parser.Parse(nil, source)
+		tree := injector.parser.Parse(oldTree, source)
 		rootNode := tree.RootNode()
 		cursor := sitter.NewQueryCursor()
 		if prevLayer != nil {
@@ -183,11 +188,11 @@ type Injector struct {
 }
 
 // NewPHPInjector creates an injector for PHP
-func NewPHPInjector(oldTree *sitter.Tree, source []byte) *Injector {
+func NewPHPInjector(source []byte) *Injector {
 	inj := &Injector{
 		parser: sitter.NewParser(),
 	}
-	inj.layers = NewInjectionLayer(source, inj, createConfig, createConfig("php"), []sitter.Range{
+	inj.layers = NewInjectionLayer(source, nil, nil, inj, createConfig, createConfig("php"), []sitter.Range{
 		sitter.Range{
 			StartByte:  0,
 			EndByte:    math.MaxUint32,
@@ -211,6 +216,22 @@ func (i *Injector) GetInjection(node *sitter.Node) (*sitter.Node, bool) {
 		}
 	}
 	return nil, false
+}
+
+// Edit returns a new injector which reflects the modification
+func (i *Injector) Edit(old *Injector, edits []sitter.EditInput, source []byte) *Injector {
+	inj := &Injector{
+		parser: i.parser,
+	}
+	inj.layers = NewInjectionLayer(source, old.layers, edits, inj, createConfig, createConfig("php"), []sitter.Range{
+		sitter.Range{
+			StartByte:  0,
+			EndByte:    math.MaxUint32,
+			StartPoint: sitter.Point{uint32(0), uint32(0)},
+			EndPoint:   sitter.Point{math.MaxUint32, math.MaxUint32},
+		},
+	})
+	return inj
 }
 
 func createConfig(languageName string) InjectionConfig {
