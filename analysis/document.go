@@ -3,6 +3,7 @@ package analysis
 import (
 	"crypto/sha1"
 	"encoding/json"
+	"log"
 	"regexp"
 	"runtime/debug"
 	"sort"
@@ -132,7 +133,8 @@ func (s *Document) IsOpen() bool {
 
 func (s *Document) GetRootNode() *sitter.Node {
 	if s.injector == nil {
-		s.injector = ast.NewPHPInjector(nil, s.GetText())
+		log.Println("Injector is nil")
+		s.injector = ast.NewPHPInjector(s.GetText())
 	}
 	return s.injector.MainRootNode()
 }
@@ -527,6 +529,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 	// log.Printf("ApplyChanges: %p", s)
 	start := time.Now()
 	newDoc := documentFromUri(s.uri)
+	edits := []sitter.EditInput{}
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
@@ -555,6 +558,22 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			}
 		}
 		newDoc.lineOffsets = newLineOffsets
+
+		rangeLength := endOffset - startOffset
+		oldEndIndex := startOffset + rangeLength
+		newEndIndex := startOffset + len(text)
+		edit := sitter.EditInput{
+			StartIndex:  uint32(startOffset),
+			OldEndIndex: uint32(oldEndIndex),
+			NewEndIndex: uint32(newEndIndex),
+			StartPoint:  util.PositionToPoint(start),
+			OldEndPoint: util.PositionToPoint(s.positionAt(oldEndIndex)),
+			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
+		}
+		edits = append(edits, edit)
+	}
+	if s.injector != nil {
+		newDoc.injector = s.injector.Edit(s.injector, edits, s.GetText())
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()
