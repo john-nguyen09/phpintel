@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,7 +65,7 @@ func TestSearchNamespace(t *testing.T) {
 		namespaceCompletionIndex + KeySep + "\\A\\B" + KeySep + "class" + KeySep + "\\A\\B\\class" + KeySep + "2",
 	}
 	for _, key := range deletedKeys {
-		b, _ := store.db.Get([]byte(key))
+		b, _ := store.db.Get(storage.ModeDisk, []byte(key))
 		assert.Equal(t, []byte(nil), b)
 	}
 	namespaces, _ = store.SearchNamespaces("\\A\\B", NewSearchOptions())
