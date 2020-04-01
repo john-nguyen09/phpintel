@@ -3,7 +3,6 @@ package analysis
 import (
 	"crypto/sha1"
 	"encoding/json"
-	"log"
 	"regexp"
 	"runtime/debug"
 	"sort"
@@ -133,7 +132,6 @@ func (s *Document) IsOpen() bool {
 
 func (s *Document) GetRootNode() *sitter.Node {
 	if s.injector == nil {
-		log.Println("Injector is nil")
 		s.injector = ast.NewPHPInjector(s.GetText())
 	}
 	return s.injector.MainRootNode()
