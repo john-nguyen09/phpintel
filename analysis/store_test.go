@@ -39,8 +39,7 @@ func TestSearchNamespace(t *testing.T) {
 	doc4 := NewDocument("test4", []byte(`<?php namespace A\B\ class Test {}`))
 	doc4.Load()
 	store.SyncDocument(doc4)
-	doc4.hasChanges = true
-	doc4.SetText([]byte(`<?php namespace A\B; class Test {}`))
+	doc4 = NewDocument("test4", []byte(`<?php namespace A\B; class Test {}`))
 	doc4.Load()
 	store.SyncDocument(doc4)
 

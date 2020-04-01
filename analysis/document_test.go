@@ -72,7 +72,7 @@ func TestSymbolAt(t *testing.T) {
 
 func TestApplyChanges(t *testing.T) {
 	document := NewDocument("test1", []byte("<?php\necho 'Hello world';"))
-	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
+	document = document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
 		protocol.TextDocumentContentChangeEvent{
 			Range: &protocol.Range{
 				Start: protocol.Position{
