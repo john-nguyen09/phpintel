@@ -232,17 +232,25 @@ func (i *Injector) Edit(edit sitter.EditInput, source []byte) *Injector {
 	return inj
 }
 
+var configMap map[string]InjectionConfig = map[string]InjectionConfig{}
+
+func init() {
+	config, err := NewConfig(phpdoc.GetLanguage(), nil)
+	if err != nil {
+		panic(err)
+	}
+	configMap["phpdoc"] = config
+
+	injectionQuery := php.GetInjectionQuery()
+	config, err = NewConfig(php.GetLanguage(), injectionQuery)
+	if err != nil {
+		panic(err)
+	}
+	configMap["php"] = config
+}
+
 func createConfig(languageName string) InjectionConfig {
-	switch languageName {
-	case "phpdoc":
-		config, _ := NewConfig(phpdoc.GetLanguage(), nil)
-		return config
-	case "php":
-		injectionQuery := php.GetInjectionQuery()
-		config, err := NewConfig(php.GetLanguage(), injectionQuery)
-		if err != nil {
-			panic(err)
-		}
+	if config, ok := configMap[languageName]; ok {
 		return config
 	}
 	return InjectionConfig{}
