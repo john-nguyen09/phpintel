@@ -35,6 +35,7 @@ type Document struct {
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
 	importTables       []*ImportTable
+	insertUseContext   *InsertUseContext
 }
 
 // VariableTable holds the range and the variables inside

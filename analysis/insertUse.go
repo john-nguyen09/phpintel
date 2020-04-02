@@ -18,6 +18,9 @@ type InsertUseContext struct {
 }
 
 func GetInsertUseContext(document *Document) InsertUseContext {
+	if document.insertUseContext != nil {
+		return *document.insertUseContext
+	}
 	insertUseCtx := InsertUseContext{
 		document:     document,
 		firstInline:  nil,
@@ -39,6 +42,7 @@ func GetInsertUseContext(document *Document) InsertUseContext {
 		}
 		child = traverser.Advance()
 	}
+	document.insertUseContext = &insertUseCtx
 	return insertUseCtx
 }
 
