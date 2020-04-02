@@ -527,7 +527,6 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 	// log.Printf("ApplyChanges: %p", s)
 	start := time.Now()
 	newDoc := documentFromUri(s.uri)
-	edits := []sitter.EditInput{}
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
@@ -568,10 +567,9 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			OldEndPoint: util.PositionToPoint(s.positionAt(oldEndIndex)),
 			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
 		}
-		edits = append(edits, edit)
-	}
-	if s.injector != nil {
-		newDoc.injector = s.injector.Edit(s.injector, edits, s.GetText())
+		if s.injector != nil {
+			newDoc.injector = s.injector.Edit(edit, newDoc.GetText())
+		}
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()
