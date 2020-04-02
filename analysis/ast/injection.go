@@ -66,7 +66,7 @@ type languageContentNodesTuple struct {
 
 // NewInjectionLayer creates all the injection layers
 func NewInjectionLayer(source []byte,
-	oldLayers []*InjectionLayer, edits []sitter.EditInput, injector *Injector,
+	oldLayers []*InjectionLayer, edit sitter.EditInput, injector *Injector,
 	configCreator InjectionConfigCreator, config InjectionConfig, ranges []sitter.Range) []*InjectionLayer {
 	result := []*InjectionLayer{}
 	queue := []configRangesTuple{}
@@ -76,9 +76,7 @@ func NewInjectionLayer(source []byte,
 		var oldTree *sitter.Tree = nil
 		if i < len(oldLayers) && oldLayers[i].config.lang == config.lang {
 			oldTree = oldLayers[i].tree
-			for _, edit := range edits {
-				oldTree.Edit(edit)
-			}
+			oldTree.Edit(edit)
 		}
 		injector.parser.SetIncludedRanges(ranges)
 		injector.parser.SetLanguage(config.lang)
@@ -192,7 +190,7 @@ func NewPHPInjector(source []byte) *Injector {
 	inj := &Injector{
 		parser: sitter.NewParser(),
 	}
-	inj.layers = NewInjectionLayer(source, nil, nil, inj, createConfig, createConfig("php"), []sitter.Range{
+	inj.layers = NewInjectionLayer(source, nil, sitter.EditInput{}, inj, createConfig, createConfig("php"), []sitter.Range{
 		sitter.Range{
 			StartByte:  0,
 			EndByte:    math.MaxUint32,
@@ -219,11 +217,11 @@ func (i *Injector) GetInjection(node *sitter.Node) (*sitter.Node, bool) {
 }
 
 // Edit returns a new injector which reflects the modification
-func (i *Injector) Edit(old *Injector, edits []sitter.EditInput, source []byte) *Injector {
+func (i *Injector) Edit(edit sitter.EditInput, source []byte) *Injector {
 	inj := &Injector{
 		parser: i.parser,
 	}
-	inj.layers = NewInjectionLayer(source, old.layers, edits, inj, createConfig, createConfig("php"), []sitter.Range{
+	inj.layers = NewInjectionLayer(source, i.layers, edit, inj, createConfig, createConfig("php"), []sitter.Range{
 		sitter.Range{
 			StartByte:  0,
 			EndByte:    math.MaxUint32,
