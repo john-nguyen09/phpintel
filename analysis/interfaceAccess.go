@@ -1,8 +1,8 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // InterfaceAccess represents a reference to the part before ::
@@ -10,7 +10,7 @@ type InterfaceAccess struct {
 	Expression
 }
 
-func newInterfaceAccess(document *Document, node *sitter.Node) *InterfaceAccess {
+func newInterfaceAccess(document *Document, node *ast.Node) *InterfaceAccess {
 	interfaceAccess := &InterfaceAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Method contains information of methods
@@ -46,7 +46,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
+func (s *Method) analyseMethodNode(document *Document, node *ast.Node) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
@@ -82,7 +82,7 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	document.popVariableTable()
 }
 
-func newMethod(document *Document, node *sitter.Node) Symbol {
+func newMethod(document *Document, node *ast.Node) Symbol {
 	method := &Method{
 		IsStatic:    false,
 		location:    document.GetNodeLocation(node),
@@ -110,7 +110,7 @@ func (s Method) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Method) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *Method) analyseParameterDeclarationList(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

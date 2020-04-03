@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Parameter contains information of a function parameter
@@ -18,7 +18,7 @@ type Parameter struct {
 	Value string        `json:"Value"`
 }
 
-func newParameter(document *Document, node *sitter.Node) *Parameter {
+func newParameter(document *Document, node *ast.Node) *Parameter {
 	param := &Parameter{
 		location: document.GetNodeLocation(node),
 	}

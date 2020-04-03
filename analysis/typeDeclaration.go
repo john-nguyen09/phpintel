@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // TypeDeclaration is type declaration for a symbol
@@ -11,7 +11,7 @@ type TypeDeclaration struct {
 	Expression
 }
 
-func newTypeDeclaration(document *Document, node *sitter.Node) *TypeDeclaration {
+func newTypeDeclaration(document *Document, node *ast.Node) *TypeDeclaration {
 	typeDeclaration := &TypeDeclaration{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

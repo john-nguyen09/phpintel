@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassConst contains information of class constants
@@ -19,7 +19,7 @@ type ClassConst struct {
 var _ HasScope = (*ClassConst)(nil)
 var _ Symbol = (*ClassConst)(nil)
 
-func newClassConst(document *Document, node *sitter.Node) Symbol {
+func newClassConst(document *Document, node *ast.Node) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}

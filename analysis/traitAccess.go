@@ -1,16 +1,16 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type TraitAccess struct {
 	Expression
 }
 
-func processTraitUseClause(document *Document, node *sitter.Node) Symbol {
+func processTraitUseClause(document *Document, node *ast.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	currentClass := document.getLastClass()
@@ -30,11 +30,11 @@ func processTraitUseClause(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func newTraitAccess(document *Document, node *sitter.Node) *TraitAccess {
+func newTraitAccess(document *Document, node *ast.Node) *TraitAccess {
 	traitAccess := &TraitAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     document.GetPhraseText(node),
+			Name:     document.GetNodeText(node),
 		},
 	}
 	types := newTypeComposite()

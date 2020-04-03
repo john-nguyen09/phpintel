@@ -4,16 +4,16 @@ import (
 	"errors"
 	"strings"
 
-	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 )
 
 type Traverser struct {
-	node   *sitter.Node
+	node   *ast.Node
 	index  int
 	parent *Traverser
 }
 
-func NewTraverser(node *sitter.Node) *Traverser {
+func NewTraverser(node *ast.Node) *Traverser {
 	return &Traverser{
 		node:   node,
 		index:  0,
@@ -21,7 +21,7 @@ func NewTraverser(node *sitter.Node) *Traverser {
 	}
 }
 
-func (s *Traverser) Advance() *sitter.Node {
+func (s *Traverser) Advance() *ast.Node {
 	node := s.Peek()
 	if node != nil {
 		s.index++
@@ -30,7 +30,7 @@ func (s *Traverser) Advance() *sitter.Node {
 	return node
 }
 
-func (s *Traverser) Peek() *sitter.Node {
+func (s *Traverser) Peek() *ast.Node {
 	if s.index >= int(s.node.ChildCount()) {
 		return nil
 	}
@@ -74,17 +74,17 @@ func (s *Traverser) Clone() *Traverser {
 
 type VisitorContext struct {
 	ShouldAscend bool
-	AscendNode   *sitter.Node
+	AscendNode   *ast.Node
 }
 
-type Visitor func(*sitter.Node, []*sitter.Node) VisitorContext
+type Visitor func(*ast.Node, []*ast.Node) VisitorContext
 
 func (s *Traverser) Traverse(visit Visitor) {
-	spine := []*sitter.Node{}
+	spine := []*ast.Node{}
 	s.realTraverse(s.node, spine, visit)
 }
 
-func (s *Traverser) realTraverse(node *sitter.Node, spine []*sitter.Node, visit Visitor) {
+func (s *Traverser) realTraverse(node *ast.Node, spine []*ast.Node, visit Visitor) {
 	ctx := visit(node, spine)
 	if !ctx.ShouldAscend {
 		return
@@ -102,13 +102,13 @@ func (s *Traverser) realTraverse(node *sitter.Node, spine []*sitter.Node, visit 
 	}
 }
 
-type NodeStack []*sitter.Node
+type NodeStack []*ast.Node
 
-func (s *NodeStack) Parent() *sitter.Node {
+func (s *NodeStack) Parent() *ast.Node {
 	if len(*s) == 0 {
 		return nil
 	}
-	var p *sitter.Node
+	var p *ast.Node
 	p, *s = (*s)[len((*s))-1], (*s)[:len((*s))-1]
 	return p
 }

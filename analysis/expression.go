@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Expression represents a reference
@@ -36,7 +36,7 @@ func (e *Expression) ResolveAndGetScope(ctx ResolveContext) TypeComposite {
 }
 
 type HasTypes interface {
-	GetLocation() protocol.Location
+	Symbol
 	GetTypes() TypeComposite
 	Resolve(ctx ResolveContext)
 }
@@ -64,7 +64,7 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
+type exprConstructor func(*Document, *ast.Node) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[string]exprConstructor
 
@@ -85,7 +85,7 @@ func init() {
 	}
 }
 
-func scanForExpression(document *Document, node *sitter.Node) HasTypes {
+func scanForExpression(document *Document, node *ast.Node) HasTypes {
 	var expression HasTypes = nil
 	shouldAdd := false
 	defer func() {
@@ -109,7 +109,7 @@ type derivedExpression struct {
 
 var _ HasTypes = (*derivedExpression)(nil)
 
-func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newDerivedExpression(document *Document, node *ast.Node) (HasTypes, bool) {
 	derivedExpr := &derivedExpression{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
