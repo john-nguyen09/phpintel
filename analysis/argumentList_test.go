@@ -17,12 +17,12 @@ func TestNestedArgumentList(t *testing.T) {
 	document := NewDocument("test1", data)
 	document.Load()
 	testOffsets := []int{
-		308, 345,
+		308,
+		345,
 	}
 	for _, testOffset := range testOffsets {
 		argumentList, hasParamsResolvable := document.ArgumentListAndFunctionCallAt(document.positionAt(testOffset))
-		offsetStr := strconv.Itoa(testOffset)
-		t.Run("TestNestedArgumentList"+offsetStr, func(t *testing.T) {
+		t.Run(strconv.Itoa(testOffset), func(t *testing.T) {
 			cupaloy.SnapshotT(t, argumentList, hasParamsResolvable)
 		})
 	}
@@ -34,5 +34,5 @@ func TestNotDuplicatedExpression(t *testing.T) {
 	document := NewDocument("test1", data)
 	document.Load()
 
-	cupaloy.SnapshotT(t, document.hasTypesSymbols)
+	cupaloy.SnapshotT(t, document.hasTypesSymbols())
 }

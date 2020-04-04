@@ -18,7 +18,15 @@ func TestConstant(t *testing.T) {
 
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []Symbol{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		switch s.(type) {
+		case *Const, *Define:
+			results = append(results, s)
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestConstantSerialiseAndDeserialise(t *testing.T) {

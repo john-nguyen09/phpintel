@@ -7,8 +7,36 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
+
+type testMethod struct {
+	location protocol.Location
+
+	Name               string
+	Params             []*Parameter
+	returnTypes        TypeComposite
+	description        string
+	Scope              TypeString
+	VisibilityModifier VisibilityModifierValue
+	IsStatic           bool
+	ClassModifier      ClassModifierValue
+}
+
+func toTestMethod(m *Method) testMethod {
+	return testMethod{
+		location:           m.location,
+		Name:               m.Name,
+		Params:             m.Params,
+		returnTypes:        m.returnTypes,
+		description:        m.description,
+		Scope:              m.Scope,
+		VisibilityModifier: m.VisibilityModifier,
+		IsStatic:           m.IsStatic,
+		ClassModifier:      m.ClassModifier,
+	}
+}
 
 func TestMethod(t *testing.T) {
 	methodTest := "../cases/method.php"
@@ -19,7 +47,14 @@ func TestMethod(t *testing.T) {
 
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []testMethod{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if m, ok := s.(*Method); ok {
+			results = append(results, toTestMethod(m))
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestMethodSerialiseAndDeserialise(t *testing.T) {
@@ -56,7 +91,14 @@ func TestMethodWithPhpDoc(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []testMethod{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if m, ok := s.(*Method); ok {
+			results = append(results, toTestMethod(m))
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestMethodFromPhpDoc(t *testing.T) {
@@ -66,7 +108,14 @@ func TestMethodFromPhpDoc(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []testMethod{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if m, ok := s.(*Method); ok {
+			results = append(results, toTestMethod(m))
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestReturnRelativeType(t *testing.T) {
@@ -83,8 +132,8 @@ class TestClass1 {
 	public function method2() {}
 }`))
 	doc.Load()
-	method1 := doc.Children[1].(*Method)
-	method2 := doc.Children[2].(*Method)
+	method1 := doc.Children[0].(*Class).getChildren()[1].(*Method)
+	method2 := doc.Children[0].(*Class).getChildren()[4].(*Method)
 
 	scopeTypes := newTypeComposite()
 	scopeTypes.add(NewTypeString("\\TestClass1"))

@@ -386,11 +386,12 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			ciDeletor.MarkNotDelete(document.GetURI(), i, key)
 		}
 	}
-	for _, child := range document.Children {
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, child Symbol) {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
 			if key == "" {
-				continue
+				return
 			}
 			entry := newEntry(ser.GetCollection(), key)
 			ser.Serialise(entry.e)
@@ -403,7 +404,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
 			}
 		}
-	}
+	})
 }
 
 func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {

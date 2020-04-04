@@ -82,6 +82,8 @@ func init() {
 		"parenthesized_expression":          newDerivedExpression,
 		"clone_expression":                  newDerivedExpression,
 		"binary_expression":                 processBinaryExpression,
+		"unary_op_expression":               processToScanChildren,
+		"assignment_expression":             newAssignment,
 	}
 }
 
@@ -100,6 +102,21 @@ func scanForExpression(document *Document, node *ast.Node) HasTypes {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
+}
+
+func processToScanChildren(document *Document, node *ast.Node) (HasTypes, bool) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		switch child.Type() {
+		case "@", "+", "-", "~", "!":
+			child = traverser.Advance()
+			continue
+		}
+		scanForExpression(document, child)
+		child = traverser.Advance()
+	}
+	return nil, false
 }
 
 type derivedExpression struct {

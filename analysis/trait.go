@@ -10,21 +10,26 @@ import (
 // Trait contains information of a trait
 type Trait struct {
 	location protocol.Location
+	children []Symbol
 
 	Name TypeString
 }
+
+var _ Symbol = (*Trait)(nil)
+var _ blockSymbol = (*Trait)(nil)
 
 func newTrait(document *Document, node *ast.Node) Symbol {
 	trait := &Trait{
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(trait)
+	document.addSymbol(trait)
+	document.pushBlock(trait)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		switch child.Type() {
 		case "name":
-			document.addSymbol(trait)
 			trait.Name = NewTypeString(document.GetNodeText(child))
 			trait.Name.SetNamespace(document.currImportTable().GetNamespace())
 		case "declaration_list":
@@ -32,6 +37,7 @@ func newTrait(document *Document, node *ast.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
+	document.popBlock()
 	return nil
 }
 
@@ -74,4 +80,12 @@ func ReadTrait(d *storage.Decoder) *Trait {
 		location: d.ReadLocation(),
 		Name:     ReadTypeString(d),
 	}
+}
+
+func (s *Trait) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Trait) getChildren() []Symbol {
+	return s.children
 }

@@ -9,16 +9,20 @@ import (
 // ArgumentList contains information of arguments in function-like call
 type ArgumentList struct {
 	location protocol.Location
+	children []Symbol
 
 	arguments []*ast.Node
 	ranges    []protocol.Range
 }
+
+var _ blockSymbol = (*ArgumentList)(nil)
 
 func newArgumentList(document *Document, node *ast.Node) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
 	document.addSymbol(argumentList)
+	document.pushBlock(argumentList)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	start := argumentList.location.Range.Start
@@ -53,6 +57,7 @@ func newArgumentList(document *Document, node *ast.Node) Symbol {
 	for _, n := range nodesToScan {
 		scanNode(document, n)
 	}
+	document.popBlock()
 	return argumentList
 }
 
@@ -67,4 +72,12 @@ func (s *ArgumentList) GetArguments() []*ast.Node {
 
 func (s *ArgumentList) GetRanges() []protocol.Range {
 	return s.ranges
+}
+
+func (s *ArgumentList) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *ArgumentList) getChildren() []Symbol {
+	return s.children
 }

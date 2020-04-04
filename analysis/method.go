@@ -10,6 +10,7 @@ import (
 // Method contains information of methods
 type Method struct {
 	location protocol.Location
+	children []Symbol
 
 	Name               string
 	Params             []*Parameter
@@ -23,6 +24,7 @@ type Method struct {
 
 var _ HasScope = (*Method)(nil)
 var _ Symbol = (*Method)(nil)
+var _ blockSymbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
@@ -50,7 +52,9 @@ func (s *Method) analyseMethodNode(document *Document, node *ast.Node) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
+	document.addSymbol(s)
 	document.pushVariableTable(node)
+	document.pushBlock(s)
 
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
@@ -70,7 +74,6 @@ func (s *Method) analyseMethodNode(document *Document, node *ast.Node) {
 			if phpDoc != nil {
 				s.applyPhpDoc(document, *phpDoc)
 			}
-			document.addSymbol(s)
 			for _, param := range s.Params {
 				variableTable.add(param.ToVariable())
 			}
@@ -80,6 +83,7 @@ func (s *Method) analyseMethodNode(document *Document, node *ast.Node) {
 		child = traverser.Advance()
 	}
 	document.popVariableTable()
+	document.popBlock()
 }
 
 func newMethod(document *Document, node *ast.Node) Symbol {
@@ -222,4 +226,12 @@ func ReadMethod(d *storage.Decoder) *Method {
 	method.ClassModifier = ClassModifierValue(d.ReadInt())
 
 	return &method
+}
+
+func (s *Method) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Method) getChildren() []Symbol {
+	return s.children
 }

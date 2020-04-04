@@ -10,6 +10,7 @@ import (
 // Function contains information of functions
 type Function struct {
 	location protocol.Location
+	children []Symbol
 
 	Name        TypeString `json:"Name"`
 	Params      []*Parameter
@@ -19,6 +20,7 @@ type Function struct {
 
 var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
+var _ blockSymbol = (*Function)(nil)
 
 func newFunction(document *Document, node *ast.Node) Symbol {
 	function := &Function{
@@ -28,6 +30,7 @@ func newFunction(document *Document, node *ast.Node) Symbol {
 	}
 	phpDoc := document.getValidPhpDoc(function.location)
 	document.pushVariableTable(node)
+	document.pushBlock(function)
 
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
@@ -51,6 +54,7 @@ func newFunction(document *Document, node *ast.Node) Symbol {
 	}
 	function.Name.SetNamespace(document.currImportTable().GetNamespace())
 	document.popVariableTable()
+	document.popBlock()
 	return function
 }
 
@@ -158,4 +162,12 @@ func ReadFunction(d *storage.Decoder) *Function {
 	function.returnTypes = ReadTypeComposite(d)
 	function.description = d.ReadString()
 	return &function
+}
+
+func (s *Function) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Function) getChildren() []Symbol {
+	return s.children
 }

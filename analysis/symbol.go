@@ -48,6 +48,12 @@ type Symbol interface {
 	GetLocation() protocol.Location
 }
 
+type blockSymbol interface {
+	Symbol
+	getChildren() []Symbol
+	addChild(Symbol)
+}
+
 // NameIndexable indicates a symbol is name indexable, i.e. have completion
 type NameIndexable interface {
 	GetIndexableName() string
@@ -77,4 +83,37 @@ type HasParamsResolvable interface {
 
 func transformQualifiedName(n *ast.Node, document *Document) TypeString {
 	return NewTypeString(document.GetNodeText(n))
+}
+
+type traverser struct {
+	shouldStop  bool
+	stopDescent bool
+}
+
+func newTraverser() traverser {
+	return traverser{}
+}
+
+func (t *traverser) traverseDocument(document *Document, fn func(*traverser, Symbol)) {
+	for _, child := range document.Children {
+		t.traverseBlock(child, fn)
+		if t.shouldStop {
+			return
+		}
+	}
+}
+
+func (t *traverser) traverseBlock(s Symbol, fn func(*traverser, Symbol)) {
+	fn(t, s)
+	if t.shouldStop {
+		return
+	}
+	if !t.stopDescent {
+		if block, ok := s.(blockSymbol); ok {
+			for _, child := range block.getChildren() {
+				t.traverseBlock(child, fn)
+			}
+		}
+	}
+	t.stopDescent = false
 }

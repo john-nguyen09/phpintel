@@ -4,6 +4,7 @@
       URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
       Range: (protocol.Range) 158:0-158:92
     },
+    children: ([]analysis.Symbol) <nil>,
     Name: (analysis.TypeString) {
       fqn: (string) (len=11) "\\preg_match",
       original: (string) (len=10) "preg_match",

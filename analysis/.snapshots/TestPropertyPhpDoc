@@ -1,24 +1,4 @@
-([]analysis.Symbol) (len=4) {
-  (*analysis.Class)({
-    description: (string) (len=36) "This is the description of the class",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 9:0-12:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=22) "\\ClassWithOnlyDocProps",
-      original: (string) (len=21) "ClassWithOnlyDocProps",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
+([]analysis.Symbol) (len=3) {
   (*analysis.Property)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",

@@ -8,15 +8,19 @@ import (
 
 type AnonymousFunction struct {
 	location protocol.Location
+	children []Symbol
 
 	Params []*Parameter
 }
+
+var _ blockSymbol = (*AnonymousFunction)(nil)
 
 func newAnonymousFunction(document *Document, node *ast.Node) Symbol {
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
 	document.pushVariableTable(node)
+	document.pushBlock(anonFunc)
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -27,14 +31,14 @@ func newAnonymousFunction(document *Document, node *ast.Node) Symbol {
 			for _, param := range anonFunc.Params {
 				variableTable.add(param.ToVariable())
 			}
-			document.addSymbol(anonFunc)
 		case "compound_statement":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
 	document.popVariableTable()
-	return nil
+	document.popBlock()
+	return anonFunc
 }
 
 func (s *AnonymousFunction) GetLocation() protocol.Location {
@@ -52,4 +56,12 @@ func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, 
 		}
 		child = traverser.Advance()
 	}
+}
+
+func (s *AnonymousFunction) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *AnonymousFunction) getChildren() []Symbol {
+	return s.children
 }

@@ -4,7 +4,6 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"regexp"
-	"runtime/debug"
 	"sort"
 	"time"
 	"unicode/utf8"
@@ -29,13 +28,13 @@ type Document struct {
 	variableTables     []*VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
-	hasTypesSymbols    []HasTypes
-	argLists           []*ArgumentList
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
 	importTables       []*ImportTable
 	insertUseContext   *InsertUseContext
+
+	blockStack []blockSymbol
 }
 
 // VariableTable holds the range and the variables inside
@@ -98,7 +97,7 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func documentFromUri(uri string) *Document {
+func documentFromURI(uri string) *Document {
 	return &Document{
 		uri:                uri,
 		Children:           []Symbol{},
@@ -109,7 +108,7 @@ func documentFromUri(uri string) *Document {
 }
 
 func NewDocument(uri string, text []byte) *Document {
-	document := documentFromUri(uri)
+	document := documentFromURI(uri)
 	document.SetText(text)
 
 	return document
@@ -280,26 +279,42 @@ func (s *Document) addSymbol(other Symbol) {
 		s.lastPhpDoc = doc
 		return
 	}
-	if other == nil {
-		debug.PrintStack()
+	if s.currentBlock() != nil {
+		s.currentBlock().addChild(other)
+	} else {
+		s.Children = append(s.Children, other)
 	}
-	if argList, ok := other.(*ArgumentList); ok {
-		if len(s.argLists) > 0 {
-			i := len(s.argLists) - 1
-			lastArgList := s.argLists[i]
-			if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
-				s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
-				return
-			}
-		}
-		s.argLists = append(s.argLists, argList)
-		return
+	// if argList, ok := other.(*ArgumentList); ok {
+	// 	if len(s.argLists) > 0 {
+	// 		i := len(s.argLists) - 1
+	// 		lastArgList := s.argLists[i]
+	// 		if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
+	// 			s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
+	// 			return
+	// 		}
+	// 	}
+	// 	s.argLists = append(s.argLists, argList)
+	// 	return
+	// }
+	// if h, ok := other.(HasTypes); ok {
+	// 	s.hasTypesSymbols = append(s.hasTypesSymbols, h)
+	// 	return
+	// }
+}
+
+func (s *Document) pushBlock(block blockSymbol) {
+	s.blockStack = append(s.blockStack, block)
+}
+
+func (s *Document) popBlock() {
+	s.blockStack = s.blockStack[:len(s.blockStack)-1]
+}
+
+func (s *Document) currentBlock() blockSymbol {
+	if len(s.blockStack) > 0 {
+		return s.blockStack[len(s.blockStack)-1]
 	}
-	if h, ok := other.(HasTypes); ok {
-		s.hasTypesSymbols = append(s.hasTypesSymbols, h)
-		return
-	}
-	s.Children = append(s.Children, other)
+	return nil
 }
 
 func (s *Document) pushVariableTable(node *ast.Node) {
@@ -419,29 +434,21 @@ func (s *Document) HasTypesAt(offset int) HasTypes {
 
 // HasTypesAtPos returns a HasTypes symbol at the position
 func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
-	// prev := s.hasTypesSymbols[0]
-	// for i, h := range s.hasTypesSymbols[1:] {
-	// 	if util.CompareRange(prev.GetLocation().Range, h.GetLocation().Range) >= 0 {
-	// 		log.Printf("%d %T(%v) %T(%v)", i, prev, prev.GetLocation().Range, h, h.GetLocation().Range)
-	// 	}
-	// 	prev = h
-	// }
-	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
-		location := s.hasTypesSymbols[i].GetLocation()
-		// log.Printf("%d %T(%v)", i, s.hasTypesSymbols[i], location.Range)
-		return util.IsInRange(pos, location.Range) <= 0
+	var result HasTypes = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos == 0 {
+			if h, ok := s.(HasTypes); ok {
+				result = h
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
+		} else if relativePos > 0 {
+			t.stopDescent = true
+		}
 	})
-	var previousHasTypes HasTypes = nil
-	for _, symbol := range s.hasTypesSymbols[index:] {
-		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if inRange < 0 {
-			break
-		}
-		if hasTypes, ok := symbol.(HasTypes); ok && inRange == 0 {
-			previousHasTypes = hasTypes
-		}
-	}
-	return previousHasTypes
+	return result
 }
 
 // HasTypesBeforePos returns a HasTypes before the position
@@ -450,22 +457,19 @@ func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
 }
 
 func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
-	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
-		location := s.hasTypesSymbols[i].GetLocation()
-		return util.IsInRange(pos, location.Range) <= 0
-	})
-	if index >= len(s.hasTypesSymbols) {
-		index = len(s.hasTypesSymbols) - 1
-	}
-	for i := index; i >= 0; i-- {
-		h := s.hasTypesSymbols[i]
-		inRange := util.IsInRange(pos, h.GetLocation().Range)
-		hRange := h.GetLocation().Range
-		if inRange > 0 || (inRange == 0 && pos == hRange.End && hRange.Start != hRange.End) {
-			return h
+	var result HasTypes = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos >= 0 {
+			if h, ok := s.(HasTypes); ok {
+				result = h
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
 		}
-	}
-	return nil
+	})
+	return result
 }
 
 func (s *Document) WordAtPos(pos protocol.Position) string {
@@ -483,27 +487,21 @@ func (s *Document) WordAtPos(pos protocol.Position) string {
 
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
 func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
-	// log.Printf("ArgumentListAndFunctionCallAt: %p", s)
-	index := sort.Search(len(s.argLists), func(i int) bool {
-		location := s.argLists[i].GetLocation()
-		return util.IsInRange(pos, location.Range) <= 0
+	var argumentList *ArgumentList = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos == 0 {
+			if args, ok := s.(*ArgumentList); ok {
+				argumentList = args
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
+		} else if relativePos > 0 {
+			t.stopDescent = true
+		}
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
-	var argumentList *ArgumentList = nil
-	if index < len(s.argLists) && util.IsInRange(pos, s.argLists[index].GetLocation().Range) == 0 {
-		argumentList = s.argLists[index]
-	} else {
-		for _, arg := range s.argLists[index:] {
-			isInRange := util.IsInRange(pos, arg.GetLocation().Range)
-			if isInRange > 0 {
-				break
-			}
-			if isInRange == 0 {
-				argumentList = arg
-				break
-			}
-		}
-	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
 		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
@@ -517,7 +515,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) *Document {
 	// log.Printf("ApplyChanges: %p", s)
 	start := time.Now()
-	newDoc := documentFromUri(s.uri)
+	newDoc := documentFromURI(s.uri)
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End

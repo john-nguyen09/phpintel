@@ -16,7 +16,7 @@ func TestParenthesisedExpression(t *testing.T) {
 	doc := NewDocument("test1", data)
 	doc.Load()
 
-	cupaloy.SnapshotT(t, doc.hasTypesSymbols)
+	cupaloy.SnapshotT(t, doc.hasTypesSymbols())
 }
 
 func TestExpressionsInsideParenthesisedExpression(t *testing.T) {

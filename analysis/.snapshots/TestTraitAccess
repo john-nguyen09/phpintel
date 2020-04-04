@@ -1,40 +1,38 @@
-([]analysis.Symbol) (len=1) {
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 9:0-12:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=32) "\\App\\Http\\Controllers\\Controller",
-      original: (string) (len=10) "Controller",
+(analysis.testClass) {
+  description: (string) "",
+  Location: (protocol.Location) {
+    URI: (string) (len=5) "test1",
+    Range: (protocol.Range) 9:0-12:1
+  },
+  Modifier: (analysis.ClassModifierValue) 0,
+  Name: (analysis.TypeString) {
+    fqn: (string) (len=32) "\\App\\Http\\Controllers\\Controller",
+    original: (string) (len=10) "Controller",
+    arrayLevel: (int) 0
+  },
+  Extends: (analysis.TypeString) {
+    fqn: (string) (len=30) "\\Illuminate\\Routing\\Controller",
+    original: (string) (len=14) "BaseController",
+    arrayLevel: (int) 0
+  },
+  Interfaces: ([]analysis.TypeString) <nil>,
+  Use: ([]analysis.TypeString) (len=3) {
+    (analysis.TypeString) {
+      fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
+      original: (string) (len=18) "AuthorizesRequests",
       arrayLevel: (int) 0
     },
-    Extends: (analysis.TypeString) {
-      fqn: (string) (len=30) "\\Illuminate\\Routing\\Controller",
-      original: (string) (len=14) "BaseController",
+    (analysis.TypeString) {
+      fqn: (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs",
+      original: (string) (len=14) "DispatchesJobs",
       arrayLevel: (int) 0
     },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) (len=3) {
-      (analysis.TypeString) {
-        fqn: (string) (len=53) "\\Illuminate\\Foundation\\Auth\\Access\\AuthorizesRequests",
-        original: (string) (len=18) "AuthorizesRequests",
-        arrayLevel: (int) 0
-      },
-      (analysis.TypeString) {
-        fqn: (string) (len=41) "\\Illuminate\\Foundation\\Bus\\DispatchesJobs",
-        original: (string) (len=14) "DispatchesJobs",
-        arrayLevel: (int) 0
-      },
-      (analysis.TypeString) {
-        fqn: (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests",
-        original: (string) (len=17) "ValidatesRequests",
-        arrayLevel: (int) 0
-      }
+    (analysis.TypeString) {
+      fqn: (string) (len=51) "\\Illuminate\\Foundation\\Validation\\ValidatesRequests",
+      original: (string) (len=17) "ValidatesRequests",
+      arrayLevel: (int) 0
     }
-  })
+  }
 }
 (*analysis.TraitAccess)({
   Expression: (analysis.Expression) {

@@ -10,6 +10,7 @@ import (
 // Interface contains information of interfaces
 type Interface struct {
 	location    protocol.Location
+	children    []Symbol
 	description string
 
 	Name    TypeString
@@ -18,6 +19,7 @@ type Interface struct {
 
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
+var _ blockSymbol = (*Interface)(nil)
 
 func newInterface(document *Document, node *ast.Node) Symbol {
 	theInterface := &Interface{
@@ -25,6 +27,7 @@ func newInterface(document *Document, node *ast.Node) Symbol {
 	}
 	document.addClass(theInterface)
 	document.addSymbol(theInterface)
+	document.pushBlock(theInterface)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -39,6 +42,7 @@ func newInterface(document *Document, node *ast.Node) Symbol {
 		child = traverser.Advance()
 	}
 	theInterface.Name.SetNamespace(document.currImportTable().GetNamespace())
+	document.popBlock()
 	return nil
 }
 
@@ -105,4 +109,12 @@ func ReadInterface(d *storage.Decoder) *Interface {
 		theInterface.Extends = append(theInterface.Extends, ReadTypeString(d))
 	}
 	return theInterface
+}
+
+func (s *Interface) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Interface) getChildren() []Symbol {
+	return s.children
 }

@@ -10,6 +10,7 @@ import (
 // Class contains information of classes
 type Class struct {
 	description string
+	children    []Symbol
 	Location    protocol.Location
 
 	Modifier   ClassModifierValue
@@ -21,6 +22,7 @@ type Class struct {
 
 var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
+var _ blockSymbol = (*Class)(nil)
 
 func getMemberModifier(node *ast.Node) VisibilityModifierValue {
 	traverser := util.NewTraverser(node)
@@ -65,11 +67,12 @@ func newClass(document *Document, node *ast.Node) Symbol {
 	phpDoc := document.getValidPhpDoc(class.Location)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
+	document.addSymbol(class)
+	document.pushBlock(class)
 
 	for child != nil {
 		switch child.Type() {
 		case "name":
-			document.addSymbol(class)
 			class.Name = NewTypeString(document.GetNodeText(child))
 			class.Name.SetNamespace(document.currImportTable().GetNamespace())
 			if phpDoc != nil {
@@ -103,6 +106,7 @@ func newClass(document *Document, node *ast.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
+	document.popBlock()
 
 	return nil
 }
@@ -231,4 +235,12 @@ func (s *Class) GetConstructor(store *Store) *Method {
 
 func (s *Class) AddUse(name TypeString) {
 	s.Use = append(s.Use, name)
+}
+
+func (s *Class) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Class) getChildren() []Symbol {
+	return s.children
 }

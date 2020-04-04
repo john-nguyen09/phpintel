@@ -3,6 +3,7 @@
     URI: (string) (len=5) "test1",
     Range: (protocol.Range) 20:12-20:14
   },
+  children: ([]analysis.Symbol) <nil>,
   arguments: ([]*ast.Node) <nil>,
   ranges: ([]protocol.Range) (len=1) {
     (protocol.Range) 20:12-20:14

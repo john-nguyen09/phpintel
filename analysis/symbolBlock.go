@@ -4,7 +4,7 @@ import (
 	"github.com/john-nguyen09/phpintel/analysis/ast"
 )
 
-type symbolConstructorMap func(*Document, *ast.Node) Symbol
+type symbolConstructor func(*Document, *ast.Node) Symbol
 
 var /* const */ typesToScanForChildren = map[string]bool{
 	"ERROR":                     true,
@@ -52,10 +52,10 @@ var /* const */ skipAddingSymbol map[string]bool = map[string]bool{
 // 	lexer.DirectoryConstant: newDirectoryConstantAccess,
 // 	lexer.DocumentComment:   newPhpDocFromNode,
 // }
-var phraseToSymbolConstructor map[string]symbolConstructorMap
+var symbolConstructorMap map[string]symbolConstructor
 
 func init() {
-	phraseToSymbolConstructor = map[string]symbolConstructorMap{
+	symbolConstructorMap = map[string]symbolConstructor{
 		"interface_declaration":                  newInterface,
 		"class_declaration":                      newClass,
 		"property_declaration":                   newPropertyDeclaration,
@@ -69,7 +69,6 @@ func init() {
 		"arguments":                              newArgumentList,
 		"trait_declaration":                      newTrait,
 		"function_call_expression":               tryToNewDefine,
-		"assignment_expression":                  newAssignment,
 		"global_declaration":                     newGlobalDeclaration,
 		"namespace_use_declaration":              processNamespaceUseDeclaration,
 		"anonymous_function_creation_expression": newAnonymousFunction,
@@ -90,7 +89,7 @@ func scanNode(document *Document, node *ast.Node) {
 		scanForChildren(document, node)
 		return
 	}
-	if constructor, ok := phraseToSymbolConstructor[node.Type()]; ok {
+	if constructor, ok := symbolConstructorMap[node.Type()]; ok {
 		symbol = constructor(document, node)
 	}
 	if _, ok := skipAddingSymbol[node.Type()]; ok {

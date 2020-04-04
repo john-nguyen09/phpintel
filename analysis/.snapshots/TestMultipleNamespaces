@@ -1,6 +1,7 @@
 ([]analysis.Symbol) (len=2) {
   (*analysis.Class)({
     description: (string) "",
+    children: ([]analysis.Symbol) <nil>,
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 4:0-7:1
@@ -21,6 +22,7 @@
   }),
   (*analysis.Class)({
     description: (string) "",
+    children: ([]analysis.Symbol) <nil>,
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 10:4-12:5

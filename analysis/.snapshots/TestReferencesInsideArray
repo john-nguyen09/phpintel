@@ -1,2 +1,299 @@
-([]analysis.Symbol) {
+([]analysis.Symbol) (len=3) {
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=5) "\\User",
+            original: (string) (len=4) "User",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:0-2:4
+      },
+      Name: (string) (len=4) "User"
+    },
+    isResolved: (bool) false
+  }),
+  (*analysis.ScopedMethodAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=5) "\\User",
+                original: (string) (len=4) "User",
+                arrayLevel: (int) 0
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:0-2:4
+          },
+          Name: (string) (len=4) "User"
+        },
+        isResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:6-2:12
+      },
+      Name: (string) (len=6) "create"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:12-8:2
+    },
+    children: ([]analysis.Symbol) (len=2) {
+      (*analysis.FunctionCall)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 7:18-7:24
+          },
+          Name: (string) (len=6) "bcrypt"
+        },
+        hasResolved: (bool) false
+      }),
+      (*analysis.ArgumentList)({
+        location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 7:24-7:53
+        },
+        children: ([]analysis.Symbol) <nil>,
+        arguments: ([]*ast.Node) (len=1) {
+          (*ast.Node)({
+            n: (*sitter.Node)((string)),
+            t: (string) (len=6) "string",
+            children: ([]*ast.Node) {
+            }
+          })
+        },
+        ranges: ([]protocol.Range) (len=1) {
+          (protocol.Range) 7:24-7:53
+        }
+      })
+    },
+    arguments: ([]*ast.Node) (len=1) {
+      (*ast.Node)({
+        n: (*sitter.Node)((array_creation_expression (array_element_initializer (string) (string)) (array_element_initializer (string) (string)) (array_element_initializer (string) (string)) (array_element_initializer (string) (string)) (array_element_initializer (string) (function_call_expression function: (qualified_name (name)) arguments: (arguments (string)))))),
+        t: (string) (len=25) "array_creation_expression",
+        children: ([]*ast.Node) (len=12) {
+          (*ast.Node)({
+            n: (*sitter.Node)(("[")),
+            t: (string) (len=1) "[",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((array_element_initializer (string) (string))),
+            t: (string) (len=25) "array_element_initializer",
+            children: ([]*ast.Node) (len=3) {
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)(("=>")),
+                t: (string) (len=2) "=>",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              })
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((",")),
+            t: (string) (len=1) ",",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((array_element_initializer (string) (string))),
+            t: (string) (len=25) "array_element_initializer",
+            children: ([]*ast.Node) (len=3) {
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)(("=>")),
+                t: (string) (len=2) "=>",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              })
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((",")),
+            t: (string) (len=1) ",",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((array_element_initializer (string) (string))),
+            t: (string) (len=25) "array_element_initializer",
+            children: ([]*ast.Node) (len=3) {
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)(("=>")),
+                t: (string) (len=2) "=>",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              })
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((",")),
+            t: (string) (len=1) ",",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((array_element_initializer (string) (string))),
+            t: (string) (len=25) "array_element_initializer",
+            children: ([]*ast.Node) (len=3) {
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)(("=>")),
+                t: (string) (len=2) "=>",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              })
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((",")),
+            t: (string) (len=1) ",",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((array_element_initializer (string) (function_call_expression function: (qualified_name (name)) arguments: (arguments (string))))),
+            t: (string) (len=25) "array_element_initializer",
+            children: ([]*ast.Node) (len=3) {
+              (*ast.Node)({
+                n: (*sitter.Node)((string)),
+                t: (string) (len=6) "string",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)(("=>")),
+                t: (string) (len=2) "=>",
+                children: ([]*ast.Node) {
+                }
+              }),
+              (*ast.Node)({
+                n: (*sitter.Node)((function_call_expression function: (qualified_name (name)) arguments: (arguments (string)))),
+                t: (string) (len=24) "function_call_expression",
+                children: ([]*ast.Node) (len=2) {
+                  (*ast.Node)({
+                    n: (*sitter.Node)((qualified_name (name))),
+                    t: (string) (len=14) "qualified_name",
+                    children: ([]*ast.Node) (len=1) {
+                      (*ast.Node)(<nil>)
+                    }
+                  }),
+                  (*ast.Node)({
+                    n: (*sitter.Node)((arguments (string))),
+                    t: (string) (len=9) "arguments",
+                    children: ([]*ast.Node) (len=3) {
+                      (*ast.Node)({
+                        n: (*sitter.Node)(("(")),
+                        t: (string) (len=1) "(",
+                        children: ([]*ast.Node) {
+                        }
+                      }),
+                      (*ast.Node)({
+                        n: (*sitter.Node)((string)),
+                        t: (string) (len=6) "string",
+                        children: ([]*ast.Node) {
+                        }
+                      }),
+                      (*ast.Node)({
+                        n: (*sitter.Node)((")")),
+                        t: (string) (len=1) ")",
+                        children: ([]*ast.Node) {
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)((",")),
+            t: (string) (len=1) ",",
+            children: ([]*ast.Node) {
+            }
+          }),
+          (*ast.Node)({
+            n: (*sitter.Node)(("]")),
+            t: (string) (len=1) "]",
+            children: ([]*ast.Node) {
+            }
+          })
+        }
+      })
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 2:12-8:2
+    }
+  })
 }
