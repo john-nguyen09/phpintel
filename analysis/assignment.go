@@ -1,12 +1,11 @@
 package analysis
 
 import (
-	sitter "github.com/smacker/go-tree-sitter"
-
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func newAssignment(document *Document, node *sitter.Node) Symbol {
+func newAssignment(document *Document, node *ast.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if firstChild.Type() == "variable_name" {
@@ -28,7 +27,7 @@ func newAssignment(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func analyseVariableAssignment(document *Document, node *sitter.Node, traverser *util.Traverser, parent *sitter.Node) {
+func analyseVariableAssignment(document *Document, node *ast.Node, traverser *util.Traverser, parent *ast.Node) {
 	traverser.Advance()
 	traverser.SkipToken(" ")
 	if parent.Type() == "augmented_assignment_expression" {

@@ -1,8 +1,7 @@
 package analysis
 
 import (
-	sitter "github.com/smacker/go-tree-sitter"
-
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -16,7 +15,7 @@ type Define struct {
 	Value string
 }
 
-func newDefine(document *Document, node *sitter.Node) Symbol {
+func newDefine(document *Document, node *ast.Node) Symbol {
 	define := &Define{
 		location: document.GetNodeLocation(node),
 	}

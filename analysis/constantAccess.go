@@ -1,8 +1,8 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ConstantAccess represents a reference to constant access
@@ -10,7 +10,7 @@ type ConstantAccess struct {
 	Expression
 }
 
-func processQualifiedName(document *Document, node *sitter.Node) (HasTypes, bool) {
+func processQualifiedName(document *Document, node *ast.Node) (HasTypes, bool) {
 	prev := node.PrevSibling()
 	if prev != nil && prev.Type() == "instanceof" {
 		return newTypeDeclaration(document, node), true
@@ -33,7 +33,7 @@ func (s *ConstantAccess) GetLocation() protocol.Location {
 	return s.Location
 }
 
-func (s *ConstantAccess) readName(document *Document, node *sitter.Node) {
+func (s *ConstantAccess) readName(document *Document, node *ast.Node) {
 	s.Name = document.GetNodeText(node)
 }
 

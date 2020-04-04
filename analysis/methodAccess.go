@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type MethodAccess struct {
@@ -12,7 +12,7 @@ type MethodAccess struct {
 	hasResolved bool
 }
 
-func newMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newMethodAccess(document *Document, node *ast.Node) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
 		Expression: Expression{},
 	}

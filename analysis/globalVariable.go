@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type GlobalVariable struct {
@@ -15,7 +15,7 @@ type GlobalVariable struct {
 	Name string
 }
 
-func newGlobalDeclaration(document *Document, node *sitter.Node) Symbol {
+func newGlobalDeclaration(document *Document, node *ast.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -31,7 +31,7 @@ func newGlobalDeclaration(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func newGlobalVariable(document *Document, node *sitter.Node) Symbol {
+func newGlobalVariable(document *Document, node *ast.Node) Symbol {
 	globalVariable := &GlobalVariable{
 		location: document.GetNodeLocation(node),
 		Name:     document.GetNodeText(node),

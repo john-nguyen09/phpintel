@@ -1,10 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Interface contains information of interfaces
@@ -19,7 +19,7 @@ type Interface struct {
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
 
-func newInterface(document *Document, node *sitter.Node) Symbol {
+func newInterface(document *Document, node *ast.Node) Symbol {
 	theInterface := &Interface{
 		location: document.GetNodeLocation(node),
 	}
@@ -42,7 +42,7 @@ func newInterface(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func (s *Interface) extends(document *Document, node *sitter.Node) {
+func (s *Interface) extends(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {

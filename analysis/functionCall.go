@@ -3,9 +3,9 @@ package analysis
 import (
 	"strings"
 
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // FunctionCall represents a reference to function call
@@ -14,7 +14,7 @@ type FunctionCall struct {
 	hasResolved bool
 }
 
-func tryToNewDefine(document *Document, node *sitter.Node) Symbol {
+func tryToNewDefine(document *Document, node *ast.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -30,7 +30,7 @@ func tryToNewDefine(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func newFunctionCall(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newFunctionCall(document *Document, node *ast.Node) (HasTypes, bool) {
 	functionCall := &FunctionCall{
 		Expression: Expression{},
 	}
