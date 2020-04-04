@@ -19,7 +19,7 @@ type Interface struct {
 
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
-var _ blockSymbol = (*Interface)(nil)
+var _ BlockSymbol = (*Interface)(nil)
 
 func newInterface(document *Document, node *ast.Node) Symbol {
 	theInterface := &Interface{
@@ -115,6 +115,6 @@ func (s *Interface) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *Interface) getChildren() []Symbol {
+func (s *Interface) GetChildren() []Symbol {
 	return s.children
 }

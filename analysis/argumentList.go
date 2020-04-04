@@ -15,7 +15,7 @@ type ArgumentList struct {
 	ranges    []protocol.Range
 }
 
-var _ blockSymbol = (*ArgumentList)(nil)
+var _ BlockSymbol = (*ArgumentList)(nil)
 
 func newArgumentList(document *Document, node *ast.Node) Symbol {
 	argumentList := &ArgumentList{
@@ -78,6 +78,6 @@ func (s *ArgumentList) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *ArgumentList) getChildren() []Symbol {
+func (s *ArgumentList) GetChildren() []Symbol {
 	return s.children
 }

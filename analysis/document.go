@@ -34,7 +34,7 @@ type Document struct {
 	importTables       []*ImportTable
 	insertUseContext   *InsertUseContext
 
-	blockStack []blockSymbol
+	blockStack []BlockSymbol
 }
 
 // VariableTable holds the range and the variables inside
@@ -302,7 +302,7 @@ func (s *Document) addSymbol(other Symbol) {
 	// }
 }
 
-func (s *Document) pushBlock(block blockSymbol) {
+func (s *Document) pushBlock(block BlockSymbol) {
 	s.blockStack = append(s.blockStack, block)
 }
 
@@ -310,7 +310,7 @@ func (s *Document) popBlock() {
 	s.blockStack = s.blockStack[:len(s.blockStack)-1]
 }
 
-func (s *Document) currentBlock() blockSymbol {
+func (s *Document) currentBlock() BlockSymbol {
 	if len(s.blockStack) > 0 {
 		return s.blockStack[len(s.blockStack)-1]
 	}

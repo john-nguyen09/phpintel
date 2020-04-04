@@ -24,7 +24,7 @@ type Method struct {
 
 var _ HasScope = (*Method)(nil)
 var _ Symbol = (*Method)(nil)
-var _ blockSymbol = (*Method)(nil)
+var _ BlockSymbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
@@ -232,6 +232,6 @@ func (s *Method) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *Method) getChildren() []Symbol {
+func (s *Method) GetChildren() []Symbol {
 	return s.children
 }

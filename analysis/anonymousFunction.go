@@ -13,7 +13,7 @@ type AnonymousFunction struct {
 	Params []*Parameter
 }
 
-var _ blockSymbol = (*AnonymousFunction)(nil)
+var _ BlockSymbol = (*AnonymousFunction)(nil)
 
 func newAnonymousFunction(document *Document, node *ast.Node) Symbol {
 	anonFunc := &AnonymousFunction{
@@ -62,6 +62,6 @@ func (s *AnonymousFunction) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *AnonymousFunction) getChildren() []Symbol {
+func (s *AnonymousFunction) GetChildren() []Symbol {
 	return s.children
 }

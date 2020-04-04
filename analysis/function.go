@@ -20,7 +20,7 @@ type Function struct {
 
 var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
-var _ blockSymbol = (*Function)(nil)
+var _ BlockSymbol = (*Function)(nil)
 
 func newFunction(document *Document, node *ast.Node) Symbol {
 	function := &Function{
@@ -168,6 +168,6 @@ func (s *Function) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *Function) getChildren() []Symbol {
+func (s *Function) GetChildren() []Symbol {
 	return s.children
 }

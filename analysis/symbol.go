@@ -48,9 +48,9 @@ type Symbol interface {
 	GetLocation() protocol.Location
 }
 
-type blockSymbol interface {
+type BlockSymbol interface {
 	Symbol
-	getChildren() []Symbol
+	GetChildren() []Symbol
 	addChild(Symbol)
 }
 
@@ -109,11 +109,27 @@ func (t *traverser) traverseBlock(s Symbol, fn func(*traverser, Symbol)) {
 		return
 	}
 	if !t.stopDescent {
-		if block, ok := s.(blockSymbol); ok {
-			for _, child := range block.getChildren() {
+		if block, ok := s.(BlockSymbol); ok {
+			for _, child := range block.GetChildren() {
 				t.traverseBlock(child, fn)
 			}
 		}
 	}
 	t.stopDescent = false
+}
+
+func TraverseDocument(document *Document, preorder func(Symbol), postorder func(Symbol)) {
+	for _, child := range document.Children {
+		TraverseSymbol(child, preorder, postorder)
+	}
+}
+
+func TraverseSymbol(s Symbol, preorder func(Symbol), postorder func(Symbol)) {
+	preorder(s)
+	if block, ok := s.(BlockSymbol); ok {
+		for _, child := range block.GetChildren() {
+			TraverseSymbol(child, preorder, postorder)
+		}
+	}
+	postorder(s)
 }

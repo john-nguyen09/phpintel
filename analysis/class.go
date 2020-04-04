@@ -22,7 +22,7 @@ type Class struct {
 
 var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
-var _ blockSymbol = (*Class)(nil)
+var _ BlockSymbol = (*Class)(nil)
 
 func getMemberModifier(node *ast.Node) VisibilityModifierValue {
 	traverser := util.NewTraverser(node)
@@ -241,6 +241,6 @@ func (s *Class) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *Class) getChildren() []Symbol {
+func (s *Class) GetChildren() []Symbol {
 	return s.children
 }

@@ -132,8 +132,8 @@ class TestClass1 {
 	public function method2() {}
 }`))
 	doc.Load()
-	method1 := doc.Children[0].(*Class).getChildren()[1].(*Method)
-	method2 := doc.Children[0].(*Class).getChildren()[4].(*Method)
+	method1 := doc.Children[0].(*Class).GetChildren()[1].(*Method)
+	method2 := doc.Children[0].(*Class).GetChildren()[4].(*Method)
 
 	scopeTypes := newTypeComposite()
 	scopeTypes.add(NewTypeString("\\TestClass1"))

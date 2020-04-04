@@ -16,7 +16,7 @@ type Trait struct {
 }
 
 var _ Symbol = (*Trait)(nil)
-var _ blockSymbol = (*Trait)(nil)
+var _ BlockSymbol = (*Trait)(nil)
 
 func newTrait(document *Document, node *ast.Node) Symbol {
 	trait := &Trait{
@@ -86,6 +86,6 @@ func (s *Trait) addChild(child Symbol) {
 	s.children = append(s.children, child)
 }
 
-func (s *Trait) getChildren() []Symbol {
+func (s *Trait) GetChildren() []Symbol {
 	return s.children
 }
