@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"regexp"
 	"sort"
+	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -22,6 +23,7 @@ type Document struct {
 	injector    *ast.Injector
 	text        []byte
 	lineOffsets []int
+	loadMu      sync.Mutex
 	isOpen      bool
 	detectedEOL string
 
@@ -97,37 +99,41 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func documentFromURI(uri string) *Document {
-	return &Document{
+func NewDocument(uri string, text []byte) *Document {
+	document := &Document{
 		uri:                uri,
 		Children:           []Symbol{},
 		variableTableLevel: 0,
 		hasChanges:         true,
 		importTables:       []*ImportTable{},
 	}
-}
-
-func NewDocument(uri string, text []byte) *Document {
-	document := documentFromURI(uri)
 	document.SetText(text)
 
 	return document
 }
 
-// Open makes a shallow copy, changes isOpen and return its pointer
-func (s Document) Open() *Document {
+// Open sets a flag to indicate the document is open
+func (s *Document) Open() {
 	s.isOpen = true
-	return &s
 }
 
-// Close makes a shallow copy, changes isOpen and return its pointer
-func (s Document) Close() *Document {
+// Close unsets the flag
+func (s *Document) Close() {
 	s.isOpen = false
-	return &s
 }
 
 func (s *Document) IsOpen() bool {
 	return s.isOpen
+}
+
+func (s *Document) ResetState() {
+	s.Children = []Symbol{}
+	s.variableTableLevel = 0
+	s.variableTables = []*VariableTable{}
+	s.classStack = []Symbol{}
+	s.lastPhpDoc = nil
+	s.importTables = []*ImportTable{}
+	s.injector = nil
 }
 
 func (s *Document) GetRootNode() *ast.Node {
@@ -142,6 +148,7 @@ func (s *Document) Load() {
 	if !s.hasChanges {
 		return
 	}
+	s.ResetState()
 	s.hasChanges = false
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
@@ -451,6 +458,14 @@ func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	return result
 }
 
+func (s *Document) Lock() {
+	s.loadMu.Lock()
+}
+
+func (s *Document) Unlock() {
+	s.loadMu.Unlock()
+}
+
 // HasTypesBeforePos returns a HasTypes before the position
 func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
 	return s.hasTypesBeforePos(pos)
@@ -512,10 +527,10 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 }
 
 // ApplyChanges applies the changes to line offsets and text
-func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) *Document {
+func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
 	// log.Printf("ApplyChanges: %p", s)
 	start := time.Now()
-	newDoc := documentFromURI(s.uri)
+	s.hasChanges = true
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
@@ -526,7 +541,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newText := append(s.text[:0:0], s.text[0:startOffset]...)
 		newText = append(newText, text...)
 		newText = append(newText, s.text[endOffset:]...)
-		newDoc.text = newText
+		s.text = newText
 
 		min := start.Line + 1
 		if min > len(s.lineOffsets) {
@@ -535,7 +550,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newLineOffsets := append(s.lineOffsets[:0:0], s.lineOffsets[0:min]...)
 		lengthDiff := len(text) - (endOffset - startOffset)
 		offsets, eol := calculateLineOffsets(text, startOffset)
-		newDoc.detectedEOL = eol
+		s.detectedEOL = eol
 		newLineOffsets = append(newLineOffsets, offsets[1:]...)
 		if end.Line+1 < len(s.lineOffsets) {
 			endLineOffsets := s.lineOffsets[end.Line+1:]
@@ -543,7 +558,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 				newLineOffsets = append(newLineOffsets, endLineOffset+lengthDiff)
 			}
 		}
-		newDoc.lineOffsets = newLineOffsets
+		s.lineOffsets = newLineOffsets
 
 		rangeLength := endOffset - startOffset
 		oldEndIndex := startOffset + rangeLength
@@ -557,14 +572,13 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
 		}
 		if s.injector != nil {
-			newDoc.injector = s.injector.Edit(edit, newDoc.GetText())
+			s.injector = s.injector.Edit(edit, s.GetText())
 		}
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()
-	newDoc.Load()
+	s.Load()
 	util.TimeTrack(start, "Load")
-	return newDoc
 }
 
 func (s *Document) getLines() []string {

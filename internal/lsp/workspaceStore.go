@@ -213,8 +213,9 @@ func (s *workspaceStore) changeDocument(ctx context.Context, uri string, changes
 	if document == nil {
 		return DocumentNotFound(uri)
 	}
-	document = document.ApplyChanges(changes)
-	store.SaveDocOnStore(document)
+	document.Lock()
+	defer document.Unlock()
+	document.ApplyChanges(changes)
 	store.SyncDocument(document)
 	s.server.provideDiagnostics(ctx, document)
 	return nil

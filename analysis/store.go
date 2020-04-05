@@ -229,7 +229,7 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, data)
-		s.SaveDocOnStore(document)
+		s.saveDocOnStore(document)
 	} else {
 		document = value.(*Document)
 	}
@@ -242,10 +242,13 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 		log.Printf("Document %s not found", uri)
 		return nil
 	}
-	defer s.releaseDocIfNotOpen(document)
-	document = document.Open()
+	document.Lock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
+	document.Open()
 	document.Load()
-	s.SaveDocOnStore(document)
 	s.SyncDocument(document)
 	return document
 }
@@ -256,9 +259,12 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 		log.Printf("document %s not found", uri)
 		return
 	}
-	defer s.releaseDocIfNotOpen(document)
-	document = document.Close()
-	s.SaveDocOnStore(document)
+	document.Lock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
+	document.Close()
 	s.SyncDocument(document)
 }
 
@@ -291,7 +297,11 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	if document == nil {
 		return nil
 	}
-	defer s.releaseDocIfNotOpen(document)
+	document.Lock()
+	defer func() {
+		document.Unlock()
+		s.releaseDocIfNotOpen(document)
+	}()
 
 	currentMD5 := document.GetHash()
 	savedMD5, ok := s.syncedDocumentURIs.Get(uri)
@@ -342,7 +352,7 @@ func (s *Store) releaseDocIfNotOpen(document *Document) {
 	}
 }
 
-func (s *Store) SaveDocOnStore(document *Document) {
+func (s *Store) saveDocOnStore(document *Document) {
 	s.documents.Set(document.GetURI(), document)
 }
 
