@@ -4,6 +4,7 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-4:1
     },
+    children: ([]analysis.Symbol) <nil>,
     Name: (analysis.TypeString) {
       fqn: (string) (len=11) "\\TestTrait1",
       original: (string) (len=10) "TestTrait1",

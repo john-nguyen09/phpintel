@@ -1,22 +1,26 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type AnonymousFunction struct {
 	location protocol.Location
+	children []Symbol
 
 	Params []*Parameter
 }
 
-func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
+var _ BlockSymbol = (*AnonymousFunction)(nil)
+
+func newAnonymousFunction(document *Document, node *ast.Node) Symbol {
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
 	document.pushVariableTable(node)
+	document.pushBlock(anonFunc)
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -27,21 +31,21 @@ func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 			for _, param := range anonFunc.Params {
 				variableTable.add(param.ToVariable())
 			}
-			document.addSymbol(anonFunc)
 		case "compound_statement":
 			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
 	document.popVariableTable()
-	return nil
+	document.popBlock()
+	return anonFunc
 }
 
 func (s *AnonymousFunction) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -52,4 +56,12 @@ func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, 
 		}
 		child = traverser.Advance()
 	}
+}
+
+func (s *AnonymousFunction) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *AnonymousFunction) GetChildren() []Symbol {
+	return s.children
 }

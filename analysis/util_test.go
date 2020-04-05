@@ -2,7 +2,9 @@ package analysis
 
 import (
 	"io/ioutil"
-	"os"
+
+	"github.com/john-nguyen09/phpintel/analysis/storage"
+	cmap "github.com/orcaman/concurrent-map"
 )
 
 func indexDocument(store *Store, filePath string, uri string) {
@@ -21,15 +23,25 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 	return document
 }
 
-func setupStore(uri string, name string) (*Store, error) {
-	testDir := "./testData/"
-	if _, err := os.Stat(testDir); os.IsNotExist(err) {
-		os.Mkdir(testDir, os.ModePerm)
+func setupStore(uri string, name string) *Store {
+	db := storage.NewMemOnly()
+	initStubs()
+	return &Store{
+		uri:       uri,
+		db:        db,
+		documents: cmap.New(),
+
+		syncedDocumentURIs: cmap.New(),
 	}
-	store, err := NewStore(uri, testDir+name)
-	if err != nil {
-		return nil, err
-	}
-	store.Clear()
-	return store, nil
+}
+
+func (s *Document) hasTypesSymbols() []HasTypes {
+	results := []HasTypes{}
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		if hasTypes, ok := s.(HasTypes); ok {
+			results = append(results, hasTypes)
+		}
+	})
+	return results
 }

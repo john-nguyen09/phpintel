@@ -1,15 +1,16 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Interface contains information of interfaces
 type Interface struct {
 	location    protocol.Location
+	children    []Symbol
 	description string
 
 	Name    TypeString
@@ -18,13 +19,15 @@ type Interface struct {
 
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
+var _ BlockSymbol = (*Interface)(nil)
 
-func newInterface(document *Document, node *sitter.Node) Symbol {
+func newInterface(document *Document, node *ast.Node) Symbol {
 	theInterface := &Interface{
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(theInterface)
 	document.addSymbol(theInterface)
+	document.pushBlock(theInterface)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -39,10 +42,11 @@ func newInterface(document *Document, node *sitter.Node) Symbol {
 		child = traverser.Advance()
 	}
 	theInterface.Name.SetNamespace(document.currImportTable().GetNamespace())
+	document.popBlock()
 	return nil
 }
 
-func (s *Interface) extends(document *Document, node *sitter.Node) {
+func (s *Interface) extends(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
@@ -105,4 +109,12 @@ func ReadInterface(d *storage.Decoder) *Interface {
 		theInterface.Extends = append(theInterface.Extends, ReadTypeString(d))
 	}
 	return theInterface
+}
+
+func (s *Interface) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Interface) GetChildren() []Symbol {
+	return s.children
 }

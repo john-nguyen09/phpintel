@@ -1,24 +1,4 @@
-([]analysis.Symbol) (len=2) {
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 2:0-4:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=16) "\\ClassConstTest1",
-      original: (string) (len=15) "ClassConstTest1",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
+([]analysis.Symbol) (len=1) {
   (*analysis.ClassConst)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",

@@ -7,7 +7,27 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
+
+type testFunction struct {
+	location protocol.Location
+
+	Name        TypeString `json:"Name"`
+	Params      []*Parameter
+	returnTypes TypeComposite
+	description string
+}
+
+func toTestFunction(function *Function) testFunction {
+	return testFunction{
+		location:    function.location,
+		Name:        function.Name,
+		Params:      function.Params,
+		returnTypes: function.returnTypes,
+		description: function.description,
+	}
+}
 
 func TestFunction(t *testing.T) {
 	functionTest := "../cases/function.php"
@@ -18,7 +38,14 @@ func TestFunction(t *testing.T) {
 
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []testFunction{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if f, ok := s.(*Function); ok {
+			results = append(results, toTestFunction(f))
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestFunctionSerialiseAndDeserialise(t *testing.T) {

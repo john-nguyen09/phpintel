@@ -4,9 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"regexp"
-	"runtime/debug"
 	"sort"
-	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -24,19 +22,19 @@ type Document struct {
 	injector    *ast.Injector
 	text        []byte
 	lineOffsets []int
-	loadMu      sync.Mutex
 	isOpen      bool
 	detectedEOL string
 
 	variableTables     []*VariableTable
 	variableTableLevel int
 	Children           []Symbol `json:"children"`
-	hasTypesSymbols    []HasTypes
-	argLists           []*ArgumentList
 	classStack         []Symbol
 	lastPhpDoc         *phpDocComment
 	hasChanges         bool
 	importTables       []*ImportTable
+	insertUseContext   *InsertUseContext
+
+	blockStack []BlockSymbol
 }
 
 // VariableTable holds the range and the variables inside
@@ -99,45 +97,40 @@ func (s *Document) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func NewDocument(uri string, text []byte) *Document {
-	document := &Document{
+func documentFromURI(uri string) *Document {
+	return &Document{
 		uri:                uri,
 		Children:           []Symbol{},
 		variableTableLevel: 0,
 		hasChanges:         true,
 		importTables:       []*ImportTable{},
 	}
+}
+
+func NewDocument(uri string, text []byte) *Document {
+	document := documentFromURI(uri)
 	document.SetText(text)
 
 	return document
 }
 
-// Open sets a flag to indicate the document is open
-func (s *Document) Open() {
+// Open makes a shallow copy, changes isOpen and return its pointer
+func (s Document) Open() *Document {
 	s.isOpen = true
+	return &s
 }
 
-// Close unsets the flag
-func (s *Document) Close() {
+// Close makes a shallow copy, changes isOpen and return its pointer
+func (s Document) Close() *Document {
 	s.isOpen = false
+	return &s
 }
 
 func (s *Document) IsOpen() bool {
 	return s.isOpen
 }
 
-func (s *Document) ResetState() {
-	s.Children = []Symbol{}
-	s.hasTypesSymbols = []HasTypes{}
-	s.argLists = []*ArgumentList{}
-	s.variableTableLevel = 0
-	s.variableTables = []*VariableTable{}
-	s.classStack = []Symbol{}
-	s.lastPhpDoc = nil
-	s.importTables = []*ImportTable{}
-}
-
-func (s *Document) GetRootNode() *sitter.Node {
+func (s *Document) GetRootNode() *ast.Node {
 	if s.injector == nil {
 		s.injector = ast.NewPHPInjector(s.GetText())
 	}
@@ -149,7 +142,6 @@ func (s *Document) Load() {
 	if !s.hasChanges {
 		return
 	}
-	s.ResetState()
 	s.hasChanges = false
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
@@ -171,7 +163,7 @@ func (s *Document) SetText(text []byte) {
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
 
-func (s *Document) pushImportTable(node *sitter.Node) {
+func (s *Document) pushImportTable(node *ast.Node) {
 	s.importTables = append(s.importTables, newImportTable(s, node))
 }
 
@@ -260,7 +252,7 @@ func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	return min
 }
 
-func (s *Document) nodeRange(node *sitter.Node) protocol.Range {
+func (s *Document) nodeRange(node *ast.Node) protocol.Range {
 	return protocol.Range{Start: util.PointToPosition(node.StartPoint()), End: util.PointToPosition(node.EndPoint())}
 }
 
@@ -270,19 +262,15 @@ func (s *Document) GetText() []byte {
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node *sitter.Node) protocol.Location {
+func (s *Document) GetNodeLocation(node *ast.Node) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
 		Range: s.nodeRange(node),
 	}
 }
 
-func (s *Document) GetNodeText(node *sitter.Node) string {
+func (s *Document) GetNodeText(node *ast.Node) string {
 	return node.Content(s.GetText())
-}
-
-func (s *Document) GetPhraseText(phrase *sitter.Node) string {
-	return s.GetNodeText(phrase)
 }
 
 func (s *Document) addSymbol(other Symbol) {
@@ -291,29 +279,45 @@ func (s *Document) addSymbol(other Symbol) {
 		s.lastPhpDoc = doc
 		return
 	}
-	if other == nil {
-		debug.PrintStack()
+	if s.currentBlock() != nil {
+		s.currentBlock().addChild(other)
+	} else {
+		s.Children = append(s.Children, other)
 	}
-	if argList, ok := other.(*ArgumentList); ok {
-		if len(s.argLists) > 0 {
-			i := len(s.argLists) - 1
-			lastArgList := s.argLists[i]
-			if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
-				s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
-				return
-			}
-		}
-		s.argLists = append(s.argLists, argList)
-		return
-	}
-	if h, ok := other.(HasTypes); ok {
-		s.hasTypesSymbols = append(s.hasTypesSymbols, h)
-		return
-	}
-	s.Children = append(s.Children, other)
+	// if argList, ok := other.(*ArgumentList); ok {
+	// 	if len(s.argLists) > 0 {
+	// 		i := len(s.argLists) - 1
+	// 		lastArgList := s.argLists[i]
+	// 		if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
+	// 			s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
+	// 			return
+	// 		}
+	// 	}
+	// 	s.argLists = append(s.argLists, argList)
+	// 	return
+	// }
+	// if h, ok := other.(HasTypes); ok {
+	// 	s.hasTypesSymbols = append(s.hasTypesSymbols, h)
+	// 	return
+	// }
 }
 
-func (s *Document) pushVariableTable(node *sitter.Node) {
+func (s *Document) pushBlock(block BlockSymbol) {
+	s.blockStack = append(s.blockStack, block)
+}
+
+func (s *Document) popBlock() {
+	s.blockStack = s.blockStack[:len(s.blockStack)-1]
+}
+
+func (s *Document) currentBlock() BlockSymbol {
+	if len(s.blockStack) > 0 {
+		return s.blockStack[len(s.blockStack)-1]
+	}
+	return nil
+}
+
+func (s *Document) pushVariableTable(node *ast.Node) {
 	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
 	if s.variableTableLevel > 0 {
 		s.getCurrentVariableTable().addChild(newVarTable)
@@ -412,19 +416,13 @@ func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 }
 
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
+	cursor := s.GetRootNode().Cursor()
 	found := util.NodeStack{}
-	traverser := util.NewTraverser(s.GetRootNode())
-	traverser.Traverse(func(node *sitter.Node, spine []*sitter.Node) util.VisitorContext {
-		if injectedNode, ok := s.injector.GetInjection(node); ok {
-			node = injectedNode
-		}
-		if node.ChildCount() == 0 && offset > int(node.StartByte()) && offset <= int(node.EndByte()) {
-			found = append(spine[:0:0], spine...)
-			found = append(found, node)
-			return util.VisitorContext{false, nil}
-		}
-		return util.VisitorContext{true, node}
-	})
+	uOffset := uint32(offset) - 1
+	found = append(found, s.GetRootNode())
+	for cursor.GoToFirstChildForByte(uOffset) != -1 {
+		found = append(found, ast.FromSitterNode(cursor.CurrentNode()))
+	}
 	return found
 }
 
@@ -436,37 +434,21 @@ func (s *Document) HasTypesAt(offset int) HasTypes {
 
 // HasTypesAtPos returns a HasTypes symbol at the position
 func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
-	// prev := s.hasTypesSymbols[0]
-	// for i, h := range s.hasTypesSymbols[1:] {
-	// 	if util.CompareRange(prev.GetLocation().Range, h.GetLocation().Range) >= 0 {
-	// 		log.Printf("%d %T(%v) %T(%v)", i, prev, prev.GetLocation().Range, h, h.GetLocation().Range)
-	// 	}
-	// 	prev = h
-	// }
-	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
-		location := s.hasTypesSymbols[i].GetLocation()
-		// log.Printf("%d %T(%v)", i, s.hasTypesSymbols[i], location.Range)
-		return util.IsInRange(pos, location.Range) <= 0
+	var result HasTypes = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos == 0 {
+			if h, ok := s.(HasTypes); ok {
+				result = h
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
+		} else if relativePos > 0 {
+			t.stopDescent = true
+		}
 	})
-	var previousHasTypes HasTypes = nil
-	for _, symbol := range s.hasTypesSymbols[index:] {
-		inRange := util.IsInRange(pos, symbol.GetLocation().Range)
-		if inRange < 0 {
-			break
-		}
-		if hasTypes, ok := symbol.(HasTypes); ok && inRange == 0 {
-			previousHasTypes = hasTypes
-		}
-	}
-	return previousHasTypes
-}
-
-func (s *Document) Lock() {
-	s.loadMu.Lock()
-}
-
-func (s *Document) Unlock() {
-	s.loadMu.Unlock()
+	return result
 }
 
 // HasTypesBeforePos returns a HasTypes before the position
@@ -475,22 +457,19 @@ func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
 }
 
 func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
-	index := sort.Search(len(s.hasTypesSymbols), func(i int) bool {
-		location := s.hasTypesSymbols[i].GetLocation()
-		return util.IsInRange(pos, location.Range) <= 0
-	})
-	if index >= len(s.hasTypesSymbols) {
-		index = len(s.hasTypesSymbols) - 1
-	}
-	for i := index; i >= 0; i-- {
-		h := s.hasTypesSymbols[i]
-		inRange := util.IsInRange(pos, h.GetLocation().Range)
-		hRange := h.GetLocation().Range
-		if inRange > 0 || (inRange == 0 && pos == hRange.End && hRange.Start != hRange.End) {
-			return h
+	var result HasTypes = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos >= 0 {
+			if h, ok := s.(HasTypes); ok {
+				result = h
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
 		}
-	}
-	return nil
+	})
+	return result
 }
 
 func (s *Document) WordAtPos(pos protocol.Position) string {
@@ -508,27 +487,21 @@ func (s *Document) WordAtPos(pos protocol.Position) string {
 
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
 func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
-	// log.Printf("ArgumentListAndFunctionCallAt: %p", s)
-	index := sort.Search(len(s.argLists), func(i int) bool {
-		location := s.argLists[i].GetLocation()
-		return util.IsInRange(pos, location.Range) <= 0
+	var argumentList *ArgumentList = nil
+	t := newTraverser()
+	t.traverseDocument(s, func(t *traverser, s Symbol) {
+		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		if relativePos == 0 {
+			if args, ok := s.(*ArgumentList); ok {
+				argumentList = args
+			}
+		} else if relativePos < 0 {
+			t.shouldStop = true
+		} else if relativePos > 0 {
+			t.stopDescent = true
+		}
 	})
 	var hasParamsResolvable HasParamsResolvable = nil
-	var argumentList *ArgumentList = nil
-	if index < len(s.argLists) && util.IsInRange(pos, s.argLists[index].GetLocation().Range) == 0 {
-		argumentList = s.argLists[index]
-	} else {
-		for _, arg := range s.argLists[index:] {
-			isInRange := util.IsInRange(pos, arg.GetLocation().Range)
-			if isInRange > 0 {
-				break
-			}
-			if isInRange == 0 {
-				argumentList = arg
-				break
-			}
-		}
-	}
 	if argumentList != nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
 		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
@@ -539,10 +512,10 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 }
 
 // ApplyChanges applies the changes to line offsets and text
-func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) {
+func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEvent) *Document {
 	// log.Printf("ApplyChanges: %p", s)
 	start := time.Now()
-	s.hasChanges = true
+	newDoc := documentFromURI(s.uri)
 	for _, change := range changes {
 		start := change.Range.Start
 		end := change.Range.End
@@ -553,7 +526,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newText := append(s.text[:0:0], s.text[0:startOffset]...)
 		newText = append(newText, text...)
 		newText = append(newText, s.text[endOffset:]...)
-		s.text = newText
+		newDoc.text = newText
 
 		min := start.Line + 1
 		if min > len(s.lineOffsets) {
@@ -562,7 +535,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		newLineOffsets := append(s.lineOffsets[:0:0], s.lineOffsets[0:min]...)
 		lengthDiff := len(text) - (endOffset - startOffset)
 		offsets, eol := calculateLineOffsets(text, startOffset)
-		s.detectedEOL = eol
+		newDoc.detectedEOL = eol
 		newLineOffsets = append(newLineOffsets, offsets[1:]...)
 		if end.Line+1 < len(s.lineOffsets) {
 			endLineOffsets := s.lineOffsets[end.Line+1:]
@@ -570,7 +543,7 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 				newLineOffsets = append(newLineOffsets, endLineOffset+lengthDiff)
 			}
 		}
-		s.lineOffsets = newLineOffsets
+		newDoc.lineOffsets = newLineOffsets
 
 		rangeLength := endOffset - startOffset
 		oldEndIndex := startOffset + rangeLength
@@ -584,13 +557,14 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
 		}
 		if s.injector != nil {
-			s.injector = s.injector.Edit(edit, s.GetText())
+			newDoc.injector = s.injector.Edit(edit, newDoc.GetText())
 		}
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()
-	s.Load()
+	newDoc.Load()
 	util.TimeTrack(start, "Load")
+	return newDoc
 }
 
 func (s *Document) getLines() []string {

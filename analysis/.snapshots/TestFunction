@@ -1,5 +1,5 @@
-([]analysis.Symbol) (len=2) {
-  (*analysis.Function)({
+([]analysis.testFunction) (len=2) {
+  (analysis.testFunction) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-4:1
@@ -35,8 +35,8 @@
       }
     },
     description: (string) ""
-  }),
-  (*analysis.Function)({
+  },
+  (analysis.testFunction) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:0-13:1
@@ -58,5 +58,5 @@
       }
     },
     description: (string) (len=23) "function3's description"
-  })
+  }
 }

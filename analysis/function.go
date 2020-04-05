@@ -1,15 +1,16 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Function contains information of functions
 type Function struct {
 	location protocol.Location
+	children []Symbol
 
 	Name        TypeString `json:"Name"`
 	Params      []*Parameter
@@ -19,8 +20,9 @@ type Function struct {
 
 var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
+var _ BlockSymbol = (*Function)(nil)
 
-func newFunction(document *Document, node *sitter.Node) Symbol {
+func newFunction(document *Document, node *ast.Node) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),
 		Params:      make([]*Parameter, 0),
@@ -28,6 +30,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 	}
 	phpDoc := document.getValidPhpDoc(function.location)
 	document.pushVariableTable(node)
+	document.pushBlock(function)
 
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
@@ -51,10 +54,11 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 	}
 	function.Name.SetNamespace(document.currImportTable().GetNamespace())
 	document.popVariableTable()
+	document.popBlock()
 	return function
 }
 
-func (s *Function) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *Function) analyseParameterDeclarationList(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -158,4 +162,12 @@ func ReadFunction(d *storage.Decoder) *Function {
 	function.returnTypes = ReadTypeComposite(d)
 	function.description = d.ReadString()
 	return &function
+}
+
+func (s *Function) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Function) GetChildren() []Symbol {
+	return s.children
 }

@@ -51,7 +51,7 @@ type InjectionLayer struct {
 	config        InjectionConfig
 	tree          *sitter.Tree
 	ranges        []sitter.Range
-	injectedNodes map[*sitter.Node]*sitter.Node
+	injectedNodes map[string]*Node
 }
 
 type configRangesTuple struct {
@@ -61,7 +61,7 @@ type configRangesTuple struct {
 
 type languageContentNodesTuple struct {
 	languageName string
-	contentNodes []*sitter.Node
+	contentNodes []*Node
 }
 
 // NewInjectionLayer creates all the injection layers
@@ -71,7 +71,7 @@ func NewInjectionLayer(source []byte,
 	result := []*InjectionLayer{}
 	queue := []configRangesTuple{}
 	var prevLayer *InjectionLayer = nil
-	prevInjectedNodes := map[string]*sitter.Node{}
+	prevInjectedNodes := map[string]*Node{}
 	for i := 0; ; i++ {
 		var oldTree *sitter.Tree = nil
 		if i < len(oldLayers) && oldLayers[i].config.lang == config.lang {
@@ -81,20 +81,20 @@ func NewInjectionLayer(source []byte,
 		injector.parser.SetIncludedRanges(ranges)
 		injector.parser.SetLanguage(config.lang)
 		tree := injector.parser.Parse(oldTree, source)
-		rootNode := tree.RootNode()
+		rootNode := FromSitterNode(tree.RootNode())
 		cursor := sitter.NewQueryCursor()
 		if prevLayer != nil {
 			len := int(rootNode.ChildCount())
 			for i := 0; i < len; i++ {
 				child := rootNode.Child(i)
 				if parent, ok := prevInjectedNodes[getNodeRangeString(child)]; ok {
-					prevLayer.injectedNodes[parent] = child
+					prevLayer.injectedNodes[getNodeRangeString(parent)] = child
 				}
 			}
 		}
 		if query := config.query; query != nil {
 			injectionsByPatternIndex := make([]languageContentNodesTuple, int(query.PatternCount()))
-			cursor.Exec(config.query, rootNode)
+			cursor.Exec(config.query, rootNode.n)
 			for mat, ok := cursor.NextMatch(); ok; mat, ok = cursor.NextMatch() {
 				entry := &injectionsByPatternIndex[mat.PatternIndex]
 				languageName, contentNode := injectionForMatch(config, query, mat, source)
@@ -132,7 +132,7 @@ func NewInjectionLayer(source []byte,
 			config:        config,
 			tree:          tree,
 			ranges:        ranges,
-			injectedNodes: map[*sitter.Node]*sitter.Node{},
+			injectedNodes: map[string]*Node{},
 		}
 		prevLayer = layer
 		result = append(result, layer)
@@ -148,16 +148,16 @@ func NewInjectionLayer(source []byte,
 	return result
 }
 
-func getNodeRangeString(n *sitter.Node) string {
+func getNodeRangeString(n *Node) string {
 	return fmt.Sprintf("%d-%d", n.StartByte(), n.EndByte())
 }
 
-func injectionForMatch(config InjectionConfig, query *sitter.Query, mat *sitter.QueryMatch, source []byte) (string, *sitter.Node) {
+func injectionForMatch(config InjectionConfig, query *sitter.Query, mat *sitter.QueryMatch, source []byte) (string, *Node) {
 	contentCaptureIndex := config.contentCaptureIndex
-	var contentNode *sitter.Node = nil
+	var contentNode *Node = nil
 	for _, capture := range mat.Captures {
 		if capture.Index == contentCaptureIndex {
-			contentNode = capture.Node
+			contentNode = FromSitterNode(capture.Node)
 		}
 	}
 	languageName := ""
@@ -202,14 +202,14 @@ func NewPHPInjector(source []byte) *Injector {
 }
 
 // MainRootNode returns the main language root node
-func (i *Injector) MainRootNode() *sitter.Node {
-	return i.layers[0].tree.RootNode()
+func (i *Injector) MainRootNode() *Node {
+	return FromSitterNode(i.layers[0].tree.RootNode())
 }
 
 // GetInjection checks if the node has injection
-func (i *Injector) GetInjection(node *sitter.Node) (*sitter.Node, bool) {
+func (i *Injector) GetInjection(node *Node) (*Node, bool) {
 	for _, layer := range i.layers {
-		if childNode, ok := layer.injectedNodes[node]; ok {
+		if childNode, ok := layer.injectedNodes[getNodeRangeString(node)]; ok {
 			return childNode, ok
 		}
 	}
@@ -232,17 +232,25 @@ func (i *Injector) Edit(edit sitter.EditInput, source []byte) *Injector {
 	return inj
 }
 
+var configMap map[string]InjectionConfig = map[string]InjectionConfig{}
+
+func init() {
+	config, err := NewConfig(phpdoc.GetLanguage(), nil)
+	if err != nil {
+		panic(err)
+	}
+	configMap["phpdoc"] = config
+
+	injectionQuery := php.GetInjectionQuery()
+	config, err = NewConfig(php.GetLanguage(), injectionQuery)
+	if err != nil {
+		panic(err)
+	}
+	configMap["php"] = config
+}
+
 func createConfig(languageName string) InjectionConfig {
-	switch languageName {
-	case "phpdoc":
-		config, _ := NewConfig(phpdoc.GetLanguage(), nil)
-		return config
-	case "php":
-		injectionQuery := php.GetInjectionQuery()
-		config, err := NewConfig(php.GetLanguage(), injectionQuery)
-		if err != nil {
-			panic(err)
-		}
+	if config, ok := configMap[languageName]; ok {
 		return config
 	}
 	return InjectionConfig{}

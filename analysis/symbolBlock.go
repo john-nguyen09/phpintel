@@ -1,12 +1,12 @@
 package analysis
 
 import (
-	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 )
 
-type symbolConstructorForPhrase func(*Document, *sitter.Node) Symbol
+type symbolConstructor func(*Document, *ast.Node) Symbol
 
-var /* const */ scanPhraseTypes = map[string]bool{
+var /* const */ typesToScanForChildren = map[string]bool{
 	"ERROR":                     true,
 	"expression_statement":      true,
 	"compound_statement":        true,
@@ -52,10 +52,10 @@ var /* const */ skipAddingSymbol map[string]bool = map[string]bool{
 // 	lexer.DirectoryConstant: newDirectoryConstantAccess,
 // 	lexer.DocumentComment:   newPhpDocFromNode,
 // }
-var phraseToSymbolConstructor map[string]symbolConstructorForPhrase
+var symbolConstructorMap map[string]symbolConstructor
 
 func init() {
-	phraseToSymbolConstructor = map[string]symbolConstructorForPhrase{
+	symbolConstructorMap = map[string]symbolConstructor{
 		"interface_declaration":                  newInterface,
 		"class_declaration":                      newClass,
 		"property_declaration":                   newPropertyDeclaration,
@@ -69,7 +69,6 @@ func init() {
 		"arguments":                              newArgumentList,
 		"trait_declaration":                      newTrait,
 		"function_call_expression":               tryToNewDefine,
-		"assignment_expression":                  newAssignment,
 		"global_declaration":                     newGlobalDeclaration,
 		"namespace_use_declaration":              processNamespaceUseDeclaration,
 		"anonymous_function_creation_expression": newAnonymousFunction,
@@ -77,7 +76,7 @@ func init() {
 	}
 }
 
-func scanNode(document *Document, node *sitter.Node) {
+func scanNode(document *Document, node *ast.Node) {
 	var symbol Symbol = nil
 	shouldSkipAdding := false
 	if node.Type() == "namespace_definition" {
@@ -86,11 +85,11 @@ func scanNode(document *Document, node *sitter.Node) {
 	}
 
 	scanForExpression(document, node)
-	if _, ok := scanPhraseTypes[node.Type()]; ok {
+	if _, ok := typesToScanForChildren[node.Type()]; ok {
 		scanForChildren(document, node)
 		return
 	}
-	if constructor, ok := phraseToSymbolConstructor[node.Type()]; ok {
+	if constructor, ok := symbolConstructorMap[node.Type()]; ok {
 		symbol = constructor(document, node)
 	}
 	if _, ok := skipAddingSymbol[node.Type()]; ok {
@@ -102,7 +101,7 @@ func scanNode(document *Document, node *sitter.Node) {
 	}
 }
 
-func scanForChildren(document *Document, node *sitter.Node) {
+func scanForChildren(document *Document, node *ast.Node) {
 	childCount := int(node.ChildCount())
 	for i := 0; i < childCount; i++ {
 		child := node.Child(i)

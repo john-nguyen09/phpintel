@@ -1,15 +1,16 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Method contains information of methods
 type Method struct {
 	location protocol.Location
+	children []Symbol
 
 	Name               string
 	Params             []*Parameter
@@ -23,6 +24,7 @@ type Method struct {
 
 var _ HasScope = (*Method)(nil)
 var _ Symbol = (*Method)(nil)
+var _ BlockSymbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
@@ -46,11 +48,13 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
+func (s *Method) analyseMethodNode(document *Document, node *ast.Node) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
+	document.addSymbol(s)
 	document.pushVariableTable(node)
+	document.pushBlock(s)
 
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
@@ -70,7 +74,6 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 			if phpDoc != nil {
 				s.applyPhpDoc(document, *phpDoc)
 			}
-			document.addSymbol(s)
 			for _, param := range s.Params {
 				variableTable.add(param.ToVariable())
 			}
@@ -80,9 +83,10 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 		child = traverser.Advance()
 	}
 	document.popVariableTable()
+	document.popBlock()
 }
 
-func newMethod(document *Document, node *sitter.Node) Symbol {
+func newMethod(document *Document, node *ast.Node) Symbol {
 	method := &Method{
 		IsStatic:    false,
 		location:    document.GetNodeLocation(node),
@@ -110,7 +114,7 @@ func (s Method) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *Method) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *Method) analyseParameterDeclarationList(document *Document, node *ast.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -222,4 +226,12 @@ func ReadMethod(d *storage.Decoder) *Method {
 	method.ClassModifier = ClassModifierValue(d.ReadInt())
 
 	return &method
+}
+
+func (s *Method) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Method) GetChildren() []Symbol {
+	return s.children
 }

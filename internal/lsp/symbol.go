@@ -7,6 +7,23 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
+func toDocumentSymbolRecursive(symbol analysis.Symbol) protocol.DocumentSymbol {
+	docSymbol, _ := symbolToProtocolDocumentSymbol(symbol)
+	if docSymbol.Kind == 0 {
+		return docSymbol
+	}
+	if block, ok := symbol.(analysis.BlockSymbol); ok {
+		for _, child := range block.GetChildren() {
+			childDocSymbol := toDocumentSymbolRecursive(child)
+			if childDocSymbol.Kind == 0 {
+				continue
+			}
+			docSymbol.Children = append(docSymbol.Children, childDocSymbol)
+		}
+	}
+	return docSymbol
+}
+
 func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSymbolParams) ([]protocol.DocumentSymbol, error) {
 	symbols := []protocol.DocumentSymbol{}
 	uri := params.TextDocument.URI
@@ -18,38 +35,17 @@ func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSy
 	if document == nil {
 		return symbols, nil
 	}
-	scopedSymbols := make(map[string][]analysis.Symbol)
-	for _, child := range document.Children {
-		switch v := child.(type) {
-		case analysis.HasScope:
-			if v.IsScopeSymbol() {
-				key := v.GetScope()
-				scopedSymbols[key] = append(scopedSymbols[key], child)
-			}
-		}
-	}
+	document.Load()
 
+	results := []protocol.DocumentSymbol{}
 	for _, child := range document.Children {
-		if v, ok := child.(analysis.HasScope); ok && v.IsScopeSymbol() {
+		docSymbol := toDocumentSymbolRecursive(child)
+		if docSymbol.Kind == 0 {
 			continue
 		}
-		symbol, fqn := symbolToProtocolDocumentSymbol(child)
-		if symbol.Kind == 0 {
-			continue
-		}
-		if childSymbols, ok := scopedSymbols[fqn]; ok {
-			for _, childSymbol := range childSymbols {
-				childDocumentSymbol, _ := symbolToProtocolDocumentSymbol(childSymbol)
-				if childDocumentSymbol.Kind == 0 {
-					continue
-				}
-				symbol.Children = append(symbol.Children, childDocumentSymbol)
-			}
-		}
-		symbols = append(symbols, symbol)
+		results = append(results, docSymbol)
 	}
-
-	return symbols, nil
+	return results, nil
 }
 
 func symbolToProtocolDocumentSymbol(symbol analysis.Symbol) (protocol.DocumentSymbol, string) {

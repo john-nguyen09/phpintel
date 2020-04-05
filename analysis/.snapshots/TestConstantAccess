@@ -1,2 +1,67 @@
-([]analysis.Symbol) {
+([]analysis.Symbol) (len=5) {
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:0-2:7
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 4:14-4:21
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 5:25-5:32
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 7:4-7:15
+      },
+      Name: (string) (len=11) "TEST_CONST1"
+    }
+  }),
+  (*analysis.ConstantAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:9-8:16
+      },
+      Name: (string) (len=7) "__DIR__"
+    }
+  })
 }

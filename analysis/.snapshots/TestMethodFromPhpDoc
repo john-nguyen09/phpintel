@@ -1,25 +1,5 @@
-([]analysis.Symbol) (len=3) {
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 5:0-7:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=21) "\\TestMethodFromPhpDoc",
-      original: (string) (len=20) "TestMethodFromPhpDoc",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Method)({
+([]analysis.testMethod) (len=2) {
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 1:0-4:3
@@ -83,8 +63,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 1:0-4:3
@@ -167,5 +147,5 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  })
+  }
 }

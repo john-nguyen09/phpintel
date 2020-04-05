@@ -1,15 +1,16 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Class contains information of classes
 type Class struct {
 	description string
+	children    []Symbol
 	Location    protocol.Location
 
 	Modifier   ClassModifierValue
@@ -21,8 +22,9 @@ type Class struct {
 
 var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
+var _ BlockSymbol = (*Class)(nil)
 
-func getMemberModifier(node *sitter.Node) VisibilityModifierValue {
+func getMemberModifier(node *ast.Node) VisibilityModifierValue {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	visibilityModifier := Public
@@ -41,7 +43,7 @@ func getMemberModifier(node *sitter.Node) VisibilityModifierValue {
 	return visibilityModifier
 }
 
-func getClassModifier(node *sitter.Node) ClassModifierValue {
+func getClassModifier(node *ast.Node) ClassModifierValue {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	c := NoClassModifier
@@ -57,7 +59,7 @@ func getClassModifier(node *sitter.Node) ClassModifierValue {
 	return c
 }
 
-func newClass(document *Document, node *sitter.Node) Symbol {
+func newClass(document *Document, node *ast.Node) Symbol {
 	class := &Class{
 		Location: document.GetNodeLocation(node),
 	}
@@ -65,11 +67,12 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 	phpDoc := document.getValidPhpDoc(class.Location)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
+	document.addSymbol(class)
+	document.pushBlock(class)
 
 	for child != nil {
 		switch child.Type() {
 		case "name":
-			document.addSymbol(class)
 			class.Name = NewTypeString(document.GetNodeText(child))
 			class.Name.SetNamespace(document.currImportTable().GetNamespace())
 			if phpDoc != nil {
@@ -103,18 +106,19 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 		}
 		child = traverser.Advance()
 	}
+	document.popBlock()
 
 	return nil
 }
 
-func (s *Class) analyseClassModifier(document *Document, n *sitter.Node) {
+func (s *Class) analyseClassModifier(document *Document, n *ast.Node) {
 	s.Modifier = getClassModifier(n)
 }
 
-func (s *Class) extends(document *Document, p *sitter.Node) {
+func (s *Class) extends(document *Document, p *ast.Node) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
-	var classAccessNode *sitter.Node = nil
+	var classAccessNode *ast.Node = nil
 	for child != nil {
 		switch child.Type() {
 		case "qualified_name":
@@ -134,7 +138,7 @@ func (s *Class) extends(document *Document, p *sitter.Node) {
 	}
 }
 
-func (s *Class) implements(document *Document, p *sitter.Node) {
+func (s *Class) implements(document *Document, p *ast.Node) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
 	for child != nil {
@@ -231,4 +235,12 @@ func (s *Class) GetConstructor(store *Store) *Method {
 
 func (s *Class) AddUse(name TypeString) {
 	s.Use = append(s.Use, name)
+}
+
+func (s *Class) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Class) GetChildren() []Symbol {
+	return s.children
 }

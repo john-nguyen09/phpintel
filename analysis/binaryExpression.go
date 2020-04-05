@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 )
 
-func processBinaryExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+func processBinaryExpression(document *Document, node *ast.Node) (HasTypes, bool) {
 	op := node.ChildByFieldName("operator")
 	if op == nil {
 		return nil, false
@@ -19,6 +19,13 @@ func processBinaryExpression(document *Document, node *sitter.Node) (HasTypes, b
 			if c, ok := lhsExpr.(CanAddType); ok && rhsExpr != nil {
 				c.AddTypes(rhsExpr.GetTypes())
 			}
+		}
+	case ".":
+		lhs := node.ChildByFieldName("left")
+		rhs := node.ChildByFieldName("right")
+		if lhs != nil && rhs != nil {
+			scanForExpression(document, lhs)
+			scanForExpression(document, rhs)
 		}
 	}
 	return nil, false

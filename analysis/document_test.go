@@ -72,7 +72,7 @@ func TestSymbolAt(t *testing.T) {
 
 func TestApplyChanges(t *testing.T) {
 	document := NewDocument("test1", []byte("<?php\necho 'Hello world';"))
-	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
+	document = document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
 		protocol.TextDocumentContentChangeEvent{
 			Range: &protocol.Range{
 				Start: protocol.Position{
@@ -99,7 +99,14 @@ func TestIntrinsics(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []Symbol{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if _, ok := s.(*FunctionCall); ok {
+			results = append(results, s)
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestChainedMethodCalls(t *testing.T) {
@@ -109,7 +116,15 @@ func TestChainedMethodCalls(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []Symbol{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		switch s.(type) {
+		case *MethodAccess, *ScopedMethodAccess:
+			results = append(results, s)
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }
 
 func TestSymbolBefore(t *testing.T) {
@@ -119,12 +134,10 @@ func TestSymbolBefore(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	if reflect.TypeOf(document.HasTypesBeforePos(protocol.Position{
+	assert.Equal(t, reflect.TypeOf(document.HasTypesBeforePos(protocol.Position{
 		Line:      1,
-		Character: 32,
-	})).String() != "*analysis.MethodAccess" {
-		t.FailNow()
-	}
+		Character: 31,
+	})).String(), "*analysis.MethodAccess")
 }
 
 type wordTestCase struct {

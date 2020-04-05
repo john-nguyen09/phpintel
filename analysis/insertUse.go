@@ -3,21 +3,24 @@ package analysis
 import (
 	"index/suffixarray"
 
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 var numLinesAfterUse = 2
 
 type InsertUseContext struct {
 	document     *Document
-	firstInline  *sitter.Node
-	namespaceDef *sitter.Node
-	lastUse      *sitter.Node
+	firstInline  *ast.Node
+	namespaceDef *ast.Node
+	lastUse      *ast.Node
 }
 
 func GetInsertUseContext(document *Document) InsertUseContext {
+	if document.insertUseContext != nil {
+		return *document.insertUseContext
+	}
 	insertUseCtx := InsertUseContext{
 		document:     document,
 		firstInline:  nil,
@@ -39,10 +42,11 @@ func GetInsertUseContext(document *Document) InsertUseContext {
 		}
 		child = traverser.Advance()
 	}
+	document.insertUseContext = &insertUseCtx
 	return insertUseCtx
 }
 
-func (i InsertUseContext) GetInsertAfterNode() *sitter.Node {
+func (i InsertUseContext) GetInsertAfterNode() *ast.Node {
 	if i.lastUse != nil {
 		return i.lastUse
 	}
@@ -101,7 +105,7 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 	return nil
 }
 
-func getIndentation(document *Document, node *sitter.Node) string {
+func getIndentation(document *Document, node *ast.Node) string {
 	nodeStart := util.PointToPosition(node.StartPoint())
 	startOffset := document.OffsetAtPosition(protocol.Position{
 		Line:      nodeStart.Line,
@@ -110,7 +114,7 @@ func getIndentation(document *Document, node *sitter.Node) string {
 	return string(document.GetText()[startOffset:node.StartByte()])
 }
 
-func getNewLine(document *Document, node *sitter.Node) string {
+func getNewLine(document *Document, node *ast.Node) string {
 	next := node.NextSibling()
 	if next == nil {
 		return document.detectedEOL

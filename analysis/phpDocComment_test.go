@@ -61,5 +61,5 @@ func TestPhpDocCommentSymbols(t *testing.T) {
 	assert.NoError(t, err)
 	doc := NewDocument("test1", data)
 	doc.Load()
-	cupaloy.SnapshotT(t, doc.hasTypesSymbols)
+	cupaloy.SnapshotT(t, doc.hasTypesSymbols())
 }

@@ -15,5 +15,12 @@ func TestFunctionCall(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []Symbol{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		if _, ok := s.(*FunctionCall); ok {
+			results = append(results, s)
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }

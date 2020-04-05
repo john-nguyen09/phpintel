@@ -15,5 +15,13 @@ func TestConstantAccess(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.Children)
+	results := []Symbol{}
+	tra := newTraverser()
+	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+		switch s.(type) {
+		case *ConstantAccess:
+			results = append(results, s)
+		}
+	})
+	cupaloy.SnapshotT(t, results)
 }

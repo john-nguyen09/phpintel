@@ -1,25 +1,5 @@
-([]analysis.Symbol) (len=14) {
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 2:0-38:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Method)({
+([]analysis.testMethod) (len=12) {
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:4-5:5
@@ -40,8 +20,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:4-9:5
@@ -94,8 +74,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:4-13:5
@@ -116,8 +96,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 15:4-17:5
@@ -138,8 +118,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) true,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 19:4-21:5
@@ -160,8 +140,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) true,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 23:4-25:5
@@ -182,8 +162,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) true,
     ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 27:4-29:5
@@ -204,8 +184,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 2
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 31:4-33:5
@@ -226,8 +206,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 2
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 35:4-37:5
@@ -248,28 +228,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 2
-  }),
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 40:0-44:1
-    },
-    Modifier: (analysis.ClassModifierValue) 1,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 41:4-41:45
@@ -290,8 +250,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 1
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 42:4-42:47
@@ -312,8 +272,8 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 1
-  }),
-  (*analysis.Method)({
+  },
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 43:4-43:62
@@ -334,5 +294,5 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 1
-  })
+  }
 }

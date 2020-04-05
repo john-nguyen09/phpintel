@@ -1,46 +1,28 @@
 package analysis
 
 import (
-	sitter "github.com/smacker/go-tree-sitter"
-
-	"github.com/john-nguyen09/phpintel/util"
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 )
 
-func newAssignment(document *Document, node *sitter.Node) Symbol {
-	traverser := util.NewTraverser(node)
-	firstChild := traverser.Advance()
-	if firstChild.Type() == "variable_name" {
-		analyseVariableAssignment(document, firstChild, traverser.Clone(), node)
-	} else {
-		scanNode(document, firstChild)
-		hasEqual := false
-		child := traverser.Advance()
-		for child != nil {
-			if child.Type() == "=" {
-				hasEqual = true
+func newAssignment(document *Document, node *ast.Node) (HasTypes, bool) {
+	lhs := node.ChildByFieldName("left")
+	rhs := node.ChildByFieldName("right")
+	if lhs != nil {
+		if lhs.Type() == "variable_name" {
+			analyseVariableAssignment(document, lhs, rhs, node)
+		} else {
+			scanNode(document, lhs)
+			if rhs != nil {
+				scanNode(document, rhs)
 			}
-			if hasEqual {
-				scanNode(document, child)
-			}
-			child = traverser.Advance()
 		}
 	}
-	return nil
+	return nil, false
 }
 
-func analyseVariableAssignment(document *Document, node *sitter.Node, traverser *util.Traverser, parent *sitter.Node) {
-	traverser.Advance()
-	traverser.SkipToken(" ")
-	if parent.Type() == "augmented_assignment_expression" {
-		traverser.SkipToken("operator")
-	} else {
-		traverser.SkipToken("=")
-	}
-	traverser.SkipToken(" ")
-	traverser.SkipToken("&")
-	rhs := traverser.Advance()
-	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(node))
-	variable, shouldAdd := newVariable(document, node)
+func analyseVariableAssignment(document *Document, lhs *ast.Node, rhs *ast.Node, parent *ast.Node) {
+	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(parent))
+	variable, shouldAdd := newVariable(document, lhs)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
 	}

@@ -15,5 +15,5 @@ func TestScopedMemberAccess(t *testing.T) {
 	}
 	document := NewDocument("test1", data)
 	document.Load()
-	cupaloy.SnapshotT(t, document.hasTypesSymbols)
+	cupaloy.SnapshotT(t, document.hasTypesSymbols())
 }

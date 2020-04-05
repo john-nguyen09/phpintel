@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,19 +18,14 @@ func TestStore(t *testing.T) {
 
 	document := NewDocument("test1", data)
 	document.Load()
-	store, err := setupStore("test", "TestStore")
-	defer store.Close()
-	if err != nil {
-		panic(err)
-	}
+	store := setupStore("test", "TestStore")
 	store.SyncDocument(document)
 	classes := store.GetClasses("\\TestClass1")
 	cupaloy.Snapshot(classes)
 }
 
 func TestSearchNamespace(t *testing.T) {
-	store, err := setupStore("test", "TestSearchNamespace")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestSearchNamespace")
 	doc1 := NewDocument("test1", []byte(`<?php namespace Namespace1;`))
 	doc1.Load()
 	store.SyncDocument(doc1)
@@ -43,9 +39,7 @@ func TestSearchNamespace(t *testing.T) {
 	doc4 := NewDocument("test4", []byte(`<?php namespace A\B\ class Test {}`))
 	doc4.Load()
 	store.SyncDocument(doc4)
-	doc4.hasChanges = true
-	doc4.injector = nil
-	doc4.SetText([]byte(`<?php namespace A\B; class Test {}`))
+	doc4 = NewDocument("test4", []byte(`<?php namespace A\B; class Test {}`))
 	doc4.Load()
 	store.SyncDocument(doc4)
 
@@ -65,7 +59,7 @@ func TestSearchNamespace(t *testing.T) {
 		namespaceCompletionIndex + KeySep + "\\A\\B" + KeySep + "class" + KeySep + "\\A\\B\\class" + KeySep + "2",
 	}
 	for _, key := range deletedKeys {
-		b, _ := store.db.Get([]byte(key))
+		b, _ := store.db.Get(storage.ModeDisk, []byte(key))
 		assert.Equal(t, []byte(nil), b)
 	}
 	namespaces, _ = store.SearchNamespaces("\\A\\B", NewSearchOptions())
@@ -78,8 +72,7 @@ type getClassesByScopeTestCase struct {
 }
 
 func TestGetClassesByScope(t *testing.T) {
-	store, err := setupStore("test", "TestGetClassesByScope")
-	assert.NoError(t, err)
+	store := setupStore("test", "TestGetClassesByScope")
 	doc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1 {
 	class Class1UnderNamespace1 {}

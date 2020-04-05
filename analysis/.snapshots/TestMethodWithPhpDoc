@@ -1,25 +1,5 @@
-([]analysis.Symbol) (len=2) {
-  (*analysis.Class)({
-    description: (string) "",
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 4:0-26:1
-    },
-    Modifier: (analysis.ClassModifierValue) 0,
-    Name: (analysis.TypeString) {
-      fqn: (string) (len=16) "\\bscitl\\sss_user",
-      original: (string) (len=8) "sss_user",
-      arrayLevel: (int) 0
-    },
-    Extends: (analysis.TypeString) {
-      fqn: (string) "",
-      original: (string) "",
-      arrayLevel: (int) 0
-    },
-    Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Method)({
+([]analysis.testMethod) (len=1) {
+  (analysis.testMethod) {
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:1-25:2
@@ -83,5 +63,5 @@
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
     IsStatic: (bool) false,
     ClassModifier: (analysis.ClassModifierValue) 0
-  })
+  }
 }

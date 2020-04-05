@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Expression represents a reference
@@ -36,7 +36,7 @@ func (e *Expression) ResolveAndGetScope(ctx ResolveContext) TypeComposite {
 }
 
 type HasTypes interface {
-	GetLocation() protocol.Location
+	Symbol
 	GetTypes() TypeComposite
 	Resolve(ctx ResolveContext)
 }
@@ -64,7 +64,7 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
+type exprConstructor func(*Document, *ast.Node) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[string]exprConstructor
 
@@ -82,10 +82,12 @@ func init() {
 		"parenthesized_expression":          newDerivedExpression,
 		"clone_expression":                  newDerivedExpression,
 		"binary_expression":                 processBinaryExpression,
+		"unary_op_expression":               processToScanChildren,
+		"assignment_expression":             newAssignment,
 	}
 }
 
-func scanForExpression(document *Document, node *sitter.Node) HasTypes {
+func scanForExpression(document *Document, node *ast.Node) HasTypes {
 	var expression HasTypes = nil
 	shouldAdd := false
 	defer func() {
@@ -102,6 +104,21 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 	return expression
 }
 
+func processToScanChildren(document *Document, node *ast.Node) (HasTypes, bool) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		switch child.Type() {
+		case "@", "+", "-", "~", "!":
+			child = traverser.Advance()
+			continue
+		}
+		scanForExpression(document, child)
+		child = traverser.Advance()
+	}
+	return nil, false
+}
+
 type derivedExpression struct {
 	Expression
 	hasResolved bool
@@ -109,7 +126,7 @@ type derivedExpression struct {
 
 var _ HasTypes = (*derivedExpression)(nil)
 
-func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newDerivedExpression(document *Document, node *ast.Node) (HasTypes, bool) {
 	derivedExpr := &derivedExpression{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

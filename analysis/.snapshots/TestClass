@@ -1,5 +1,5 @@
-([]analysis.Symbol) (len=5) {
-  (*analysis.Class)({
+([]analysis.testClass) (len=4) {
+  (analysis.testClass) {
     description: (string) "",
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -18,30 +18,8 @@
     },
     Interfaces: ([]analysis.TypeString) <nil>,
     Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Method)({
-    location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 3:4-5:5
-    },
-    Name: (string) (len=7) "method1",
-    Params: ([]*analysis.Parameter) {
-    },
-    returnTypes: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) {
-      }
-    },
-    description: (string) "",
-    Scope: (analysis.TypeString) {
-      fqn: (string) (len=10) "\\TestClass",
-      original: (string) (len=9) "TestClass",
-      arrayLevel: (int) 0
-    },
-    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false,
-    ClassModifier: (analysis.ClassModifierValue) 0
-  }),
-  (*analysis.Class)({
+  },
+  (analysis.testClass) {
     description: (string) "",
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -66,8 +44,8 @@
       }
     },
     Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
+  },
+  (analysis.testClass) {
     description: (string) "",
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -97,8 +75,8 @@
       }
     },
     Use: ([]analysis.TypeString) <nil>
-  }),
-  (*analysis.Class)({
+  },
+  (analysis.testClass) {
     description: (string) "",
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
@@ -128,5 +106,5 @@
       }
     },
     Use: ([]analysis.TypeString) <nil>
-  })
+  }
 }
