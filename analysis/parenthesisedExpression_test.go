@@ -37,4 +37,13 @@ if (empty($data)) { }`))
 		Line:      2,
 		Character: 11,
 	})).String())
+
+	doc1 := NewDocument("test2", []byte(`<?php
+if (get_profile_roles() !== false) { }`))
+	doc1.Load()
+
+	assert.Equal(t, "*analysis.FunctionCall", reflect.TypeOf(doc1.HasTypesAtPos(protocol.Position{
+		Line:      1,
+		Character: 10,
+	})).String())
 }

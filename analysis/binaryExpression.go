@@ -27,6 +27,8 @@ func processBinaryExpression(document *Document, node *ast.Node) (HasTypes, bool
 			scanForExpression(document, lhs)
 			scanForExpression(document, rhs)
 		}
+	default:
+		scanForChildren(document, node)
 	}
 	return nil, false
 }
