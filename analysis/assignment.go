@@ -22,16 +22,17 @@ func newAssignment(document *Document, node *ast.Node) (HasTypes, bool) {
 
 func analyseVariableAssignment(document *Document, lhs *ast.Node, rhs *ast.Node, parent *ast.Node) {
 	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(parent))
-	variable, shouldAdd := newVariable(document, lhs)
+	variable := newVariableWithoutPushing(document, lhs)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
 	}
-	if shouldAdd {
-		document.addSymbol(variable)
-	}
+	// The variable appears before rhs therefore being added before rhs
+	document.addSymbol(variable)
 
 	var expression HasTypes = nil
 	expression = scanForExpression(document, rhs)
+	// But the variable should be pushed after any rhs's variables
+	document.pushVariable(variable)
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {

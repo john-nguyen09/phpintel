@@ -20,6 +20,12 @@ func newVariableExpression(document *Document, node *ast.Node) (HasTypes, bool) 
 }
 
 func newVariable(document *Document, node *ast.Node) (*Variable, bool) {
+	variable := newVariableWithoutPushing(document, node)
+	document.pushVariable(variable)
+	return variable, true
+}
+
+func newVariableWithoutPushing(document *Document, node *ast.Node) *Variable {
 	variable := &Variable{
 		Expression: Expression{
 			Name:     document.GetNodeText(node),
@@ -33,8 +39,7 @@ func newVariable(document *Document, node *ast.Node) (*Variable, bool) {
 	if variable.Name == "$this" {
 		variable.setExpression(newRelativeScope(document, variable.Location))
 	}
-	document.pushVariable(variable)
-	return variable, true
+	return variable
 }
 
 func (s *Variable) GetLocation() protocol.Location {
@@ -103,4 +108,53 @@ func (s *Variable) GetName() string {
 
 func (s *Variable) AddTypes(t TypeComposite) {
 	s.Type.merge(t)
+}
+
+// VariableTable holds the range and the variables inside
+type VariableTable struct {
+	locationRange  protocol.Range
+	variables      map[string]*Variable
+	globalDeclares map[string]bool
+	level          int
+	children       []*VariableTable
+}
+
+func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
+	return &VariableTable{
+		locationRange:  locationRange,
+		variables:      map[string]*Variable{},
+		globalDeclares: map[string]bool{},
+		level:          level,
+	}
+}
+
+func (vt *VariableTable) add(variable *Variable) {
+	vt.variables[variable.Name] = variable
+}
+
+func (vt *VariableTable) get(name string) *Variable {
+	if variable, ok := vt.variables[name]; ok {
+		return variable
+	}
+	return nil
+}
+
+func (vt *VariableTable) canReferenceGlobal(name string) bool {
+	if _, ok := vt.globalDeclares[name]; ok {
+		return true
+	}
+	return false
+}
+
+func (vt *VariableTable) setReferenceGlobal(name string) {
+	vt.globalDeclares[name] = true
+}
+
+// GetVariables returns all the variables in the table
+func (vt *VariableTable) GetVariables() map[string]*Variable {
+	return vt.variables
+}
+
+func (vt *VariableTable) addChild(child *VariableTable) {
+	vt.children = append(vt.children, child)
 }

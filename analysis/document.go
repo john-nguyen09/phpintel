@@ -39,55 +39,6 @@ type Document struct {
 	blockStack []BlockSymbol
 }
 
-// VariableTable holds the range and the variables inside
-type VariableTable struct {
-	locationRange  protocol.Range
-	variables      map[string]*Variable
-	globalDeclares map[string]bool
-	level          int
-	children       []*VariableTable
-}
-
-func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
-	return &VariableTable{
-		locationRange:  locationRange,
-		variables:      map[string]*Variable{},
-		globalDeclares: map[string]bool{},
-		level:          level,
-	}
-}
-
-func (vt *VariableTable) add(variable *Variable) {
-	vt.variables[variable.Name] = variable
-}
-
-func (vt *VariableTable) get(name string) *Variable {
-	if variable, ok := vt.variables[name]; ok {
-		return variable
-	}
-	return nil
-}
-
-func (vt *VariableTable) canReferenceGlobal(name string) bool {
-	if _, ok := vt.globalDeclares[name]; ok {
-		return true
-	}
-	return false
-}
-
-func (vt *VariableTable) setReferenceGlobal(name string) {
-	vt.globalDeclares[name] = true
-}
-
-// GetVariables returns all the variables in the table
-func (vt *VariableTable) GetVariables() map[string]*Variable {
-	return vt.variables
-}
-
-func (vt *VariableTable) addChild(child *VariableTable) {
-	vt.children = append(vt.children, child)
-}
-
 // MarshalJSON is used for json.Marshal
 func (s *Document) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
@@ -291,22 +242,6 @@ func (s *Document) addSymbol(other Symbol) {
 	} else {
 		s.Children = append(s.Children, other)
 	}
-	// if argList, ok := other.(*ArgumentList); ok {
-	// 	if len(s.argLists) > 0 {
-	// 		i := len(s.argLists) - 1
-	// 		lastArgList := s.argLists[i]
-	// 		if util.IsInRange(argList.GetLocation().Range.Start, lastArgList.GetLocation().Range) == 0 {
-	// 			s.argLists = append(s.argLists[:i], append([]*ArgumentList{argList}, s.argLists[i:]...)...)
-	// 			return
-	// 		}
-	// 	}
-	// 	s.argLists = append(s.argLists, argList)
-	// 	return
-	// }
-	// if h, ok := other.(HasTypes); ok {
-	// 	s.hasTypesSymbols = append(s.hasTypesSymbols, h)
-	// 	return
-	// }
 }
 
 func (s *Document) pushBlock(block BlockSymbol) {
