@@ -23,7 +23,12 @@ func newClassTypeDesignator(document *Document, node *ast.Node) (HasTypes, bool)
 			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 			s.Location = document.GetNodeLocation(child)
 			s.Name = typeString.GetOriginal()
-			s.Type.add(typeString)
+			if IsNameRelative(typeString.GetOriginal()) {
+				relativeScope := newRelativeScope(document, s.Location)
+				s.Type.merge(relativeScope.Types)
+			} else {
+				s.Type.add(typeString)
+			}
 		case "relative_scope":
 			relativeScope := newRelativeScope(document, s.Location)
 			s.Type.merge(relativeScope.Types)
