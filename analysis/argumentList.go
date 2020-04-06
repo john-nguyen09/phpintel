@@ -29,15 +29,13 @@ func newArgumentList(document *Document, node *ast.Node) Symbol {
 	nodesToScan := []*ast.Node{}
 	for child != nil {
 		t := child.Type()
-		if t == " " || t == "," {
-			if t == "," {
-				end := util.PointToPosition(child.StartPoint())
-				argumentList.ranges = append(argumentList.ranges, protocol.Range{
-					Start: start,
-					End:   end,
-				})
-				start = end
-			}
+		if t == "," || (t == "ERROR" && document.GetNodeText(child) == ",") {
+			end := util.PointToPosition(child.StartPoint())
+			argumentList.ranges = append(argumentList.ranges, protocol.Range{
+				Start: start,
+				End:   end,
+			})
+			start = end
 			child = traverser.Advance()
 			continue
 		}
