@@ -30,7 +30,6 @@ var /* const */ typesToScanForChildren = map[string]bool{
 	"subscript_expression":      true,
 	"cast_expression":           true,
 	"unary_op_expression":       true,
-	"binary_expression":         true,
 	"echo_statement":            true,
 	"unset_statement":           true,
 	"print_intrinsic":           true,
