@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type AnonymousFunction struct {
@@ -15,7 +15,7 @@ type AnonymousFunction struct {
 
 var _ BlockSymbol = (*AnonymousFunction)(nil)
 
-func newAnonymousFunction(document *Document, node *ast.Node) Symbol {
+func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
@@ -45,7 +45,7 @@ func (s *AnonymousFunction) GetLocation() protocol.Location {
 	return s.location
 }
 
-func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *ast.Node) {
+func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

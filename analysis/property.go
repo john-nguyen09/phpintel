@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Property contains information for properties
@@ -36,7 +36,7 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 	return property
 }
 
-func newPropertyDeclaration(document *Document, node *ast.Node) Symbol {
+func newPropertyDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	visibility := Public
 	isStatic := false
@@ -56,7 +56,7 @@ func newPropertyDeclaration(document *Document, node *ast.Node) Symbol {
 	return nil
 }
 
-func newProperty(document *Document, node *ast.Node, visibility VisibilityModifierValue, isStatic bool) *Property {
+func newProperty(document *Document, node *sitter.Node, visibility VisibilityModifierValue, isStatic bool) *Property {
 	property := &Property{
 		location:           document.GetNodeLocation(node),
 		VisibilityModifier: visibility,

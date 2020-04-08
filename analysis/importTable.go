@@ -3,9 +3,9 @@ package analysis
 import (
 	"strings"
 
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type ImportTable struct {
@@ -16,7 +16,7 @@ type ImportTable struct {
 	constants map[string]string
 }
 
-func newImportTable(document *Document, node *ast.Node) *ImportTable {
+func newImportTable(document *Document, node *sitter.Node) *ImportTable {
 	return &ImportTable{
 		start:     util.PointToPosition(node.StartPoint()),
 		namespace: nil,

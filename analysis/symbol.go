@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // VisibilityModifierValue is a value of visibility modifier (public, protected, private)
@@ -81,7 +81,7 @@ type HasParamsResolvable interface {
 	ResolveToHasParams(ctx ResolveContext) []HasParams
 }
 
-func transformQualifiedName(n *ast.Node, document *Document) TypeString {
+func transformQualifiedName(n *sitter.Node, document *Document) TypeString {
 	return NewTypeString(document.GetNodeText(n))
 }
 

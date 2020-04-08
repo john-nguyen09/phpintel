@@ -1,8 +1,8 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassAccess represents a reference to the part before ::
@@ -14,7 +14,7 @@ type ClassAccess struct {
 
 var _ (HasTypes) = (*ClassAccess)(nil)
 
-func newClassAccess(document *Document, node *ast.Node) *ClassAccess {
+func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -45,7 +45,7 @@ func newClassAccess(document *Document, node *ast.Node) *ClassAccess {
 	return classAccess
 }
 
-func analyseMemberName(document *Document, node *ast.Node) string {
+func analyseMemberName(document *Document, node *sitter.Node) string {
 	switch node.Type() {
 	case "name", "variable_name", "qualified_name":
 		return document.GetNodeText(node)

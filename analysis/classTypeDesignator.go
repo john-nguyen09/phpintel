@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassTypeDesignator represents a reference to object creation (e.g. new TestClass())
@@ -11,7 +11,7 @@ type ClassTypeDesignator struct {
 	Expression
 }
 
-func newClassTypeDesignator(document *Document, node *ast.Node) (HasTypes, bool) {
+func newClassTypeDesignator(document *Document, node *sitter.Node) (HasTypes, bool) {
 	s := &ClassTypeDesignator{}
 	document.addSymbol(s)
 	traverser := util.NewTraverser(node)

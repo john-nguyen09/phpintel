@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Function contains information of functions
@@ -22,7 +22,7 @@ var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
 var _ BlockSymbol = (*Function)(nil)
 
-func newFunction(document *Document, node *ast.Node) Symbol {
+func newFunction(document *Document, node *sitter.Node) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),
 		Params:      make([]*Parameter, 0),
@@ -58,7 +58,7 @@ func newFunction(document *Document, node *ast.Node) Symbol {
 	return function
 }
 
-func (s *Function) analyseParameterDeclarationList(document *Document, node *ast.Node) {
+func (s *Function) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

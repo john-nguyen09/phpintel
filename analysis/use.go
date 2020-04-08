@@ -1,8 +1,8 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type UseType int
@@ -13,7 +13,7 @@ const (
 	UseConst            = iota
 )
 
-func processNamespaceUseDeclaration(document *Document, node *ast.Node) Symbol {
+func processNamespaceUseDeclaration(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	useType := UseClass
@@ -39,7 +39,7 @@ func processNamespaceUseDeclaration(document *Document, node *ast.Node) Symbol {
 	return nil
 }
 
-func processNamespaceUseClause(document *Document, useType UseType, node *ast.Node) {
+func processNamespaceUseClause(document *Document, useType UseType, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	name := ""
@@ -56,7 +56,7 @@ func processNamespaceUseClause(document *Document, useType UseType, node *ast.No
 	addUseToImportTable(document, useType, alias, name)
 }
 
-func processNamespaceUseGroupClauseList(document *Document, prefix string, useType UseType, node *ast.Node) {
+func processNamespaceUseGroupClauseList(document *Document, prefix string, useType UseType, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
@@ -93,7 +93,7 @@ func processNamespaceUseGroupClauseList(document *Document, prefix string, useTy
 	}
 }
 
-func getAliasFromNode(document *Document, node *ast.Node) string {
+func getAliasFromNode(document *Document, node *sitter.Node) string {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

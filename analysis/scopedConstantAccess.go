@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedConstantAccess represents a reference to constant in class access, e.g. ::CONSTANT
@@ -11,7 +11,7 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, node *ast.Node) (HasTypes, bool) {
+func newScopedConstantAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
 	}

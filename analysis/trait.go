@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Trait contains information of a trait
@@ -18,7 +18,7 @@ type Trait struct {
 var _ Symbol = (*Trait)(nil)
 var _ BlockSymbol = (*Trait)(nil)
 
-func newTrait(document *Document, node *ast.Node) Symbol {
+func newTrait(document *Document, node *sitter.Node) Symbol {
 	trait := &Trait{
 		location: document.GetNodeLocation(node),
 	}

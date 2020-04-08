@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedPropertyAccess represents a reference to property in
@@ -14,7 +14,7 @@ type ScopedPropertyAccess struct {
 	hasResolved bool
 }
 
-func newScopedPropertyAccess(document *Document, node *ast.Node) (HasTypes, bool) {
+func newScopedPropertyAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
 	}

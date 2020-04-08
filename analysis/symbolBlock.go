@@ -1,10 +1,8 @@
 package analysis
 
-import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
-)
+import sitter "github.com/smacker/go-tree-sitter"
 
-type symbolConstructor func(*Document, *ast.Node) Symbol
+type symbolConstructor func(*Document, *sitter.Node) Symbol
 
 var /* const */ typesToScanForChildren = map[string]bool{
 	"ERROR":                     true,
@@ -75,7 +73,7 @@ func init() {
 	}
 }
 
-func scanNode(document *Document, node *ast.Node) {
+func scanNode(document *Document, node *sitter.Node) {
 	var symbol Symbol = nil
 	shouldSkipAdding := false
 	if node.Type() == "namespace_definition" {
@@ -100,7 +98,7 @@ func scanNode(document *Document, node *ast.Node) {
 	}
 }
 
-func scanForChildren(document *Document, node *ast.Node) {
+func scanForChildren(document *Document, node *sitter.Node) {
 	childCount := int(node.ChildCount())
 	for i := 0; i < childCount; i++ {
 		child := node.Child(i)

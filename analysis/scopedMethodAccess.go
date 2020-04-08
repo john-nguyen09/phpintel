@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
@@ -13,7 +13,7 @@ type ScopedMethodAccess struct {
 	hasResolved bool
 }
 
-func newScopedMethodAccess(document *Document, node *ast.Node) (HasTypes, bool) {
+func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
 	}

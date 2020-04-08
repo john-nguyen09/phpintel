@@ -1,10 +1,10 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Const contains information of constants
@@ -15,7 +15,7 @@ type Const struct {
 	Value string
 }
 
-func newConstDeclaration(document *Document, node *ast.Node) Symbol {
+func newConstDeclaration(document *Document, node *sitter.Node) Symbol {
 	class := document.getLastClass()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -47,7 +47,7 @@ func newConstDeclaration(document *Document, node *ast.Node) Symbol {
 	return nil
 }
 
-func newConst(document *Document, node *ast.Node) Symbol {
+func newConst(document *Document, node *sitter.Node) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}

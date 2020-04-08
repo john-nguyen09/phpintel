@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type methodTagParam struct {
@@ -28,7 +28,7 @@ type tag struct {
 var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
 var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[ \t]*\*[ \t]*`)
 
-func processTypeNode(document *Document, node *ast.Node) string {
+func processTypeNode(document *Document, node *sitter.Node) string {
 	text := document.GetNodeText(node)
 	if text == "" {
 		return text
@@ -38,7 +38,7 @@ func processTypeNode(document *Document, node *ast.Node) string {
 	return text
 }
 
-func paramOrPropTypeTag(tagName string, document *Document, node *ast.Node) tag {
+func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	name := ""
 	description := ""
@@ -64,7 +64,7 @@ func paramOrPropTypeTag(tagName string, document *Document, node *ast.Node) tag 
 	}
 }
 
-func varTag(tagName string, document *Document, node *ast.Node) tag {
+func varTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	name := ""
 	description := ""
@@ -90,7 +90,7 @@ func varTag(tagName string, document *Document, node *ast.Node) tag {
 	}
 }
 
-func returnTag(tagName string, document *Document, node *ast.Node) tag {
+func returnTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	name := ""
 	description := ""
@@ -114,7 +114,7 @@ func returnTag(tagName string, document *Document, node *ast.Node) tag {
 	}
 }
 
-func methodTag(tagName string, document *Document, node *ast.Node) tag {
+func methodTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	isStatic := false
 	name := ""
@@ -153,7 +153,7 @@ func methodTag(tagName string, document *Document, node *ast.Node) tag {
 	}
 }
 
-func methodParam(document *Document, node *ast.Node) methodTagParam {
+func methodParam(document *Document, node *sitter.Node) methodTagParam {
 	ts := []string{}
 	name := ""
 	value := ""
@@ -178,7 +178,7 @@ func methodParam(document *Document, node *ast.Node) methodTagParam {
 	}
 }
 
-func globalTag(tagName string, document *Document, node *ast.Node) tag {
+func globalTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	name := ""
 	description := ""
@@ -216,12 +216,12 @@ type phpDocComment struct {
 	PropertyWrites []tag
 }
 
-func readDescriptionNode(document *Document, node *ast.Node) string {
+func readDescriptionNode(document *Document, node *sitter.Node) string {
 	desc := document.GetNodeText(node)
 	return strings.TrimSpace(stripPattern.ReplaceAllString(desc, ""))
 }
 
-func getTagName(document *Document, node *ast.Node) string {
+func getTagName(document *Document, node *sitter.Node) string {
 	traverser := util.NewTraverser(node)
 	tagName := ""
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
@@ -232,7 +232,7 @@ func getTagName(document *Document, node *ast.Node) string {
 	return tagName
 }
 
-func parseTag(document *Document, node *ast.Node) (tag, error) {
+func parseTag(document *Document, node *sitter.Node) (tag, error) {
 	tagName := getTagName(document, node)
 	switch tagName {
 	case "@param", "@property", "@property-read", "@property-write":
@@ -274,7 +274,7 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 	return d.location
 }
 
-func newPhpDocFromNode(document *Document, node *ast.Node) Symbol {
+func newPhpDocFromNode(document *Document, node *sitter.Node) Symbol {
 	if node, ok := document.injector.GetInjection(node); ok {
 		phpDoc := phpDocComment{
 			location:    document.GetNodeLocation(node),

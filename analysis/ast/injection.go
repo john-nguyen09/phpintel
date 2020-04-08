@@ -51,7 +51,7 @@ type InjectionLayer struct {
 	config        InjectionConfig
 	tree          *sitter.Tree
 	ranges        []sitter.Range
-	injectedNodes map[string]*Node
+	injectedNodes map[string]*sitter.Node
 }
 
 type configRangesTuple struct {
@@ -61,7 +61,7 @@ type configRangesTuple struct {
 
 type languageContentNodesTuple struct {
 	languageName string
-	contentNodes []*Node
+	contentNodes []*sitter.Node
 }
 
 // NewInjectionLayer creates all the injection layers
@@ -71,7 +71,7 @@ func NewInjectionLayer(source []byte,
 	result := []*InjectionLayer{}
 	queue := []configRangesTuple{}
 	var prevLayer *InjectionLayer = nil
-	prevInjectedNodes := map[string]*Node{}
+	prevInjectedNodes := map[string]*sitter.Node{}
 	for i := 0; ; i++ {
 		var oldTree *sitter.Tree = nil
 		if i < len(oldLayers) && oldLayers[i].config.lang == config.lang {
@@ -81,7 +81,7 @@ func NewInjectionLayer(source []byte,
 		injector.parser.SetIncludedRanges(ranges)
 		injector.parser.SetLanguage(config.lang)
 		tree := injector.parser.Parse(oldTree, source)
-		rootNode := FromSitterNode(tree.RootNode())
+		rootNode := tree.RootNode()
 		cursor := sitter.NewQueryCursor()
 		if prevLayer != nil {
 			len := int(rootNode.ChildCount())
@@ -94,7 +94,7 @@ func NewInjectionLayer(source []byte,
 		}
 		if query := config.query; query != nil {
 			injectionsByPatternIndex := make([]languageContentNodesTuple, int(query.PatternCount()))
-			cursor.Exec(config.query, rootNode.n)
+			cursor.Exec(config.query, rootNode)
 			for mat, ok := cursor.NextMatch(); ok; mat, ok = cursor.NextMatch() {
 				entry := &injectionsByPatternIndex[mat.PatternIndex]
 				languageName, contentNode := injectionForMatch(config, query, mat, source)
@@ -132,7 +132,7 @@ func NewInjectionLayer(source []byte,
 			config:        config,
 			tree:          tree,
 			ranges:        ranges,
-			injectedNodes: map[string]*Node{},
+			injectedNodes: map[string]*sitter.Node{},
 		}
 		prevLayer = layer
 		result = append(result, layer)
@@ -148,16 +148,16 @@ func NewInjectionLayer(source []byte,
 	return result
 }
 
-func getNodeRangeString(n *Node) string {
+func getNodeRangeString(n *sitter.Node) string {
 	return fmt.Sprintf("%d-%d", n.StartByte(), n.EndByte())
 }
 
-func injectionForMatch(config InjectionConfig, query *sitter.Query, mat *sitter.QueryMatch, source []byte) (string, *Node) {
+func injectionForMatch(config InjectionConfig, query *sitter.Query, mat *sitter.QueryMatch, source []byte) (string, *sitter.Node) {
 	contentCaptureIndex := config.contentCaptureIndex
-	var contentNode *Node = nil
+	var contentNode *sitter.Node = nil
 	for _, capture := range mat.Captures {
 		if capture.Index == contentCaptureIndex {
-			contentNode = FromSitterNode(capture.Node)
+			contentNode = capture.Node
 		}
 	}
 	languageName := ""
@@ -202,12 +202,12 @@ func NewPHPInjector(source []byte) *Injector {
 }
 
 // MainRootNode returns the main language root node
-func (i *Injector) MainRootNode() *Node {
-	return FromSitterNode(i.layers[0].tree.RootNode())
+func (i *Injector) MainRootNode() *sitter.Node {
+	return i.layers[0].tree.RootNode()
 }
 
 // GetInjection checks if the node has injection
-func (i *Injector) GetInjection(node *Node) (*Node, bool) {
+func (i *Injector) GetInjection(node *sitter.Node) (*sitter.Node, bool) {
 	for _, layer := range i.layers {
 		if childNode, ok := layer.injectedNodes[getNodeRangeString(node)]; ok {
 			return childNode, ok

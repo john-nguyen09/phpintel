@@ -1,10 +1,8 @@
 package analysis
 
-import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
-)
+import sitter "github.com/smacker/go-tree-sitter"
 
-func newAssignment(document *Document, node *ast.Node) (HasTypes, bool) {
+func newAssignment(document *Document, node *sitter.Node) (HasTypes, bool) {
 	lhs := node.ChildByFieldName("left")
 	rhs := node.ChildByFieldName("right")
 	if lhs != nil {
@@ -20,7 +18,7 @@ func newAssignment(document *Document, node *ast.Node) (HasTypes, bool) {
 	return nil, false
 }
 
-func analyseVariableAssignment(document *Document, lhs *ast.Node, rhs *ast.Node, parent *ast.Node) {
+func analyseVariableAssignment(document *Document, lhs *sitter.Node, rhs *sitter.Node, parent *sitter.Node) {
 	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(parent))
 	variable := newVariableWithoutPushing(document, lhs)
 	if phpDoc != nil {

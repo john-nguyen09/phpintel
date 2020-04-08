@@ -1,10 +1,8 @@
 package analysis
 
-import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
-)
+import sitter "github.com/smacker/go-tree-sitter"
 
-func processBinaryExpression(document *Document, node *ast.Node) (HasTypes, bool) {
+func processBinaryExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	op := node.ChildByFieldName("operator")
 	if op == nil {
 		return nil, false

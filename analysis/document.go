@@ -87,7 +87,7 @@ func (s *Document) ResetState() {
 	s.injector = nil
 }
 
-func (s *Document) GetRootNode() *ast.Node {
+func (s *Document) GetRootNode() *sitter.Node {
 	if s.injector == nil {
 		s.injector = ast.NewPHPInjector(s.GetText())
 	}
@@ -121,7 +121,7 @@ func (s *Document) SetText(text []byte) {
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
 
-func (s *Document) pushImportTable(node *ast.Node) {
+func (s *Document) pushImportTable(node *sitter.Node) {
 	s.importTables = append(s.importTables, newImportTable(s, node))
 }
 
@@ -210,7 +210,7 @@ func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	return min
 }
 
-func (s *Document) nodeRange(node *ast.Node) protocol.Range {
+func (s *Document) nodeRange(node *sitter.Node) protocol.Range {
 	return protocol.Range{Start: util.PointToPosition(node.StartPoint()), End: util.PointToPosition(node.EndPoint())}
 }
 
@@ -220,14 +220,14 @@ func (s *Document) GetText() []byte {
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node *ast.Node) protocol.Location {
+func (s *Document) GetNodeLocation(node *sitter.Node) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
 		Range: s.nodeRange(node),
 	}
 }
 
-func (s *Document) GetNodeText(node *ast.Node) string {
+func (s *Document) GetNodeText(node *sitter.Node) string {
 	return node.Content(s.GetText())
 }
 
@@ -259,7 +259,7 @@ func (s *Document) currentBlock() BlockSymbol {
 	return nil
 }
 
-func (s *Document) pushVariableTable(node *ast.Node) {
+func (s *Document) pushVariableTable(node *sitter.Node) {
 	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
 	if s.variableTableLevel > 0 {
 		s.getCurrentVariableTable().addChild(newVarTable)
@@ -358,12 +358,12 @@ func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 }
 
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
-	cursor := s.GetRootNode().Cursor()
+	cursor := sitter.NewTreeCursor(s.GetRootNode())
 	found := util.NodeStack{}
 	uOffset := uint32(offset) - 1
 	found = append(found, s.GetRootNode())
 	for cursor.GoToFirstChildForByte(uOffset) != -1 {
-		found = append(found, ast.FromSitterNode(cursor.CurrentNode()))
+		found = append(found, cursor.CurrentNode())
 	}
 	return found
 }

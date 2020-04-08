@@ -5,7 +5,7 @@ package analysis
 // 	scope    HasTypes
 // }
 
-// func analyseForeachStatement(document *Document, node *ast.Node) (HasTypes, bool) {
+// func analyseForeachStatement(document *Document, node *sitter.Node) (HasTypes, bool) {
 // 	traverser := util.NewTraverser(node)
 // 	child := traverser.Advance()
 // 	f := &ForeachCollection{

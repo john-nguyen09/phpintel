@@ -1,9 +1,9 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ArgumentList contains information of arguments in function-like call
@@ -11,13 +11,13 @@ type ArgumentList struct {
 	location protocol.Location
 	children []Symbol
 
-	arguments []*ast.Node
+	arguments []*sitter.Node
 	ranges    []protocol.Range
 }
 
 var _ BlockSymbol = (*ArgumentList)(nil)
 
-func newArgumentList(document *Document, node *ast.Node) Symbol {
+func newArgumentList(document *Document, node *sitter.Node) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
@@ -26,7 +26,7 @@ func newArgumentList(document *Document, node *ast.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	start := argumentList.location.Range.Start
-	nodesToScan := []*ast.Node{}
+	nodesToScan := []*sitter.Node{}
 	for child != nil {
 		t := child.Type()
 		if t == "," || (t == "ERROR" && document.GetNodeText(child) == ",") {
@@ -64,7 +64,7 @@ func (s *ArgumentList) GetLocation() protocol.Location {
 }
 
 // GetArguments returns the arguments
-func (s *ArgumentList) GetArguments() []*ast.Node {
+func (s *ArgumentList) GetArguments() []*sitter.Node {
 	return s.arguments
 }
 

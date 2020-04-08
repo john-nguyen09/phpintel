@@ -1,8 +1,8 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Variable represents a reference to the variable
@@ -15,17 +15,17 @@ type Variable struct {
 
 var _ CanAddType = (*Variable)(nil)
 
-func newVariableExpression(document *Document, node *ast.Node) (HasTypes, bool) {
+func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
 	return newVariable(document, node)
 }
 
-func newVariable(document *Document, node *ast.Node) (*Variable, bool) {
+func newVariable(document *Document, node *sitter.Node) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
 	document.pushVariable(variable)
 	return variable, true
 }
 
-func newVariableWithoutPushing(document *Document, node *ast.Node) *Variable {
+func newVariableWithoutPushing(document *Document, node *sitter.Node) *Variable {
 	variable := &Variable{
 		Expression: Expression{
 			Name:     document.GetNodeText(node),

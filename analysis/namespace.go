@@ -3,15 +3,15 @@ package analysis
 import (
 	"strings"
 
-	"github.com/john-nguyen09/phpintel/analysis/ast"
 	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type Namespace struct {
 	Name string
 }
 
-func newNamespace(document *Document, node *ast.Node) *Namespace {
+func newNamespace(document *Document, node *sitter.Node) *Namespace {
 	namespace := &Namespace{}
 	document.pushImportTable(node)
 	document.setNamespace(namespace)
@@ -29,7 +29,7 @@ func newNamespace(document *Document, node *ast.Node) *Namespace {
 	return namespace
 }
 
-func readNamespaceExcludeError(document *Document, node *ast.Node) string {
+func readNamespaceExcludeError(document *Document, node *sitter.Node) string {
 	traverser := util.NewTraverser(node)
 	parts := []string{}
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
