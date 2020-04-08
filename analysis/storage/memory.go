@@ -13,7 +13,7 @@ type memory struct {
 
 var _ DB = (*memory)(nil)
 
-func newMemory() *memory {
+func NewMemory() *memory {
 	return &memory{
 		radix: iradix.New(),
 	}

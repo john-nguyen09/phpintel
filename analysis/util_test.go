@@ -24,7 +24,7 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 }
 
 func setupStore(uri string, name string) *Store {
-	db := storage.NewMemOnly()
+	db := storage.NewMemory()
 	initStubs()
 	return &Store{
 		uri:       uri,

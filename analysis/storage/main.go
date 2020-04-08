@@ -44,14 +44,14 @@ const (
 
 // NewCombined returns a combined instance of disk and memory
 func NewCombined(path string) (*Combined, error) {
-	disk, err := newDisk(path)
+	disk, err := NewDisk(path)
 	if err != nil {
 		return nil, err
 	}
 	return &Combined{
 		// This index must match DBMode
 		dbs: []DB{
-			newMemory(),
+			NewMemory(),
 			disk,
 		},
 	}, nil
@@ -60,7 +60,7 @@ func NewCombined(path string) (*Combined, error) {
 func NewMemOnly() *Combined {
 	return &Combined{
 		dbs: []DB{
-			newMemory(),
+			NewMemory(),
 		},
 		memOnly: true,
 	}

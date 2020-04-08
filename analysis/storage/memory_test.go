@@ -6,7 +6,7 @@ import (
 )
 
 func TestIterator(t *testing.T) {
-	mem := newMemory()
+	mem := NewMemory()
 	mem.Put([]byte("test1"), nil)
 	mem.Put([]byte("test2"), nil)
 	mem.Put([]byte("akjshdfkajsdf"), nil)

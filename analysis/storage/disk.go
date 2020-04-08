@@ -12,7 +12,7 @@ type disk struct {
 
 var _ DB = (*disk)(nil)
 
-func newDisk(path string) (*disk, error) {
+func NewDisk(path string) (*disk, error) {
 	opts := levigo.NewOptions()
 	opts.SetCache(levigo.NewLRUCache(3 << 30))
 	opts.SetCreateIfMissing(true)

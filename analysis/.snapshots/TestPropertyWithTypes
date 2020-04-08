@@ -1,0 +1,38 @@
+([]analysis.Symbol) (len=2) {
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:14-4:24
+    },
+    description: (string) "",
+    Name: (string) (len=10) "$_formname",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=11) "\\moodleform",
+      original: (string) (len=10) "moodleform",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
+  }),
+  (*analysis.Property)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:14-7:20
+    },
+    description: (string) "",
+    Name: (string) (len=6) "$_form",
+    Scope: (analysis.TypeString) {
+      fqn: (string) (len=11) "\\moodleform",
+      original: (string) (len=10) "moodleform",
+      arrayLevel: (int) 0
+    },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 1,
+    IsStatic: (bool) false,
+    Types: (analysis.TypeComposite) {
+      typeStrings: ([]analysis.TypeString) <nil>
+    }
+  })
+}

@@ -63,11 +63,11 @@ type completionIndexDeletor struct {
 	keys      map[string]bool
 }
 
-func newCompletionIndexDeletor(db *storage.Combined, uri string) *completionIndexDeletor {
+func newCompletionIndexDeletor(db storage.DB, uri string) *completionIndexDeletor {
 	indexKeys := map[string]bool{}
 	keys := map[string]bool{}
 	entry := newEntry(documentCompletionIndex, uri)
-	db.PrefixStream(storage.ModeDisk, entry.getKeyBytes(), func(it storage.Iterator) {
+	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 		keys[string(it.Key())] = true
 		d := storage.NewDecoder(it.Value())
 		len := d.ReadInt()
@@ -114,12 +114,12 @@ func getCompletionKey(token string, symbolKey string) string {
 	return token + KeySep + symbolKey
 }
 
-func searchCompletions(db *storage.Combined, query searchQuery) SearchResult {
+func searchCompletions(db storage.DB, query searchQuery) SearchResult {
 	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
 	isComplete := true
 	name := strings.ToLower(query.keyword)
 	entry := newEntry(query.collection, name)
-	db.PrefixStream(storage.ModeDisk, entry.getKeyBytes(), func(it storage.Iterator) {
+	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 		completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
 		if _, ok := uniqueCompletionValues[completionValue]; ok {
 			return
