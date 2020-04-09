@@ -468,6 +468,11 @@ func namespacePredicate(scope string) func(s Symbol) bool {
 
 func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]string, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
+	// In namespace normally there isn't \ but somehow it has ignores in because
+	// namespaces are not indexed with \
+	if scope == "\\" {
+		scope = ""
+	}
 	namespaces := []string{}
 	query := searchQuery{
 		collection: namespaceCompletionIndex + KeySep + scope,
@@ -493,9 +498,6 @@ func (s *Store) GetClasses(name string) []*Class {
 }
 
 func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onDataResult) {
-	if scope == "" {
-		scope = "\\"
-	}
 	if scope[len(scope)-1] != '\\' {
 		scope += "\\"
 	}
@@ -569,10 +571,6 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 
 func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Interface, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
 	interfaces := []*Interface{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{

@@ -118,42 +118,48 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 }
 
 func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name TypeString, word string) (string, *protocol.TextEdit) {
-	insertUse := GetInsertUseContext(document)
-	parts := name.GetParts()
-	currentScope := i.ResolveScopeNamespace(word)
-	firstPart, parts := parts[0], parts[1:]
+	if IsFQN(word) {
+		return name.GetOriginal(), nil
+	}
+	wordNamespace := i.ResolveScopeNamespace(word)
+	nameNamespace := name.GetNamespace()
+	if wordNamespace == nameNamespace {
+		return name.GetOriginal(), nil
+	}
+	nameParts := name.GetParts()
+	firstPart, nameParts := nameParts[0], nameParts[1:]
 	if fqn, ok := i.classes[firstPart]; ok && strings.Index(word, fqn) == 0 {
-		if len(parts) > 0 {
-			return strings.Join(parts, "\\"), nil
+		if len(nameParts) > 0 {
+			return strings.Join(nameParts, "\\"), nil
 		}
 		return firstPart, nil
-	}
-	if currentScope != "" && strings.Index(name.GetFQN(), currentScope) == 0 {
-		return name.GetFQN()[len(currentScope)+1:], nil
-	}
-	if currentScope != "" && currentScope == name.GetNamespace() {
-		return name.GetOriginal(), nil
-	}
-	wordScope, _ := GetScopeAndNameFromString(word)
-	scope := name.GetNamespace()
-	if wordScope != "" && wordScope == scope {
-		return name.GetOriginal(), insertUse.GetUseEdit(NewTypeString(scope), nil, "")
-	}
-	for alias, fqn := range i.classes {
-		if "\\"+fqn == name.GetFQN() {
-			return alias, nil
-		}
-	}
-	if IsFQN(word) || (wordScope == "" && scope == "") {
-		return name.GetOriginal(), nil
 	}
 	// TODO: Defines do not have implicit namespace except
 	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
 	switch symbol.(type) {
 	case *Function, *Const, *Define:
-		if scope == "" {
+		// Functions, constants on \ can be used within any namespaces without the need of
+		// use statement
+		if nameNamespace == "\\" {
 			return name.GetOriginal(), nil
 		}
+	}
+	// Aliases
+	for alias, fqn := range i.classes {
+		if "\\"+fqn == name.GetFQN() {
+			return alias, nil
+		}
+	}
+	// Anything below will require insert use
+	insertUse := GetInsertUseContext(document)
+	// Calculate what to inlude in insert use, because it is possible
+	// that the current word has a scope, e.g. TestNamespace1\Class.
+	// Therefore, it only needs `use TestNamespace1;`
+	currentWordScope, _ := GetScopeAndNameFromString(word)
+	if currentWordScope != "" && currentWordScope == nameNamespace {
+		// If this goes here we don't need to include `function` or `const` in use
+		// because we only insert the namespace
+		return name.GetOriginal(), insertUse.GetUseEdit(NewTypeString(nameNamespace), nil, "")
 	}
 	return name.GetOriginal(), insertUse.GetUseEdit(name, symbol, "")
 }

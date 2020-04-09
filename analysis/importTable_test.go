@@ -54,12 +54,15 @@ namespace TestNamespace2;`))
 	doc3.Load()
 
 	doc4 := NewDocument("importTable4", []byte(`<?php
-class DateTime {}`))
+class DateTime {}
+
+function TestFunction2() {}`))
 	doc4.Load()
 
 	class := doc1.Children[0].(*Class)
 	function := doc1.Children[1].(*Function)
 	class2 := doc4.Children[0].(*Class)
+	function2 := doc4.Children[1].(*Function)
 
 	cases := []useTestCase{
 		useTestCase{doc2, class, class.Name, "Test", useResult{"TestClass1", "use TestNamespace1\\TestClass1;"}},
@@ -71,6 +74,8 @@ class DateTime {}`))
 		useTestCase{doc3, class, class.Name, "\\TestNamespace1\\Te", useResult{"TestClass1", ""}},
 		useTestCase{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
 		useTestCase{doc2, class2, class2.Name, "Dat", useResult{"DateTime", ""}},
+		useTestCase{doc3, class2, class2.Name, "Da", useResult{"DateTime", "use DateTime;"}},
+		useTestCase{doc3, function2, function2.Name, "Test", useResult{"TestFunction2", ""}},
 	}
 
 	for i, testCase := range cases {
