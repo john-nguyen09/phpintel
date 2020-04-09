@@ -84,7 +84,6 @@ func (s *Document) ResetState() {
 	s.classStack = []Symbol{}
 	s.lastPhpDoc = nil
 	s.importTables = []*ImportTable{}
-	s.injector = nil
 }
 
 func (s *Document) GetRootNode() *sitter.Node {
