@@ -13,250 +13,319 @@ var /* const */ triggerParameterHintsCommand = protocol.Command{
 	Command: "editor.action.triggerParameterHints",
 }
 
-func concatDescriptionIfAvailable(content string, description string) string {
+func concatDescriptionIfAvailable(sb *strings.Builder, description string) {
 	if len(description) > 0 {
 		converter := md.NewConverter("", true, nil)
 		markdown, err := converter.ConvertString(description)
 		if err == nil {
 			description = markdown
 		}
-		return content + "\n___\n" + description
+		writeHorLine(sb)
+		sb.WriteString(description)
 	}
-	return content
 }
 
-func paramsToString(params []*analysis.Parameter) string {
+func wrapPHPCode(sb *strings.Builder, fn func(*strings.Builder)) {
+	sb.WriteString("```php\n<?php\n")
+	fn(sb)
+	sb.WriteString("\n```\n")
+}
+
+func writeHorLine(sb *strings.Builder) {
+	sb.WriteString("\n____\n")
+}
+
+func concatParams(sb *strings.Builder, params []*analysis.Parameter) {
 	paramContents := []string{}
 	if len(params) > 0 {
 		for _, param := range params {
-			paramContent := ""
+			var paramContent strings.Builder
 			if !param.Type.IsEmpty() {
-				paramContent += param.Type.ToString() + " "
+				paramContent.WriteString(param.Type.ToString())
+				paramContent.WriteString(" ")
 			}
-			paramContent += param.Name
+			paramContent.WriteString(param.Name)
 			if param.HasValue() {
-				paramContent += " = " + param.Value
+				paramContent.WriteString(" = ")
+				paramContent.WriteString(param.Value)
 			}
-			paramContents = append(paramContents, paramContent)
+			paramContents = append(paramContents, paramContent.String())
 		}
 	}
-	return strings.Join(paramContents, ", ")
+	sb.WriteString(strings.Join(paramContents, ", "))
 }
 
-func ClassToHover(ref analysis.HasTypes, class analysis.Class) *protocol.Hover {
-	content := "```"
-	content += "class " + class.Name.GetOriginal()
-	if !class.Extends.IsEmpty() {
-		content += " extends " + class.Extends.GetOriginal()
+func formatClasses(classes []*analysis.Class) *strings.Builder {
+	sb := &strings.Builder{}
+	for _, class := range classes {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("class ")
+			sb.WriteString(class.Name.GetOriginal())
+			if !class.Extends.IsEmpty() {
+				sb.WriteString(" extends ")
+				sb.WriteString(class.Extends.ToString())
+			}
+			if len(class.Interfaces) > 0 {
+				implements := []string{}
+				for _, implement := range class.Interfaces {
+					implements = append(implements, implement.GetOriginal())
+				}
+				sb.WriteString(" implements ")
+				sb.WriteString(strings.Join(implements, ", "))
+			}
+		})
+		concatDescriptionIfAvailable(sb, class.GetDescription())
+		writeHorLine(sb)
 	}
-	if len(class.Interfaces) > 0 {
-		implements := []string{}
-		for _, implement := range class.Interfaces {
-			implements = append(implements, implement.GetOriginal())
-		}
-		content += " implements " + strings.Join(implements, ", ")
-	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, class.GetDescription())
+	return sb
+}
+
+func classesToHover(ref analysis.HasTypes, classes []*analysis.Class) *protocol.Hover {
+	sb := formatClasses(classes)
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func InterfaceToHover(ref analysis.HasTypes, theInterface analysis.Interface) *protocol.Hover {
-	content := "```"
-	content += "interface " + theInterface.Name.GetOriginal()
+func formatInterfaces(interfaces []*analysis.Interface) *strings.Builder {
+	sb := &strings.Builder{}
+	for _, inte := range interfaces {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("interface ")
+			sb.WriteString(inte.Name.GetOriginal())
+			extendStrings := []string{}
+			for _, extend := range inte.Extends {
+				if !extend.IsEmpty() {
+					extendStrings = append(extendStrings, extend.GetOriginal())
+				}
+			}
+			if len(extendStrings) > 0 {
+				sb.WriteString(" extends ")
+				sb.WriteString(strings.Join(extendStrings, ", "))
+			}
+		})
+		concatDescriptionIfAvailable(sb, inte.GetDescription())
+		writeHorLine(sb)
+	}
+	return sb
+}
 
-	extendStrings := []string{}
-	for _, extend := range theInterface.Extends {
-		if extend.IsEmpty() {
-			continue
-		}
-		extendStrings = append(extendStrings, extend.GetOriginal())
-	}
-	if len(extendStrings) != 0 {
-		content += " extends " + strings.Join(extendStrings, ", ")
-	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, theInterface.GetDescription())
+func interfacesToHover(ref analysis.HasTypes, interfaces []*analysis.Interface) *protocol.Hover {
+	content := formatInterfaces(interfaces)
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: content.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func ConstToHover(ref analysis.HasTypes, constant analysis.Const) *protocol.Hover {
-	content := "```"
-	content += "const " + constant.Name.GetOriginal()
-	if len(constant.Value) > 0 {
-		content += " = " + constant.Value
+func formatConsts(constants []*analysis.Const) *strings.Builder {
+	sb := &strings.Builder{}
+	for _, constant := range constants {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("const ")
+			sb.WriteString(constant.Name.GetOriginal())
+			if len(constant.Value) > 0 {
+				sb.WriteString(" = ")
+				sb.WriteString(constant.Value)
+			}
+		})
+		concatDescriptionIfAvailable(sb, constant.GetDescription())
+		writeHorLine(sb)
 	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, constant.GetDescription()) + "```"
+	return sb
+}
+
+func formatDefines(defines []*analysis.Define) *strings.Builder {
+	sb := &strings.Builder{}
+	for _, define := range defines {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("define('")
+			sb.WriteString(define.GetName())
+			sb.WriteString("'")
+			if len(define.Value) > 0 {
+				sb.WriteString(", ")
+				sb.WriteString(define.Value)
+			}
+			sb.WriteString(")")
+		})
+		concatDescriptionIfAvailable(sb, define.GetDescription())
+		writeHorLine(sb)
+	}
+	return sb
+}
+
+func functionsToHover(ref analysis.HasTypes, functions []*analysis.Function) *protocol.Hover {
+	sb := &strings.Builder{}
+	for _, fn := range functions {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("function ")
+			sb.WriteString(fn.GetName().GetOriginal())
+			sb.WriteString("(")
+			concatParams(sb, fn.GetParams())
+			sb.WriteString(")")
+			if !fn.GetReturnTypes().IsEmpty() {
+				sb.WriteString(": ")
+				sb.WriteString(fn.GetReturnTypes().ToString())
+			}
+		})
+		concatDescriptionIfAvailable(sb, fn.GetDescription())
+		writeHorLine(sb)
+	}
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func DefineToHover(ref analysis.HasTypes, define analysis.Define) *protocol.Hover {
-	content := "```"
-	content += "define('" + define.GetName() + "'"
-	if len(define.Value) > 0 {
-		content += ", " + define.Value
+func traitsToHover(ref analysis.HasTypes, traits []*analysis.Trait) *protocol.Hover {
+	sb := &strings.Builder{}
+	for _, trait := range traits {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("trait ")
+			sb.WriteString(trait.Name.GetOriginal())
+		})
+		concatDescriptionIfAvailable(sb, trait.GetDescription())
+		writeHorLine(sb)
 	}
-	content += ")"
-	content += "```"
-	content = concatDescriptionIfAvailable(content, define.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func FunctionToHover(ref analysis.HasTypes, function analysis.Function) *protocol.Hover {
-	content := "```"
-	content += "function " + function.GetName().GetOriginal() + "("
-	content += paramsToString(function.Params)
-	content += ")"
-	if !function.GetReturnTypes().IsEmpty() {
-		content += ": " + function.GetReturnTypes().ToString()
+func classConstsToHover(ref analysis.HasTypes, classConsts []*analysis.ClassConst) *protocol.Hover {
+	sb := &strings.Builder{}
+	for _, classConst := range classConsts {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			sb.WriteString("const ")
+			sb.WriteString(classConst.Name)
+			if len(classConst.Value) > 0 {
+				sb.WriteString(" = ")
+				sb.WriteString(classConst.Value)
+			}
+		})
+		concatDescriptionIfAvailable(sb, classConst.GetDescription())
+		writeHorLine(sb)
 	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, function.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func TraitToHover(ref analysis.HasTypes, trait analysis.Trait) *protocol.Hover {
-	content := "```"
-	content += "trait " + trait.Name.GetOriginal()
-	content += "```"
-	content = concatDescriptionIfAvailable(content, trait.GetDescription())
-	theRange := ref.GetLocation().Range
-	return &protocol.Hover{
-		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
-			Value: content,
-		},
-		Range: &theRange,
-	}
-}
-
-func ClassConstToHover(ref analysis.HasTypes, classConst analysis.ClassConst) *protocol.Hover {
-	content := "```"
-	content += "const " + classConst.Name
-	if len(classConst.Value) > 0 {
-		content += " = " + classConst.Value
-	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, classConst.GetDescription())
-	theRange := ref.GetLocation().Range
-	return &protocol.Hover{
-		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
-			Value: content,
-		},
-		Range: &theRange,
-	}
-}
-
-func concatVisibility(content string, visibility analysis.VisibilityModifierValue) string {
+func concatVisibility(sb *strings.Builder, visibility analysis.VisibilityModifierValue) {
 	if visibility == analysis.Public {
-		return content + " public"
+		sb.WriteString("public")
+	} else if visibility == analysis.Private {
+		sb.WriteString("private")
+	} else if visibility == analysis.Protected {
+		sb.WriteString("protected")
 	}
-	if visibility == analysis.Private {
-		return content + " private"
-	}
-	if visibility == analysis.Protected {
-		return content + " protected"
-	}
-	return content
 }
 
-func MethodToHover(ref analysis.HasTypes, method analysis.Method) *protocol.Hover {
-	content := "```"
-	content = concatVisibility(content, method.VisibilityModifier)
-	if method.IsStatic {
-		content += " static"
+func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol.Hover {
+	sb := &strings.Builder{}
+	for _, method := range methods {
+		wrapPHPCode(sb, func(sb *strings.Builder) {
+			concatVisibility(sb, method.VisibilityModifier)
+			if method.IsStatic {
+				sb.WriteString(" static")
+			}
+			sb.WriteString(" function ")
+			sb.WriteString(method.GetName())
+			sb.WriteString("(")
+			concatParams(sb, method.Params)
+			sb.WriteString(")")
+			if !method.GetReturnTypes().IsEmpty() {
+				sb.WriteString(": ")
+				sb.WriteString(method.GetReturnTypes().ToString())
+			}
+		})
+		concatDescriptionIfAvailable(sb, method.GetDescription())
+		writeHorLine(sb)
 	}
-	content += " function " + method.GetName() + "("
-	content += paramsToString(method.Params)
-	content += ")"
-	if !method.GetReturnTypes().IsEmpty() {
-		content += ": " + method.GetReturnTypes().ToString()
-	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, method.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func PropertyToHover(ref analysis.HasTypes, property analysis.Property) *protocol.Hover {
-	content := "```"
-	content = concatVisibility(content, property.VisibilityModifier)
-	if property.IsStatic {
-		content += " static"
+func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *protocol.Hover {
+	sb := &strings.Builder{}
+	for _, property := range properties {
+		wrapPHPCode(sb, func(s *strings.Builder) {
+			concatVisibility(sb, property.VisibilityModifier)
+			if property.IsStatic {
+				sb.WriteString(" static")
+			}
+			sb.WriteString(" ")
+			sb.WriteString(property.GetName())
+			if !property.Types.IsEmpty() {
+				sb.WriteString(": ")
+				sb.WriteString(property.Types.ToString())
+			}
+		})
+		concatDescriptionIfAvailable(sb, property.GetDescription())
+		writeHorLine(sb)
 	}
-	content += " " + property.GetName()
-	if !property.Types.IsEmpty() {
-		content += ": " + property.Types.ToString()
-	}
-	content += "```"
-	content = concatDescriptionIfAvailable(content, property.GetDescription())
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
 		Range: &theRange,
 	}
 }
 
-func VariableToHover(variable *analysis.Variable) *protocol.Hover {
-	content := "```"
-	if t := variable.GetTypes(); !t.IsEmpty() {
-		content += t.ToString() + " "
-	}
-	content += variable.Name
-	content += "```"
-	content = concatDescriptionIfAvailable(content, variable.GetDescription())
+func variableToHover(variable *analysis.Variable) *protocol.Hover {
+	sb := &strings.Builder{}
+	wrapPHPCode(sb, func(sb *strings.Builder) {
+		if t := variable.GetTypes(); !t.IsEmpty() {
+			sb.WriteString(t.ToString())
+			sb.WriteString(" ")
+		}
+		sb.WriteString(variable.Name)
+	})
+	concatDescriptionIfAvailable(sb, variable.GetDescription())
 	theRange := variable.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
 			Kind:  "markdown",
-			Value: content,
+			Value: sb.String(),
 		},
+		Range: &theRange,
+	}
+}
+
+func hoverFromSymbol(s analysis.Symbol) *protocol.Hover {
+	theRange := s.GetLocation().Range
+	return &protocol.Hover{
 		Range: &theRange,
 	}
 }
@@ -268,12 +337,17 @@ func HasParamsInsertText(f analysis.HasParams, label string) (string, protocol.I
 	return label + "($0)", protocol.SnippetTextFormat, &triggerParameterHintsCommand
 }
 
-func HasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEdit) string {
-	detail := f.GetNameLabel() + "(" + paramsToString(f.GetParams()) + ")"
+func hasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEdit) string {
+	var sb strings.Builder
+	sb.WriteString(f.GetNameLabel())
+	sb.WriteString("(")
+	concatParams(&sb, f.GetParams())
+	sb.WriteString(")")
 	if textEdit != nil {
-		detail += "\n" + textEdit.NewText
+		sb.WriteString("\n")
+		sb.WriteString(textEdit.NewText)
 	}
-	return detail
+	return sb.String()
 }
 
 func normaliseNamespaceName(name string) string {

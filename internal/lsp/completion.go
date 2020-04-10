@@ -268,7 +268,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Label:               label,
 			AdditionalTextEdits: textEdits,
 			Documentation:       function.GetDescription(),
-			Detail:              HasParamsDetailWithTextEdit(function, textEdit),
+			Detail:              hasParamsDetailWithTextEdit(function, textEdit),
 		})
 	}
 	if analysis.IsFQN(word) {
@@ -342,7 +342,7 @@ func scopedAccessCompletion(ctx *completionContext, word string, scope analysis.
 				InsertTextFormat: textFormat,
 				Command:          command,
 				Documentation:    method.GetDescription(),
-				Detail:           HasParamsDetailWithTextEdit(method, nil),
+				Detail:           hasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 		classConsts, searchResult := ctx.store.SearchClassConsts(scopeTypeFQN, word, baseSearchOptions())
@@ -402,7 +402,7 @@ func memberAccessCompletion(ctx *completionContext, word string, scope analysis.
 				InsertTextFormat: textFormat,
 				Command:          command,
 				Documentation:    method.GetDescription(),
-				Detail:           HasParamsDetailWithTextEdit(method, nil),
+				Detail:           hasParamsDetailWithTextEdit(method, nil),
 			})
 		}
 	}
