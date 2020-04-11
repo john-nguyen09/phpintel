@@ -102,7 +102,7 @@ func (s *Variable) GetDescription() string {
 }
 
 func (s *Variable) GetDetail() string {
-	return s.Type.ToString()
+	return s.GetTypes().ToString()
 }
 
 func (s *Variable) GetName() string {

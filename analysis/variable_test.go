@@ -72,4 +72,18 @@ func TestVariableTable(t *testing.T) {
 		actualNames = append(actualNames, v.Name)
 	}
 	assert.Equal(t, []string{"$var1", "$var2"}, actualNames)
+
+	vars = vt.GetVariables(protocol.Position{Line: 2, Character: 0})
+	for _, v := range vars {
+		if v.Name == "$var1" {
+			assert.Equal(t, "\\Class1", v.GetTypes().ToString())
+		}
+	}
+
+	vars = vt.GetVariables(protocol.Position{Line: 4, Character: 0})
+	for _, v := range vars {
+		if v.Name == "$var1" {
+			assert.Equal(t, "\\Class2", v.GetTypes().ToString())
+		}
+	}
 }

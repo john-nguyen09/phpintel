@@ -140,18 +140,18 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 						break
 					}
 					if par != nil && par.Type() == "dynamic_variable_name" {
-						completionList = variableCompletion(completionCtx, word)
+						completionList = variableCompletion(completionCtx, resolveCtx, word)
 						break
 					}
 					completionList = nameCompletion(completionCtx, symbol, word)
 				case "variable_name":
-					completionList = variableCompletion(completionCtx, word)
+					completionList = variableCompletion(completionCtx, resolveCtx, word)
 				}
 			}
 		case "type":
 			completionList = nameCompletion(completionCtx, symbol, word)
 		case "$":
-			completionList = variableCompletion(completionCtx, word)
+			completionList = variableCompletion(completionCtx, resolveCtx, word)
 		case "named_label_statement", "\\":
 			par := parent.Parent()
 			if par != nil && par.Type() == "namespace_name" {
@@ -170,7 +170,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	return completionList, nil
 }
 
-func variableCompletion(ctx *completionContext, word string) *protocol.CompletionList {
+func variableCompletion(ctx *completionContext, resolveCtx analysis.ResolveContext, word string) *protocol.CompletionList {
 	varTable := ctx.doc.GetVariableTableAt(ctx.pos)
 	completionList := &protocol.CompletionList{
 		IsIncomplete: true,
@@ -190,6 +190,7 @@ func variableCompletion(ctx *completionContext, word string) *protocol.Completio
 			continue
 		}
 
+		variable.Resolve(resolveCtx)
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.VariableCompletion,
 			Label:         variable.Name,
