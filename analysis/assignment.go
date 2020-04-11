@@ -1,6 +1,9 @@
 package analysis
 
-import sitter "github.com/smacker/go-tree-sitter"
+import (
+	"github.com/john-nguyen09/phpintel/util"
+	sitter "github.com/smacker/go-tree-sitter"
+)
 
 func newAssignment(document *Document, node *sitter.Node) (HasTypes, bool) {
 	lhs := node.ChildByFieldName("left")
@@ -30,7 +33,7 @@ func analyseVariableAssignment(document *Document, lhs *sitter.Node, rhs *sitter
 	var expression HasTypes = nil
 	expression = scanForExpression(document, rhs)
 	// But the variable should be pushed after any rhs's variables
-	document.pushVariable(variable)
+	document.pushVariable(variable, util.PointToPosition(parent.EndPoint()))
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {

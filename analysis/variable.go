@@ -1,7 +1,10 @@
 package analysis
 
 import (
+	"sort"
+
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	sitter "github.com/smacker/go-tree-sitter"
 )
 
@@ -21,7 +24,7 @@ func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, boo
 
 func newVariable(document *Document, node *sitter.Node) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
-	document.pushVariable(variable)
+	document.pushVariable(variable, variable.GetLocation().Range.End)
 	return variable, true
 }
 
@@ -110,10 +113,22 @@ func (s *Variable) AddTypes(t TypeComposite) {
 	s.Type.merge(t)
 }
 
+type contextualVariable struct {
+	v     *Variable
+	start protocol.Position
+}
+
+func newContextualVariable(v *Variable, start protocol.Position) contextualVariable {
+	return contextualVariable{
+		v:     v,
+		start: start,
+	}
+}
+
 // VariableTable holds the range and the variables inside
 type VariableTable struct {
 	locationRange  protocol.Range
-	variables      map[string]*Variable
+	variables      map[string][]contextualVariable
 	globalDeclares map[string]bool
 	level          int
 	children       []*VariableTable
@@ -122,19 +137,38 @@ type VariableTable struct {
 func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
 	return &VariableTable{
 		locationRange:  locationRange,
-		variables:      map[string]*Variable{},
+		variables:      map[string][]contextualVariable{},
 		globalDeclares: map[string]bool{},
 		level:          level,
 	}
 }
 
-func (vt *VariableTable) add(variable *Variable) {
-	vt.variables[variable.Name] = variable
+func (vt *VariableTable) add(variable *Variable, start protocol.Position) {
+	currentVars := []contextualVariable{}
+	newCtxVar := newContextualVariable(variable, start)
+	if prevVars, ok := vt.variables[variable.Name]; ok {
+		index := 0
+		if len(prevVars) > 0 {
+			index = sort.Search(len(prevVars), func(i int) bool {
+				return util.ComparePos(start, prevVars[i].start) < 0
+			})
+		}
+		prevVars = append(prevVars[:index], append([]contextualVariable{newCtxVar}, prevVars[index:]...)...)
+		vt.variables[variable.Name] = prevVars
+	} else {
+		vt.variables[variable.Name] = append(currentVars, newContextualVariable(variable, start))
+	}
 }
 
-func (vt *VariableTable) get(name string) *Variable {
-	if variable, ok := vt.variables[name]; ok {
-		return variable
+func (vt *VariableTable) get(name string, pos protocol.Position) *Variable {
+	if vars, ok := vt.variables[name]; ok {
+		index := sort.Search(len(vars), func(i int) bool {
+			return util.ComparePos(pos, vars[i].start) < 0
+		})
+		index--
+		if index >= 0 && index < len(vars) {
+			return vars[index].v
+		}
 	}
 	return nil
 }
@@ -151,8 +185,21 @@ func (vt *VariableTable) setReferenceGlobal(name string) {
 }
 
 // GetVariables returns all the variables in the table
-func (vt *VariableTable) GetVariables() map[string]*Variable {
-	return vt.variables
+func (vt *VariableTable) GetVariables(pos protocol.Position) []*Variable {
+	results := []*Variable{}
+	for _, vars := range vt.variables {
+		if len(vars) == 0 {
+			continue
+		}
+		index := sort.Search(len(vars), func(i int) bool {
+			return util.ComparePos(pos, vars[i].start) < 0
+		})
+		index--
+		if index >= 0 && index < len(vars) {
+			results = append(results, vars[index].v)
+		}
+	}
+	return results
 }
 
 func (vt *VariableTable) addChild(child *VariableTable) {

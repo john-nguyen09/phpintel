@@ -299,16 +299,16 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 	return traverseAndFind(lastFoundVarTable)
 }
 
-func (s *Document) pushVariable(variable *Variable) {
+func (s *Document) pushVariable(variable *Variable, pos protocol.Position) {
 	variableTable := s.getCurrentVariableTable()
-	currentVariable := variableTable.get(variable.Name)
+	currentVariable := variableTable.get(variable.Name, pos)
 	if currentVariable != nil {
 		variable.mergeTypesWithVariable(currentVariable)
 	}
 	if variableTable.level == 0 || variableTable.canReferenceGlobal(variable.Name) {
 		variable.canReferenceGlobal = true
 	}
-	variableTable.add(variable)
+	variableTable.add(variable, pos)
 }
 
 // Even though the name indicates class but actually this will also

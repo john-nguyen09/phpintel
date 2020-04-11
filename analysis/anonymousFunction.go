@@ -29,7 +29,7 @@ func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 		case "formal_parameters":
 			anonFunc.analyseParameterDeclarationList(document, child)
 			for _, param := range anonFunc.Params {
-				variableTable.add(param.ToVariable())
+				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
 			}
 		case "compound_statement":
 			scanForChildren(document, child)

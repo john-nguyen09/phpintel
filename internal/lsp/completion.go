@@ -179,7 +179,7 @@ func variableCompletion(ctx *completionContext, word string) *protocol.Completio
 		return completionList
 	}
 	symbol := ctx.doc.HasTypesAtPos(ctx.pos)
-	for _, variable := range varTable.GetVariables() {
+	for _, variable := range varTable.GetVariables(ctx.pos) {
 		if variable.Name == "$" {
 			continue
 		}

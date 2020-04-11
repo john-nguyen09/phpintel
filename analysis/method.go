@@ -75,7 +75,7 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 				s.applyPhpDoc(document, *phpDoc)
 			}
 			for _, param := range s.Params {
-				variableTable.add(param.ToVariable())
+				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
 			}
 		case "compound_statement":
 			scanForChildren(document, child)

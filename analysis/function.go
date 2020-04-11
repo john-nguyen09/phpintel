@@ -45,7 +45,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 				function.applyPhpDoc(document, *phpDoc)
 			}
 			for _, param := range function.Params {
-				variableTable.add(param.ToVariable())
+				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
 			}
 		case "compound_statement":
 			scanForChildren(document, child)
