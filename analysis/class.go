@@ -11,6 +11,7 @@ import (
 type Class struct {
 	description string
 	children    []Symbol
+	refLocation protocol.Location
 	Location    protocol.Location
 
 	Modifier   ClassModifierValue
@@ -23,6 +24,7 @@ type Class struct {
 var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
 var _ BlockSymbol = (*Class)(nil)
+var _ SymbolReference = (*Class)(nil)
 
 func getMemberModifier(node *sitter.Node) VisibilityModifierValue {
 	traverser := util.NewTraverser(node)
@@ -75,6 +77,7 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 		case "name":
 			class.Name = NewTypeString(document.GetNodeText(child))
 			class.Name.SetNamespace(document.currImportTable().GetNamespace())
+			class.refLocation = document.GetNodeLocation(child)
 			if phpDoc != nil {
 				class.description = phpDoc.Description
 				for _, propertyTag := range phpDoc.Properties {
@@ -192,6 +195,7 @@ func (s *Class) IsScopeSymbol() bool {
 
 func (s *Class) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.Location)
+	e.WriteLocation(s.refLocation)
 	e.WriteInt(int(s.Modifier))
 	e.WriteString(s.description)
 	s.Name.Write(e)
@@ -209,6 +213,7 @@ func (s *Class) Serialise(e *storage.Encoder) {
 func ReadClass(d *storage.Decoder) *Class {
 	theClass := &Class{
 		Location:    d.ReadLocation(),
+		refLocation: d.ReadLocation(),
 		Modifier:    ClassModifierValue(d.ReadInt()),
 		description: d.ReadString(),
 		Name:        ReadTypeString(d),
@@ -243,4 +248,14 @@ func (s *Class) addChild(child Symbol) {
 
 func (s *Class) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the FQN of the class' name
+func (s *Class) ReferenceFQN() string {
+	return s.Name.GetFQN()
+}
+
+// ReferenceLocation returns the location of the class' name
+func (s *Class) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

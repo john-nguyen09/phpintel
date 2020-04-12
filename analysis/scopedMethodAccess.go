@@ -13,6 +13,8 @@ type ScopedMethodAccess struct {
 	hasResolved bool
 }
 
+var _ HasTypesHasScope = (*ScopedMethodAccess)(nil)
+
 func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
@@ -97,4 +99,15 @@ func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams 
 		}
 	}
 	return hasParams
+}
+
+func (s *ScopedMethodAccess) MemberName() string {
+	return s.Name
+}
+
+func (s *ScopedMethodAccess) GetScopeTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return newTypeComposite()
 }

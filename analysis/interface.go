@@ -10,6 +10,7 @@ import (
 // Interface contains information of interfaces
 type Interface struct {
 	location    protocol.Location
+	refLocation protocol.Location
 	children    []Symbol
 	description string
 
@@ -20,6 +21,7 @@ type Interface struct {
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
 var _ BlockSymbol = (*Interface)(nil)
+var _ SymbolReference = (*Interface)(nil)
 
 func newInterface(document *Document, node *sitter.Node) Symbol {
 	theInterface := &Interface{
@@ -34,6 +36,7 @@ func newInterface(document *Document, node *sitter.Node) Symbol {
 		switch child.Type() {
 		case "name":
 			theInterface.Name = NewTypeString(document.GetNodeText(child))
+			theInterface.refLocation = document.GetNodeLocation(child)
 		case "interface_base_clause":
 			theInterface.extends(document, child)
 		case "declaration_list":
@@ -117,4 +120,14 @@ func (s *Interface) addChild(child Symbol) {
 
 func (s *Interface) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the interface's FQN for reference index
+func (s *Interface) ReferenceFQN() string {
+	return s.Name.GetFQN()
+}
+
+// ReferenceLocation returns the location of the interface's name
+func (s *Interface) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

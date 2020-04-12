@@ -12,6 +12,8 @@ type MethodAccess struct {
 	hasResolved bool
 }
 
+var _ HasTypesHasScope = (*MethodAccess)(nil)
+
 func newMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
 		Expression: Expression{},
@@ -87,4 +89,15 @@ func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 		}
 	}
 	return hasParams
+}
+
+func (s *MethodAccess) GetScopeTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return newTypeComposite()
+}
+
+func (s *MethodAccess) MemberName() string {
+	return s.Name
 }

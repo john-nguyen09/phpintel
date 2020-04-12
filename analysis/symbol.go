@@ -71,6 +71,13 @@ type HasScope interface {
 	IsScopeSymbol() bool
 }
 
+// SymbolReference is a reference to the symbol itself
+type SymbolReference interface {
+	Symbol
+	ReferenceFQN() string
+	ReferenceLocation() protocol.Location
+}
+
 type serialisable interface {
 	GetCollection() string
 	GetKey() string

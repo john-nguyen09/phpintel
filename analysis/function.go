@@ -9,8 +9,9 @@ import (
 
 // Function contains information of functions
 type Function struct {
-	location protocol.Location
-	children []Symbol
+	location    protocol.Location
+	refLocation protocol.Location
+	children    []Symbol
 
 	Name        TypeString `json:"Name"`
 	Params      []*Parameter
@@ -21,6 +22,7 @@ type Function struct {
 var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
 var _ BlockSymbol = (*Function)(nil)
+var _ SymbolReference = (*Function)(nil)
 
 func newFunction(document *Document, node *sitter.Node) Symbol {
 	function := &Function{
@@ -39,6 +41,7 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 		switch child.Type() {
 		case "name":
 			function.Name = NewTypeString(document.GetNodeText(child))
+			function.refLocation = document.GetNodeLocation(child)
 		case "formal_parameters":
 			function.analyseParameterDeclarationList(document, child)
 			if phpDoc != nil {
@@ -170,4 +173,14 @@ func (s *Function) addChild(child Symbol) {
 
 func (s *Function) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the FQN to function's name for the reference index
+func (s *Function) ReferenceFQN() string {
+	return s.Name.GetFQN()
+}
+
+// ReferenceLocation returns the location of the function's name for reference index
+func (s *Function) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

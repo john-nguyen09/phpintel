@@ -89,6 +89,27 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 	return name.GetFQN()
 }
 
+func (i ImportTable) functionPossibleFQNs(name TypeString) []string {
+	firstPart, parts := name.GetFirstAndRestParts()
+	aliasTable := i.functions
+	if len(parts) > 0 {
+		aliasTable = i.classes
+	}
+	results := []string{}
+	if fqn, ok := aliasTable[firstPart]; ok {
+		results = append(results, "\\"+fqn)
+		return results
+	}
+	fqn := name.GetFQN()
+	if !IsFQN(fqn) {
+		fqn = "\\" + fqn
+	}
+	results = append(results, fqn)
+	name.SetNamespace(i.GetNamespace())
+	results = append(results, name.GetFQN())
+	return results
+}
+
 func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.constants
