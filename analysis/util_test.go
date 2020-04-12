@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/stub"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -25,10 +26,11 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 
 func setupStore(uri string, name string) *Store {
 	db := storage.NewMemory()
-	initStubs()
+	stubbers := stub.GetStubbers()
 	return &Store{
 		uri:       uri,
 		db:        db,
+		stubbers:  stubbers,
 		documents: cmap.New(),
 
 		syncedDocumentURIs: cmap.New(),

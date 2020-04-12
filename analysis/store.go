@@ -11,6 +11,7 @@ import (
 	"github.com/Masterminds/semver"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/stub"
 	"github.com/john-nguyen09/phpintel/util"
 	putil "github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
@@ -47,8 +48,6 @@ var /* const */ versionKey = []byte("Version")
 
 const scopeSep = "::"
 
-var stubs = []*PhpStub{}
-
 // KeySep is the separator when constructing key
 const KeySep string = "\x00"
 
@@ -79,6 +78,7 @@ func (s *entry) bytes() []byte {
 type Store struct {
 	uri       protocol.DocumentURI
 	db        storage.DB
+	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
 
 	syncedDocumentURIs cmap.ConcurrentMap
@@ -143,19 +143,16 @@ func (s SearchOptions) IsLimitReached() bool {
 	return s.limiter()
 }
 
-func initStubs() {
-	stubs = append(stubs, NewPhpStormStub())
-}
-
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	db, err := storage.NewDisk(storePath)
-	initStubs()
+	stubbers := stub.GetStubbers()
 	if err != nil {
 		return nil, err
 	}
 	store := &Store{
 		uri:       uri,
 		db:        db,
+		stubbers:  stubbers,
 		documents: cmap.New(),
 
 		syncedDocumentURIs: cmap.New(),
@@ -200,9 +197,9 @@ func (s *Store) Migrate(newVersion string) {
 }
 
 func (s *Store) LoadStubs() {
-	for _, stub := range stubs {
-		stub.Walk(func(path string, data []byte) error {
-			document := NewDocument(stub.GetUri(path), data)
+	for _, stubber := range s.stubbers {
+		stubber.Walk(func(path string, data []byte) error {
+			document := NewDocument(stubber.GetURI(path), data)
 			currentMD5 := document.GetHash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(entry.getKeyBytes())

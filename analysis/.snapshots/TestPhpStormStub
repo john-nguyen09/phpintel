@@ -2,7 +2,7 @@
   (*analysis.Function)({
     location: (protocol.Location) {
       URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-      Range: (protocol.Range) 158:0-158:92
+      Range: (protocol.Range) 156:0-156:92
     },
     children: ([]analysis.Symbol) <nil>,
     Name: (analysis.TypeString) {
@@ -14,7 +14,7 @@
       (*analysis.Parameter)({
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-          Range: (protocol.Range) 158:21-158:29
+          Range: (protocol.Range) 156:21-156:29
         },
         description: (string) "",
         hasValue: (bool) false,
@@ -33,7 +33,7 @@
       (*analysis.Parameter)({
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-          Range: (protocol.Range) 158:31-158:39
+          Range: (protocol.Range) 156:31-156:39
         },
         description: (string) "",
         hasValue: (bool) false,
@@ -52,7 +52,7 @@
       (*analysis.Parameter)({
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-          Range: (protocol.Range) 158:41-158:63
+          Range: (protocol.Range) 156:41-156:63
         },
         description: (string) "",
         hasValue: (bool) true,
@@ -71,7 +71,7 @@
       (*analysis.Parameter)({
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-          Range: (protocol.Range) 158:65-158:75
+          Range: (protocol.Range) 156:65-156:75
         },
         description: (string) "",
         hasValue: (bool) true,
@@ -90,7 +90,7 @@
       (*analysis.Parameter)({
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
-          Range: (protocol.Range) 158:77-158:88
+          Range: (protocol.Range) 156:77-156:88
         },
         description: (string) "",
         hasValue: (bool) true,
