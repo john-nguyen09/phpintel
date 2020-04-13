@@ -85,7 +85,7 @@ func classesToHover(ref analysis.HasTypes, classes []*analysis.Class) *protocol.
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -120,7 +120,7 @@ func interfacesToHover(ref analysis.HasTypes, interfaces []*analysis.Interface) 
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: content.String(),
 		},
 		Range: &theRange,
@@ -183,7 +183,7 @@ func functionsToHover(ref analysis.HasTypes, functions []*analysis.Function) *pr
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -203,7 +203,7 @@ func traitsToHover(ref analysis.HasTypes, traits []*analysis.Trait) *protocol.Ho
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -227,7 +227,7 @@ func classConstsToHover(ref analysis.HasTypes, classConsts []*analysis.ClassCons
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -268,7 +268,7 @@ func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -296,7 +296,7 @@ func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *
 	theRange := ref.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -316,7 +316,7 @@ func variableToHover(variable *analysis.Variable) *protocol.Hover {
 	theRange := variable.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
-			Kind:  "markdown",
+			Kind:  protocol.Markdown,
 			Value: sb.String(),
 		},
 		Range: &theRange,
@@ -327,6 +327,10 @@ func hoverFromSymbol(s analysis.Symbol) *protocol.Hover {
 	theRange := s.GetLocation().Range
 	return &protocol.Hover{
 		Range: &theRange,
+		Contents: protocol.MarkupContent{
+			Kind:  protocol.Markdown,
+			Value: "",
+		},
 	}
 }
 
