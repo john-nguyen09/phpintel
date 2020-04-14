@@ -99,5 +99,5 @@ func (s *MethodAccess) GetScopeTypes() TypeComposite {
 }
 
 func (s *MethodAccess) MemberName() string {
-	return s.Name
+	return s.Name + "()"
 }

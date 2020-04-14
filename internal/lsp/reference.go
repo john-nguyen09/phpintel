@@ -30,11 +30,11 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		for _, t := range v.GetTypes().Resolve() {
 			results = append(results, store.GetReferences(t.GetFQN())...)
 		}
-	case *analysis.MethodAccess, *analysis.PropertyAccess, *analysis.ScopedMethodAccess, *analysis.ScopedPropertyAccess:
+	case *analysis.MethodAccess, *analysis.PropertyAccess, *analysis.ScopedMethodAccess, *analysis.ScopedPropertyAccess, *analysis.ScopedConstantAccess:
 		sym.Resolve(resolveCtx)
 		h := sym.(analysis.HasTypesHasScope)
 		for _, t := range h.GetScopeTypes().Resolve() {
-			fqn := t.GetFQN() + "->" + h.MemberName()
+			fqn := t.GetFQN() + "::" + h.MemberName()
 			results = append(results, store.GetReferences(fqn)...)
 		}
 	}

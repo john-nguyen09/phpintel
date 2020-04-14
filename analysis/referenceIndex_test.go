@@ -62,6 +62,10 @@ func TestReferenceIndex(t *testing.T) {
 				Start: protocol.Position{Line: 2, Character: 4},
 				End:   protocol.Position{Line: 2, Character: 13},
 			}},
+			{URI: "test4", Range: protocol.Range{
+				Start: protocol.Position{Line: 4, Character: 0},
+				End:   protocol.Position{Line: 4, Character: 9},
+			}},
 		}, store.GetReferences(typ.GetFQN()))
 	}
 
@@ -80,6 +84,10 @@ func TestReferenceIndex(t *testing.T) {
 			{URI: "test3", Range: protocol.Range{
 				Start: protocol.Position{Line: 15, Character: 61},
 				End:   protocol.Position{Line: 15, Character: 75},
+			}},
+			{URI: "test4", Range: protocol.Range{
+				Start: protocol.Position{Line: 6, Character: 0},
+				End:   protocol.Position{Line: 6, Character: 14},
 			}},
 			{URI: "test5", Range: protocol.Range{
 				Start: protocol.Position{Line: 7, Character: 10},

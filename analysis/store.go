@@ -458,13 +458,7 @@ func (s *Store) writeReferenceIfAvailable(batch storage.Batch, document *Documen
 		}
 	case HasTypesHasScope:
 		switch v.(type) {
-		case *MethodAccess, *PropertyAccess:
-			for _, t := range v.GetScopeTypes().Resolve() {
-				fqn := t.GetFQN() + "->" + v.MemberName()
-				entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
-				riDeletor.MarkNotDelete(s, sym, fqn)
-			}
-		case *ScopedMethodAccess, *ScopedPropertyAccess:
+		case *MethodAccess, *PropertyAccess, *ScopedMethodAccess, *ScopedPropertyAccess, *ScopedConstantAccess:
 			for _, t := range v.GetScopeTypes().Resolve() {
 				fqn := t.GetFQN() + "::" + v.MemberName()
 				entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)

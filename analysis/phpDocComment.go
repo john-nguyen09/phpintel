@@ -23,6 +23,8 @@ type tag struct {
 	TypeString  string
 	Parameters  []methodTagParam
 	IsStatic    bool
+
+	nameLocation protocol.Location
 }
 
 var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
@@ -41,6 +43,7 @@ func processTypeNode(document *Document, node *sitter.Node) string {
 func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	name := ""
+	nameLocation := protocol.Location{}
 	description := ""
 	traverser := util.NewTraverser(node)
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
@@ -54,6 +57,7 @@ func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) t
 			}
 		case "variable_name":
 			name = document.GetNodeText(child)
+			nameLocation = document.GetNodeLocation(child)
 		}
 	}
 	return tag{
@@ -61,6 +65,8 @@ func paramOrPropTypeTag(tagName string, document *Document, node *sitter.Node) t
 		Name:        name,
 		Description: description,
 		TypeString:  strings.Join(ts, "|"),
+
+		nameLocation: nameLocation,
 	}
 }
 
@@ -118,6 +124,7 @@ func methodTag(tagName string, document *Document, node *sitter.Node) tag {
 	ts := []string{}
 	isStatic := false
 	name := ""
+	nameLocation := protocol.Location{}
 	params := []methodTagParam{}
 	description := ""
 	traverser := util.NewTraverser(node)
@@ -134,6 +141,7 @@ func methodTag(tagName string, document *Document, node *sitter.Node) tag {
 			isStatic = true
 		case "name":
 			name = document.GetNodeText(child)
+			nameLocation = document.GetNodeLocation(child)
 		case "param":
 			params = append(params, methodParam(document, child))
 		}
@@ -150,6 +158,8 @@ func methodTag(tagName string, document *Document, node *sitter.Node) tag {
 		Name:        name,
 		Parameters:  params,
 		Description: description,
+
+		nameLocation: nameLocation,
 	}
 }
 

@@ -102,7 +102,7 @@ func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams 
 }
 
 func (s *ScopedMethodAccess) MemberName() string {
-	return s.Name
+	return s.Name + "()"
 }
 
 func (s *ScopedMethodAccess) GetScopeTypes() TypeComposite {
