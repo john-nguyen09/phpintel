@@ -494,15 +494,13 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 		}
 		s.lineOffsets = newLineOffsets
 
-		rangeLength := endOffset - startOffset
-		oldEndIndex := startOffset + rangeLength
 		newEndIndex := startOffset + len(text)
 		edit := sitter.EditInput{
 			StartIndex:  uint32(startOffset),
-			OldEndIndex: uint32(oldEndIndex),
+			OldEndIndex: uint32(endOffset),
 			NewEndIndex: uint32(newEndIndex),
 			StartPoint:  util.PositionToPoint(start),
-			OldEndPoint: util.PositionToPoint(s.positionAt(oldEndIndex)),
+			OldEndPoint: util.PositionToPoint(s.positionAt(endOffset)),
 			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
 		}
 		if s.injector != nil {
