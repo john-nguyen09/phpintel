@@ -87,6 +87,8 @@ func init() {
 		phrase.SimpleAssignmentExpression:     newAssignment,
 		phrase.ByRefAssignmentExpression:      newAssignment,
 		phrase.CompoundAssignmentExpression:   newAssignment,
+		phrase.InstanceOfExpression:           processInstanceOfExpression,
+		phrase.InstanceofTypeDesignator:       newInstanceOfTypeDesignator,
 	}
 }
 

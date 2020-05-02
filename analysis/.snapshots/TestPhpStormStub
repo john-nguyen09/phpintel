@@ -58,7 +58,12 @@
         hasValue: (bool) true,
         Name: (string) (len=8) "$matches",
         Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) (len=1) {
+          typeStrings: ([]analysis.TypeString) (len=2) {
+            (analysis.TypeString) {
+              fqn: (string) (len=5) "array",
+              original: (string) (len=5) "array",
+              arrayLevel: (int) 0
+            },
             (analysis.TypeString) {
               fqn: (string) (len=6) "string",
               original: (string) (len=6) "string",

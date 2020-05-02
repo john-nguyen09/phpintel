@@ -34,8 +34,13 @@ func processTypeNode(document *Document, node *phrase.Phrase) string {
 	if text == "" {
 		return text
 	}
-	typeDecl := newTypeDeclaration(document, node)
-	document.addSymbol(typeDecl)
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	if p, ok := child.(*phrase.Phrase); ok && (p.Type == phrase.QualifiedName ||
+		p.Type == phrase.FullyQualifiedName) {
+		typeDecl := newTypeDeclaration(document, node)
+		document.addSymbol(typeDecl)
+	}
 	return text
 }
 
@@ -180,6 +185,11 @@ func methodTag(tagName string, document *Document, node *phrase.Phrase) tag {
 			case phrase.ParameterDeclarationList:
 				params = processParamList(document, p)
 			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.Static:
+				isStatic = true
+			}
 		}
 	}
 
@@ -274,8 +284,12 @@ func readDescriptionNode(document *Document, node *phrase.Phrase) string {
 }
 
 func getTagName(document *Document, p *phrase.Phrase) string {
-	if len(p.Children) >= 2 {
-		return document.GetNodeText(p.Children[1])
+	traverser := util.NewTraverser(p)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		if t, ok := child.(*lexer.Token); ok &&
+			t.Type > lexer.DocumentCommentTagNameAnchorStart && t.Type < lexer.DocumentCommentTagNameAnchorEnd {
+			return document.getTokenText(t)
+		}
 	}
 	return ""
 }
@@ -284,7 +298,11 @@ func parseTag(document *Document, p *phrase.Phrase) (tag, error) {
 	tagName := getTagName(document, p)
 	switch tagName {
 	case "@param", "@property", "@property-read", "@property-write":
-		return paramOrPropTypeTag(tagName, document, p), nil
+		paramOrProp := paramOrPropTypeTag(tagName, document, p)
+		if tagName != "@param" && paramOrProp.Name == "" {
+			return tag{}, fmt.Errorf("@property tags with no name")
+		}
+		return paramOrProp, nil
 	case "@var":
 		return varTag(tagName, document, p), nil
 	case "@return":

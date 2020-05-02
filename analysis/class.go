@@ -69,7 +69,6 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
-				document.addSymbol(class)
 				class.analyseHeader(document, p, phpDoc)
 			case phrase.ClassDeclarationBody:
 				scanForChildren(document, p)

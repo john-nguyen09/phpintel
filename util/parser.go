@@ -10,6 +10,9 @@ func FirstToken(node phrase.AstNode) *lexer.Token {
 	if t, ok := node.(*lexer.Token); ok {
 		return t
 	}
+	if e, ok := node.(*phrase.ParseError); ok {
+		return e.Unexpected
+	}
 	if p, ok := node.(*phrase.Phrase); ok && len(p.Children) != 0 {
 		return FirstToken(p.Children[0])
 	}
@@ -20,6 +23,9 @@ func FirstToken(node phrase.AstNode) *lexer.Token {
 func LastToken(node phrase.AstNode) *lexer.Token {
 	if t, ok := node.(*lexer.Token); ok {
 		return t
+	}
+	if e, ok := node.(*phrase.ParseError); ok {
+		return e.Unexpected
 	}
 	if p, ok := node.(*phrase.Phrase); ok && len(p.Children) != 0 {
 		return LastToken(p.Children[len(p.Children)-1])

@@ -36,8 +36,16 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 				}
 				document.addSymbol(typeDeclaration)
 			case phrase.ConstantAccessExpression:
-				if constAccess, shouldAdd := newConstantAccess(document, p); shouldAdd {
+				var (
+					constAccess HasTypes
+					shouldAdd   bool
+				)
+				if constAccess, shouldAdd = newConstantAccess(document, p); shouldAdd {
 					document.addSymbol(constAccess)
+				}
+				if constAccess != nil && hasEqual {
+					param.hasValue = true
+					param.Value += document.getPhraseText(p)
 				}
 			default:
 				if hasEqual {

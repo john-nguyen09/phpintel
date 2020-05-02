@@ -28,6 +28,7 @@ func tryToNewDefine(document *Document, node *phrase.Phrase) Symbol {
 				}
 			}
 		}
+		child = traverser.Advance()
 	}
 	return nil
 }

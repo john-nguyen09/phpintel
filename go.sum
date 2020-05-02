@@ -39,6 +39,12 @@ github.com/john-nguyen09/go-phpparser v0.0.0-20200502014731-5185eb47a5f9 h1:yhvS
 github.com/john-nguyen09/go-phpparser v0.0.0-20200502014731-5185eb47a5f9/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
 github.com/john-nguyen09/go-phpparser v0.0.0-20200502015943-6c4072dd8c53 h1:vnM6wx8pwBsFAucXoYWOVWnuOCQeHISOQNJuciweCrc=
 github.com/john-nguyen09/go-phpparser v0.0.0-20200502015943-6c4072dd8c53/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502074225-9fb5072d298c h1:ptkaF51ZG2S8ox2hRhZ0umxoCf753dMaWIezydAA78U=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502074225-9fb5072d298c/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502115602-873b3c661b40 h1:eZRSUGbr+TCqfezom4iaXwwOfBRQyQMJ12/sXvvFeYw=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502115602-873b3c661b40/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502121305-4ee4c80b5416 h1:fc0wCORHsESI5CQ6WtjEWua/aAHoHrEnasvHUI1ne0Q=
+github.com/john-nguyen09/go-phpparser v0.0.0-20200502121305-4ee4c80b5416/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
 github.com/karrick/godirwalk v1.12.0 h1:nkS4xxsjiZMvVlazd0mFyiwD4BR9f3m6LXGhM2TUx3Y=
 github.com/karrick/godirwalk v1.12.0/go.mod h1:H5KPZjojv4lE+QYImBI8xVtrBRgYrIVsaRPx4tDPEn4=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=

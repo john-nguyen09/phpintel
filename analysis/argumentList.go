@@ -21,7 +21,7 @@ var _ BlockSymbol = (*ArgumentList)(nil)
 func newEmptyArgumentList(document *Document, open *lexer.Token, close *lexer.Token) *ArgumentList {
 	closePos := document.positionAt(open.Offset)
 	if close != nil {
-		closePos = document.positionAt(close.Offset)
+		closePos = document.positionAt(close.Offset + close.Length)
 	}
 	argumentList := &ArgumentList{
 		location: protocol.Location{
@@ -58,10 +58,13 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 				child = traverser.Advance()
 				continue
 			}
+			if token.Type != lexer.Whitespace {
+				argumentList.arguments = append(argumentList.arguments, token)
+			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			nodesToScan = append(nodesToScan, p)
+			argumentList.arguments = append(argumentList.arguments, p)
 		}
-		argumentList.arguments = append(argumentList.arguments, child)
 		child = traverser.Advance()
 	}
 	argumentList.ranges = append(argumentList.ranges, protocol.Range{

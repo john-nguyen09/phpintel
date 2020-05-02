@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -39,126 +40,60 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	// log.Printf("Completion: %s %v %T %s, kind: %v", word, pos, symbol, nodes, params.Context.TriggerKind)
 	parent := nodes.Parent()
-	if parent != nil {
-		switch parent.Type() {
-		case "::":
-			prev := parent.PrevSibling()
-			if prev != nil {
-				s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
-				// log.Printf("%T %v %s %v", s, s, prev.Type(), util.PointToPosition(prev.EndPoint()))
-				if s != nil {
-					s.Resolve(resolveCtx)
-					completionList = scopedAccessCompletion(completionCtx, word, s)
-				}
+	switch parent.Type {
+	case phrase.SimpleVariable:
+		if nodes.Parent().Type == phrase.ScopedMemberName {
+			if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
+				completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
 			}
-		case "->":
-			prev := parent.PrevSibling()
-			if prev != nil {
-				s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
-				// log.Printf("%T %s %v", s, prev.Type(), util.PointToPosition(prev.EndPoint()))
-				if s != nil {
-					s.Resolve(resolveCtx)
-					completionList = memberAccessCompletion(completionCtx, word, s)
-				}
-			}
-		case "name":
-			par := nodes.Parent()
-			prev := parent.PrevSibling()
-			if (prev != nil && prev.Type() == "use") || (par != nil && par.Type() == "namespace_name") {
-				completionList = useCompletion(completionCtx, word)
-				break
-			}
-			if par != nil {
-				switch par.Type() {
-				case "class_constant_access_expression":
-					if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
-						if s.Scope != nil {
-							s.Scope.Resolve(resolveCtx)
-							completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
-						}
-					}
-				case "scoped_call_expression":
-					if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
-						if s.Scope != nil {
-							s.Scope.Resolve(resolveCtx)
-							completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
-						}
-					}
-				case "member_access_expression":
-					if s, ok := symbol.(*analysis.PropertyAccess); ok {
-						if s.Scope != nil {
-							s.Scope.Resolve(resolveCtx)
-							completionList = memberAccessCompletion(completionCtx, word, s.Scope)
-						}
-					}
-				case "member_call_expression":
-					if s, ok := symbol.(*analysis.MethodAccess); ok {
-						if s.Scope != nil {
-							s.Scope.Resolve(resolveCtx)
-							completionList = memberAccessCompletion(completionCtx, word, s.Scope)
-						}
-					}
-				case "named_label_statement":
-					completionList = nameCompletion(completionCtx, symbol, word)
-				case "qualified_name":
-					par = nodes.Parent()
-					if par != nil && par.Type() == "namespace_use_clause" {
-						completionList = useCompletion(completionCtx, word)
-						break
-					}
-					completionList = nameCompletion(completionCtx, symbol, word)
-				case "ERROR":
-					parPrev := par.PrevSibling()
-					par = nodes.Parent()
-					if parPrev != nil {
-						t := parPrev.Type()
-						if t == "php_tag" {
-							completionList = phpTagCompletion(word)
-							break
-						}
-						if par != nil && par.Type() == "declaration_list" {
-							completionList = keywordCompletion(completionCtx, word)
-							break
-						}
-					}
-					prev := parent.PrevSibling()
-					if par.Type() == "formal_parameters" || (prev != nil && prev.Type() == "(") {
-						completionList = typeCompletion(completionCtx, word)
-						break
-					}
-					if par.Type() == "member_access_expression" {
-						if parPrev != nil && parPrev.Type() == "->" {
-							prev = parPrev.PrevSibling()
-							if prev != nil {
-								s := document.HasTypesAtPos(util.PointToPosition(prev.EndPoint()))
-								if s != nil {
-									s.Resolve(resolveCtx)
-									completionList = memberAccessCompletion(completionCtx, word, s)
-								}
-							}
-						}
-						break
-					}
-					if par != nil && par.Type() == "dynamic_variable_name" {
-						completionList = variableCompletion(completionCtx, resolveCtx, word)
-						break
-					}
-					completionList = nameCompletion(completionCtx, symbol, word)
-				case "variable_name":
-					completionList = variableCompletion(completionCtx, resolveCtx, word)
-				}
-			}
-		case "type":
+			break
+		}
+		completionList = variableCompletion(completionCtx, resolveCtx, word)
+	case phrase.NamespaceName:
+		nodes.Parent()
+		if nodes.Parent().Type == phrase.ConstantAccessExpression {
 			completionList = nameCompletion(completionCtx, symbol, word)
-		case "$":
-			completionList = variableCompletion(completionCtx, resolveCtx, word)
-		case "named_label_statement", "\\":
-			par := parent.Parent()
-			if par != nil && par.Type() == "namespace_name" {
-				completionList = useCompletion(completionCtx, word)
-				break
+		}
+	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
+		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
+			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+		}
+	case phrase.ScopedCallExpression:
+		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
+			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+		}
+	case phrase.ScopedPropertyAccessExpression:
+		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
+			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+		}
+	case phrase.Identifier:
+		nodes.Parent()
+		parent := nodes.Parent()
+		switch parent.Type {
+		case phrase.ClassConstantAccessExpression, phrase.ScopedCallExpression:
+			symbol := document.HasTypesAt(util.FirstToken(&parent).Offset)
+			if s, ok := symbol.(*analysis.ClassAccess); ok {
+				s.Resolve(resolveCtx)
+				completionList = scopedAccessCompletion(completionCtx, word, s)
 			}
-			completionList = nameCompletion(completionCtx, symbol, word)
+		}
+	case phrase.PropertyAccessExpression:
+		s := document.HasTypesBeforePos(params.Position)
+		if s != nil {
+			s.Resolve(resolveCtx)
+			completionList = memberAccessCompletion(completionCtx, word, s)
+		}
+	case phrase.MemberName:
+		parent := nodes.Parent()
+		switch parent.Type {
+		case phrase.PropertyAccessExpression:
+			if s, ok := symbol.(*analysis.PropertyAccess); ok {
+				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+			}
+		case phrase.MethodCallExpression:
+			if s, ok := symbol.(*analysis.MethodAccess); ok {
+				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+			}
 		}
 	}
 	switch s := symbol.(type) {

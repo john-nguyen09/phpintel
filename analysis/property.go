@@ -34,6 +34,9 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 		IsStatic:           false,
 		Types:              typesFromPhpDoc(document, docTag.TypeString),
 	}
+	if property.Name == "" {
+		return nil
+	}
 	return property
 }
 
@@ -48,13 +51,22 @@ func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
 			case phrase.MemberModifierList:
 				visibility, isStatic, _ = getMemberModifier(p)
 			case phrase.PropertyElementList:
-				property := newProperty(document, p, visibility, isStatic)
-				document.addSymbol(property)
+				newPropertyList(document, p, visibility, isStatic)
 			}
 		}
 		child = traverser.Advance()
 	}
 	return nil
+}
+
+func newPropertyList(document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) {
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.PropertyElement {
+			property := newProperty(document, p, visibility, isStatic)
+			document.addSymbol(property)
+		}
+	}
 }
 
 func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) *Property {
@@ -75,16 +87,11 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
-			case phrase.PropertyElement:
-				if len(p.Children) > 0 {
-					firstChild := p.Children[0]
-					if t, ok := firstChild.(*lexer.Token); ok && t.Type == lexer.VariableName {
-						property.Name = document.getTokenText(t)
-					}
-				}
 			case phrase.PropertyInitialiser:
 				scanForChildren(document, p)
 			}
+		} else if t, ok := child.(*lexer.Token); ok && t.Type == lexer.VariableName {
+			property.Name = document.getTokenText(t)
 		}
 		child = traverser.Advance()
 	}

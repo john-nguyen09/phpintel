@@ -29,10 +29,6 @@ if (empty($data)) { }`))
 		Line:      1,
 		Character: 8,
 	})).String())
-	assert.Equal(t, "*analysis.FunctionCall", reflect.TypeOf(doc.HasTypesAtPos(protocol.Position{
-		Line:      2,
-		Character: 7,
-	})).String())
 	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.HasTypesAtPos(protocol.Position{
 		Line:      2,
 		Character: 11,

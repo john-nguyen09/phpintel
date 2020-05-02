@@ -34,15 +34,10 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
-			case phrase.InterfaceBaseClause:
-				theInterface.extends(document, p)
+			case phrase.InterfaceDeclarationHeader:
+				theInterface.analyseHeader(document, p)
 			case phrase.InterfaceDeclarationBody:
 				scanForChildren(document, p)
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			switch t.Type {
-			case lexer.Name:
-				theInterface.Name = NewTypeString(document.GetNodeText(t))
 			}
 		}
 		child = traverser.Advance()
@@ -50,6 +45,25 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	theInterface.Name.SetNamespace(document.currImportTable().GetNamespace())
 	document.popBlock()
 	return nil
+}
+
+func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				s.Name = NewTypeString(document.getTokenText(token))
+			}
+		} else if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.InterfaceBaseClause:
+				s.extends(document, p)
+			}
+		}
+		child = traverser.Advance()
+	}
 }
 
 func (s *Interface) extends(document *Document, node *phrase.Phrase) {

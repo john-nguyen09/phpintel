@@ -23,7 +23,7 @@ App`)
 		Character: 21,
 	}, pos)
 	assert.Equal(t, "", getIndentation(document, ctx.GetInsertAfterNode()))
-	assert.Equal(t, "", getNewLine(document, ctx.GetInsertAfterNode()))
+	assert.Equal(t, "\n", getNewLine(document, ctx.GetInsertAfterNode()))
 
 	document = NewDocument("test2", []byte(`<?php
 	namespace Namespace1;`))

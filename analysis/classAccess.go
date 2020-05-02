@@ -22,24 +22,24 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 		},
 	}
 	types := newTypeComposite()
-	switch node.Type {
-	case phrase.QualifiedName, phrase.FullyQualifiedName:
-		typeString := transformQualifiedName(node, document)
-		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
-		types.add(typeString)
-	case phrase.SimpleVariable:
-		expr := scanForExpression(document, node)
-		if expr != nil {
-			classAccess.Scope = expr
-		}
-	}
 	if IsNameRelative(classAccess.Name) {
 		relativeScope := newRelativeScope(document, classAccess.Location)
 		types.merge(relativeScope.Types)
-	}
-	if IsNameParent(classAccess.Name) {
+	} else if IsNameParent(classAccess.Name) {
 		parentScope := newParentScope(document, classAccess.Location)
 		types.merge(parentScope.Types)
+	} else {
+		switch node.Type {
+		case phrase.QualifiedName, phrase.FullyQualifiedName:
+			typeString := transformQualifiedName(node, document)
+			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
+			types.add(typeString)
+		case phrase.SimpleVariable:
+			expr := scanForExpression(document, node)
+			if expr != nil {
+				classAccess.Scope = expr
+			}
+		}
 	}
 	classAccess.Type = types
 	return classAccess

@@ -5,7 +5,7 @@
       TagName: (string) (len=6) "@param",
       Name: (string) (len=10) "$validator",
       Description: (string) "",
-      TypeString: (string) (len=52) "\\\\Illuminate\\\\Contracts\\\\Validation\\\\Validator|array",
+      TypeString: (string) (len=48) "\\Illuminate\\Contracts\\Validation\\Validator|array",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
     },
@@ -13,7 +13,7 @@
       TagName: (string) (len=6) "@param",
       Name: (string) (len=8) "$request",
       Description: (string) "",
-      TypeString: (string) (len=32) "\\\\Illuminate\\\\Http\\\\Request|null",
+      TypeString: (string) (len=29) "\\Illuminate\\Http\\Request|null",
       Parameters: ([]analysis.methodTagParam) <nil>,
       IsStatic: (bool) false
     },
