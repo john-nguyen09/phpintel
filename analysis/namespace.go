@@ -3,42 +3,32 @@ package analysis
 import (
 	"strings"
 
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type Namespace struct {
 	Name string
 }
 
-func newNamespace(document *Document, node *sitter.Node) *Namespace {
+func newNamespace(document *Document, node *phrase.Phrase) *Namespace {
 	namespace := &Namespace{}
 	document.pushImportTable(node)
 	document.setNamespace(namespace)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "namespace_name":
-			namespace.Name = readNamespaceExcludeError(document, child)
-		case "compound_statement":
-			scanForChildren(document, child)
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.NamespaceName:
+				namespace.Name = document.getPhraseText(p)
+			case phrase.StatementList:
+				scanForChildren(document, p)
+			}
 		}
 		child = traverser.Advance()
 	}
 	return namespace
-}
-
-func readNamespaceExcludeError(document *Document, node *sitter.Node) string {
-	traverser := util.NewTraverser(node)
-	parts := []string{}
-	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
-		switch child.Type() {
-		case "name":
-			parts = append(parts, document.GetNodeText(child))
-		}
-	}
-	return strings.Join(parts, "\\")
 }
 
 type indexableNamespace struct {

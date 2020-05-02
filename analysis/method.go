@@ -1,10 +1,11 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Method contains information of methods
@@ -48,7 +49,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
+func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
@@ -60,25 +61,20 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "visibility_modifier":
-			s.VisibilityModifier = getMemberModifier(child)
-		case "static_modifier":
-			s.IsStatic = true
-		case "class_modifier":
-			s.ClassModifier = getClassModifier(child)
-		case "name":
-			s.Name = document.GetNodeText(child)
-		case "formal_parameters":
-			s.analyseParameterDeclarationList(document, child)
-			if phpDoc != nil {
-				s.applyPhpDoc(document, *phpDoc)
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.MethodDeclarationHeader:
+				s.analyseHeader(document, p)
+				if phpDoc != nil {
+					s.applyPhpDoc(document, *phpDoc)
+				}
+				for _, param := range s.Params {
+					lastToken := util.LastToken(p)
+					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+				}
+			case phrase.MethodDeclarationBody:
+				scanForChildren(document, p)
 			}
-			for _, param := range s.Params {
-				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
-			}
-		case "compound_statement":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -86,7 +82,42 @@ func (s *Method) analyseMethodNode(document *Document, node *sitter.Node) {
 	document.popBlock()
 }
 
-func newMethod(document *Document, node *sitter.Node) Symbol {
+func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) {
+	traverser := util.NewTraverser(methodHeader)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.MemberModifierList:
+				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
+			case phrase.ParameterDeclarationList:
+				s.analyseParameterDeclarationList(document, p)
+			case phrase.Identifier:
+				s.Name = document.getPhraseText(p)
+			}
+		} else if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				s.Name = document.getTokenText(token)
+			}
+		}
+		child = traverser.Advance()
+	}
+}
+
+func (s *Method) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
+			param := newParameter(document, p)
+			s.Params = append(s.Params, param)
+		}
+		child = traverser.Advance()
+	}
+}
+
+func newMethod(document *Document, node *phrase.Phrase) Symbol {
 	method := &Method{
 		IsStatic:    false,
 		location:    document.GetNodeLocation(node),
@@ -106,25 +137,11 @@ func newMethod(document *Document, node *sitter.Node) Symbol {
 		method.Scope = trait.Name
 		method.Scope.SetNamespace(document.currImportTable().GetNamespace())
 	}
-
 	return nil
 }
 
 func (s Method) GetLocation() protocol.Location {
 	return s.location
-}
-
-func (s *Method) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if child.Type() == "simple_parameter" {
-			param := newParameter(document, child)
-			s.Params = append(s.Params, param)
-		}
-
-		child = traverser.Advance()
-	}
 }
 
 func (s *Method) applyPhpDoc(document *Document, phpDoc phpDocComment) {

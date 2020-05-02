@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
@@ -13,24 +13,27 @@ type ScopedMethodAccess struct {
 	hasResolved bool
 }
 
-func newScopedMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	classAccess := newClassAccess(document, firstChild)
-	document.addSymbol(classAccess)
-	methodAccess.Scope = classAccess
+	if p, ok := firstChild.(*phrase.Phrase); ok {
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
+		methodAccess.Scope = classAccess
+	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	methodAccess.Location = document.GetNodeLocation(thirdChild)
-	methodAccess.Name = analyseMemberName(document, thirdChild)
+	if p, ok := thirdChild.(*phrase.Phrase); ok {
+		methodAccess.Name = analyseMemberName(document, p)
+	}
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "arguments":
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ArgumentExpressionList {
 			scanNode(document, child)
 			break
 		}

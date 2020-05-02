@@ -1,10 +1,11 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Class contains information of classes
@@ -24,42 +25,36 @@ var _ HasScope = (*Class)(nil)
 var _ Symbol = (*Class)(nil)
 var _ BlockSymbol = (*Class)(nil)
 
-func getMemberModifier(node *sitter.Node) VisibilityModifierValue {
+func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, ClassModifierValue) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	visibilityModifier := Public
+	classModifier := NoClassModifier
+	isStatic := false
 	for child != nil {
-		switch child.Type() {
-		case "public":
-			visibilityModifier = Public
-		case "protected":
-			visibilityModifier = Protected
-		case "private":
-			visibilityModifier = Private
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Abstract:
+				classModifier = Abstract
+			case lexer.Final:
+				classModifier = Final
+			case lexer.Static:
+				isStatic = true
+			case lexer.Public:
+				visibilityModifier = Public
+			case lexer.Protected:
+				visibilityModifier = Protected
+			case lexer.Private:
+				visibilityModifier = Private
+			}
 		}
 		child = traverser.Advance()
 	}
 
-	return visibilityModifier
+	return visibilityModifier, isStatic, classModifier
 }
 
-func getClassModifier(node *sitter.Node) ClassModifierValue {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	c := NoClassModifier
-	for child != nil {
-		switch child.Type() {
-		case "final":
-			c = Final
-		case "abstract":
-			c = Abstract
-		}
-		child = traverser.Advance()
-	}
-	return c
-}
-
-func newClass(document *Document, node *sitter.Node) Symbol {
+func newClass(document *Document, node *phrase.Phrase) Symbol {
 	class := &Class{
 		Location: document.GetNodeLocation(node),
 	}
@@ -71,61 +66,81 @@ func newClass(document *Document, node *sitter.Node) Symbol {
 	document.pushBlock(class)
 
 	for child != nil {
-		switch child.Type() {
-		case "name":
-			class.Name = NewTypeString(document.GetNodeText(child))
-			class.Name.SetNamespace(document.currImportTable().GetNamespace())
-			if phpDoc != nil {
-				class.description = phpDoc.Description
-				for _, propertyTag := range phpDoc.Properties {
-					property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-					document.addSymbol(property)
-				}
-				for _, propertyTag := range phpDoc.PropertyReads {
-					property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-					document.addSymbol(property)
-				}
-				for _, propertyTag := range phpDoc.PropertyWrites {
-					property := newPropertyFromPhpDocTag(document, class, propertyTag, phpDoc.GetLocation())
-					document.addSymbol(property)
-				}
-				for _, methodTag := range phpDoc.Methods {
-					method := newMethodFromPhpDocTag(document, class, methodTag, phpDoc.GetLocation())
-					document.addSymbol(method)
-				}
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ClassDeclarationHeader:
+				document.addSymbol(class)
+				class.analyseHeader(document, p, phpDoc)
+			case phrase.ClassDeclarationBody:
+				scanForChildren(document, p)
 			}
-		case "class_modifier":
-			class.analyseClassModifier(document, child)
-		case "class_base_clause":
-			class.extends(document, child)
-		case "class_interface_clause":
-			class.implements(document, child)
-
-		case "declaration_list":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
+
 	document.popBlock()
 
 	return nil
 }
 
-func (s *Class) analyseClassModifier(document *Document, n *sitter.Node) {
-	s.Modifier = getClassModifier(n)
+func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase, phpDoc *phpDocComment) {
+	traverser := util.NewTraverser(classHeader)
+	child := traverser.Advance()
+	for child != nil {
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				s.Name = NewTypeString(document.getTokenText(token))
+				s.Name.SetNamespace(document.currImportTable().GetNamespace())
+				if phpDoc != nil {
+					s.description = phpDoc.Description
+					for _, propertyTag := range phpDoc.Properties {
+						property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+					for _, propertyTag := range phpDoc.PropertyReads {
+						property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+					for _, propertyTag := range phpDoc.PropertyWrites {
+						property := newPropertyFromPhpDocTag(document, s, propertyTag, phpDoc.GetLocation())
+						document.addSymbol(property)
+					}
+					for _, methodTag := range phpDoc.Methods {
+						method := newMethodFromPhpDocTag(document, s, methodTag, phpDoc.GetLocation())
+						document.addSymbol(method)
+					}
+				}
+			case lexer.Abstract:
+				s.Modifier = Abstract
+			case lexer.Final:
+				s.Modifier = Final
+			}
+		} else if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ClassBaseClause:
+				s.extends(document, p)
+			case phrase.ClassInterfaceClause:
+				s.implements(document, p)
+			}
+		}
+		child = traverser.Advance()
+	}
 }
 
-func (s *Class) extends(document *Document, p *sitter.Node) {
+func (s *Class) extends(document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
-	var classAccessNode *sitter.Node = nil
+	var classAccessNode *phrase.Phrase = nil
 	for child != nil {
-		switch child.Type() {
-		case "qualified_name":
-			{
-				s.Extends = transformQualifiedName(child, document)
-				s.Extends.SetFQN(document.currImportTable().GetClassReferenceFQN(s.Extends))
-				classAccessNode = child
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.QualifiedName, phrase.FullyQualifiedName:
+				{
+					s.Extends = transformQualifiedName(p, document)
+					s.Extends.SetFQN(document.currImportTable().GetClassReferenceFQN(s.Extends))
+					classAccessNode = p
+				}
 			}
 		}
 
@@ -138,19 +153,29 @@ func (s *Class) extends(document *Document, p *sitter.Node) {
 	}
 }
 
-func (s *Class) implements(document *Document, p *sitter.Node) {
+func (s *Class) implements(document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
-	child := traverser.Advance()
+	child := traverser.Peek()
 	for child != nil {
-		if child.Type() == "qualified_name" {
-			typeString := transformQualifiedName(child, document)
-			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
-			s.Interfaces = append(s.Interfaces, typeString)
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedNameList {
+			traverser, _ = traverser.Descend()
+			child = traverser.Advance()
+			for child != nil {
+				if p, ok = child.(*phrase.Phrase); ok && (p.Type == phrase.QualifiedName || p.Type == phrase.FullyQualifiedName) {
+					typeString := transformQualifiedName(p, document)
+					typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
+					s.Interfaces = append(s.Interfaces, typeString)
 
-			interfaceAccess := newInterfaceAccess(document, child)
-			document.addSymbol(interfaceAccess)
+					interfaceAccess := newInterfaceAccess(document, p)
+					document.addSymbol(interfaceAccess)
+				}
+
+				child = traverser.Advance()
+			}
+			break
 		}
-		child = traverser.Advance()
+		traverser.Advance()
+		child = traverser.Peek()
 	}
 }
 

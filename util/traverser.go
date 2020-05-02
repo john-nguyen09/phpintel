@@ -4,16 +4,17 @@ import (
 	"errors"
 	"strings"
 
-	sitter "github.com/smacker/go-tree-sitter"
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 )
 
 type Traverser struct {
-	node   *sitter.Node
+	node   phrase.AstNode
 	index  int
 	parent *Traverser
 }
 
-func NewTraverser(node *sitter.Node) *Traverser {
+func NewTraverser(node *phrase.Phrase) *Traverser {
 	return &Traverser{
 		node:   node,
 		index:  0,
@@ -21,7 +22,7 @@ func NewTraverser(node *sitter.Node) *Traverser {
 	}
 }
 
-func (s *Traverser) Advance() *sitter.Node {
+func (s *Traverser) Advance() phrase.AstNode {
 	node := s.Peek()
 	if node != nil {
 		s.index++
@@ -30,21 +31,30 @@ func (s *Traverser) Advance() *sitter.Node {
 	return node
 }
 
-func (s *Traverser) Peek() *sitter.Node {
-	if s.index >= int(s.node.ChildCount()) {
+func (s *Traverser) Peek() phrase.AstNode {
+	p, ok := s.node.(*phrase.Phrase)
+	if !ok {
+		return nil
+	}
+	if s.index >= len(p.Children) {
 		return nil
 	}
 
-	return s.node.Child(s.index)
+	return p.Children[s.index]
 }
 
 func (s *Traverser) Descend() (*Traverser, error) {
-	if s.index >= int(s.node.ChildCount()) {
+	p, ok := s.node.(*phrase.Phrase)
+	if !ok {
+		return nil, errors.New("Cannot descend into token")
+	}
+
+	if s.index >= len(p.Children) {
 		return nil, errors.New("This is outside of children")
 	}
 
 	return &Traverser{
-		node:   s.node.Child(s.index),
+		node:   p.Children[s.index],
 		index:  0,
 		parent: s,
 	}, nil
@@ -57,34 +67,36 @@ func (s *Traverser) Ascend() (*Traverser, error) {
 	return s.parent, nil
 }
 
-func (s *Traverser) SkipToken(tokenType string) {
+func (s *Traverser) SkipToken(tokenType lexer.TokenType) {
 	next := s.Peek()
-	for next != nil && next.Type() == tokenType {
+	for nextToken, ok := next.(*lexer.Token); ok && nextToken.Type == tokenType; {
 		s.Advance()
 		next = s.Peek()
+		nextToken, ok = next.(*lexer.Token)
 	}
 }
 
 func (s *Traverser) Clone() *Traverser {
 	return &Traverser{
-		node:  s.node,
-		index: s.index,
+		node:   s.node,
+		index:  s.index,
+		parent: s.parent,
 	}
 }
 
 type VisitorContext struct {
 	ShouldAscend bool
-	AscendNode   *sitter.Node
+	AscendNode   phrase.AstNode
 }
 
-type Visitor func(*sitter.Node, []*sitter.Node) VisitorContext
+type Visitor func(phrase.AstNode, []*phrase.Phrase) VisitorContext
 
 func (s *Traverser) Traverse(visit Visitor) {
-	spine := []*sitter.Node{}
+	spine := []*phrase.Phrase{}
 	s.realTraverse(s.node, spine, visit)
 }
 
-func (s *Traverser) realTraverse(node *sitter.Node, spine []*sitter.Node, visit Visitor) {
+func (s *Traverser) realTraverse(node phrase.AstNode, spine []*phrase.Phrase, visit Visitor) {
 	ctx := visit(node, spine)
 	if !ctx.ShouldAscend {
 		return
@@ -92,31 +104,37 @@ func (s *Traverser) realTraverse(node *sitter.Node, spine []*sitter.Node, visit 
 	if ctx.AscendNode != nil {
 		node = ctx.AscendNode
 	}
-	childCount := int(node.ChildCount())
-	if childCount > 0 {
-		spine = append(spine, node)
-		for i := 0; i < childCount; i++ {
-			s.realTraverse(node.Child(i), spine, visit)
+	if p, ok := node.(*phrase.Phrase); ok {
+		spine = append(spine, p)
+		for _, child := range p.Children {
+			s.realTraverse(child, spine, visit)
 		}
 		spine = spine[:len(spine)-1]
 	}
 }
 
-type NodeStack []*sitter.Node
+type NodeStack []*phrase.Phrase
 
-func (s *NodeStack) Parent() *sitter.Node {
+func (s *NodeStack) Parent() phrase.Phrase {
 	if len(*s) == 0 {
-		return nil
+		return phrase.Phrase{
+			Type: phrase.Unknown,
+			Children: []phrase.AstNode{
+				lexer.Token{
+					Type: lexer.Undefined,
+				},
+			},
+		}
 	}
-	var p *sitter.Node
-	p, *s = (*s)[len((*s))-1], (*s)[:len((*s))-1]
-	return p
+	var p *phrase.Phrase
+	p, *s = (*s)[len(*s)-1], (*s)[:len(*s)-1]
+	return *p
 }
 
 func (s NodeStack) String() string {
 	strs := []string{}
-	for p := s.Parent(); p != nil; p = s.Parent() {
-		strs = append(strs, p.Type())
+	for p := s.Parent(); p.Type != phrase.Unknown; p = s.Parent() {
+		strs = append(strs, p.Type.String())
 	}
 	return strings.Join(strs, ", ")
 }

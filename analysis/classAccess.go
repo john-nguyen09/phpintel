@@ -1,8 +1,8 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ClassAccess represents a reference to the part before ::
@@ -14,20 +14,20 @@ type ClassAccess struct {
 
 var _ (HasTypes) = (*ClassAccess)(nil)
 
-func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
+func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     document.GetNodeText(node),
+			Name:     document.getPhraseText(node),
 		},
 	}
 	types := newTypeComposite()
-	switch node.Type() {
-	case "qualified_name":
+	switch node.Type {
+	case phrase.QualifiedName, phrase.FullyQualifiedName:
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)
-	case "variable_name":
+	case phrase.SimpleVariable:
 		expr := scanForExpression(document, node)
 		if expr != nil {
 			classAccess.Scope = expr
@@ -45,10 +45,9 @@ func newClassAccess(document *Document, node *sitter.Node) *ClassAccess {
 	return classAccess
 }
 
-func analyseMemberName(document *Document, node *sitter.Node) string {
-	switch node.Type() {
-	case "name", "variable_name", "qualified_name":
-		return document.GetNodeText(node)
+func analyseMemberName(document *Document, node *phrase.Phrase) string {
+	if node.Type == phrase.ScopedMemberName {
+		return document.getPhraseText(node)
 	}
 
 	return ""

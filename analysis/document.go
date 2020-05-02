@@ -9,10 +9,11 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/john-nguyen09/phpintel/analysis/ast"
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/parser"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 var /* const */ wordRegex = regexp.MustCompile(`[\\a-zA-Z_\x80-\xff][\\a-zA-Z0-9_\x80-\xff]*$`)
@@ -20,8 +21,8 @@ var /* const */ wordRegex = regexp.MustCompile(`[\\a-zA-Z_\x80-\xff][\\a-zA-Z0-9
 // Document contains information of documents
 type Document struct {
 	uri         string
-	injector    *ast.Injector
 	text        []byte
+	rootNode    *phrase.Phrase
 	lineOffsets []int
 	loadMu      sync.Mutex
 	isOpen      bool
@@ -73,6 +74,7 @@ func (s *Document) Close() {
 	s.isOpen = false
 }
 
+// IsOpen returns whether the document is open
 func (s *Document) IsOpen() bool {
 	return s.isOpen
 }
@@ -85,13 +87,15 @@ func (s *Document) ResetState() {
 	s.lastPhpDoc = nil
 	s.importTables = []*ImportTable{}
 	s.insertUseContext = nil
+	s.rootNode = nil
 }
 
-func (s *Document) GetRootNode() *sitter.Node {
-	if s.injector == nil {
-		s.injector = ast.NewPHPInjector(s.GetText())
+// GetRootNode returns the root node of the AST tree
+func (s *Document) GetRootNode() *phrase.Phrase {
+	if s.rootNode == nil {
+		s.rootNode = parser.Parse(s.GetText())
 	}
-	return s.injector.MainRootNode()
+	return s.rootNode
 }
 
 // Load makes sure that symbols are available
@@ -121,7 +125,7 @@ func (s *Document) SetText(text []byte) {
 	s.lineOffsets, s.detectedEOL = calculateLineOffsets(s.text, 0)
 }
 
-func (s *Document) pushImportTable(node *sitter.Node) {
+func (s *Document) pushImportTable(node *phrase.Phrase) {
 	s.importTables = append(s.importTables, newImportTable(s, node))
 }
 
@@ -210,8 +214,31 @@ func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	return min
 }
 
-func (s *Document) nodeRange(node *sitter.Node) protocol.Range {
-	return protocol.Range{Start: util.PointToPosition(node.StartPoint()), End: util.PointToPosition(node.EndPoint())}
+func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
+	r := protocol.Range{}
+	first := util.FirstToken(node)
+	last := util.LastToken(node)
+	if first != nil && last != nil {
+		r.Start = s.positionAt(first.Offset)
+		r.End = s.positionAt(last.Offset + last.Length)
+	}
+	return r
+}
+
+func (s *Document) errorRange(err *phrase.ParseError) protocol.Range {
+	if len(err.Children) == 0 {
+		return protocol.Range{
+			Start: s.positionAt(err.Unexpected.Offset),
+			End:   s.positionAt(err.Unexpected.Offset + err.Unexpected.Length),
+		}
+	}
+
+	firstToken := err.Children[0].(*lexer.Token)
+	lastToken := err.Children[len(err.Children)-1].(*lexer.Token)
+	return protocol.Range{
+		Start: s.positionAt(firstToken.Offset),
+		End:   s.positionAt(lastToken.Offset + lastToken.Length),
+	}
 }
 
 // GetText is a getter for text
@@ -220,15 +247,33 @@ func (s *Document) GetText() []byte {
 }
 
 // GetNodeLocation retrieves the location of a phrase node
-func (s *Document) GetNodeLocation(node *sitter.Node) protocol.Location {
+func (s *Document) GetNodeLocation(node phrase.AstNode) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
 		Range: s.nodeRange(node),
 	}
 }
 
-func (s *Document) GetNodeText(node *sitter.Node) string {
-	return node.Content(s.GetText())
+func (s *Document) getTokenText(t *lexer.Token) string {
+	return string(s.text[t.Offset : t.Offset+t.Length])
+}
+
+func (s *Document) getPhraseText(p *phrase.Phrase) string {
+	firstToken, lastToken := util.FirstToken(p), util.LastToken(p)
+	if firstToken == nil || lastToken == nil {
+		return ""
+	}
+	return string(s.text[firstToken.Offset : lastToken.Offset+lastToken.Length])
+}
+
+func (s *Document) GetNodeText(node phrase.AstNode) string {
+	switch node := node.(type) {
+	case *lexer.Token:
+		return s.getTokenText(node)
+	case *phrase.Phrase:
+		return s.getPhraseText(node)
+	}
+	return ""
 }
 
 func (s *Document) addSymbol(other Symbol) {
@@ -259,7 +304,7 @@ func (s *Document) currentBlock() BlockSymbol {
 	return nil
 }
 
-func (s *Document) pushVariableTable(node *sitter.Node) {
+func (s *Document) pushVariableTable(node *phrase.Phrase) {
 	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
 	if s.variableTableLevel > 0 {
 		s.getCurrentVariableTable().addChild(newVarTable)
@@ -358,13 +403,15 @@ func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 }
 
 func (s *Document) NodeSpineAt(offset int) util.NodeStack {
-	cursor := sitter.NewTreeCursor(s.GetRootNode())
 	found := util.NodeStack{}
-	uOffset := uint32(offset) - 1
-	found = append(found, s.GetRootNode())
-	for cursor.GoToFirstChildForByte(uOffset) != -1 {
-		found = append(found, cursor.CurrentNode())
-	}
+	traverser := util.NewTraverser(s.GetRootNode())
+	traverser.Traverse(func(node phrase.AstNode, spine []*phrase.Phrase) util.VisitorContext {
+		if t, ok := node.(*lexer.Token); ok && offset > t.Offset && offset <= (t.Offset+t.Length) {
+			found = append(spine[:0:0], spine...)
+			return util.VisitorContext{ShouldAscend: false}
+		}
+		return util.VisitorContext{ShouldAscend: true}
+	})
 	return found
 }
 
@@ -494,19 +541,6 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 			}
 		}
 		s.lineOffsets = newLineOffsets
-
-		newEndIndex := startOffset + len(text)
-		edit := sitter.EditInput{
-			StartIndex:  uint32(startOffset),
-			OldEndIndex: uint32(endOffset),
-			NewEndIndex: uint32(newEndIndex),
-			StartPoint:  util.PositionToPoint(start),
-			OldEndPoint: util.PositionToPoint(s.positionAt(endOffset)),
-			NewEndPoint: util.PositionToPoint(s.positionAt(newEndIndex)),
-		}
-		if s.injector != nil {
-			s.injector = s.injector.Edit(edit, s.GetText())
-		}
 	}
 	util.TimeTrack(start, "contentChanges")
 	start = time.Now()

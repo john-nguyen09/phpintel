@@ -3,9 +3,9 @@ package analysis
 import (
 	"sort"
 
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Variable represents a reference to the variable
@@ -18,17 +18,17 @@ type Variable struct {
 
 var _ CanAddType = (*Variable)(nil)
 
-func newVariableExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	return newVariable(document, node)
 }
 
-func newVariable(document *Document, node *sitter.Node) (*Variable, bool) {
+func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
 	document.pushVariable(variable, variable.GetLocation().Range.End)
 	return variable, true
 }
 
-func newVariableWithoutPushing(document *Document, node *sitter.Node) *Variable {
+func newVariableWithoutPushing(document *Document, node *phrase.Phrase) *Variable {
 	variable := &Variable{
 		Expression: Expression{
 			Name:     document.GetNodeText(node),

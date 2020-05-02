@@ -1,26 +1,33 @@
 package util
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
-	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
-func FirstToken(node *sitter.Node) *sitter.Node {
-	if node.ChildCount() == 0 {
-		return node
+// FirstToken returns the first terminal node (leave)
+func FirstToken(node phrase.AstNode) *lexer.Token {
+	if t, ok := node.(*lexer.Token); ok {
+		return t
 	}
-	return node.Child(0)
+	if p, ok := node.(*phrase.Phrase); ok && len(p.Children) != 0 {
+		return FirstToken(p.Children[0])
+	}
+	return nil
 }
 
-func LastToken(node *sitter.Node) *sitter.Node {
-	if node.ChildCount() == 0 {
-		return node
+// LastToken returns the last terminal node (leave)
+func LastToken(node phrase.AstNode) *lexer.Token {
+	if t, ok := node.(*lexer.Token); ok {
+		return t
 	}
-
-	return node.Child(int(node.ChildCount()) - 1)
+	if p, ok := node.(*phrase.Phrase); ok && len(p.Children) != 0 {
+		return LastToken(p.Children[len(p.Children)-1])
+	}
+	return nil
 }
 
+// IsOfPhraseType checks if a node is the given type
 func IsOfPhraseType(node phrase.AstNode, phraseType phrase.PhraseType) (*phrase.Phrase, bool) {
 	p, ok := node.(*phrase.Phrase)
 	if !ok {
@@ -29,6 +36,7 @@ func IsOfPhraseType(node phrase.AstNode, phraseType phrase.PhraseType) (*phrase.
 	return p, p.Type == phraseType
 }
 
+// IsOfPhraseTypes checks if a node is one of the given types
 func IsOfPhraseTypes(node phrase.AstNode, phraseTypes []phrase.PhraseType) (*phrase.Phrase, bool) {
 	p, ok := node.(*phrase.Phrase)
 	if !ok {
@@ -40,18 +48,4 @@ func IsOfPhraseTypes(node phrase.AstNode, phraseTypes []phrase.PhraseType) (*phr
 		}
 	}
 	return nil, false
-}
-
-func PointToPosition(p sitter.Point) protocol.Position {
-	return protocol.Position{
-		Line:      int(p.Row),
-		Character: int(p.Column),
-	}
-}
-
-func PositionToPoint(p protocol.Position) sitter.Point {
-	return sitter.Point{
-		Row:    uint32(p.Line),
-		Column: uint32(p.Character),
-	}
 }

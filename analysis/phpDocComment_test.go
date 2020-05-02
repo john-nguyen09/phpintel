@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +22,7 @@ func TestPhpDocComment(t *testing.T) {
 	*/`
 	doc := NewDocument("test", []byte(phpDocStr))
 	doc.Load()
-	phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Child(1))
+	phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
 	cupaloy.SnapshotT(t, phpDoc)
 
 	phpDocStrs := []string{
@@ -49,7 +50,7 @@ func TestPhpDocComment(t *testing.T) {
 	for i, phpDocStr := range phpDocStrs {
 		doc := NewDocument("test", []byte(phpDocStr))
 		doc.Load()
-		phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Child(1))
+		phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
 		t.Run("phpDocStr_"+strconv.Itoa(i), func(t *testing.T) {
 			cupaloy.SnapshotT(t, phpDoc)
 		})

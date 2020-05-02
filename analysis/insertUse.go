@@ -1,20 +1,18 @@
 package analysis
 
 import (
-	"index/suffixarray"
-
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 var numLinesAfterUse = 2
 
 type InsertUseContext struct {
 	document     *Document
-	firstInline  *sitter.Node
-	namespaceDef *sitter.Node
-	lastUse      *sitter.Node
+	firstInline  *phrase.Phrase
+	namespaceDef *phrase.Phrase
+	lastUse      *phrase.Phrase
 }
 
 func GetInsertUseContext(document *Document) InsertUseContext {
@@ -30,23 +28,24 @@ func GetInsertUseContext(document *Document) InsertUseContext {
 	traverser := util.NewTraverser(document.GetRootNode())
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "php_tag":
-			if insertUseCtx.firstInline == nil {
-				insertUseCtx.firstInline = child
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.InlineText:
+				if insertUseCtx.firstInline == nil {
+					insertUseCtx.firstInline = p
+				}
+			case phrase.NamespaceDefinition:
+				insertUseCtx.namespaceDef = p
+			case phrase.NamespaceUseDeclaration:
+				insertUseCtx.lastUse = p
 			}
-		case "namespace_definition":
-			insertUseCtx.namespaceDef = child
-		case "namespace_use_declaration":
-			insertUseCtx.lastUse = child
 		}
 		child = traverser.Advance()
 	}
-	document.insertUseContext = &insertUseCtx
 	return insertUseCtx
 }
 
-func (i InsertUseContext) GetInsertAfterNode() *sitter.Node {
+func (i InsertUseContext) GetInsertAfterNode() *phrase.Phrase {
 	if i.lastUse != nil {
 		return i.lastUse
 	}
@@ -63,7 +62,8 @@ func (i InsertUseContext) GetInsertAfterNode() *sitter.Node {
 func (i InsertUseContext) GetInsertPosition() (protocol.Position, bool) {
 	afterNode := i.GetInsertAfterNode()
 	if afterNode != nil {
-		return util.PointToPosition(afterNode.EndPoint()), true
+		lastToken := util.LastToken(afterNode)
+		return i.document.positionAt(lastToken.Offset + lastToken.Length), true
 	}
 	return protocol.Position{}, false
 }
@@ -77,7 +77,7 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 		afterNode := i.GetInsertAfterNode()
 		text := eol
 
-		if afterNode.Type() == "namespace_definition" {
+		if afterNode.Type == phrase.NamespaceDefinition {
 			text += eol
 		}
 
@@ -105,30 +105,34 @@ func (i InsertUseContext) GetUseEdit(typeString TypeString, symbol Symbol, alias
 	return nil
 }
 
-func getIndentation(document *Document, node *sitter.Node) string {
-	nodeStart := util.PointToPosition(node.StartPoint())
+func getIndentation(document *Document, node *phrase.Phrase) string {
+	firstToken := util.FirstToken(node)
+	tokenStartPosition := document.positionAt(firstToken.Offset)
 	startOffset := document.OffsetAtPosition(protocol.Position{
-		Line:      nodeStart.Line,
+		Line:      tokenStartPosition.Line,
 		Character: 0,
 	})
-	return string(document.GetText()[startOffset:node.StartByte()])
+	return string(document.GetText()[startOffset:firstToken.Offset])
 }
 
-func getNewLine(document *Document, node *sitter.Node) string {
-	next := node.NextSibling()
-	if next == nil {
-		return document.detectedEOL
-	}
-	nodeEnd := node.EndByte()
-	startNext := next.StartByte()
-	index := suffixarray.New(document.GetText()[nodeEnd:startNext])
-	numNewLines := len(index.Lookup([]byte(document.detectedEOL), -1))
-	if numNewLines < numLinesAfterUse {
-		newLines := ""
-		for i := 0; i < (numLinesAfterUse - numNewLines); i++ {
-			newLines += document.detectedEOL
-		}
-		return newLines
-	}
-	return ""
+func getNewLine(document *Document, node *phrase.Phrase) string {
+	return document.detectedEOL
+	// TODO: Insert empty lines after `node` depending on how many lines
+	// between `node` and next sibling
+	// next := node.NextSibling()
+	// if next == nil {
+	// 	return document.detectedEOL
+	// }
+	// nodeEnd := node.EndByte()
+	// startNext := next.StartByte()
+	// index := suffixarray.New(document.GetText()[nodeEnd:startNext])
+	// numNewLines := len(index.Lookup([]byte(document.detectedEOL), -1))
+	// if numNewLines < numLinesAfterUse {
+	// 	newLines := ""
+	// 	for i := 0; i < (numLinesAfterUse - numNewLines); i++ {
+	// 		newLines += document.detectedEOL
+	// 	}
+	// 	return newLines
+	// }
+	// return ""
 }

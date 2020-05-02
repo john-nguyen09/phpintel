@@ -1,96 +1,119 @@
 package analysis
 
-import sitter "github.com/smacker/go-tree-sitter"
+import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
+)
 
-type symbolConstructor func(*Document, *sitter.Node) Symbol
+type symbolConstructor func(*Document, *phrase.Phrase) Symbol
+type symbolConstructorForToken func(*Document, *lexer.Token) Symbol
 
-var /* const */ typesToScanForChildren = map[string]bool{
-	"ERROR":                     true,
-	"expression_statement":      true,
-	"compound_statement":        true,
-	"while_statement":           true,
-	"switch_statement":          true,
-	"switch_block":              true,
-	"case_statement":            true,
-	"default_statement":         true,
-	"array_creation_expression": true,
-	"array_element_initializer": true,
-	"if_statement":              true,
-	"else_if_clause":            true,
-	"else_if_clause_2":          true,
-	"else_clause":               true,
-	"else_clause_2":             true,
-	"include_expression":        true,
-	"include_once_expression":   true,
-	"require_expression":        true,
-	"require_once_expression":   true,
-	"conditional_expression":    true,
-	"subscript_expression":      true,
-	"cast_expression":           true,
-	"unary_op_expression":       true,
-	"echo_statement":            true,
-	"unset_statement":           true,
-	"print_intrinsic":           true,
-	"try_statement":             true,
-	"catch_clause":              true,
-	"finally_clause":            true,
-	"return_statement":          true,
-	"throw_statement":           true,
-	"foreach_statement":         true,
-	"for_statement":             true,
+type void = struct{}
+
+var empty void
+
+var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
+	phrase.ExpressionStatement:            empty,
+	phrase.WhileStatement:                 empty,
+	phrase.ClassMemberDeclarationList:     empty,
+	phrase.InterfaceMemberDeclarationList: empty,
+	phrase.ClassConstElementList:          empty,
+	phrase.ClassConstDeclaration:          empty,
+	phrase.EncapsulatedExpression:         empty,
+	phrase.CompoundStatement:              empty,
+	phrase.StatementList:                  empty,
+	phrase.AdditiveExpression:             empty,
+	phrase.IfStatement:                    empty,
+	phrase.ElseClause:                     empty,
+	phrase.IncludeExpression:              empty,
+	phrase.EchoIntrinsic:                  empty,
+	phrase.ExpressionList:                 empty,
+	phrase.ClassDeclarationBody:           empty,
+	phrase.TryStatement:                   empty,
+	phrase.CatchClauseList:                empty,
+	phrase.CatchClause:                    empty,
+	phrase.ReturnStatement:                empty,
+	phrase.ObjectCreationExpression:       empty,
+	phrase.ScopedCallExpression:           empty,
+	phrase.ArrayCreationExpression:        empty,
+	phrase.ArrayInitialiserList:           empty,
+	phrase.ArrayElement:                   empty,
+	phrase.ArrayValue:                     empty,
+	phrase.ArrayKey:                       empty,
+	phrase.LogicalExpression:              empty,
+	phrase.RelationalExpression:           empty,
+	phrase.EqualityExpression:             empty,
+	phrase.ForStatement:                   empty,
+	phrase.UnaryOpExpression:              empty,
+	phrase.ThrowStatement:                 empty,
+	phrase.ElseIfClauseList:               empty,
+	phrase.ElseIfClause:                   empty,
+	phrase.TernaryExpression:              empty,
+	phrase.SubscriptExpression:            empty,
+	phrase.EmptyIntrinsic:                 empty,
+	phrase.UnsetIntrinsic:                 empty,
+	phrase.IssetIntrinsic:                 empty,
+	phrase.EvalIntrinsic:                  empty,
+	phrase.VariableList:                   empty,
+	phrase.TraitMemberDeclarationList:     empty,
+	phrase.CastExpression:                 empty,
+	phrase.SwitchStatement:                empty,
+	phrase.CaseStatementList:              empty,
+	phrase.CaseStatement:                  empty,
 }
 
-var /* const */ skipAddingSymbol map[string]bool = map[string]bool{
-	"arguments": true,
+var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
+	lexer.DirectoryConstant: newDirectoryConstantAccess,
 }
-
-// var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
-// 	// Expressions
-// 	lexer.DirectoryConstant: newDirectoryConstantAccess,
-// 	lexer.DocumentComment:   newPhpDocFromNode,
-// }
-var symbolConstructorMap map[string]symbolConstructor
+var symbolConstructorMap map[phrase.PhraseType]symbolConstructor
 
 func init() {
-	symbolConstructorMap = map[string]symbolConstructor{
-		"interface_declaration":                  newInterface,
-		"class_declaration":                      newClass,
-		"property_declaration":                   newPropertyDeclaration,
-		"method_declaration":                     newMethod,
-		"constructor_declaration":                newMethod,
-		"destructor_declaration":                 newMethod,
-		"use_declaration":                        processTraitUseClause,
-		"function_definition":                    newFunction,
-		"const_declaration":                      newConstDeclaration,
-		"const_element":                          newConst,
-		"arguments":                              newArgumentList,
-		"trait_declaration":                      newTrait,
-		"function_call_expression":               tryToNewDefine,
-		"global_declaration":                     newGlobalDeclaration,
-		"namespace_use_declaration":              processNamespaceUseDeclaration,
-		"anonymous_function_creation_expression": newAnonymousFunction,
-		"comment":                                newPhpDocFromNode,
+	symbolConstructorMap = map[phrase.PhraseType]symbolConstructor{
+		phrase.InterfaceDeclaration:                newInterface,
+		phrase.ClassDeclaration:                    newClass,
+		phrase.PropertyDeclaration:                 newPropertyDeclaration,
+		phrase.MethodDeclaration:                   newMethod,
+		phrase.TraitUseClause:                      processTraitUseClause,
+		phrase.FunctionDeclaration:                 newFunction,
+		phrase.ConstDeclaration:                    newConstDeclaration,
+		phrase.ConstElement:                        newConst,
+		phrase.ClassConstElement:                   newClassConst,
+		phrase.ArgumentExpressionList:              newArgumentList,
+		phrase.TraitDeclaration:                    newTrait,
+		phrase.FunctionCallExpression:              tryToNewDefine,
+		phrase.GlobalDeclaration:                   newGlobalDeclaration,
+		phrase.NamespaceUseDeclaration:             processNamespaceUseDeclaration,
+		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
+		phrase.DocumentComment:                     newPhpDocFromNode,
 	}
 }
 
-func scanNode(document *Document, node *sitter.Node) {
+func scanNode(document *Document, node phrase.AstNode) {
 	var symbol Symbol = nil
 	shouldSkipAdding := false
-	if node.Type() == "namespace_definition" {
-		newNamespace(document, node)
-		return
-	}
 
-	scanForExpression(document, node)
-	if _, ok := typesToScanForChildren[node.Type()]; ok {
-		scanForChildren(document, node)
-		return
-	}
-	if constructor, ok := symbolConstructorMap[node.Type()]; ok {
-		symbol = constructor(document, node)
-	}
-	if _, ok := skipAddingSymbol[node.Type()]; ok {
-		shouldSkipAdding = true
+	if p, ok := node.(*phrase.Phrase); ok {
+		if p.Type == phrase.NamespaceDefinition {
+			newNamespace(document, p)
+			return
+		}
+
+		scanForExpression(document, p)
+		if _, ok := typesToScanForChildren[p.Type]; ok {
+			scanForChildren(document, p)
+			return
+		}
+		if constructor, ok := symbolConstructorMap[p.Type]; ok {
+			symbol = constructor(document, p)
+		}
+		switch p.Type {
+		case phrase.ArgumentExpressionList:
+			shouldSkipAdding = true
+		}
+	} else if t, ok := node.(*lexer.Token); ok {
+		if constructor, ok := tokenToSymbolConstructor[t.Type]; ok {
+			symbol = constructor(document, t)
+		}
 	}
 
 	if !shouldSkipAdding && symbol != nil {
@@ -98,10 +121,8 @@ func scanNode(document *Document, node *sitter.Node) {
 	}
 }
 
-func scanForChildren(document *Document, node *sitter.Node) {
-	childCount := int(node.ChildCount())
-	for i := 0; i < childCount; i++ {
-		child := node.Child(i)
+func scanForChildren(document *Document, node *phrase.Phrase) {
+	for _, child := range node.Children {
 		scanNode(document, child)
 	}
 }

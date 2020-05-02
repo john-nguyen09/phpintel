@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedConstantAccess represents a reference to constant in class access, e.g. ::CONSTANT
@@ -11,19 +11,23 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
-func newScopedConstantAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newScopedConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	classAccess := newClassAccess(document, firstChild)
-	document.addSymbol(classAccess)
-	constantAccess.Scope = classAccess
+	if p, ok := firstChild.(*phrase.Phrase); ok {
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
+		constantAccess.Scope = classAccess
+	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	constantAccess.Location = document.GetNodeLocation(thirdChild)
-	constantAccess.Name = analyseMemberName(document, thirdChild)
+	if p, ok := thirdChild.(*phrase.Phrase); ok {
+		constantAccess.Name = analyseMemberName(document, p)
+	}
 	return constantAccess, true
 }
 

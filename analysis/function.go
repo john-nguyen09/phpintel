@@ -1,10 +1,11 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Function contains information of functions
@@ -22,7 +23,7 @@ var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
 var _ BlockSymbol = (*Function)(nil)
 
-func newFunction(document *Document, node *sitter.Node) Symbol {
+func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),
 		Params:      make([]*Parameter, 0),
@@ -31,24 +32,24 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 	phpDoc := document.getValidPhpDoc(function.location)
 	document.pushVariableTable(node)
 	document.pushBlock(function)
-
 	variableTable := document.getCurrentVariableTable()
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "name":
-			function.Name = NewTypeString(document.GetNodeText(child))
-		case "formal_parameters":
-			function.analyseParameterDeclarationList(document, child)
-			if phpDoc != nil {
-				function.applyPhpDoc(document, *phpDoc)
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.FunctionDeclarationHeader:
+				function.analyseHeader(document, p)
+				if phpDoc != nil {
+					function.applyPhpDoc(document, *phpDoc)
+				}
+				for _, param := range function.Params {
+					lastToken := util.LastToken(p)
+					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+				}
+			case phrase.FunctionDeclarationBody:
+				scanForChildren(document, p)
 			}
-			for _, param := range function.Params {
-				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
-			}
-		case "compound_statement":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -58,15 +59,35 @@ func newFunction(document *Document, node *sitter.Node) Symbol {
 	return function
 }
 
-func (s *Function) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if child.Type() == "simple_parameter" {
-			param := newParameter(document, child)
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				s.Name = NewTypeString(document.getTokenText(token))
+			}
+		} else if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ParameterDeclarationList:
+				s.analyseParameterDeclarationList(document, p)
+			case phrase.Identifier:
+				s.Name = NewTypeString(document.getPhraseText(p))
+			}
+		}
+		child = traverser.Advance()
+	}
+}
+
+func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
+			param := newParameter(document, p)
 			s.Params = append(s.Params, param)
 		}
-
 		child = traverser.Advance()
 	}
 }
