@@ -13,7 +13,7 @@ import (
 
 func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHelpParams) (*protocol.SignatureHelp, error) {
 	// ) always means hiding signature popup
-	if params.Context.TriggerCharacter == ")" {
+	if params.Context != nil && params.Context.TriggerCharacter == ")" {
 		return nil, nil
 	}
 	signatureHelp := &protocol.SignatureHelp{

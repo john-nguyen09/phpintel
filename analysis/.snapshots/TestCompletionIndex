@@ -4,12 +4,12 @@
     children: ([]analysis.Symbol) <nil>,
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 40:0-44:1
+      Range: (protocol.Range) 2:0-38:1
     },
-    Modifier: (analysis.ClassModifierValue) 1,
+    Modifier: (analysis.ClassModifierValue) 0,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=24) "\\TestAbstractMethodClass",
-      original: (string) (len=23) "TestAbstractMethodClass",
+      fqn: (string) (len=16) "\\TestMethodClass",
+      original: (string) (len=15) "TestMethodClass",
       arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
@@ -25,12 +25,12 @@
     children: ([]analysis.Symbol) <nil>,
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 2:0-38:1
+      Range: (protocol.Range) 40:0-44:1
     },
-    Modifier: (analysis.ClassModifierValue) 0,
+    Modifier: (analysis.ClassModifierValue) 1,
     Name: (analysis.TypeString) {
-      fqn: (string) (len=16) "\\TestMethodClass",
-      original: (string) (len=15) "TestMethodClass",
+      fqn: (string) (len=24) "\\TestAbstractMethodClass",
+      original: (string) (len=23) "TestAbstractMethodClass",
       arrayLevel: (int) 0
     },
     Extends: (analysis.TypeString) {
