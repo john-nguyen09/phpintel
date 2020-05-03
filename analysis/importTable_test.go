@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -122,4 +123,14 @@ function func2() {
 		actual := testCase.importTable.GetFunctionReferenceFQN(store, NewTypeString(testCase.funcCall))
 		assert.Equal(t, testCase.expected, actual)
 	}
+}
+
+func TestImportTableOnEmptyFile(t *testing.T) {
+	doc := NewDocument("test1", []byte(""))
+	doc.Load()
+	importTable := doc.ImportTableAtPos(protocol.Position{
+		Line:      0,
+		Character: 0,
+	})
+	assert.NotNil(t, importTable)
 }

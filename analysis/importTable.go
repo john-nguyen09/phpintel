@@ -17,8 +17,13 @@ type ImportTable struct {
 }
 
 func newImportTable(document *Document, node *phrase.Phrase) *ImportTable {
+	start := 0
+	firstToken := util.FirstToken(node)
+	if firstToken != nil {
+		start = firstToken.Offset
+	}
 	return &ImportTable{
-		start:     document.positionAt(util.FirstToken(node).Offset),
+		start:     document.positionAt(start),
 		namespace: nil,
 		classes:   map[string]string{},
 		functions: map[string]string{},
