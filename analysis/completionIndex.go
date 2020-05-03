@@ -46,15 +46,16 @@ func newFuzzyEngine(db storage.DB) *fuzzyEngine {
 		if b, err := db.Get([]byte(completionDataCollection)); err == nil && len(b) > 0 {
 			log.Println("Loading fuzzy engine from DB")
 			d := storage.NewDecoder(b)
-			engine = fuzzyEngineFromDecoder(db, d)
+			engine = fuzzyEngineFromDecoder(d)
 		}
 	}
 	if engine == nil {
 		engine = &fuzzyEngine{
-			db:      db,
 			entries: map[string][]fuzzyEntry{},
 		}
 	}
+	engine.db = db
+	engine.stopSignal = make(chan struct{})
 	go func() {
 		ticker := time.NewTicker(compactionDuration)
 		for {
@@ -69,7 +70,7 @@ func newFuzzyEngine(db storage.DB) *fuzzyEngine {
 	return engine
 }
 
-func fuzzyEngineFromDecoder(db storage.DB, d *storage.Decoder) *fuzzyEngine {
+func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
 	entriesMap := map[string][]fuzzyEntry{}
 	collectionLen := d.ReadInt()
 	count := 0
@@ -89,7 +90,6 @@ func fuzzyEngineFromDecoder(db storage.DB, d *storage.Decoder) *fuzzyEngine {
 		count++
 	}
 	return &fuzzyEngine{
-		db:      db,
 		entries: entriesMap,
 	}
 }
@@ -103,20 +103,13 @@ func (f *fuzzyEngine) Len() int {
 }
 
 func (f *fuzzyEngine) serialise(e *storage.Encoder) {
-	f.compact()
 	f.indexMutex.Lock()
 	defer f.indexMutex.Unlock()
 	e.WriteInt(len(f.entries))
 	for collection, entries := range f.entries {
 		e.WriteString(collection)
-		notDeleted := entries[:0]
+		e.WriteInt(len(entries))
 		for _, entry := range entries {
-			if !entry.deleted {
-				notDeleted = append(notDeleted, entry)
-			}
-		}
-		e.WriteInt(len(notDeleted))
-		for _, entry := range notDeleted {
 			e.WriteString(entry.name)
 			e.WriteString(entry.key)
 			e.WriteString(entry.uri)
@@ -179,6 +172,7 @@ func (f *fuzzyEngine) compact() {
 func (f *fuzzyEngine) close() error {
 	f.stopSignal <- struct{}{}
 	e := storage.NewEncoder()
+	f.compact()
 	f.serialise(e)
 	return f.db.Put([]byte(completionDataCollection), e.Bytes())
 }

@@ -75,7 +75,7 @@ func TestFuzzyEngine(t *testing.T) {
 	e := storage.NewEncoder()
 	engine.serialise(e)
 	d := storage.NewDecoder(e.Bytes())
-	newEngine := fuzzyEngineFromDecoder(nil, d)
+	newEngine := fuzzyEngineFromDecoder(d)
 
 	matches = []string{}
 	newEngine.search(searchQuery{
