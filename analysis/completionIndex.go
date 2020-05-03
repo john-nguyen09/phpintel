@@ -155,6 +155,7 @@ func (f *fuzzyEngine) search(query searchQuery) SearchResult {
 		}
 		result := query.onData(CompletionValue(f.entries[f.currentCollection][match.Index].key))
 		if result.shouldStop {
+			searchResult.IsComplete = false
 			break
 		}
 	}
