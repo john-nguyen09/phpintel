@@ -12,10 +12,13 @@ func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
 	diagnostics := []protocol.Diagnostic{}
 	traverser := util.NewTraverser(rootNode)
 	traverser.Traverse(func(node phrase.AstNode, _ []*phrase.Phrase) util.VisitorContext {
+		if p, ok := node.(*phrase.Phrase); ok && p.Type == phrase.DocumentComment {
+			return util.VisitorContext{ShouldAscend: false}
+		}
 		if err, ok := node.(*phrase.ParseError); ok {
 			diagnostics = append(diagnostics, parserErrorToDiagnostic(document, err))
 		}
-		return util.VisitorContext{true, nil}
+		return util.VisitorContext{ShouldAscend: true}
 	})
 	return diagnostics
 }
