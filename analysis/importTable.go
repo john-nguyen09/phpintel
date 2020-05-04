@@ -3,9 +3,9 @@ package analysis
 import (
 	"strings"
 
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type ImportTable struct {
@@ -16,9 +16,14 @@ type ImportTable struct {
 	constants map[string]string
 }
 
-func newImportTable(document *Document, node *sitter.Node) *ImportTable {
+func newImportTable(document *Document, node *phrase.Phrase) *ImportTable {
+	start := 0
+	firstToken := util.FirstToken(node)
+	if firstToken != nil {
+		start = firstToken.Offset
+	}
 	return &ImportTable{
-		start:     util.PointToPosition(node.StartPoint()),
+		start:     document.positionAt(start),
 		namespace: nil,
 		classes:   map[string]string{},
 		functions: map[string]string{},

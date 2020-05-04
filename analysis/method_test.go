@@ -133,7 +133,7 @@ class TestClass1 {
 }`))
 	doc.Load()
 	method1 := doc.Children[0].(*Class).GetChildren()[1].(*Method)
-	method2 := doc.Children[0].(*Class).GetChildren()[4].(*Method)
+	method2 := doc.Children[0].(*Class).GetChildren()[3].(*Method)
 
 	scopeTypes := newTypeComposite()
 	scopeTypes.add(NewTypeString("\\TestClass1"))

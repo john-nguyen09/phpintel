@@ -1,11 +1,15 @@
 package analysis
 
 import (
-	"strings"
+	"log"
+	"sync"
+	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
-	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
+	"github.com/sahilm/fuzzy"
 )
+
+const compactionDuration = 15 * time.Second
 
 // CompletionValue holds references to uri and name
 type CompletionValue string
@@ -20,116 +24,192 @@ type searchQuery struct {
 	onData     func(CompletionValue) onDataResult
 }
 
+type fuzzyEntry struct {
+	name    string
+	key     string
+	uri     string
+	deleted bool
+}
+
+type fuzzyEngine struct {
+	db         storage.DB
+	indexMutex sync.RWMutex
+	entries    map[string][]fuzzyEntry
+	stopSignal chan struct{}
+
+	currentCollection string
+}
+
+func newFuzzyEngine(db storage.DB) *fuzzyEngine {
+	var engine *fuzzyEngine
+	if db != nil {
+		if b, err := db.Get([]byte(completionDataCollection)); err == nil && len(b) > 0 {
+			log.Println("Loading fuzzy engine from DB")
+			d := storage.NewDecoder(b)
+			engine = fuzzyEngineFromDecoder(d)
+		}
+	}
+	if engine == nil {
+		engine = &fuzzyEngine{
+			entries: map[string][]fuzzyEntry{},
+		}
+	}
+	engine.db = db
+	engine.stopSignal = make(chan struct{})
+	go func() {
+		ticker := time.NewTicker(compactionDuration)
+		for {
+			select {
+			case <-ticker.C:
+				engine.compact()
+			case <-engine.stopSignal:
+				break
+			}
+		}
+	}()
+	return engine
+}
+
+func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
+	entriesMap := map[string][]fuzzyEntry{}
+	collectionLen := d.ReadInt()
+	count := 0
+	for i := 0; i < collectionLen; i++ {
+		collection := d.ReadString()
+		entriesLen := d.ReadInt()
+		entries := []fuzzyEntry{}
+		for j := 0; j < entriesLen; j++ {
+			entries = append(entries, fuzzyEntry{
+				name:    d.ReadString(),
+				key:     d.ReadString(),
+				uri:     d.ReadString(),
+				deleted: false,
+			})
+		}
+		entriesMap[collection] = entries
+		count++
+	}
+	return &fuzzyEngine{
+		entries: entriesMap,
+	}
+}
+
+func (f *fuzzyEngine) String(i int) string {
+	return f.entries[f.currentCollection][i].name
+}
+
+func (f *fuzzyEngine) Len() int {
+	return len(f.entries[f.currentCollection])
+}
+
+func (f *fuzzyEngine) serialise(e *storage.Encoder) {
+	f.indexMutex.Lock()
+	defer f.indexMutex.Unlock()
+	e.WriteInt(len(f.entries))
+	for collection, entries := range f.entries {
+		e.WriteString(collection)
+		e.WriteInt(len(entries))
+		for _, entry := range entries {
+			e.WriteString(entry.name)
+			e.WriteString(entry.key)
+			e.WriteString(entry.uri)
+		}
+	}
+}
+
+func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey string) {
+	f.indexMutex.Lock()
+	defer f.indexMutex.Unlock()
+	collection := indexable.GetIndexCollection()
+	var (
+		currEntries []fuzzyEntry
+		ok          bool
+	)
+	if currEntries, ok = f.entries[collection]; ok {
+	}
+	currEntries = append(currEntries, fuzzyEntry{
+		name:    indexable.GetIndexableName(),
+		key:     symbolKey,
+		uri:     uri,
+		deleted: false,
+	})
+	f.entries[collection] = currEntries
+}
+
+func (f *fuzzyEngine) search(query searchQuery) SearchResult {
+	f.indexMutex.RLock()
+	defer f.indexMutex.RUnlock()
+	f.currentCollection = query.collection
+	matches := fuzzy.FindFrom(query.keyword, f)
+	searchResult := SearchResult{IsComplete: true}
+	for _, match := range matches {
+		if f.entries[f.currentCollection][match.Index].deleted {
+			continue
+		}
+		result := query.onData(CompletionValue(f.entries[f.currentCollection][match.Index].key))
+		if result.shouldStop {
+			searchResult.IsComplete = false
+			break
+		}
+	}
+	return searchResult
+}
+
+func (f *fuzzyEngine) compact() {
+	f.indexMutex.Lock()
+	defer f.indexMutex.Unlock()
+	for collection, entries := range f.entries {
+		newEntries := entries[:0]
+		for _, entry := range entries {
+			if !entry.deleted {
+				newEntries = append(newEntries, entry)
+			}
+		}
+		f.entries[collection] = newEntries
+	}
+}
+
+func (f *fuzzyEngine) close() error {
+	f.stopSignal <- struct{}{}
+	e := storage.NewEncoder()
+	f.compact()
+	f.serialise(e)
+	return f.db.Put([]byte(completionDataCollection), e.Bytes())
+}
+
 type SearchResult struct {
 	IsComplete bool
 }
 
-// Serialise writes the CompletionValue
-func (cv CompletionValue) Serialise(e *storage.Encoder) {
-	e.WriteString(string(cv))
+type fuzzyEngineDeletor struct {
+	uri                string
+	engine             *fuzzyEngine
+	entriesToBeDeleted []*fuzzyEntry
 }
 
-func readCompletionValue(d *storage.Decoder) CompletionValue {
-	return CompletionValue(d.ReadString())
-}
-
-func createCompletionEntries(uri string, indexable NameIndexable, symbolKey string) []*entry {
-	entries := []*entry{}
-	keys := getCompletionKeys(uri, indexable, symbolKey)
-	completionKeys := [][]byte{}
-	for _, key := range keys {
-		entry := newEntry(indexable.GetIndexCollection(), key)
-		completionValue := CompletionValue(symbolKey)
-		completionValue.Serialise(entry.e)
-		entries = append(entries, entry)
-
-		completionKeys = append(completionKeys, entry.getKeyBytes())
-	}
-	entries = append(entries, createEntryToReferCompletionIndex(uri, symbolKey, completionKeys))
-	return entries
-}
-
-func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]byte) *entry {
-	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
-	entry.e.WriteInt(len(keys))
-	for _, key := range keys {
-		entry.e.WriteBytes(key)
-	}
-	return entry
-}
-
-type completionIndexDeletor struct {
-	indexKeys map[string]bool
-	keys      map[string]bool
-}
-
-func newCompletionIndexDeletor(db storage.DB, uri string) *completionIndexDeletor {
-	indexKeys := map[string]bool{}
-	keys := map[string]bool{}
-	entry := newEntry(documentCompletionIndex, uri)
-	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
-		keys[string(it.Key())] = true
-		d := storage.NewDecoder(it.Value())
-		len := d.ReadInt()
-		if len > 0 {
-			for i := 0; i < len; i++ {
-				key := d.ReadBytes()
-				indexKeys[string(key)] = true
+func newFuzzyEngineDeletor(engine *fuzzyEngine, uri string) *fuzzyEngineDeletor {
+	entriesToBeDeleted := []*fuzzyEntry{}
+	engine.indexMutex.RLock()
+	for collection, entries := range engine.entries {
+		for i, entry := range entries {
+			if entry.deleted {
+				continue
+			}
+			if entry.uri == uri {
+				entriesToBeDeleted = append(entriesToBeDeleted, &engine.entries[collection][i])
 			}
 		}
-	})
-	return &completionIndexDeletor{indexKeys, keys}
-}
-
-func (d *completionIndexDeletor) MarkNotDelete(uri string, indexable NameIndexable, symbolKey string) {
-	keys := getCompletionKeys(uri, indexable, symbolKey)
-	for _, key := range keys {
-		entry := newEntry(indexable.GetIndexCollection(), key)
-		delete(d.indexKeys, string(entry.getKeyBytes()))
 	}
-	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
-	delete(d.keys, string(entry.getKeyBytes()))
-}
-
-func (d *completionIndexDeletor) Delete(b storage.Batch) {
-	for indexKey := range d.indexKeys {
-		b.Delete([]byte(indexKey))
-	}
-	for key := range d.keys {
-		b.Delete([]byte(key))
+	engine.indexMutex.RUnlock()
+	return &fuzzyEngineDeletor{
+		uri:                uri,
+		engine:             engine,
+		entriesToBeDeleted: entriesToBeDeleted,
 	}
 }
 
-func getCompletionKeys(uri string, indexable NameIndexable, symbolKey string) []string {
-	tokens := wordtokeniser.Tokenise(indexable.GetIndexableName())
-	keys := []string{}
-	for _, token := range tokens {
-		token = strings.ToLower(token)
-		keys = append(keys, getCompletionKey(token, symbolKey))
+func (d *fuzzyEngineDeletor) delete() {
+	for _, entry := range d.entriesToBeDeleted {
+		entry.deleted = true
 	}
-	return keys
-}
-
-func getCompletionKey(token string, symbolKey string) string {
-	return token + KeySep + symbolKey
-}
-
-func searchCompletions(db storage.DB, query searchQuery) SearchResult {
-	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
-	isComplete := true
-	name := strings.ToLower(query.keyword)
-	entry := newEntry(query.collection, name)
-	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
-		completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
-		if _, ok := uniqueCompletionValues[completionValue]; ok {
-			return
-		}
-		result := query.onData(completionValue)
-		uniqueCompletionValues[completionValue] = true
-		if result.shouldStop {
-			isComplete = false
-			it.Stop()
-		}
-	})
-	return SearchResult{isComplete}
 }

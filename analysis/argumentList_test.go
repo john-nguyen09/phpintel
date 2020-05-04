@@ -48,7 +48,7 @@ $abc = $DB->get_record('abc',)`))
 		Character: 29,
 	})
 	assert.Equal(t, []protocol.Range{
-		{Start: protocol.Position{Line: 1, Character: 22}, End: protocol.Position{Line: 1, Character: 28}},
+		{Start: protocol.Position{Line: 1, Character: 23}, End: protocol.Position{Line: 1, Character: 28}},
 		{Start: protocol.Position{Line: 1, Character: 28}, End: protocol.Position{Line: 1, Character: 30}},
 	}, args.ranges)
 }

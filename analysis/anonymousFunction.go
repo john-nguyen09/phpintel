@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type AnonymousFunction struct {
@@ -15,7 +15,7 @@ type AnonymousFunction struct {
 
 var _ BlockSymbol = (*AnonymousFunction)(nil)
 
-func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
+func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
@@ -25,14 +25,17 @@ func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "formal_parameters":
-			anonFunc.analyseParameterDeclarationList(document, child)
-			for _, param := range anonFunc.Params {
-				variableTable.add(param.ToVariable(), util.PointToPosition(child.EndPoint()))
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.AnonymousFunctionHeader:
+				anonFunc.analyseHeader(document, p)
+				for _, param := range anonFunc.Params {
+					lastToken := util.LastToken(p)
+					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+				}
+			case phrase.FunctionDeclarationBody:
+				scanForChildren(document, p)
 			}
-		case "compound_statement":
-			scanForChildren(document, child)
 		}
 		child = traverser.Advance()
 	}
@@ -41,21 +44,34 @@ func newAnonymousFunction(document *Document, node *sitter.Node) Symbol {
 	return anonFunc
 }
 
-func (s *AnonymousFunction) GetLocation() protocol.Location {
-	return s.location
-}
-
-func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *sitter.Node) {
+func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "simple_parameter":
-			param := newParameter(document, child)
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ParameterDeclarationList:
+				s.analyseParameterDeclarationList(document, p)
+			}
+		}
+		child = traverser.Advance()
+	}
+}
+
+func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
+			param := newParameter(document, p)
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()
 	}
+}
+
+func (s *AnonymousFunction) GetLocation() protocol.Location {
+	return s.location
 }
 
 func (s *AnonymousFunction) addChild(child Symbol) {

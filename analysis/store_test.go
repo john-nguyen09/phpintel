@@ -2,9 +2,11 @@ package analysis
 
 import (
 	"io/ioutil"
+	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/karrick/godirwalk"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,7 +41,6 @@ func TestSearchNamespace(t *testing.T) {
 	doc4.Load()
 	store.SyncDocument(doc4)
 	doc4.hasChanges = true
-	doc4.injector = nil
 	doc4.SetText([]byte(`<?php namespace A\B; class Test {}`))
 	doc4.Load()
 	store.SyncDocument(doc4)
@@ -102,4 +103,25 @@ namespace Namespace2 {
 			}
 		}
 	}
+}
+
+func TestStoreClose(t *testing.T) {
+	store := setupStore("test", "TestStoreClose")
+	filePaths := []string{}
+	godirwalk.Walk("cases", &godirwalk.Options{
+		Callback: func(path string, de *godirwalk.Dirent) error {
+			if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
+				filePaths = append(filePaths, path)
+			}
+			return nil
+		},
+		Unsorted: true,
+	})
+	for id, filePath := range filePaths {
+		data, _ := ioutil.ReadFile(filePath)
+		document := NewDocument("test"+string(id), data)
+		document.Load()
+		store.SyncDocument(document)
+	}
+	store.fEngine.close()
 }

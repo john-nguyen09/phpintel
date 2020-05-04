@@ -30,6 +30,7 @@ func setupStore(uri string, name string) *Store {
 	return &Store{
 		uri:       uri,
 		db:        db,
+		fEngine:   newFuzzyEngine(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 

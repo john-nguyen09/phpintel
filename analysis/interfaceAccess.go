@@ -1,8 +1,8 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // InterfaceAccess represents a reference to the part before ::
@@ -10,15 +10,15 @@ type InterfaceAccess struct {
 	Expression
 }
 
-func newInterfaceAccess(document *Document, node *sitter.Node) *InterfaceAccess {
+func newInterfaceAccess(document *Document, node *phrase.Phrase) *InterfaceAccess {
 	interfaceAccess := &InterfaceAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     document.GetNodeText(node),
+			Name:     document.getPhraseText(node),
 		},
 	}
 	types := newTypeComposite()
-	if node.Type() == "qualified_name" {
+	if node.Type == phrase.QualifiedName || node.Type == phrase.FullyQualifiedName {
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)

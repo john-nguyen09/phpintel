@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type TraitAccess struct {
@@ -12,19 +12,14 @@ type TraitAccess struct {
 
 var _ HasTypes = (*TraitAccess)(nil)
 
-func processTraitUseClause(document *Document, node *sitter.Node) Symbol {
+func processTraitUseClause(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
-	currentClass := document.getLastClass()
 	for child != nil {
-		switch child.Type() {
-		case "qualified_name":
-			traitAccess := newTraitAccess(document, child)
-			document.addSymbol(traitAccess)
-			if class, ok := currentClass.(*Class); ok {
-				for _, typeString := range traitAccess.Type.Resolve() {
-					class.AddUse(typeString)
-				}
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.QualifiedNameList:
+				traitAnalyseQualifiedNameList(document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -32,15 +27,36 @@ func processTraitUseClause(document *Document, node *sitter.Node) Symbol {
 	return nil
 }
 
-func newTraitAccess(document *Document, node *sitter.Node) *TraitAccess {
+func traitAnalyseQualifiedNameList(document *Document, node *phrase.Phrase) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Advance()
+	currentClass := document.getLastClass()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.QualifiedName, phrase.FullyQualifiedName:
+				traitAccess := newTraitAccess(document, p)
+				document.addSymbol(traitAccess)
+				if class, ok := currentClass.(*Class); ok {
+					for _, typeString := range traitAccess.Type.Resolve() {
+						class.AddUse(typeString)
+					}
+				}
+			}
+		}
+		child = traverser.Advance()
+	}
+}
+
+func newTraitAccess(document *Document, node *phrase.Phrase) *TraitAccess {
 	traitAccess := &TraitAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
-			Name:     document.GetNodeText(node),
+			Name:     document.getPhraseText(node),
 		},
 	}
 	types := newTypeComposite()
-	if node.Type() == "qualified_name" {
+	if node.Type == phrase.QualifiedName || node.Type == phrase.FullyQualifiedName {
 		typeString := transformQualifiedName(node, document)
 		typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 		types.add(typeString)

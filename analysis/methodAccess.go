@@ -1,9 +1,10 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 type MethodAccess struct {
@@ -14,26 +15,46 @@ type MethodAccess struct {
 
 var _ HasTypesHasScope = (*MethodAccess)(nil)
 
-func newMethodAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	expression := scanForExpression(document, firstChild)
-	if expression != nil {
-		methodAccess.Scope = expression
+	if p, ok := firstChild.(*phrase.Phrase); ok {
+		expression := scanForExpression(document, p)
+		if expression != nil {
+			methodAccess.Scope = expression
+		}
 	}
+	traverser.Advance()
 	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()
+	var open *lexer.Token = nil
+	var close *lexer.Token = nil
+	hasArgs := false
 	for child != nil {
-		switch child.Type() {
-		case "arguments":
-			scanNode(document, child)
-			break
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.ArgumentExpressionList:
+				newArgumentList(document, p)
+				hasArgs = true
+				break
+			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.OpenParenthesis:
+				open = t
+			case lexer.CloseParenthesis:
+				close = t
+			}
 		}
 		child = traverser.Advance()
+	}
+	if !hasArgs {
+		args := newEmptyArgumentList(document, open, close)
+		document.addSymbol(args)
 	}
 	return methodAccess, false
 }

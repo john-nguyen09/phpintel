@@ -5,8 +5,5 @@
       original: (string) (len=6) "string",
       arrayLevel: (int) 0
     }
-  },
-  uniqueFQNs: (map[string]bool) (len=1) {
-    (string) (len=6) "string": (bool) true
   }
 }

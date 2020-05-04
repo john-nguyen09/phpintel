@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // ScopedPropertyAccess represents a reference to property in
@@ -16,19 +16,23 @@ type ScopedPropertyAccess struct {
 
 var _ HasTypesHasScope = (*ScopedPropertyAccess)(nil)
 
-func newScopedPropertyAccess(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newScopedPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	classAccess := newClassAccess(document, firstChild)
-	document.addSymbol(classAccess)
-	propertyAccess.Scope = classAccess
+	if p, ok := firstChild.(*phrase.Phrase); ok {
+		classAccess := newClassAccess(document, p)
+		document.addSymbol(classAccess)
+		propertyAccess.Scope = classAccess
+	}
 	traverser.Advance()
 	thirdChild := traverser.Advance()
 	propertyAccess.Location = document.GetNodeLocation(thirdChild)
-	propertyAccess.Name = analyseMemberName(document, thirdChild)
+	if p, ok := thirdChild.(*phrase.Phrase); ok {
+		propertyAccess.Name = analyseMemberName(document, p)
+	}
 	return propertyAccess, true
 }
 

@@ -1,10 +1,11 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Const contains information of constants
@@ -15,39 +16,19 @@ type Const struct {
 	Value string
 }
 
-func newConstDeclaration(document *Document, node *sitter.Node) Symbol {
-	class := document.getLastClass()
+func newConstDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		if child.Type() == "const_element" {
-			c := newConst(document, child).(*Const)
-			if class != nil {
-				classConst := &ClassConst{
-					location: c.GetLocation(),
-					Name:     c.Name.GetOriginal(),
-					Value:    c.Value,
-				}
-				switch v := class.(type) {
-				case *Class:
-					classConst.Scope = v.Name
-				case *Interface:
-					classConst.Scope = v.Name
-				case *Trait:
-					classConst.Scope = v.Name
-				}
-				document.addSymbol(classConst)
-			} else {
-				document.addSymbol(c)
-			}
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ConstElementList {
+			scanForChildren(document, p)
 		}
 		child = traverser.Advance()
 	}
-
 	return nil
 }
 
-func newConst(document *Document, node *sitter.Node) Symbol {
+func newConst(document *Document, node *phrase.Phrase) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}
@@ -55,21 +36,27 @@ func newConst(document *Document, node *sitter.Node) Symbol {
 	child := traverser.Advance()
 	hasEquals := false
 	for child != nil {
-		switch child.Type() {
-		case "name":
-			constant.Name = NewTypeString(document.GetNodeText(child))
-		case "=":
-			hasEquals = true
-		default:
+		if token, ok := child.(*lexer.Token); ok {
+			switch token.Type {
+			case lexer.Name:
+				constant.Name = NewTypeString(document.getTokenText(token))
+			case lexer.Equals:
+				hasEquals = true
+				traverser.SkipToken(lexer.Whitespace)
+			default:
+				if hasEquals {
+					constant.Value += document.getTokenText(token)
+				}
+			}
+		} else if p, ok := child.(*phrase.Phrase); ok {
 			if hasEquals {
-				constant.Value += document.GetNodeText(child)
+				constant.Value += document.getPhraseText(p)
 			}
 		}
 
 		child = traverser.Advance()
 	}
 	constant.Name.SetNamespace(document.currImportTable().GetNamespace())
-
 	return constant
 }
 

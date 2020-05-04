@@ -1,18 +1,4 @@
-([]analysis.HasTypes) (len=3) {
-  (*analysis.FunctionCall)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 2:0-2:5
-      },
-      Name: (string) (len=5) "isset"
-    },
-    hasResolved: (bool) false
-  }),
+([]analysis.HasTypes) (len=2) {
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {

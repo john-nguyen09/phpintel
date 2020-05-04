@@ -4,7 +4,7 @@
     Range: (protocol.Range) 20:12-20:14
   },
   children: ([]analysis.Symbol) <nil>,
-  arguments: ([]*sitter.Node) <nil>,
+  arguments: ([]phrase.AstNode) <nil>,
   ranges: ([]protocol.Range) (len=1) {
     (protocol.Range) 20:12-20:14
   }

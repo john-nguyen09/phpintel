@@ -1,9 +1,9 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
 // Expression represents a reference
@@ -70,30 +70,35 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type exprConstructor func(*Document, *sitter.Node) (HasTypes, bool)
+type exprConstructor func(*Document, *phrase.Phrase) (HasTypes, bool)
 
-var nodeTypeToExprConstructor map[string]exprConstructor
+var nodeTypeToExprConstructor map[phrase.PhraseType]exprConstructor
 
 func init() {
-	nodeTypeToExprConstructor = map[string]exprConstructor{
-		"function_call_expression":          newFunctionCall,
-		"qualified_name":                    processQualifiedName,
-		"scoped_property_access_expression": newScopedPropertyAccess,
-		"scoped_call_expression":            newScopedMethodAccess,
-		"class_constant_access_expression":  newScopedConstantAccess,
-		"object_creation_expression":        newClassTypeDesignator,
-		"variable_name":                     newVariableExpression,
-		"member_access_expression":          newPropertyAccess,
-		"member_call_expression":            newMethodAccess,
-		"parenthesized_expression":          newDerivedExpression,
-		"clone_expression":                  newDerivedExpression,
-		"binary_expression":                 processBinaryExpression,
-		"unary_op_expression":               processToScanChildren,
-		"assignment_expression":             newAssignment,
+	nodeTypeToExprConstructor = map[phrase.PhraseType]exprConstructor{
+		phrase.FunctionCallExpression:         newFunctionCall,
+		phrase.ConstantAccessExpression:       newConstantAccess,
+		phrase.ScopedPropertyAccessExpression: newScopedPropertyAccess,
+		phrase.ScopedCallExpression:           newScopedMethodAccess,
+		phrase.ClassConstantAccessExpression:  newScopedConstantAccess,
+		phrase.ErrorScopedAccessExpression:    newScopedConstantAccess,
+		phrase.ObjectCreationExpression:       newClassTypeDesignator,
+		phrase.SimpleVariable:                 newVariableExpression,
+		phrase.PropertyAccessExpression:       newPropertyAccess,
+		phrase.MethodCallExpression:           newMethodAccess,
+		phrase.ForeachStatement:               analyseForeachStatement,
+		phrase.EncapsulatedExpression:         newDerivedExpression,
+		phrase.CloneExpression:                newDerivedExpression,
+		phrase.UnaryOpExpression:              processToScanChildren,
+		phrase.SimpleAssignmentExpression:     newAssignment,
+		phrase.ByRefAssignmentExpression:      newAssignment,
+		phrase.CompoundAssignmentExpression:   newAssignment,
+		phrase.InstanceOfExpression:           processInstanceOfExpression,
+		phrase.InstanceofTypeDesignator:       newInstanceOfTypeDesignator,
 	}
 }
 
-func scanForExpression(document *Document, node *sitter.Node) HasTypes {
+func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 	var expression HasTypes = nil
 	shouldAdd := false
 	defer func() {
@@ -104,22 +109,19 @@ func scanForExpression(document *Document, node *sitter.Node) HasTypes {
 			document.addSymbol(symbol)
 		}
 	}()
-	if constructor, ok := nodeTypeToExprConstructor[node.Type()]; ok {
+	if constructor, ok := nodeTypeToExprConstructor[node.Type]; ok {
 		expression, shouldAdd = constructor(document, node)
 	}
 	return expression
 }
 
-func processToScanChildren(document *Document, node *sitter.Node) (HasTypes, bool) {
+func processToScanChildren(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		switch child.Type() {
-		case "@", "+", "-", "~", "!":
-			child = traverser.Advance()
-			continue
+		if p, ok := child.(*phrase.Phrase); ok {
+			scanForExpression(document, p)
 		}
-		scanForExpression(document, child)
 		child = traverser.Advance()
 	}
 	return nil, false
@@ -132,7 +134,7 @@ type derivedExpression struct {
 
 var _ HasTypes = (*derivedExpression)(nil)
 
-func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool) {
+func newDerivedExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	derivedExpr := &derivedExpression{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -142,10 +144,12 @@ func newDerivedExpression(document *Document, node *sitter.Node) (HasTypes, bool
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
-		expr := scanForExpression(document, child)
-		if expr != nil {
-			derivedExpr.Scope = expr
-			break
+		if p, ok := child.(*phrase.Phrase); ok {
+			expr := scanForExpression(document, p)
+			if expr != nil {
+				derivedExpr.Scope = expr
+				break
+			}
 		}
 		child = traverser.Advance()
 	}

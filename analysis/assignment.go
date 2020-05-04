@@ -1,28 +1,47 @@
 package analysis
 
 import (
+	"github.com/john-nguyen09/go-phpparser/lexer"
+	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
-	sitter "github.com/smacker/go-tree-sitter"
 )
 
-func newAssignment(document *Document, node *sitter.Node) (HasTypes, bool) {
-	lhs := node.ChildByFieldName("left")
-	rhs := node.ChildByFieldName("right")
-	if lhs != nil {
-		if lhs.Type() == "variable_name" {
-			analyseVariableAssignment(document, lhs, rhs, node)
-		} else {
-			scanNode(document, lhs)
-			if rhs != nil {
-				scanNode(document, rhs)
-			}
+func newAssignment(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+	traverser := util.NewTraverser(node)
+	firstChild := traverser.Advance()
+	isVariable := false
+	if p, ok := firstChild.(*phrase.Phrase); ok {
+		if p.Type == phrase.SimpleVariable {
+			analyseVariableAssignment(document, p, traverser.Clone(), node)
+			isVariable = true
+		}
+	}
+	if !isVariable {
+		if p, ok := firstChild.(*phrase.Phrase); ok {
+			scanNode(document, p)
+		}
+		for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+			scanNode(document, child)
 		}
 	}
 	return nil, false
 }
 
-func analyseVariableAssignment(document *Document, lhs *sitter.Node, rhs *sitter.Node, parent *sitter.Node) {
-	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(parent))
+func analyseVariableAssignment(document *Document, lhs *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
+	traverser.Advance()
+	traverser.SkipToken(lexer.Whitespace)
+	if parent.Type == phrase.CompoundAssignmentExpression {
+		traverser.SkipToken(lexer.DotEquals)
+	} else {
+		traverser.SkipToken(lexer.Equals)
+	}
+	traverser.SkipToken(lexer.Whitespace)
+	if parent.Type == phrase.ByRefAssignmentExpression {
+		traverser.SkipToken(lexer.Ampersand)
+		traverser.SkipToken(lexer.Whitespace)
+	}
+	rhs := traverser.Advance()
+	phpDoc := document.getValidPhpDoc(document.GetNodeLocation(lhs))
 	variable := newVariableWithoutPushing(document, lhs)
 	if phpDoc != nil {
 		variable.applyPhpDoc(document, *phpDoc)
@@ -31,9 +50,12 @@ func analyseVariableAssignment(document *Document, lhs *sitter.Node, rhs *sitter
 	document.addSymbol(variable)
 
 	var expression HasTypes = nil
-	expression = scanForExpression(document, rhs)
+	if p, ok := rhs.(*phrase.Phrase); ok {
+		expression = scanForExpression(document, p)
+	}
 	// But the variable should be pushed after any rhs's variables
-	document.pushVariable(variable, util.PointToPosition(parent.EndPoint()))
+	lastToken := util.LastToken(parent)
+	document.pushVariable(variable, document.positionAt(lastToken.Offset+lastToken.Length))
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {

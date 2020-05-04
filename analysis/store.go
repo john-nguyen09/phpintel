@@ -31,7 +31,7 @@ const (
 	globalVariableCollection string = "gloVar"
 	documentCollection       string = "doc"
 
-	documentCompletionIndex   string = "docCom"
+	completionDataCollection  string = "comDatCol"
 	functionCompletionIndex   string = "funCom"
 	constCompletionIndex      string = "conCom"
 	defineCompletionIndex     string = "defCom"
@@ -81,6 +81,7 @@ func (s *entry) bytes() []byte {
 type Store struct {
 	uri       protocol.DocumentURI
 	db        storage.DB
+	fEngine   *fuzzyEngine
 	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
 
@@ -155,6 +156,7 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	store := &Store{
 		uri:       uri,
 		db:        db,
+		fEngine:   newFuzzyEngine(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 
@@ -164,6 +166,7 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 }
 
 func (s *Store) Close() {
+	s.fEngine.close()
 	s.db.Close()
 }
 
@@ -270,8 +273,8 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newCompletionIndexDeletor(s.db, uri)
-		ciDeletor.Delete(b)
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, uri)
+		ciDeletor.delete()
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(b)
 		riDeletor := newReferenceIndexDeletor(s.db, uri)
@@ -328,13 +331,13 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
 		riDeletor := newReferenceIndexDeletor(s.db, document.GetURI())
 
 		s.writeAllSymbols(b, document, ciDeletor, syDeletor, riDeletor)
 
-		ciDeletor.Delete(b)
+		ciDeletor.delete()
 		syDeletor.Delete(b)
 		riDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
@@ -387,13 +390,12 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 }
 
 func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
-	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor, riDeletor *referenceIndexDeletor) {
+	ciDeletor *fuzzyEngineDeletor, syDeletor *symbolDeletor, riDeletor *referenceIndexDeletor) {
 	for _, impTable := range document.importTables {
 		is := indexablesFromNamespaceName(impTable.GetNamespace())
 		for index, i := range is {
 			key := i.key + KeySep + strconv.Itoa(index)
-			indexName(batch, document, i, key)
-			ciDeletor.MarkNotDelete(document.GetURI(), i, key)
+			s.indexName(batch, document, i, key)
 		}
 	}
 	tra := newTraverser()
@@ -410,8 +412,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			syDeletor.MarkNotDelete(ser)
 
 			if indexable, ok := child.(NameIndexable); ok {
-				indexName(batch, document, indexable, key)
-				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
+				s.indexName(batch, document, indexable, key)
 			}
 		}
 
@@ -478,11 +479,8 @@ func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
 	writeEntry(batch, entry)
 }
 
-func indexName(batch storage.Batch, document *Document, indexable NameIndexable, key string) {
-	entries := createCompletionEntries(document.GetURI(), indexable, key)
-	for _, entry := range entries {
-		writeEntry(batch, entry)
-	}
+func (s *Store) indexName(batch storage.Batch, document *Document, indexable NameIndexable, key string) {
+	s.fEngine.index(document.GetURI(), indexable, key)
 }
 
 func writeEntry(batch storage.Batch, entry *entry) {
@@ -543,7 +541,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return namespaces, result
 }
 
@@ -615,7 +613,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return classes, result
 }
 
@@ -653,7 +651,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return interfaces, result
 }
 
@@ -695,7 +693,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return traits, result
 }
 
@@ -733,7 +731,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return functions, result
 }
 
@@ -769,7 +767,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return consts, result
 }
 
@@ -805,7 +803,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return defines, result
 }
 
@@ -856,7 +854,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return methods, result
 }
 
@@ -907,7 +905,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return classConsts, result
 }
 
@@ -958,7 +956,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.fEngine.search(query)
 	return properties, result
 }
 
