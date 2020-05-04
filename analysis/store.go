@@ -451,9 +451,6 @@ func (s *Store) writeReferenceIfAvailable(batch storage.Batch, document *Documen
 		}
 		for _, t := range sym.GetTypes().Resolve() {
 			fqn := t.GetFQN()
-			if fqn == "\\TestInterface2" {
-				log.Println(sym.GetLocation())
-			}
 			entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
 			riDeletor.MarkNotDelete(s, sym, fqn)
 		}
