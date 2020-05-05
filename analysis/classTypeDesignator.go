@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -17,9 +16,6 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, 
 	document.addSymbol(classTypeDesignator)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
-	var open *lexer.Token = nil
-	var close *lexer.Token = nil
-	hasArgs := false
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
@@ -27,21 +23,9 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, 
 				classTypeDesignator.analyseNode(document, p)
 			case phrase.ArgumentExpressionList:
 				newArgumentList(document, p)
-				hasArgs = true
-			}
-		} else if t, ok := child.(*lexer.Token); ok {
-			switch t.Type {
-			case lexer.OpenParenthesis:
-				open = t
-			case lexer.CloseParenthesis:
-				close = t
 			}
 		}
 		child = traverser.Advance()
-	}
-	if !hasArgs && open != nil && close != nil {
-		args := newEmptyArgumentList(document, open, close)
-		document.addSymbol(args)
 	}
 	return classTypeDesignator, false
 }

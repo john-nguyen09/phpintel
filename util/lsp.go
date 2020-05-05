@@ -14,7 +14,7 @@ func IsInRange(position protocol.Position, theRange protocol.Range) int {
 		return -1
 	}
 	if position.Line > end.Line ||
-		(position.Line == end.Line && position.Character > end.Character) {
+		(position.Line == end.Line && position.Character >= end.Character) {
 		return 1
 	}
 	return 0

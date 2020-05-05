@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -33,27 +32,12 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, b
 	}
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()
-	var open *lexer.Token = nil
-	var close *lexer.Token = nil
-	hasArgs := false
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ArgumentExpressionList {
-			hasArgs = true
 			scanNode(document, child)
 			break
-		} else if t, ok := child.(*lexer.Token); ok {
-			switch t.Type {
-			case lexer.OpenParenthesis:
-				open = t
-			case lexer.CloseParenthesis:
-				close = t
-			}
 		}
 		child = traverser.Advance()
-	}
-	if !hasArgs {
-		args := newEmptyArgumentList(document, open, close)
-		document.addSymbol(args)
 	}
 	return methodAccess, false
 }

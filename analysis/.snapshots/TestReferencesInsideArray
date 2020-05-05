@@ -55,7 +55,7 @@
   (*analysis.ArgumentList)({
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 2:13-8:1
+      Range: (protocol.Range) 2:12-8:2
     },
     children: ([]analysis.Symbol) (len=2) {
       (*analysis.FunctionCall)({
@@ -75,14 +75,15 @@
       (*analysis.ArgumentList)({
         location: (protocol.Location) {
           URI: (string) (len=5) "test1",
-          Range: (protocol.Range) 7:25-7:52
+          Range: (protocol.Range) 7:24-7:53
         },
         children: ([]analysis.Symbol) <nil>,
         arguments: ([]phrase.AstNode) (len=1) {
           (*lexer.Token)(StringLiteral 164 27 ModeScripting)
         },
+        argumentRanges: ([]protocol.Range) <nil>,
         ranges: ([]protocol.Range) (len=1) {
-          (protocol.Range) 7:25-7:52
+          (protocol.Range) 7:24-7:53
         }
       })
     },
@@ -200,7 +201,7 @@
                     Children: ([]phrase.AstNode) (len=1) {
                       (*phrase.Phrase)({
                         Type: (phrase.PhraseType) FunctionCallExpression,
-                        Children: ([]phrase.AstNode) (len=4) {
+                        Children: ([]phrase.AstNode) (len=2) {
                           (*phrase.Phrase)({
                             Type: (phrase.PhraseType) QualifiedName,
                             Children: ([]phrase.AstNode) (len=1) {
@@ -212,14 +213,14 @@
                               })
                             }
                           }),
-                          (*lexer.Token)(OpenParenthesis 163 1 ModeScripting),
                           (*phrase.Phrase)({
                             Type: (phrase.PhraseType) ArgumentExpressionList,
-                            Children: ([]phrase.AstNode) (len=1) {
-                              (*lexer.Token)(StringLiteral 164 27 ModeScripting)
+                            Children: ([]phrase.AstNode) (len=3) {
+                              (*lexer.Token)(OpenParenthesis 163 1 ModeScripting),
+                              (*lexer.Token)(StringLiteral 164 27 ModeScripting),
+                              (*lexer.Token)(CloseParenthesis 191 1 ModeScripting)
                             }
-                          }),
-                          (*lexer.Token)(CloseParenthesis 191 1 ModeScripting)
+                          })
                         }
                       })
                     }
@@ -234,8 +235,11 @@
         }
       })
     },
-    ranges: ([]protocol.Range) (len=1) {
+    argumentRanges: ([]protocol.Range) (len=1) {
       (protocol.Range) 2:13-8:1
+    },
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 2:12-8:2
     }
   })
 }

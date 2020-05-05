@@ -57,6 +57,7 @@ type Server interface {
 	Rename(context.Context, *RenameParams) (*WorkspaceEdit, error)
 	PrepareRename(context.Context, *PrepareRenameParams) (*Range, error)
 	ExecuteCommand(context.Context, *ExecuteCommandParams) (interface{}, error)
+	DocumentSignatures(context.Context, *TextDocumentIdentifier) ([]TextEdit, error)
 }
 
 func (h serverHandler) Deliver(ctx context.Context, r *jsonrpc2.Request, delivered bool) bool {
@@ -519,6 +520,17 @@ func (h serverHandler) Deliver(ctx context.Context, r *jsonrpc2.Request, deliver
 			return true
 		}
 		resp, err := h.server.ExecuteCommand(ctx, &params)
+		if err := r.Reply(ctx, resp, err); err != nil {
+			log.Error(ctx, "", err)
+		}
+		return true
+	case "documentSignatures":
+		var params TextDocumentIdentifier
+		if err := json.Unmarshal(*r.Params, &params); err != nil {
+			sendParseError(ctx, r, err)
+			return true
+		}
+		resp, err := h.server.DocumentSignatures(ctx, &params)
 		if err := r.Reply(ctx, resp, err); err != nil {
 			log.Error(ctx, "", err)
 		}

@@ -76,6 +76,10 @@ func (s *Parameter) GetDescription() string {
 	return s.description
 }
 
+func (s *Parameter) GetLocation() protocol.Location {
+	return s.location
+}
+
 func (s Parameter) ToVariable() *Variable {
 	return &Variable{
 		Expression: Expression{

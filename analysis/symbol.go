@@ -131,5 +131,7 @@ func TraverseSymbol(s Symbol, preorder func(Symbol), postorder func(Symbol)) {
 			TraverseSymbol(child, preorder, postorder)
 		}
 	}
-	postorder(s)
+	if postorder != nil {
+		postorder(s)
+	}
 }

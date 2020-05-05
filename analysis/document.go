@@ -458,10 +458,11 @@ func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	t := newTraverser()
 	t.traverseDocument(s, func(t *traverser, s Symbol) {
 		relativePos := util.IsInRange(pos, s.GetLocation().Range)
-		if relativePos >= 0 {
+		if relativePos > 0 {
 			if h, ok := s.(HasTypes); ok {
 				result = h
 			}
+			t.stopDescent = true
 		} else if relativePos < 0 {
 			t.shouldStop = true
 		}
