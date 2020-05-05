@@ -21,6 +21,7 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.WhileStatement:                 empty,
 	phrase.StatementList:                  empty,
 	phrase.AdditiveExpression:             empty,
+	phrase.MultiplicativeExpression:       empty,
 	phrase.IfStatement:                    empty,
 	phrase.ElseClause:                     empty,
 	phrase.IncludeExpression:              empty,
