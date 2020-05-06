@@ -427,7 +427,8 @@ func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	t := newTraverser()
 	t.traverseDocument(s, func(t *traverser, s Symbol) {
 		relativePos := util.IsInRange(pos, s.GetLocation().Range)
-		if relativePos == 0 {
+		relativeEndPos := util.ComparePos(pos, s.GetLocation().Range.End)
+		if relativePos == 0 || (relativePos > 0 && relativeEndPos == 0) {
 			if h, ok := s.(HasTypes); ok {
 				result = h
 			}

@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"io/ioutil"
+	"reflect"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -108,4 +109,13 @@ class TestClass2 { public function method(); }`))
 		}
 		assert.Equal(t, []string{"method"}, names)
 	})
+}
+
+func TestMemberAccess(t *testing.T) {
+	data, _ := ioutil.ReadFile("../cases/completion/memberAccess.php")
+	doc := NewDocument("test1", data)
+	doc.Load()
+
+	symbol := doc.HasTypesAtPos(protocol.Position{Line: 6, Character: 16})
+	assert.Equal(t, "*analysis.PropertyAccess", reflect.TypeOf(symbol).String())
 }
