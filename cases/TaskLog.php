@@ -24,4 +24,11 @@ class TaskLog extends Model
     {
         return $this->belongsTo(User::class, '');
     }
+
+    public function anotherFunction()
+    {
+        if (!hasPermission('To do something')) {
+            butDoItAnyway();
+        }
+    }
 }

@@ -83,7 +83,6 @@ func init() {
 		phrase.ForeachStatement:               analyseForeachStatement,
 		phrase.EncapsulatedExpression:         newDerivedExpression,
 		phrase.CloneExpression:                newDerivedExpression,
-		phrase.UnaryOpExpression:              processToScanChildren,
 		phrase.SimpleAssignmentExpression:     newAssignment,
 		phrase.ByRefAssignmentExpression:      newAssignment,
 		phrase.CompoundAssignmentExpression:   newAssignment,
