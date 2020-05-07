@@ -10,7 +10,7 @@ require (
 	github.com/evorts/html-to-markdown v0.0.3
 	github.com/hashicorp/go-immutable-radix v1.2.0
 	github.com/jmhodges/levigo v1.0.0
-	github.com/john-nguyen09/go-phpparser v0.0.0-20200505113203-457710d17713
+	github.com/john-nguyen09/go-phpparser v0.0.0-20200507091038-45e522afc830
 	github.com/karrick/godirwalk v1.12.0
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
