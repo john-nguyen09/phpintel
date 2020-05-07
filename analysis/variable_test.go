@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -71,6 +72,9 @@ func TestVariableTable(t *testing.T) {
 	for _, v := range vars {
 		actualNames = append(actualNames, v.Name)
 	}
+	sort.Slice(actualNames, func(i, j int) bool {
+		return actualNames[i] < actualNames[j]
+	})
 	assert.Equal(t, []string{"$var1", "$var2"}, actualNames)
 
 	vars = vt.GetVariables(protocol.Position{Line: 2, Character: 0})
