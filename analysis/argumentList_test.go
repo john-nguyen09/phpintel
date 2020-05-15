@@ -71,5 +71,7 @@ func TestDocumentSignatures(t *testing.T) {
 		{Line: 24, Character: 32},
 		{Line: 24, Character: 45},
 		{Line: 29, Character: 27},
+		{Line: 32, Character: 39},
+		{Line: 32, Character: 47},
 	}, befores)
 }

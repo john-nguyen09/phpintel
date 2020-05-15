@@ -30,5 +30,7 @@ class TaskLog extends Model
         if (!hasPermission('To do something')) {
             butDoItAnyway();
         }
+        if (($data['i'] = array_search($image, $this->imagekeys)) === FALSE) {
+        }
     }
 }
