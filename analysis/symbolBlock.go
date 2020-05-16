@@ -60,6 +60,8 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.ClassConstElementList:          empty,
 	phrase.PostfixIncrementExpression:     empty,
 	phrase.PostfixDecrementExpression:     empty,
+	phrase.PrefixIncrementExpression:      empty,
+	phrase.PrefixDecrementExpression:      empty,
 }
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
