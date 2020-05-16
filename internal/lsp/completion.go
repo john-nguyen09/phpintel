@@ -28,9 +28,6 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
-	document.Lock()
-	defer document.Unlock()
-	document.Load()
 	var completionList *protocol.CompletionList = nil
 	pos := params.Position
 	resolveCtx := analysis.NewResolveContext(store, document)
@@ -88,10 +85,12 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		switch parent.Type {
 		case phrase.PropertyAccessExpression:
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
+				s.Scope.Resolve(resolveCtx)
 				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 			}
 		case phrase.MethodCallExpression:
 			if s, ok := symbol.(*analysis.MethodAccess); ok {
+				s.Scope.Resolve(resolveCtx)
 				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
 			}
 		}

@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"io/ioutil"
+	"reflect"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -19,7 +20,7 @@ func indexTestCase(store *Store, uri string, path string, isOpen bool) {
 	if isOpen {
 		document.Open()
 	}
-	store.saveDocOnStore(document)
+	store.SaveDocOnStore(document)
 	store.SyncDocument(document)
 }
 
@@ -54,12 +55,12 @@ func TestCompletionWithScope(t *testing.T) {
 namespace Namespace1;
 class TestClass {}`))
 		defDoc1.Load()
-		store.saveDocOnStore(defDoc1)
+		store.SaveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
 
 		defDoc2 := NewDocument("test2", []byte(`<?php class TestClassABC {}`))
 		defDoc2.Load()
-		store.saveDocOnStore(defDoc2)
+		store.SaveDocOnStore(defDoc2)
 		store.SyncDocument(defDoc2)
 
 		classes, _ := store.SearchClasses("\\Namespace1\\Te", NewSearchOptions())
@@ -80,7 +81,7 @@ class TestClass2 {
 	const CLASS_CONST_ABC = 2;
 }`))
 		defDoc1.Load()
-		store.saveDocOnStore(defDoc1)
+		store.SaveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
 
 		classConsts, _ := store.SearchClassConsts("\\TestClass1", "CL", NewSearchOptions())
@@ -97,7 +98,7 @@ class TestClass2 {
 class TestClass1 { public function methodABC(); }
 class TestClass2 { public function method(); }`))
 		defDoc1.Load()
-		store.saveDocOnStore(defDoc1)
+		store.SaveDocOnStore(defDoc1)
 		store.SyncDocument(defDoc1)
 
 		methods, _ := store.SearchMethods("\\TestClass2", "me", NewSearchOptions())
@@ -108,4 +109,13 @@ class TestClass2 { public function method(); }`))
 		}
 		assert.Equal(t, []string{"method"}, names)
 	})
+}
+
+func TestMemberAccess(t *testing.T) {
+	data, _ := ioutil.ReadFile("../cases/completion/memberAccess.php")
+	doc := NewDocument("test1", data)
+	doc.Load()
+
+	symbol := doc.HasTypesAtPos(protocol.Position{Line: 6, Character: 16})
+	assert.Equal(t, "*analysis.PropertyAccess", reflect.TypeOf(symbol).String())
 }

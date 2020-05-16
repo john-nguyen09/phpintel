@@ -30,8 +30,6 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
-	document.Lock()
-	defer document.Unlock()
 	pos := params.TextDocumentPositionParams.Position
 	nodeStack := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	if nodeStack.Parent().Type == phrase.ArrayInitialiserList {
@@ -52,6 +50,49 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	})
 
 	return signatureHelp, nil
+}
+
+type signatureTuple struct {
+	argumentList        *analysis.ArgumentList
+	hasParamsResolvable analysis.HasParamsResolvable
+}
+
+func (s *Server) documentSignatures(ctx context.Context, params *protocol.TextDocumentIdentifier) ([]protocol.TextEdit, error) {
+	uri := params.URI
+	store := s.store.getStore(uri)
+	if store == nil {
+		return nil, StoreNotFound(uri)
+	}
+	document := store.GetOrCreateDocument(uri)
+	if document == nil {
+		return nil, DocumentNotFound(uri)
+	}
+	document.Lock()
+	defer document.Unlock()
+	document.Load()
+	results := []protocol.TextEdit{}
+	analysis.TraverseDocument(document, func(s analysis.Symbol) {
+		if argumentList, ok := s.(*analysis.ArgumentList); ok {
+			hasTypes := document.HasTypesBeforePos(argumentList.GetLocation().Range.Start)
+			if resolvable, ok := hasTypes.(analysis.HasParamsResolvable); ok {
+				hasParams := resolvable.ResolveToHasParams(analysis.NewResolveContext(store, document))
+				if len(hasParams) > 0 {
+					firstHasParam := hasParams[0]
+					ranges := argumentList.GetArgumentRanges()
+					for i, param := range firstHasParam.GetParams() {
+						if i >= len(ranges) {
+							break
+						}
+						results = append(results, protocol.TextEdit{
+							NewText: param.Name,
+							Range:   ranges[i],
+						})
+					}
+				}
+			}
+		}
+	}, nil)
+	return results, nil
 }
 
 func hasParamToSignatureInformation(hasParam analysis.HasParams) protocol.SignatureInformation {

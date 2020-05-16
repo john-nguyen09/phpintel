@@ -264,6 +264,10 @@ func (s *Server) SelectionRange(context.Context, *protocol.SelectionRangeParams)
 	return nil, notImplemented("SelectionRange")
 }
 
+func (s *Server) DocumentSignatures(ctx context.Context, params *protocol.TextDocumentIdentifier) ([]protocol.TextEdit, error) {
+	return s.documentSignatures(ctx, params)
+}
+
 func notImplemented(method string) *jsonrpc2.Error {
 	return jsonrpc2.NewErrorf(jsonrpc2.CodeMethodNotFound, "method %q not yet implemented", method)
 }

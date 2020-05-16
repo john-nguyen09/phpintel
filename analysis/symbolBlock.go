@@ -21,6 +21,7 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.WhileStatement:                 empty,
 	phrase.StatementList:                  empty,
 	phrase.AdditiveExpression:             empty,
+	phrase.MultiplicativeExpression:       empty,
 	phrase.IfStatement:                    empty,
 	phrase.ElseClause:                     empty,
 	phrase.IncludeExpression:              empty,
@@ -57,7 +58,10 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.DefaultStatement:               empty,
 	phrase.ClassConstDeclaration:          empty,
 	phrase.ClassConstElementList:          empty,
-	phrase.EncapsulatedExpression:         empty,
+	phrase.PostfixIncrementExpression:     empty,
+	phrase.PostfixDecrementExpression:     empty,
+	phrase.PrefixIncrementExpression:      empty,
+	phrase.PrefixDecrementExpression:      empty,
 }
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{

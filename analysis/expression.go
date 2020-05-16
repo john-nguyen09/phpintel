@@ -89,7 +89,6 @@ func init() {
 		phrase.ForeachStatement:               analyseForeachStatement,
 		phrase.EncapsulatedExpression:         newDerivedExpression,
 		phrase.CloneExpression:                newDerivedExpression,
-		phrase.UnaryOpExpression:              processToScanChildren,
 		phrase.SimpleAssignmentExpression:     newAssignment,
 		phrase.ByRefAssignmentExpression:      newAssignment,
 		phrase.CompoundAssignmentExpression:   newAssignment,
@@ -143,15 +142,24 @@ func newDerivedExpression(document *Document, node *phrase.Phrase) (HasTypes, bo
 	document.addSymbol(derivedExpr)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
+	nodesToScan := []phrase.AstNode{}
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
+			if _, ok := nodeTypeToExprConstructor[p.Type]; !ok {
+				nodesToScan = append(nodesToScan, p)
+			}
 			expr := scanForExpression(document, p)
 			if expr != nil {
 				derivedExpr.Scope = expr
 				break
 			}
+		} else {
+			nodesToScan = append(nodesToScan, child)
 		}
 		child = traverser.Advance()
+	}
+	for _, node := range nodesToScan {
+		scanNode(document, node)
 	}
 	return derivedExpr, false
 }

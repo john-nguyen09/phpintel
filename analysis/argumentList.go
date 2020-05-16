@@ -12,29 +12,12 @@ type ArgumentList struct {
 	location protocol.Location
 	children []Symbol
 
-	arguments []phrase.AstNode
-	ranges    []protocol.Range
+	arguments      []phrase.AstNode
+	argumentRanges []protocol.Range
+	ranges         []protocol.Range
 }
 
 var _ BlockSymbol = (*ArgumentList)(nil)
-
-func newEmptyArgumentList(document *Document, open *lexer.Token, close *lexer.Token) *ArgumentList {
-	closePos := document.positionAt(open.Offset)
-	if close != nil {
-		closePos = document.positionAt(close.Offset + close.Length)
-	}
-	argumentList := &ArgumentList{
-		location: protocol.Location{
-			URI: document.GetURI(),
-			Range: protocol.Range{
-				Start: document.positionAt(open.Offset),
-				End:   closePos,
-			},
-		},
-	}
-	argumentList.ranges = append(argumentList.ranges, argumentList.location.Range)
-	return argumentList
-}
 
 func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
@@ -54,11 +37,12 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 					Start: start,
 					End:   end,
 				})
-				start = end
+				start = document.positionAt(token.Offset + token.Length)
 				child = traverser.Advance()
 				continue
 			}
-			if token.Type != lexer.Whitespace {
+			if token.Type != lexer.Whitespace &&
+				token.Type != lexer.OpenParenthesis && token.Type != lexer.CloseParenthesis {
 				argumentList.arguments = append(argumentList.arguments, token)
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
@@ -71,6 +55,9 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 		Start: start,
 		End:   argumentList.location.Range.End,
 	})
+	for _, argument := range argumentList.GetArguments() {
+		argumentList.argumentRanges = append(argumentList.argumentRanges, document.nodeRange(argument))
+	}
 	for _, n := range nodesToScan {
 		scanNode(document, n)
 	}
@@ -85,6 +72,14 @@ func (s *ArgumentList) GetLocation() protocol.Location {
 // GetArguments returns the arguments
 func (s *ArgumentList) GetArguments() []phrase.AstNode {
 	return s.arguments
+}
+
+// GetArgumentRanges returns the ranges of the arguments
+// while this is not useful for providing signature help
+// because the ranges ignore whitespaces, but this is
+// useful for align signature annotations
+func (s *ArgumentList) GetArgumentRanges() []protocol.Range {
+	return s.argumentRanges
 }
 
 func (s *ArgumentList) GetRanges() []protocol.Range {

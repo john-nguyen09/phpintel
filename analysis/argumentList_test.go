@@ -29,6 +29,27 @@ func TestNestedArgumentList(t *testing.T) {
 	}
 }
 
+func TestArgumentLists(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$var1 = 0;
+testFunction1()
+++$var1;
+`))
+	doc.Load()
+	argRanges := []protocol.Range{}
+	TraverseDocument(doc, func(s Symbol) {
+		if argumentList, ok := s.(*ArgumentList); ok {
+			argRanges = append(argRanges, argumentList.ranges...)
+		}
+	}, nil)
+	assert.Equal(t, []protocol.Range{
+		{
+			Start: protocol.Position{Line: 2, Character: 13},
+			End:   protocol.Position{Line: 2, Character: 15},
+		},
+	}, argRanges)
+}
+
 func TestNotDuplicatedExpression(t *testing.T) {
 	data, err := ioutil.ReadFile("../cases/argumentsExpression.php")
 	assert.NoError(t, err)
@@ -48,7 +69,30 @@ $abc = $DB->get_record('abc',)`))
 		Character: 29,
 	})
 	assert.Equal(t, []protocol.Range{
-		{Start: protocol.Position{Line: 1, Character: 23}, End: protocol.Position{Line: 1, Character: 28}},
-		{Start: protocol.Position{Line: 1, Character: 28}, End: protocol.Position{Line: 1, Character: 30}},
+		{Start: protocol.Position{Line: 1, Character: 22}, End: protocol.Position{Line: 1, Character: 28}},
+		{Start: protocol.Position{Line: 1, Character: 29}, End: protocol.Position{Line: 1, Character: 30}},
 	}, args.ranges)
+}
+
+func TestDocumentSignatures(t *testing.T) {
+	data, _ := ioutil.ReadFile("../cases/TaskLog.php")
+	doc := NewDocument("test1", data)
+	doc.Load()
+
+	befores := []protocol.Position{}
+	TraverseDocument(doc, func(s Symbol) {
+		if argumentList, ok := s.(*ArgumentList); ok {
+			for _, r := range argumentList.GetArgumentRanges() {
+				befores = append(befores, r.Start)
+			}
+		}
+	}, nil)
+	assert.Equal(t, []protocol.Position{
+		{Line: 19, Character: 27},
+		{Line: 24, Character: 32},
+		{Line: 24, Character: 45},
+		{Line: 29, Character: 27},
+		{Line: 32, Character: 39},
+		{Line: 32, Character: 47},
+	}, befores)
 }

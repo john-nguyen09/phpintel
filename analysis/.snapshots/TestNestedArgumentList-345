@@ -5,6 +5,7 @@
   },
   children: ([]analysis.Symbol) <nil>,
   arguments: ([]phrase.AstNode) <nil>,
+  argumentRanges: ([]protocol.Range) <nil>,
   ranges: ([]protocol.Range) (len=1) {
     (protocol.Range) 20:12-20:14
   }

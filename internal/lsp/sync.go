@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -27,8 +26,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 }
 
 func (s *Server) didChange(ctx context.Context, params *protocol.DidChangeTextDocumentParams) error {
-	uri := params.TextDocument.URI
-	return s.store.changeDocument(ctx, uri, params.ContentChanges)
+	return s.store.changeDocument(ctx, params)
 }
 
 func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocumentParams) error {
@@ -43,10 +41,8 @@ func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocu
 
 func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.DidChangeWatchedFilesParams) error {
 	go func() {
-		start := time.Now()
 		var wg sync.WaitGroup
 		changes := append(params.Changes[:0:0], params.Changes...)
-		log.Printf("Length before: %d", len(changes))
 		for _, change := range changes {
 			if change.Type == protocol.Deleted {
 				s.store.deleteJobs <- change.URI
@@ -93,8 +89,6 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 			})
 		}
 		wg.Wait()
-		elapsed := time.Since(start)
-		log.Printf("%d changes took %s", len(changes), elapsed)
 	}()
 	return nil
 }
