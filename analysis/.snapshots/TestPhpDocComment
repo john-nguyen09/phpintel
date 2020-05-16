@@ -7,7 +7,11 @@
       Description: (string) "",
       TypeString: (string) (len=48) "\\Illuminate\\Contracts\\Validation\\Validator|array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 3:61-3:71
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=6) "@param",
@@ -15,7 +19,11 @@
       Description: (string) "",
       TypeString: (string) (len=29) "\\Illuminate\\Http\\Request|null",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 4:42-4:50
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=7) "@return",
@@ -23,7 +31,11 @@
       Description: (string) "",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) "",
+        Range: (protocol.Range) 0:0-0:0
+      }
     }
   },
   Returns: ([]analysis.tag) (len=1) {
@@ -33,7 +45,11 @@
       Description: (string) "",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) "",
+        Range: (protocol.Range) 0:0-0:0
+      }
     }
   },
   Properties: ([]analysis.tag) {

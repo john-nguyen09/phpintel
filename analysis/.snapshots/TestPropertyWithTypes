@@ -4,6 +4,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 4:14-4:24
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:14-4:24
+    },
     description: (string) (len=16) "name of the form",
     Name: (string) (len=10) "$_formname",
     Scope: (analysis.TypeString) {
@@ -25,6 +29,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:14-7:20
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:14-7:20
     },

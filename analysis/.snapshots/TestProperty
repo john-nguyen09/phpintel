@@ -4,6 +4,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:19-3:31
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 3:19-3:31
+    },
     description: (string) "",
     Name: (string) (len=12) "$staticProp1",
     Scope: (analysis.TypeString) {
@@ -19,6 +23,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:21-4:33
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 4:21-4:33
     },
@@ -40,6 +48,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 5:18-5:30
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:18-5:30
+    },
     description: (string) "",
     Name: (string) (len=12) "$staticProp2",
     Scope: (analysis.TypeString) {
@@ -55,6 +67,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 6:11-6:23
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 6:11-6:23
     },
@@ -76,6 +92,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 6:25-6:37
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 6:25-6:37
+    },
     description: (string) "",
     Name: (string) (len=12) "$staticProp4",
     Scope: (analysis.TypeString) {
@@ -91,6 +111,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:19-7:31
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:19-7:31
     },
@@ -112,6 +136,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:33-7:45
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:33-7:45
+    },
     description: (string) "",
     Name: (string) (len=12) "$staticProp6",
     Scope: (analysis.TypeString) {
@@ -127,6 +155,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 9:12-9:18
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 9:12-9:18
     },
@@ -148,6 +180,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 10:14-10:20
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 10:14-10:20
+    },
     description: (string) "",
     Name: (string) (len=6) "$prop2",
     Scope: (analysis.TypeString) {
@@ -163,6 +199,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 11:11-11:17
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 11:11-11:17
     },
@@ -184,6 +224,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 12:8-12:14
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 12:8-12:14
+    },
     description: (string) "",
     Name: (string) (len=6) "$prop4",
     Scope: (analysis.TypeString) {
@@ -199,6 +243,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 12:16-12:22
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 12:16-12:22
     },
@@ -220,6 +268,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 13:14-13:20
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 13:14-13:20
+    },
     description: (string) "",
     Name: (string) (len=6) "$prop6",
     Scope: (analysis.TypeString) {
@@ -238,6 +290,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 13:22-13:28
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 13:22-13:28
+    },
     description: (string) "",
     Name: (string) (len=6) "$prop7",
     Scope: (analysis.TypeString) {
@@ -253,6 +309,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 18:11-18:17
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 18:11-18:17
     },
@@ -277,6 +337,10 @@
   }),
   (*analysis.Property)({
     location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 22:14-22:25
+    },
+    refLocation: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 22:14-22:25
     },
