@@ -26,8 +26,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 }
 
 func (s *Server) didChange(ctx context.Context, params *protocol.DidChangeTextDocumentParams) error {
-	uri := params.TextDocument.URI
-	return s.store.changeDocument(ctx, uri, params.ContentChanges)
+	return s.store.changeDocument(ctx, params)
 }
 
 func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocumentParams) error {

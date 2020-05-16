@@ -29,6 +29,27 @@ func TestNestedArgumentList(t *testing.T) {
 	}
 }
 
+func TestArgumentLists(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$var1 = 0;
+testFunction1()
+++$var1;
+`))
+	doc.Load()
+	argRanges := []protocol.Range{}
+	TraverseDocument(doc, func(s Symbol) {
+		if argumentList, ok := s.(*ArgumentList); ok {
+			argRanges = append(argRanges, argumentList.ranges...)
+		}
+	}, nil)
+	assert.Equal(t, []protocol.Range{
+		{
+			Start: protocol.Position{Line: 2, Character: 13},
+			End:   protocol.Position{Line: 2, Character: 15},
+		},
+	}, argRanges)
+}
+
 func TestNotDuplicatedExpression(t *testing.T) {
 	data, err := ioutil.ReadFile("../cases/argumentsExpression.php")
 	assert.NoError(t, err)

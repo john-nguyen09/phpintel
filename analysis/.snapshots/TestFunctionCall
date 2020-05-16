@@ -1,4 +1,4 @@
-([]analysis.Symbol) (len=5) {
+([]analysis.Symbol) (len=4) {
   (*analysis.FunctionCall)({
     Expression: (analysis.Expression) {
       Type: (analysis.TypeComposite) {
@@ -10,20 +10,6 @@
         Range: (protocol.Range) 2:8-2:13
       },
       Name: (string) (len=5) "fopen"
-    },
-    hasResolved: (bool) false
-  }),
-  (*analysis.FunctionCall)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (analysis.HasTypes) <nil>,
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 4:16-4:21
-      },
-      Name: (string) (len=5) "fgets"
     },
     hasResolved: (bool) false
   }),

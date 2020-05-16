@@ -204,7 +204,8 @@ func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
 	store.DeleteFolder(uri)
 }
 
-func (s *workspaceStore) changeDocument(ctx context.Context, uri string, changes []protocol.TextDocumentContentChangeEvent) error {
+func (s *workspaceStore) changeDocument(ctx context.Context, params *protocol.DidChangeTextDocumentParams) error {
+	uri := params.TextDocument.URI
 	store := s.getStore(uri)
 	if store == nil {
 		return StoreNotFound(uri)
@@ -213,10 +214,10 @@ func (s *workspaceStore) changeDocument(ctx context.Context, uri string, changes
 	if document == nil {
 		return DocumentNotFound(uri)
 	}
-	document.Lock()
-	defer document.Unlock()
-	document.ApplyChanges(changes)
-	store.SyncDocument(document)
-	s.server.provideDiagnostics(ctx, document)
+	newDoc := document.CloneForMutate()
+	newDoc.ApplyChanges(params.ContentChanges)
+	store.SyncDocument(newDoc)
+	store.SaveDocOnStore(newDoc)
+	s.server.provideDiagnostics(ctx, newDoc)
 	return nil
 }

@@ -229,7 +229,7 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 			return nil
 		}
 		document = NewDocument(uri, data)
-		s.saveDocOnStore(document)
+		s.SaveDocOnStore(document)
 	} else {
 		document = value.(*Document)
 	}
@@ -348,7 +348,7 @@ func (s *Store) releaseDocIfNotOpen(document *Document) {
 	}
 }
 
-func (s *Store) saveDocOnStore(document *Document) {
+func (s *Store) SaveDocOnStore(document *Document) {
 	s.documents.Set(document.GetURI(), document)
 }
 

@@ -30,8 +30,6 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
-	document.Lock()
-	defer document.Unlock()
 	pos := params.TextDocumentPositionParams.Position
 	nodeStack := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	if nodeStack.Parent().Type == phrase.ArrayInitialiserList {

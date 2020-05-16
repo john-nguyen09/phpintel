@@ -28,9 +28,6 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
-	document.Lock()
-	defer document.Unlock()
-	document.Load()
 	var completionList *protocol.CompletionList = nil
 	pos := params.Position
 	resolveCtx := analysis.NewResolveContext(store, document)

@@ -79,20 +79,10 @@ func (s *Document) IsOpen() bool {
 	return s.isOpen
 }
 
-func (s *Document) ResetState() {
-	s.Children = []Symbol{}
-	s.variableTableLevel = 0
-	s.variableTables = []*VariableTable{}
-	s.classStack = []Symbol{}
-	s.lastPhpDoc = nil
-	s.importTables = []*ImportTable{}
-	s.insertUseContext = nil
-	s.rootNode = nil
-}
-
 // GetRootNode returns the root node of the AST tree
 func (s *Document) GetRootNode() *phrase.Phrase {
 	if s.rootNode == nil {
+		defer util.TimeTrack(time.Now(), "GetRootNode")
 		s.rootNode = parser.Parse(s.GetText())
 	}
 	return s.rootNode
@@ -103,7 +93,6 @@ func (s *Document) Load() {
 	if !s.hasChanges {
 		return
 	}
-	s.ResetState()
 	s.hasChanges = false
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
@@ -508,6 +497,19 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 		}
 	}
 	return argumentList, hasParamsResolvable
+}
+
+// CloneForMutate returns a new document with resetted state
+func (s *Document) CloneForMutate() *Document {
+	return &Document{
+		uri:         s.uri,
+		text:        s.text,
+		lineOffsets: s.lineOffsets,
+		isOpen:      s.isOpen,
+		detectedEOL: s.detectedEOL,
+
+		hasChanges: true,
+	}
 }
 
 // ApplyChanges applies the changes to line offsets and text
