@@ -355,6 +355,27 @@ func (s *Document) getLastClass() Symbol {
 	return s.classStack[len(s.classStack)-1]
 }
 
+// ClassAt returns a class, interface or trait at the position
+func (s *Document) ClassAt(pos protocol.Position) Symbol {
+	var found Symbol
+	tra := newTraverser()
+	tra.traverseDocument(s, func(tra *traverser, s Symbol) {
+		relativeRange := util.IsInRange(pos, s.GetLocation().Range)
+		if relativeRange > 0 {
+			tra.stopDescent = true
+			return
+		} else if relativeRange == 0 {
+			switch s.(type) {
+			case *Class, *Interface, *Trait:
+				found = s
+			}
+		} else {
+			tra.shouldStop = true
+		}
+	})
+	return found
+}
+
 func (s *Document) addClass(other Symbol) {
 	switch instance := other.(type) {
 	case *Class:
@@ -396,7 +417,7 @@ func (s *Document) NodeSpineAt(offset int) util.NodeStack {
 	traverser := util.NewTraverser(s.GetRootNode())
 	traverser.Traverse(func(node phrase.AstNode, spine []*phrase.Phrase) util.VisitorContext {
 		if t, ok := node.(*lexer.Token); ok && offset > t.Offset && offset <= (t.Offset+t.Length) {
-			found = append(spine[:0:0], spine...)
+			found.SetParents(append(spine[:0:0], spine...)).SetToken(t)
 			return util.VisitorContext{ShouldAscend: false}
 		}
 		return util.VisitorContext{ShouldAscend: true}
