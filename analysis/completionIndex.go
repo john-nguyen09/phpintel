@@ -2,11 +2,13 @@ package analysis
 
 import (
 	"log"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
-	"github.com/sahilm/fuzzy"
+	"github.com/junegunn/fzf/src/algo"
+	"github.com/junegunn/fzf/src/util"
 )
 
 const compactionDuration = 15 * time.Second
@@ -136,11 +138,29 @@ func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey strin
 	f.entries[collection] = currEntries
 }
 
+type match struct {
+	Index int
+}
+
+func (f *fuzzyEngine) match(pattern string) []match {
+	matches := []match{}
+	dataLen := f.Len()
+	patternRune := []rune(strings.ToLower(pattern))
+	for i := 0; i < dataLen; i++ {
+		chars := util.ToChars([]byte(f.String(i)))
+		result, _ := algo.FuzzyMatchV2(false, true, true, &chars, patternRune, false, nil)
+		if result.Score > 0 {
+			matches = append(matches, match{i})
+		}
+	}
+	return matches
+}
+
 func (f *fuzzyEngine) search(query searchQuery) SearchResult {
 	f.indexMutex.RLock()
 	defer f.indexMutex.RUnlock()
 	f.currentCollection = query.collection
-	matches := fuzzy.FindFrom(query.keyword, f)
+	matches := f.match(query.keyword)
 	searchResult := SearchResult{IsComplete: true}
 	for _, match := range matches {
 		if f.entries[f.currentCollection][match.Index].deleted {
