@@ -1,5 +1,9 @@
 ([]analysis.Symbol) (len=1) {
   (*analysis.ClassConst)({
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 3:10-3:22
+    },
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:10-3:26

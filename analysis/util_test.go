@@ -9,7 +9,10 @@ import (
 )
 
 func indexDocument(store *Store, filePath string, uri string) {
-	data, _ := ioutil.ReadFile(filePath)
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
 	document := NewDocument(uri, data)
 	document.Load()
 	store.SyncDocument(document)

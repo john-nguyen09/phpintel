@@ -95,4 +95,84 @@ func TestReferenceIndex(t *testing.T) {
 			}},
 		}, store.GetReferences(typ.GetFQN()))
 	}
+
+	t.Run("Method", func(t *testing.T) {
+		store := setupStore(t.Name()+"-", t.Name())
+		indexDocument(store, "../cases/method.php", "method")
+		indexDocument(store, "../cases/reference/methodAccess.php", "methodAccess")
+
+		assert.Equal(t, []protocol.Location{
+			{URI: t.Name() + "-method", Range: protocol.Range{
+				Start: protocol.Position{Line: 11, Character: 20},
+				End:   protocol.Position{Line: 11, Character: 31},
+			}},
+			{URI: t.Name() + "-methodAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 3, Character: 7},
+				End:   protocol.Position{Line: 3, Character: 18},
+			}},
+		}, store.GetReferences("\\TestMethodClass::testMethod3()"))
+
+		assert.Equal(t, []protocol.Location{
+			{URI: t.Name() + "-methodAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 14, Character: 15},
+				End:   protocol.Position{Line: 14, Character: 22},
+			}},
+			{URI: t.Name() + "-methodAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 7, Character: 20},
+				End:   protocol.Position{Line: 7, Character: 27},
+			}},
+		}, store.GetReferences("\\TestMethodClass2::method1()"))
+	})
+
+	t.Run("Const", func(t *testing.T) {
+		store := setupStore(t.Name()+"-", t.Name())
+		indexDocument(store, "../cases/reference/classConstAccess.php", "classConstAccess")
+		assert.Equal(t, []protocol.Location{
+			{URI: t.Name() + "-classConstAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 12, Character: 16},
+				End:   protocol.Position{Line: 12, Character: 22},
+			}},
+			{URI: t.Name() + "-classConstAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 4, Character: 10},
+				End:   protocol.Position{Line: 4, Character: 16},
+			}},
+			{URI: t.Name() + "-classConstAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 8, Character: 16},
+				End:   protocol.Position{Line: 8, Character: 22},
+			}},
+		}, store.GetReferences("\\TestConstClass::CONST1"))
+	})
+
+	t.Run("Property", func(t *testing.T) {
+		store := setupStore(t.Name()+"-", t.Name())
+		indexDocument(store, "../cases/reference/propertyAccess.php", "propertyAccess")
+		assert.Equal(t, []protocol.Location{
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 16, Character: 7},
+				End:   protocol.Position{Line: 16, Character: 12},
+			}},
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 4, Character: 11},
+				End:   protocol.Position{Line: 4, Character: 17},
+			}},
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 9, Character: 15},
+				End:   protocol.Position{Line: 9, Character: 20},
+			}},
+		}, store.GetReferences("\\TestPropertyClass1::$prop1"))
+		assert.Equal(t, []protocol.Location{
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 10, Character: 16},
+				End:   protocol.Position{Line: 10, Character: 22},
+			}},
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 14, Character: 20},
+				End:   protocol.Position{Line: 14, Character: 26},
+			}},
+			{URI: t.Name() + "-propertyAccess", Range: protocol.Range{
+				Start: protocol.Position{Line: 5, Character: 18},
+				End:   protocol.Position{Line: 5, Character: 24},
+			}},
+		}, store.GetReferences("\\TestPropertyClass1::$prop2"))
+	})
 }

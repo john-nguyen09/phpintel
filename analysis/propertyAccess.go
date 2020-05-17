@@ -62,5 +62,9 @@ func (s *PropertyAccess) GetScopeTypes() TypeComposite {
 }
 
 func (s *PropertyAccess) MemberName() string {
-	return s.Name
+	name := []rune(s.Name)
+	if len(name) > 0 && name[0] != '$' {
+		name = append([]rune{'$'}, name...)
+	}
+	return string(name)
 }
