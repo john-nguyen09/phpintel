@@ -10,6 +10,8 @@ type TraitAccess struct {
 	Expression
 }
 
+var _ HasTypes = (*TraitAccess)(nil)
+
 func processTraitUseClause(document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()

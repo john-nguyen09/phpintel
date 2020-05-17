@@ -10,7 +10,8 @@ import (
 
 // ClassConst contains information of class constants
 type ClassConst struct {
-	location protocol.Location
+	refLocation protocol.Location
+	location    protocol.Location
 
 	Name  string
 	Value string
@@ -19,6 +20,7 @@ type ClassConst struct {
 
 var _ HasScope = (*ClassConst)(nil)
 var _ Symbol = (*ClassConst)(nil)
+var _ SymbolReference = (*ClassConst)(nil)
 
 func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
@@ -59,6 +61,7 @@ func newClassConst(document *Document, node *phrase.Phrase) Symbol {
 				case phrase.Identifier:
 					{
 						classConst.Name = document.getPhraseText(p)
+						classConst.refLocation = document.GetNodeLocation(p)
 					}
 				}
 			}
@@ -119,4 +122,12 @@ func ReadClassConst(d *storage.Decoder) *ClassConst {
 		Value:    d.ReadString(),
 		Scope:    ReadTypeString(d),
 	}
+}
+
+func (s *ClassConst) ReferenceFQN() string {
+	return s.Scope.GetFQN() + "::" + s.Name
+}
+
+func (s *ClassConst) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

@@ -4,6 +4,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-8:3
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:24-5:41
+    },
     description: (string) (len=20) "The admin navigation",
     Name: (string) (len=17) "$admin_navigation",
     Scope: (analysis.TypeString) {
@@ -28,6 +32,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-8:3
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 6:29-6:40
+    },
     description: (string) (len=14) "The navigation",
     Name: (string) (len=11) "$navigation",
     Scope: (analysis.TypeString) {
@@ -51,6 +59,10 @@
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-8:3
+    },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:35-7:51
     },
     description: (string) (len=19) "The section manager",
     Name: (string) (len=16) "$section_manager",

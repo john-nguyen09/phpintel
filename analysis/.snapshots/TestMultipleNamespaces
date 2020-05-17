@@ -2,6 +2,10 @@
   (*analysis.Class)({
     description: (string) "",
     children: ([]analysis.Symbol) <nil>,
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 4:6-4:23
+    },
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 4:0-7:1
@@ -23,6 +27,10 @@
   (*analysis.Class)({
     description: (string) "",
     children: ([]analysis.Symbol) <nil>,
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 10:10-10:27
+    },
     Location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 10:4-12:5

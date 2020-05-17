@@ -7,7 +7,11 @@
       Description: (string) (len=9) "Course ID",
       TypeString: (string) (len=3) "int",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 10:23-10:32
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -15,7 +19,11 @@
       Description: (string) (len=7) "User ID",
       TypeString: (string) (len=3) "int",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 11:23-11:30
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -23,7 +31,11 @@
       Description: (string) (len=149) "Array from section number (e.g. 0) to array of course-module IDs in that\nsection; this only includes sections that contain at least one course-module",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 12:25-12:34
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -31,7 +43,11 @@
       Description: (string) (len=94) "Array from course-module instance to cm_info object within this course, in\norder of appearance",
       TypeString: (string) (len=9) "cm_info[]",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 14:29-14:33
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -39,7 +55,11 @@
       Description: (string) (len=66) "Array from string (modname) => int (instance id) => cm_info object",
       TypeString: (string) (len=11) "cm_info[][]",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 16:31-16:41
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -47,7 +67,11 @@
       Description: (string) (len=174) "Groups that the current user belongs to. Calculated on the first request.\nIs an array of grouping id => array of group id => group id. Includes grouping id 0 for 'all groups'",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 17:25-17:32
+      }
     }
   },
   Returns: ([]analysis.tag) {
@@ -71,7 +95,11 @@
       Description: (string) (len=9) "Course ID",
       TypeString: (string) (len=3) "int",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 10:23-10:32
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -79,7 +107,11 @@
       Description: (string) (len=7) "User ID",
       TypeString: (string) (len=3) "int",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 11:23-11:30
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -87,7 +119,11 @@
       Description: (string) (len=149) "Array from section number (e.g. 0) to array of course-module IDs in that\nsection; this only includes sections that contain at least one course-module",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 12:25-12:34
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -95,7 +131,11 @@
       Description: (string) (len=94) "Array from course-module instance to cm_info object within this course, in\norder of appearance",
       TypeString: (string) (len=9) "cm_info[]",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 14:29-14:33
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -103,7 +143,11 @@
       Description: (string) (len=66) "Array from string (modname) => int (instance id) => cm_info object",
       TypeString: (string) (len=11) "cm_info[][]",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 16:31-16:41
+      }
     },
     (analysis.tag) {
       TagName: (string) (len=14) "@property-read",
@@ -111,7 +155,11 @@
       Description: (string) (len=174) "Groups that the current user belongs to. Calculated on the first request.\nIs an array of grouping id => array of group id => group id. Includes grouping id 0 for 'all groups'",
       TypeString: (string) (len=5) "array",
       Parameters: ([]analysis.methodTagParam) <nil>,
-      IsStatic: (bool) false
+      IsStatic: (bool) false,
+      nameLocation: (protocol.Location) {
+        URI: (string) (len=4) "test",
+        Range: (protocol.Range) 17:25-17:32
+      }
     }
   },
   PropertyWrites: ([]analysis.tag) {

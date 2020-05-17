@@ -4,6 +4,10 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:0-5:1
     },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 2:10-2:23
+    },
     children: ([]analysis.Symbol) <nil>,
     description: (string) "",
     Name: (analysis.TypeString) {
@@ -17,6 +21,10 @@
     location: (protocol.Location) {
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 7:0-7:50
+    },
+    refLocation: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 7:10-7:24
     },
     children: ([]analysis.Symbol) <nil>,
     description: (string) "",

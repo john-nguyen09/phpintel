@@ -82,3 +82,18 @@ func GetURIID(uri string) string {
 	result += "-" + lastPart + "-" + hash[:8]
 	return result
 }
+
+// CanonicaliseURI canonicalises a child URI by shorten it assuming that it is
+// prefixed with parent, otherwise the original URI is returned
+func CanonicaliseURI(parent string, child string) string {
+	return strings.TrimPrefix(child, parent)
+}
+
+// URIFromCanonicalURI converts canonical URI back to full URI, if the canonical URI
+// is a full URI which is prefixed with parent then it is returned
+func URIFromCanonicalURI(parent string, canonicalURI string) string {
+	if strings.HasPrefix(canonicalURI, parent) {
+		return canonicalURI
+	}
+	return parent + canonicalURI
+}

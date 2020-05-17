@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"runtime/pprof"
 	"sync"
 
 	"github.com/john-nguyen09/phpintel/analysis"
@@ -86,6 +87,7 @@ func (s *Server) Initialized(ctx context.Context, params *protocol.InitializedPa
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
+	pprof.StopCPUProfile()
 	return s.shutdown(ctx)
 }
 
@@ -178,7 +180,7 @@ func (s *Server) Implementation(context.Context, *protocol.ImplementationParams)
 }
 
 func (s *Server) References(ctx context.Context, params *protocol.ReferenceParams) ([]protocol.Location, error) {
-	return nil, notImplemented("References")
+	return s.references(ctx, params)
 }
 
 func (s *Server) DocumentHighlight(ctx context.Context, params *protocol.DocumentHighlightParams) ([]protocol.DocumentHighlight, error) {

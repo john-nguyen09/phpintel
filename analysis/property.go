@@ -11,6 +11,7 @@ import (
 // Property contains information for properties
 type Property struct {
 	location    protocol.Location
+	refLocation protocol.Location
 	description string
 
 	Name               string
@@ -22,10 +23,12 @@ type Property struct {
 
 var _ HasScope = (*Property)(nil)
 var _ Symbol = (*Property)(nil)
+var _ SymbolReference = (*Property)(nil)
 
 func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
 	property := &Property{
 		location:    location,
+		refLocation: docTag.nameLocation,
 		description: docTag.Description,
 
 		Name:               docTag.Name,
@@ -92,6 +95,7 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 			}
 		} else if t, ok := child.(*lexer.Token); ok && t.Type == lexer.VariableName {
 			property.Name = document.getTokenText(t)
+			property.refLocation = document.GetNodeLocation(t)
 		}
 		child = traverser.Advance()
 	}
@@ -165,4 +169,14 @@ func ReadProperty(d *storage.Decoder) *Property {
 		IsStatic:           d.ReadBool(),
 		Types:              ReadTypeComposite(d),
 	}
+}
+
+// ReferenceFQN returns the FQN of the property
+func (s *Property) ReferenceFQN() string {
+	return s.Scope.GetFQN() + "::" + s.Name
+}
+
+// ReferenceLocation returns the location of the property's name
+func (s *Property) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

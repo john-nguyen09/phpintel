@@ -41,6 +41,12 @@ type HasTypes interface {
 	Resolve(ctx ResolveContext)
 }
 
+type HasTypesHasScope interface {
+	HasTypes
+	MemberName() string
+	GetScopeTypes() TypeComposite
+}
+
 type HasName interface {
 	GetName() string
 }

@@ -10,8 +10,9 @@ import (
 
 // Function contains information of functions
 type Function struct {
-	location protocol.Location
-	children []Symbol
+	location    protocol.Location
+	refLocation protocol.Location
+	children    []Symbol
 
 	Name        TypeString `json:"Name"`
 	Params      []*Parameter
@@ -22,6 +23,7 @@ type Function struct {
 var _ HasScope = (*Function)(nil)
 var _ Symbol = (*Function)(nil)
 var _ BlockSymbol = (*Function)(nil)
+var _ SymbolReference = (*Function)(nil)
 
 func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
@@ -67,6 +69,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				s.Name = NewTypeString(document.getTokenText(token))
+				s.refLocation = document.GetNodeLocation(token)
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
@@ -191,4 +194,14 @@ func (s *Function) addChild(child Symbol) {
 
 func (s *Function) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the FQN to function's name for the reference index
+func (s *Function) ReferenceFQN() string {
+	return s.Name.GetFQN()
+}
+
+// ReferenceLocation returns the location of the function's name for reference index
+func (s *Function) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

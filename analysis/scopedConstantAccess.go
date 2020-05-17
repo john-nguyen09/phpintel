@@ -11,6 +11,8 @@ type ScopedConstantAccess struct {
 	Expression
 }
 
+var _ HasTypesHasScope = (*ScopedConstantAccess)(nil)
+
 func newScopedConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
@@ -38,4 +40,17 @@ func (s *ScopedConstantAccess) GetLocation() protocol.Location {
 func (s *ScopedConstantAccess) GetTypes() TypeComposite {
 	// TODO: Look up constant types
 	return s.Type
+}
+
+// MemberName returns the class constant name
+func (s *ScopedConstantAccess) MemberName() string {
+	return s.Name
+}
+
+// GetScopeTypes returns the types of the scope
+func (s *ScopedConstantAccess) GetScopeTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return newTypeComposite()
 }

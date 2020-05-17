@@ -12,6 +12,8 @@ type PropertyAccess struct {
 	hasResolved bool
 }
 
+var _ HasTypesHasScope = (*PropertyAccess)(nil)
+
 func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &PropertyAccess{
 		Expression: Expression{},
@@ -50,4 +52,19 @@ func (s *PropertyAccess) Resolve(ctx ResolveContext) {
 
 func (s *PropertyAccess) GetTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *PropertyAccess) GetScopeTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return newTypeComposite()
+}
+
+func (s *PropertyAccess) MemberName() string {
+	name := []rune(s.Name)
+	if len(name) > 0 && name[0] != '$' {
+		name = append([]rune{'$'}, name...)
+	}
+	return string(name)
 }

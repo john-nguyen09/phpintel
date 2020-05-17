@@ -11,6 +11,7 @@ import (
 // Interface contains information of interfaces
 type Interface struct {
 	location    protocol.Location
+	refLocation protocol.Location
 	children    []Symbol
 	description string
 
@@ -21,6 +22,7 @@ type Interface struct {
 var _ HasScope = (*Interface)(nil)
 var _ Symbol = (*Interface)(nil)
 var _ BlockSymbol = (*Interface)(nil)
+var _ SymbolReference = (*Interface)(nil)
 
 func newInterface(document *Document, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
@@ -55,6 +57,7 @@ func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
 			switch token.Type {
 			case lexer.Name:
 				s.Name = NewTypeString(document.getTokenText(token))
+				s.refLocation = document.GetNodeLocation(token)
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
@@ -147,4 +150,14 @@ func (s *Interface) addChild(child Symbol) {
 
 func (s *Interface) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the interface's FQN for reference index
+func (s *Interface) ReferenceFQN() string {
+	return s.Name.GetFQN()
+}
+
+// ReferenceLocation returns the location of the interface's name
+func (s *Interface) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }

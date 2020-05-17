@@ -14,6 +14,8 @@ type ScopedPropertyAccess struct {
 	hasResolved bool
 }
 
+var _ HasTypesHasScope = (*ScopedPropertyAccess)(nil)
+
 func newScopedPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
@@ -64,4 +66,15 @@ func (s *ScopedPropertyAccess) Resolve(ctx ResolveContext) {
 
 func (s *ScopedPropertyAccess) GetTypes() TypeComposite {
 	return s.Type
+}
+
+func (s *ScopedPropertyAccess) GetScopeTypes() TypeComposite {
+	if s.Scope != nil {
+		return s.Scope.GetTypes()
+	}
+	return newTypeComposite()
+}
+
+func (s *ScopedPropertyAccess) MemberName() string {
+	return s.Name
 }

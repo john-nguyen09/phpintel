@@ -28,7 +28,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	switch v := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
 		classes := []*analysis.Class{}
-		for _, typeString := range v.Type.Resolve() {
+		for _, typeString := range v.GetTypes().Resolve() {
 			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
 		}
 		constructors := []*analysis.Method{}

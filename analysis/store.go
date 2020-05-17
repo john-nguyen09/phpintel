@@ -18,30 +18,33 @@ import (
 )
 
 const (
-	documentSymbols          string = "documentSymbols"
-	classCollection          string = "class"
-	interfaceCollection      string = "interface"
-	traitCollection          string = "trait"
-	functionCollection       string = "function"
-	constCollection          string = "const"
-	defineCollection         string = "define"
-	methodCollection         string = "method"
-	classConstCollection     string = "classConst"
-	propertyCollection       string = "property"
-	globalVariableCollection string = "globalVariable"
-	documentCollection       string = "document"
+	documentSymbols          string = "docSym"
+	classCollection          string = "cla"
+	interfaceCollection      string = "int"
+	traitCollection          string = "tra"
+	functionCollection       string = "fun"
+	constCollection          string = "con"
+	defineCollection         string = "def"
+	methodCollection         string = "met"
+	classConstCollection     string = "claCon"
+	propertyCollection       string = "pro"
+	globalVariableCollection string = "gloVar"
+	documentCollection       string = "doc"
 
-	completionDataCollection  string = "completionDataCollection"
-	functionCompletionIndex   string = "functionCompletionIndex"
-	constCompletionIndex      string = "constCompletionIndex"
-	defineCompletionIndex     string = "defineCompletionIndex"
-	classCompletionIndex      string = "classCompletionIndex"
-	interfaceCompletionIndex  string = "interfaceCompletionindex"
-	traitCompletionIndex      string = "traitCompletionIndex"
-	methodCompletionIndex     string = "methodCompletionIndex"
-	propertyCompletionIndex   string = "propertyCompletionIndex"
-	classConstCompletionIndex string = "classConstCompletionIndex"
-	namespaceCompletionIndex  string = "namespaceCompletionIndex"
+	completionDataCollection  string = "comDatCol"
+	functionCompletionIndex   string = "funCom"
+	constCompletionIndex      string = "conCom"
+	defineCompletionIndex     string = "defCom"
+	classCompletionIndex      string = "claCom"
+	interfaceCompletionIndex  string = "intCom"
+	traitCompletionIndex      string = "traCom"
+	methodCompletionIndex     string = "metCom"
+	propertyCompletionIndex   string = "proCom"
+	classConstCompletionIndex string = "claConCom"
+	namespaceCompletionIndex  string = "namCom"
+
+	referenceIndexCollection string = "refInd"
+	documentReferenceIndex   string = "docRefInd"
 )
 
 var /* const */ versionKey = []byte("Version")
@@ -274,6 +277,8 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 		ciDeletor.delete()
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(b)
+		riDeletor := newReferenceIndexDeletor(s.db, uri)
+		riDeletor.Delete(b)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
 		return nil
@@ -328,11 +333,13 @@ func (s *Store) SyncDocument(document *Document) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
 		ciDeletor := newFuzzyEngineDeletor(s.fEngine, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
+		riDeletor := newReferenceIndexDeletor(s.db, document.GetURI())
 
-		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
+		s.writeAllSymbols(b, document, ciDeletor, syDeletor, riDeletor)
 
 		ciDeletor.delete()
 		syDeletor.Delete(b)
+		riDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
 		b.Put(entry.getKeyBytes(), document.GetHash())
 		return nil
@@ -383,7 +390,7 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 }
 
 func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
-	ciDeletor *fuzzyEngineDeletor, syDeletor *symbolDeletor) {
+	ciDeletor *fuzzyEngineDeletor, syDeletor *symbolDeletor, riDeletor *referenceIndexDeletor) {
 	for _, impTable := range document.importTables {
 		is := indexablesFromNamespaceName(impTable.GetNamespace())
 		for index, i := range is {
@@ -408,7 +415,60 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 				s.indexName(batch, document, indexable, key)
 			}
 		}
+
+		if r, ok := child.(SymbolReference); ok {
+			s.writeSymbolReference(batch, document, r, riDeletor)
+		}
+		if h, ok := child.(HasTypes); ok {
+			s.writeReferenceIfAvailable(batch, document, h, riDeletor)
+		}
 	})
+}
+
+func (s *Store) writeSymbolReference(batch storage.Batch, document *Document,
+	sym SymbolReference, riDeletor *referenceIndexDeletor) {
+	entries := createReferenceEntry(s, sym.ReferenceLocation(), sym.ReferenceFQN())
+	for _, entry := range entries {
+		writeEntry(batch, entry)
+	}
+	riDeletor.MarkNotDelete(s, sym, sym.ReferenceFQN())
+}
+
+func (s *Store) writeReferenceIfAvailable(batch storage.Batch, document *Document,
+	sym HasTypes, riDeletor *referenceIndexDeletor) {
+	entries := []*entry{}
+	switch v := sym.(type) {
+	case *FunctionCall:
+		name := NewTypeString(v.Name)
+		possibleFQNs := document.ImportTableAtPos(v.GetLocation().Range.Start).functionPossibleFQNs(name)
+		for _, fqn := range possibleFQNs {
+			entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
+			riDeletor.MarkNotDelete(s, sym, fqn)
+		}
+	case *ClassTypeDesignator, *TypeDeclaration, *ClassAccess, *TraitAccess, *InterfaceAccess:
+		if c, ok := sym.(*ClassAccess); ok && IsNameRelative(c.Name) {
+			break
+		}
+		for _, t := range sym.GetTypes().Resolve() {
+			fqn := t.GetFQN()
+			entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
+			riDeletor.MarkNotDelete(s, sym, fqn)
+		}
+	case HasTypesHasScope:
+		switch v.(type) {
+		case *MethodAccess, *PropertyAccess, *ScopedMethodAccess, *ScopedPropertyAccess, *ScopedConstantAccess:
+			for _, t := range v.GetScopeTypes().Resolve() {
+				fqn := t.GetFQN() + "::" + v.MemberName()
+				entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
+				riDeletor.MarkNotDelete(s, sym, fqn)
+			}
+		}
+	}
+	if len(entries) > 0 {
+		for _, entry := range entries {
+			writeEntry(batch, entry)
+		}
+	}
 }
 
 func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
@@ -905,4 +965,9 @@ func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 		results = append(results, ReadGlobalVariable(d))
 	})
 	return results
+}
+
+// GetReferences returns the locations of the reference to an FQN
+func (s *Store) GetReferences(fqn string) []protocol.Location {
+	return searchReferences(s, fqn+KeySep)
 }

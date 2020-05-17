@@ -113,10 +113,27 @@ func (s *Traverser) realTraverse(node phrase.AstNode, spine []*phrase.Phrase, vi
 	}
 }
 
-type NodeStack []*phrase.Phrase
+// NodeStack contains the token and its parents
+type NodeStack struct {
+	parents []*phrase.Phrase
+	token   *lexer.Token
+}
 
+// SetParents sets the parents of the stack
+func (s *NodeStack) SetParents(parents []*phrase.Phrase) *NodeStack {
+	s.parents = parents
+	return s
+}
+
+// SetToken sets the token to the stack
+func (s *NodeStack) SetToken(token *lexer.Token) *NodeStack {
+	s.token = token
+	return s
+}
+
+// Parent returns the parent and mutate the stack
 func (s *NodeStack) Parent() phrase.Phrase {
-	if len(*s) == 0 {
+	if len(s.parents) == 0 {
 		return phrase.Phrase{
 			Type: phrase.Unknown,
 			Children: []phrase.AstNode{
@@ -127,12 +144,23 @@ func (s *NodeStack) Parent() phrase.Phrase {
 		}
 	}
 	var p *phrase.Phrase
-	p, *s = (*s)[len(*s)-1], (*s)[:len(*s)-1]
+	p, s.parents = s.parents[len(s.parents)-1], s.parents[:len(s.parents)-1]
 	return *p
 }
 
+// Token returns the token of the stack
+func (s NodeStack) Token() lexer.Token {
+	if s.token == nil {
+		return lexer.Token{Type: lexer.Undefined}
+	}
+	return *s.token
+}
+
+// String returns the string representation of a NodeStack
 func (s NodeStack) String() string {
-	strs := []string{}
+	strs := []string{
+		s.token.String(),
+	}
 	for p := s.Parent(); p.Type != phrase.Unknown; p = s.Parent() {
 		strs = append(strs, p.Type.String())
 	}

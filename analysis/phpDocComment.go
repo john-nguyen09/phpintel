@@ -24,6 +24,8 @@ type tag struct {
 	TypeString  string
 	Parameters  []methodTagParam
 	IsStatic    bool
+
+	nameLocation protocol.Location
 }
 
 var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
@@ -60,6 +62,7 @@ func processTypeUnionNode(document *Document, node *phrase.Phrase) []string {
 func paramOrPropTypeTag(tagName string, document *Document, p *phrase.Phrase) tag {
 	ts := []string{}
 	name := ""
+	nameLocation := protocol.Location{}
 	description := ""
 	traverser := util.NewTraverser(p)
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
@@ -77,6 +80,7 @@ func paramOrPropTypeTag(tagName string, document *Document, p *phrase.Phrase) ta
 			}
 		} else if t, ok := child.(*lexer.Token); ok && t.Type == lexer.VariableName {
 			name = document.getTokenText(t)
+			nameLocation = document.GetNodeLocation(t)
 		}
 	}
 	return tag{
@@ -84,6 +88,8 @@ func paramOrPropTypeTag(tagName string, document *Document, p *phrase.Phrase) ta
 		Name:        name,
 		Description: description,
 		TypeString:  strings.Join(ts, "|"),
+
+		nameLocation: nameLocation,
 	}
 }
 
@@ -165,6 +171,7 @@ func methodTag(tagName string, document *Document, node *phrase.Phrase) tag {
 	ts := []string{}
 	isStatic := false
 	name := ""
+	nameLocation := protocol.Location{}
 	params := []methodTagParam{}
 	description := ""
 	traverser := util.NewTraverser(node)
@@ -182,6 +189,7 @@ func methodTag(tagName string, document *Document, node *phrase.Phrase) tag {
 				ts = append(ts, processTypeUnionNode(document, p)...)
 			case phrase.Identifier:
 				name = document.getPhraseText(p)
+				nameLocation = document.GetNodeLocation(p)
 			case phrase.ParameterDeclarationList:
 				params = processParamList(document, p)
 			}
@@ -204,6 +212,8 @@ func methodTag(tagName string, document *Document, node *phrase.Phrase) tag {
 		Name:        name,
 		Parameters:  params,
 		Description: description,
+
+		nameLocation: nameLocation,
 	}
 }
 

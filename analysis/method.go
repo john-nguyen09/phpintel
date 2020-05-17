@@ -10,8 +10,9 @@ import (
 
 // Method contains information of methods
 type Method struct {
-	location protocol.Location
-	children []Symbol
+	location    protocol.Location
+	refLocation protocol.Location
+	children    []Symbol
 
 	Name               string
 	Params             []*Parameter
@@ -26,12 +27,14 @@ type Method struct {
 var _ HasScope = (*Method)(nil)
 var _ Symbol = (*Method)(nil)
 var _ BlockSymbol = (*Method)(nil)
+var _ SymbolReference = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
 		IsStatic:    methodTag.IsStatic,
 		Name:        methodTag.Name,
 		location:    location,
+		refLocation: methodTag.nameLocation,
 		returnTypes: typesFromPhpDoc(document, methodTag.TypeString),
 		Params:      []*Parameter{},
 		description: methodTag.Description,
@@ -94,6 +97,7 @@ func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) 
 				s.analyseParameterDeclarationList(document, p)
 			case phrase.Identifier:
 				s.Name = document.getPhraseText(p)
+				s.refLocation = document.GetNodeLocation(p)
 			}
 		} else if token, ok := child.(*lexer.Token); ok {
 			switch token.Type {
@@ -251,4 +255,14 @@ func (s *Method) addChild(child Symbol) {
 
 func (s *Method) GetChildren() []Symbol {
 	return s.children
+}
+
+// ReferenceFQN returns the FQN for the method
+func (s *Method) ReferenceFQN() string {
+	return s.Scope.GetFQN() + "::" + s.Name + "()"
+}
+
+// ReferenceLocation returns the location for the method's name
+func (s *Method) ReferenceLocation() protocol.Location {
+	return s.refLocation
 }
