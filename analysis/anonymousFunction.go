@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"log"
+
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
@@ -16,6 +18,7 @@ type AnonymousFunction struct {
 var _ BlockSymbol = (*AnonymousFunction)(nil)
 
 func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
+	prevVariableTable := document.getCurrentVariableTable()
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
@@ -28,7 +31,7 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.AnonymousFunctionHeader:
-				anonFunc.analyseHeader(document, p)
+				anonFunc.analyseHeader(document, p, variableTable, prevVariableTable)
 				for _, param := range anonFunc.Params {
 					lastToken := util.LastToken(p)
 					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
@@ -44,7 +47,8 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 	return anonFunc
 }
 
-func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phrase) {
+func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phrase,
+	variableTable *VariableTable, prevVariableTable *VariableTable) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -52,6 +56,8 @@ func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phras
 			switch p.Type {
 			case phrase.ParameterDeclarationList:
 				s.analyseParameterDeclarationList(document, p)
+			case phrase.AnonymousFunctionUseClause:
+				s.analyseUseClause(document, p, variableTable, prevVariableTable)
 			}
 		}
 		child = traverser.Advance()
@@ -67,6 +73,46 @@ func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, 
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()
+	}
+}
+
+func (s *AnonymousFunction) analyseUseClause(document *Document, node *phrase.Phrase,
+	variableTable *VariableTable, prevVariableTable *VariableTable) {
+	traverser := util.NewTraverser(node)
+	child := traverser.Peek()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			if p.Type == phrase.ClosureUseList {
+				var err error
+				traverser, err = traverser.Descend()
+				if err != nil {
+					log.Println(err)
+				} else {
+					child = traverser.Advance()
+					for child != nil {
+						if p, ok := child.(*phrase.Phrase); ok {
+							if p.Type == phrase.AnonymousFunctionUseVariable {
+								variable, shouldAdd := newVariable(document, p)
+								if shouldAdd {
+									document.addSymbol(variable)
+								}
+								prevVariable := prevVariableTable.get(variable.Name, variable.Location.Range.Start)
+								if prevVariable != nil {
+									variable.mergeTypesWithVariable(prevVariable)
+								}
+							}
+						}
+						child = traverser.Advance()
+					}
+				}
+				traverser, err = traverser.Ascend()
+				if err != nil {
+					log.Println(err)
+				}
+			}
+		}
+		traverser.Advance()
+		child = traverser.Peek()
 	}
 }
 
