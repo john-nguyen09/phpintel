@@ -9,7 +9,8 @@ import (
 )
 
 func (s *Server) provideDiagnostics(ctx context.Context, document *analysis.Document) {
-	diagnostics := analysis.GetParserDiagnostic(document)
+	diagnostics := analysis.GetParserDiagnostics(document)
+	diagnostics = append(diagnostics, analysis.UnusedDiagnostics(document)...)
 	params := &protocol.PublishDiagnosticsParams{
 		URI:         document.GetURI(),
 		Diagnostics: diagnostics,

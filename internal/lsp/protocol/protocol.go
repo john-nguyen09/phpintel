@@ -7,9 +7,9 @@ package protocol
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
-	"github.com/john-nguyen09/phpintel/internal/log"
 )
 
 const (
@@ -42,7 +42,7 @@ func sendParseError(ctx context.Context, req *jsonrpc2.Request, err error) {
 		err = jsonrpc2.NewErrorf(jsonrpc2.CodeParseError, "%v", err)
 	}
 	if err := req.Reply(ctx, nil, err); err != nil {
-		log.Error(ctx, "", err)
+		log.Println(err)
 	}
 }
 
@@ -4026,7 +4026,7 @@ type SignatureHelpTriggerKind float64
 type DiagnosticSeverity float64
 
 // DiagnosticTag defines constants
-type DiagnosticTag float64
+type DiagnosticTag int
 
 // MarkupKind defines constants
 type MarkupKind string

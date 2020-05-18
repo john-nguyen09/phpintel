@@ -19,12 +19,12 @@ type Variable struct {
 var _ CanAddType = (*Variable)(nil)
 
 func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
-	return newVariable(document, node)
+	return newVariable(document, node, false)
 }
 
-func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
+func newVariable(document *Document, node *phrase.Phrase, isDeclaration bool) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
-	document.pushVariable(variable, variable.GetLocation().Range.End)
+	document.pushVariable(variable, variable.GetLocation().Range.End, isDeclaration)
 	return variable, true
 }
 
@@ -114,14 +114,18 @@ func (s *Variable) AddTypes(t TypeComposite) {
 }
 
 type contextualVariable struct {
-	v     *Variable
-	start protocol.Position
+	v             *Variable
+	start         protocol.Position
+	isDeclaration bool
+	// If isDeclaration is false then this is not used
+	isUsed bool
 }
 
-func newContextualVariable(v *Variable, start protocol.Position) contextualVariable {
+func newContextualVariable(v *Variable, start protocol.Position, isDeclaration bool) contextualVariable {
 	return contextualVariable{
-		v:     v,
-		start: start,
+		v:             v,
+		start:         start,
+		isDeclaration: isDeclaration,
 	}
 }
 
@@ -143,9 +147,15 @@ func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
 	}
 }
 
-func (vt *VariableTable) add(variable *Variable, start protocol.Position) {
+func (vt *VariableTable) add(variable *Variable, start protocol.Position, isDeclaration bool) {
 	currentVars := []contextualVariable{}
-	newCtxVar := newContextualVariable(variable, start)
+	newCtxVar := newContextualVariable(variable, start, isDeclaration)
+	if !isDeclaration {
+		declarationVar := vt.declarationVariableAt(variable.Name, variable.GetLocation().Range.Start)
+		if declarationVar != nil {
+			declarationVar.isUsed = true
+		}
+	}
 	if prevVars, ok := vt.variables[variable.Name]; ok {
 		index := 0
 		if len(prevVars) > 0 {
@@ -156,7 +166,7 @@ func (vt *VariableTable) add(variable *Variable, start protocol.Position) {
 		prevVars = append(prevVars[:index], append([]contextualVariable{newCtxVar}, prevVars[index:]...)...)
 		vt.variables[variable.Name] = prevVars
 	} else {
-		vt.variables[variable.Name] = append(currentVars, newContextualVariable(variable, start))
+		vt.variables[variable.Name] = append(currentVars, newCtxVar)
 	}
 }
 
@@ -204,4 +214,31 @@ func (vt *VariableTable) GetVariables(pos protocol.Position) []*Variable {
 
 func (vt *VariableTable) addChild(child *VariableTable) {
 	vt.children = append(vt.children, child)
+}
+
+func (vt *VariableTable) unusedVariables() []*Variable {
+	results := []*Variable{}
+	for _, ctxVars := range vt.variables {
+		for _, ctxVar := range ctxVars {
+			if ctxVar.isDeclaration && !ctxVar.isUsed {
+				results = append(results, ctxVar.v)
+			}
+		}
+	}
+	return results
+}
+
+func (vt *VariableTable) declarationVariableAt(name string, pos protocol.Position) *contextualVariable {
+	var found *contextualVariable
+	if ctxVars, ok := vt.variables[name]; ok {
+		for i, ctxVar := range ctxVars {
+			if util.ComparePos(pos, ctxVar.v.GetLocation().Range.Start) <= 0 {
+				break
+			}
+			if ctxVar.isDeclaration && ctxVar.v.Name == name {
+				found = &ctxVars[i]
+			}
+		}
+	}
+	return found
 }

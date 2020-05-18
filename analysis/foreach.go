@@ -56,7 +56,7 @@ func analyseForeachValue(document *Document, f *ForeachCollection, node *phrase.
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.SimpleVariable:
-				if v, shouldAdd := newVariable(document, p); shouldAdd {
+				if v, shouldAdd := newVariable(document, p, true); shouldAdd {
 					v.setExpression(f)
 					document.addSymbol(v)
 				}

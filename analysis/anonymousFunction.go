@@ -34,7 +34,7 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 				anonFunc.analyseHeader(document, p, variableTable, prevVariableTable)
 				for _, param := range anonFunc.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
 				}
 			case phrase.FunctionDeclarationBody:
 				scanForChildren(document, p)
@@ -92,7 +92,7 @@ func (s *AnonymousFunction) analyseUseClause(document *Document, node *phrase.Ph
 					for child != nil {
 						if p, ok := child.(*phrase.Phrase); ok {
 							if p.Type == phrase.AnonymousFunctionUseVariable {
-								variable, shouldAdd := newVariable(document, p)
+								variable, shouldAdd := newVariable(document, p, true)
 								if shouldAdd {
 									document.addSymbol(variable)
 								}

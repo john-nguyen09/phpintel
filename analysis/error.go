@@ -7,7 +7,10 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func GetParserDiagnostic(document *Document) []protocol.Diagnostic {
+const source = "phpintel"
+
+// GetParserDiagnostics returns the diagnostics for the syntax error
+func GetParserDiagnostics(document *Document) []protocol.Diagnostic {
 	rootNode := document.GetRootNode()
 	diagnostics := []protocol.Diagnostic{}
 	traverser := util.NewTraverser(rootNode)
@@ -33,6 +36,32 @@ func parserErrorToDiagnostic(document *Document, err *phrase.ParseError) protoco
 		Range:    document.errorRange(err),
 		Message:  message,
 		Severity: protocol.SeverityError,
-		Source:   "phpintel",
+		Source:   source,
 	}
+}
+
+// UnusedDiagnostics returns the diagnostics for unused variables or imports
+// TODO: provide unused imports
+func UnusedDiagnostics(document *Document) []protocol.Diagnostic {
+	diagnostics := []protocol.Diagnostic{}
+	unusedVariables := document.UnusedVariables()
+	for _, unusedVariable := range unusedVariables {
+		nodes := document.NodeSpineAt(document.OffsetAtPosition(unusedVariable.Location.Range.End))
+		nodes.Parent() // Ignore variable node
+		parent := nodes.Parent()
+		var r protocol.Range
+		if parent.Type == phrase.SimpleAssignmentExpression {
+			r = document.nodeRange(&parent)
+		} else {
+			r = unusedVariable.GetLocation().Range
+		}
+		diagnostics = append(diagnostics, protocol.Diagnostic{
+			Range:    r,
+			Message:  unusedVariable.Name + " is declared but its value is never read.",
+			Source:   source,
+			Severity: protocol.SeverityHint,
+			Tags:     []protocol.DiagnosticTag{protocol.Unnecessary},
+		})
+	}
+	return diagnostics
 }

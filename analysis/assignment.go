@@ -55,7 +55,7 @@ func analyseVariableAssignment(document *Document, lhs *phrase.Phrase, traverser
 	}
 	// But the variable should be pushed after any rhs's variables
 	lastToken := util.LastToken(parent)
-	document.pushVariable(variable, document.positionAt(lastToken.Offset+lastToken.Length))
+	document.pushVariable(variable, document.positionAt(lastToken.Offset+lastToken.Length), true)
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {

@@ -334,7 +334,7 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 	return traverseAndFind(lastFoundVarTable)
 }
 
-func (s *Document) pushVariable(variable *Variable, pos protocol.Position) {
+func (s *Document) pushVariable(variable *Variable, pos protocol.Position, isDeclaration bool) {
 	variableTable := s.getCurrentVariableTable()
 	currentVariable := variableTable.get(variable.Name, pos)
 	if currentVariable != nil {
@@ -343,7 +343,7 @@ func (s *Document) pushVariable(variable *Variable, pos protocol.Position) {
 	if variableTable.level == 0 || variableTable.canReferenceGlobal(variable.Name) {
 		variable.canReferenceGlobal = true
 	}
-	variableTable.add(variable, pos)
+	variableTable.add(variable, pos, isDeclaration)
 }
 
 // Even though the name indicates class but actually this will also
@@ -643,4 +643,17 @@ func (s *Document) ImportTableAtPos(pos protocol.Position) *ImportTable {
 
 func (s *Document) setNamespace(namespace *Namespace) {
 	s.currImportTable().setNamespace(namespace)
+}
+
+// UnusedVariables return unused declared variables in the doc
+func (s *Document) UnusedVariables() []*Variable {
+	results := []*Variable{}
+	queue := append([]*VariableTable(nil), s.variableTables...)
+	for len(queue) > 0 {
+		var varTable *VariableTable
+		varTable, queue = queue[0], queue[1:]
+		queue = append(queue, varTable.children...)
+		results = append(results, varTable.unusedVariables()...)
+	}
+	return results
 }

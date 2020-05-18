@@ -73,7 +73,7 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 				}
 				for _, param := range s.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
 				}
 			case phrase.MethodDeclarationBody:
 				scanForChildren(document, p)
