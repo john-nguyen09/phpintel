@@ -108,24 +108,6 @@ function testFunction1()
 }`))
 	doc.Load()
 
-	t.Run("TestDeclarationVariableAt", func(t *testing.T) {
-		vt := doc.GetVariableTableAt(protocol.Position{Line: 0, Character: 0})
-		v := vt.declarationVariableAt("$var1", protocol.Position{Line: 2, Character: 0})
-		assert.Equal(t, protocol.Location{
-			URI: "test1", Range: protocol.Range{
-				Start: protocol.Position{Line: 1, Character: 0},
-				End:   protocol.Position{Line: 1, Character: 5},
-			},
-		}, v.v.GetLocation())
-		v = vt.declarationVariableAt("$var1", protocol.Position{Line: 4, Character: 0})
-		assert.Equal(t, protocol.Location{
-			URI: "test1", Range: protocol.Range{
-				Start: protocol.Position{Line: 3, Character: 0},
-				End:   protocol.Position{Line: 3, Character: 5},
-			},
-		}, v.v.GetLocation())
-	})
-
 	t.Run("TestDocumentUnusedVariables", func(t *testing.T) {
 		results := []protocol.Location{}
 		for _, unusedVar := range doc.UnusedVariables() {

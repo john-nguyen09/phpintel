@@ -234,8 +234,3 @@ func (vt *VariableTable) unusedVariables() []*Variable {
 	}
 	return results
 }
-
-func (vt *VariableTable) declarationVariableAt(name string, pos protocol.Position) *contextualVariable {
-	var found *contextualVariable
-	return found
-}
