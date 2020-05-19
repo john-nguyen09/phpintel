@@ -93,6 +93,7 @@ func (s *AnonymousFunction) analyseUseClause(document *Document, node *phrase.Ph
 						if p, ok := child.(*phrase.Phrase); ok {
 							if p.Type == phrase.AnonymousFunctionUseVariable {
 								variable, shouldAdd := newVariable(document, p, true)
+								prevVariableTable.add(variable, variable.GetLocation().Range.End, false)
 								if shouldAdd {
 									document.addSymbol(variable)
 								}

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -105,6 +106,10 @@ function testFunction1()
 	$var1->format('U');
 
 	$var1 = new Class();
+}
+
+$var2 = null;
+$callback = function() use ($var2) {
 }`))
 	doc.Load()
 
@@ -113,14 +118,21 @@ function testFunction1()
 		for _, unusedVar := range doc.UnusedVariables() {
 			results = append(results, unusedVar.GetLocation())
 		}
+		sort.SliceStable(results, func(i, j int) bool {
+			return util.CompareRange(results[i].Range, results[j].Range) < 0
+		})
 		assert.Equal(t, []protocol.Location{
-			{URI: "test1", Range: protocol.Range{
-				Start: protocol.Position{Line: 1, Character: 0},
-				End:   protocol.Position{Line: 1, Character: 5},
-			}},
 			{URI: "test1", Range: protocol.Range{
 				Start: protocol.Position{Line: 11, Character: 1},
 				End:   protocol.Position{Line: 11, Character: 6},
+			}},
+			{URI: "test1", Range: protocol.Range{
+				Start: protocol.Position{Line: 15, Character: 0},
+				End:   protocol.Position{Line: 15, Character: 9},
+			}},
+			{URI: "test1", Range: protocol.Range{
+				Start: protocol.Position{Line: 15, Character: 28},
+				End:   protocol.Position{Line: 15, Character: 33},
 			}},
 		}, results)
 	})
