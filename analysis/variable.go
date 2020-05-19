@@ -151,9 +151,16 @@ func (vt *VariableTable) add(variable *Variable, start protocol.Position, isDecl
 	currentVars := []contextualVariable{}
 	newCtxVar := newContextualVariable(variable, start, isDeclaration)
 	if !isDeclaration {
-		declarationVar := vt.declarationVariableAt(variable.Name, variable.GetLocation().Range.Start)
-		if declarationVar != nil {
-			declarationVar.isUsed = true
+		pos := variable.GetLocation().Range.Start
+		if ctxVars, ok := vt.variables[variable.Name]; ok {
+			for i, ctxVar := range ctxVars {
+				if util.ComparePos(pos, ctxVar.v.GetLocation().Range.Start) <= 0 {
+					break
+				}
+				if ctxVar.isDeclaration && ctxVar.v.Name == variable.Name {
+					ctxVars[i].isUsed = true
+				}
+			}
 		}
 	}
 	if prevVars, ok := vt.variables[variable.Name]; ok {
@@ -230,15 +237,5 @@ func (vt *VariableTable) unusedVariables() []*Variable {
 
 func (vt *VariableTable) declarationVariableAt(name string, pos protocol.Position) *contextualVariable {
 	var found *contextualVariable
-	if ctxVars, ok := vt.variables[name]; ok {
-		for i, ctxVar := range ctxVars {
-			if util.ComparePos(pos, ctxVar.v.GetLocation().Range.Start) <= 0 {
-				break
-			}
-			if ctxVar.isDeclaration && ctxVar.v.Name == name {
-				found = &ctxVars[i]
-			}
-		}
-	}
 	return found
 }

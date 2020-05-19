@@ -26,6 +26,14 @@ func readMemberName(document *Document, traverser *util.Traverser) (string, prot
 			if t, ok := child.(*lexer.Token); ok && t.Type == lexer.Name {
 				name = document.getTokenText(t)
 			}
+			if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
+				name = document.getPhraseText(p)
+				v, shouldAdd := newVariable(document, p, false)
+				if shouldAdd {
+					document.addSymbol(v)
+				}
+				return name, location
+			}
 		}
 		location = document.GetNodeLocation(p)
 	}
