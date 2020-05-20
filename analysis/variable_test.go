@@ -153,4 +153,23 @@ $task->$shortname()->delete();`))
 			},
 		})
 	})
+
+	t.Run("TestGlobalVariableDeclaration", func(t *testing.T) {
+		doc3 := NewDocument("test3", []byte(`<?php
+function thisIsAFunction()
+{
+	global $DB;
+}`))
+		doc3.Load()
+		results := []protocol.Location{}
+		for _, unusedVar := range doc3.UnusedVariables() {
+			results = append(results, unusedVar.GetLocation())
+		}
+		assert.Equal(t, []protocol.Location{
+			{URI: "test3", Range: protocol.Range{
+				Start: protocol.Position{Line: 3, Character: 8},
+				End:   protocol.Position{Line: 3, Character: 11},
+			}},
+		}, results)
+	})
 }

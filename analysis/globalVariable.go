@@ -56,6 +56,7 @@ func newGlobalVariable(document *Document, node *phrase.Phrase) Symbol {
 	}
 	variableTable := document.getCurrentVariableTable()
 	variableTable.setReferenceGlobal(globalVariable.GetName())
+	document.pushVariable(globalVariable.toVariable(), globalVariable.location.Range.End, true)
 	return globalVariable
 }
 
@@ -102,6 +103,17 @@ func (s *GlobalVariable) Serialise(e *storage.Encoder) {
 	s.types.Write(e)
 	e.WriteString(s.description)
 	e.WriteString(s.Name)
+}
+
+func (s GlobalVariable) toVariable() *Variable {
+	return &Variable{
+		Expression: Expression{
+			Location: s.location,
+			Type:     s.types,
+			Name:     s.Name,
+		},
+		description: s.description,
+	}
 }
 
 func ReadGlobalVariable(d *storage.Decoder) *GlobalVariable {
