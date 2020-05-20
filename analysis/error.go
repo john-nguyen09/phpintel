@@ -46,17 +46,8 @@ func UnusedDiagnostics(document *Document) []protocol.Diagnostic {
 	diagnostics := []protocol.Diagnostic{}
 	unusedVariables := document.UnusedVariables()
 	for _, unusedVariable := range unusedVariables {
-		nodes := document.NodeSpineAt(document.OffsetAtPosition(unusedVariable.Location.Range.End))
-		nodes.Parent() // Ignore variable node
-		parent := nodes.Parent()
-		var r protocol.Range
-		if parent.Type == phrase.SimpleAssignmentExpression {
-			r = document.nodeRange(&parent)
-		} else {
-			r = unusedVariable.GetLocation().Range
-		}
 		diagnostics = append(diagnostics, protocol.Diagnostic{
-			Range:    r,
+			Range:    unusedVariable.GetLocation().Range,
 			Message:  unusedVariable.Name + " is declared but its value is never read.",
 			Source:   source,
 			Severity: protocol.SeverityHint,
