@@ -136,4 +136,21 @@ $callback = function() use ($var2) {
 			}},
 		}, results)
 	})
+
+	t.Run("TestMemberNameVariableReference", func(t *testing.T) {
+		doc2 := NewDocument("test2", []byte(`<?php
+$shortname = 'type' . ucfirst($taskType);
+$task->$shortname()->delete();`))
+		doc2.Load()
+		results := []protocol.Location{}
+		for _, unusedVar := range doc2.UnusedVariables() {
+			results = append(results, unusedVar.GetLocation())
+		}
+		assert.NotContains(t, results, protocol.Location{
+			URI: "test2", Range: protocol.Range{
+				Start: protocol.Position{Line: 1, Character: 0},
+				End:   protocol.Position{Line: 1, Character: 11},
+			},
+		})
+	})
 }
