@@ -176,3 +176,23 @@ func TestReferenceIndex(t *testing.T) {
 		}, store.GetReferences("\\TestPropertyClass1::$prop2"))
 	})
 }
+
+func TestValidatingReferences(t *testing.T) {
+	store := setupStore("test", t.Name())
+	doc := NewDocument("test1", []byte(`<?php
+function testFunction1() {}`))
+	doc.Load()
+	store.SyncDocument(doc)
+	doc = NewDocument("test1", []byte(`<?php
+
+function testFunction1() {}`))
+	doc.Load()
+	store.SyncDocument(doc)
+	results := store.GetReferences("\\testFunction1")
+	assert.Equal(t, []protocol.Location{
+		{URI: "test1", Range: protocol.Range{
+			Start: protocol.Position{Line: 2, Character: 9},
+			End:   protocol.Position{Line: 2, Character: 22},
+		}},
+	}, results)
+}
