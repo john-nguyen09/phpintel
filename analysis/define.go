@@ -16,7 +16,7 @@ type Define struct {
 	Value string
 }
 
-func newDefine(document *Document, node *phrase.Phrase) Symbol {
+func newDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	define := &Define{
 		location: document.GetNodeLocation(node),
 	}
@@ -25,7 +25,7 @@ func newDefine(document *Document, node *phrase.Phrase) Symbol {
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			if p.Type == phrase.ArgumentExpressionList {
-				symbol := newArgumentList(document, p)
+				symbol := newArgumentList(a, document, p)
 				if args, ok := symbol.(*ArgumentList); ok {
 					define.analyseArgs(document, args)
 				}

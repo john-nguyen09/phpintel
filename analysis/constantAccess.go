@@ -11,7 +11,7 @@ type ConstantAccess struct {
 	Expression
 }
 
-func newDirectoryConstantAccess(document *Document, token *lexer.Token) Symbol {
+func newDirectoryConstantAccess(a analyser, document *Document, token *lexer.Token) Symbol {
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(token),
@@ -21,7 +21,7 @@ func newDirectoryConstantAccess(document *Document, token *lexer.Token) Symbol {
 	return constantAccess
 }
 
-func newConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newConstantAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ConstantAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),

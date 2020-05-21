@@ -52,7 +52,7 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	return method
 }
 
-func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
+func (s *Method) analyseMethodNode(a analyser, document *Document, node *phrase.Phrase) {
 	s.Params = []*Parameter{}
 	s.returnTypes = newTypeComposite()
 	phpDoc := document.getValidPhpDoc(s.location)
@@ -67,16 +67,16 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.MethodDeclarationHeader:
-				s.analyseHeader(document, p)
+				s.analyseHeader(a, document, p)
 				if phpDoc != nil {
 					s.applyPhpDoc(document, *phpDoc)
 				}
 				for _, param := range s.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
 				}
 			case phrase.MethodDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -85,7 +85,7 @@ func (s *Method) analyseMethodNode(document *Document, node *phrase.Phrase) {
 	document.popBlock()
 }
 
-func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) {
+func (s *Method) analyseHeader(a analyser, document *Document, methodHeader *phrase.Phrase) {
 	traverser := util.NewTraverser(methodHeader)
 	child := traverser.Advance()
 	for child != nil {
@@ -94,7 +94,7 @@ func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) 
 			case phrase.MemberModifierList:
 				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
 			case phrase.ParameterDeclarationList:
-				s.analyseParameterDeclarationList(document, p)
+				s.analyseParameterDeclarationList(a, document, p)
 			case phrase.Identifier:
 				s.Name = document.getPhraseText(p)
 				s.refLocation = document.GetNodeLocation(p)
@@ -109,26 +109,26 @@ func (s *Method) analyseHeader(document *Document, methodHeader *phrase.Phrase) 
 	}
 }
 
-func (s *Method) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+func (s *Method) analyseParameterDeclarationList(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+			param := newParameter(a, document, p)
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()
 	}
 }
 
-func newMethod(document *Document, node *phrase.Phrase) Symbol {
+func newMethod(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	method := &Method{
 		IsStatic:    false,
 		location:    document.GetNodeLocation(node),
 		Params:      []*Parameter{},
 		returnTypes: newTypeComposite(),
 	}
-	method.analyseMethodNode(document, node)
+	method.analyseMethodNode(a, document, node)
 
 	lastClass := document.getLastClass()
 	if theClass, ok := lastClass.(*Class); ok {

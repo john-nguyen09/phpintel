@@ -25,7 +25,7 @@ var _ Symbol = (*Function)(nil)
 var _ BlockSymbol = (*Function)(nil)
 var _ SymbolReference = (*Function)(nil)
 
-func newFunction(document *Document, node *phrase.Phrase) Symbol {
+func newFunction(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	function := &Function{
 		location:    document.GetNodeLocation(node),
 		Params:      make([]*Parameter, 0),
@@ -41,16 +41,16 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.FunctionDeclarationHeader:
-				function.analyseHeader(document, p)
+				function.analyseHeader(a, document, p)
 				if phpDoc != nil {
 					function.applyPhpDoc(document, *phpDoc)
 				}
 				for _, param := range function.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
 				}
 			case phrase.FunctionDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -61,7 +61,7 @@ func newFunction(document *Document, node *phrase.Phrase) Symbol {
 	return function
 }
 
-func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
+func (s *Function) analyseHeader(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -74,7 +74,7 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ParameterDeclarationList:
-				s.analyseParameterDeclarationList(document, p)
+				s.analyseParameterDeclarationList(a, document, p)
 			case phrase.Identifier:
 				s.Name = NewTypeString(document.getPhraseText(p))
 			}
@@ -83,12 +83,12 @@ func (s *Function) analyseHeader(document *Document, node *phrase.Phrase) {
 	}
 }
 
-func (s *Function) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+func (s *Function) analyseParameterDeclarationList(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+			param := newParameter(a, document, p)
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()

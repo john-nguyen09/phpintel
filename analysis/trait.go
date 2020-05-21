@@ -19,7 +19,7 @@ type Trait struct {
 var _ Symbol = (*Trait)(nil)
 var _ BlockSymbol = (*Trait)(nil)
 
-func newTrait(document *Document, node *phrase.Phrase) Symbol {
+func newTrait(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	trait := &Trait{
 		location: document.GetNodeLocation(node),
 	}
@@ -34,7 +34,7 @@ func newTrait(document *Document, node *phrase.Phrase) Symbol {
 			case phrase.TraitDeclarationHeader:
 				trait.analyseHeader(document, p)
 			case phrase.TraitDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -104,4 +104,18 @@ func (s *Trait) addChild(child Symbol) {
 
 func (s *Trait) GetChildren() []Symbol {
 	return s.children
+}
+
+func (s *Trait) findProp(name string) *Property {
+	var (
+		prop *Property
+		ok   bool
+	)
+	for _, child := range s.children {
+		if prop, ok = child.(*Property); ok && prop.Name == name {
+			break
+		}
+		prop = nil
+	}
+	return prop
 }

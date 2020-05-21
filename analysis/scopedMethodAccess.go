@@ -15,14 +15,14 @@ type ScopedMethodAccess struct {
 
 var _ HasTypesHasScope = (*ScopedMethodAccess)(nil)
 
-func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newScopedMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, p)
+		classAccess := newClassAccess(a, document, p)
 		document.addSymbol(classAccess)
 		methodAccess.Scope = classAccess
 	}
@@ -36,7 +36,7 @@ func newScopedMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, b
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ArgumentExpressionList {
-			scanNode(document, child)
+			scanNode(a, document, child)
 			break
 		}
 		child = traverser.Advance()

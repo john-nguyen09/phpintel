@@ -24,7 +24,7 @@ var _ Symbol = (*Interface)(nil)
 var _ BlockSymbol = (*Interface)(nil)
 var _ SymbolReference = (*Interface)(nil)
 
-func newInterface(document *Document, node *phrase.Phrase) Symbol {
+func newInterface(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	theInterface := &Interface{
 		location: document.GetNodeLocation(node),
 	}
@@ -39,7 +39,7 @@ func newInterface(document *Document, node *phrase.Phrase) Symbol {
 			case phrase.InterfaceDeclarationHeader:
 				theInterface.analyseHeader(document, p)
 			case phrase.InterfaceDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -160,4 +160,18 @@ func (s *Interface) ReferenceFQN() string {
 // ReferenceLocation returns the location of the interface's name
 func (s *Interface) ReferenceLocation() protocol.Location {
 	return s.refLocation
+}
+
+func (s *Interface) findProp(name string) *Property {
+	var (
+		prop *Property
+		ok   bool
+	)
+	for _, child := range s.children {
+		if prop, ok = child.(*Property); ok && prop.Name == name {
+			break
+		}
+		prop = nil
+	}
+	return prop
 }

@@ -15,7 +15,7 @@ type AnonymousFunction struct {
 
 var _ BlockSymbol = (*AnonymousFunction)(nil)
 
-func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
+func newAnonymousFunction(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
 	}
@@ -28,13 +28,13 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.AnonymousFunctionHeader:
-				anonFunc.analyseHeader(document, p)
+				anonFunc.analyseHeader(a, document, p)
 				for _, param := range anonFunc.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
 				}
 			case phrase.FunctionDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -44,26 +44,26 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 	return anonFunc
 }
 
-func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phrase) {
+func (s *AnonymousFunction) analyseHeader(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ParameterDeclarationList:
-				s.analyseParameterDeclarationList(document, p)
+				s.analyseParameterDeclarationList(a, document, p)
 			}
 		}
 		child = traverser.Advance()
 	}
 }
 
-func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+func (s *AnonymousFunction) analyseParameterDeclarationList(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+			param := newParameter(a, document, p)
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()

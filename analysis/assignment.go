@@ -6,28 +6,35 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func newAssignment(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newAssignment(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
-	isVariable := false
+	haveProcessed := false
 	if p, ok := firstChild.(*phrase.Phrase); ok {
 		if p.Type == phrase.SimpleVariable {
-			analyseVariableAssignment(document, p, traverser.Clone(), node)
-			isVariable = true
+			analyseVariableAssignment(a, document, p, traverser.Clone(), node)
+			haveProcessed = true
+		}
+		if p.Type == phrase.PropertyAccessExpression {
+			block := document.currentBlock()
+			if method, ok := block.(*Method); ok && method.Name == "__construct" {
+				processPropertyAccessAssignment(a, document, p, node)
+				haveProcessed = true
+			}
 		}
 	}
-	if !isVariable {
+	if !haveProcessed {
 		if p, ok := firstChild.(*phrase.Phrase); ok {
-			scanNode(document, p)
+			scanNode(a, document, p)
 		}
 		for child := traverser.Advance(); child != nil; child = traverser.Advance() {
-			scanNode(document, child)
+			scanNode(a, document, child)
 		}
 	}
 	return nil, false
 }
 
-func analyseVariableAssignment(document *Document, lhs *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
+func analyseVariableAssignment(a analyser, document *Document, lhs *phrase.Phrase, traverser *util.Traverser, parent *phrase.Phrase) {
 	traverser.Advance()
 	traverser.SkipToken(lexer.Whitespace)
 	if parent.Type == phrase.CompoundAssignmentExpression {
@@ -51,15 +58,15 @@ func analyseVariableAssignment(document *Document, lhs *phrase.Phrase, traverser
 
 	var expression HasTypes = nil
 	if p, ok := rhs.(*phrase.Phrase); ok {
-		expression = scanForExpression(document, p)
+		expression = scanForExpression(a, document, p)
 	}
 	// But the variable should be pushed after any rhs's variables
 	lastToken := util.LastToken(parent)
-	document.pushVariable(variable, document.positionAt(lastToken.Offset+lastToken.Length))
+	document.pushVariable(a, variable, document.positionAt(lastToken.Offset+lastToken.Length))
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {
-		scanNode(document, rhs)
+		scanNode(a, document, rhs)
 	}
 	globalVariable := document.getGlobalVariable(variable.Name)
 	if globalVariable != nil {
@@ -67,5 +74,44 @@ func analyseVariableAssignment(document *Document, lhs *phrase.Phrase, traverser
 		if !types.IsEmpty() {
 			globalVariable.types.merge(types)
 		}
+	}
+}
+
+func processPropertyAccessAssignment(a analyser, document *Document, node *phrase.Phrase, parent *phrase.Phrase) {
+	var (
+		lhsExpr HasTypes
+		rhsExpr HasTypes
+		prop    *Property
+	)
+	traverser := util.NewTraverser(node)
+	firstChild := traverser.Advance()
+	parentTraverser := util.NewTraverser(parent)
+	lhs := parentTraverser.Advance()
+	if p, ok := lhs.(*phrase.Phrase); ok {
+		lhsExpr = scanForExpression(a, document, p)
+	}
+	parentTraverser.SkipToken(lexer.Whitespace)
+	parentTraverser.SkipToken(lexer.Equals)
+	parentTraverser.SkipToken(lexer.Whitespace)
+	rhs := parentTraverser.Advance()
+	if rhsP, ok := rhs.(*phrase.Phrase); ok {
+		rhsExpr = scanForExpression(a, document, rhsP)
+	}
+	if p, ok1 := firstChild.(*phrase.Phrase); ok1 && p.Type == phrase.SimpleVariable &&
+		document.getPhraseText(p) == "$this" {
+		if propAccess, ok2 := lhsExpr.(*PropertyAccess); ok2 && propAccess != nil {
+			class := document.getLastClass()
+			switch v := class.(type) {
+			case *Class:
+				prop = v.findProp(propAccess.MemberName())
+			case *Interface:
+				prop = v.findProp(propAccess.MemberName())
+			case *Trait:
+				prop = v.findProp(propAccess.MemberName())
+			}
+		}
+	}
+	if prop != nil && rhsExpr != nil {
+		prop.Types.merge(rhsExpr.GetTypes())
 	}
 }

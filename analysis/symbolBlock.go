@@ -3,14 +3,23 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
-type symbolConstructor func(*Document, *phrase.Phrase) Symbol
-type symbolConstructorForToken func(*Document, *lexer.Token) Symbol
+type symbolConstructor func(analyser, *Document, *phrase.Phrase) Symbol
+type symbolConstructorForToken func(analyser, *Document, *lexer.Token) Symbol
 
 type void = struct{}
 
 var empty void
+
+type analyser struct {
+	nodes util.NodeStack
+}
+
+func newAnalyser() analyser {
+	return analyser{}
+}
 
 var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.ExpressionStatement:            empty,
@@ -90,23 +99,23 @@ func init() {
 	}
 }
 
-func scanNode(document *Document, node phrase.AstNode) {
+func scanNode(a analyser, document *Document, node phrase.AstNode) {
 	var symbol Symbol = nil
 	shouldSkipAdding := false
 
 	if p, ok := node.(*phrase.Phrase); ok {
 		if p.Type == phrase.NamespaceDefinition {
-			newNamespace(document, p)
+			newNamespace(a, document, p)
 			return
 		}
 
-		scanForExpression(document, p)
+		scanForExpression(a, document, p)
 		if _, ok := typesToScanForChildren[p.Type]; ok {
-			scanForChildren(document, p)
+			scanForChildren(a, document, p)
 			return
 		}
 		if constructor, ok := symbolConstructorMap[p.Type]; ok {
-			symbol = constructor(document, p)
+			symbol = constructor(a, document, p)
 		}
 		switch p.Type {
 		case phrase.ArgumentExpressionList:
@@ -114,7 +123,7 @@ func scanNode(document *Document, node phrase.AstNode) {
 		}
 	} else if t, ok := node.(*lexer.Token); ok {
 		if constructor, ok := tokenToSymbolConstructor[t.Type]; ok {
-			symbol = constructor(document, t)
+			symbol = constructor(a, document, t)
 		}
 	}
 
@@ -123,8 +132,10 @@ func scanNode(document *Document, node phrase.AstNode) {
 	}
 }
 
-func scanForChildren(document *Document, node *phrase.Phrase) {
+func scanForChildren(a analyser, document *Document, node *phrase.Phrase) {
+	a.nodes.Push(node)
 	for _, child := range node.Children {
-		scanNode(document, child)
+		scanNode(a, document, child)
 	}
+	a.nodes.Pop()
 }

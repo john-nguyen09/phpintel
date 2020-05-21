@@ -15,7 +15,7 @@ type GlobalVariable struct {
 	Name string
 }
 
-func newGlobalDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newGlobalDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

@@ -14,7 +14,7 @@ type ClassAccess struct {
 
 var _ (HasTypes) = (*ClassAccess)(nil)
 
-func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
+func newClassAccess(a analyser, document *Document, node *phrase.Phrase) *ClassAccess {
 	classAccess := &ClassAccess{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -35,7 +35,7 @@ func newClassAccess(document *Document, node *phrase.Phrase) *ClassAccess {
 			typeString.SetFQN(document.currImportTable().GetClassReferenceFQN(typeString))
 			types.add(typeString)
 		case phrase.SimpleVariable:
-			expr := scanForExpression(document, node)
+			expr := scanForExpression(a, document, node)
 			if expr != nil {
 				classAccess.Scope = expr
 			}

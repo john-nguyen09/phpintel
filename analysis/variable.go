@@ -16,15 +16,13 @@ type Variable struct {
 	hasResolved        bool
 }
 
-var _ CanAddType = (*Variable)(nil)
-
-func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
-	return newVariable(document, node)
+func newVariableExpression(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
+	return newVariable(a, document, node)
 }
 
-func newVariable(document *Document, node *phrase.Phrase) (*Variable, bool) {
+func newVariable(a analyser, document *Document, node *phrase.Phrase) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
-	document.pushVariable(variable, variable.GetLocation().Range.End)
+	document.pushVariable(a, variable, variable.GetLocation().Range.End)
 	return variable, true
 }
 
@@ -109,10 +107,6 @@ func (s *Variable) GetName() string {
 	return s.Name
 }
 
-func (s *Variable) AddTypes(t TypeComposite) {
-	s.Type.merge(t)
-}
-
 type contextualVariable struct {
 	v     *Variable
 	start protocol.Position
@@ -143,7 +137,7 @@ func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
 	}
 }
 
-func (vt *VariableTable) add(variable *Variable, start protocol.Position) {
+func (vt *VariableTable) add(a analyser, variable *Variable, start protocol.Position) {
 	currentVars := []contextualVariable{}
 	newCtxVar := newContextualVariable(variable, start)
 	if prevVars, ok := vt.variables[variable.Name]; ok {
@@ -156,7 +150,7 @@ func (vt *VariableTable) add(variable *Variable, start protocol.Position) {
 		prevVars = append(prevVars[:index], append([]contextualVariable{newCtxVar}, prevVars[index:]...)...)
 		vt.variables[variable.Name] = prevVars
 	} else {
-		vt.variables[variable.Name] = append(currentVars, newContextualVariable(variable, start))
+		vt.variables[variable.Name] = append(currentVars, newCtxVar)
 	}
 }
 

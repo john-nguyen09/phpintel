@@ -16,19 +16,19 @@ type Const struct {
 	Value string
 }
 
-func newConstDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newConstDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ConstElementList {
-			scanForChildren(document, p)
+			scanForChildren(a, document, p)
 		}
 		child = traverser.Advance()
 	}
 	return nil
 }
 
-func newConst(document *Document, node *phrase.Phrase) Symbol {
+func newConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}

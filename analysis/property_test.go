@@ -88,3 +88,25 @@ func TestPropertyWithTypes(t *testing.T) {
 	})
 	cupaloy.SnapshotT(t, results)
 }
+
+func TestAssignPropertyTypesInConstructor(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+class TestAssignPropertyTypesInConstructorClass
+{
+	public $prop1;
+	public function __construct(DatabaseInterface $db)
+	{
+		$this->prop1 = $db;
+	}
+}`))
+	doc.Load()
+	results := []string{}
+	TraverseDocument(doc, func(s Symbol) {
+		if prop, ok := s.(*Property); ok {
+			results = append(results, prop.Types.ToString())
+		}
+	}, nil)
+	assert.Equal(t, []string{
+		"\\DatabaseInterface",
+	}, results)
+}

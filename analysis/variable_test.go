@@ -13,6 +13,7 @@ func TestVariableTable(t *testing.T) {
 		Start: protocol.Position{Line: 0, Character: 0},
 		End:   protocol.Position{Line: 8, Character: 0},
 	}, 0)
+	a := newAnalyser()
 	types1 := newTypeComposite()
 	types1.add(NewTypeString("\\Class1"))
 	types2 := newTypeComposite()
@@ -37,9 +38,9 @@ func TestVariableTable(t *testing.T) {
 			Name: "$var1",
 		},
 	}
-	vt.add(var1, protocol.Position{Line: 0, Character: 5})
-	vt.add(var3, protocol.Position{Line: 5, Character: 5})
-	vt.add(var2, protocol.Position{Line: 3, Character: 8})
+	vt.add(a, var1, protocol.Position{Line: 0, Character: 5})
+	vt.add(a, var3, protocol.Position{Line: 5, Character: 5})
+	vt.add(a, var2, protocol.Position{Line: 3, Character: 8})
 	actualPositions := []protocol.Position{}
 	for _, v := range vt.variables["$var1"] {
 		actualPositions = append(actualPositions, v.start)
@@ -58,7 +59,7 @@ func TestVariableTable(t *testing.T) {
 			Name: "$var2",
 		},
 	}
-	vt.add(var4, protocol.Position{Line: 7, Character: 4})
+	vt.add(a, var4, protocol.Position{Line: 7, Character: 4})
 
 	vars := vt.GetVariables(protocol.Position{Line: 6, Character: 0})
 	actualNames := []string{}

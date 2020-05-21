@@ -14,14 +14,14 @@ type MethodAccess struct {
 
 var _ HasTypesHasScope = (*MethodAccess)(nil)
 
-func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		expression := scanForExpression(document, p)
+		expression := scanForExpression(a, document, p)
 		if expression != nil {
 			methodAccess.Scope = expression
 		}
@@ -34,7 +34,7 @@ func newMethodAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ArgumentExpressionList:
-				newArgumentList(document, p)
+				newArgumentList(a, document, p)
 				break
 			}
 		}

@@ -43,7 +43,7 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 	return property
 }
 
-func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func newPropertyDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	visibility := Public
 	isStatic := false
@@ -54,7 +54,7 @@ func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
 			case phrase.MemberModifierList:
 				visibility, isStatic, _ = getMemberModifier(p)
 			case phrase.PropertyElementList:
-				newPropertyList(document, p, visibility, isStatic)
+				newPropertyList(a, document, p, visibility, isStatic)
 			}
 		}
 		child = traverser.Advance()
@@ -62,17 +62,18 @@ func newPropertyDeclaration(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func newPropertyList(document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) {
+func newPropertyList(a analyser, document *Document, node *phrase.Phrase,
+	visibility VisibilityModifierValue, isStatic bool) {
 	traverser := util.NewTraverser(node)
 	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.PropertyElement {
-			property := newProperty(document, p, visibility, isStatic)
+			property := newProperty(a, document, p, visibility, isStatic)
 			document.addSymbol(property)
 		}
 	}
 }
 
-func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) *Property {
+func newProperty(a analyser, document *Document, node *phrase.Phrase, visibility VisibilityModifierValue, isStatic bool) *Property {
 	property := &Property{
 		location:           document.GetNodeLocation(node),
 		VisibilityModifier: visibility,
@@ -91,7 +92,7 @@ func newProperty(document *Document, node *phrase.Phrase, visibility VisibilityM
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.PropertyInitialiser:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		} else if t, ok := child.(*lexer.Token); ok && t.Type == lexer.VariableName {
 			property.Name = document.getTokenText(t)

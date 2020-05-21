@@ -13,14 +13,14 @@ type ScopedConstantAccess struct {
 
 var _ HasTypesHasScope = (*ScopedConstantAccess)(nil)
 
-func newScopedConstantAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newScopedConstantAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, p)
+		classAccess := newClassAccess(a, document, p)
 		document.addSymbol(classAccess)
 		constantAccess.Scope = classAccess
 	}

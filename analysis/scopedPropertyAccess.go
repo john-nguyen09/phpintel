@@ -16,14 +16,14 @@ type ScopedPropertyAccess struct {
 
 var _ HasTypesHasScope = (*ScopedPropertyAccess)(nil)
 
-func newScopedPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newScopedPropertyAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		classAccess := newClassAccess(document, p)
+		classAccess := newClassAccess(a, document, p)
 		document.addSymbol(classAccess)
 		propertyAccess.Scope = classAccess
 	}

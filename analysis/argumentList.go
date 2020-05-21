@@ -19,7 +19,7 @@ type ArgumentList struct {
 
 var _ BlockSymbol = (*ArgumentList)(nil)
 
-func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
+func newArgumentList(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
 		location: document.GetNodeLocation(node),
 	}
@@ -59,7 +59,7 @@ func newArgumentList(document *Document, node *phrase.Phrase) Symbol {
 		argumentList.argumentRanges = append(argumentList.argumentRanges, document.nodeRange(argument))
 	}
 	for _, n := range nodesToScan {
-		scanNode(document, n)
+		scanNode(a, document, n)
 	}
 	document.popBlock()
 	return argumentList

@@ -22,7 +22,7 @@ var _ HasScope = (*ClassConst)(nil)
 var _ Symbol = (*ClassConst)(nil)
 var _ SymbolReference = (*ClassConst)(nil)
 
-func newClassConst(document *Document, node *phrase.Phrase) Symbol {
+func newClassConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}

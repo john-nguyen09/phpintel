@@ -11,7 +11,7 @@ type ForeachCollection struct {
 	scope    HasTypes
 }
 
-func analyseForeachStatement(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func analyseForeachStatement(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	var f *ForeachCollection = nil
@@ -19,11 +19,11 @@ func analyseForeachStatement(document *Document, node *phrase.Phrase) (HasTypes,
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ForeachCollection:
-				f = newForeachCollection(document, p)
+				f = newForeachCollection(a, document, p)
 			case phrase.ForeachValue:
-				analyseForeachValue(document, f, p)
+				analyseForeachValue(a, document, f, p)
 			case phrase.CompoundStatement:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -31,7 +31,7 @@ func analyseForeachStatement(document *Document, node *phrase.Phrase) (HasTypes,
 	return nil, false
 }
 
-func newForeachCollection(document *Document, node *phrase.Phrase) *ForeachCollection {
+func newForeachCollection(a analyser, document *Document, node *phrase.Phrase) *ForeachCollection {
 	f := &ForeachCollection{
 		location: document.GetNodeLocation(node),
 	}
@@ -39,7 +39,7 @@ func newForeachCollection(document *Document, node *phrase.Phrase) *ForeachColle
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
-			expr := scanForExpression(document, p)
+			expr := scanForExpression(a, document, p)
 			if expr != nil {
 				f.setExpression(expr)
 			}
@@ -49,14 +49,14 @@ func newForeachCollection(document *Document, node *phrase.Phrase) *ForeachColle
 	return f
 }
 
-func analyseForeachValue(document *Document, f *ForeachCollection, node *phrase.Phrase) {
+func analyseForeachValue(a analyser, document *Document, f *ForeachCollection, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.SimpleVariable:
-				if v, shouldAdd := newVariable(document, p); shouldAdd {
+				if v, shouldAdd := newVariable(a, document, p); shouldAdd {
 					v.setExpression(f)
 					document.addSymbol(v)
 				}
