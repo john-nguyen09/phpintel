@@ -277,7 +277,7 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 		ciDeletor.delete()
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(b)
-		riDeletor := newReferenceIndexDeletor(s.db, uri)
+		riDeletor := newReferenceIndexDeletor(s, uri)
 		riDeletor.Delete(b)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
@@ -333,7 +333,7 @@ func (s *Store) SyncDocument(document *Document) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
 		ciDeletor := newFuzzyEngineDeletor(s.fEngine, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
-		riDeletor := newReferenceIndexDeletor(s.db, document.GetURI())
+		riDeletor := newReferenceIndexDeletor(s, document.GetURI())
 
 		s.writeAllSymbols(b, document, ciDeletor, syDeletor, riDeletor)
 

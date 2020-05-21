@@ -55,15 +55,16 @@ type referenceIndexDeletor struct {
 	docKeys   map[string]bool
 }
 
-func newReferenceIndexDeletor(db storage.DB, uri string) *referenceIndexDeletor {
+func newReferenceIndexDeletor(store *Store, uri string) *referenceIndexDeletor {
 	indexKeys := map[string]bool{}
 	docKeys := map[string]bool{}
-	entry := newEntry(documentReferenceIndex, uri)
-	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
+	canonicalURI := util.CanonicaliseURI(store.uri, uri)
+	entry := newEntry(documentReferenceIndex, canonicalURI)
+	store.db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 		docKey := string(it.Key())
 		docKeys[docKey] = true
 		keyInfo := strings.Split(docKey, KeySep)
-		indexKeys[keyInfo[2]] = true
+		indexKeys[strings.Join(keyInfo[2:], KeySep)] = true
 	})
 	return &referenceIndexDeletor{
 		indexKeys: indexKeys,
@@ -84,7 +85,8 @@ func (d *referenceIndexDeletor) MarkNotDelete(store *Store, s Symbol, fqn string
 
 func (d *referenceIndexDeletor) Delete(b storage.Batch) {
 	for indexKey := range d.indexKeys {
-		b.Delete([]byte(indexKey))
+		entry := newEntry(referenceIndexCollection, indexKey)
+		b.Delete(entry.getKeyBytes())
 	}
 	for docKey := range d.docKeys {
 		b.Delete([]byte(docKey))
