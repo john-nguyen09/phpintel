@@ -17,3 +17,10 @@ func TestAssignment(t *testing.T) {
 	document.Load()
 	cupaloy.SnapshotT(t, document.hasTypesSymbols())
 }
+
+func TestRegressionOnErrorAssignment(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$var1 = !empty($var2) ? 
+`))
+	doc.Load()
+}

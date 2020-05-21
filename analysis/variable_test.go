@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,9 +39,9 @@ func TestVariableTable(t *testing.T) {
 			Name: "$var1",
 		},
 	}
-	vt.add(a, var1, protocol.Position{Line: 0, Character: 5})
-	vt.add(a, var3, protocol.Position{Line: 5, Character: 5})
-	vt.add(a, var2, protocol.Position{Line: 3, Character: 8})
+	vt.add(a, var1, protocol.Position{Line: 0, Character: 5}, true)
+	vt.add(a, var3, protocol.Position{Line: 5, Character: 5}, true)
+	vt.add(a, var2, protocol.Position{Line: 3, Character: 8}, true)
 	actualPositions := []protocol.Position{}
 	for _, v := range vt.variables["$var1"] {
 		actualPositions = append(actualPositions, v.start)
@@ -59,7 +60,7 @@ func TestVariableTable(t *testing.T) {
 			Name: "$var2",
 		},
 	}
-	vt.add(a, var4, protocol.Position{Line: 7, Character: 4})
+	vt.add(a, var4, protocol.Position{Line: 7, Character: 4}, true)
 
 	vars := vt.GetVariables(protocol.Position{Line: 6, Character: 0})
 	actualNames := []string{}
@@ -91,4 +92,85 @@ func TestVariableTable(t *testing.T) {
 			assert.Equal(t, "\\Class2", v.GetTypes().ToString())
 		}
 	}
+}
+
+func TestUnusedVariables(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$var1 = new Class();
+
+$var1 = new DateTime();
+$var1->modify('tomorrow');
+
+function testFunction1()
+{
+	$var1 = new DateTime();
+	$var1->format('U');
+
+	$var1 = new Class();
+}
+
+$var2 = null;
+$callback = function() use ($var2) {
+}`))
+	doc.Load()
+
+	t.Run("TestDocumentUnusedVariables", func(t *testing.T) {
+		results := []protocol.Location{}
+		for _, unusedVar := range doc.UnusedVariables() {
+			results = append(results, unusedVar.GetLocation())
+		}
+		sort.SliceStable(results, func(i, j int) bool {
+			return util.CompareRange(results[i].Range, results[j].Range) < 0
+		})
+		assert.Equal(t, []protocol.Location{
+			{URI: "test1", Range: protocol.Range{
+				Start: protocol.Position{Line: 11, Character: 1},
+				End:   protocol.Position{Line: 11, Character: 6},
+			}},
+			{URI: "test1", Range: protocol.Range{
+				Start: protocol.Position{Line: 15, Character: 0},
+				End:   protocol.Position{Line: 15, Character: 9},
+			}},
+			{URI: "test1", Range: protocol.Range{
+				Start: protocol.Position{Line: 15, Character: 28},
+				End:   protocol.Position{Line: 15, Character: 33},
+			}},
+		}, results)
+	})
+
+	t.Run("TestMemberNameVariableReference", func(t *testing.T) {
+		doc2 := NewDocument("test2", []byte(`<?php
+$shortname = 'type' . ucfirst($taskType);
+$task->$shortname()->delete();`))
+		doc2.Load()
+		results := []protocol.Location{}
+		for _, unusedVar := range doc2.UnusedVariables() {
+			results = append(results, unusedVar.GetLocation())
+		}
+		assert.NotContains(t, results, protocol.Location{
+			URI: "test2", Range: protocol.Range{
+				Start: protocol.Position{Line: 1, Character: 0},
+				End:   protocol.Position{Line: 1, Character: 11},
+			},
+		})
+	})
+
+	t.Run("TestGlobalVariableDeclaration", func(t *testing.T) {
+		doc3 := NewDocument("test3", []byte(`<?php
+function thisIsAFunction()
+{
+	global $DB;
+}`))
+		doc3.Load()
+		results := []protocol.Location{}
+		for _, unusedVar := range doc3.UnusedVariables() {
+			results = append(results, unusedVar.GetLocation())
+		}
+		assert.Equal(t, []protocol.Location{
+			{URI: "test3", Range: protocol.Range{
+				Start: protocol.Position{Line: 3, Character: 8},
+				End:   protocol.Position{Line: 3, Character: 11},
+			}},
+		}, results)
+	})
 }

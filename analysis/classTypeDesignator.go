@@ -46,7 +46,7 @@ func (s *ClassTypeDesignator) analyseNode(a analyser, document *Document, node *
 				relativeScope := newRelativeScope(document, s.Location)
 				s.Type.merge(relativeScope.Types)
 			case phrase.SimpleVariable:
-				if variable, ok := newVariable(a, document, p); ok {
+				if variable, ok := newVariable(a, document, p, false); ok {
 					document.addSymbol(variable)
 				}
 			}

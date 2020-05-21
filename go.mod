@@ -7,10 +7,11 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
+	github.com/davecgh/go-spew v1.1.1
 	github.com/evorts/html-to-markdown v0.0.3
 	github.com/hashicorp/go-immutable-radix v1.2.0
 	github.com/jmhodges/levigo v1.0.0
-	github.com/john-nguyen09/go-phpparser v0.0.0-20200515114932-96dc8bc45d36
+	github.com/john-nguyen09/go-phpparser v0.0.0-20200519064129-f8e3246984b4
 	github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d
 	github.com/karrick/godirwalk v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0

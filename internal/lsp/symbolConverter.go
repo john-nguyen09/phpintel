@@ -31,6 +31,12 @@ func wrapPHPCode(sb *strings.Builder, fn func(*strings.Builder)) {
 	sb.WriteString("\n```\n")
 }
 
+func wrapCode(sb *strings.Builder, fn func(*strings.Builder)) {
+	sb.WriteString("```\n")
+	fn(sb)
+	sb.WriteString("\n````\n")
+}
+
 func writeHorLine(sb *strings.Builder) {
 	sb.WriteString("\n____\n")
 }
@@ -305,7 +311,7 @@ func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *
 
 func variableToHover(variable *analysis.Variable) *protocol.Hover {
 	sb := &strings.Builder{}
-	wrapPHPCode(sb, func(sb *strings.Builder) {
+	wrapCode(sb, func(sb *strings.Builder) {
 		if t := variable.GetTypes(); !t.IsEmpty() {
 			sb.WriteString(t.ToString())
 			sb.WriteString(" ")

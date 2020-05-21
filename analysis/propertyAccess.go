@@ -27,7 +27,7 @@ func newPropertyAccess(a analyser, document *Document, node *phrase.Phrase) (Has
 		}
 	}
 
-	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)
+	propertyAccess.Name, propertyAccess.Location = readMemberName(a, document, traverser)
 	return propertyAccess, true
 }
 

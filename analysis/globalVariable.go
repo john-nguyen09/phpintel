@@ -22,7 +22,7 @@ func newGlobalDeclaration(a analyser, document *Document, node *phrase.Phrase) S
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.VariableNameList:
-				analyseVariableNameList(document, p)
+				analyseVariableNameList(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -30,12 +30,12 @@ func newGlobalDeclaration(a analyser, document *Document, node *phrase.Phrase) S
 	return nil
 }
 
-func analyseVariableNameList(document *Document, node *phrase.Phrase) {
+func analyseVariableNameList(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
-			globalVariable := newGlobalVariable(document, p)
+			globalVariable := newGlobalVariable(a, document, p)
 			if globalVariable != nil {
 				document.addSymbol(globalVariable)
 			}
@@ -44,7 +44,7 @@ func analyseVariableNameList(document *Document, node *phrase.Phrase) {
 	}
 }
 
-func newGlobalVariable(document *Document, node *phrase.Phrase) Symbol {
+func newGlobalVariable(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	globalVariable := &GlobalVariable{
 		location: document.GetNodeLocation(node),
 		Name:     document.getPhraseText(node),
@@ -56,6 +56,7 @@ func newGlobalVariable(document *Document, node *phrase.Phrase) Symbol {
 	}
 	variableTable := document.getCurrentVariableTable()
 	variableTable.setReferenceGlobal(globalVariable.GetName())
+	document.pushVariable(a, globalVariable.toVariable(), globalVariable.location.Range.End, true)
 	return globalVariable
 }
 
@@ -102,6 +103,17 @@ func (s *GlobalVariable) Serialise(e *storage.Encoder) {
 	s.types.Write(e)
 	e.WriteString(s.description)
 	e.WriteString(s.Name)
+}
+
+func (s GlobalVariable) toVariable() *Variable {
+	return &Variable{
+		Expression: Expression{
+			Location: s.location,
+			Type:     s.types,
+			Name:     s.Name,
+		},
+		description: s.description,
+	}
 }
 
 func ReadGlobalVariable(d *storage.Decoder) *GlobalVariable {

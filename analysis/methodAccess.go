@@ -27,7 +27,7 @@ func newMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTy
 		}
 	}
 	traverser.Advance()
-	methodAccess.Name, methodAccess.Location = readMemberName(document, traverser)
+	methodAccess.Name, methodAccess.Location = readMemberName(a, document, traverser)
 	document.addSymbol(methodAccess)
 	child := traverser.Advance()
 	for child != nil {

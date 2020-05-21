@@ -71,6 +71,9 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.PostfixDecrementExpression:     empty,
 	phrase.PrefixIncrementExpression:      empty,
 	phrase.PrefixDecrementExpression:      empty,
+	phrase.ForInitialiser:                 empty,
+	phrase.ForControl:                     empty,
+	phrase.ForEndOfLoop:                   empty,
 }
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{

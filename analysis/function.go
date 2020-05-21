@@ -47,7 +47,7 @@ func newFunction(a analyser, document *Document, node *phrase.Phrase) Symbol {
 				}
 				for _, param := range function.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length))
+					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
 				}
 			case phrase.FunctionDeclarationBody:
 				scanForChildren(a, document, p)
