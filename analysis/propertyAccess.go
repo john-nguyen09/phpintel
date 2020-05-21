@@ -14,20 +14,20 @@ type PropertyAccess struct {
 
 var _ HasTypesHasScope = (*PropertyAccess)(nil)
 
-func newPropertyAccess(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newPropertyAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &PropertyAccess{
 		Expression: Expression{},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
 	if p, ok := firstChild.(*phrase.Phrase); ok {
-		expression := scanForExpression(document, p)
+		expression := scanForExpression(a, document, p)
 		if expression != nil {
 			propertyAccess.Scope = expression
 		}
 	}
 
-	propertyAccess.Name, propertyAccess.Location = readMemberName(document, traverser)
+	propertyAccess.Name, propertyAccess.Location = readMemberName(a, document, traverser)
 	return propertyAccess, true
 }
 

@@ -7,7 +7,7 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-func readMemberName(document *Document, traverser *util.Traverser) (string, protocol.Location) {
+func readMemberName(a analyser, document *Document, traverser *util.Traverser) (string, protocol.Location) {
 	next := traverser.Peek()
 	location := protocol.Location{}
 	for nextToken, ok := next.(*lexer.Token); ok && (nextToken.Type == lexer.Whitespace || nextToken.Type == lexer.Arrow); {
@@ -28,7 +28,7 @@ func readMemberName(document *Document, traverser *util.Traverser) (string, prot
 			}
 			if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
 				name = document.getPhraseText(p)
-				v, shouldAdd := newVariable(document, p, false)
+				v, shouldAdd := newVariable(a, document, p, false)
 				if shouldAdd {
 					document.addSymbol(v)
 				}

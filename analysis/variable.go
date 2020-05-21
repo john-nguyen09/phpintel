@@ -16,15 +16,13 @@ type Variable struct {
 	hasResolved        bool
 }
 
-var _ CanAddType = (*Variable)(nil)
-
-func newVariableExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
-	return newVariable(document, node, false)
+func newVariableExpression(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
+	return newVariable(a, document, node, false)
 }
 
-func newVariable(document *Document, node *phrase.Phrase, isDeclaration bool) (*Variable, bool) {
+func newVariable(a analyser, document *Document, node *phrase.Phrase, isDeclaration bool) (*Variable, bool) {
 	variable := newVariableWithoutPushing(document, node)
-	document.pushVariable(variable, variable.GetLocation().Range.End, isDeclaration)
+	document.pushVariable(a, variable, variable.GetLocation().Range.End, isDeclaration)
 	return variable, true
 }
 
@@ -109,10 +107,6 @@ func (s *Variable) GetName() string {
 	return s.Name
 }
 
-func (s *Variable) AddTypes(t TypeComposite) {
-	s.Type.merge(t)
-}
-
 type contextualVariable struct {
 	v             *Variable
 	start         protocol.Position
@@ -147,7 +141,7 @@ func newVariableTable(locationRange protocol.Range, level int) *VariableTable {
 	}
 }
 
-func (vt *VariableTable) add(variable *Variable, start protocol.Position, isDeclaration bool) {
+func (vt *VariableTable) add(a analyser, variable *Variable, start protocol.Position, isDeclaration bool) {
 	currentVars := []contextualVariable{}
 	newCtxVar := newContextualVariable(variable, start, isDeclaration)
 	if !isDeclaration {

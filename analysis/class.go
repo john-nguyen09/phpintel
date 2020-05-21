@@ -56,7 +56,7 @@ func getMemberModifier(node *phrase.Phrase) (VisibilityModifierValue, bool, Clas
 	return visibilityModifier, isStatic, classModifier
 }
 
-func newClass(document *Document, node *phrase.Phrase) Symbol {
+func newClass(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	class := &Class{
 		Location: document.GetNodeLocation(node),
 	}
@@ -71,9 +71,9 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassDeclarationHeader:
-				class.analyseHeader(document, p, phpDoc)
+				class.analyseHeader(a, document, p, phpDoc)
 			case phrase.ClassDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -84,7 +84,7 @@ func newClass(document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase, phpDoc *phpDocComment) {
+func (s *Class) analyseHeader(a analyser, document *Document, classHeader *phrase.Phrase, phpDoc *phpDocComment) {
 	traverser := util.NewTraverser(classHeader)
 	child := traverser.Advance()
 	for child != nil {
@@ -121,7 +121,7 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase, ph
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassBaseClause:
-				s.extends(document, p)
+				s.extends(a, document, p)
 			case phrase.ClassInterfaceClause:
 				s.implements(document, p)
 			}
@@ -130,7 +130,7 @@ func (s *Class) analyseHeader(document *Document, classHeader *phrase.Phrase, ph
 	}
 }
 
-func (s *Class) extends(document *Document, p *phrase.Phrase) {
+func (s *Class) extends(a analyser, document *Document, p *phrase.Phrase) {
 	traverser := util.NewTraverser(p)
 	child := traverser.Advance()
 	var classAccessNode *phrase.Phrase = nil
@@ -150,7 +150,7 @@ func (s *Class) extends(document *Document, p *phrase.Phrase) {
 	}
 
 	if classAccessNode != nil {
-		classAccess := newClassAccess(document, classAccessNode)
+		classAccess := newClassAccess(a, document, classAccessNode)
 		document.addSymbol(classAccess)
 	}
 }
@@ -282,4 +282,18 @@ func (s *Class) ReferenceFQN() string {
 // ReferenceLocation returns the location of the class' name
 func (s *Class) ReferenceLocation() protocol.Location {
 	return s.refLocation
+}
+
+func (s *Class) findProp(name string) *Property {
+	var (
+		prop *Property
+		ok   bool
+	)
+	for _, child := range s.children {
+		if prop, ok = child.(*Property); ok && prop.Name == name {
+			break
+		}
+		prop = nil
+	}
+	return prop
 }

@@ -21,7 +21,7 @@ func TestPhpDocComment(t *testing.T) {
 	* @throws \Illuminate\Validation\ValidationException
 	*/`
 	doc := NewDocument("test", []byte(phpDocStr))
-	phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
+	phpDoc := newPhpDocFromNode(newAnalyser(), doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
 	cupaloy.SnapshotT(t, phpDoc)
 
 	phpDocStrs := []string{
@@ -48,7 +48,7 @@ func TestPhpDocComment(t *testing.T) {
 	}
 	for i, phpDocStr := range phpDocStrs {
 		doc := NewDocument("test", []byte(phpDocStr))
-		phpDoc := newPhpDocFromNode(doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
+		phpDoc := newPhpDocFromNode(newAnalyser(), doc, doc.GetRootNode().Children[1].(*phrase.Phrase))
 		t.Run("phpDocStr_"+strconv.Itoa(i), func(t *testing.T) {
 			cupaloy.SnapshotT(t, phpDoc)
 		})

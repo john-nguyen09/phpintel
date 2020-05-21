@@ -51,10 +51,6 @@ type HasName interface {
 	GetName() string
 }
 
-type CanAddType interface {
-	AddTypes(types TypeComposite)
-}
-
 type expressionKind int
 
 const (
@@ -70,7 +66,7 @@ const (
 	scopedPropertyAccessKind = iota
 )
 
-type exprConstructor func(*Document, *phrase.Phrase) (HasTypes, bool)
+type exprConstructor func(analyser, *Document, *phrase.Phrase) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[phrase.PhraseType]exprConstructor
 
@@ -97,7 +93,7 @@ func init() {
 	}
 }
 
-func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
+func scanForExpression(a analyser, document *Document, node *phrase.Phrase) HasTypes {
 	var expression HasTypes = nil
 	shouldAdd := false
 	defer func() {
@@ -109,17 +105,17 @@ func scanForExpression(document *Document, node *phrase.Phrase) HasTypes {
 		}
 	}()
 	if constructor, ok := nodeTypeToExprConstructor[node.Type]; ok {
-		expression, shouldAdd = constructor(document, node)
+		expression, shouldAdd = constructor(a, document, node)
 	}
 	return expression
 }
 
-func processToScanChildren(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func processToScanChildren(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
-			scanForExpression(document, p)
+			scanForExpression(a, document, p)
 		}
 		child = traverser.Advance()
 	}
@@ -133,7 +129,7 @@ type derivedExpression struct {
 
 var _ HasTypes = (*derivedExpression)(nil)
 
-func newDerivedExpression(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newDerivedExpression(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	derivedExpr := &derivedExpression{
 		Expression: Expression{
 			Location: document.GetNodeLocation(node),
@@ -148,7 +144,7 @@ func newDerivedExpression(document *Document, node *phrase.Phrase) (HasTypes, bo
 			if _, ok := nodeTypeToExprConstructor[p.Type]; !ok {
 				nodesToScan = append(nodesToScan, p)
 			}
-			expr := scanForExpression(document, p)
+			expr := scanForExpression(a, document, p)
 			if expr != nil {
 				derivedExpr.Scope = expr
 				break
@@ -159,7 +155,7 @@ func newDerivedExpression(document *Document, node *phrase.Phrase) (HasTypes, bo
 		child = traverser.Advance()
 	}
 	for _, node := range nodesToScan {
-		scanNode(document, node)
+		scanNode(a, document, node)
 	}
 	return derivedExpr, false
 }

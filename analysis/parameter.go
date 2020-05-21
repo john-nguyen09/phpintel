@@ -19,7 +19,7 @@ type Parameter struct {
 	Value string        `json:"Value"`
 }
 
-func newParameter(document *Document, node *phrase.Phrase) *Parameter {
+func newParameter(a analyser, document *Document, node *phrase.Phrase) *Parameter {
 	param := &Parameter{
 		location: document.GetNodeLocation(node),
 	}
@@ -40,7 +40,7 @@ func newParameter(document *Document, node *phrase.Phrase) *Parameter {
 					constAccess HasTypes
 					shouldAdd   bool
 				)
-				if constAccess, shouldAdd = newConstantAccess(document, p); shouldAdd {
+				if constAccess, shouldAdd = newConstantAccess(a, document, p); shouldAdd {
 					document.addSymbol(constAccess)
 				}
 				if constAccess != nil && hasEqual {

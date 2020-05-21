@@ -96,7 +96,7 @@ func (s *Document) Load() {
 	s.hasChanges = false
 	rootNode := s.GetRootNode()
 	s.pushVariableTable(rootNode)
-	scanForChildren(s, rootNode)
+	scanForChildren(newAnalyser(), s, rootNode)
 
 	if len(s.importTables) == 0 {
 		s.pushImportTable(rootNode)
@@ -334,7 +334,7 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 	return traverseAndFind(lastFoundVarTable)
 }
 
-func (s *Document) pushVariable(variable *Variable, pos protocol.Position, isDeclaration bool) {
+func (s *Document) pushVariable(a analyser, variable *Variable, pos protocol.Position, isDeclaration bool) {
 	variableTable := s.getCurrentVariableTable()
 	currentVariable := variableTable.get(variable.Name, pos)
 	if currentVariable != nil {
@@ -343,7 +343,7 @@ func (s *Document) pushVariable(variable *Variable, pos protocol.Position, isDec
 	if variableTable.level == 0 || variableTable.canReferenceGlobal(variable.Name) {
 		variable.canReferenceGlobal = true
 	}
-	variableTable.add(variable, pos, isDeclaration)
+	variableTable.add(a, variable, pos, isDeclaration)
 }
 
 // Even though the name indicates class but actually this will also

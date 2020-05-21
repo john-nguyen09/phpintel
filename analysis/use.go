@@ -14,7 +14,7 @@ const (
 	UseConst            = iota
 )
 
-func processNamespaceUseDeclaration(document *Document, node *phrase.Phrase) Symbol {
+func processNamespaceUseDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	useType := UseClass

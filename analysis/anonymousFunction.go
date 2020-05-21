@@ -17,7 +17,7 @@ type AnonymousFunction struct {
 
 var _ BlockSymbol = (*AnonymousFunction)(nil)
 
-func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
+func newAnonymousFunction(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	prevVariableTable := document.getCurrentVariableTable()
 	anonFunc := &AnonymousFunction{
 		location: document.GetNodeLocation(node),
@@ -31,13 +31,13 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.AnonymousFunctionHeader:
-				anonFunc.analyseHeader(document, p, variableTable, prevVariableTable)
+				anonFunc.analyseHeader(a, document, p, variableTable, prevVariableTable)
 				for _, param := range anonFunc.Params {
 					lastToken := util.LastToken(p)
-					variableTable.add(param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
+					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
 				}
 			case phrase.FunctionDeclarationBody:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -47,7 +47,7 @@ func newAnonymousFunction(document *Document, node *phrase.Phrase) Symbol {
 	return anonFunc
 }
 
-func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phrase,
+func (s *AnonymousFunction) analyseHeader(a analyser, document *Document, node *phrase.Phrase,
 	variableTable *VariableTable, prevVariableTable *VariableTable) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -55,28 +55,28 @@ func (s *AnonymousFunction) analyseHeader(document *Document, node *phrase.Phras
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ParameterDeclarationList:
-				s.analyseParameterDeclarationList(document, p)
+				s.analyseParameterDeclarationList(a, document, p)
 			case phrase.AnonymousFunctionUseClause:
-				s.analyseUseClause(document, p, variableTable, prevVariableTable)
+				s.analyseUseClause(a, document, p, variableTable, prevVariableTable)
 			}
 		}
 		child = traverser.Advance()
 	}
 }
 
-func (s *AnonymousFunction) analyseParameterDeclarationList(document *Document, node *phrase.Phrase) {
+func (s *AnonymousFunction) analyseParameterDeclarationList(a analyser, document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ParameterDeclaration {
-			param := newParameter(document, p)
+			param := newParameter(a, document, p)
 			s.Params = append(s.Params, param)
 		}
 		child = traverser.Advance()
 	}
 }
 
-func (s *AnonymousFunction) analyseUseClause(document *Document, node *phrase.Phrase,
+func (s *AnonymousFunction) analyseUseClause(a analyser, document *Document, node *phrase.Phrase,
 	variableTable *VariableTable, prevVariableTable *VariableTable) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
@@ -92,8 +92,8 @@ func (s *AnonymousFunction) analyseUseClause(document *Document, node *phrase.Ph
 					for child != nil {
 						if p, ok := child.(*phrase.Phrase); ok {
 							if p.Type == phrase.AnonymousFunctionUseVariable {
-								variable, shouldAdd := newVariable(document, p, true)
-								prevVariableTable.add(variable, variable.GetLocation().Range.End, false)
+								variable, shouldAdd := newVariable(a, document, p, true)
+								prevVariableTable.add(a, variable, variable.GetLocation().Range.End, false)
 								if shouldAdd {
 									document.addSymbol(variable)
 								}

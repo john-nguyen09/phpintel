@@ -11,7 +11,7 @@ type ClassTypeDesignator struct {
 	Expression
 }
 
-func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, bool) {
+func newClassTypeDesignator(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	classTypeDesignator := &ClassTypeDesignator{}
 	document.addSymbol(classTypeDesignator)
 	traverser := util.NewTraverser(node)
@@ -20,9 +20,9 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, 
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassTypeDesignator:
-				classTypeDesignator.analyseNode(document, p)
+				classTypeDesignator.analyseNode(a, document, p)
 			case phrase.ArgumentExpressionList:
-				newArgumentList(document, p)
+				newArgumentList(a, document, p)
 			}
 		}
 		child = traverser.Advance()
@@ -30,7 +30,7 @@ func newClassTypeDesignator(document *Document, node *phrase.Phrase) (HasTypes, 
 	return classTypeDesignator, false
 }
 
-func (s *ClassTypeDesignator) analyseNode(document *Document, node *phrase.Phrase) {
+func (s *ClassTypeDesignator) analyseNode(a analyser, document *Document, node *phrase.Phrase) {
 	s.Location = document.GetNodeLocation(node)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -46,7 +46,7 @@ func (s *ClassTypeDesignator) analyseNode(document *Document, node *phrase.Phras
 				relativeScope := newRelativeScope(document, s.Location)
 				s.Type.merge(relativeScope.Types)
 			case phrase.SimpleVariable:
-				if variable, ok := newVariable(document, p, false); ok {
+				if variable, ok := newVariable(a, document, p, false); ok {
 					document.addSymbol(variable)
 				}
 			}

@@ -350,7 +350,7 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 	return d.location
 }
 
-func newPhpDocFromNode(document *Document, node *phrase.Phrase) Symbol {
+func newPhpDocFromNode(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	phpDoc := phpDocComment{
 		location:    document.GetNodeLocation(node),
 		Description: "",

@@ -11,7 +11,7 @@ type Namespace struct {
 	Name string
 }
 
-func newNamespace(document *Document, node *phrase.Phrase) *Namespace {
+func newNamespace(a analyser, document *Document, node *phrase.Phrase) *Namespace {
 	namespace := &Namespace{}
 	document.pushImportTable(node)
 	document.setNamespace(namespace)
@@ -23,7 +23,7 @@ func newNamespace(document *Document, node *phrase.Phrase) *Namespace {
 			case phrase.NamespaceName:
 				namespace.Name = document.getPhraseText(p)
 			case phrase.StatementList:
-				scanForChildren(document, p)
+				scanForChildren(a, document, p)
 			}
 		}
 		child = traverser.Advance()

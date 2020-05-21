@@ -12,7 +12,7 @@ type TraitAccess struct {
 
 var _ HasTypes = (*TraitAccess)(nil)
 
-func processTraitUseClause(document *Document, node *phrase.Phrase) Symbol {
+func processTraitUseClause(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {

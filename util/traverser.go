@@ -119,6 +119,21 @@ type NodeStack struct {
 	token   *lexer.Token
 }
 
+// Push adds the node to the stack
+func (s *NodeStack) Push(node *phrase.Phrase) {
+	s.parents = append(s.parents, node)
+}
+
+// Pop pops the node from the stack or nil if stack is empty
+func (s *NodeStack) Pop() *phrase.Phrase {
+	if len(s.parents) == 0 {
+		return nil
+	}
+	var p *phrase.Phrase
+	p, s.parents = s.parents[len(s.parents)-1], s.parents[:len(s.parents)-1]
+	return p
+}
+
 // SetParents sets the parents of the stack
 func (s *NodeStack) SetParents(parents []*phrase.Phrase) *NodeStack {
 	s.parents = parents
@@ -133,6 +148,13 @@ func (s *NodeStack) SetToken(token *lexer.Token) *NodeStack {
 
 // Parent returns the parent and mutate the stack
 func (s *NodeStack) Parent() phrase.Phrase {
+	p := s.Phrase()
+	s.Pop()
+	return p
+}
+
+// Phrase returns the phrase of the stack
+func (s *NodeStack) Phrase() phrase.Phrase {
 	if len(s.parents) == 0 {
 		return phrase.Phrase{
 			Type: phrase.Unknown,
@@ -144,7 +166,7 @@ func (s *NodeStack) Parent() phrase.Phrase {
 		}
 	}
 	var p *phrase.Phrase
-	p, s.parents = s.parents[len(s.parents)-1], s.parents[:len(s.parents)-1]
+	p = s.parents[len(s.parents)-1]
 	return *p
 }
 
