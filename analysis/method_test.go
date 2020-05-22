@@ -30,7 +30,7 @@ func toTestMethod(m *Method) testMethod {
 		Name:               m.Name,
 		Params:             m.Params,
 		returnTypes:        m.returnTypes,
-		description:        m.description,
+		description:        m.GetDescription(),
 		Scope:              m.Scope,
 		VisibilityModifier: m.VisibilityModifier,
 		IsStatic:           m.IsStatic,

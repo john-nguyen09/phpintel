@@ -20,6 +20,8 @@ type Class struct {
 	Extends    TypeString
 	Interfaces []TypeString
 	Use        []TypeString
+
+	deprecatedTag *tag
 }
 
 var _ HasScope = (*Class)(nil)
@@ -112,6 +114,7 @@ func (s *Class) analyseHeader(a analyser, document *Document, classHeader *phras
 						method := newMethodFromPhpDocTag(document, s, methodTag, phpDoc.GetLocation())
 						document.addSymbol(method)
 					}
+					s.deprecatedTag = phpDoc.deprecated()
 				}
 			case lexer.Abstract:
 				s.Modifier = Abstract
@@ -232,6 +235,7 @@ func (s *Class) Serialise(e *storage.Encoder) {
 	for _, use := range s.Use {
 		use.Write(e)
 	}
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadClass(d *storage.Decoder) *Class {
@@ -251,6 +255,7 @@ func ReadClass(d *storage.Decoder) *Class {
 	for i := 0; i < numUse; i++ {
 		theClass.Use = append(theClass.Use, ReadTypeString(d))
 	}
+	theClass.deprecatedTag = deserialiseDeprecatedTag(d)
 	return theClass
 }
 

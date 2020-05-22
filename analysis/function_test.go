@@ -25,7 +25,7 @@ func toTestFunction(function *Function) testFunction {
 		Name:        function.Name,
 		Params:      function.Params,
 		returnTypes: function.returnTypes,
-		description: function.description,
+		description: function.GetDescription(),
 	}
 }
 

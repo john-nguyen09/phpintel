@@ -7,6 +7,7 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
@@ -274,6 +275,30 @@ func globalTag(tagName string, document *Document, node *phrase.Phrase) tag {
 	}
 }
 
+func deprecatedTag(tagName string, document *Document, node *phrase.Phrase) tag {
+	name := ""
+	description := ""
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.DocumentCommentDescription:
+				description = readDescriptionNode(document, p)
+			}
+		} else if t, ok := child.(*lexer.Token); ok {
+			switch t.Type {
+			case lexer.DocumentCommentVersion:
+				name = document.getTokenText(t)
+			}
+		}
+	}
+	return tag{
+		TagName:     tagName,
+		Name:        name,
+		Description: description,
+	}
+}
+
 type phpDocComment struct {
 	Description string
 	tags        []tag
@@ -282,6 +307,7 @@ type phpDocComment struct {
 	Methods     []tag
 	Vars        []tag
 	Globals     []tag
+	Deprecates  []tag
 	location    protocol.Location
 
 	PropertyReads  []tag
@@ -321,6 +347,8 @@ func parseTag(document *Document, p *phrase.Phrase) (tag, error) {
 		return methodTag(tagName, document, p), nil
 	case "@global":
 		return globalTag(tagName, document, p), nil
+	case "@deprecated":
+		return deprecatedTag(tagName, document, p), nil
 	}
 	return tag{}, fmt.Errorf("Unexpected tag: %s", tagName)
 }
@@ -346,8 +374,47 @@ func (d phpDocComment) findParamTag(name string) *tag {
 	return nil
 }
 
+func (d phpDocComment) deprecated() *tag {
+	if len(d.Deprecates) <= 0 {
+		return nil
+	}
+	return &d.Deprecates[0]
+}
+
+func (d *phpDocComment) prefillTags() {
+	d.Returns = d.findTagsByTagName("@return")
+	d.Properties = d.findTagsByTagName("@property")
+	d.PropertyReads = d.findTagsByTagName("@property-read")
+	d.PropertyWrites = d.findTagsByTagName("@property-write")
+	d.Methods = d.findTagsByTagName("@method")
+	d.Vars = d.findTagsByTagName("@var")
+	d.Globals = d.findTagsByTagName("@global")
+	d.Deprecates = d.findTagsByTagName("@deprecated")
+}
+
 func (d *phpDocComment) GetLocation() protocol.Location {
 	return d.location
+}
+
+func serialiseDeprecatedTag(e *storage.Encoder, t *tag) {
+	if t == nil {
+		e.WriteBool(false)
+	} else {
+		e.WriteBool(true)
+		e.WriteString(t.Name)
+		e.WriteString(t.Description)
+	}
+}
+
+func deserialiseDeprecatedTag(d *storage.Decoder) *tag {
+	if d.ReadBool() {
+		return &tag{
+			TagName:     "@deprecated",
+			Name:        d.ReadString(),
+			Description: d.ReadString(),
+		}
+	}
+	return nil
 }
 
 func newPhpDocFromNode(a analyser, document *Document, node *phrase.Phrase) Symbol {
@@ -372,14 +439,6 @@ func newPhpDocFromNode(a analyser, document *Document, node *phrase.Phrase) Symb
 			}
 		}
 	}
-
-	phpDoc.Returns = phpDoc.findTagsByTagName("@return")
-	phpDoc.Properties = phpDoc.findTagsByTagName("@property")
-	phpDoc.PropertyReads = phpDoc.findTagsByTagName("@property-read")
-	phpDoc.PropertyWrites = phpDoc.findTagsByTagName("@property-write")
-	phpDoc.Methods = phpDoc.findTagsByTagName("@method")
-	phpDoc.Vars = phpDoc.findTagsByTagName("@var")
-	phpDoc.Globals = phpDoc.findTagsByTagName("@global")
-
+	phpDoc.prefillTags()
 	return &phpDoc
 }

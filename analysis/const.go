@@ -10,10 +10,11 @@ import (
 
 // Const contains information of constants
 type Const struct {
-	location protocol.Location
-
-	Name  TypeString
-	Value string
+	location      protocol.Location
+	description   string
+	deprecatedTag *tag
+	Name          TypeString
+	Value         string
 }
 
 func newConstDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
@@ -32,6 +33,7 @@ func newConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	constant := &Const{
 		location: document.GetNodeLocation(node),
 	}
+	phpDoc := document.getValidPhpDoc(constant.location)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	hasEquals := false
@@ -40,6 +42,10 @@ func newConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 			switch token.Type {
 			case lexer.Name:
 				constant.Name = NewTypeString(document.getTokenText(token))
+				if phpDoc != nil {
+					constant.description = phpDoc.Description
+					constant.deprecatedTag = phpDoc.deprecated()
+				}
 			case lexer.Equals:
 				hasEquals = true
 				traverser.SkipToken(lexer.Whitespace)
@@ -69,7 +75,7 @@ func (s *Const) GetName() string {
 }
 
 func (s *Const) GetDescription() string {
-	return s.GetName() + " = " + s.Value
+	return s.GetName() + " = " + s.Value + "; " + s.description
 }
 
 func (s *Const) GetCollection() string {
@@ -90,14 +96,18 @@ func (s *Const) GetIndexCollection() string {
 
 func (s *Const) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
+	e.WriteString(s.description)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 	s.Name.Write(e)
 	e.WriteString(s.Value)
 }
 
 func ReadConst(d *storage.Decoder) *Const {
 	return &Const{
-		location: d.ReadLocation(),
-		Name:     ReadTypeString(d),
-		Value:    d.ReadString(),
+		location:      d.ReadLocation(),
+		description:   d.ReadString(),
+		deprecatedTag: deserialiseDeprecatedTag(d),
+		Name:          ReadTypeString(d),
+		Value:         d.ReadString(),
 	}
 }

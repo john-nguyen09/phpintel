@@ -60,6 +60,8 @@
   },
   Globals: ([]analysis.tag) {
   },
+  Deprecates: ([]analysis.tag) {
+  },
   location: (protocol.Location) {
     URI: (string) (len=4) "test",
     Range: (protocol.Range) 0:6-8:3

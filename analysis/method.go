@@ -22,6 +22,7 @@ type Method struct {
 	VisibilityModifier VisibilityModifierValue
 	IsStatic           bool
 	ClassModifier      ClassModifierValue
+	deprecatedTag      *tag
 }
 
 var _ HasScope = (*Method)(nil)
@@ -161,6 +162,7 @@ func (s *Method) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 		}
 	}
 	s.description = phpDoc.Description
+	s.deprecatedTag = phpDoc.deprecated()
 }
 
 func (s Method) GetName() string {
@@ -226,6 +228,7 @@ func (s *Method) Serialise(e *storage.Encoder) {
 	e.WriteInt(int(s.VisibilityModifier))
 	e.WriteBool(s.IsStatic)
 	e.WriteInt(int(s.ClassModifier))
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadMethod(d *storage.Decoder) *Method {
@@ -245,6 +248,7 @@ func ReadMethod(d *storage.Decoder) *Method {
 	method.VisibilityModifier = VisibilityModifierValue(d.ReadInt())
 	method.IsStatic = d.ReadBool()
 	method.ClassModifier = ClassModifierValue(d.ReadInt())
+	method.deprecatedTag = deserialiseDeprecatedTag(d)
 
 	return &method
 }

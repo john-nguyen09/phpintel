@@ -8,12 +8,14 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:10-3:26
     },
+    description: (string) "",
     Name: (string) (len=12) "CLASS_CONST1",
     Value: (string) (len=1) "5",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=16) "\\ClassConstTest1",
       original: (string) (len=15) "ClassConstTest1",
       arrayLevel: (int) 0
-    }
+    },
+    deprecatedTag: (*analysis.tag)(<nil>)
   })
 }

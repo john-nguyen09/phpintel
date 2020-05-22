@@ -22,6 +22,7 @@
       arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
+    Use: ([]analysis.TypeString) <nil>,
+    deprecatedTag: (*analysis.tag)(<nil>)
   })
 }

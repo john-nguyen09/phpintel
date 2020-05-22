@@ -10,14 +10,14 @@ import (
 
 // Function contains information of functions
 type Function struct {
-	location    protocol.Location
-	refLocation protocol.Location
-	children    []Symbol
-
-	Name        TypeString `json:"Name"`
-	Params      []*Parameter
-	returnTypes TypeComposite
-	description string
+	location      protocol.Location
+	refLocation   protocol.Location
+	children      []Symbol
+	Name          TypeString `json:"Name"`
+	Params        []*Parameter
+	returnTypes   TypeComposite
+	description   string
+	deprecatedTag *tag
 }
 
 var _ HasScope = (*Function)(nil)
@@ -108,6 +108,7 @@ func (s *Function) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 		}
 	}
 	s.description = phpDoc.Description
+	s.deprecatedTag = phpDoc.deprecated()
 }
 
 func (s *Function) GetLocation() protocol.Location {
@@ -171,6 +172,7 @@ func (s *Function) Serialise(e *storage.Encoder) {
 	}
 	s.returnTypes.Write(e)
 	e.WriteString(s.description)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadFunction(d *storage.Decoder) *Function {
@@ -185,6 +187,7 @@ func ReadFunction(d *storage.Decoder) *Function {
 	}
 	function.returnTypes = ReadTypeComposite(d)
 	function.description = d.ReadString()
+	function.deprecatedTag = deserialiseDeprecatedTag(d)
 	return &function
 }
 

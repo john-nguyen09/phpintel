@@ -9,6 +9,7 @@
       Range: (protocol.Range) 4:14-4:24
     },
     description: (string) (len=16) "name of the form",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (string) (len=10) "$_formname",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=11) "\\moodleform",
@@ -37,6 +38,7 @@
       Range: (protocol.Range) 7:14-7:20
     },
     description: (string) (len=27) "quickform object definition",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (string) (len=6) "$_form",
     Scope: (analysis.TypeString) {
       fqn: (string) (len=11) "\\moodleform",

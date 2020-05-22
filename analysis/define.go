@@ -10,16 +10,18 @@ import (
 
 // Define contains information of define constants
 type Define struct {
-	location protocol.Location
-
-	Name  TypeString
-	Value string
+	location      protocol.Location
+	description   string
+	deprecatedTag *tag
+	Name          TypeString
+	Value         string
 }
 
 func newDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	define := &Define{
 		location: document.GetNodeLocation(node),
 	}
+	phpDoc := document.getValidPhpDoc(define.location)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -28,6 +30,10 @@ func newDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
 				symbol := newArgumentList(a, document, p)
 				if args, ok := symbol.(*ArgumentList); ok {
 					define.analyseArgs(document, args)
+					if phpDoc != nil {
+						define.description = phpDoc.Description
+						define.deprecatedTag = phpDoc.deprecated()
+					}
 				}
 			}
 		}
@@ -46,7 +52,7 @@ func (s *Define) GetName() string {
 }
 
 func (s *Define) GetDescription() string {
-	return s.GetName() + " = " + s.Value
+	return s.GetName() + " = " + s.Value + "; " + s.description
 }
 
 func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
@@ -81,14 +87,18 @@ func (s *Define) GetIndexCollection() string {
 
 func (s *Define) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
+	e.WriteString(s.description)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 	s.Name.Write(e)
 	e.WriteString(s.Value)
 }
 
 func ReadDefine(d *storage.Decoder) *Define {
 	return &Define{
-		location: d.ReadLocation(),
-		Name:     ReadTypeString(d),
-		Value:    d.ReadString(),
+		location:      d.ReadLocation(),
+		description:   d.ReadString(),
+		deprecatedTag: deserialiseDeprecatedTag(d),
+		Name:          ReadTypeString(d),
+		Value:         d.ReadString(),
 	}
 }

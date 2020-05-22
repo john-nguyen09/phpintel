@@ -10,6 +10,7 @@
     },
     children: ([]analysis.Symbol) <nil>,
     description: (string) "",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (analysis.TypeString) {
       fqn: (string) (len=14) "\\TestInterface",
       original: (string) (len=13) "TestInterface",
@@ -28,6 +29,7 @@
     },
     children: ([]analysis.Symbol) <nil>,
     description: (string) "",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (analysis.TypeString) {
       fqn: (string) (len=15) "\\TestInterface2",
       original: (string) (len=14) "TestInterface2",
