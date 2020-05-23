@@ -87,7 +87,9 @@ func (s *Server) Initialized(ctx context.Context, params *protocol.InitializedPa
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
-	pprof.StopCPUProfile()
+	if protocol.GetCpuprofile(ctx) != "" {
+		pprof.StopCPUProfile()
+	}
 	return s.shutdown(ctx)
 }
 
