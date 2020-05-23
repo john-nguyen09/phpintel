@@ -3,7 +3,7 @@ package lsp
 import (
 	"strings"
 
-	md "github.com/evorts/html-to-markdown"
+	md "github.com/JohannesKaufmann/html-to-markdown"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
