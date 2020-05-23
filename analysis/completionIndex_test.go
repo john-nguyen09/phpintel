@@ -55,8 +55,8 @@ func TestFuzzyEngine(t *testing.T) {
 		entriesToBeDeleted = append(entriesToBeDeleted, *entry)
 	}
 	assert.Equal(t, []fuzzyEntry{
-		{name: "abc", key: "c1#abc", uri: "test1", deleted: false},
-		{name: "xyz", key: "c1#xyz", uri: "test1", deleted: false},
+		{collection: "c1", name: "abc", key: "c1#abc", uri: "test1", deleted: false},
+		{collection: "c1", name: "xyz", key: "c1#xyz", uri: "test1", deleted: false},
 	}, entriesToBeDeleted)
 
 	deletor.delete()
@@ -94,6 +94,6 @@ func TestFuzzyEngine(t *testing.T) {
 		entriesToBeDeleted = append(entriesToBeDeleted, *entry)
 	}
 	assert.Equal(t, []fuzzyEntry{
-		{name: "foobar", key: "c1#foobar", uri: "test2", deleted: false},
+		{collection: "c1", name: "foobar", key: "c1#foobar", uri: "test2", deleted: false},
 	}, entriesToBeDeleted)
 }

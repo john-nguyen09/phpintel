@@ -27,19 +27,21 @@ type searchQuery struct {
 }
 
 type fuzzyEntry struct {
-	name    string
-	key     string
-	uri     string
-	deleted bool
+	collection string
+	name       string
+	key        string
+	uri        string
+	deleted    bool
 }
 
 type fuzzyEngine struct {
 	db         storage.DB
 	indexMutex sync.RWMutex
-	entries    map[string][]fuzzyEntry
-	stopSignal chan struct{}
+	entries    map[string][]*fuzzyEntry
 
 	currentCollection string
+	entryURIIndex     map[string][]*fuzzyEntry
+	reusableEntries   map[string][]*fuzzyEntry
 }
 
 func newFuzzyEngine(db storage.DB) *fuzzyEngine {
@@ -53,46 +55,49 @@ func newFuzzyEngine(db storage.DB) *fuzzyEngine {
 	}
 	if engine == nil {
 		engine = &fuzzyEngine{
-			entries: map[string][]fuzzyEntry{},
+			entries:         map[string][]*fuzzyEntry{},
+			entryURIIndex:   map[string][]*fuzzyEntry{},
+			reusableEntries: map[string][]*fuzzyEntry{},
 		}
 	}
 	engine.db = db
-	engine.stopSignal = make(chan struct{})
-	go func() {
-		ticker := time.NewTicker(compactionDuration)
-		for {
-			select {
-			case <-ticker.C:
-				engine.compact()
-			case <-engine.stopSignal:
-				break
-			}
-		}
-	}()
 	return engine
 }
 
 func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
-	entriesMap := map[string][]fuzzyEntry{}
+	entriesMap := map[string][]*fuzzyEntry{}
+	entryURIIndex := map[string][]*fuzzyEntry{}
 	collectionLen := d.ReadInt()
 	count := 0
 	for i := 0; i < collectionLen; i++ {
 		collection := d.ReadString()
 		entriesLen := d.ReadInt()
-		entries := []fuzzyEntry{}
+		entries := []*fuzzyEntry{}
 		for j := 0; j < entriesLen; j++ {
-			entries = append(entries, fuzzyEntry{
-				name:    d.ReadString(),
-				key:     d.ReadString(),
-				uri:     d.ReadString(),
-				deleted: false,
-			})
+			entry := &fuzzyEntry{
+				collection: collection,
+				name:       d.ReadString(),
+				key:        d.ReadString(),
+				uri:        d.ReadString(),
+				deleted:    false,
+			}
+			entries = append(entries, entry)
+			var (
+				entries []*fuzzyEntry
+				ok      bool
+			)
+			if entries, ok = entryURIIndex[entry.uri]; ok {
+			}
+			entries = append(entries, entry)
+			entryURIIndex[entry.uri] = entries
 		}
 		entriesMap[collection] = entries
 		count++
 	}
 	return &fuzzyEngine{
-		entries: entriesMap,
+		entries:         entriesMap,
+		entryURIIndex:   entryURIIndex,
+		reusableEntries: map[string][]*fuzzyEntry{},
 	}
 }
 
@@ -124,18 +129,38 @@ func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey strin
 	defer f.indexMutex.Unlock()
 	collection := indexable.GetIndexCollection()
 	var (
-		currEntries []fuzzyEntry
+		currEntries []*fuzzyEntry
 		ok          bool
+		entry       *fuzzyEntry
 	)
 	if currEntries, ok = f.entries[collection]; ok {
 	}
-	currEntries = append(currEntries, fuzzyEntry{
-		name:    indexable.GetIndexableName(),
-		key:     symbolKey,
-		uri:     uri,
-		deleted: false,
-	})
+	if reusableEntries, ok := f.reusableEntries[collection]; ok && len(reusableEntries) > 0 {
+		entry, reusableEntries = reusableEntries[len(reusableEntries)-1], reusableEntries[:len(reusableEntries)-1]
+		f.reusableEntries[collection] = reusableEntries
+		entry.collection = collection
+		entry.name = indexable.GetIndexableName()
+		entry.key = symbolKey
+		entry.uri = uri
+		entry.deleted = false
+	} else {
+		entry = &fuzzyEntry{
+			collection: collection,
+			name:       indexable.GetIndexableName(),
+			key:        symbolKey,
+			uri:        uri,
+			deleted:    false,
+		}
+		currEntries = append(currEntries, entry)
+	}
 	f.entries[collection] = currEntries
+	var (
+		entries []*fuzzyEntry
+	)
+	if entries, ok = f.entryURIIndex[entry.uri]; ok {
+	}
+	entries = append(entries, entry)
+	f.entryURIIndex[entry.uri] = entries
 }
 
 type match struct {
@@ -175,24 +200,8 @@ func (f *fuzzyEngine) search(query searchQuery) SearchResult {
 	return searchResult
 }
 
-func (f *fuzzyEngine) compact() {
-	f.indexMutex.Lock()
-	defer f.indexMutex.Unlock()
-	for collection, entries := range f.entries {
-		newEntries := entries[:0]
-		for _, entry := range entries {
-			if !entry.deleted {
-				newEntries = append(newEntries, entry)
-			}
-		}
-		f.entries[collection] = newEntries
-	}
-}
-
 func (f *fuzzyEngine) close() error {
-	f.stopSignal <- struct{}{}
 	e := storage.NewEncoder()
-	f.compact()
 	f.serialise(e)
 	return f.db.Put([]byte(completionDataCollection), e.Bytes())
 }
@@ -210,15 +219,8 @@ type fuzzyEngineDeletor struct {
 func newFuzzyEngineDeletor(engine *fuzzyEngine, uri string) *fuzzyEngineDeletor {
 	entriesToBeDeleted := []*fuzzyEntry{}
 	engine.indexMutex.RLock()
-	for collection, entries := range engine.entries {
-		for i, entry := range entries {
-			if entry.deleted {
-				continue
-			}
-			if entry.uri == uri {
-				entriesToBeDeleted = append(entriesToBeDeleted, &engine.entries[collection][i])
-			}
-		}
+	if entries, ok := engine.entryURIIndex[uri]; ok {
+		entriesToBeDeleted = entries
 	}
 	engine.indexMutex.RUnlock()
 	return &fuzzyEngineDeletor{
@@ -231,5 +233,13 @@ func newFuzzyEngineDeletor(engine *fuzzyEngine, uri string) *fuzzyEngineDeletor 
 func (d *fuzzyEngineDeletor) delete() {
 	for _, entry := range d.entriesToBeDeleted {
 		entry.deleted = true
+		var (
+			currentReusableEntries []*fuzzyEntry
+			ok                     bool
+		)
+		if currentReusableEntries, ok = d.engine.reusableEntries[entry.collection]; ok {
+		}
+		currentReusableEntries = append(currentReusableEntries, entry)
+		d.engine.reusableEntries[entry.collection] = currentReusableEntries
 	}
 }
