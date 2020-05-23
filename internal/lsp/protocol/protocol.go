@@ -6,8 +6,9 @@ package protocol
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 )
@@ -2806,7 +2807,11 @@ type Position struct {
 }
 
 func (p Position) String() string {
-	return fmt.Sprintf("%d:%d", p.Line, p.Character)
+	sb := strings.Builder{}
+	sb.WriteString(strconv.Itoa(p.Line))
+	sb.WriteString(":")
+	sb.WriteString(strconv.Itoa(p.Character))
+	return sb.String()
 }
 
 /*Range defined:
@@ -2836,7 +2841,11 @@ type Range struct {
 }
 
 func (r Range) String() string {
-	return fmt.Sprintf("%s-%s", r.Start, r.End)
+	sb := strings.Builder{}
+	sb.WriteString(r.Start.String())
+	sb.WriteString("-")
+	sb.WriteString(r.End.String())
+	return sb.String()
 }
 
 /*Location defined:
