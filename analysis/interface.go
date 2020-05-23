@@ -10,13 +10,13 @@ import (
 
 // Interface contains information of interfaces
 type Interface struct {
-	location    protocol.Location
-	refLocation protocol.Location
-	children    []Symbol
-	description string
-
-	Name    TypeString
-	Extends []TypeString
+	location      protocol.Location
+	refLocation   protocol.Location
+	children      []Symbol
+	description   string
+	deprecatedTag *tag
+	Name          TypeString
+	Extends       []TypeString
 }
 
 var _ HasScope = (*Interface)(nil)
@@ -29,6 +29,7 @@ func newInterface(a analyser, document *Document, node *phrase.Phrase) Symbol {
 		location: document.GetNodeLocation(node),
 	}
 	document.addClass(theInterface)
+	phpDoc := document.getValidPhpDoc(theInterface.location)
 	document.addSymbol(theInterface)
 	document.pushBlock(theInterface)
 	traverser := util.NewTraverser(node)
@@ -37,7 +38,7 @@ func newInterface(a analyser, document *Document, node *phrase.Phrase) Symbol {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.InterfaceDeclarationHeader:
-				theInterface.analyseHeader(document, p)
+				theInterface.analyseHeader(document, p, phpDoc)
 			case phrase.InterfaceDeclarationBody:
 				scanForChildren(a, document, p)
 			}
@@ -49,7 +50,7 @@ func newInterface(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	return nil
 }
 
-func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
+func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase, phpDoc *phpDocComment) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -58,6 +59,10 @@ func (s *Interface) analyseHeader(document *Document, node *phrase.Phrase) {
 			case lexer.Name:
 				s.Name = NewTypeString(document.getTokenText(token))
 				s.refLocation = document.GetNodeLocation(token)
+				if phpDoc != nil {
+					s.description = phpDoc.Description
+					s.deprecatedTag = phpDoc.deprecated()
+				}
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
@@ -130,6 +135,8 @@ func (s *Interface) Serialise(e *storage.Encoder) {
 	for _, extend := range s.Extends {
 		extend.Write(e)
 	}
+	e.WriteString(s.description)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadInterface(d *storage.Decoder) *Interface {
@@ -141,6 +148,8 @@ func ReadInterface(d *storage.Decoder) *Interface {
 	for i := 0; i < countExtends; i++ {
 		theInterface.Extends = append(theInterface.Extends, ReadTypeString(d))
 	}
+	theInterface.description = d.ReadString()
+	theInterface.deprecatedTag = deserialiseDeprecatedTag(d)
 	return theInterface
 }
 

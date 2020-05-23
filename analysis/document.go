@@ -266,7 +266,6 @@ func (s *Document) GetNodeText(node phrase.AstNode) string {
 }
 
 func (s *Document) addSymbol(other Symbol) {
-	s.lastPhpDoc = nil
 	if doc, ok := other.(*phpDocComment); ok {
 		s.lastPhpDoc = doc
 		return

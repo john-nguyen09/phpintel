@@ -10,10 +10,10 @@ import (
 
 // Property contains information for properties
 type Property struct {
-	location    protocol.Location
-	refLocation protocol.Location
-	description string
-
+	location           protocol.Location
+	refLocation        protocol.Location
+	description        string
+	deprecatedTag      *tag
 	Name               string
 	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
@@ -121,6 +121,7 @@ func (s *Property) GetDescription() string {
 
 func (s *Property) applyPhpDoc(document *Document, phpDoc phpDocComment) {
 	tags := phpDoc.Vars
+	s.deprecatedTag = phpDoc.deprecated()
 	for _, tag := range tags {
 		s.Types.merge(typesFromPhpDoc(document, tag.TypeString))
 		s.description = tag.Description
@@ -159,6 +160,8 @@ func (s *Property) Serialise(e *storage.Encoder) {
 	e.WriteInt(int(s.VisibilityModifier))
 	e.WriteBool(s.IsStatic)
 	s.Types.Write(e)
+	e.WriteString(s.description)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadProperty(d *storage.Decoder) *Property {
@@ -169,6 +172,8 @@ func ReadProperty(d *storage.Decoder) *Property {
 		VisibilityModifier: VisibilityModifierValue(d.ReadInt()),
 		IsStatic:           d.ReadBool(),
 		Types:              ReadTypeComposite(d),
+		description:        d.ReadString(),
+		deprecatedTag:      deserialiseDeprecatedTag(d),
 	}
 }
 

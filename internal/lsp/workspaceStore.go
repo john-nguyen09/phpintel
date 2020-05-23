@@ -218,6 +218,6 @@ func (s *workspaceStore) changeDocument(ctx context.Context, params *protocol.Di
 	newDoc.ApplyChanges(params.ContentChanges)
 	store.SyncDocument(newDoc)
 	store.SaveDocOnStore(newDoc)
-	s.server.provideDiagnostics(ctx, newDoc)
+	s.server.provideDiagnostics(ctx, store, newDoc)
 	return nil
 }

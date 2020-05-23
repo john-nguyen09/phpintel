@@ -4,6 +4,8 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 2:6-2:21
     },
+    description: (string) "",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (analysis.TypeString) {
       fqn: (string) (len=12) "\\TEST_CONST1",
       original: (string) (len=11) "TEST_CONST1",
@@ -16,6 +18,8 @@
       URI: (string) (len=5) "test1",
       Range: (protocol.Range) 3:0-3:24
     },
+    description: (string) "",
+    deprecatedTag: (*analysis.tag)(<nil>),
     Name: (analysis.TypeString) {
       fqn: (string) (len=12) "\\TEST_CONST2",
       original: (string) (len=11) "TEST_CONST2",

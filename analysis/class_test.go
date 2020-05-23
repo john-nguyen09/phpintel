@@ -22,7 +22,7 @@ type testClass struct {
 
 func toTestClass(class *Class) testClass {
 	return testClass{
-		description: class.description,
+		description: class.GetDescription(),
 		Location:    class.Location,
 		Modifier:    class.Modifier,
 		Name:        class.Name,

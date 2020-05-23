@@ -130,6 +130,7 @@
         }
       }
     },
-    description: (string) (len=34) "Perform a regular expression match"
+    description: (string) (len=34) "Perform a regular expression match",
+    deprecatedTag: (*analysis.tag)(<nil>)
   })
 }

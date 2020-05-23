@@ -20,7 +20,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 	}
 	document := store.OpenDocument(uri)
 	if document != nil {
-		s.provideDiagnostics(ctx, document)
+		s.provideDiagnostics(ctx, store, document)
 	}
 	return nil
 }

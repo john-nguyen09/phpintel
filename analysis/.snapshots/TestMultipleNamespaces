@@ -22,7 +22,8 @@
       arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
+    Use: ([]analysis.TypeString) <nil>,
+    deprecatedTag: (*analysis.tag)(<nil>)
   }),
   (*analysis.Class)({
     description: (string) "",
@@ -47,6 +48,7 @@
       arrayLevel: (int) 0
     },
     Interfaces: ([]analysis.TypeString) <nil>,
-    Use: ([]analysis.TypeString) <nil>
+    Use: ([]analysis.TypeString) <nil>,
+    deprecatedTag: (*analysis.tag)(<nil>)
   })
 }

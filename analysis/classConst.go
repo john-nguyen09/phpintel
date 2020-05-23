@@ -12,10 +12,13 @@ import (
 type ClassConst struct {
 	refLocation protocol.Location
 	location    protocol.Location
+	description string
 
 	Name  string
 	Value string
 	Scope TypeString
+
+	deprecatedTag *tag
 }
 
 var _ HasScope = (*ClassConst)(nil)
@@ -26,6 +29,7 @@ func newClassConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	classConst := &ClassConst{
 		location: document.GetNodeLocation(node),
 	}
+	phpDoc := document.getValidPhpDoc(classConst.location)
 	lastClass := document.getLastClass()
 	if theClass, ok := lastClass.(*Class); ok {
 		classConst.Scope = theClass.Name
@@ -44,10 +48,8 @@ func newClassConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 		if token, ok := child.(*lexer.Token); ok {
 			switch token.Type {
 			case lexer.Equals:
-				{
-					hasEquals = true
-					traverser.SkipToken(lexer.Whitespace)
-				}
+				hasEquals = true
+				traverser.SkipToken(lexer.Whitespace)
 			default:
 				if hasEquals {
 					classConst.Value += document.getTokenText(token)
@@ -59,9 +61,11 @@ func newClassConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
 			} else {
 				switch p.Type {
 				case phrase.Identifier:
-					{
-						classConst.Name = document.getPhraseText(p)
-						classConst.refLocation = document.GetNodeLocation(p)
+					classConst.Name = document.getPhraseText(p)
+					classConst.refLocation = document.GetNodeLocation(p)
+					if phpDoc != nil {
+						classConst.description = phpDoc.Description
+						classConst.deprecatedTag = phpDoc.deprecated()
 					}
 				}
 			}
@@ -80,8 +84,7 @@ func (s *ClassConst) GetName() string {
 }
 
 func (s *ClassConst) GetDescription() string {
-	// TODO: Implement docblock description
-	return ""
+	return s.description
 }
 
 func (s *ClassConst) GetCollection() string {
@@ -110,17 +113,21 @@ func (s *ClassConst) IsScopeSymbol() bool {
 
 func (s *ClassConst) Serialise(e *storage.Encoder) {
 	e.WriteLocation(s.location)
+	e.WriteString(s.description)
 	e.WriteString(s.Name)
 	e.WriteString(s.Value)
 	s.Scope.Write(e)
+	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
 func ReadClassConst(d *storage.Decoder) *ClassConst {
 	return &ClassConst{
-		location: d.ReadLocation(),
-		Name:     d.ReadString(),
-		Value:    d.ReadString(),
-		Scope:    ReadTypeString(d),
+		location:      d.ReadLocation(),
+		description:   d.ReadString(),
+		Name:          d.ReadString(),
+		Value:         d.ReadString(),
+		Scope:         ReadTypeString(d),
+		deprecatedTag: deserialiseDeprecatedTag(d),
 	}
 }
 
