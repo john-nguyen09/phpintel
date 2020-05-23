@@ -66,17 +66,17 @@ function TestFunction2() {}`))
 	function2 := doc4.Children[1].(*Function)
 
 	cases := []useTestCase{
-		useTestCase{doc2, class, class.Name, "Test", useResult{"TestClass1", "use TestNamespace1\\TestClass1;"}},
-		useTestCase{doc2, function, function.Name, "Function", useResult{"TestFunction1", "use function TestNamespace1\\TestFunction1;"}},
-		useTestCase{doc2, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", ""}},
-		useTestCase{doc3, function, function.Name, "test", useResult{"TestFunction1", "use function TestNamespace1\\TestFunction1;"}},
-		useTestCase{doc3, class, class.Name, "TestNamespace1\\T", useResult{"TestClass1", "use TestNamespace1;"}},
-		useTestCase{doc3, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", "use TestNamespace1;"}},
-		useTestCase{doc3, class, class.Name, "\\TestNamespace1\\Te", useResult{"TestClass1", ""}},
-		useTestCase{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
-		useTestCase{doc2, class2, class2.Name, "Dat", useResult{"DateTime", ""}},
-		useTestCase{doc3, class2, class2.Name, "Da", useResult{"DateTime", "use DateTime;"}},
-		useTestCase{doc3, function2, function2.Name, "Test", useResult{"TestFunction2", ""}},
+		{doc2, class, class.Name, "Test", useResult{"TestClass1", "use TestNamespace1\\TestClass1;"}},
+		{doc2, function, function.Name, "Function", useResult{"TestFunction1", "use function TestNamespace1\\TestFunction1;"}},
+		{doc2, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", ""}},
+		{doc3, function, function.Name, "test", useResult{"TestFunction1", "use function TestNamespace1\\TestFunction1;"}},
+		{doc3, class, class.Name, "TestNamespace1\\T", useResult{"TestClass1", "use TestNamespace1;"}},
+		{doc3, function, function.Name, "TestNamespace1\\t", useResult{"TestFunction1", "use TestNamespace1;"}},
+		{doc3, class, class.Name, "\\TestNamespace1\\Te", useResult{"TestClass1", ""}},
+		{doc3, function, function.Name, "\\TestNamespace1\\Test", useResult{"TestFunction1", ""}},
+		{doc2, class2, class2.Name, "Dat", useResult{"DateTime", ""}},
+		{doc3, class2, class2.Name, "Da", useResult{"DateTime", "use DateTime;"}},
+		{doc3, function2, function2.Name, "Test", useResult{"TestFunction2", ""}},
 	}
 
 	for i, testCase := range cases {
@@ -133,4 +133,25 @@ func TestImportTableOnEmptyFile(t *testing.T) {
 		Character: 0,
 	})
 	assert.NotNil(t, importTable)
+}
+
+func TestUnusedImports(t *testing.T) {
+	data, err := ioutil.ReadFile("../cases/unused/import.php")
+	if err != nil {
+		panic(err)
+	}
+	doc := NewDocument("test1", data)
+	doc.Load()
+	importTable := doc.ImportTableAtPos(protocol.Position{Line: 3, Character: 0})
+	var results []protocol.Range
+	unusedImportItems := importTable.unusedImportItems()
+	for _, item := range unusedImportItems {
+		results = append(results, item.locationRange)
+	}
+	assert.Equal(t, []protocol.Range{
+		{Start: protocol.Position{Line: 4, Character: 4}, End: protocol.Position{Line: 4, Character: 14}},
+		{Start: protocol.Position{Line: 6, Character: 4}, End: protocol.Position{Line: 6, Character: 9}},
+		{Start: protocol.Position{Line: 9, Character: 15}, End: protocol.Position{Line: 9, Character: 24}},
+		{Start: protocol.Position{Line: 12, Character: 4}, End: protocol.Position{Line: 12, Character: 10}},
+	}, results)
 }

@@ -3,13 +3,25 @@
   namespace: (*analysis.Namespace)({
     Name: (string) (len=14) "TestNamespace1"
   }),
-  classes: (map[string]string) (len=1) {
-    (string) (len=13) "RootTestClass": (string) (len=9) "TestClass"
+  classes: (map[string]*analysis.importItem) (len=1) {
+    (string) (len=13) "RootTestClass": (*analysis.importItem)({
+      name: (string) (len=9) "TestClass",
+      locationRange: (protocol.Range) 4:4-4:30,
+      isUsed: (bool) true
+    })
   },
-  functions: (map[string]string) (len=2) {
-    (string) (len=13) "testFunction2": (string) (len=28) "TestNamespace3\\testFunction2",
-    (string) (len=13) "testFunction3": (string) (len=28) "TestNamespace3\\testFunction3"
+  functions: (map[string]*analysis.importItem) (len=2) {
+    (string) (len=13) "testFunction2": (*analysis.importItem)({
+      name: (string) (len=28) "TestNamespace3\\testFunction2",
+      locationRange: (protocol.Range) 6:4-6:17,
+      isUsed: (bool) true
+    }),
+    (string) (len=13) "testFunction3": (*analysis.importItem)({
+      name: (string) (len=28) "TestNamespace3\\testFunction3",
+      locationRange: (protocol.Range) 7:4-7:17,
+      isUsed: (bool) true
+    })
   },
-  constants: (map[string]string) {
+  constants: (map[string]*analysis.importItem) {
   }
 })

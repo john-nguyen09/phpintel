@@ -56,6 +56,17 @@ func UnusedDiagnostics(document *Document) []protocol.Diagnostic {
 			Tags:     []protocol.DiagnosticTag{protocol.Unnecessary},
 		})
 	}
+	for _, importTable := range document.importTables {
+		for _, unusedImport := range importTable.unusedImportItems() {
+			diagnostics = append(diagnostics, protocol.Diagnostic{
+				Range:    unusedImport.locationRange,
+				Message:  unusedImport.name + " is declared but its value is never used.",
+				Source:   source,
+				Severity: protocol.SeverityHint,
+				Tags:     []protocol.DiagnosticTag{protocol.Unnecessary},
+			})
+		}
+	}
 	return diagnostics
 }
 

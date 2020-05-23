@@ -8,12 +8,18 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
+type importItem struct {
+	name          string
+	locationRange protocol.Range
+	isUsed        bool
+}
+
 type ImportTable struct {
 	start     protocol.Position
 	namespace *Namespace
-	classes   map[string]string
-	functions map[string]string
-	constants map[string]string
+	classes   map[string]*importItem
+	functions map[string]*importItem
+	constants map[string]*importItem
 }
 
 func newImportTable(document *Document, node *phrase.Phrase) *ImportTable {
@@ -25,9 +31,9 @@ func newImportTable(document *Document, node *phrase.Phrase) *ImportTable {
 	return &ImportTable{
 		start:     document.positionAt(start),
 		namespace: nil,
-		classes:   map[string]string{},
-		functions: map[string]string{},
-		constants: map[string]string{},
+		classes:   map[string]*importItem{},
+		functions: map[string]*importItem{},
+		constants: map[string]*importItem{},
 	}
 }
 
@@ -39,19 +45,28 @@ func makeSureAliasIsNotEmpty(alias string, name string) string {
 	return alias
 }
 
-func (i *ImportTable) addClassName(alias string, name string) {
+func (i *ImportTable) addClassName(alias string, name string, r protocol.Range) {
 	alias = makeSureAliasIsNotEmpty(alias, name)
-	i.classes[alias] = name
+	i.classes[alias] = &importItem{
+		name:          name,
+		locationRange: r,
+	}
 }
 
-func (i *ImportTable) addFunctionName(alias string, name string) {
+func (i *ImportTable) addFunctionName(alias string, name string, r protocol.Range) {
 	alias = makeSureAliasIsNotEmpty(alias, name)
-	i.functions[alias] = name
+	i.functions[alias] = &importItem{
+		name:          name,
+		locationRange: r,
+	}
 }
 
-func (i *ImportTable) addConstName(alias string, name string) {
+func (i *ImportTable) addConstName(alias string, name string, r protocol.Range) {
 	alias = makeSureAliasIsNotEmpty(alias, name)
-	i.constants[alias] = name
+	i.constants[alias] = &importItem{
+		name:          name,
+		locationRange: r,
+	}
 }
 
 func (i *ImportTable) setNamespace(namespace *Namespace) {
@@ -60,12 +75,13 @@ func (i *ImportTable) setNamespace(namespace *Namespace) {
 
 func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
-	if fqn, ok := i.classes[firstPart]; ok {
-		fqn = "\\" + fqn
+	if item, ok := i.classes[firstPart]; ok {
+		fqn := "\\" + item.name
 		if len(parts) > 0 {
 			fqn += "\\" + strings.Join(parts, "\\")
 		}
 		name.SetFQN(fqn)
+		i.useClass(firstPart)
 	} else {
 		name.SetNamespace(i.GetNamespace())
 	}
@@ -79,8 +95,8 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 		aliasTable = i.classes
 	}
 
-	if fqn, ok := aliasTable[firstPart]; ok {
-		return "\\" + fqn
+	if item, ok := aliasTable[firstPart]; ok {
+		return "\\" + item.name
 	}
 	fqn := name.GetFQN()
 	if !IsFQN(fqn) {
@@ -101,8 +117,8 @@ func (i ImportTable) functionPossibleFQNs(name TypeString) []string {
 		aliasTable = i.classes
 	}
 	results := []string{}
-	if fqn, ok := aliasTable[firstPart]; ok {
-		results = append(results, "\\"+fqn)
+	if item, ok := aliasTable[firstPart]; ok {
+		results = append(results, "\\"+item.name)
 		return results
 	}
 	fqn := name.GetFQN()
@@ -122,8 +138,8 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 		aliasTable = i.classes
 	}
 
-	if fqn, ok := aliasTable[firstPart]; ok {
-		return "\\" + fqn
+	if item, ok := aliasTable[firstPart]; ok {
+		return "\\" + item.name
 	}
 	fqn := name.GetFQN()
 	if !IsFQN(fqn) {
@@ -154,7 +170,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 	}
 	nameParts := name.GetParts()
 	firstPart, nameParts := nameParts[0], nameParts[1:]
-	if fqn, ok := i.classes[firstPart]; ok && strings.Index(word, fqn) == 0 {
+	if item, ok := i.classes[firstPart]; ok && strings.Index(word, item.name) == 0 {
 		if len(nameParts) > 0 {
 			return strings.Join(nameParts, "\\"), nil
 		}
@@ -171,8 +187,8 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 		}
 	}
 	// Aliases
-	for alias, fqn := range i.classes {
-		if "\\"+fqn == name.GetFQN() {
+	for alias, item := range i.classes {
+		if "\\"+item.name == name.GetFQN() {
 			return alias, nil
 		}
 	}
@@ -201,4 +217,60 @@ func (i ImportTable) ResolveScopeNamespace(word string) string {
 	name := NewTypeString(word)
 	name.SetNamespace(i.GetNamespace())
 	return name.GetNamespace()
+}
+
+func (i *ImportTable) useClass(name string) {
+	if item, ok := i.classes[name]; ok {
+		item.isUsed = true
+	}
+}
+
+func (i *ImportTable) useFunction(name string) {
+	if item, ok := i.functions[name]; ok {
+		item.isUsed = true
+	}
+}
+
+func (i *ImportTable) useConstant(name string) {
+	if item, ok := i.constants[name]; ok {
+		item.isUsed = true
+	}
+}
+
+func (i *ImportTable) useFunctionOrClass(name TypeString) {
+	firstPart, parts := name.GetFirstAndRestParts()
+	if len(parts) > 0 {
+		i.useClass(firstPart)
+	} else {
+		i.useFunction(firstPart)
+	}
+}
+
+func (i *ImportTable) useConstOrClass(name TypeString) {
+	firstPart, parts := name.GetFirstAndRestParts()
+	if len(parts) > 0 {
+		i.useClass(firstPart)
+	} else {
+		i.useConstant(firstPart)
+	}
+}
+
+func (i ImportTable) unusedImportItems() []*importItem {
+	var results []*importItem
+	for _, item := range i.classes {
+		if !item.isUsed {
+			results = append(results, item)
+		}
+	}
+	for _, item := range i.functions {
+		if !item.isUsed {
+			results = append(results, item)
+		}
+	}
+	for _, item := range i.constants {
+		if !item.isUsed {
+			results = append(results, item)
+		}
+	}
+	return results
 }

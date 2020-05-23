@@ -3,6 +3,7 @@ package analysis
 import (
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 )
 
@@ -67,7 +68,7 @@ func processNamespaceUseClauseList(document *Document, useType UseType, node *ph
 				}
 				child = traverser.Advance()
 			}
-			addUseToImportTable(document, useType, alias, name)
+			addUseToImportTable(document, useType, alias, name, document.nodeRange(p))
 
 			traverser, err = traverser.Ascend()
 			if err != nil {
@@ -107,7 +108,7 @@ func processNamespaceUseGroupClauseList(document *Document, prefix string, useTy
 					child = traverser.Advance()
 				}
 				name = prefix + "\\" + name
-				addUseToImportTable(document, useType, alias, name)
+				addUseToImportTable(document, useType, alias, name, document.nodeRange(p))
 
 				traverser, err = traverser.Ascend()
 				if err != nil {
@@ -132,13 +133,13 @@ func getAliasFromNode(document *Document, node *phrase.Phrase) string {
 	return ""
 }
 
-func addUseToImportTable(document *Document, useType UseType, alias string, name string) {
+func addUseToImportTable(document *Document, useType UseType, alias string, name string, r protocol.Range) {
 	switch useType {
 	case UseClass:
-		document.currImportTable().addClassName(alias, name)
+		document.currImportTable().addClassName(alias, name, r)
 	case UseFunction:
-		document.currImportTable().addFunctionName(alias, name)
+		document.currImportTable().addFunctionName(alias, name, r)
 	case UseConst:
-		document.currImportTable().addConstName(alias, name)
+		document.currImportTable().addConstName(alias, name, r)
 	}
 }

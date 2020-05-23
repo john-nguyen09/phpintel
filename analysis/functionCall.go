@@ -43,6 +43,7 @@ func newFunctionCall(a analyser, document *Document, node *phrase.Phrase) (HasTy
 	if firstChild != nil {
 		functionCall.Location = document.GetNodeLocation(firstChild)
 		functionCall.Name = document.GetNodeText(firstChild)
+		document.currImportTable().useFunctionOrClass(NewTypeString(functionCall.Name))
 	}
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {

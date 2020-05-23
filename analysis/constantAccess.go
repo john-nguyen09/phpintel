@@ -28,6 +28,7 @@ func newConstantAccess(a analyser, document *Document, node *phrase.Phrase) (Has
 		},
 	}
 	constantAccess.readName(document, node)
+	document.currImportTable().useConstOrClass(NewTypeString(constantAccess.Name))
 	return constantAccess, true
 }
 
