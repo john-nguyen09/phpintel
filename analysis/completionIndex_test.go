@@ -18,6 +18,21 @@ func TestCompletionIndex(t *testing.T) {
 	cupaloy.SnapshotT(t, classes)
 }
 
+func TestMultipleIndexing(t *testing.T) {
+	store := setupStore("test", t.Name())
+	indexDocument(store, "../cases/method.php", "method")
+	indexDocument(store, "../cases/method.php", "method")
+	classes, _ := store.SearchClasses("TestMethodClass", NewSearchOptions())
+	results := []string{}
+	for _, c := range classes {
+		results = append(results, c.Name.GetFQN())
+	}
+	assert.Equal(t, []string{
+		"\\TestMethodClass",
+		"\\TestAbstractMethodClass",
+	}, results)
+}
+
 type indexable struct {
 	collection string
 	name       string

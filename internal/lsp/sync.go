@@ -56,7 +56,9 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 			}
 			stats, err := os.Stat(filePath)
 			if err != nil {
-				log.Printf("didChangeWatchedFiles error: %v", err)
+				if !os.IsNotExist(err) {
+					log.Printf("didChangeWatchedFiles error: %v", err)
+				}
 				continue
 			}
 			matched := strings.HasSuffix(filePath, ".php")
