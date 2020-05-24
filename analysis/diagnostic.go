@@ -113,6 +113,29 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 					}
 				}
 			}
+		case *TypeDeclaration:
+			v.Resolve(ctx)
+		LTypeDecl:
+			for _, t := range v.GetTypes().Resolve() {
+				for _, c := range ctx.store.GetClasses(t.GetFQN()) {
+					if c.deprecatedTag != nil {
+						diagnostics = append(diagnostics, create(
+							v.Location.Range,
+							deprecatedDescription(v.Name+" is deprecated", c.deprecatedTag),
+						))
+						break LTypeDecl
+					}
+				}
+				for _, i := range ctx.store.GetInterfaces(t.GetFQN()) {
+					if i.deprecatedTag != nil {
+						diagnostics = append(diagnostics, create(
+							v.Location.Range,
+							deprecatedDescription(v.Name+" is deprecated", i.deprecatedTag),
+						))
+						break LTypeDecl
+					}
+				}
+			}
 		case *ClassAccess:
 			v.Resolve(ctx)
 		LClass:

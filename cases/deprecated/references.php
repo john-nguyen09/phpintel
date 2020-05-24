@@ -10,4 +10,8 @@ DeprecatedClass::$deprecatedStaticProp;
 
 class InheritingDeprecatedClass extends DeprecatedClass implements DeprecatedInterface
 {
+    private function method1(DeprecatedClass $instance)
+    {
+        
+    }
 }

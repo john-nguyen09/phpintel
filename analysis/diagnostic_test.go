@@ -39,5 +39,6 @@ func TestDeprecatedReferences(t *testing.T) {
 		{Start: protocol.Position{Line: 8, Character: 17}, End: protocol.Position{Line: 8, Character: 38}},
 		{Start: protocol.Position{Line: 10, Character: 40}, End: protocol.Position{Line: 10, Character: 55}},
 		{Start: protocol.Position{Line: 10, Character: 67}, End: protocol.Position{Line: 10, Character: 86}},
+		{Start: protocol.Position{Line: 12, Character: 29}, End: protocol.Position{Line: 12, Character: 44}},
 	}, results)
 }
