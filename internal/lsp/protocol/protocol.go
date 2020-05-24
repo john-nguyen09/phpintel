@@ -3216,7 +3216,7 @@ type WorkspaceEdit struct {
 	/*Changes defined:
 	 * Holds changes to existing resources.
 	 */
-	Changes *map[string][]TextEdit `json:"changes,omitempty"` // [uri: string]: TextEdit[];
+	Changes map[string][]TextEdit `json:"changes,omitempty"` // [uri: string]: TextEdit[];
 
 	/*DocumentChanges defined:
 	 * Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes

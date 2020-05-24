@@ -123,6 +123,11 @@ func newContextualVariable(v *Variable, start protocol.Position, isDeclaration b
 	}
 }
 
+// Variable returns the variable of the contextualVariable
+func (c contextualVariable) Variable() *Variable {
+	return c.v
+}
+
 // VariableTable holds the range and the variables inside
 type VariableTable struct {
 	locationRange  protocol.Range
@@ -227,4 +232,12 @@ func (vt *VariableTable) unusedVariables() []*Variable {
 		}
 	}
 	return results
+}
+
+// GetContextualVariables returns the variable instances with the given name
+func (vt *VariableTable) GetContextualVariables(name string) []contextualVariable {
+	if ctxVars, ok := vt.variables[name]; ok {
+		return ctxVars
+	}
+	return nil
 }

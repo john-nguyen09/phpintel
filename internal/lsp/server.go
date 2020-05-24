@@ -234,7 +234,7 @@ func (s *Server) OnTypeFormatting(context.Context, *protocol.DocumentOnTypeForma
 }
 
 func (s *Server) Rename(ctx context.Context, params *protocol.RenameParams) (*protocol.WorkspaceEdit, error) {
-	return nil, nil
+	return s.rename(params)
 }
 
 func (s *Server) Declaration(context.Context, *protocol.DeclarationParams) ([]protocol.DeclarationLink, error) {

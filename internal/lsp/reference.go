@@ -91,3 +91,35 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	}
 	return results, nil
 }
+
+func (s *Server) rename(params *protocol.RenameParams) (*protocol.WorkspaceEdit, error) {
+	uri := params.TextDocument.URI
+	store := s.store.getStore(uri)
+	if store == nil {
+		return nil, StoreNotFound(uri)
+	}
+	doc := store.GetOrCreateDocument(uri)
+	if doc == nil {
+		return nil, DocumentNotFound(uri)
+	}
+	pos := params.Position
+	symbol := doc.HasTypesAtPos(pos)
+	result := &protocol.WorkspaceEdit{
+		Changes: make(map[string][]protocol.TextEdit),
+	}
+	switch v := symbol.(type) {
+	case *analysis.Variable:
+		varTable := doc.GetVariableTableAt(pos)
+		if varTable != nil {
+			var changes []protocol.TextEdit
+			for _, ctxVar := range varTable.GetContextualVariables(v.Name) {
+				changes = append(changes, protocol.TextEdit{
+					Range:   ctxVar.Variable().Location.Range,
+					NewText: params.NewName,
+				})
+			}
+			result.Changes[uri] = changes
+		}
+	}
+	return result, nil
+}
