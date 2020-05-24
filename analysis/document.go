@@ -538,6 +538,11 @@ func (s *Document) ApplyChanges(changes []protocol.TextDocumentContentChangeEven
 	start := time.Now()
 	s.hasChanges = true
 	for _, change := range changes {
+		// Full sync
+		if change.Range == nil {
+			s.SetText([]byte(change.Text))
+			continue
+		}
 		start := change.Range.Start
 		end := change.Range.End
 		text := []byte(change.Text)

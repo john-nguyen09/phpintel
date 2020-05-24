@@ -34,7 +34,7 @@ func wrapPHPCode(sb *strings.Builder, fn func(*strings.Builder)) {
 func wrapCode(sb *strings.Builder, fn func(*strings.Builder)) {
 	sb.WriteString("```\n")
 	fn(sb)
-	sb.WriteString("\n````\n")
+	sb.WriteString("\n```\n")
 }
 
 func writeHorLine(sb *strings.Builder) {

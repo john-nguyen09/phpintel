@@ -12,6 +12,7 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/internal/lsp"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 var (
@@ -19,12 +20,14 @@ var (
 	version    string = "Unknown"
 	memprofile string
 	cpuprofile string
+	panicLog   string
 )
 
 func main() {
 	flag.BoolVar(&flgVersion, "version", false, "Show version of the language server")
 	flag.StringVar(&memprofile, "memprofile", "", "write mem profile to `file`")
 	flag.StringVar(&cpuprofile, "cpuprofile", "", "write cpu profile to `file`")
+	flag.StringVar(&panicLog, "paniclog", "", "write panic log to `file` (Windows only)")
 	flag.Parse()
 
 	if flgVersion {
@@ -32,6 +35,12 @@ func main() {
 		return
 	}
 
+	if panicLog != "" {
+		f, err := os.OpenFile(panicLog, os.O_CREATE, os.ModePerm)
+		if err == nil {
+			util.RedirectStderr(f)
+		}
+	}
 	if cpuprofile != "" {
 		f, err := os.Create(cpuprofile)
 		if err != nil {

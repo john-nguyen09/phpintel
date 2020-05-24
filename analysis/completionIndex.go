@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -83,14 +82,12 @@ func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
 				deleted:    false,
 			}
 			entries = append(entries, entry)
-			var (
-				entries []*fuzzyEntry
-			)
+			entriesURIIndex := map[*fuzzyEntry]*fuzzyEntry{}
 			if m, ok := entryURIIndex.Get(entry.uri); ok {
-				entries = m.([]*fuzzyEntry)
+				entriesURIIndex = m.(map[*fuzzyEntry]*fuzzyEntry)
 			}
-			entries = append(entries, entry)
-			entryURIIndex.Set(entry.uri, entries)
+			entriesURIIndex[entry] = entry
+			entryURIIndex.Set(entry.uri, entriesURIIndex)
 		}
 		entriesMap.Set(collection, entries)
 		count++
@@ -113,7 +110,7 @@ func (f *fuzzyEngine) Len() int {
 	if m, ok := f.entries.Get(f.currentCollection); ok {
 		return len(m.([]*fuzzyEntry))
 	}
-	panic(fmt.Errorf("%s is not a valid collection", f.currentCollection))
+	return 0
 }
 
 func (f *fuzzyEngine) serialise(e *storage.Encoder) {
