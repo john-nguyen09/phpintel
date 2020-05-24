@@ -1,6 +1,6 @@
-// Log the panic under unix to the log file
+// Log the panic under linux to the log file
 
-//+build unix
+//+build linux
 
 package util
 
