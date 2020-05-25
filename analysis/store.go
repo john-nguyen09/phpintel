@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver"
+	"github.com/bep/debounce"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
@@ -85,7 +86,8 @@ type Store struct {
 	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
 
-	syncedDocumentURIs cmap.ConcurrentMap
+	syncedDocumentURIs   cmap.ConcurrentMap
+	DebouncedDeprecation func(func())
 }
 
 type symbolDeletor struct {
@@ -160,7 +162,8 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 		stubbers:  stubbers,
 		documents: cmap.New(),
 
-		syncedDocumentURIs: cmap.New(),
+		syncedDocumentURIs:   cmap.New(),
+		DebouncedDeprecation: debounce.New(2 * time.Second),
 	}
 	return store, nil
 }
