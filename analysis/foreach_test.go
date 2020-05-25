@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestForeach(t *testing.T) {
@@ -18,4 +19,8 @@ func TestForeach(t *testing.T) {
 	h := document.HasTypesAt(75)
 	h.Resolve(NewResolveContext(store, document))
 	cupaloy.SnapshotT(t, h.GetTypes())
+
+	h = document.HasTypesAt(120)
+	h.Resolve(NewResolveContext(store, document))
+	assert.Equal(t, "string", h.GetTypes().ToString())
 }

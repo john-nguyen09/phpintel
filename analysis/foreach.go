@@ -22,7 +22,7 @@ func analyseForeachStatement(a analyser, document *Document, node *phrase.Phrase
 				f = newForeachCollection(a, document, p)
 			case phrase.ForeachValue:
 				analyseForeachValue(a, document, f, p)
-			case phrase.CompoundStatement:
+			case phrase.CompoundStatement, phrase.StatementList:
 				scanForChildren(a, document, p)
 			}
 		}
