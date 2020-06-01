@@ -120,7 +120,7 @@ function func2() {
 		{doc3.importTables[0], "func3", "\\Namespace3\\func3"},
 	}
 	for _, testCase := range testCases {
-		actual := testCase.importTable.GetFunctionReferenceFQN(store, NewTypeString(testCase.funcCall))
+		actual := testCase.importTable.GetFunctionReferenceFQN(NewQuery(store), NewTypeString(testCase.funcCall))
 		assert.Equal(t, testCase.expected, actual)
 	}
 }

@@ -15,8 +15,9 @@ func (s *Server) provideDiagnostics(ctx context.Context, store *analysis.Store, 
 	store.DebouncedDeprecation(func() {
 		ctx = xcontext.Detach(ctx)
 		params := &protocol.PublishDiagnosticsParams{
-			URI:         document.GetURI(),
-			Diagnostics: analysis.DeprecatedDiagnostics(analysis.NewResolveContext(store, document)),
+			URI: document.GetURI(),
+			Diagnostics: append(diagnostics,
+				analysis.DeprecatedDiagnostics(analysis.NewResolveContext(analysis.NewQuery(store), document))...),
 		}
 		err := s.client.PublishDiagnostics(ctx, params)
 		if err != nil {

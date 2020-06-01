@@ -65,9 +65,9 @@ func (s *ClassTypeDesignator) GetTypes() TypeComposite {
 
 func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
-	store := ctx.store
+	q := ctx.query
 	for _, typeString := range s.GetTypes().Resolve() {
-		methods := store.GetMethods(typeString.GetFQN(), "__construct")
+		methods := q.GetMethods(typeString.GetFQN(), "__construct")
 		for _, method := range methods {
 			hasParams = append(hasParams, method)
 		}

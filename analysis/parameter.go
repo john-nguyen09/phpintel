@@ -11,6 +11,7 @@ import (
 // Parameter contains information of a function parameter
 type Parameter struct {
 	location    protocol.Location
+	varLocation protocol.Location
 	description string
 	hasValue    bool
 
@@ -21,7 +22,8 @@ type Parameter struct {
 
 func newParameter(a analyser, document *Document, node *phrase.Phrase) *Parameter {
 	param := &Parameter{
-		location: document.GetNodeLocation(node),
+		location:    document.GetNodeLocation(node),
+		varLocation: document.GetNodeLocation(node),
 	}
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
@@ -60,6 +62,7 @@ func newParameter(a analyser, document *Document, node *phrase.Phrase) *Paramete
 				traverser.SkipToken(lexer.Whitespace)
 			case lexer.VariableName:
 				param.Name = document.getTokenText(token)
+				param.varLocation = document.GetNodeLocation(token)
 			default:
 				if hasEqual {
 					param.hasValue = true
@@ -83,7 +86,7 @@ func (s *Parameter) GetLocation() protocol.Location {
 func (s Parameter) ToVariable() *Variable {
 	return &Variable{
 		Expression: Expression{
-			Location: s.location,
+			Location: s.varLocation,
 			Type:     s.Type,
 			Name:     s.Name,
 			Scope:    nil,
@@ -99,6 +102,7 @@ func (s Parameter) HasValue() bool {
 
 func (s *Parameter) Write(e *storage.Encoder) {
 	e.WriteLocation(s.location)
+	e.WriteLocation(s.varLocation)
 	e.WriteBool(s.hasValue)
 	e.WriteString(s.Name)
 	s.Type.Write(e)
@@ -107,10 +111,11 @@ func (s *Parameter) Write(e *storage.Encoder) {
 
 func ReadParameter(d *storage.Decoder) *Parameter {
 	return &Parameter{
-		location: d.ReadLocation(),
-		hasValue: d.ReadBool(),
-		Name:     d.ReadString(),
-		Type:     ReadTypeComposite(d),
-		Value:    d.ReadString(),
+		location:    d.ReadLocation(),
+		varLocation: d.ReadLocation(),
+		hasValue:    d.ReadBool(),
+		Name:        d.ReadString(),
+		Type:        ReadTypeComposite(d),
+		Value:       d.ReadString(),
 	}
 }

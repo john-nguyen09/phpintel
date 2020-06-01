@@ -43,10 +43,11 @@ func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, loc
 	}
 	for _, paramTag := range methodTag.Parameters {
 		param := &Parameter{
-			location: location,
-			Name:     paramTag.Name,
-			Value:    paramTag.Value,
-			Type:     typesFromPhpDoc(document, paramTag.TypeString),
+			location:    location,
+			varLocation: location,
+			Name:        paramTag.Name,
+			Value:       paramTag.Value,
+			Type:        typesFromPhpDoc(document, paramTag.TypeString),
 		}
 		method.Params = append(method.Params, param)
 	}

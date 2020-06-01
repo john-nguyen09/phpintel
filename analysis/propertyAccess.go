@@ -39,11 +39,17 @@ func (s *PropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
-	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			for _, property := range GetClassProperties(store, class, "$"+s.Name, NewSearchOptions()) {
-				s.Type.merge(property.Types)
+	q := ctx.query
+	var scopeName string
+	if n, ok := s.Scope.(HasName); ok {
+		scopeName = n.GetName()
+	}
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
+	types := s.ResolveAndGetScope(ctx)
+	for _, scopeType := range types.Resolve() {
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, p := range q.GetClassProps(class, "$"+s.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+				s.Type.merge(p.Prop.Types)
 			}
 		}
 	}

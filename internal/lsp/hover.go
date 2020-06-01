@@ -18,7 +18,8 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	if document == nil {
 		return nil, DocumentNotFound(uri)
 	}
-	resolveCtx := analysis.NewResolveContext(store, document)
+	q := analysis.NewQuery(store)
+	resolveCtx := analysis.NewResolveContext(q, document)
 	document.Load()
 	pos := params.TextDocumentPositionParams.Position
 	symbol := document.HasTypesAtPos(pos)
@@ -29,12 +30,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ClassTypeDesignator:
 		classes := []*analysis.Class{}
 		for _, typeString := range v.GetTypes().Resolve() {
-			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
+			classes = append(classes, q.GetClasses(typeString.GetFQN())...)
 		}
-		constructors := []*analysis.Method{}
+		constructors := []analysis.MethodWithScope{}
 		for _, class := range classes {
-			constructor := class.GetConstructor(store)
-			if constructor != nil {
+			constructor := q.GetClassConstructor(class)
+			if constructor.Method != nil {
 				constructors = append(constructors, constructor)
 			}
 		}
@@ -47,8 +48,8 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		classes := []*analysis.Class{}
 		interfaces := []*analysis.Interface{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
-			interfaces = append(interfaces, store.GetInterfaces(typeString.GetFQN())...)
+			classes = append(classes, q.GetClasses(typeString.GetFQN())...)
+			interfaces = append(interfaces, q.GetInterfaces(typeString.GetFQN())...)
 		}
 		var sb strings.Builder
 		if len(classes) > 0 {
@@ -65,7 +66,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.InterfaceAccess:
 		interfaces := []*analysis.Interface{}
 		for _, typeString := range v.Type.Resolve() {
-			interfaces = append(interfaces, store.GetInterfaces(typeString.GetFQN())...)
+			interfaces = append(interfaces, q.GetInterfaces(typeString.GetFQN())...)
 		}
 		if len(interfaces) > 0 {
 			hover = interfacesToHover(v, interfaces)
@@ -73,7 +74,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.TraitAccess:
 		traits := []*analysis.Trait{}
 		for _, typeString := range v.GetTypes().Resolve() {
-			traits = append(traits, store.GetTraits(typeString.GetFQN())...)
+			traits = append(traits, q.GetTraits(typeString.GetFQN())...)
 		}
 		if len(traits) > 0 {
 			hover = traitsToHover(v, traits)
@@ -82,12 +83,12 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		consts := []*analysis.Const{}
 		defines := []*analysis.Define{}
 		name := analysis.NewTypeString(v.Name)
-		consts = append(consts, store.GetConsts(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name))...)
+		consts = append(consts, q.GetConsts(document.ImportTableAtPos(pos).GetConstReferenceFQN(q, name))...)
 		var sb strings.Builder
 		if len(consts) > 0 {
 			sb.WriteString(formatConsts(consts).String())
 		}
-		defines = append(defines, store.GetDefines(document.ImportTableAtPos(pos).GetConstReferenceFQN(store, name))...)
+		defines = append(defines, q.GetDefines(document.ImportTableAtPos(pos).GetConstReferenceFQN(q, name))...)
 		if len(defines) > 0 {
 			sb.WriteString(formatDefines(defines).String())
 		}
@@ -98,7 +99,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 		}
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
-		functions := store.GetFunctions(document.ImportTableAtPos(pos).GetFunctionReferenceFQN(store, name))
+		functions := q.GetFunctions(document.ImportTableAtPos(pos).GetFunctionReferenceFQN(q, name))
 		if len(functions) > 0 {
 			hover = functionsToHover(symbol, functions)
 			break
@@ -106,88 +107,88 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	case *analysis.ScopedConstantAccess:
 		classConsts := []*analysis.ClassConst{}
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			classConsts = append(classConsts, store.GetClassConsts(scopeType.GetFQN(), v.Name)...)
+			classConsts = append(classConsts, q.GetClassConsts(scopeType.GetFQN(), v.Name)...)
 		}
 		if len(classConsts) > 0 {
 			hover = classConstsToHover(symbol, classConsts)
 		}
 	case *analysis.ScopedMethodAccess:
-		name := ""
-		classScope := ""
+		var scopeName string
 		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			name = hasName.GetName()
+			scopeName = hasName.GetName()
 		}
-		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope()
-		}
-		methods := []*analysis.Method{}
+		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		methods := analysis.EmptyInheritedMethods()
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, class := range store.GetClasses(scopeType.GetFQN()) {
-				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.StaticMethodsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
 			}
 		}
-		if len(methods) > 0 {
-			hover = methodsToHover(symbol, methods)
+		if methods.Len() > 0 {
+			hover = methodsToHover(symbol, methods.ReduceStatic(currentClass, scopeName))
 		}
 	case *analysis.ScopedPropertyAccess:
-		name := ""
-		classScope := ""
+		var scopeName string
 		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			name = hasName.GetName()
+			scopeName = hasName.GetName()
 		}
-		if hasScope, ok := v.Scope.(analysis.HasScope); ok {
-			classScope = hasScope.GetScope()
-		}
-		properties := []*analysis.Property{}
+		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		properties := analysis.EmptyInheritedProps()
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, class := range store.GetClasses(scopeType.GetFQN()) {
-				properties = append(properties, analysis.GetClassProperties(store, class, v.Name,
-					analysis.StaticPropsScopeAware(analysis.NewSearchOptions(), classScope, name))...)
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				properties.Merge(q.GetClassProps(class, v.Name, properties.SearchedFQNs))
 			}
 		}
-		if len(properties) > 0 {
-			hover = propertiesToHover(symbol, properties)
+		if properties.Len() > 0 {
+			hover = propertiesToHover(symbol, properties.ReduceStatic(currentClass, scopeName))
 		}
 	case *analysis.Variable:
 		v.Resolve(resolveCtx)
 		hover = variableToHover(v)
 	case *analysis.PropertyAccess:
-		properties := []*analysis.Property{}
-		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, class := range store.GetClasses(scopeType.GetFQN()) {
-				properties = append(properties, analysis.GetClassProperties(store, class, "$"+v.Name,
-					analysis.PropsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+		var scopeName string
+		if n, ok := v.Scope.(analysis.HasName); ok {
+			scopeName = n.GetName()
+		}
+		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		types := v.ResolveAndGetScope(resolveCtx)
+		properties := analysis.EmptyInheritedProps()
+		for _, scopeType := range types.Resolve() {
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				properties.Merge(q.GetClassProps(class, "$"+v.Name, properties.SearchedFQNs))
 			}
 		}
-		if len(properties) > 0 {
-			hover = propertiesToHover(symbol, properties)
+		if properties.Len() > 0 {
+			hover = propertiesToHover(symbol, properties.ReduceAccess(currentClass, scopeName, types))
 		}
 	case *analysis.MethodAccess:
-		methods := []*analysis.Method{}
-		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, class := range store.GetClasses(scopeType.GetFQN()) {
-				methods = append(methods, analysis.GetClassMethods(store, class, v.Name,
-					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+		var scopeName string
+		if n, ok := v.Scope.(analysis.HasName); ok {
+			scopeName = n.GetName()
+		}
+		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		types := v.ResolveAndGetScope(resolveCtx)
+		methods := analysis.EmptyInheritedMethods()
+		for _, scopeType := range types.Resolve() {
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
 			}
-			for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
-				methods = append(methods, analysis.GetInterfaceMethods(store, theInterface, v.Name,
-					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
+				methods.Merge(q.GetInterfaceMethods(theInterface, v.Name, methods.SearchedFQNs))
 			}
-			for _, trait := range store.GetTraits(scopeType.GetFQN()) {
-				methods = append(methods, analysis.GetTraitMethods(store, trait, v.Name,
-					analysis.MethodsScopeAware(analysis.NewSearchOptions(), document, v.Scope))...)
+			for _, trait := range q.GetTraits(scopeType.GetFQN()) {
+				methods.Merge(q.GetTraitMethods(trait, v.Name))
 			}
 		}
-		if len(methods) > 0 {
-			hover = methodsToHover(symbol, methods)
+		if methods.Len() > 0 {
+			hover = methodsToHover(symbol, methods.ReduceAccess(currentClass, scopeName, types))
 		}
 	case *analysis.TypeDeclaration:
 		classes := []*analysis.Class{}
 		interfaces := []*analysis.Interface{}
 		for _, typeString := range v.Type.Resolve() {
-			classes = append(classes, store.GetClasses(typeString.GetFQN())...)
-			interfaces = append(interfaces, store.GetInterfaces(typeString.GetFQN())...)
+			classes = append(classes, q.GetClasses(typeString.GetFQN())...)
+			interfaces = append(interfaces, q.GetInterfaces(typeString.GetFQN())...)
 		}
 		var sb strings.Builder
 		if len(classes) > 0 {

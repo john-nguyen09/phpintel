@@ -77,16 +77,6 @@ func SearchInterfaceMethods(store *Store, theInterface *Interface, keyword strin
 	return searchInterfaceMethods(store, theInterface, options)
 }
 
-func GetInterfaceMethods(store *Store, theInterface *Interface, name string, options SearchOptions) []*Method {
-	methods := []*Method{}
-	for _, interfaceMethod := range store.GetMethods(theInterface.Name.GetFQN(), name) {
-		if isSymbolValid(interfaceMethod, options) {
-			methods = append(methods, interfaceMethod)
-		}
-	}
-	return methods
-}
-
 func searchClassMethods(store *Store, class *Class, options SearchOptions) []*Method {
 	methods := []*Method{}
 	for _, method := range store.GetAllMethods(class.Name.GetFQN()) {
@@ -124,42 +114,6 @@ func searchClassMethods(store *Store, class *Class, options SearchOptions) []*Me
 func SearchClassMethods(store *Store, class *Class, keyword string, options SearchOptions) []*Method {
 	options = withKeywordOptions(keyword, withNoDuplicateNamesOptions(options))
 	return searchClassMethods(store, class, options)
-}
-
-func GetClassMethods(store *Store, class *Class, name string, options SearchOptions) []*Method {
-	methods := []*Method{}
-	options = withNoDuplicateNamesOptions(options)
-	for _, classMethod := range store.GetMethods(class.Name.GetFQN(), name) {
-		if isSymbolValid(classMethod, options) {
-			methods = append(methods, classMethod)
-		}
-	}
-
-	for _, traitName := range class.Use {
-		if traitName.IsEmpty() {
-			continue
-		}
-		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			methods = append(methods, GetTraitMethods(store, trait, name, options)...)
-		}
-	}
-
-	if !class.Extends.IsEmpty() {
-		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			methods = append(methods, GetClassMethods(store, class, name, options)...)
-		}
-	}
-
-	for _, typeString := range class.Interfaces {
-		if typeString.IsEmpty() {
-			continue
-		}
-		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			methods = append(methods, GetInterfaceMethods(store, theInterface, name,
-				options)...)
-		}
-	}
-	return methods
 }
 
 func searchTraitProps(store *Store, trait *Trait, options SearchOptions) []*Property {
@@ -241,42 +195,6 @@ func SearchClassProperties(store *Store, class *Class, keyword string, options S
 	return searchClassProperties(store, class, options)
 }
 
-func GetClassProperties(store *Store, class *Class, name string, options SearchOptions) []*Property {
-	props := []*Property{}
-	options = withNoDuplicateNamesOptions(options)
-	for _, classProp := range store.GetProperties(class.Name.GetFQN(), name) {
-		if isSymbolValid(classProp, options) {
-			props = append(props, classProp)
-		}
-	}
-
-	for _, traitName := range class.Use {
-		if traitName.IsEmpty() {
-			continue
-		}
-		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			props = append(props, getTraitProps(store, trait, name, options)...)
-		}
-	}
-
-	if !class.Extends.IsEmpty() {
-		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			props = append(props, GetClassProperties(store, class, name, options)...)
-		}
-	}
-
-	for _, typeString := range class.Interfaces {
-		if typeString.IsEmpty() {
-			continue
-		}
-		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			props = append(props, getInterfaceProps(store, theInterface, name,
-				options)...)
-		}
-	}
-	return props
-}
-
 func searchTraitClassConsts(store *Store, trait *Trait, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
 	for _, classConst := range store.GetAllClassConsts(trait.Name.GetFQN()) {
@@ -287,31 +205,11 @@ func searchTraitClassConsts(store *Store, trait *Trait, options SearchOptions) [
 	return classConsts
 }
 
-func getTraitClassConsts(store *Store, trait *Trait, name string, options SearchOptions) []*ClassConst {
-	classConsts := []*ClassConst{}
-	for _, traitClassConst := range store.GetClassConsts(trait.Name.GetFQN(), name) {
-		if isSymbolValid(traitClassConst, options) {
-			classConsts = append(classConsts, traitClassConst)
-		}
-	}
-	return classConsts
-}
-
 func searchInterfaceClassConsts(store *Store, theInterface *Interface, options SearchOptions) []*ClassConst {
 	classConsts := []*ClassConst{}
 	for _, classConst := range store.GetAllClassConsts(theInterface.Name.GetFQN()) {
 		if isSymbolValid(classConst, options) {
 			classConsts = append(classConsts, classConst)
-		}
-	}
-	return classConsts
-}
-
-func getInterfaceClassConsts(store *Store, theInterface *Interface, name string, options SearchOptions) []*ClassConst {
-	classConsts := []*ClassConst{}
-	for _, interfaceClassConst := range store.GetClassConsts(theInterface.Name.GetFQN(), name) {
-		if isSymbolValid(interfaceClassConst, options) {
-			classConsts = append(classConsts, interfaceClassConst)
 		}
 	}
 	return classConsts
@@ -356,42 +254,6 @@ func SearchClassClassConsts(store *Store, class *Class, keyword string, options 
 	return searchClassClassConsts(store, class, options)
 }
 
-func GetClassClassConsts(store *Store, class *Class, name string, options SearchOptions) []*ClassConst {
-	classConsts := []*ClassConst{}
-	options = withNoDuplicateNamesOptions(options)
-	for _, classClassConst := range store.GetClassConsts(class.Name.GetFQN(), name) {
-		if isSymbolValid(classClassConst, options) {
-			classConsts = append(classConsts, classClassConst)
-		}
-	}
-
-	for _, traitName := range class.Use {
-		if traitName.IsEmpty() {
-			continue
-		}
-		for _, trait := range store.GetTraits(traitName.GetFQN()) {
-			classConsts = append(classConsts, getTraitClassConsts(store, trait, name, options)...)
-		}
-	}
-
-	if !class.Extends.IsEmpty() {
-		for _, class := range store.GetClasses(class.Extends.GetFQN()) {
-			classConsts = append(classConsts, GetClassClassConsts(store, class, name, options)...)
-		}
-	}
-
-	for _, typeString := range class.Interfaces {
-		if typeString.IsEmpty() {
-			continue
-		}
-		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			classConsts = append(classConsts, getInterfaceClassConsts(store, theInterface, name,
-				options)...)
-		}
-	}
-	return classConsts
-}
-
 func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) SearchOptions {
 	return opt.WithPredicate(func(symbol Symbol) bool {
 		method := symbol.(*Method)
@@ -422,7 +284,7 @@ func StaticMethodsScopeAware(opt SearchOptions, classScope string, name string) 
 
 func MethodsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
 	name := ""
-	classScope := document.getClassScopeAtSymbol(scope)
+	classScope := document.GetClassScopeAtSymbol(scope)
 	if hasName, ok := scope.(HasName); ok {
 		name = hasName.GetName()
 	}
@@ -479,7 +341,7 @@ func StaticPropsScopeAware(opt SearchOptions, classScope string, name string) Se
 
 func PropsScopeAware(opt SearchOptions, document *Document, scope HasTypes) SearchOptions {
 	name := ""
-	classScope := document.getClassScopeAtSymbol(scope)
+	classScope := document.GetClassScopeAtSymbol(scope)
 	if hasName, ok := scope.(HasName); ok {
 		name = hasName.GetName()
 	}

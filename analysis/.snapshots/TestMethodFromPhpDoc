@@ -11,6 +11,10 @@
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 1:0-4:3
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
         description: (string) "",
         hasValue: (bool) false,
         Name: (string) (len=6) "$table",
@@ -27,6 +31,10 @@
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        varLocation: (protocol.Location) {
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 1:0-4:3
         },
@@ -76,6 +84,10 @@
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 1:0-4:3
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
         description: (string) "",
         hasValue: (bool) false,
         Name: (string) (len=6) "$class",
@@ -95,6 +107,10 @@
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 1:0-4:3
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
         description: (string) "",
         hasValue: (bool) false,
         Name: (string) (len=5) "$name",
@@ -111,6 +127,10 @@
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-4:3
+        },
+        varLocation: (protocol.Location) {
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 1:0-4:3
         },

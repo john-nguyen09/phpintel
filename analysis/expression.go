@@ -14,13 +14,15 @@ type Expression struct {
 	Name     string
 }
 
+// ResolveContext contains query and document
 type ResolveContext struct {
-	store    *Store
+	query    *Query
 	document *Document
 }
 
-func NewResolveContext(store *Store, document *Document) ResolveContext {
-	return ResolveContext{store, document}
+// NewResolveContext creates a resolve context
+func NewResolveContext(query *Query, document *Document) ResolveContext {
+	return ResolveContext{query, document}
 }
 
 func (e *Expression) Resolve(ctx ResolveContext) {

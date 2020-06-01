@@ -41,6 +41,14 @@ func writeHorLine(sb *strings.Builder) {
 	sb.WriteString("\n____\n")
 }
 
+func writeScope(sb *strings.Builder, kind, name string) {
+	sb.WriteString("\n`")
+	sb.WriteString(kind)
+	sb.WriteString(" ")
+	sb.WriteString(name)
+	sb.WriteString("`")
+}
+
 func concatParams(sb *strings.Builder, params []*analysis.Parameter) {
 	paramContents := []string{}
 	if len(params) > 0 {
@@ -250,9 +258,13 @@ func concatVisibility(sb *strings.Builder, visibility analysis.VisibilityModifie
 	}
 }
 
-func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol.Hover {
+func methodsToHover(ref analysis.HasTypes, methods []analysis.MethodWithScope) *protocol.Hover {
 	sb := &strings.Builder{}
-	for _, method := range methods {
+	for _, m := range methods {
+		method := m.Method
+		if method == nil {
+			continue
+		}
 		wrapPHPCode(sb, func(sb *strings.Builder) {
 			concatVisibility(sb, method.VisibilityModifier)
 			if method.IsStatic {
@@ -268,6 +280,25 @@ func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol
 				sb.WriteString(method.GetReturnTypes().ToString())
 			}
 		})
+		var (
+			scopeKind string
+			scopeName string
+		)
+		switch v := m.Scope.(type) {
+		case *analysis.Class:
+			scopeKind = "class"
+			scopeName = v.Name.GetFQN()
+		case *analysis.Interface:
+			scopeKind = "interface"
+			scopeName = v.Name.GetFQN()
+		case *analysis.Trait:
+			scopeKind = "trait"
+			scopeName = v.Name.GetFQN()
+		}
+		if scopeKind != "" {
+			writeHorLine(sb)
+			writeScope(sb, scopeKind, scopeName)
+		}
 		concatDescriptionIfAvailable(sb, method.GetDescription())
 		writeHorLine(sb)
 	}
@@ -281,9 +312,10 @@ func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol
 	}
 }
 
-func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *protocol.Hover {
+func propertiesToHover(ref analysis.HasTypes, properties []analysis.PropWithScope) *protocol.Hover {
 	sb := &strings.Builder{}
-	for _, property := range properties {
+	for _, p := range properties {
+		property := p.Prop
 		wrapPHPCode(sb, func(s *strings.Builder) {
 			concatVisibility(sb, property.VisibilityModifier)
 			if property.IsStatic {
@@ -296,6 +328,25 @@ func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *
 				sb.WriteString(property.Types.ToString())
 			}
 		})
+		var (
+			scopeKind string
+			scopeName string
+		)
+		switch v := p.Scope.(type) {
+		case *analysis.Class:
+			scopeKind = "class"
+			scopeName = v.Name.GetFQN()
+		case *analysis.Interface:
+			scopeKind = "interface"
+			scopeName = v.Name.GetFQN()
+		case *analysis.Trait:
+			scopeKind = "trait"
+			scopeName = v.Name.GetFQN()
+		}
+		if scopeKind != "" {
+			writeHorLine(sb)
+			writeScope(sb, scopeKind, scopeName)
+		}
 		concatDescriptionIfAvailable(sb, property.GetDescription())
 		writeHorLine(sb)
 	}

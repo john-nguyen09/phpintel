@@ -51,16 +51,22 @@ func (s *MethodAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
+	q := ctx.query
+	var scopeName string
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
+	if n, ok := s.Scope.(HasName); ok {
+		scopeName = n.GetName()
+	}
+	types := s.Scope.GetTypes()
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			for _, method := range GetClassMethods(store, class, s.Name, NewSearchOptions()) {
-				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
-		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
-			for _, method := range GetInterfaceMethods(store, theInterface, s.Name, NewSearchOptions()) {
-				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+		for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
+			for _, m := range q.GetInterfaceMethods(theInterface, s.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
 	}
@@ -73,24 +79,23 @@ func (s *MethodAccess) GetTypes() TypeComposite {
 
 func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
-	store := ctx.store
-	document := ctx.document
-	for _, typeString := range s.ResolveAndGetScope(ctx).Resolve() {
-		methods := []*Method{}
-		for _, class := range store.GetClasses(typeString.GetFQN()) {
-			methods = append(methods, GetClassMethods(store, class, s.Name,
-				MethodsScopeAware(NewSearchOptions(), document, s.Scope))...)
+	q := ctx.query
+	var scopeName string
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
+	if n, ok := s.Scope.(HasName); ok {
+		scopeName = n.GetName()
+	}
+	types := s.ResolveAndGetScope(ctx)
+	for _, typeString := range types.Resolve() {
+		methods := []MethodWithScope{}
+		for _, class := range q.GetClasses(typeString.GetFQN()) {
+			methods = append(methods, q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, scopeName, types)...)
 		}
-		for _, theInterface := range store.GetInterfaces(typeString.GetFQN()) {
-			methods = append(methods, GetInterfaceMethods(store, theInterface, s.Name,
-				MethodsScopeAware(NewSearchOptions(), document, s.Scope))...)
+		for _, intf := range q.GetInterfaces(typeString.GetFQN()) {
+			methods = append(methods, q.GetInterfaceMethods(intf, s.Name, nil).ReduceAccess(currentClass, scopeName, types)...)
 		}
-		for _, trait := range store.GetTraits(typeString.GetFQN()) {
-			methods = append(methods, GetTraitMethods(store, trait, s.Name,
-				MethodsScopeAware(NewSearchOptions(), document, s.Scope))...)
-		}
-		for _, method := range methods {
-			hasParams = append(hasParams, method)
+		for _, m := range methods {
+			hasParams = append(hasParams, m.Method)
 		}
 	}
 	return hasParams

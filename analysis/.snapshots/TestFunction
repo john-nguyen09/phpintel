@@ -15,6 +15,10 @@
           URI: (string) (len=5) "test1",
           Range: (protocol.Range) 2:22-2:46
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 2:32-2:39
+        },
         description: (string) "",
         hasValue: (bool) true,
         Name: (string) (len=7) "$param1",

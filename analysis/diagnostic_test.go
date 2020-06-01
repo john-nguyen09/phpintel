@@ -19,7 +19,7 @@ func TestDeprecatedReferences(t *testing.T) {
 	doc.Load()
 	store.SyncDocument(doc)
 
-	diagnostics := DeprecatedDiagnostics(NewResolveContext(store, doc))
+	diagnostics := DeprecatedDiagnostics(NewResolveContext(NewQuery(store), doc))
 	results := []protocol.Range{}
 	for _, diagnostic := range diagnostics {
 		results = append(results, diagnostic.Range)

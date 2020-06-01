@@ -88,7 +88,7 @@ func (i ImportTable) GetClassReferenceFQN(name TypeString) string {
 	return name.GetFQN()
 }
 
-func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) string {
+func (i ImportTable) GetFunctionReferenceFQN(q *Query, name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.functions
 	if len(parts) > 0 {
@@ -102,7 +102,7 @@ func (i ImportTable) GetFunctionReferenceFQN(store *Store, name TypeString) stri
 	if !IsFQN(fqn) {
 		fqn = "\\" + fqn
 	}
-	functions := store.GetFunctions(fqn)
+	functions := q.GetFunctions(fqn)
 	if len(functions) > 0 {
 		return fqn
 	}
@@ -131,7 +131,7 @@ func (i ImportTable) functionPossibleFQNs(name TypeString) []string {
 	return results
 }
 
-func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string {
+func (i ImportTable) GetConstReferenceFQN(q *Query, name TypeString) string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.constants
 	if len(parts) > 0 {
@@ -145,13 +145,13 @@ func (i ImportTable) GetConstReferenceFQN(store *Store, name TypeString) string 
 	if !IsFQN(fqn) {
 		fqn = "\\" + fqn
 	}
-	constants := store.GetConsts(fqn)
+	constants := q.GetConsts(fqn)
 	if len(constants) > 0 {
 		return fqn
 	}
 	// TODO: Defines do not have implicit namespace except
 	// explicitly stated, e.g. define(__NAMESPACE__ . '\const1', true)
-	defines := store.GetDefines(fqn)
+	defines := q.GetDefines(fqn)
 	if len(defines) > 0 {
 		return fqn
 	}

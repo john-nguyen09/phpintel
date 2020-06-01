@@ -30,7 +30,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	}
 	var completionList *protocol.CompletionList = nil
 	pos := params.Position
-	resolveCtx := analysis.NewResolveContext(store, document)
+	resolveCtx := analysis.NewResolveContext(analysis.NewQuery(store), document)
 	completionCtx := &completionContext{document, store, pos}
 	symbol := document.HasTypesAtPos(pos)
 	word := document.WordAtPos(pos)
@@ -41,7 +41,9 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	case phrase.SimpleVariable:
 		if nodes.Parent().Type == phrase.ScopedMemberName {
 			if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
-				completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+				if s.Scope != nil {
+					completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+				}
 			}
 			break
 		}
@@ -53,15 +55,21 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		}
 	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
-			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			if s.Scope != nil {
+				completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			}
 		}
 	case phrase.ScopedCallExpression:
 		if s, ok := symbol.(*analysis.ScopedMethodAccess); ok {
-			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			if s.Scope != nil {
+				completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			}
 		}
 	case phrase.ScopedPropertyAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
-			completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			if s.Scope != nil {
+				completionList = scopedAccessCompletion(completionCtx, word, s.Scope)
+			}
 		}
 	case phrase.Identifier:
 		nodes.Parent()
@@ -85,13 +93,17 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		switch parent.Type {
 		case phrase.PropertyAccessExpression:
 			if s, ok := symbol.(*analysis.PropertyAccess); ok {
-				s.Scope.Resolve(resolveCtx)
-				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+				if s.Scope != nil {
+					s.Scope.Resolve(resolveCtx)
+					completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+				}
 			}
 		case phrase.MethodCallExpression:
 			if s, ok := symbol.(*analysis.MethodAccess); ok {
-				s.Scope.Resolve(resolveCtx)
-				completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+				if s.Scope != nil {
+					s.Scope.Resolve(resolveCtx)
+					completionList = memberAccessCompletion(completionCtx, word, s.Scope)
+				}
 			}
 		}
 	}
@@ -297,20 +309,21 @@ func memberAccessCompletion(ctx *completionContext, word string, scope analysis.
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
+	q := analysis.NewQuery(ctx.store)
 	for _, scopeType := range scope.GetTypes().Resolve() {
 		properties := []*analysis.Property{}
 		methods := []*analysis.Method{}
-		for _, class := range ctx.store.GetClasses(scopeType.GetFQN()) {
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
 			methods = append(methods, analysis.SearchClassMethods(ctx.store, class, word,
 				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 			properties = append(properties, analysis.SearchClassProperties(ctx.store, class, word,
 				analysis.PropsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}
-		for _, theInterface := range ctx.store.GetInterfaces(scopeType.GetFQN()) {
+		for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
 			methods = append(methods, analysis.SearchInterfaceMethods(ctx.store, theInterface, word,
 				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}
-		for _, trait := range ctx.store.GetTraits(scopeType.GetFQN()) {
+		for _, trait := range q.GetTraits(scopeType.GetFQN()) {
 			methods = append(methods, analysis.GetTraitMethods(ctx.store, trait, word,
 				analysis.MethodsScopeAware(analysis.NewSearchOptions(), ctx.doc, scope))...)
 		}

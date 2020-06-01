@@ -66,10 +66,10 @@ func (s *FunctionCall) Resolve(ctx ResolveContext) {
 		return
 	}
 	document := ctx.document
-	store := ctx.store
+	q := ctx.query
 	s.hasResolved = true
 	typeString := NewTypeString(s.Name)
-	functions := store.GetFunctions(document.currImportTable().GetFunctionReferenceFQN(store, typeString))
+	functions := q.GetFunctions(document.currImportTable().GetFunctionReferenceFQN(ctx.query, typeString))
 	for _, function := range functions {
 		s.Type.merge(function.returnTypes)
 	}
@@ -82,10 +82,10 @@ func (s *FunctionCall) GetTypes() TypeComposite {
 func (s *FunctionCall) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	functions := []HasParams{}
 	typeString := NewTypeString(s.Name)
-	store := ctx.store
+	q := ctx.query
 	document := ctx.document
-	typeString.SetFQN(document.currImportTable().GetFunctionReferenceFQN(store, typeString))
-	for _, function := range store.GetFunctions(typeString.GetFQN()) {
+	typeString.SetFQN(document.currImportTable().GetFunctionReferenceFQN(q, typeString))
+	for _, function := range q.GetFunctions(typeString.GetFQN()) {
 		functions = append(functions, function)
 	}
 	return functions

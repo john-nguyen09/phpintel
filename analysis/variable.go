@@ -71,10 +71,10 @@ func (s *Variable) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
+	q := ctx.query
 	s.hasResolved = true
 	if s.canReferenceGlobal {
-		globalVariables := store.GetGlobalVariables(s.Name)
+		globalVariables := q.GetGlobalVariables(s.Name)
 		for _, globalVariable := range globalVariables {
 			s.Type.merge(globalVariable.types)
 		}
