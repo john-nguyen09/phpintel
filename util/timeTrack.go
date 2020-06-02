@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var ShowTimeTrack = true
+var ShowTimeTrack = false
 
 func TimeTrack(start time.Time, name string) {
 	if !ShowTimeTrack {

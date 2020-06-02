@@ -214,15 +214,11 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *ScopedMethodAccess:
-			var scopeName string
-			if hasName, ok := v.Scope.(HasName); ok {
-				scopeName = hasName.GetName()
-			}
-			currentClass := ctx.document.GetClassScopeAtSymbol(v.Scope)
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LScopedMethod:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
 				for _, class := range q.GetClasses(scopeType.GetFQN()) {
-					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceStatic(currentClass, scopeName) {
+					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceStatic(currentClass, v) {
 						if m.Method == nil {
 							continue
 						}
@@ -237,15 +233,11 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *ScopedPropertyAccess:
-			var scopeName string
-			if hasName, ok := v.Scope.(HasName); ok {
-				scopeName = hasName.GetName()
-			}
-			currentClass := ctx.document.GetClassScopeAtSymbol(v.Scope)
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LScopedProp:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
 				for _, class := range q.GetClasses(scopeType.GetFQN()) {
-					for _, p := range q.GetClassProps(class, v.Name, nil).ReduceStatic(currentClass, scopeName) {
+					for _, p := range q.GetClassProps(class, v.Name, nil).ReduceStatic(currentClass, v) {
 						if p.Prop.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
@@ -257,16 +249,11 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *PropertyAccess:
-			var scopeName string
-			if hasName, ok := v.Scope.(HasName); ok {
-				scopeName = hasName.GetName()
-			}
-			currentClass := ctx.document.GetClassScopeAtSymbol(v.Scope)
-			types := v.ResolveAndGetScope(ctx)
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LProp:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
 				for _, class := range q.GetClasses(scopeType.GetFQN()) {
-					for _, p := range q.GetClassProps(class, "$"+v.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+					for _, p := range q.GetClassProps(class, "$"+v.Name, nil).ReduceAccess(currentClass, v) {
 						if p.Prop.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
@@ -278,16 +265,11 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *MethodAccess:
-			var scopeName string
-			if hasName, ok := v.Scope.(HasName); ok {
-				scopeName = hasName.GetName()
-			}
-			currentClass := ctx.document.GetClassScopeAtSymbol(v.Scope)
-			types := v.ResolveAndGetScope(ctx)
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LMethod:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
 				for _, class := range q.GetClasses(scopeType.GetFQN()) {
-					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceAccess(currentClass, v) {
 						method := m.Method
 						if method == nil {
 							continue
@@ -302,7 +284,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 					}
 				}
 				for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
-					for _, m := range q.GetInterfaceMethods(theInterface, v.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+					for _, m := range q.GetInterfaceMethods(theInterface, v.Name, nil).ReduceAccess(currentClass, v) {
 						method := m.Method
 						if method == nil {
 							continue
@@ -317,7 +299,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 					}
 				}
 				for _, trait := range q.GetTraits(scopeType.GetFQN()) {
-					for _, m := range q.GetTraitMethods(trait, v.Name).ReduceAccess(currentClass, scopeName, types) {
+					for _, m := range q.GetTraitMethods(trait, v.Name).ReduceAccess(currentClass, v) {
 						method := m.Method
 						if method == nil {
 							continue

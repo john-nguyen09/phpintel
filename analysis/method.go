@@ -20,7 +20,7 @@ type Method struct {
 	description        string
 	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
-	IsStatic           bool
+	isStatic           bool
 	ClassModifier      ClassModifierValue
 	deprecatedTag      *tag
 }
@@ -29,10 +29,11 @@ var _ HasScope = (*Method)(nil)
 var _ Symbol = (*Method)(nil)
 var _ BlockSymbol = (*Method)(nil)
 var _ SymbolReference = (*Method)(nil)
+var _ MemberSymbol = (*Method)(nil)
 
 func newMethodFromPhpDocTag(document *Document, class *Class, methodTag tag, location protocol.Location) *Method {
 	method := &Method{
-		IsStatic:    methodTag.IsStatic,
+		isStatic:    methodTag.IsStatic,
 		Name:        methodTag.Name,
 		location:    location,
 		refLocation: methodTag.nameLocation,
@@ -94,7 +95,7 @@ func (s *Method) analyseHeader(a analyser, document *Document, methodHeader *phr
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.MemberModifierList:
-				s.VisibilityModifier, s.IsStatic, s.ClassModifier = getMemberModifier(p)
+				s.VisibilityModifier, s.isStatic, s.ClassModifier = getMemberModifier(p)
 			case phrase.ParameterDeclarationList:
 				s.analyseParameterDeclarationList(a, document, p)
 			case phrase.Identifier:
@@ -125,7 +126,7 @@ func (s *Method) analyseParameterDeclarationList(a analyser, document *Document,
 
 func newMethod(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	method := &Method{
-		IsStatic:    false,
+		isStatic:    false,
 		location:    document.GetNodeLocation(node),
 		Params:      []*Parameter{},
 		returnTypes: newTypeComposite(),
@@ -196,7 +197,7 @@ func (s *Method) GetIndexCollection() string {
 
 func (s *Method) GetNameLabel() string {
 	label := s.VisibilityModifier.ToString()
-	if s.IsStatic {
+	if s.isStatic {
 		label += " static"
 	}
 	label += " " + s.Name
@@ -227,7 +228,7 @@ func (s *Method) Serialise(e *storage.Encoder) {
 
 	s.Scope.Write(e)
 	e.WriteInt(int(s.VisibilityModifier))
-	e.WriteBool(s.IsStatic)
+	e.WriteBool(s.isStatic)
 	e.WriteInt(int(s.ClassModifier))
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
@@ -247,7 +248,7 @@ func ReadMethod(d *storage.Decoder) *Method {
 
 	method.Scope = ReadTypeString(d)
 	method.VisibilityModifier = VisibilityModifierValue(d.ReadInt())
-	method.IsStatic = d.ReadBool()
+	method.isStatic = d.ReadBool()
 	method.ClassModifier = ClassModifierValue(d.ReadInt())
 	method.deprecatedTag = deserialiseDeprecatedTag(d)
 
@@ -270,4 +271,19 @@ func (s *Method) ReferenceFQN() string {
 // ReferenceLocation returns the location for the method's name
 func (s *Method) ReferenceLocation() protocol.Location {
 	return s.refLocation
+}
+
+// IsStatic returns whether a method is static
+func (s *Method) IsStatic() bool {
+	return s.isStatic
+}
+
+// ScopeTypeString returns the class scope
+func (s *Method) ScopeTypeString() TypeString {
+	return s.Scope
+}
+
+// Visibility returns the visibility modifier of the method
+func (s *Method) Visibility() VisibilityModifierValue {
+	return s.VisibilityModifier
 }

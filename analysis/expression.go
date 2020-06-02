@@ -53,6 +53,13 @@ type HasName interface {
 	GetName() string
 }
 
+// MemberAccess is a has types that accesses via a scope name and types
+type MemberAccess interface {
+	HasTypes
+	ScopeName() string
+	ScopeTypes() TypeComposite
+}
+
 type expressionKind int
 
 const (

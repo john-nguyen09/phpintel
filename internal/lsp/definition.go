@@ -69,77 +69,77 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 			locations = append(locations, function.GetLocation())
 		}
 	case *analysis.ScopedConstantAccess:
+		currentClass := document.GetClassScopeAtSymbol(v)
+		var classConsts []analysis.ClassConstWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			for _, classConst := range q.GetClassConsts(scopeType.GetFQN(), v.Name) {
-				locations = append(locations, classConst.GetLocation())
+			ccs := analysis.EmptyInheritedClassConst()
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				ccs.Merge(q.GetClassClassConsts(class, v.Name, ccs.SearchedFQNs))
 			}
+			for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
+				ccs.Merge(q.GetInterfaceClassConsts(intf, v.Name, ccs.SearchedFQNs))
+			}
+			classConsts = analysis.MergeClassConstWithScope(classConsts, ccs.ReduceStatic(currentClass, v))
+		}
+		for _, c := range classConsts {
+			locations = append(locations, c.Const.GetLocation())
 		}
 	case *analysis.ScopedMethodAccess:
-		var scopeName string
-		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = hasName.GetName()
-		}
-		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		currentClass := document.GetClassScopeAtSymbol(v)
+		var methods []analysis.MethodWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			methods := analysis.EmptyInheritedMethods()
+			ms := analysis.EmptyInheritedMethods()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetClassMethods(class, v.Name, ms.SearchedFQNs))
 			}
-			for _, m := range methods.ReduceStatic(currentClass, scopeName) {
-				locations = append(locations, m.Method.GetLocation())
-			}
+			methods = analysis.MergeMethodWithScope(methods, ms.ReduceStatic(currentClass, v))
+		}
+		for _, m := range methods {
+			locations = append(locations, m.Method.GetLocation())
 		}
 	case *analysis.ScopedPropertyAccess:
-		var scopeName string
-		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = hasName.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
+		var props []analysis.PropWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			properties := analysis.EmptyInheritedProps()
+			ps := analysis.EmptyInheritedProps()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				properties.Merge(q.GetClassProps(class, v.Name, properties.SearchedFQNs))
+				ps.Merge(q.GetClassProps(class, v.Name, ps.SearchedFQNs))
 			}
-			for _, ps := range properties.ReduceStatic(currentClass, scopeName) {
-				locations = append(locations, ps.Prop.GetLocation())
-			}
+			props = analysis.MergePropWithScope(props, ps.ReduceStatic(currentClass, v))
+		}
+		for _, p := range props {
+			locations = append(locations, p.Prop.GetLocation())
 		}
 	case *analysis.PropertyAccess:
-		var scopeName string
-		if n, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = n.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		types := v.ResolveAndGetScope(resolveCtx)
-		properties := analysis.EmptyInheritedProps()
-		for _, scopeType := range types.Resolve() {
+		var props []analysis.PropWithScope
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ps := analysis.EmptyInheritedProps()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				properties.Merge(q.GetClassProps(class, "$"+v.Name, properties.SearchedFQNs))
+				ps.Merge(q.GetClassProps(class, "$"+v.Name, ps.SearchedFQNs))
 			}
+			props = analysis.MergePropWithScope(props, ps.ReduceAccess(currentClass, v))
 		}
-		for _, ps := range properties.ReduceAccess(currentClass, scopeName, types) {
-			locations = append(locations, ps.Prop.GetLocation())
+		for _, p := range props {
+			locations = append(locations, p.Prop.GetLocation())
 		}
 	case *analysis.MethodAccess:
-		var scopeName string
-		if n, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = n.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		types := v.ResolveAndGetScope(resolveCtx)
-		methods := analysis.EmptyInheritedMethods()
-		for _, scopeType := range types.Resolve() {
+		var methods []analysis.MethodWithScope
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ms := analysis.EmptyInheritedMethods()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetClassMethods(class, v.Name, ms.SearchedFQNs))
 			}
 			for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
-				methods.Merge(q.GetInterfaceMethods(theInterface, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetInterfaceMethods(theInterface, v.Name, ms.SearchedFQNs))
 			}
 			for _, trait := range q.GetTraits(scopeType.GetFQN()) {
-				methods.Merge(q.GetTraitMethods(trait, v.Name))
+				ms.Merge(q.GetTraitMethods(trait, v.Name))
 			}
+			methods = analysis.MergeMethodWithScope(methods, ms.ReduceAccess(currentClass, v))
 		}
-		for _, m := range methods.ReduceAccess(currentClass, scopeName, types) {
+		for _, m := range methods {
 			locations = append(locations, m.Method.GetLocation())
 		}
 	case *analysis.TypeDeclaration:

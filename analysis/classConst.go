@@ -14,9 +14,10 @@ type ClassConst struct {
 	location    protocol.Location
 	description string
 
-	Name  string
-	Value string
-	Scope TypeString
+	Name               string
+	Value              string
+	Scope              TypeString
+	VisibilityModifier VisibilityModifierValue
 
 	deprecatedTag *tag
 }
@@ -24,10 +25,40 @@ type ClassConst struct {
 var _ HasScope = (*ClassConst)(nil)
 var _ Symbol = (*ClassConst)(nil)
 var _ SymbolReference = (*ClassConst)(nil)
+var _ MemberSymbol = (*ClassConst)(nil)
 
-func newClassConst(a analyser, document *Document, node *phrase.Phrase) Symbol {
+func newClassConstDeclaration(a analyser, document *Document, node *phrase.Phrase) Symbol {
+	traverser := util.NewTraverser(node)
+	visibility := Public
+	child := traverser.Advance()
+	for child != nil {
+		if p, ok := child.(*phrase.Phrase); ok {
+			switch p.Type {
+			case phrase.MemberModifierList:
+				visibility, _, _ = getMemberModifier(p)
+			case phrase.ClassConstElementList:
+				newClassConstList(a, document, p, visibility)
+			}
+		}
+		child = traverser.Advance()
+	}
+	return nil
+}
+
+func newClassConstList(a analyser, document *Document, node *phrase.Phrase, visibility VisibilityModifierValue) {
+	traverser := util.NewTraverser(node)
+	for child := traverser.Advance(); child != nil; child = traverser.Advance() {
+		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.ClassConstElement {
+			property := newClassConst(a, document, p, visibility)
+			document.addSymbol(property)
+		}
+	}
+}
+
+func newClassConst(a analyser, document *Document, node *phrase.Phrase, visibility VisibilityModifierValue) Symbol {
 	classConst := &ClassConst{
-		location: document.GetNodeLocation(node),
+		location:           document.GetNodeLocation(node),
+		VisibilityModifier: visibility,
 	}
 	phpDoc := document.getValidPhpDoc(classConst.location)
 	lastClass := document.getLastClass()
@@ -137,4 +168,19 @@ func (s *ClassConst) ReferenceFQN() string {
 
 func (s *ClassConst) ReferenceLocation() protocol.Location {
 	return s.refLocation
+}
+
+// IsStatic is always static for class const
+func (s *ClassConst) IsStatic() bool {
+	return true
+}
+
+// ScopeTypeString returns the class const's class name
+func (s *ClassConst) ScopeTypeString() TypeString {
+	return s.Scope
+}
+
+// Visibility returns the visibility modifier of the class const
+func (s *ClassConst) Visibility() VisibilityModifierValue {
+	return s.VisibilityModifier
 }

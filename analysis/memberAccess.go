@@ -39,3 +39,23 @@ func readMemberName(a analyser, document *Document, traverser *util.Traverser) (
 	}
 	return name, location
 }
+
+// MemberAccessExpression is the base struct for non-static member access
+type MemberAccessExpression struct {
+	Expression
+}
+
+// ScopeName returns the name of the accessed scope
+func (m *MemberAccessExpression) ScopeName() string {
+	var scopeName string
+	if n, ok := m.Scope.(HasName); ok {
+		scopeName = n.GetName()
+	}
+	return scopeName
+}
+
+// ScopeTypes returns the types of the scope, this should be resolved
+// before calling this
+func (m *MemberAccessExpression) ScopeTypes() TypeComposite {
+	return m.Scope.GetTypes()
+}

@@ -17,7 +17,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
@@ -46,7 +46,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {

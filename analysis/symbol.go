@@ -78,6 +78,13 @@ type SymbolReference interface {
 	ReferenceLocation() protocol.Location
 }
 
+// MemberSymbol is a symbol that is a member of another symbol (class consts, methods and props)
+type MemberSymbol interface {
+	ScopeTypeString() TypeString
+	IsStatic() bool
+	Visibility() VisibilityModifierValue
+}
+
 type serialisable interface {
 	GetCollection() string
 	GetKey() string

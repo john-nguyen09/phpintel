@@ -17,7 +17,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -40,7 +40,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -63,7 +63,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -86,7 +86,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -109,7 +109,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -132,7 +132,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -155,7 +155,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) true,
+    isStatic: (bool) true,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -178,7 +178,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 2,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -201,7 +201,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -224,7 +224,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -247,7 +247,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -270,7 +270,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -293,7 +293,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -316,7 +316,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }
@@ -339,7 +339,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 0,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) (len=1) {
         (analysis.TypeString) {
@@ -368,7 +368,7 @@
       arrayLevel: (int) 0
     },
     VisibilityModifier: (analysis.VisibilityModifierValue) 1,
-    IsStatic: (bool) false,
+    isStatic: (bool) false,
     Types: (analysis.TypeComposite) {
       typeStrings: ([]analysis.TypeString) <nil>
     }

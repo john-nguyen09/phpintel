@@ -8,16 +8,19 @@ import (
 
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
 type ScopedMethodAccess struct {
-	Expression
+	MemberAccessExpression
 
 	hasResolved bool
 }
 
 var _ HasTypesHasScope = (*ScopedMethodAccess)(nil)
+var _ MemberAccess = (*ScopedMethodAccess)(nil)
 
 func newScopedMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -54,19 +57,15 @@ func (s *ScopedMethodAccess) Resolve(ctx ResolveContext) {
 	}
 	s.hasResolved = true
 	q := ctx.query
-	var scopeName string
-	if n, ok := s.Scope.(HasName); ok {
-		scopeName = n.GetName()
-	}
 	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range q.GetClasses(scopeType.GetFQN()) {
-			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, scopeName) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, s) {
 				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
 		for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
-			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, scopeName) {
+			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, s) {
 				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
@@ -80,19 +79,15 @@ func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
 	q := ctx.query
-	var scopeName string
-	if n, ok := s.Scope.(HasName); ok {
-		scopeName = n.GetName()
-	}
 	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range q.GetClasses(scopeType.GetFQN()) {
-			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, scopeName) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, s) {
 				hasParams = append(hasParams, m.Method)
 			}
 		}
 		for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
-			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, scopeName) {
+			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, s) {
 				hasParams = append(hasParams, m.Method)
 			}
 		}

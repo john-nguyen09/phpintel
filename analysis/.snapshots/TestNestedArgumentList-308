@@ -11,35 +11,37 @@
   }
 })
 (*analysis.ScopedMethodAccess)({
-  Expression: (analysis.Expression) {
-    Type: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
-    },
-    Scope: (*analysis.ClassAccess)({
-      Expression: (analysis.Expression) {
-        Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=32) "\\Illuminate\\Support\\Facades\\Hash",
-              original: (string) (len=31) "Illuminate\\Support\\Facades\\Hash",
-              arrayLevel: (int) 0
-            }
-          }
-        },
-        Scope: (analysis.HasTypes) <nil>,
-        Location: (protocol.Location) {
-          URI: (string) (len=5) "test1",
-          Range: (protocol.Range) 15:26-15:57
-        },
-        Name: (string) (len=31) "Illuminate\\Support\\Facades\\Hash"
+  MemberAccessExpression: (analysis.MemberAccessExpression) {
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
       },
-      isResolved: (bool) false
-    }),
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 15:59-15:63
-    },
-    Name: (string) (len=4) "make"
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=32) "\\Illuminate\\Support\\Facades\\Hash",
+                original: (string) (len=31) "Illuminate\\Support\\Facades\\Hash",
+                arrayLevel: (int) 0
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 15:26-15:57
+          },
+          Name: (string) (len=31) "Illuminate\\Support\\Facades\\Hash"
+        },
+        isResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 15:59-15:63
+      },
+      Name: (string) (len=4) "make"
+    }
   },
   hasResolved: (bool) false
 })

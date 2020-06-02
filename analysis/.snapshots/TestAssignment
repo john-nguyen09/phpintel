@@ -196,35 +196,37 @@
         typeStrings: ([]analysis.TypeString) <nil>
       },
       Scope: (*analysis.ScopedMethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.ClassAccess)({
-            Expression: (analysis.Expression) {
-              Type: (analysis.TypeComposite) {
-                typeStrings: ([]analysis.TypeString) (len=1) {
-                  (analysis.TypeString) {
-                    fqn: (string) (len=11) "\\TestClass1",
-                    original: (string) (len=10) "TestClass1",
-                    arrayLevel: (int) 0
-                  }
-                }
-              },
-              Scope: (analysis.HasTypes) <nil>,
-              Location: (protocol.Location) {
-                URI: (string) (len=5) "test1",
-                Range: (protocol.Range) 5:8-5:18
-              },
-              Name: (string) (len=10) "TestClass1"
+        MemberAccessExpression: (analysis.MemberAccessExpression) {
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) <nil>
             },
-            isResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 5:20-5:27
-          },
-          Name: (string) (len=7) "method1"
+            Scope: (*analysis.ClassAccess)({
+              Expression: (analysis.Expression) {
+                Type: (analysis.TypeComposite) {
+                  typeStrings: ([]analysis.TypeString) (len=1) {
+                    (analysis.TypeString) {
+                      fqn: (string) (len=11) "\\TestClass1",
+                      original: (string) (len=10) "TestClass1",
+                      arrayLevel: (int) 0
+                    }
+                  }
+                },
+                Scope: (analysis.HasTypes) <nil>,
+                Location: (protocol.Location) {
+                  URI: (string) (len=5) "test1",
+                  Range: (protocol.Range) 5:8-5:18
+                },
+                Name: (string) (len=10) "TestClass1"
+              },
+              isResolved: (bool) false
+            }),
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 5:20-5:27
+            },
+            Name: (string) (len=7) "method1"
+          }
         },
         hasResolved: (bool) false
       }),
@@ -259,35 +261,37 @@
     isResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=11) "\\TestClass1",
-                original: (string) (len=10) "TestClass1",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 5:8-5:18
-          },
-          Name: (string) (len=10) "TestClass1"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 5:20-5:27
-      },
-      Name: (string) (len=7) "method1"
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=11) "\\TestClass1",
+                  original: (string) (len=10) "TestClass1",
+                  arrayLevel: (int) 0
+                }
+              }
+            },
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 5:8-5:18
+            },
+            Name: (string) (len=10) "TestClass1"
+          },
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 5:20-5:27
+        },
+        Name: (string) (len=7) "method1"
+      }
     },
     hasResolved: (bool) false
   }),
@@ -312,35 +316,37 @@
     isResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=16) "\\TestMethodClass",
-                original: (string) (len=15) "TestMethodClass",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 6:0-6:15
-          },
-          Name: (string) (len=15) "TestMethodClass"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 6:17-6:28
-      },
-      Name: (string) (len=11) "testMethod6"
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=16) "\\TestMethodClass",
+                  original: (string) (len=15) "TestMethodClass",
+                  arrayLevel: (int) 0
+                }
+              }
+            },
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 6:0-6:15
+            },
+            Name: (string) (len=15) "TestMethodClass"
+          },
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 6:17-6:28
+        },
+        Name: (string) (len=11) "testMethod6"
+      }
     },
     hasResolved: (bool) false
   }),
@@ -365,35 +371,37 @@
     isResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=16) "\\TestMethodClass",
-                original: (string) (len=15) "TestMethodClass",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 7:0-7:15
-          },
-          Name: (string) (len=15) "TestMethodClass"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 7:17-7:28
-      },
-      Name: (string) (len=11) "testMethod3"
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=16) "\\TestMethodClass",
+                  original: (string) (len=15) "TestMethodClass",
+                  arrayLevel: (int) 0
+                }
+              }
+            },
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 7:0-7:15
+            },
+            Name: (string) (len=15) "TestMethodClass"
+          },
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 7:17-7:28
+        },
+        Name: (string) (len=11) "testMethod3"
+      }
     },
     hasResolved: (bool) false
   })

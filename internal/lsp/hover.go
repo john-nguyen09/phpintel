@@ -105,83 +105,81 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 			break
 		}
 	case *analysis.ScopedConstantAccess:
-		classConsts := []*analysis.ClassConst{}
+		currentClass := document.GetClassScopeAtSymbol(v)
+		var classConsts []analysis.ClassConstWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
-			classConsts = append(classConsts, q.GetClassConsts(scopeType.GetFQN(), v.Name)...)
+			ccs := analysis.EmptyInheritedClassConst()
+			for _, class := range q.GetClasses(scopeType.GetFQN()) {
+				ccs.Merge(q.GetClassClassConsts(class, v.Name, ccs.SearchedFQNs))
+			}
+			for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
+				ccs.Merge(q.GetInterfaceClassConsts(intf, v.Name, ccs.SearchedFQNs))
+			}
+			classConsts = analysis.MergeClassConstWithScope(classConsts, ccs.ReduceStatic(currentClass, v))
 		}
 		if len(classConsts) > 0 {
 			hover = classConstsToHover(symbol, classConsts)
 		}
 	case *analysis.ScopedMethodAccess:
-		var scopeName string
-		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = hasName.GetName()
-		}
-		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		methods := analysis.EmptyInheritedMethods()
+		currentClass := document.GetClassScopeAtSymbol(v)
+		var methods []analysis.MethodWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ms := analysis.EmptyInheritedMethods()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetClassMethods(class, v.Name, ms.SearchedFQNs))
 			}
+			methods = analysis.MergeMethodWithScope(methods, ms.ReduceStatic(currentClass, v))
 		}
-		if methods.Len() > 0 {
-			hover = methodsToHover(symbol, methods.ReduceStatic(currentClass, scopeName))
+		if len(methods) > 0 {
+			hover = methodsToHover(symbol, methods)
 		}
 	case *analysis.ScopedPropertyAccess:
-		var scopeName string
-		if hasName, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = hasName.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		properties := analysis.EmptyInheritedProps()
+		var props []analysis.PropWithScope
 		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ps := analysis.EmptyInheritedProps()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				properties.Merge(q.GetClassProps(class, v.Name, properties.SearchedFQNs))
+				ps.Merge(q.GetClassProps(class, v.Name, ps.SearchedFQNs))
 			}
+			props = analysis.MergePropWithScope(props, ps.ReduceStatic(currentClass, v))
 		}
-		if properties.Len() > 0 {
-			hover = propertiesToHover(symbol, properties.ReduceStatic(currentClass, scopeName))
+		if len(props) > 0 {
+			hover = propertiesToHover(symbol, props)
 		}
 	case *analysis.Variable:
 		v.Resolve(resolveCtx)
 		hover = variableToHover(v)
 	case *analysis.PropertyAccess:
-		var scopeName string
-		if n, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = n.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		types := v.ResolveAndGetScope(resolveCtx)
-		properties := analysis.EmptyInheritedProps()
-		for _, scopeType := range types.Resolve() {
+		var props []analysis.PropWithScope
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ps := analysis.EmptyInheritedProps()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				properties.Merge(q.GetClassProps(class, "$"+v.Name, properties.SearchedFQNs))
+				ps.Merge(q.GetClassProps(class, "$"+v.Name, ps.SearchedFQNs))
 			}
+			props = analysis.MergePropWithScope(props, ps.ReduceAccess(currentClass, v))
 		}
-		if properties.Len() > 0 {
-			hover = propertiesToHover(symbol, properties.ReduceAccess(currentClass, scopeName, types))
+		if len(props) > 0 {
+			hover = propertiesToHover(symbol, props)
 		}
 	case *analysis.MethodAccess:
-		var scopeName string
-		if n, ok := v.Scope.(analysis.HasName); ok {
-			scopeName = n.GetName()
-		}
 		currentClass := document.GetClassScopeAtSymbol(v.Scope)
-		types := v.ResolveAndGetScope(resolveCtx)
-		methods := analysis.EmptyInheritedMethods()
-		for _, scopeType := range types.Resolve() {
+		var methods []analysis.MethodWithScope
+		for _, scopeType := range v.ResolveAndGetScope(resolveCtx).Resolve() {
+			ms := analysis.EmptyInheritedMethods()
 			for _, class := range q.GetClasses(scopeType.GetFQN()) {
-				methods.Merge(q.GetClassMethods(class, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetClassMethods(class, v.Name, ms.SearchedFQNs))
 			}
 			for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
-				methods.Merge(q.GetInterfaceMethods(theInterface, v.Name, methods.SearchedFQNs))
+				ms.Merge(q.GetInterfaceMethods(theInterface, v.Name, ms.SearchedFQNs))
 			}
 			for _, trait := range q.GetTraits(scopeType.GetFQN()) {
-				methods.Merge(q.GetTraitMethods(trait, v.Name))
+				ms.Merge(q.GetTraitMethods(trait, v.Name))
 			}
+			methods = analysis.MergeMethodWithScope(methods, ms.ReduceAccess(currentClass, v))
 		}
-		if methods.Len() > 0 {
-			hover = methodsToHover(symbol, methods.ReduceAccess(currentClass, scopeName, types))
+		if len(methods) > 0 {
+			hover = methodsToHover(symbol, methods)
 		}
 	case *analysis.TypeDeclaration:
 		classes := []*analysis.Class{}

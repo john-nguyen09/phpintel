@@ -1,102 +1,93 @@
 ([]analysis.Symbol) (len=10) {
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
-                original: (string) (len=15) "ServiceProvider",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 34:8-34:14
-          },
-          Name: (string) (len=6) "parent"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 34:16-34:20
-      },
-      Name: (string) (len=4) "boot"
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=61) "\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider",
+                  original: (string) (len=15) "ServiceProvider",
+                  arrayLevel: (int) 0
+                }
+              }
+            },
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 34:8-34:14
+            },
+            Name: (string) (len=6) "parent"
+          },
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 34:16-34:20
+        },
+        Name: (string) (len=4) "boot"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.Variable)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.RelativeScope)({
-            location: (protocol.Location) {
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Variable)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) <nil>
+            },
+            Scope: (*analysis.RelativeScope)({
+              location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 44:8-44:13
+              },
+              Types: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                    original: (string) (len=20) "RouteServiceProvider",
+                    arrayLevel: (int) 0
+                  }
+                }
+              }
+            }),
+            Location: (protocol.Location) {
               URI: (string) (len=5) "test1",
               Range: (protocol.Range) 44:8-44:13
             },
-            Types: (analysis.TypeComposite) {
-              typeStrings: ([]analysis.TypeString) (len=1) {
-                (analysis.TypeString) {
-                  fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
-                  original: (string) (len=20) "RouteServiceProvider",
-                  arrayLevel: (int) 0
-                }
-              }
-            }
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 44:8-44:13
+            Name: (string) (len=5) "$this"
           },
-          Name: (string) (len=5) "$this"
+          description: (string) "",
+          canReferenceGlobal: (bool) false,
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 44:15-44:27
         },
-        description: (string) "",
-        canReferenceGlobal: (bool) false,
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 44:15-44:27
-      },
-      Name: (string) (len=12) "mapApiRoutes"
+        Name: (string) (len=12) "mapApiRoutes"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.Variable)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
-                original: (string) (len=20) "RouteServiceProvider",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (*analysis.RelativeScope)({
-            location: (protocol.Location) {
-              URI: (string) (len=5) "test1",
-              Range: (protocol.Range) 46:8-46:13
-            },
-            Types: (analysis.TypeComposite) {
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Variable)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
               typeStrings: ([]analysis.TypeString) (len=1) {
                 (analysis.TypeString) {
                   fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
@@ -104,116 +95,84 @@
                   arrayLevel: (int) 0
                 }
               }
-            }
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 46:8-46:13
+            },
+            Scope: (*analysis.RelativeScope)({
+              location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 46:8-46:13
+              },
+              Types: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) (len=1) {
+                  (analysis.TypeString) {
+                    fqn: (string) (len=35) "\\App\\Providers\\RouteServiceProvider",
+                    original: (string) (len=20) "RouteServiceProvider",
+                    arrayLevel: (int) 0
+                  }
+                }
+              }
+            }),
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 46:8-46:13
+            },
+            Name: (string) (len=5) "$this"
           },
-          Name: (string) (len=5) "$this"
+          description: (string) "",
+          canReferenceGlobal: (bool) false,
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 46:15-46:27
         },
-        description: (string) "",
-        canReferenceGlobal: (bool) false,
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 46:15-46:27
-      },
-      Name: (string) (len=12) "mapWebRoutes"
+        Name: (string) (len=12) "mapWebRoutes"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
-                original: (string) (len=5) "Route",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 60:8-60:13
-          },
-          Name: (string) (len=5) "Route"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 60:15-60:25
-      },
-      Name: (string) (len=10) "middleware"
-    },
-    hasResolved: (bool) false
-  }),
-  (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ScopedMethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.ClassAccess)({
-            Expression: (analysis.Expression) {
-              Type: (analysis.TypeComposite) {
-                typeStrings: ([]analysis.TypeString) (len=1) {
-                  (analysis.TypeString) {
-                    fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
-                    original: (string) (len=5) "Route",
-                    arrayLevel: (int) 0
-                  }
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                  original: (string) (len=5) "Route",
+                  arrayLevel: (int) 0
                 }
-              },
-              Scope: (analysis.HasTypes) <nil>,
-              Location: (protocol.Location) {
-                URI: (string) (len=5) "test1",
-                Range: (protocol.Range) 60:8-60:13
-              },
-              Name: (string) (len=5) "Route"
+              }
             },
-            isResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 60:15-60:25
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 60:8-60:13
+            },
+            Name: (string) (len=5) "Route"
           },
-          Name: (string) (len=10) "middleware"
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 60:15-60:25
         },
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 61:15-61:24
-      },
-      Name: (string) (len=9) "namespace"
+        Name: (string) (len=10) "middleware"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.MethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.ScopedMethodAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.ScopedMethodAccess)({
+          MemberAccessExpression: (analysis.MemberAccessExpression) {
             Expression: (analysis.Expression) {
               Type: (analysis.TypeComposite) {
                 typeStrings: ([]analysis.TypeString) <nil>
@@ -243,115 +202,127 @@
                 Range: (protocol.Range) 60:15-60:25
               },
               Name: (string) (len=10) "middleware"
-            },
-            hasResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 61:15-61:24
+            }
           },
-          Name: (string) (len=9) "namespace"
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 61:15-61:24
         },
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 62:15-62:20
-      },
-      Name: (string) (len=5) "group"
+        Name: (string) (len=9) "namespace"
+      }
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.MethodAccess)({
+          MemberAccessExpression: (analysis.MemberAccessExpression) {
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>
+              },
+              Scope: (*analysis.ScopedMethodAccess)({
+                MemberAccessExpression: (analysis.MemberAccessExpression) {
+                  Expression: (analysis.Expression) {
+                    Type: (analysis.TypeComposite) {
+                      typeStrings: ([]analysis.TypeString) <nil>
+                    },
+                    Scope: (*analysis.ClassAccess)({
+                      Expression: (analysis.Expression) {
+                        Type: (analysis.TypeComposite) {
+                          typeStrings: ([]analysis.TypeString) (len=1) {
+                            (analysis.TypeString) {
+                              fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                              original: (string) (len=5) "Route",
+                              arrayLevel: (int) 0
+                            }
+                          }
+                        },
+                        Scope: (analysis.HasTypes) <nil>,
+                        Location: (protocol.Location) {
+                          URI: (string) (len=5) "test1",
+                          Range: (protocol.Range) 60:8-60:13
+                        },
+                        Name: (string) (len=5) "Route"
+                      },
+                      isResolved: (bool) false
+                    }),
+                    Location: (protocol.Location) {
+                      URI: (string) (len=5) "test1",
+                      Range: (protocol.Range) 60:15-60:25
+                    },
+                    Name: (string) (len=10) "middleware"
+                  }
+                },
+                hasResolved: (bool) false
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 61:15-61:24
+              },
+              Name: (string) (len=9) "namespace"
+            }
+          },
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 62:15-62:20
+        },
+        Name: (string) (len=5) "group"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.ScopedMethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ClassAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) (len=1) {
-              (analysis.TypeString) {
-                fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
-                original: (string) (len=5) "Route",
-                arrayLevel: (int) 0
-              }
-            }
-          },
-          Scope: (analysis.HasTypes) <nil>,
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 74:8-74:13
-          },
-          Name: (string) (len=5) "Route"
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
         },
-        isResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 74:15-74:21
-      },
-      Name: (string) (len=6) "prefix"
-    },
-    hasResolved: (bool) false
-  }),
-  (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.ScopedMethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.ClassAccess)({
-            Expression: (analysis.Expression) {
-              Type: (analysis.TypeComposite) {
-                typeStrings: ([]analysis.TypeString) (len=1) {
-                  (analysis.TypeString) {
-                    fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
-                    original: (string) (len=5) "Route",
-                    arrayLevel: (int) 0
-                  }
+        Scope: (*analysis.ClassAccess)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) (len=1) {
+                (analysis.TypeString) {
+                  fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                  original: (string) (len=5) "Route",
+                  arrayLevel: (int) 0
                 }
-              },
-              Scope: (analysis.HasTypes) <nil>,
-              Location: (protocol.Location) {
-                URI: (string) (len=5) "test1",
-                Range: (protocol.Range) 74:8-74:13
-              },
-              Name: (string) (len=5) "Route"
+              }
             },
-            isResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 74:15-74:21
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 74:8-74:13
+            },
+            Name: (string) (len=5) "Route"
           },
-          Name: (string) (len=6) "prefix"
+          isResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 74:15-74:21
         },
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 75:15-75:25
-      },
-      Name: (string) (len=10) "middleware"
+        Name: (string) (len=6) "prefix"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.MethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.ScopedMethodAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.ScopedMethodAccess)({
+          MemberAccessExpression: (analysis.MemberAccessExpression) {
             Expression: (analysis.Expression) {
               Type: (analysis.TypeComposite) {
                 typeStrings: ([]analysis.TypeString) <nil>
@@ -381,70 +352,63 @@
                 Range: (protocol.Range) 74:15-74:21
               },
               Name: (string) (len=6) "prefix"
-            },
-            hasResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 75:15-75:25
+            }
           },
-          Name: (string) (len=10) "middleware"
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 75:15-75:25
         },
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 76:15-76:24
-      },
-      Name: (string) (len=9) "namespace"
+        Name: (string) (len=10) "middleware"
+      }
     },
     hasResolved: (bool) false
   }),
   (*analysis.MethodAccess)({
-    Expression: (analysis.Expression) {
-      Type: (analysis.TypeComposite) {
-        typeStrings: ([]analysis.TypeString) <nil>
-      },
-      Scope: (*analysis.MethodAccess)({
-        Expression: (analysis.Expression) {
-          Type: (analysis.TypeComposite) {
-            typeStrings: ([]analysis.TypeString) <nil>
-          },
-          Scope: (*analysis.MethodAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.MethodAccess)({
+          MemberAccessExpression: (analysis.MemberAccessExpression) {
             Expression: (analysis.Expression) {
               Type: (analysis.TypeComposite) {
                 typeStrings: ([]analysis.TypeString) <nil>
               },
               Scope: (*analysis.ScopedMethodAccess)({
-                Expression: (analysis.Expression) {
-                  Type: (analysis.TypeComposite) {
-                    typeStrings: ([]analysis.TypeString) <nil>
-                  },
-                  Scope: (*analysis.ClassAccess)({
-                    Expression: (analysis.Expression) {
-                      Type: (analysis.TypeComposite) {
-                        typeStrings: ([]analysis.TypeString) (len=1) {
-                          (analysis.TypeString) {
-                            fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
-                            original: (string) (len=5) "Route",
-                            arrayLevel: (int) 0
-                          }
-                        }
-                      },
-                      Scope: (analysis.HasTypes) <nil>,
-                      Location: (protocol.Location) {
-                        URI: (string) (len=5) "test1",
-                        Range: (protocol.Range) 74:8-74:13
-                      },
-                      Name: (string) (len=5) "Route"
+                MemberAccessExpression: (analysis.MemberAccessExpression) {
+                  Expression: (analysis.Expression) {
+                    Type: (analysis.TypeComposite) {
+                      typeStrings: ([]analysis.TypeString) <nil>
                     },
-                    isResolved: (bool) false
-                  }),
-                  Location: (protocol.Location) {
-                    URI: (string) (len=5) "test1",
-                    Range: (protocol.Range) 74:15-74:21
-                  },
-                  Name: (string) (len=6) "prefix"
+                    Scope: (*analysis.ClassAccess)({
+                      Expression: (analysis.Expression) {
+                        Type: (analysis.TypeComposite) {
+                          typeStrings: ([]analysis.TypeString) (len=1) {
+                            (analysis.TypeString) {
+                              fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                              original: (string) (len=5) "Route",
+                              arrayLevel: (int) 0
+                            }
+                          }
+                        },
+                        Scope: (analysis.HasTypes) <nil>,
+                        Location: (protocol.Location) {
+                          URI: (string) (len=5) "test1",
+                          Range: (protocol.Range) 74:8-74:13
+                        },
+                        Name: (string) (len=5) "Route"
+                      },
+                      isResolved: (bool) false
+                    }),
+                    Location: (protocol.Location) {
+                      URI: (string) (len=5) "test1",
+                      Range: (protocol.Range) 74:15-74:21
+                    },
+                    Name: (string) (len=6) "prefix"
+                  }
                 },
                 hasResolved: (bool) false
               }),
@@ -453,22 +417,96 @@
                 Range: (protocol.Range) 75:15-75:25
               },
               Name: (string) (len=10) "middleware"
-            },
-            hasResolved: (bool) false
-          }),
-          Location: (protocol.Location) {
-            URI: (string) (len=5) "test1",
-            Range: (protocol.Range) 76:15-76:24
+            }
           },
-          Name: (string) (len=9) "namespace"
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 76:15-76:24
         },
-        hasResolved: (bool) false
-      }),
-      Location: (protocol.Location) {
-        URI: (string) (len=5) "test1",
-        Range: (protocol.Range) 77:15-77:20
-      },
-      Name: (string) (len=5) "group"
+        Name: (string) (len=9) "namespace"
+      }
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.MethodAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.MethodAccess)({
+          MemberAccessExpression: (analysis.MemberAccessExpression) {
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>
+              },
+              Scope: (*analysis.MethodAccess)({
+                MemberAccessExpression: (analysis.MemberAccessExpression) {
+                  Expression: (analysis.Expression) {
+                    Type: (analysis.TypeComposite) {
+                      typeStrings: ([]analysis.TypeString) <nil>
+                    },
+                    Scope: (*analysis.ScopedMethodAccess)({
+                      MemberAccessExpression: (analysis.MemberAccessExpression) {
+                        Expression: (analysis.Expression) {
+                          Type: (analysis.TypeComposite) {
+                            typeStrings: ([]analysis.TypeString) <nil>
+                          },
+                          Scope: (*analysis.ClassAccess)({
+                            Expression: (analysis.Expression) {
+                              Type: (analysis.TypeComposite) {
+                                typeStrings: ([]analysis.TypeString) (len=1) {
+                                  (analysis.TypeString) {
+                                    fqn: (string) (len=33) "\\Illuminate\\Support\\Facades\\Route",
+                                    original: (string) (len=5) "Route",
+                                    arrayLevel: (int) 0
+                                  }
+                                }
+                              },
+                              Scope: (analysis.HasTypes) <nil>,
+                              Location: (protocol.Location) {
+                                URI: (string) (len=5) "test1",
+                                Range: (protocol.Range) 74:8-74:13
+                              },
+                              Name: (string) (len=5) "Route"
+                            },
+                            isResolved: (bool) false
+                          }),
+                          Location: (protocol.Location) {
+                            URI: (string) (len=5) "test1",
+                            Range: (protocol.Range) 74:15-74:21
+                          },
+                          Name: (string) (len=6) "prefix"
+                        }
+                      },
+                      hasResolved: (bool) false
+                    }),
+                    Location: (protocol.Location) {
+                      URI: (string) (len=5) "test1",
+                      Range: (protocol.Range) 75:15-75:25
+                    },
+                    Name: (string) (len=10) "middleware"
+                  }
+                },
+                hasResolved: (bool) false
+              }),
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 76:15-76:24
+              },
+              Name: (string) (len=9) "namespace"
+            }
+          },
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 77:15-77:20
+        },
+        Name: (string) (len=5) "group"
+      }
     },
     hasResolved: (bool) false
   })

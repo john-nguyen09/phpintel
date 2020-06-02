@@ -7,7 +7,7 @@ import (
 )
 
 type MethodAccess struct {
-	Expression
+	MemberAccessExpression
 
 	hasResolved bool
 }
@@ -16,7 +16,9 @@ var _ HasTypesHasScope = (*MethodAccess)(nil)
 
 func newMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &MethodAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -52,20 +54,15 @@ func (s *MethodAccess) Resolve(ctx ResolveContext) {
 		return
 	}
 	q := ctx.query
-	var scopeName string
 	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
-	if n, ok := s.Scope.(HasName); ok {
-		scopeName = n.GetName()
-	}
-	types := s.Scope.GetTypes()
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
 		for _, class := range q.GetClasses(scopeType.GetFQN()) {
-			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, s) {
 				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
 		for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
-			for _, m := range q.GetInterfaceMethods(theInterface, s.Name, nil).ReduceAccess(currentClass, scopeName, types) {
+			for _, m := range q.GetInterfaceMethods(theInterface, s.Name, nil).ReduceAccess(currentClass, s) {
 				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
@@ -80,19 +77,15 @@ func (s *MethodAccess) GetTypes() TypeComposite {
 func (s *MethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
 	q := ctx.query
-	var scopeName string
 	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
-	if n, ok := s.Scope.(HasName); ok {
-		scopeName = n.GetName()
-	}
 	types := s.ResolveAndGetScope(ctx)
 	for _, typeString := range types.Resolve() {
 		methods := []MethodWithScope{}
 		for _, class := range q.GetClasses(typeString.GetFQN()) {
-			methods = append(methods, q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, scopeName, types)...)
+			methods = append(methods, q.GetClassMethods(class, s.Name, nil).ReduceAccess(currentClass, s)...)
 		}
 		for _, intf := range q.GetInterfaces(typeString.GetFQN()) {
-			methods = append(methods, q.GetInterfaceMethods(intf, s.Name, nil).ReduceAccess(currentClass, scopeName, types)...)
+			methods = append(methods, q.GetInterfaceMethods(intf, s.Name, nil).ReduceAccess(currentClass, s)...)
 		}
 		for _, m := range methods {
 			hasParams = append(hasParams, m.Method)

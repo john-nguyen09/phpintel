@@ -177,14 +177,18 @@ type match struct {
 	Index int
 }
 
+func isMatch(str string, pattern []rune) bool {
+	chars := util.ToChars([]byte(str))
+	result, _ := algo.FuzzyMatchV2(false, true, true, &chars, pattern, false, nil)
+	return result.Score > 0
+}
+
 func (f *fuzzyEngine) match(pattern string) []match {
 	matches := []match{}
 	dataLen := f.Len()
 	patternRune := []rune(strings.ToLower(pattern))
 	for i := 0; i < dataLen; i++ {
-		chars := util.ToChars([]byte(f.String(i)))
-		result, _ := algo.FuzzyMatchV2(false, true, true, &chars, patternRune, false, nil)
-		if result.Score > 0 {
+		if isMatch(f.String(i), patternRune) {
 			matches = append(matches, match{i})
 		}
 	}

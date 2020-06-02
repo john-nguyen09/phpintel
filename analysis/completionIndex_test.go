@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"path/filepath"
+	"sort"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -69,6 +70,9 @@ func TestFuzzyEngine(t *testing.T) {
 	for _, entry := range deletor.entriesToBeDeleted {
 		entriesToBeDeleted = append(entriesToBeDeleted, *entry)
 	}
+	sort.Slice(entriesToBeDeleted, func(i, j int) bool {
+		return entriesToBeDeleted[i].key < entriesToBeDeleted[j].key
+	})
 	assert.Equal(t, []fuzzyEntry{
 		{collection: "c1", name: "abc", key: "c1#abc", uri: "test1", deleted: false},
 		{collection: "c1", name: "xyz", key: "c1#xyz", uri: "test1", deleted: false},

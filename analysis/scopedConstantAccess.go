@@ -8,14 +8,17 @@ import (
 
 // ScopedConstantAccess represents a reference to constant in class access, e.g. ::CONSTANT
 type ScopedConstantAccess struct {
-	Expression
+	MemberAccessExpression
 }
 
 var _ HasTypesHasScope = (*ScopedConstantAccess)(nil)
+var _ MemberAccess = (*ScopedConstantAccess)(nil)
 
 func newScopedConstantAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	constantAccess := &ScopedConstantAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
