@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"sort"
 	"strings"
 	"time"
 
@@ -177,7 +178,7 @@ func variableCompletion(ctx *completionContext, resolveCtx analysis.ResolveConte
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.VariableCompletion,
 			Label:         variable.Name,
-			Documentation: variable.GetDescription(),
+			Documentation: descriptionToMarkupContent(variable.GetDescription()),
 			Detail:        variable.GetDetail(),
 		})
 	}
@@ -215,7 +216,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Kind:                protocol.ConstantCompletion,
 			Label:               label,
 			AdditionalTextEdits: textEdits,
-			Documentation:       constant.GetDescription(),
+			Documentation:       descriptionToMarkupContent(constant.GetDescription()),
 			Detail:              getDetailFromTextEdit(constant.Name, textEdit),
 		})
 	}
@@ -231,7 +232,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Kind:                protocol.ConstantCompletion,
 			Label:               label,
 			InsertText:          label,
-			Documentation:       define.GetDescription(),
+			Documentation:       descriptionToMarkupContent(define.GetDescription()),
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(define.Name, textEdit),
 		})
@@ -252,7 +253,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 			Kind:                protocol.FunctionCompletion,
 			Label:               label,
 			AdditionalTextEdits: textEdits,
-			Documentation:       function.GetDescription(),
+			Documentation:       descriptionToMarkupContent(function.GetDescription()),
 			Detail:              hasParamsDetailWithTextEdit(function, textEdit),
 		})
 	}
@@ -282,7 +283,7 @@ func classCompletion(ctx *completionContext, symbol analysis.HasTypes, word stri
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:                protocol.ClassCompletion,
 			Label:               name,
-			Documentation:       class.GetDescription(),
+			Documentation:       descriptionToMarkupContent(class.GetDescription()),
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
@@ -310,19 +311,31 @@ func scopedAccessCompletion(ctx *completionContext, word string, access analysis
 			ps.Merge(ctx.query.SearchClassProps(class, word, ps.SearchedFQNs))
 			ccs.Merge(ctx.query.SearchClassClassConsts(class, word, ccs.SearchedFQNs))
 		}
+		for _, intf := range ctx.query.GetInterfaces(scopeTypeFQN) {
+			ms.Merge(ctx.query.SearchInterfaceMethods(intf, word, ms.SearchedFQNs))
+			ps.Merge(ctx.query.SearchInterfaceProps(intf, word, ps.SearchedFQNs))
+			ccs.Merge(ctx.query.SearchInterfaceClassConsts(intf, word, ccs.SearchedFQNs))
+		}
 		methods = analysis.MergeMethodWithScope(methods, ms.ReduceStatic(currentClass, access))
 		props = analysis.MergePropWithScope(props, ps.ReduceStatic(currentClass, access))
 		classConsts = analysis.MergeClassConstWithScope(classConsts, ccs.ReduceStatic(currentClass, access))
 	}
+	var scores []int
 	for _, m := range methods {
 		completionList.Items = append(completionList.Items, methodToCompletionItem(m))
+		scores = append(scores, m.Score)
 	}
 	for _, p := range props {
 		completionList.Items = append(completionList.Items, propToCompletionItem(p))
+		scores = append(scores, p.Score)
 	}
 	for _, c := range classConsts {
 		completionList.Items = append(completionList.Items, classConstToCompletionItem(c))
+		scores = append(scores, c.Score)
 	}
+	sort.SliceStable(completionList.Items, func(i, j int) bool {
+		return scores[i] < scores[j]
+	})
 	return completionList
 }
 
@@ -343,15 +356,27 @@ func memberAccessCompletion(ctx *completionContext, word string, access analysis
 			ms.Merge(ctx.query.SearchClassMethods(class, word, ms.SearchedFQNs))
 			ps.Merge(ctx.query.SearchClassProps(class, word, ps.SearchedFQNs))
 		}
+		for _, intf := range ctx.query.GetInterfaces(scopeTypeFQN) {
+			ms.Merge(ctx.query.SearchInterfaceMethods(intf, word, ms.SearchedFQNs))
+			ps.Merge(ctx.query.SearchInterfaceProps(intf, word, ps.SearchedFQNs))
+		}
 		methods = analysis.MergeMethodWithScope(methods, ms.ReduceAccess(currentClass, access))
 		props = analysis.MergePropWithScope(props, ps.ReduceAccess(currentClass, access))
 	}
+	var scores []int
 	for _, m := range methods {
 		completionList.Items = append(completionList.Items, methodToCompletionItem(m))
+		scores = append(scores, m.Score)
 	}
 	for _, p := range props {
-		completionList.Items = append(completionList.Items, propToCompletionItem(p))
+		item := propToCompletionItem(p)
+		item.Label = item.Label[1:]
+		completionList.Items = append(completionList.Items, item)
+		scores = append(scores, p.Score)
 	}
+	sort.SliceStable(completionList.Items, func(i, j int) bool {
+		return scores[i] < scores[j]
+	})
 	return completionList
 }
 
@@ -373,7 +398,7 @@ func typeCompletion(ctx *completionContext, word string) *protocol.CompletionLis
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:                protocol.ClassCompletion,
 			Label:               label,
-			Documentation:       class.GetDescription(),
+			Documentation:       descriptionToMarkupContent(class.GetDescription()),
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(class.Name, textEdit),
 		})
@@ -389,7 +414,7 @@ func typeCompletion(ctx *completionContext, word string) *protocol.CompletionLis
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:                protocol.ClassCompletion,
 			Label:               label,
-			Documentation:       theInterface.GetDescription(),
+			Documentation:       descriptionToMarkupContent(theInterface.GetDescription()),
 			AdditionalTextEdits: textEdits,
 			Detail:              getDetailFromTextEdit(theInterface.Name, textEdit),
 		})

@@ -13,14 +13,16 @@ var /* const */ triggerParameterHintsCommand = protocol.Command{
 	Command: "editor.action.triggerParameterHints",
 }
 
-func concatDescriptionIfAvailable(sb *strings.Builder, description string) {
+func concatDescriptionIfAvailable(sb *strings.Builder, description string, writeLine bool) {
 	if len(description) > 0 {
 		converter := md.NewConverter("", true, nil)
 		markdown, err := converter.ConvertString(description)
 		if err == nil {
 			description = markdown
 		}
-		writeHorLine(sb)
+		if writeLine {
+			writeHorLine(sb)
+		}
 		sb.WriteString(description)
 	}
 }
@@ -88,7 +90,7 @@ func formatClasses(classes []*analysis.Class) *strings.Builder {
 				sb.WriteString(strings.Join(implements, ", "))
 			}
 		})
-		concatDescriptionIfAvailable(sb, class.GetDescription())
+		concatDescriptionIfAvailable(sb, class.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -123,7 +125,7 @@ func formatInterfaces(interfaces []*analysis.Interface) *strings.Builder {
 				sb.WriteString(strings.Join(extendStrings, ", "))
 			}
 		})
-		concatDescriptionIfAvailable(sb, inte.GetDescription())
+		concatDescriptionIfAvailable(sb, inte.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -152,7 +154,7 @@ func formatConsts(constants []*analysis.Const) *strings.Builder {
 				sb.WriteString(constant.Value)
 			}
 		})
-		concatDescriptionIfAvailable(sb, constant.GetDescription())
+		concatDescriptionIfAvailable(sb, constant.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -171,7 +173,7 @@ func formatDefines(defines []*analysis.Define) *strings.Builder {
 			}
 			sb.WriteString(")")
 		})
-		concatDescriptionIfAvailable(sb, define.GetDescription())
+		concatDescriptionIfAvailable(sb, define.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -191,7 +193,7 @@ func functionsToHover(ref analysis.HasTypes, functions []*analysis.Function) *pr
 				sb.WriteString(fn.GetReturnTypes().ToString())
 			}
 		})
-		concatDescriptionIfAvailable(sb, fn.GetDescription())
+		concatDescriptionIfAvailable(sb, fn.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -211,7 +213,7 @@ func traitsToHover(ref analysis.HasTypes, traits []*analysis.Trait) *protocol.Ho
 			sb.WriteString("trait ")
 			sb.WriteString(trait.Name.GetOriginal())
 		})
-		concatDescriptionIfAvailable(sb, trait.GetDescription())
+		concatDescriptionIfAvailable(sb, trait.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -238,26 +240,8 @@ func classConstsToHover(ref analysis.HasTypes, classConsts []analysis.ClassConst
 				sb.WriteString(c.Const.Value)
 			}
 		})
-		var (
-			scopeKind string
-			scopeName string
-		)
-		switch v := c.Scope.(type) {
-		case *analysis.Class:
-			scopeKind = "class"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Interface:
-			scopeKind = "interface"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Trait:
-			scopeKind = "trait"
-			scopeName = v.Name.GetFQN()
-		}
-		if scopeKind != "" {
-			writeHorLine(sb)
-			writeScope(sb, scopeKind, scopeName)
-		}
-		concatDescriptionIfAvailable(sb, c.Const.GetDescription())
+		concatScopeIfAvailable(sb, c.Scope, true)
+		concatDescriptionIfAvailable(sb, c.Const.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -267,6 +251,30 @@ func classConstsToHover(ref analysis.HasTypes, classConsts []analysis.ClassConst
 			Value: sb.String(),
 		},
 		Range: &theRange,
+	}
+}
+
+func concatScopeIfAvailable(sb *strings.Builder, scope analysis.Symbol, writeLine bool) {
+	var (
+		scopeKind string
+		scopeName string
+	)
+	switch v := scope.(type) {
+	case *analysis.Class:
+		scopeKind = "class"
+		scopeName = v.Name.GetFQN()
+	case *analysis.Interface:
+		scopeKind = "interface"
+		scopeName = v.Name.GetFQN()
+	case *analysis.Trait:
+		scopeKind = "trait"
+		scopeName = v.Name.GetFQN()
+	}
+	if scopeKind != "" {
+		if writeLine {
+			writeHorLine(sb)
+		}
+		writeScope(sb, scopeKind, scopeName)
 	}
 }
 
@@ -302,26 +310,8 @@ func methodsToHover(ref analysis.HasTypes, methods []analysis.MethodWithScope) *
 				sb.WriteString(method.GetReturnTypes().ToString())
 			}
 		})
-		var (
-			scopeKind string
-			scopeName string
-		)
-		switch v := m.Scope.(type) {
-		case *analysis.Class:
-			scopeKind = "class"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Interface:
-			scopeKind = "interface"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Trait:
-			scopeKind = "trait"
-			scopeName = v.Name.GetFQN()
-		}
-		if scopeKind != "" {
-			writeHorLine(sb)
-			writeScope(sb, scopeKind, scopeName)
-		}
-		concatDescriptionIfAvailable(sb, method.GetDescription())
+		concatScopeIfAvailable(sb, m.Scope, true)
+		concatDescriptionIfAvailable(sb, method.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -350,26 +340,8 @@ func propertiesToHover(ref analysis.HasTypes, properties []analysis.PropWithScop
 				sb.WriteString(property.Types.ToString())
 			}
 		})
-		var (
-			scopeKind string
-			scopeName string
-		)
-		switch v := p.Scope.(type) {
-		case *analysis.Class:
-			scopeKind = "class"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Interface:
-			scopeKind = "interface"
-			scopeName = v.Name.GetFQN()
-		case *analysis.Trait:
-			scopeKind = "trait"
-			scopeName = v.Name.GetFQN()
-		}
-		if scopeKind != "" {
-			writeHorLine(sb)
-			writeScope(sb, scopeKind, scopeName)
-		}
-		concatDescriptionIfAvailable(sb, property.GetDescription())
+		concatScopeIfAvailable(sb, p.Scope, true)
+		concatDescriptionIfAvailable(sb, property.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -391,7 +363,7 @@ func variableToHover(variable *analysis.Variable) *protocol.Hover {
 		}
 		sb.WriteString(variable.Name)
 	})
-	concatDescriptionIfAvailable(sb, variable.GetDescription())
+	concatDescriptionIfAvailable(sb, variable.GetDescription(), true)
 	theRange := variable.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
@@ -431,6 +403,28 @@ func hasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEd
 		sb.WriteString(textEdit.NewText)
 	}
 	return sb.String()
+}
+
+func methodDocumentation(method analysis.MethodWithScope) protocol.MarkupContent {
+	sb := &strings.Builder{}
+	concatScopeIfAvailable(sb, method.Scope, false)
+	sb.WriteString("\n\n")
+	concatDescriptionIfAvailable(sb, method.Method.GetDescription(), false)
+	return protocol.MarkupContent{
+		Kind:  protocol.Markdown,
+		Value: sb.String(),
+	}
+}
+
+func propDocumentation(prop analysis.PropWithScope) protocol.MarkupContent {
+	sb := &strings.Builder{}
+	concatScopeIfAvailable(sb, prop.Scope, false)
+	sb.WriteString("\n\n")
+	concatDescriptionIfAvailable(sb, prop.Prop.GetDescription(), false)
+	return protocol.MarkupContent{
+		Kind:  protocol.Markdown,
+		Value: sb.String(),
+	}
 }
 
 func normaliseNamespaceName(name string) string {
@@ -473,7 +467,7 @@ func classToCompletionItem(class *analysis.Class, label string, textEdit *protoc
 	return protocol.CompletionItem{
 		Kind:                protocol.ClassCompletion,
 		Label:               label,
-		Documentation:       class.GetDescription(),
+		Documentation:       descriptionToMarkupContent(class.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(class.Name, textEdit),
 	}
@@ -487,7 +481,7 @@ func interfaceToCompletionItem(intf *analysis.Interface, label string, textEdit 
 	return protocol.CompletionItem{
 		Kind:                protocol.InterfaceCompletion,
 		Label:               label,
-		Documentation:       intf.GetDescription(),
+		Documentation:       descriptionToMarkupContent(intf.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(intf.Name, textEdit),
 	}
@@ -501,7 +495,7 @@ func traitToCompletionItem(trait *analysis.Trait, label string, textEdit *protoc
 	return protocol.CompletionItem{
 		Kind:                protocol.ClassCompletion,
 		Label:               label,
-		Documentation:       trait.GetDescription(),
+		Documentation:       descriptionToMarkupContent(trait.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(trait.Name, textEdit),
 	}
@@ -516,7 +510,7 @@ func methodToCompletionItem(m analysis.MethodWithScope) protocol.CompletionItem 
 		InsertText:       insertText,
 		InsertTextFormat: textFormat,
 		Command:          command,
-		Documentation:    method.GetDescription(),
+		Documentation:    methodDocumentation(m),
 		Detail:           hasParamsDetailWithTextEdit(method, nil),
 	}
 }
@@ -526,7 +520,8 @@ func propToCompletionItem(p analysis.PropWithScope) protocol.CompletionItem {
 	return protocol.CompletionItem{
 		Kind:          protocol.PropertyCompletion,
 		Label:         prop.GetName(),
-		Documentation: prop.GetDescription(),
+		Documentation: propDocumentation(p),
+		Detail:        p.Prop.Types.ToString(),
 	}
 }
 
@@ -535,6 +530,13 @@ func classConstToCompletionItem(c analysis.ClassConstWithScope) protocol.Complet
 	return protocol.CompletionItem{
 		Kind:          protocol.ConstantCompletion,
 		Label:         classConst.GetName(),
-		Documentation: classConst.GetDescription(),
+		Documentation: descriptionToMarkupContent(classConst.GetDescription()),
+	}
+}
+
+func descriptionToMarkupContent(desc string) protocol.MarkupContent {
+	return protocol.MarkupContent{
+		Kind:  protocol.PlainText,
+		Value: desc,
 	}
 }

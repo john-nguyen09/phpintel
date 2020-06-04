@@ -1,8 +1,11 @@
 package analysis
 
-import "strings"
+import (
+	"strings"
+)
 
 const sep = ":"
+const staticInAccessCost = 16
 
 // Query is a wrapper around store
 type Query struct {
@@ -129,12 +132,13 @@ func (q *Query) GetGlobalVariables(name string) []*GlobalVariable {
 type MethodWithScope struct {
 	Method *Method
 	Scope  Symbol
+	Score  int
 }
 
 func methodWithScopeFromMethods(scope Symbol, methods []*Method) []MethodWithScope {
 	results := []MethodWithScope{}
 	for _, method := range methods {
-		results = append(results, MethodWithScope{method, scope})
+		results = append(results, MethodWithScope{method, scope, 0})
 	}
 	return results
 }
@@ -344,6 +348,9 @@ func (m InheritedMethods) ReduceAccess(currentClass string, access MemberAccess)
 			continue
 		}
 		if IsInherited(currentClass, access, m.RelationMap, ms.Method) {
+			if ms.Method.isStatic {
+				ms.Score -= staticInAccessCost
+			}
 			results = append(results, ms)
 			duplicatedNames[ms.Method.Name] = struct{}{}
 		}
@@ -491,7 +498,28 @@ func (q *Query) SearchClassMethods(class *Class, keyword string, searchedFQNs ma
 		newMethods := methods.Methods[:0]
 		patternRune := []rune(strings.ToLower(keyword))
 		for _, method := range methods.Methods {
-			if isMatch(method.Method.Name, patternRune) {
+			if matched, score := isMatch(method.Method.Name, patternRune); matched {
+				method.Score = score
+				newMethods = append(newMethods, method)
+			}
+		}
+		methods.Methods = newMethods
+	}
+	return methods
+}
+
+// SearchInterfaceMethods searches methods using fuzzy
+func (q *Query) SearchInterfaceMethods(intf *Interface, keyword string, searchedFQNs map[string]struct{}) InheritedMethods {
+	if searchedFQNs == nil {
+		searchedFQNs = map[string]struct{}{}
+	}
+	methods := q.GetInterfaceMethods(intf, "", searchedFQNs)
+	if keyword != "" {
+		newMethods := methods.Methods[:0]
+		patternRune := []rune(strings.ToLower(keyword))
+		for _, method := range methods.Methods {
+			if matched, score := isMatch(method.Method.Name, patternRune); matched {
+				method.Score = score
 				newMethods = append(newMethods, method)
 			}
 		}
@@ -504,12 +532,13 @@ func (q *Query) SearchClassMethods(class *Class, keyword string, searchedFQNs ma
 type ClassConstWithScope struct {
 	Const *ClassConst
 	Scope Symbol
+	Score int
 }
 
 func classConstWithScopeFromConsts(scope Symbol, classConsts []*ClassConst) []ClassConstWithScope {
 	results := []ClassConstWithScope{}
 	for _, classConst := range classConsts {
-		results = append(results, ClassConstWithScope{classConst, scope})
+		results = append(results, ClassConstWithScope{classConst, scope, 0})
 	}
 	return results
 }
@@ -588,7 +617,12 @@ func (q *Query) GetClassConsts(scope string, name string) []*ClassConst {
 			return classConsts
 		}
 	}
-	classConsts := q.store.GetClassConsts(scope, name)
+	var classConsts []*ClassConst
+	if name != "" {
+		classConsts = q.store.GetClassConsts(scope, name)
+	} else {
+		classConsts = q.store.GetAllClassConsts(scope)
+	}
 	q.cache[cacheKey] = classConsts
 	return classConsts
 }
@@ -681,11 +715,32 @@ func (q *Query) SearchClassClassConsts(class *Class, keyword string, searchedFQN
 		searchedFQNs = map[string]struct{}{}
 	}
 	classConsts := q.GetClassClassConsts(class, "", searchedFQNs)
-	if keyword == "" {
+	if keyword != "" {
 		newMethods := classConsts.Consts[:0]
-		patternRune := []rune(keyword)
+		patternRune := []rune(strings.ToLower(keyword))
 		for _, classConst := range classConsts.Consts {
-			if isMatch(classConst.Const.Name, patternRune) {
+			if matched, score := isMatch(classConst.Const.Name, patternRune); matched {
+				classConst.Score = score
+				newMethods = append(newMethods, classConst)
+			}
+		}
+		classConsts.Consts = newMethods
+	}
+	return classConsts
+}
+
+// SearchInterfaceClassConsts searches for class consts using fuzzy match
+func (q *Query) SearchInterfaceClassConsts(intf *Interface, keyword string, searchedFQNs map[string]struct{}) InheritedClassConst {
+	if searchedFQNs == nil {
+		searchedFQNs = map[string]struct{}{}
+	}
+	classConsts := q.GetInterfaceClassConsts(intf, "", searchedFQNs)
+	if keyword != "" {
+		newMethods := classConsts.Consts[:0]
+		patternRune := []rune(strings.ToLower(keyword))
+		for _, classConst := range classConsts.Consts {
+			if matched, score := isMatch(classConst.Const.Name, patternRune); matched {
+				classConst.Score = score
 				newMethods = append(newMethods, classConst)
 			}
 		}
@@ -698,12 +753,13 @@ func (q *Query) SearchClassClassConsts(class *Class, keyword string, searchedFQN
 type PropWithScope struct {
 	Prop  *Property
 	Scope Symbol
+	Score int
 }
 
 func propWithScopeFromProps(scope Symbol, props []*Property) []PropWithScope {
 	results := []PropWithScope{}
 	for _, prop := range props {
-		results = append(results, PropWithScope{prop, scope})
+		results = append(results, PropWithScope{prop, scope, 0})
 	}
 	return results
 }
@@ -783,6 +839,9 @@ func (p InheritedProps) ReduceAccess(currentClass string, access MemberAccess) [
 			continue
 		}
 		if IsInherited(currentClass, access, p.RelationMap, ps.Prop) {
+			if ps.Prop.isStatic {
+				ps.Score -= staticInAccessCost
+			}
 			results = append(results, ps)
 			duplicatedNames[ps.Prop.Name] = struct{}{}
 		}
@@ -803,7 +862,12 @@ func (q *Query) GetProps(scope, name string) []*Property {
 			return p
 		}
 	}
-	p := q.store.GetProperties(scope, name)
+	var p []*Property
+	if name != "" {
+		p = q.store.GetProperties(scope, name)
+	} else {
+		p = q.store.GetAllProperties(scope)
+	}
 	q.cache[cacheKey] = p
 	return p
 }
@@ -892,9 +956,30 @@ func (q *Query) SearchClassProps(class *Class, keyword string, searchedFQNs map[
 	props := q.GetClassProps(class, "", searchedFQNs)
 	if keyword != "" {
 		newProps := props.Props[:0]
-		patternRune := []rune(keyword)
+		patternRune := []rune(strings.ToLower(keyword))
 		for _, prop := range props.Props {
-			if isMatch(prop.Prop.Name, patternRune) {
+			if matched, score := isMatch(prop.Prop.Name, patternRune); matched {
+				prop.Score = score
+				newProps = append(newProps, prop)
+			}
+		}
+		props.Props = newProps
+	}
+	return props
+}
+
+// SearchInterfaceProps searches for class props using fuzzy match
+func (q *Query) SearchInterfaceProps(intf *Interface, keyword string, searchedFQNs map[string]struct{}) InheritedProps {
+	if searchedFQNs == nil {
+		searchedFQNs = map[string]struct{}{}
+	}
+	props := q.GetInterfaceProps(intf, "", searchedFQNs)
+	if keyword != "" {
+		newProps := props.Props[:0]
+		patternRune := []rune(strings.ToLower(keyword))
+		for _, prop := range props.Props {
+			if matched, score := isMatch(prop.Prop.Name, patternRune); matched {
+				prop.Score = score
 				newProps = append(newProps, prop)
 			}
 		}
