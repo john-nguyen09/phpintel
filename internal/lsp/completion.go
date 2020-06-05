@@ -150,6 +150,8 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		completionList = classCompletion(completionCtx, s, s.Name)
 	case *analysis.TypeDeclaration:
 		completionList = typeCompletion(completionCtx, s.Name)
+	case *analysis.InterfaceAccess:
+		completionList = interfaceCompletion(completionCtx, word)
 	}
 	return completionList, nil
 }
@@ -479,6 +481,22 @@ func useCompletion(ctx *completionContext, word string) *protocol.CompletionList
 	completionList.IsIncomplete = !searchResult.IsComplete
 	for _, trait := range traits {
 		completionList.Items = append(completionList.Items, traitToCompletionItem(trait, trait.Name.GetOriginal(), nil))
+	}
+	return completionList
+}
+
+func interfaceCompletion(ctx *completionContext, word string) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
+	}
+	opts := baseSearchOptions()
+	store := ctx.query.Store()
+	interfaces, searchResult := store.SearchInterfaces(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
+	for _, intf := range interfaces {
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, intf, intf.Name, word)
+		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, label, textEdit))
 	}
 	return completionList
 }

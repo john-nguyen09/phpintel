@@ -141,6 +141,9 @@ func (t TypeString) FirstPart() string {
 
 func (t TypeString) GetFirstAndRestParts() (string, []string) {
 	parts := t.GetParts()
+	if len(parts) == 0 {
+		return "", nil
+	}
 	return parts[0], parts[1:]
 }
 
