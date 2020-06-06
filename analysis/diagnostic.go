@@ -74,7 +74,7 @@ func UnusedDiagnostics(document *Document) []protocol.Diagnostic {
 func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 	defer util.TimeTrack(time.Now(), "DeprecatedDiagnostics")
 	doc := ctx.document
-	store := ctx.store
+	q := ctx.query
 	create := func(r protocol.Range, message string) protocol.Diagnostic {
 		return protocol.Diagnostic{
 			Range:    r,
@@ -89,8 +89,8 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 		switch v := s.(type) {
 		case *FunctionCall:
 			t := NewTypeString(v.Name)
-			fqn := doc.ImportTableAtPos(v.Location.Range.Start).GetFunctionReferenceFQN(store, t)
-			for _, f := range store.GetFunctions(fqn) {
+			fqn := doc.ImportTableAtPos(v.Location.Range.Start).GetFunctionReferenceFQN(ctx.query, t)
+			for _, f := range q.GetFunctions(fqn) {
 				if f.deprecatedTag != nil {
 					diagnostics = append(diagnostics, create(
 						v.Location.Range,
@@ -103,7 +103,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 			v.Resolve(ctx)
 		LClassTypeDesignator:
 			for _, t := range v.GetTypes().Resolve() {
-				for _, c := range store.GetClasses(t.GetFQN()) {
+				for _, c := range q.GetClasses(t.GetFQN()) {
 					if c.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -117,7 +117,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 			v.Resolve(ctx)
 		LTypeDecl:
 			for _, t := range v.GetTypes().Resolve() {
-				for _, c := range ctx.store.GetClasses(t.GetFQN()) {
+				for _, c := range q.GetClasses(t.GetFQN()) {
 					if c.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -126,7 +126,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 						break LTypeDecl
 					}
 				}
-				for _, i := range ctx.store.GetInterfaces(t.GetFQN()) {
+				for _, i := range q.GetInterfaces(t.GetFQN()) {
 					if i.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -140,7 +140,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 			v.Resolve(ctx)
 		LClass:
 			for _, t := range v.GetTypes().Resolve() {
-				for _, c := range ctx.store.GetClasses(t.GetFQN()) {
+				for _, c := range q.GetClasses(t.GetFQN()) {
 					if c.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -149,7 +149,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 						break LClass
 					}
 				}
-				for _, i := range ctx.store.GetInterfaces(t.GetFQN()) {
+				for _, i := range q.GetInterfaces(t.GetFQN()) {
 					if i.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -163,7 +163,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 			v.Resolve(ctx)
 		LInterface:
 			for _, t := range v.GetTypes().Resolve() {
-				for _, i := range ctx.store.GetInterfaces(t.GetFQN()) {
+				for _, i := range q.GetInterfaces(t.GetFQN()) {
 					if i.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -176,9 +176,9 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 		case *ConstantAccess:
 			v.Resolve(ctx)
 			name := NewTypeString(v.Name)
-			fqn := doc.ImportTableAtPos(v.Location.Range.Start).GetConstReferenceFQN(store, name)
+			fqn := doc.ImportTableAtPos(v.Location.Range.Start).GetConstReferenceFQN(q, name)
 			var shouldStop bool
-			for _, c := range store.GetConsts(fqn) {
+			for _, c := range q.GetConsts(fqn) {
 				if c.deprecatedTag != nil {
 					diagnostics = append(diagnostics, create(
 						v.Location.Range,
@@ -191,7 +191,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 			if shouldStop {
 				break
 			}
-			for _, c := range store.GetDefines(fqn) {
+			for _, c := range q.GetDefines(fqn) {
 				if c.deprecatedTag != nil {
 					diagnostics = append(diagnostics, create(
 						v.Location.Range,
@@ -203,7 +203,7 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 		case *ScopedConstantAccess:
 		LScopedConstant:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
-				for _, c := range store.GetClassConsts(scopeType.GetFQN(), v.Name) {
+				for _, c := range q.GetClassConsts(scopeType.GetFQN(), v.Name) {
 					if c.deprecatedTag != nil {
 						diagnostics = append(diagnostics, create(
 							v.Location.Range,
@@ -214,23 +214,18 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *ScopedMethodAccess:
-			name := ""
-			classScope := ""
-			if hasName, ok := v.Scope.(HasName); ok {
-				name = hasName.GetName()
-			}
-			if hasScope, ok := v.Scope.(HasScope); ok {
-				classScope = hasScope.GetScope()
-			}
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LScopedMethod:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
-				for _, class := range store.GetClasses(scopeType.GetFQN()) {
-					for _, m := range GetClassMethods(store, class, v.Name,
-						StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
-						if m.deprecatedTag != nil {
+				for _, class := range q.GetClasses(scopeType.GetFQN()) {
+					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceStatic(currentClass, v) {
+						if m.Method == nil {
+							continue
+						}
+						if m.Method.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(m.ReferenceFQN()+" is deprecated", m.deprecatedTag),
+								deprecatedDescription(m.Method.ReferenceFQN()+" is deprecated", m.Method.deprecatedTag),
 							))
 							break LScopedMethod
 						}
@@ -238,23 +233,15 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *ScopedPropertyAccess:
-			name := ""
-			classScope := ""
-			if hasName, ok := v.Scope.(HasName); ok {
-				name = hasName.GetName()
-			}
-			if hasScope, ok := v.Scope.(HasScope); ok {
-				classScope = hasScope.GetScope()
-			}
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LScopedProp:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
-				for _, class := range store.GetClasses(scopeType.GetFQN()) {
-					for _, p := range GetClassProperties(store, class, v.Name,
-						StaticPropsScopeAware(NewSearchOptions(), classScope, name)) {
-						if p.deprecatedTag != nil {
+				for _, class := range q.GetClasses(scopeType.GetFQN()) {
+					for _, p := range q.GetClassProps(class, v.Name, nil).ReduceStatic(currentClass, v) {
+						if p.Prop.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(p.ReferenceFQN()+" is deprecated", p.deprecatedTag),
+								deprecatedDescription(p.Prop.ReferenceFQN()+" is deprecated", p.Prop.deprecatedTag),
 							))
 							break LScopedProp
 						}
@@ -262,15 +249,15 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *PropertyAccess:
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LProp:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
-				for _, class := range store.GetClasses(scopeType.GetFQN()) {
-					for _, p := range GetClassProperties(store, class, "$"+v.Name,
-						PropsScopeAware(NewSearchOptions(), doc, v.Scope)) {
-						if p.deprecatedTag != nil {
+				for _, class := range q.GetClasses(scopeType.GetFQN()) {
+					for _, p := range q.GetClassProps(class, "$"+v.Name, nil).ReduceAccess(currentClass, v) {
+						if p.Prop.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(p.ReferenceFQN()+" is deprecated", p.deprecatedTag),
+								deprecatedDescription(p.Prop.ReferenceFQN()+" is deprecated", p.Prop.deprecatedTag),
 							))
 							break LProp
 						}
@@ -278,39 +265,49 @@ func DeprecatedDiagnostics(ctx ResolveContext) []protocol.Diagnostic {
 				}
 			}
 		case *MethodAccess:
+			currentClass := ctx.document.GetClassScopeAtSymbol(v)
 		LMethod:
 			for _, scopeType := range v.ResolveAndGetScope(ctx).Resolve() {
-				for _, class := range store.GetClasses(scopeType.GetFQN()) {
-					for _, m := range GetClassMethods(store, class, v.Name,
-						MethodsScopeAware(NewSearchOptions(), doc, v.Scope)) {
-						if m.deprecatedTag != nil {
+				for _, class := range q.GetClasses(scopeType.GetFQN()) {
+					for _, m := range q.GetClassMethods(class, v.Name, nil).ReduceAccess(currentClass, v) {
+						method := m.Method
+						if method == nil {
+							continue
+						}
+						if method.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(m.ReferenceFQN()+" is deprecated", m.deprecatedTag),
+								deprecatedDescription(method.ReferenceFQN()+" is deprecated", method.deprecatedTag),
 							))
 							break LMethod
 						}
 					}
 				}
-				for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
-					for _, m := range GetInterfaceMethods(store, theInterface, v.Name,
-						MethodsScopeAware(NewSearchOptions(), doc, v.Scope)) {
-						if m.deprecatedTag != nil {
+				for _, theInterface := range q.GetInterfaces(scopeType.GetFQN()) {
+					for _, m := range q.GetInterfaceMethods(theInterface, v.Name, nil).ReduceAccess(currentClass, v) {
+						method := m.Method
+						if method == nil {
+							continue
+						}
+						if method.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(m.ReferenceFQN()+" is deprecated", m.deprecatedTag),
+								deprecatedDescription(method.ReferenceFQN()+" is deprecated", method.deprecatedTag),
 							))
 							break LMethod
 						}
 					}
 				}
-				for _, trait := range store.GetTraits(scopeType.GetFQN()) {
-					for _, m := range GetTraitMethods(store, trait, v.Name,
-						MethodsScopeAware(NewSearchOptions(), doc, v.Scope)) {
-						if m.deprecatedTag != nil {
+				for _, trait := range q.GetTraits(scopeType.GetFQN()) {
+					for _, m := range q.GetTraitMethods(trait, v.Name).ReduceAccess(currentClass, v) {
+						method := m.Method
+						if method == nil {
+							continue
+						}
+						if method.deprecatedTag != nil {
 							diagnostics = append(diagnostics, create(
 								v.Location.Range,
-								deprecatedDescription(m.ReferenceFQN()+" is deprecated", m.deprecatedTag),
+								deprecatedDescription(method.ReferenceFQN()+" is deprecated", method.deprecatedTag),
 							))
 							break LMethod
 						}

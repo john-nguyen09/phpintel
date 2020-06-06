@@ -79,6 +79,8 @@ func (s *entry) bytes() []byte {
 	return s.e.Bytes()
 }
 
+// Store contains information about a given folder and functions
+// for querying symbols
 type Store struct {
 	uri       protocol.DocumentURI
 	db        storage.DB
@@ -119,20 +121,25 @@ func (d *symbolDeletor) Delete(batch storage.Batch) {
 	}
 }
 
+// SearchOptions contains predicates and limiter if applicable for searching
+// symbols
 type SearchOptions struct {
 	predicates []func(s Symbol) bool
 	limiter    func() bool
 }
 
+// NewSearchOptions creates an empty search option
 func NewSearchOptions() SearchOptions {
 	return SearchOptions{}
 }
 
+// WithPredicate adds a predicate into the search option
 func (s SearchOptions) WithPredicate(predicate func(s Symbol) bool) SearchOptions {
 	s.predicates = append(s.predicates, predicate)
 	return s
 }
 
+// WithLimit adds a limiter into the search option
 func (s SearchOptions) WithLimit(limit int) SearchOptions {
 	count := 0
 	s.limiter = func() bool {
@@ -142,6 +149,7 @@ func (s SearchOptions) WithLimit(limit int) SearchOptions {
 	return s
 }
 
+// IsLimitReached returns true if the limitter reaches the limit
 func (s SearchOptions) IsLimitReached() bool {
 	if s.limiter == nil {
 		return false
@@ -149,6 +157,8 @@ func (s SearchOptions) IsLimitReached() bool {
 	return s.limiter()
 }
 
+// NewStore creates a store with the disk storage or returns an error
+// if the disk storage cannot be created
 func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	db, err := storage.NewDisk(storePath)
 	stubbers := stub.GetStubbers()
@@ -168,11 +178,14 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	return store, nil
 }
 
+// Close triggers close on the fuzzy engine, and closes the disk storage
 func (s *Store) Close() {
 	s.fEngine.close()
 	s.db.Close()
 }
 
+// GetStoreVersion returns the version of the disk storage or v0.0.0 if
+// the version is missing from the disk
 func (s *Store) GetStoreVersion() string {
 	v, err := s.db.Get(versionKey)
 	if err != nil {
@@ -181,14 +194,18 @@ func (s *Store) GetStoreVersion() string {
 	return string(v)
 }
 
+// PutVersion stores the given version on the disk
 func (s *Store) PutVersion(version string) {
 	s.db.Put(versionKey, []byte(version))
 }
 
+// Clear triggers a disk clear
 func (s *Store) Clear() {
 	s.db.Clear()
 }
 
+// Migrate checks for defined version if it is less than
+// clears the store
 func (s *Store) Migrate(newVersion string) {
 	storeVersion := s.GetStoreVersion()
 	sv, _ := semver.NewVersion(storeVersion)
@@ -205,6 +222,8 @@ func (s *Store) Migrate(newVersion string) {
 	}
 }
 
+// LoadStubs loads the defined stubs, compare their hash and index them
+// if needed
 func (s *Store) LoadStubs() {
 	for _, stubber := range s.stubbers {
 		stubber.Walk(func(path string, data []byte) error {
@@ -221,6 +240,8 @@ func (s *Store) LoadStubs() {
 	}
 }
 
+// GetOrCreateDocument checks if the store contains the given URI or
+// create a new document with the given URI
 func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	var document *Document
 	if value, ok := s.documents.Get(uri); !ok {
@@ -242,6 +263,8 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 	return document
 }
 
+// OpenDocument loads and index the document with the given URI, at the same time
+// marks it as open to retain it on the memory
 func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
@@ -259,6 +282,8 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 	return document
 }
 
+// CloseDocument syncs the document with the given URI and marks
+// it as close to release memory
 func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 	document := s.GetOrCreateDocument(uri)
 	if document == nil {
@@ -274,6 +299,8 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 	s.SyncDocument(document)
 }
 
+// DeleteDocument deletes all symbols and indexes relating to the URI
+// this returns error if the disk cannot be written
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
 		ciDeletor := newFuzzyEngineDeletor(s.fEngine, uri)
@@ -291,6 +318,7 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	}
 }
 
+// DeleteFolder searches for documents and triggers `DeleteDocument`
 func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	entry := newEntry(documentCollection, uri)
 	s.db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
@@ -299,6 +327,9 @@ func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 	})
 }
 
+// CompareAndIndexDocument compares the file's hash with the stored one
+// on the disk, and if they are not matched load the document and sync.
+// The pointer to the document is returned
 func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	uri := putil.PathToUri(filePath)
 	document := s.GetOrCreateDocument(uri)
@@ -331,6 +362,8 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 	return document
 }
 
+// SyncDocument writes all definition symbols and indexes to the disk
+// or the fuzzy engine
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
@@ -358,10 +391,14 @@ func (s *Store) releaseDocIfNotOpen(document *Document) {
 	}
 }
 
+// SaveDocOnStore retains the document in memory
 func (s *Store) SaveDocOnStore(document *Document) {
 	s.documents.Set(document.GetURI(), document)
 }
 
+// PrepareForIndexing loads all the synced documents from the disk storage
+// into memory, this is to make sure that any deleted documents that are
+// not yet synced, get deleted
 func (s *Store) PrepareForIndexing() {
 	defer util.TimeTrack(time.Now(), "PrepareForIndexing")
 	syncedDocumentURIs := s.getSyncedDocumentURIs()
@@ -370,6 +407,9 @@ func (s *Store) PrepareForIndexing() {
 	}
 }
 
+// FinishIndexing checks for all URIs that are not removed from the map
+// and delete them, because if the file exists its URI should be removed
+// from the map
 func (s *Store) FinishIndexing() {
 	err := s.db.WriteBatch(func(wb storage.Batch) error {
 		for iter := range s.syncedDocumentURIs.Iter() {
@@ -491,10 +531,12 @@ func deleteEntry(batch storage.Batch, entry *entry) {
 	batch.Delete(entry.getKeyBytes())
 }
 
+// GetURI returns the store URI
 func (s *Store) GetURI() protocol.DocumentURI {
 	return s.uri
 }
 
+// IsSymbolValid returns true if the given symbol matches all predicates of the given options
 func isSymbolValid(symbol Symbol, options SearchOptions) bool {
 	if len(options.predicates) == 0 {
 		return true
@@ -524,6 +566,8 @@ func namespacePredicate(scope string) func(s Symbol) bool {
 	}
 }
 
+// SearchNamespaces searches namespaces with the given keyword, and keyword can contain
+// a namespace scope, e.g. Namespace1\NestedNams
 func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]string, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	// In namespace normally there isn't \ but somehow it has ignores in because
@@ -545,6 +589,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 	return namespaces, result
 }
 
+// GetClasses searches all classes with the given name
 func (s *Store) GetClasses(name string) []*Class {
 	entry := newEntry(classCollection, name+KeySep)
 	classes := []*Class{}
@@ -555,7 +600,7 @@ func (s *Store) GetClasses(name string) []*Class {
 	return classes
 }
 
-func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onDataResult) {
+func (s *Store) getClassesByScopeStream(scope string, onData func(*Class) onDataResult) {
 	if scope[len(scope)-1] != '\\' {
 		scope += "\\"
 	}
@@ -569,6 +614,8 @@ func (s *Store) GetClassesByScopeStream(scope string, onData func(*Class) onData
 	})
 }
 
+// SearchClasses uses the completion index to search for classes with the given keyword.
+// `keyword` can contain scope \Namespace1\Cl
 func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	classes := []*Class{}
@@ -581,7 +628,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 				return false
 			})
 		}
-		s.GetClassesByScopeStream(scope, func(class *Class) onDataResult {
+		s.getClassesByScopeStream(scope, func(class *Class) onDataResult {
 			if isSymbolValid(class, options) {
 				classes = append(classes, class)
 				if options.IsLimitReached() {
@@ -617,6 +664,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 	return classes, result
 }
 
+// GetInterfaces searches all the interfaces with the given name from the disk storage
 func (s *Store) GetInterfaces(name string) []*Interface {
 	entry := newEntry(interfaceCollection, name+KeySep)
 	interfaces := []*Interface{}
@@ -627,6 +675,8 @@ func (s *Store) GetInterfaces(name string) []*Interface {
 	return interfaces
 }
 
+// SearchInterfaces uses completion index to search for interfaces with the given keyword.
+// `keyword` can contain scope \Namespace1\Cl
 func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Interface, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	interfaces := []*Interface{}
@@ -655,6 +705,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 	return interfaces, result
 }
 
+// GetTraits searches for all the traits with the given name from the disk storage
 func (s *Store) GetTraits(name string) []*Trait {
 	entry := newEntry(traitCollection, name+KeySep)
 	traits := []*Trait{}
@@ -665,6 +716,8 @@ func (s *Store) GetTraits(name string) []*Trait {
 	return traits
 }
 
+// SearchTraits uses completion index to search traits matching the given keyword.
+// `keyword` can contain scope
 func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	prefixes := []string{""}
@@ -697,6 +750,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 	return traits, result
 }
 
+// GetFunctions searches all functions with the given name from the disk storage
 func (s *Store) GetFunctions(name string) []*Function {
 	entry := newEntry(functionCollection, name+KeySep)
 	functions := []*Function{}
@@ -707,6 +761,8 @@ func (s *Store) GetFunctions(name string) []*Function {
 	return functions
 }
 
+// SearchFunctions uses the completion index to search functions matching the given keyword.
+// `keyword` can contain scope
 func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Function, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
 	functions := []*Function{}
@@ -735,6 +791,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 	return functions, result
 }
 
+// GetConsts searches all the consts with the given name from the disk storage
 func (s *Store) GetConsts(name string) []*Const {
 	entry := newEntry(constCollection, name+KeySep)
 	consts := []*Const{}
@@ -745,6 +802,7 @@ func (s *Store) GetConsts(name string) []*Const {
 	return consts
 }
 
+// SearchConsts uses completion index to search constants matching the given keyword
 func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, SearchResult) {
 	consts := []*Const{}
 	query := searchQuery{
@@ -771,6 +829,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 	return consts, result
 }
 
+// GetDefines searches all `define()` with the given name from the disk storage
 func (s *Store) GetDefines(name string) []*Define {
 	entry := newEntry(defineCollection, name+KeySep)
 	defines := []*Define{}
@@ -781,6 +840,7 @@ func (s *Store) GetDefines(name string) []*Define {
 	return defines
 }
 
+// SearchDefines uses completion index to search `define()`s matching the given keyword
 func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define, SearchResult) {
 	defines := []*Define{}
 	query := searchQuery{
@@ -807,6 +867,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 	return defines, result
 }
 
+// GetMethods searches for all methods with the same scope and name as given
 func (s *Store) GetMethods(scope string, name string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
 	methods := []*Method{}
@@ -817,6 +878,9 @@ func (s *Store) GetMethods(scope string, name string) []*Method {
 	return methods
 }
 
+// GetAllMethods returns all the methods with the given scope.
+// This function can be faster than `SearchMethods` for searching only methods
+// under given scope, because this only scans methods which have the given scope
 func (s *Store) GetAllMethods(scope string) []*Method {
 	entry := newEntry(methodCollection, scope+KeySep)
 	methods := []*Method{}
@@ -827,6 +891,10 @@ func (s *Store) GetAllMethods(scope string) []*Method {
 	return methods
 }
 
+// SearchMethods uses completion index to search methods matching the given scope and keyword.
+// This function is slow and should only be used for searching method store-wide, because the completion
+// index will scan through all the methods in the store and compare its scope.
+// If the scope is "" all methods matching will be returned.
 func (s *Store) SearchMethods(scope string, keyword string, options SearchOptions) ([]*Method, SearchResult) {
 	if keyword == "" {
 		return []*Method{}, SearchResult{false}
@@ -858,6 +926,9 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 	return methods, result
 }
 
+// GetClassConsts searches all class constants with the given scope and name from the disk
+// storage.
+// The word class is used loosely in here which means it can be interfaces/traits
 func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep+name)
 	classConsts := []*ClassConst{}
@@ -868,6 +939,8 @@ func (s *Store) GetClassConsts(scope string, name string) []*ClassConst {
 	return classConsts
 }
 
+// GetAllClassConsts returns all the class constants under the given scope.
+// The word class is used loosely in here, which means it can be classes/interfaces/traits
 func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	entry := newEntry(classConstCollection, scope+KeySep)
 	classConsts := []*ClassConst{}
@@ -878,6 +951,10 @@ func (s *Store) GetAllClassConsts(scope string) []*ClassConst {
 	return classConsts
 }
 
+// SearchClassConsts uses completion index to search class constants matching the
+// given scope and keyword.
+// If the scope is empty all matched class constants are returned.
+// The word class is used loosely in here, which means it can be classes/interfaces/traits
 func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOptions) ([]*ClassConst, SearchResult) {
 	if keyword == "" {
 		return s.GetAllClassConsts(scope), SearchResult{true}
@@ -909,6 +986,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 	return classConsts, result
 }
 
+// GetProperties searches all properties with the given scope and name from the disk storage
 func (s *Store) GetProperties(scope string, name string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep+name+KeySep)
 	properties := []*Property{}
@@ -919,6 +997,7 @@ func (s *Store) GetProperties(scope string, name string) []*Property {
 	return properties
 }
 
+// GetAllProperties searches all properties with the given scope from the disk storage
 func (s *Store) GetAllProperties(scope string) []*Property {
 	entry := newEntry(propertyCollection, scope+KeySep)
 	properties := []*Property{}
@@ -929,6 +1008,8 @@ func (s *Store) GetAllProperties(scope string) []*Property {
 	return properties
 }
 
+// SearchProperties uses completion index to search properties matching the given scope
+// and name. If the scope is "", this will forward to `GetAllProperties`, and ignore keyword
 func (s *Store) SearchProperties(scope string, keyword string, options SearchOptions) ([]*Property, SearchResult) {
 	if keyword == "" {
 		return s.GetAllProperties(scope), SearchResult{true}
@@ -960,6 +1041,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 	return properties, result
 }
 
+// GetGlobalVariables searches all global variables with the given name from the disk storage
 func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 	entry := newEntry(globalVariableCollection, name+KeySep)
 	results := []*GlobalVariable{}

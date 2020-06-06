@@ -8,16 +8,19 @@ import (
 
 // ScopedMethodAccess represents a reference to method in class access, e.g. ::method()
 type ScopedMethodAccess struct {
-	Expression
+	MemberAccessExpression
 
 	hasResolved bool
 }
 
 var _ HasTypesHasScope = (*ScopedMethodAccess)(nil)
+var _ MemberAccess = (*ScopedMethodAccess)(nil)
 
 func newScopedMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	methodAccess := &ScopedMethodAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -52,27 +55,18 @@ func (s *ScopedMethodAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
 	s.hasResolved = true
-	name := ""
-	classScope := ""
-	if hasName, ok := s.Scope.(HasName); ok {
-		name = hasName.GetName()
-	}
-	if hasScope, ok := s.Scope.(HasScope); ok {
-		classScope = hasScope.GetScope()
-	}
+	q := ctx.query
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			for _, method := range GetClassMethods(store, class, s.Name,
-				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
-				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, s) {
+				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
-		for _, theInterface := range store.GetInterfaces(scopeType.GetFQN()) {
-			for _, method := range GetInterfaceMethods(store, theInterface, s.Name,
-				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
-				s.Type.merge(resolveMemberTypes(method.GetReturnTypes(), s.Scope))
+		for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
+			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, s) {
+				s.Type.merge(resolveMemberTypes(m.Method.GetReturnTypes(), s.Scope))
 			}
 		}
 	}
@@ -84,20 +78,17 @@ func (s *ScopedMethodAccess) GetTypes() TypeComposite {
 
 func (s *ScopedMethodAccess) ResolveToHasParams(ctx ResolveContext) []HasParams {
 	hasParams := []HasParams{}
-	store := ctx.store
-	for _, typeString := range s.ResolveAndGetScope(ctx).Resolve() {
-		name := ""
-		classScope := ""
-		if hasName, ok := s.Scope.(HasName); ok {
-			name = hasName.GetName()
+	q := ctx.query
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
+	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, m := range q.GetClassMethods(class, s.Name, nil).ReduceStatic(currentClass, s) {
+				hasParams = append(hasParams, m.Method)
+			}
 		}
-		if hasScope, ok := s.Scope.(HasScope); ok {
-			classScope = hasScope.GetScope()
-		}
-		for _, class := range store.GetClasses(typeString.GetFQN()) {
-			for _, method := range GetClassMethods(store, class, s.Name,
-				StaticMethodsScopeAware(NewSearchOptions(), classScope, name)) {
-				hasParams = append(hasParams, method)
+		for _, intf := range q.GetInterfaces(scopeType.GetFQN()) {
+			for _, m := range q.GetInterfaceMethods(intf, s.Name, nil).ReduceStatic(currentClass, s) {
+				hasParams = append(hasParams, m.Method)
 			}
 		}
 	}

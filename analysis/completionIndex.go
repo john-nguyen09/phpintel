@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"log"
+	"sort"
 	"strings"
 	"time"
 
@@ -175,6 +176,13 @@ func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey strin
 
 type match struct {
 	Index int
+	Score int
+}
+
+func isMatch(str string, pattern []rune) (bool, int) {
+	chars := util.ToChars([]byte(str))
+	result, _ := algo.FuzzyMatchV2(false, true, true, &chars, pattern, false, nil)
+	return result.Score > 0, result.Score
 }
 
 func (f *fuzzyEngine) match(pattern string) []match {
@@ -182,12 +190,13 @@ func (f *fuzzyEngine) match(pattern string) []match {
 	dataLen := f.Len()
 	patternRune := []rune(strings.ToLower(pattern))
 	for i := 0; i < dataLen; i++ {
-		chars := util.ToChars([]byte(f.String(i)))
-		result, _ := algo.FuzzyMatchV2(false, true, true, &chars, patternRune, false, nil)
-		if result.Score > 0 {
-			matches = append(matches, match{i})
+		if matched, score := isMatch(f.String(i), patternRune); matched {
+			matches = append(matches, match{i, score})
 		}
 	}
+	sort.SliceStable(matches, func(i, j int) bool {
+		return matches[i].Score < matches[j].Score
+	})
 	return matches
 }
 

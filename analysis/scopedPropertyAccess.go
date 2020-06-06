@@ -9,16 +9,19 @@ import (
 // ScopedPropertyAccess represents a reference to property in
 // scoped class access, e.g. ::$property
 type ScopedPropertyAccess struct {
-	Expression
+	MemberAccessExpression
 
 	hasResolved bool
 }
 
 var _ HasTypesHasScope = (*ScopedPropertyAccess)(nil)
+var _ MemberAccess = (*ScopedPropertyAccess)(nil)
 
 func newScopedPropertyAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &ScopedPropertyAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -44,21 +47,13 @@ func (s *ScopedPropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
+	q := ctx.query
 	s.hasResolved = true
-	name := ""
-	classScope := ""
-	if hasName, ok := s.Scope.(HasName); ok {
-		name = hasName.GetName()
-	}
-	if hasScope, ok := s.Scope.(HasScope); ok {
-		classScope = hasScope.GetScope()
-	}
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			for _, property := range GetClassProperties(store, class, s.Name,
-				StaticPropsScopeAware(NewSearchOptions(), classScope, name)) {
-				s.Type.merge(property.Types)
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, p := range q.GetClassProps(class, s.Name, nil).ReduceStatic(currentClass, s) {
+				s.Type.merge(p.Prop.Types)
 			}
 		}
 	}

@@ -3,12 +3,14 @@ package analysis
 import (
 	"io/ioutil"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -120,7 +122,7 @@ function func2() {
 		{doc3.importTables[0], "func3", "\\Namespace3\\func3"},
 	}
 	for _, testCase := range testCases {
-		actual := testCase.importTable.GetFunctionReferenceFQN(store, NewTypeString(testCase.funcCall))
+		actual := testCase.importTable.GetFunctionReferenceFQN(NewQuery(store), NewTypeString(testCase.funcCall))
 		assert.Equal(t, testCase.expected, actual)
 	}
 }
@@ -148,6 +150,9 @@ func TestUnusedImports(t *testing.T) {
 	for _, item := range unusedImportItems {
 		results = append(results, item.locationRange)
 	}
+	sort.Slice(results, func(i, j int) bool {
+		return util.CompareRange(results[i], results[j]) < 0
+	})
 	assert.Equal(t, []protocol.Range{
 		{Start: protocol.Position{Line: 4, Character: 4}, End: protocol.Position{Line: 4, Character: 14}},
 		{Start: protocol.Position{Line: 6, Character: 4}, End: protocol.Position{Line: 6, Character: 9}},

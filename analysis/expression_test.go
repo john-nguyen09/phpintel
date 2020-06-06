@@ -19,7 +19,7 @@ $var3 = clone $var2;`))
 	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols()[2].GetTypes().ToString())
 
 	var3 := doc.hasTypesSymbols()[4]
-	var3.Resolve(NewResolveContext(store, doc))
+	var3.Resolve(NewResolveContext(NewQuery(store), doc))
 	assert.Equal(t, "\\DateTime", var3.GetTypes().ToString())
 }
 

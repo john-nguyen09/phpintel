@@ -11,35 +11,37 @@
   }
 })
 (*analysis.ScopedMethodAccess)({
-  Expression: (analysis.Expression) {
-    Type: (analysis.TypeComposite) {
-      typeStrings: ([]analysis.TypeString) <nil>
-    },
-    Scope: (*analysis.ClassAccess)({
-      Expression: (analysis.Expression) {
-        Type: (analysis.TypeComposite) {
-          typeStrings: ([]analysis.TypeString) (len=1) {
-            (analysis.TypeString) {
-              fqn: (string) (len=5) "\\User",
-              original: (string) (len=4) "User",
-              arrayLevel: (int) 0
-            }
-          }
-        },
-        Scope: (analysis.HasTypes) <nil>,
-        Location: (protocol.Location) {
-          URI: (string) (len=5) "test1",
-          Range: (protocol.Range) 20:0-20:4
-        },
-        Name: (string) (len=4) "User"
+  MemberAccessExpression: (analysis.MemberAccessExpression) {
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
       },
-      isResolved: (bool) false
-    }),
-    Location: (protocol.Location) {
-      URI: (string) (len=5) "test1",
-      Range: (protocol.Range) 20:6-20:12
-    },
-    Name: (string) (len=6) "create"
+      Scope: (*analysis.ClassAccess)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=5) "\\User",
+                original: (string) (len=4) "User",
+                arrayLevel: (int) 0
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 20:0-20:4
+          },
+          Name: (string) (len=4) "User"
+        },
+        isResolved: (bool) false
+      }),
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 20:6-20:12
+      },
+      Name: (string) (len=6) "create"
+    }
   },
   hasResolved: (bool) false
 })

@@ -16,6 +16,7 @@
       original: (string) (len=15) "ClassConstTest1",
       arrayLevel: (int) 0
     },
+    VisibilityModifier: (analysis.VisibilityModifierValue) 0,
     deprecatedTag: (*analysis.tag)(<nil>)
   })
 }

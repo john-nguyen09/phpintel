@@ -39,7 +39,8 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if argumentList == nil || hasParamsResolvable == nil {
 		return nil, nil
 	}
-	hasParams := hasParamsResolvable.ResolveToHasParams(analysis.NewResolveContext(store, document))
+	resolveCtx := analysis.NewResolveContext(analysis.NewQuery(store), document)
+	hasParams := hasParamsResolvable.ResolveToHasParams(resolveCtx)
 	for _, hasParam := range hasParams {
 		signatureHelp.Signatures = append(signatureHelp.Signatures, hasParamToSignatureInformation(hasParam))
 	}
@@ -71,11 +72,12 @@ func (s *Server) documentSignatures(ctx context.Context, params *protocol.TextDo
 	defer document.Unlock()
 	document.Load()
 	results := []protocol.TextEdit{}
+	resolveCtx := analysis.NewResolveContext(analysis.NewQuery(store), document)
 	analysis.TraverseDocument(document, func(s analysis.Symbol) {
 		if argumentList, ok := s.(*analysis.ArgumentList); ok {
 			hasTypes := document.HasTypesBeforePos(argumentList.GetLocation().Range.Start)
 			if resolvable, ok := hasTypes.(analysis.HasParamsResolvable); ok {
-				hasParams := resolvable.ResolveToHasParams(analysis.NewResolveContext(store, document))
+				hasParams := resolvable.ResolveToHasParams(resolveCtx)
 				if len(hasParams) > 0 {
 					firstHasParam := hasParams[0]
 					ranges := argumentList.GetArgumentRanges()

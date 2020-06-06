@@ -12,12 +12,13 @@ func IsInRange(position protocol.Position, theRange protocol.Range) int {
 	start := theRange.Start
 	end := theRange.End
 
-	if position.Line < start.Line ||
-		(position.Line == start.Line && position.Character < start.Character) {
+	if position.Line < start.Line || (position.Line == start.Line && position.Character < start.Character) {
 		return -1
 	}
-	if position.Line > end.Line ||
-		(position.Line == end.Line && position.Character >= end.Character) {
+	if position.Line > end.Line || (position.Line == end.Line && position.Character >= end.Character) {
+		if ComparePos(start, end) == 0 {
+			return -1
+		}
 		return 1
 	}
 	return 0

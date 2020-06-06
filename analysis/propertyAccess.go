@@ -7,16 +7,19 @@ import (
 )
 
 type PropertyAccess struct {
-	Expression
+	MemberAccessExpression
 
 	hasResolved bool
 }
 
 var _ HasTypesHasScope = (*PropertyAccess)(nil)
+var _ MemberAccess = (*PropertyAccess)(nil)
 
 func newPropertyAccess(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	propertyAccess := &PropertyAccess{
-		Expression: Expression{},
+		MemberAccessExpression: MemberAccessExpression{
+			Expression: Expression{},
+		},
 	}
 	traverser := util.NewTraverser(node)
 	firstChild := traverser.Advance()
@@ -39,11 +42,12 @@ func (s *PropertyAccess) Resolve(ctx ResolveContext) {
 	if s.hasResolved {
 		return
 	}
-	store := ctx.store
+	q := ctx.query
+	currentClass := ctx.document.GetClassScopeAtSymbol(s.Scope)
 	for _, scopeType := range s.ResolveAndGetScope(ctx).Resolve() {
-		for _, class := range store.GetClasses(scopeType.GetFQN()) {
-			for _, property := range GetClassProperties(store, class, "$"+s.Name, NewSearchOptions()) {
-				s.Type.merge(property.Types)
+		for _, class := range q.GetClasses(scopeType.GetFQN()) {
+			for _, p := range q.GetClassProps(class, "$"+s.Name, nil).ReduceAccess(currentClass, s) {
+				s.Type.merge(p.Prop.Types)
 			}
 		}
 	}

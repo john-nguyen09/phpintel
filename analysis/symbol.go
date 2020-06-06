@@ -78,6 +78,13 @@ type SymbolReference interface {
 	ReferenceLocation() protocol.Location
 }
 
+// MemberSymbol is a symbol that is a member of another symbol (class consts, methods and props)
+type MemberSymbol interface {
+	ScopeTypeString() TypeString
+	IsStatic() bool
+	Visibility() VisibilityModifierValue
+}
+
 type serialisable interface {
 	GetCollection() string
 	GetKey() string
@@ -115,14 +122,19 @@ func (t *traverser) traverseBlock(s Symbol, fn func(*traverser, Symbol)) {
 	if t.shouldStop {
 		return
 	}
+	defer func() {
+		t.stopDescent = false
+	}()
 	if !t.stopDescent {
 		if block, ok := s.(BlockSymbol); ok {
 			for _, child := range block.GetChildren() {
 				t.traverseBlock(child, fn)
+				if t.shouldStop {
+					return
+				}
 			}
 		}
 	}
-	t.stopDescent = false
 }
 
 func TraverseDocument(document *Document, preorder func(Symbol), postorder func(Symbol)) {

@@ -33,7 +33,7 @@ func toTestMethod(m *Method) testMethod {
 		description:        m.GetDescription(),
 		Scope:              m.Scope,
 		VisibilityModifier: m.VisibilityModifier,
-		IsStatic:           m.IsStatic,
+		IsStatic:           m.IsStatic(),
 		ClassModifier:      m.ClassModifier,
 	}
 }

@@ -17,7 +17,7 @@ func TestReferenceIndex(t *testing.T) {
 	}
 	sym := doc2.HasTypesAtPos(pos)
 	name := NewTypeString(sym.(*FunctionCall).Name)
-	fqn := doc2.ImportTableAtPos(pos).GetFunctionReferenceFQN(store, name)
+	fqn := doc2.ImportTableAtPos(pos).GetFunctionReferenceFQN(NewQuery(store), name)
 	assert.Equal(t, []protocol.Location{
 		{URI: "test1", Range: protocol.Range{
 			Start: protocol.Position{Line: 2, Character: 9},

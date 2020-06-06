@@ -36,7 +36,8 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		return nil, DocumentNotFound(uri)
 	}
 	pos := params.TextDocumentPositionParams.Position
-	resolveCtx := analysis.NewResolveContext(store, document)
+	q := analysis.NewQuery(store)
+	resolveCtx := analysis.NewResolveContext(q, document)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	// log.Printf("Reference: %v %s", pos, nodes)
 	parent := nodes.Parent()
@@ -75,7 +76,7 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	switch v := sym.(type) {
 	case *analysis.FunctionCall:
 		name := analysis.NewTypeString(v.Name)
-		fqn := document.ImportTableAtPos(v.GetLocation().Range.Start).GetFunctionReferenceFQN(store, name)
+		fqn := document.ImportTableAtPos(v.GetLocation().Range.Start).GetFunctionReferenceFQN(q, name)
 		results = store.GetReferences(fqn)
 	case *analysis.ClassTypeDesignator, *analysis.TypeDeclaration, *analysis.ClassAccess, *analysis.TraitAccess:
 		for _, t := range v.GetTypes().Resolve() {

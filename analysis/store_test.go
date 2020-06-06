@@ -93,7 +93,7 @@ namespace Namespace2 {
 	}
 	for _, testCase := range testCases {
 		classFQNs := []string{}
-		store.GetClassesByScopeStream(testCase.scope, func(class *Class) onDataResult {
+		store.getClassesByScopeStream(testCase.scope, func(class *Class) onDataResult {
 			classFQNs = append(classFQNs, class.Name.GetFQN())
 			return onDataResult{false}
 		})

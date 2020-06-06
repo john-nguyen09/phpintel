@@ -13,14 +13,16 @@ var /* const */ triggerParameterHintsCommand = protocol.Command{
 	Command: "editor.action.triggerParameterHints",
 }
 
-func concatDescriptionIfAvailable(sb *strings.Builder, description string) {
+func concatDescriptionIfAvailable(sb *strings.Builder, description string, writeLine bool) {
 	if len(description) > 0 {
 		converter := md.NewConverter("", true, nil)
 		markdown, err := converter.ConvertString(description)
 		if err == nil {
 			description = markdown
 		}
-		writeHorLine(sb)
+		if writeLine {
+			writeHorLine(sb)
+		}
 		sb.WriteString(description)
 	}
 }
@@ -39,6 +41,14 @@ func wrapCode(sb *strings.Builder, fn func(*strings.Builder)) {
 
 func writeHorLine(sb *strings.Builder) {
 	sb.WriteString("\n____\n")
+}
+
+func writeScope(sb *strings.Builder, kind, name string) {
+	sb.WriteString("\n`")
+	sb.WriteString(kind)
+	sb.WriteString(" ")
+	sb.WriteString(name)
+	sb.WriteString("`")
 }
 
 func concatParams(sb *strings.Builder, params []*analysis.Parameter) {
@@ -80,7 +90,7 @@ func formatClasses(classes []*analysis.Class) *strings.Builder {
 				sb.WriteString(strings.Join(implements, ", "))
 			}
 		})
-		concatDescriptionIfAvailable(sb, class.GetDescription())
+		concatDescriptionIfAvailable(sb, class.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -115,7 +125,7 @@ func formatInterfaces(interfaces []*analysis.Interface) *strings.Builder {
 				sb.WriteString(strings.Join(extendStrings, ", "))
 			}
 		})
-		concatDescriptionIfAvailable(sb, inte.GetDescription())
+		concatDescriptionIfAvailable(sb, inte.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -144,7 +154,7 @@ func formatConsts(constants []*analysis.Const) *strings.Builder {
 				sb.WriteString(constant.Value)
 			}
 		})
-		concatDescriptionIfAvailable(sb, constant.GetDescription())
+		concatDescriptionIfAvailable(sb, constant.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -163,7 +173,7 @@ func formatDefines(defines []*analysis.Define) *strings.Builder {
 			}
 			sb.WriteString(")")
 		})
-		concatDescriptionIfAvailable(sb, define.GetDescription())
+		concatDescriptionIfAvailable(sb, define.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	return sb
@@ -183,7 +193,7 @@ func functionsToHover(ref analysis.HasTypes, functions []*analysis.Function) *pr
 				sb.WriteString(fn.GetReturnTypes().ToString())
 			}
 		})
-		concatDescriptionIfAvailable(sb, fn.GetDescription())
+		concatDescriptionIfAvailable(sb, fn.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -203,7 +213,7 @@ func traitsToHover(ref analysis.HasTypes, traits []*analysis.Trait) *protocol.Ho
 			sb.WriteString("trait ")
 			sb.WriteString(trait.Name.GetOriginal())
 		})
-		concatDescriptionIfAvailable(sb, trait.GetDescription())
+		concatDescriptionIfAvailable(sb, trait.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -216,18 +226,22 @@ func traitsToHover(ref analysis.HasTypes, traits []*analysis.Trait) *protocol.Ho
 	}
 }
 
-func classConstsToHover(ref analysis.HasTypes, classConsts []*analysis.ClassConst) *protocol.Hover {
+func classConstsToHover(ref analysis.HasTypes, classConsts []analysis.ClassConstWithScope) *protocol.Hover {
 	sb := &strings.Builder{}
-	for _, classConst := range classConsts {
+	for _, c := range classConsts {
+		if c.Const == nil {
+			continue
+		}
 		wrapPHPCode(sb, func(sb *strings.Builder) {
 			sb.WriteString("const ")
-			sb.WriteString(classConst.Name)
-			if len(classConst.Value) > 0 {
+			sb.WriteString(c.Const.Name)
+			if len(c.Const.Value) > 0 {
 				sb.WriteString(" = ")
-				sb.WriteString(classConst.Value)
+				sb.WriteString(c.Const.Value)
 			}
 		})
-		concatDescriptionIfAvailable(sb, classConst.GetDescription())
+		concatScopeIfAvailable(sb, c.Scope, true)
+		concatDescriptionIfAvailable(sb, c.Const.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -237,6 +251,30 @@ func classConstsToHover(ref analysis.HasTypes, classConsts []*analysis.ClassCons
 			Value: sb.String(),
 		},
 		Range: &theRange,
+	}
+}
+
+func concatScopeIfAvailable(sb *strings.Builder, scope analysis.Symbol, writeLine bool) {
+	var (
+		scopeKind string
+		scopeName string
+	)
+	switch v := scope.(type) {
+	case *analysis.Class:
+		scopeKind = "class"
+		scopeName = v.Name.GetFQN()
+	case *analysis.Interface:
+		scopeKind = "interface"
+		scopeName = v.Name.GetFQN()
+	case *analysis.Trait:
+		scopeKind = "trait"
+		scopeName = v.Name.GetFQN()
+	}
+	if scopeKind != "" {
+		if writeLine {
+			writeHorLine(sb)
+		}
+		writeScope(sb, scopeKind, scopeName)
 	}
 }
 
@@ -250,12 +288,16 @@ func concatVisibility(sb *strings.Builder, visibility analysis.VisibilityModifie
 	}
 }
 
-func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol.Hover {
+func methodsToHover(ref analysis.HasTypes, methods []analysis.MethodWithScope) *protocol.Hover {
 	sb := &strings.Builder{}
-	for _, method := range methods {
+	for _, m := range methods {
+		method := m.Method
+		if method == nil {
+			continue
+		}
 		wrapPHPCode(sb, func(sb *strings.Builder) {
 			concatVisibility(sb, method.VisibilityModifier)
-			if method.IsStatic {
+			if method.IsStatic() {
 				sb.WriteString(" static")
 			}
 			sb.WriteString(" function ")
@@ -268,7 +310,8 @@ func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol
 				sb.WriteString(method.GetReturnTypes().ToString())
 			}
 		})
-		concatDescriptionIfAvailable(sb, method.GetDescription())
+		concatScopeIfAvailable(sb, m.Scope, true)
+		concatDescriptionIfAvailable(sb, method.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -281,12 +324,13 @@ func methodsToHover(ref analysis.HasTypes, methods []*analysis.Method) *protocol
 	}
 }
 
-func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *protocol.Hover {
+func propertiesToHover(ref analysis.HasTypes, properties []analysis.PropWithScope) *protocol.Hover {
 	sb := &strings.Builder{}
-	for _, property := range properties {
+	for _, p := range properties {
+		property := p.Prop
 		wrapPHPCode(sb, func(s *strings.Builder) {
 			concatVisibility(sb, property.VisibilityModifier)
-			if property.IsStatic {
+			if property.IsStatic() {
 				sb.WriteString(" static")
 			}
 			sb.WriteString(" ")
@@ -296,7 +340,8 @@ func propertiesToHover(ref analysis.HasTypes, properties []*analysis.Property) *
 				sb.WriteString(property.Types.ToString())
 			}
 		})
-		concatDescriptionIfAvailable(sb, property.GetDescription())
+		concatScopeIfAvailable(sb, p.Scope, true)
+		concatDescriptionIfAvailable(sb, property.GetDescription(), true)
 		writeHorLine(sb)
 	}
 	theRange := ref.GetLocation().Range
@@ -318,7 +363,7 @@ func variableToHover(variable *analysis.Variable) *protocol.Hover {
 		}
 		sb.WriteString(variable.Name)
 	})
-	concatDescriptionIfAvailable(sb, variable.GetDescription())
+	concatDescriptionIfAvailable(sb, variable.GetDescription(), true)
 	theRange := variable.GetLocation().Range
 	return &protocol.Hover{
 		Contents: protocol.MarkupContent{
@@ -340,7 +385,7 @@ func hoverFromSymbol(s analysis.Symbol) *protocol.Hover {
 	}
 }
 
-func HasParamsInsertText(f analysis.HasParams, label string) (string, protocol.InsertTextFormat, *protocol.Command) {
+func hasParamsInsertText(f analysis.HasParams, label string) (string, protocol.InsertTextFormat, *protocol.Command) {
 	if len(f.GetParams()) == 0 {
 		return label + "()", protocol.PlainTextTextFormat, nil
 	}
@@ -358,6 +403,28 @@ func hasParamsDetailWithTextEdit(f analysis.HasParams, textEdit *protocol.TextEd
 		sb.WriteString(textEdit.NewText)
 	}
 	return sb.String()
+}
+
+func methodDocumentation(method analysis.MethodWithScope) protocol.MarkupContent {
+	sb := &strings.Builder{}
+	concatScopeIfAvailable(sb, method.Scope, false)
+	sb.WriteString("\n\n")
+	concatDescriptionIfAvailable(sb, method.Method.GetDescription(), false)
+	return protocol.MarkupContent{
+		Kind:  protocol.Markdown,
+		Value: sb.String(),
+	}
+}
+
+func propDocumentation(prop analysis.PropWithScope) protocol.MarkupContent {
+	sb := &strings.Builder{}
+	concatScopeIfAvailable(sb, prop.Scope, false)
+	sb.WriteString("\n\n")
+	concatDescriptionIfAvailable(sb, prop.Prop.GetDescription(), false)
+	return protocol.MarkupContent{
+		Kind:  protocol.Markdown,
+		Value: sb.String(),
+	}
 }
 
 func normaliseNamespaceName(name string) string {
@@ -400,7 +467,7 @@ func classToCompletionItem(class *analysis.Class, label string, textEdit *protoc
 	return protocol.CompletionItem{
 		Kind:                protocol.ClassCompletion,
 		Label:               label,
-		Documentation:       class.GetDescription(),
+		Documentation:       descriptionToMarkupContent(class.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(class.Name, textEdit),
 	}
@@ -414,7 +481,7 @@ func interfaceToCompletionItem(intf *analysis.Interface, label string, textEdit 
 	return protocol.CompletionItem{
 		Kind:                protocol.InterfaceCompletion,
 		Label:               label,
-		Documentation:       intf.GetDescription(),
+		Documentation:       descriptionToMarkupContent(intf.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(intf.Name, textEdit),
 	}
@@ -428,8 +495,48 @@ func traitToCompletionItem(trait *analysis.Trait, label string, textEdit *protoc
 	return protocol.CompletionItem{
 		Kind:                protocol.ClassCompletion,
 		Label:               label,
-		Documentation:       trait.GetDescription(),
+		Documentation:       descriptionToMarkupContent(trait.GetDescription()),
 		AdditionalTextEdits: textEdits,
 		Detail:              getDetailFromTextEdit(trait.Name, textEdit),
+	}
+}
+
+func methodToCompletionItem(m analysis.MethodWithScope) protocol.CompletionItem {
+	method := m.Method
+	insertText, textFormat, command := hasParamsInsertText(method, method.GetName())
+	return protocol.CompletionItem{
+		Kind:             protocol.MethodCompletion,
+		Label:            method.GetName(),
+		InsertText:       insertText,
+		InsertTextFormat: textFormat,
+		Command:          command,
+		Documentation:    methodDocumentation(m),
+		Detail:           hasParamsDetailWithTextEdit(method, nil),
+	}
+}
+
+func propToCompletionItem(p analysis.PropWithScope) protocol.CompletionItem {
+	prop := p.Prop
+	return protocol.CompletionItem{
+		Kind:          protocol.PropertyCompletion,
+		Label:         prop.GetName(),
+		Documentation: propDocumentation(p),
+		Detail:        p.Prop.Types.ToString(),
+	}
+}
+
+func classConstToCompletionItem(c analysis.ClassConstWithScope) protocol.CompletionItem {
+	classConst := c.Const
+	return protocol.CompletionItem{
+		Kind:          protocol.ConstantCompletion,
+		Label:         classConst.GetName(),
+		Documentation: descriptionToMarkupContent(classConst.GetDescription()),
+	}
+}
+
+func descriptionToMarkupContent(desc string) protocol.MarkupContent {
+	return protocol.MarkupContent{
+		Kind:  protocol.PlainText,
+		Value: desc,
 	}
 }

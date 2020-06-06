@@ -259,14 +259,6 @@ func ReadClass(d *storage.Decoder) *Class {
 	return theClass
 }
 
-func (s *Class) GetConstructor(store *Store) *Method {
-	methods := GetClassMethods(store, s, "__construct", NewSearchOptions())
-	if len(methods) > 0 {
-		return methods[0]
-	}
-	return nil
-}
-
 func (s *Class) AddUse(name TypeString) {
 	s.Use = append(s.Use, name)
 }

@@ -386,7 +386,11 @@ func (s *Document) addClass(other Symbol) {
 	}
 }
 
-func (s *Document) getClassScopeAtSymbol(symbol Symbol) string {
+// GetClassScopeAtSymbol returns the class scope at the symbol
+func (s *Document) GetClassScopeAtSymbol(symbol Symbol) string {
+	if symbol == nil {
+		return ""
+	}
 	class := s.getClassAtPos(symbol.GetLocation().Range.Start)
 	if class == nil {
 		return ""

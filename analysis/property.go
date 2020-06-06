@@ -17,13 +17,14 @@ type Property struct {
 	Name               string
 	Scope              TypeString
 	VisibilityModifier VisibilityModifierValue
-	IsStatic           bool
+	isStatic           bool
 	Types              TypeComposite
 }
 
 var _ HasScope = (*Property)(nil)
 var _ Symbol = (*Property)(nil)
 var _ SymbolReference = (*Property)(nil)
+var _ MemberSymbol = (*Property)(nil)
 
 func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, location protocol.Location) *Property {
 	property := &Property{
@@ -34,7 +35,7 @@ func newPropertyFromPhpDocTag(document *Document, parent *Class, docTag tag, loc
 		Name:               docTag.Name,
 		Scope:              parent.Name,
 		VisibilityModifier: Public,
-		IsStatic:           false,
+		isStatic:           false,
 		Types:              typesFromPhpDoc(document, docTag.TypeString),
 	}
 	if property.Name == "" {
@@ -77,7 +78,7 @@ func newProperty(a analyser, document *Document, node *phrase.Phrase, visibility
 	property := &Property{
 		location:           document.GetNodeLocation(node),
 		VisibilityModifier: visibility,
-		IsStatic:           isStatic,
+		isStatic:           isStatic,
 	}
 	parent := document.getLastClass()
 	switch v := parent.(type) {
@@ -158,7 +159,7 @@ func (s *Property) Serialise(e *storage.Encoder) {
 	e.WriteString(s.Name)
 	s.Scope.Write(e)
 	e.WriteInt(int(s.VisibilityModifier))
-	e.WriteBool(s.IsStatic)
+	e.WriteBool(s.isStatic)
 	s.Types.Write(e)
 	e.WriteString(s.description)
 	serialiseDeprecatedTag(e, s.deprecatedTag)
@@ -170,7 +171,7 @@ func ReadProperty(d *storage.Decoder) *Property {
 		Name:               d.ReadString(),
 		Scope:              ReadTypeString(d),
 		VisibilityModifier: VisibilityModifierValue(d.ReadInt()),
-		IsStatic:           d.ReadBool(),
+		isStatic:           d.ReadBool(),
 		Types:              ReadTypeComposite(d),
 		description:        d.ReadString(),
 		deprecatedTag:      deserialiseDeprecatedTag(d),
@@ -185,4 +186,19 @@ func (s *Property) ReferenceFQN() string {
 // ReferenceLocation returns the location of the property's name
 func (s *Property) ReferenceLocation() protocol.Location {
 	return s.refLocation
+}
+
+// IsStatic returns whether a property is static
+func (s *Property) IsStatic() bool {
+	return s.isStatic
+}
+
+// ScopeTypeString returns the class scope of the property
+func (s *Property) ScopeTypeString() TypeString {
+	return s.Scope
+}
+
+// Visibility returns the visibility modifier value for the property
+func (s *Property) Visibility() VisibilityModifierValue {
+	return s.VisibilityModifier
 }

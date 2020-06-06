@@ -33,8 +33,7 @@ func newAnonymousFunction(a analyser, document *Document, node *phrase.Phrase) S
 			case phrase.AnonymousFunctionHeader:
 				anonFunc.analyseHeader(a, document, p, variableTable, prevVariableTable)
 				for _, param := range anonFunc.Params {
-					lastToken := util.LastToken(p)
-					variableTable.add(a, param.ToVariable(), document.positionAt(lastToken.Offset+lastToken.Length), true)
+					variableTable.add(a, param.ToVariable(), document.nodeRange(p).End, true)
 				}
 			case phrase.FunctionDeclarationBody:
 				scanForChildren(a, document, p)

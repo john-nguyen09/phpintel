@@ -20,6 +20,10 @@
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
           Range: (protocol.Range) 156:21-156:29
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 156:21-156:29
+        },
         description: (string) "",
         hasValue: (bool) false,
         Name: (string) (len=8) "$pattern",
@@ -36,6 +40,10 @@
       }),
       (*analysis.Parameter)({
         location: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 156:31-156:39
+        },
+        varLocation: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
           Range: (protocol.Range) 156:31-156:39
         },
@@ -57,6 +65,10 @@
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
           Range: (protocol.Range) 156:41-156:63
+        },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 156:48-156:56
         },
         description: (string) "",
         hasValue: (bool) true,
@@ -82,6 +94,10 @@
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
           Range: (protocol.Range) 156:65-156:75
         },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 156:65-156:71
+        },
         description: (string) "",
         hasValue: (bool) true,
         Name: (string) (len=6) "$flags",
@@ -100,6 +116,10 @@
         location: (protocol.Location) {
           URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
           Range: (protocol.Range) 156:77-156:88
+        },
+        varLocation: (protocol.Location) {
+          URI: (string) (len=30) "phpstorm-stubs://pcre/pcre.php",
+          Range: (protocol.Range) 156:77-156:84
         },
         description: (string) "",
         hasValue: (bool) true,

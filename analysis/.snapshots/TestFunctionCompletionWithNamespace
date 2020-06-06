@@ -4,7 +4,10 @@
     Kind: (protocol.CompletionItemKind) 3,
     Tags: ([]protocol.CompletionItemTag) <nil>,
     Detail: (string) "",
-    Documentation: (string) "",
+    Documentation: (protocol.MarkupContent) {
+      Kind: (protocol.MarkupKind) "",
+      Value: (string) ""
+    },
     Deprecated: (bool) false,
     Preselect: (bool) false,
     SortText: (string) "",

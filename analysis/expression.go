@@ -14,13 +14,15 @@ type Expression struct {
 	Name     string
 }
 
+// ResolveContext contains query and document
 type ResolveContext struct {
-	store    *Store
+	query    *Query
 	document *Document
 }
 
-func NewResolveContext(store *Store, document *Document) ResolveContext {
-	return ResolveContext{store, document}
+// NewResolveContext creates a resolve context
+func NewResolveContext(query *Query, document *Document) ResolveContext {
+	return ResolveContext{query, document}
 }
 
 func (e *Expression) Resolve(ctx ResolveContext) {
@@ -49,6 +51,13 @@ type HasTypesHasScope interface {
 
 type HasName interface {
 	GetName() string
+}
+
+// MemberAccess is a has types that accesses via a scope name and types
+type MemberAccess interface {
+	HasTypes
+	ScopeName() string
+	ScopeTypes() TypeComposite
 }
 
 type expressionKind int
