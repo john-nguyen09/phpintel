@@ -12,11 +12,11 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	q := analysis.NewQuery(store)
 	resolveCtx := analysis.NewResolveContext(q, document)

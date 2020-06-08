@@ -225,6 +225,7 @@ func (s *Store) Migrate(newVersion string) {
 // LoadStubs loads the defined stubs, compare their hash and index them
 // if needed
 func (s *Store) LoadStubs() {
+	start := time.Now()
 	for _, stubber := range s.stubbers {
 		stubber.Walk(func(path string, data []byte) error {
 			document := NewDocument(stubber.GetURI(path), data)
@@ -238,6 +239,7 @@ func (s *Store) LoadStubs() {
 			return nil
 		})
 	}
+	log.Printf("LoadStubs took %s", time.Since(start))
 }
 
 // GetOrCreateDocument checks if the store contains the given URI or
@@ -646,6 +648,9 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classCollection, string(completionValue))
 			value, err := s.db.Get(entry.getKeyBytes())
+			// if keyInfo[0] == "\\tool_payment\\order" {
+			// 	log.Printf("%d, %v", len(value), err)
+			// }
 			if err != nil {
 				return onDataResult{false}
 			}

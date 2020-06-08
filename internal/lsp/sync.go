@@ -16,7 +16,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 	uri := params.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return StoreNotFound(uri)
+		return nil
 	}
 	document := store.OpenDocument(uri)
 	if document != nil {
@@ -33,7 +33,7 @@ func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocu
 	uri := params.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return StoreNotFound(uri)
+		return nil
 	}
 	store.CloseDocument(uri)
 	return nil

@@ -100,27 +100,19 @@ func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
 	}
 }
 
-func (f *fuzzyEngine) String(i int) string {
-	if m, ok := f.entries.Get(f.currentCollection); ok {
-		return m.([]*fuzzyEntry)[i].name
-	}
-	return ""
-}
-
-func (f *fuzzyEngine) Len() int {
-	if m, ok := f.entries.Get(f.currentCollection); ok {
-		return len(m.([]*fuzzyEntry))
-	}
-	return 0
-}
-
 func (f *fuzzyEngine) serialise(e *storage.Encoder) {
 	e.WriteInt(f.entries.Count())
 	for tuple := range f.entries.IterBuffered() {
 		e.WriteString(tuple.Key)
 		entries := tuple.Val.([]*fuzzyEntry)
-		e.WriteInt(len(entries))
+		var newEntries []*fuzzyEntry
 		for _, entry := range entries {
+			if !entry.deleted {
+				newEntries = append(newEntries, entry)
+			}
+		}
+		e.WriteInt(len(newEntries))
+		for _, entry := range newEntries {
 			e.WriteString(entry.name)
 			e.WriteString(entry.key)
 			e.WriteString(entry.uri)
@@ -175,9 +167,17 @@ func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey strin
 }
 
 type match struct {
-	Index int
+	Key   string
 	Score int
 }
+
+type byScore []match
+
+func (m byScore) Len() int { return len(m) }
+
+func (m byScore) Less(i, j int) bool { return m[i].Score > m[j].Score }
+
+func (m byScore) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 
 func isMatch(str string, pattern []rune) (bool, int) {
 	chars := util.ToChars([]byte(str))
@@ -185,34 +185,37 @@ func isMatch(str string, pattern []rune) (bool, int) {
 	return result.Score > 0, result.Score
 }
 
-func (f *fuzzyEngine) match(pattern string) []match {
-	matches := []match{}
-	dataLen := f.Len()
-	patternRune := []rune(strings.ToLower(pattern))
-	for i := 0; i < dataLen; i++ {
-		if matched, score := isMatch(f.String(i), patternRune); matched {
-			matches = append(matches, match{i, score})
-		}
-	}
-	sort.SliceStable(matches, func(i, j int) bool {
-		return matches[i].Score < matches[j].Score
-	})
-	return matches
-}
-
 func (f *fuzzyEngine) search(query searchQuery) SearchResult {
 	f.currentCollection = query.collection
-	matches := f.match(query.keyword)
 	searchResult := SearchResult{IsComplete: true}
 	var entries []*fuzzyEntry
 	if m, ok := f.entries.Get(f.currentCollection); ok {
 		entries = m.([]*fuzzyEntry)
 	}
-	for _, match := range matches {
-		if len(entries) == 0 || entries[match.Index].deleted {
+	patternRune := []rune(strings.ToLower(query.keyword))
+	var (
+		matches []match
+	)
+	uniqueKey := map[string]struct{}{}
+	for _, entry := range entries {
+		if entry.deleted {
 			continue
 		}
-		result := query.onData(CompletionValue(entries[match.Index].key))
+		if _, ok := uniqueKey[entry.key]; ok {
+			continue
+		}
+		var (
+			matched bool
+			score   int
+		)
+		if matched, score = isMatch(entry.name, patternRune); matched {
+			matches = append(matches, match{entry.key, score})
+			uniqueKey[entry.key] = struct{}{}
+		}
+	}
+	sort.Sort(byScore(matches))
+	for _, match := range matches {
+		result := query.onData(CompletionValue(match.Key))
 		if result.shouldStop {
 			searchResult.IsComplete = false
 			break

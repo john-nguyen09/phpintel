@@ -13,11 +13,11 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	document.Load()
 	q := analysis.NewQuery(store)

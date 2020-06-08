@@ -29,11 +29,11 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	pos := params.TextDocumentPositionParams.Position
 	q := analysis.NewQuery(store)
@@ -97,11 +97,11 @@ func (s *Server) rename(params *protocol.RenameParams) (*protocol.WorkspaceEdit,
 	uri := params.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	doc := store.GetOrCreateDocument(uri)
 	if doc == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	pos := params.Position
 	symbol := doc.HasTypesAtPos(pos)

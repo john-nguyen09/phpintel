@@ -106,7 +106,6 @@ func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protoc
 func (s *workspaceStore) removeView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
 	store := s.getStore(uri)
 	if store == nil {
-		log.Println(StoreNotFound(uri))
 		return
 	}
 	defer store.Close()
@@ -208,11 +207,11 @@ func (s *workspaceStore) changeDocument(ctx context.Context, params *protocol.Di
 	uri := params.TextDocument.URI
 	store := s.getStore(uri)
 	if store == nil {
-		return StoreNotFound(uri)
+		return nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return DocumentNotFound(uri)
+		return nil
 	}
 	newDoc := document.CloneForMutate()
 	newDoc.ApplyChanges(params.ContentChanges)

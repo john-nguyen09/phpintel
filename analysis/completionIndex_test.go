@@ -29,8 +29,8 @@ func TestMultipleIndexing(t *testing.T) {
 		results = append(results, c.Name.GetFQN())
 	}
 	assert.Equal(t, []string{
-		"\\TestAbstractMethodClass",
 		"\\TestMethodClass",
+		"\\TestAbstractMethodClass",
 	}, results)
 }
 

@@ -61,11 +61,11 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	var completionList *protocol.CompletionList = nil
 	pos := params.Position

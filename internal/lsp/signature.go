@@ -24,11 +24,11 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	uri := params.TextDocumentPositionParams.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	pos := params.TextDocumentPositionParams.Position
 	nodeStack := document.NodeSpineAt(document.OffsetAtPosition(pos))
@@ -62,11 +62,11 @@ func (s *Server) documentSignatures(ctx context.Context, params *protocol.TextDo
 	uri := params.URI
 	store := s.store.getStore(uri)
 	if store == nil {
-		return nil, StoreNotFound(uri)
+		return nil, nil
 	}
 	document := store.GetOrCreateDocument(uri)
 	if document == nil {
-		return nil, DocumentNotFound(uri)
+		return nil, nil
 	}
 	document.Lock()
 	defer document.Unlock()
