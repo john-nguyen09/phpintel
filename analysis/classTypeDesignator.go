@@ -67,9 +67,11 @@ func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams
 	hasParams := []HasParams{}
 	q := ctx.query
 	for _, typeString := range s.GetTypes().Resolve() {
-		methods := q.GetMethods(typeString.GetFQN(), "__construct")
-		for _, method := range methods {
-			hasParams = append(hasParams, method)
+		for _, class := range q.GetClasses(typeString.GetFQN()) {
+			constructor := q.GetClassConstructor(class)
+			if constructor.Method != nil {
+				hasParams = append(hasParams, constructor.Method)
+			}
 		}
 	}
 	return hasParams

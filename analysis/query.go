@@ -40,14 +40,9 @@ func (q *Query) GetClasses(name string) []*Class {
 }
 
 // GetClassConstructor returns the constructor of the given class
+// including the inherited constructor from parent
 func (q *Query) GetClassConstructor(class *Class) MethodWithScope {
-	methods := q.GetMethods(class.Name.GetFQN(), "__construct")
-	result := MethodWithScope{}
-	if len(methods) > 0 {
-		result.Method = methods[0]
-		result.Scope = class
-	}
-	return result
+	return q.GetClassMethods(class, "__construct", nil).ReduceFirst()
 }
 
 // GetInterfaces is a cached proxy behind store
@@ -310,6 +305,18 @@ func (m *InheritedMethods) Merge(other InheritedMethods) {
 		m.SearchedFQNs[fqn] = struct{}{}
 	}
 	m.RelationMap.Merge(other.RelationMap)
+}
+
+// ReduceFirst ignores static or non-static rules and returns the first
+// public encountered method, this is useful in case of constructors
+// which only public methods are accessible
+func (m InheritedMethods) ReduceFirst() MethodWithScope {
+	for _, m := range m.Methods {
+		if m.Method.VisibilityModifier == Public {
+			return m
+		}
+	}
+	return MethodWithScope{}
 }
 
 // ReduceStatic filters the methods by the static rules, even though

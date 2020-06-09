@@ -88,8 +88,20 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		completionList = variableCompletion(completionCtx, resolveCtx, word)
 	case phrase.NamespaceName:
 		nodes.Parent()
-		if nodes.Parent().Type == phrase.ConstantAccessExpression {
+		switch nodes.Parent().Type {
+		case phrase.ConstantAccessExpression:
 			completionList = nameCompletion(completionCtx, symbol, word)
+		case phrase.ClassBaseClause:
+			completionList = classCompletion(completionCtx, symbol, word)
+		case phrase.InterfaceBaseClause:
+			completionList = interfaceCompletion(completionCtx, word)
+		case phrase.QualifiedNameList:
+			switch nodes.Parent().Type {
+			case phrase.ClassInterfaceClause:
+				completionList = interfaceCompletion(completionCtx, word)
+			case phrase.TraitUseClause:
+				completionList = traitCompletion(completionCtx, word)
+			}
 		}
 	case phrase.ErrorScopedAccessExpression, phrase.ClassConstantAccessExpression:
 		if s, ok := symbol.(*analysis.ScopedConstantAccess); ok {
@@ -150,8 +162,6 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		completionList = classCompletion(completionCtx, s, s.Name)
 	case *analysis.TypeDeclaration:
 		completionList = typeCompletion(completionCtx, s.Name)
-	case *analysis.InterfaceAccess:
-		completionList = interfaceCompletion(completionCtx, word)
 	}
 	return completionList, nil
 }
@@ -497,6 +507,22 @@ func interfaceCompletion(ctx *completionContext, word string) *protocol.Completi
 	for _, intf := range interfaces {
 		label, textEdit := importTable.ResolveToQualified(ctx.doc, intf, intf.Name, word)
 		completionList.Items = append(completionList.Items, interfaceToCompletionItem(intf, label, textEdit))
+	}
+	return completionList
+}
+
+func traitCompletion(ctx *completionContext, word string) *protocol.CompletionList {
+	completionList := &protocol.CompletionList{
+		IsIncomplete: false,
+	}
+	opts := baseSearchOptions()
+	store := ctx.query.Store()
+	traits, searchResult := store.SearchTraits(word, opts)
+	completionList.IsIncomplete = !searchResult.IsComplete
+	importTable := ctx.doc.ImportTableAtPos(ctx.pos)
+	for _, trait := range traits {
+		label, textEdit := importTable.ResolveToQualified(ctx.doc, trait, trait.Name, word)
+		completionList.Items = append(completionList.Items, traitToCompletionItem(trait, label, textEdit))
 	}
 	return completionList
 }
