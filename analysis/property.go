@@ -180,7 +180,7 @@ func ReadProperty(d *storage.Decoder) *Property {
 
 // ReferenceFQN returns the FQN of the property
 func (s *Property) ReferenceFQN() string {
-	return s.Scope.GetFQN() + "::" + s.Name
+	return "." + s.Name
 }
 
 // ReferenceLocation returns the location of the property's name

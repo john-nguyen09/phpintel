@@ -49,9 +49,10 @@ func newFuzzyEngine(db storage.DB) *fuzzyEngine {
 	var engine *fuzzyEngine
 	if db != nil {
 		if b, err := db.Get([]byte(completionDataCollection)); err == nil && len(b) > 0 {
-			log.Println("Loading fuzzy engine from DB")
+			start := time.Now()
 			d := storage.NewDecoder(b)
 			engine = fuzzyEngineFromDecoder(d)
+			log.Printf("Loading fuzzy engine from DB took %s", time.Since(start))
 		}
 	}
 	if engine == nil {
