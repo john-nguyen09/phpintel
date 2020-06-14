@@ -127,7 +127,9 @@ func (i ImportTable) functionPossibleFQNs(name TypeString) []string {
 	}
 	results = append(results, fqn)
 	name.SetNamespace(i.GetNamespace())
-	results = append(results, name.GetFQN())
+	if name.GetFQN() != fqn {
+		results = append(results, name.GetFQN())
+	}
 	return results
 }
 

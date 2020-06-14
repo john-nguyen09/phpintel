@@ -163,7 +163,7 @@ func ReadClassConst(d *storage.Decoder) *ClassConst {
 }
 
 func (s *ClassConst) ReferenceFQN() string {
-	return s.Scope.GetFQN() + "::" + s.Name
+	return "." + s.Name
 }
 
 func (s *ClassConst) ReferenceLocation() protocol.Location {

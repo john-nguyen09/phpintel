@@ -173,6 +173,7 @@ func (s *workspaceStore) indexFolder(store *analysis.Store, folderPath string) {
 		store.FinishIndexing()
 		elapsed := time.Since(start)
 		log.Printf("Finished indexing %d files in %s", count, elapsed)
+		util.PrintMemUsage()
 	}()
 }
 

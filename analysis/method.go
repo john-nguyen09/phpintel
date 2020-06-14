@@ -265,7 +265,7 @@ func (s *Method) GetChildren() []Symbol {
 
 // ReferenceFQN returns the FQN for the method
 func (s *Method) ReferenceFQN() string {
-	return s.Scope.GetFQN() + "::" + s.Name + "()"
+	return "." + s.Name + "()"
 }
 
 // ReferenceLocation returns the location for the method's name

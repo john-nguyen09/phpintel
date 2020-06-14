@@ -36,8 +36,6 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		return nil, nil
 	}
 	pos := params.TextDocumentPositionParams.Position
-	q := analysis.NewQuery(store)
-	resolveCtx := analysis.NewResolveContext(q, document)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	// log.Printf("Reference: %v %s", pos, nodes)
 	parent := nodes.Parent()
@@ -46,49 +44,32 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		node := nodes.Parent()
 		switch node.Type {
 		case phrase.MethodDeclarationHeader, phrase.ClassConstElement:
-			scopeFQN := classScopeFQNAt(document, pos)
-			if scopeFQN != "" {
-				name := document.GetNodeText(&parent)
-				if node.Type == phrase.MethodDeclarationHeader {
-					name += "()"
-				}
-				fqn := scopeFQN + "::" + name
-				results = append(results, store.GetReferences(fqn)...)
+			ref := "."
+			ref += document.GetNodeText(&parent)
+			if node.Type == phrase.MethodDeclarationHeader {
+				ref += "()"
 			}
+			results = append(results, store.GetReferences(ref)...)
 		}
 	case phrase.PropertyElement:
-		scopeFQN := classScopeFQNAt(document, pos)
-		if scopeFQN != "" {
-			name := document.GetNodeText(&parent)
-			fqn := scopeFQN + "::" + name
-			results = append(results, store.GetReferences(fqn)...)
-		}
+		ref := "."
+		ref += document.GetNodeText(&parent)
+		results = append(results, store.GetReferences(ref)...)
 	case phrase.FunctionDeclarationHeader,
 		phrase.ClassDeclarationHeader,
 		phrase.InterfaceDeclarationHeader,
 		phrase.TraitDeclarationHeader:
 		nameToken := nodes.Token()
-		name := analysis.NewTypeString(document.GetNodeText(&nameToken))
-		name.SetNamespace(document.ImportTableAtPos(pos).GetNamespace())
-		results = append(results, store.GetReferences(name.GetFQN())...)
+		ref := document.GetNodeText(&nameToken)
+		if parent.Type == phrase.FunctionDeclarationHeader {
+			ref += "()"
+		}
+		results = append(results, store.GetReferences(ref)...)
 	}
 	sym := document.HasTypesAtPos(pos)
-	switch v := sym.(type) {
-	case *analysis.FunctionCall:
-		name := analysis.NewTypeString(v.Name)
-		fqn := document.ImportTableAtPos(v.GetLocation().Range.Start).GetFunctionReferenceFQN(q, name)
-		results = store.GetReferences(fqn)
-	case *analysis.ClassTypeDesignator, *analysis.TypeDeclaration, *analysis.ClassAccess, *analysis.TraitAccess:
-		for _, t := range v.GetTypes().Resolve() {
-			results = append(results, store.GetReferences(t.GetFQN())...)
-		}
-	case *analysis.MethodAccess, *analysis.PropertyAccess, *analysis.ScopedMethodAccess, *analysis.ScopedPropertyAccess, *analysis.ScopedConstantAccess:
-		sym.Resolve(resolveCtx)
-		h := sym.(analysis.HasTypesHasScope)
-		for _, t := range h.GetScopeTypes().Resolve() {
-			fqn := t.GetFQN() + "::" + h.MemberName()
-			results = append(results, store.GetReferences(fqn)...)
-		}
+	refs := analysis.SymToRefs(document, sym)
+	for _, ref := range refs {
+		results = append(results, store.GetReferences(ref)...)
 	}
 	return results, nil
 }

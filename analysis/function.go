@@ -201,7 +201,7 @@ func (s *Function) GetChildren() []Symbol {
 
 // ReferenceFQN returns the FQN to function's name for the reference index
 func (s *Function) ReferenceFQN() string {
-	return s.Name.GetFQN()
+	return s.Name.GetFQN() + "()"
 }
 
 // ReferenceLocation returns the location of the function's name for reference index

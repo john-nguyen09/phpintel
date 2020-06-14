@@ -7,12 +7,11 @@ import (
 	"time"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	putil "github.com/john-nguyen09/phpintel/util"
 	"github.com/junegunn/fzf/src/algo"
 	"github.com/junegunn/fzf/src/util"
 	cmap "github.com/orcaman/concurrent-map"
 )
-
-const compactionDuration = 15 * time.Second
 
 // CompletionValue holds references to uri and name
 type CompletionValue string
@@ -28,11 +27,11 @@ type searchQuery struct {
 }
 
 type fuzzyEntry struct {
-	collection string
-	name       string
-	key        string
-	uri        string
-	deleted    bool
+	collection   string
+	name         string
+	key          string
+	canonicalURI string
+	deleted      bool
 }
 
 type fuzzyEngine struct {
@@ -49,9 +48,10 @@ func newFuzzyEngine(db storage.DB) *fuzzyEngine {
 	var engine *fuzzyEngine
 	if db != nil {
 		if b, err := db.Get([]byte(completionDataCollection)); err == nil && len(b) > 0 {
-			log.Println("Loading fuzzy engine from DB")
+			start := time.Now()
 			d := storage.NewDecoder(b)
 			engine = fuzzyEngineFromDecoder(d)
+			log.Printf("Loading fuzzy engine from DB took %s", time.Since(start))
 		}
 	}
 	if engine == nil {
@@ -76,19 +76,19 @@ func fuzzyEngineFromDecoder(d *storage.Decoder) *fuzzyEngine {
 		entries := []*fuzzyEntry{}
 		for j := 0; j < entriesLen; j++ {
 			entry := &fuzzyEntry{
-				collection: collection,
-				name:       d.ReadString(),
-				key:        d.ReadString(),
-				uri:        d.ReadString(),
-				deleted:    false,
+				collection:   collection,
+				name:         d.ReadString(),
+				key:          d.ReadString(),
+				canonicalURI: d.ReadString(),
+				deleted:      false,
 			}
 			entries = append(entries, entry)
 			entriesURIIndex := map[*fuzzyEntry]*fuzzyEntry{}
-			if m, ok := entryURIIndex.Get(entry.uri); ok {
+			if m, ok := entryURIIndex.Get(entry.canonicalURI); ok {
 				entriesURIIndex = m.(map[*fuzzyEntry]*fuzzyEntry)
 			}
 			entriesURIIndex[entry] = entry
-			entryURIIndex.Set(entry.uri, entriesURIIndex)
+			entryURIIndex.Set(entry.canonicalURI, entriesURIIndex)
 		}
 		entriesMap.Set(collection, entries)
 		count++
@@ -115,14 +115,15 @@ func (f *fuzzyEngine) serialise(e *storage.Encoder) {
 		for _, entry := range newEntries {
 			e.WriteString(entry.name)
 			e.WriteString(entry.key)
-			e.WriteString(entry.uri)
+			e.WriteString(entry.canonicalURI)
 		}
 	}
 }
 
-func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey string) {
+func (f *fuzzyEngine) index(store *Store, uri string, indexable NameIndexable, symbolKey string) {
 	collection := indexable.GetIndexCollection()
-	f.entryURIIndex.Upsert(uri, []*fuzzyEntry(nil), func(ok bool, curr interface{}, _ interface{}) interface{} {
+	canonicalURI := putil.CanonicaliseURI(store.uri, uri)
+	f.entryURIIndex.Upsert(canonicalURI, []*fuzzyEntry(nil), func(ok bool, curr interface{}, _ interface{}) interface{} {
 		entryURIIndex := make(map[*fuzzyEntry]*fuzzyEntry)
 		if ok {
 			entryURIIndex = curr.(map[*fuzzyEntry]*fuzzyEntry)
@@ -145,15 +146,15 @@ func (f *fuzzyEngine) index(uri string, indexable NameIndexable, symbolKey strin
 					entry.collection = collection
 					entry.name = indexable.GetIndexableName()
 					entry.key = symbolKey
-					entry.uri = uri
+					entry.canonicalURI = canonicalURI
 					entry.deleted = false
 				} else {
 					entry = &fuzzyEntry{
-						collection: collection,
-						name:       indexable.GetIndexableName(),
-						key:        symbolKey,
-						uri:        uri,
-						deleted:    false,
+						collection:   collection,
+						name:         indexable.GetIndexableName(),
+						key:          symbolKey,
+						canonicalURI: canonicalURI,
+						deleted:      false,
 					}
 					currEntries = append(currEntries, entry)
 				}
@@ -241,15 +242,16 @@ type fuzzyEngineDeletor struct {
 	entriesToBeDeleted []*fuzzyEntry
 }
 
-func newFuzzyEngineDeletor(engine *fuzzyEngine, uri string) *fuzzyEngineDeletor {
+func newFuzzyEngineDeletor(engine *fuzzyEngine, store *Store, uri string) *fuzzyEngineDeletor {
 	entriesToBeDeleted := []*fuzzyEntry{}
-	if m, ok := engine.entryURIIndex.Get(uri); ok {
+	canonicalURI := putil.CanonicaliseURI(store.uri, uri)
+	if m, ok := engine.entryURIIndex.Get(canonicalURI); ok {
 		for entry := range m.(map[*fuzzyEntry]*fuzzyEntry) {
 			entriesToBeDeleted = append(entriesToBeDeleted, entry)
 		}
 	}
 	return &fuzzyEngineDeletor{
-		uri:                uri,
+		uri:                canonicalURI,
 		engine:             engine,
 		entriesToBeDeleted: entriesToBeDeleted,
 	}

@@ -48,11 +48,12 @@ func (i indexable) GetIndexableName() string {
 }
 
 func TestFuzzyEngine(t *testing.T) {
+	store := setupStore("test", t.Name())
 	engine := newFuzzyEngine(nil)
-	engine.index("test1", indexable{"c1", "abc"}, "c1#abc")
-	engine.index("test1", indexable{"c1", "xyz"}, "c1#xyz")
-	engine.index("test2", indexable{"c1", "foobar"}, "c1#foobar")
-	engine.index("test3", indexable{"c1", "john_citizen"}, "c1#john_citizen")
+	engine.index(store, "test1", indexable{"c1", "abc"}, "c1#abc")
+	engine.index(store, "test1", indexable{"c1", "xyz"}, "c1#xyz")
+	engine.index(store, "test2", indexable{"c1", "foobar"}, "c1#foobar")
+	engine.index(store, "test3", indexable{"c1", "john_citizen"}, "c1#john_citizen")
 
 	matches := []string{}
 	engine.search(searchQuery{
@@ -65,7 +66,7 @@ func TestFuzzyEngine(t *testing.T) {
 	})
 	assert.Equal(t, []string{"c1#abc"}, matches)
 
-	deletor := newFuzzyEngineDeletor(engine, "test1")
+	deletor := newFuzzyEngineDeletor(engine, store, "test1")
 	entriesToBeDeleted := []fuzzyEntry{}
 	for _, entry := range deletor.entriesToBeDeleted {
 		entriesToBeDeleted = append(entriesToBeDeleted, *entry)
@@ -74,13 +75,13 @@ func TestFuzzyEngine(t *testing.T) {
 		return entriesToBeDeleted[i].key < entriesToBeDeleted[j].key
 	})
 	assert.Equal(t, []fuzzyEntry{
-		{collection: "c1", name: "abc", key: "c1#abc", uri: "test1", deleted: false},
-		{collection: "c1", name: "xyz", key: "c1#xyz", uri: "test1", deleted: false},
+		{collection: "c1", name: "abc", key: "c1#abc", canonicalURI: "1", deleted: false},
+		{collection: "c1", name: "xyz", key: "c1#xyz", canonicalURI: "1", deleted: false},
 	}, entriesToBeDeleted)
 
 	deletor.delete()
 	matches = []string{}
-	engine.index("test1", indexable{"c1", "xyz"}, "c1#xyz")
+	engine.index(store, "test1", indexable{"c1", "xyz"}, "c1#xyz")
 	engine.search(searchQuery{
 		collection: "c1",
 		keyword:    "abc",
@@ -107,12 +108,12 @@ func TestFuzzyEngine(t *testing.T) {
 	})
 	assert.Equal(t, []string{"c1#foobar"}, matches)
 
-	deletor = newFuzzyEngineDeletor(engine, "test2")
+	deletor = newFuzzyEngineDeletor(engine, store, "test2")
 	entriesToBeDeleted = []fuzzyEntry{}
 	for _, entry := range deletor.entriesToBeDeleted {
 		entriesToBeDeleted = append(entriesToBeDeleted, *entry)
 	}
 	assert.Equal(t, []fuzzyEntry{
-		{collection: "c1", name: "foobar", key: "c1#foobar", uri: "test2", deleted: false},
+		{collection: "c1", name: "foobar", key: "c1#foobar", canonicalURI: "2", deleted: false},
 	}, entriesToBeDeleted)
 }

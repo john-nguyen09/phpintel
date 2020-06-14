@@ -1,94 +1,151 @@
 package analysis
 
 import (
+	"log"
 	"strings"
+	"time"
 
+	"github.com/john-nguyen09/phpintel/analysis/filter"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	cmap "github.com/orcaman/concurrent-map"
 )
 
-func createReferenceEntry(store *Store, location protocol.Location, fqn string) []*entry {
-	entries := []*entry{}
-	canonicalURI := util.CanonicaliseURI(store.uri, location.URI)
-	key := createReferenceIndexKey(canonicalURI, location.Range, fqn)
-	entries = append(entries, newEntry(referenceIndexCollection, key))
-	entries = append(entries, createEntryToReferReferenceIndex(canonicalURI, key))
-	return entries
+var filterCollection = "filter"
+
+type entryInfo struct {
+	ref string
+	r   protocol.Range
 }
 
-func createReferenceIndexKey(uri string, r protocol.Range, fqn string) string {
-	sb := strings.Builder{}
-	sb.WriteString(fqn)
-	sb.WriteString(KeySep)
-	sb.WriteString(uri)
-	sb.WriteString(KeySep)
-	sb.WriteString(r.String())
-	return sb.String()
+func (i entryInfo) serialise(e *storage.Encoder) {
+	e.WriteString(i.ref)
+	e.WritePosition(i.r.Start)
+	e.WritePosition(i.r.End)
 }
 
-func createEntryToReferReferenceIndex(uri string, key string) *entry {
-	sb := strings.Builder{}
-	sb.WriteString(uri)
-	sb.WriteString(KeySep)
-	sb.WriteString(key)
-	return newEntry(documentReferenceIndex, sb.String())
+func entryInfoDecode(d *storage.Decoder) entryInfo {
+	return entryInfo{
+		ref: d.ReadString(),
+		r: protocol.Range{
+			Start: d.ReadPosition(),
+			End:   d.ReadPosition(),
+		},
+	}
 }
 
-func searchReferences(store *Store, fqn string) []protocol.Location {
-	results := []protocol.Location{}
-	entry := newEntry(referenceIndexCollection, fqn)
-	store.db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
-		keyInfo := strings.Split(string(it.Key()), KeySep)
-		uri := util.URIFromCanonicalURI(store.uri, keyInfo[2])
-		r := util.RangeFromString(keyInfo[3])
-		results = append(results, protocol.Location{
-			URI:   uri,
-			Range: r,
-		})
-	})
+type referenceEntry struct {
+	filter *filter.GrowingFilter
+}
+
+func newReferenceEntry() referenceEntry {
+	return referenceEntry{
+		filter: filter.NewGrowing(filter.DefaultOptions()),
+	}
+}
+
+func (e referenceEntry) search(store *Store, uri string, ref string) []protocol.Range {
+	var results []protocol.Range
+	canonicalURI := util.CanonicaliseURI(store.uri, uri)
+	dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+	if data, err := store.db.Get(dbEntry.getKeyBytes()); err == nil && len(data) != 0 {
+		d := storage.NewDecoder(data)
+		infoCount := d.ReadInt()
+		for i := 0; i < infoCount; i++ {
+			info := entryInfoDecode(d)
+			if info.ref == ref {
+				results = append(results, info.r)
+			}
+		}
+	}
 	return results
 }
 
-type referenceIndexDeletor struct {
-	indexKeys map[string]bool
-	docKeys   map[string]bool
+type referenceIndex struct {
+	db      storage.DB
+	entries cmap.ConcurrentMap
 }
 
-func newReferenceIndexDeletor(store *Store, uri string) *referenceIndexDeletor {
-	indexKeys := map[string]bool{}
-	docKeys := map[string]bool{}
-	canonicalURI := util.CanonicaliseURI(store.uri, uri)
-	entry := newEntry(documentReferenceIndex, canonicalURI)
-	store.db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
-		docKey := string(it.Key())
-		docKeys[docKey] = true
-		keyInfo := strings.Split(docKey, KeySep)
-		indexKeys[strings.Join(keyInfo[2:], KeySep)] = true
+func newReferenceIndex(db storage.DB) *referenceIndex {
+	index := &referenceIndex{
+		db:      db,
+		entries: cmap.New(),
+	}
+	if db != nil {
+		dbEntry := newEntry(referenceIndexCollection, filterCollection+KeySep)
+		start := time.Now()
+		count := 0
+		db.PrefixStream(dbEntry.getKeyBytes(), func(it storage.Iterator) {
+			count++
+			keyInfo := strings.Split(string(it.Key()), KeySep)
+			d := storage.NewDecoder(it.Value())
+			index.entries.Set(keyInfo[2], referenceEntry{
+				filter: filter.GrowingFilterDecode(d),
+			})
+		})
+		if count > 0 {
+			log.Printf("Load reference index took %s", time.Since(start))
+		}
+	}
+	return index
+}
+
+func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch, infos []entryInfo) {
+	canonicalURI := util.CanonicaliseURI(store.uri, doc.GetURI())
+	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
+		var entry referenceEntry
+		if ok {
+			entry = curr.(referenceEntry)
+		} else {
+			entry = new.(referenceEntry)
+		}
+		dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+		dbEntry.e.WriteInt(len(infos))
+		for _, info := range infos {
+			entry.filter.Insert([]byte(info.ref))
+			info.serialise(dbEntry.e)
+		}
+		writeEntry(batch, dbEntry)
+		dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+		entry.filter.Encode(dbEntry.e)
+		writeEntry(batch, dbEntry)
+		return entry
 	})
-	return &referenceIndexDeletor{
-		indexKeys: indexKeys,
-		docKeys:   docKeys,
-	}
 }
 
-func (d *referenceIndexDeletor) MarkNotDelete(store *Store, s Symbol, fqn string) {
-	canonicalURI := util.CanonicaliseURI(store.uri, s.GetLocation().URI)
-	key := createReferenceIndexKey(canonicalURI, s.GetLocation().Range, fqn)
-	delete(d.indexKeys, key)
-	sb := strings.Builder{}
-	sb.WriteString(canonicalURI)
-	sb.WriteString(KeySep)
-	sb.WriteString(key)
-	delete(d.docKeys, sb.String())
+func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string) {
+	canonicalURI := util.CanonicaliseURI(store.uri, uri)
+	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
+		var entry referenceEntry
+		if ok {
+			entry = curr.(referenceEntry)
+			dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+			batch.Delete(dbEntry.getKeyBytes())
+			dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+			batch.Delete(dbEntry.getKeyBytes())
+			entry.filter.Reset()
+		} else {
+			entry = new.(referenceEntry)
+		}
+		return entry
+	})
 }
 
-func (d *referenceIndexDeletor) Delete(b storage.Batch) {
-	for indexKey := range d.indexKeys {
-		entry := newEntry(referenceIndexCollection, indexKey)
-		b.Delete(entry.getKeyBytes())
+func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
+	var results []protocol.Location
+	refBytes := []byte(ref)
+	for tuple := range i.entries.IterBuffered() {
+		entry := tuple.Val.(referenceEntry)
+		if entry.filter.Lookup(refBytes) {
+			uri := util.URIFromCanonicalURI(store.uri, tuple.Key)
+			for _, r := range entry.search(store, uri, ref) {
+				results = append(results, protocol.Location{
+					URI:   uri,
+					Range: r,
+				})
+			}
+		}
 	}
-	for docKey := range d.docKeys {
-		b.Delete([]byte(docKey))
-	}
+	return results
 }

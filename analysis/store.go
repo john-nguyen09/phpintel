@@ -85,6 +85,7 @@ type Store struct {
 	uri       protocol.DocumentURI
 	db        storage.DB
 	fEngine   *fuzzyEngine
+	refIndex  *referenceIndex
 	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
 
@@ -169,6 +170,7 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 		uri:       uri,
 		db:        db,
 		fEngine:   newFuzzyEngine(db),
+		refIndex:  newReferenceIndex(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 
@@ -305,12 +307,11 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 // this returns error if the disk cannot be written
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newFuzzyEngineDeletor(s.fEngine, uri)
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, s, uri)
 		ciDeletor.delete()
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(b)
-		riDeletor := newReferenceIndexDeletor(s, uri)
-		riDeletor.Delete(b)
+		s.refIndex.resetURI(s, b, uri)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
 		return nil
@@ -369,15 +370,14 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newFuzzyEngineDeletor(s.fEngine, document.GetURI())
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, s, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
-		riDeletor := newReferenceIndexDeletor(s, document.GetURI())
+		s.refIndex.resetURI(s, b, document.GetURI())
 
-		s.writeAllSymbols(b, document, ciDeletor, syDeletor, riDeletor)
+		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
 
 		ciDeletor.delete()
 		syDeletor.Delete(b)
-		riDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
 		b.Put(entry.getKeyBytes(), document.GetHash())
 		return nil
@@ -435,7 +435,7 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 }
 
 func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
-	ciDeletor *fuzzyEngineDeletor, syDeletor *symbolDeletor, riDeletor *referenceIndexDeletor) {
+	ciDeletor *fuzzyEngineDeletor, syDeletor *symbolDeletor) {
 	for _, impTable := range document.importTables {
 		is := indexablesFromNamespaceName(impTable.GetNamespace())
 		for index, i := range is {
@@ -444,6 +444,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 		}
 	}
 	tra := newTraverser()
+	var referenceEntryInfos []entryInfo
 	tra.traverseDocument(document, func(tra *traverser, child Symbol) {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
@@ -462,58 +463,22 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 		}
 
 		if r, ok := child.(SymbolReference); ok {
-			s.writeSymbolReference(batch, document, r, riDeletor)
+			referenceEntryInfos = append(referenceEntryInfos, entryInfo{
+				ref: r.ReferenceFQN(),
+				r:   r.ReferenceLocation().Range,
+			})
 		}
 		if h, ok := child.(HasTypes); ok {
-			s.writeReferenceIfAvailable(batch, document, h, riDeletor)
-		}
-	})
-}
-
-func (s *Store) writeSymbolReference(batch storage.Batch, document *Document,
-	sym SymbolReference, riDeletor *referenceIndexDeletor) {
-	entries := createReferenceEntry(s, sym.ReferenceLocation(), sym.ReferenceFQN())
-	for _, entry := range entries {
-		writeEntry(batch, entry)
-	}
-	riDeletor.MarkNotDelete(s, sym, sym.ReferenceFQN())
-}
-
-func (s *Store) writeReferenceIfAvailable(batch storage.Batch, document *Document,
-	sym HasTypes, riDeletor *referenceIndexDeletor) {
-	entries := []*entry{}
-	switch v := sym.(type) {
-	case *FunctionCall:
-		name := NewTypeString(v.Name)
-		possibleFQNs := document.ImportTableAtPos(v.GetLocation().Range.Start).functionPossibleFQNs(name)
-		for _, fqn := range possibleFQNs {
-			entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
-			riDeletor.MarkNotDelete(s, sym, fqn)
-		}
-	case *ClassTypeDesignator, *TypeDeclaration, *ClassAccess, *TraitAccess, *InterfaceAccess:
-		if c, ok := sym.(*ClassAccess); ok && IsNameRelative(c.Name) {
-			break
-		}
-		for _, t := range sym.GetTypes().Resolve() {
-			fqn := t.GetFQN()
-			entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
-			riDeletor.MarkNotDelete(s, sym, fqn)
-		}
-	case HasTypesHasScope:
-		switch v.(type) {
-		case *MethodAccess, *PropertyAccess, *ScopedMethodAccess, *ScopedPropertyAccess, *ScopedConstantAccess:
-			for _, t := range v.GetScopeTypes().Resolve() {
-				fqn := t.GetFQN() + "::" + v.MemberName()
-				entries = append(entries, createReferenceEntry(s, sym.GetLocation(), fqn)...)
-				riDeletor.MarkNotDelete(s, sym, fqn)
+			r := h.GetLocation().Range
+			for _, ref := range SymToRefs(document, h) {
+				referenceEntryInfos = append(referenceEntryInfos, entryInfo{
+					ref: ref,
+					r:   r,
+				})
 			}
 		}
-	}
-	if len(entries) > 0 {
-		for _, entry := range entries {
-			writeEntry(batch, entry)
-		}
-	}
+	})
+	s.refIndex.index(s, document, batch, referenceEntryInfos)
 }
 
 func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
@@ -522,7 +487,7 @@ func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
 }
 
 func (s *Store) indexName(batch storage.Batch, document *Document, indexable NameIndexable, key string) {
-	s.fEngine.index(document.GetURI(), indexable, key)
+	s.fEngine.index(s, document.GetURI(), indexable, key)
 }
 
 func writeEntry(batch storage.Batch, entry *entry) {
@@ -1058,6 +1023,34 @@ func (s *Store) GetGlobalVariables(name string) []*GlobalVariable {
 }
 
 // GetReferences returns the locations of the reference to an FQN
-func (s *Store) GetReferences(fqn string) []protocol.Location {
-	return searchReferences(s, fqn+KeySep)
+func (s *Store) GetReferences(ref string) []protocol.Location {
+	return s.refIndex.search(s, ref)
+}
+
+// SymToRefs converts a HasTypes symbol to reference strings
+func SymToRefs(document *Document, sym HasTypes) []string {
+	var refs []string
+	switch v := sym.(type) {
+	case *FunctionCall:
+		possibleFQNs := document.ImportTableAtPos(sym.GetLocation().Range.Start).functionPossibleFQNs(NewTypeString(v.Name))
+		for _, fqn := range possibleFQNs {
+			sb := &strings.Builder{}
+			sb.WriteString(fqn)
+			sb.WriteString("()")
+			refs = append(refs, sb.String())
+		}
+	case *ClassTypeDesignator, *TypeDeclaration, *ClassAccess, *TraitAccess, *InterfaceAccess:
+		if c, ok := sym.(*ClassAccess); ok && IsNameRelative(c.Name) {
+			break
+		}
+		for _, t := range sym.GetTypes().Resolve() {
+			refs = append(refs, t.GetFQN())
+		}
+	case HasTypesHasScope:
+		sb := &strings.Builder{}
+		sb.WriteString(".")
+		sb.WriteString(v.MemberName())
+		refs = append(refs, sb.String())
+	}
+	return refs
 }
