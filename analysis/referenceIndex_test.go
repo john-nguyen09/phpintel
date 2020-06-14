@@ -189,7 +189,7 @@ function testFunction1() {}`))
 function testFunction1() {}`))
 	doc.Load()
 	store.SyncDocument(doc)
-	results := store.GetReferences("\\testFunction1")
+	results := store.GetReferences("\\testFunction1()")
 	assert.Equal(t, []protocol.Location{
 		{URI: "test1", Range: protocol.Range{
 			Start: protocol.Position{Line: 2, Character: 9},

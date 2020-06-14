@@ -103,12 +103,6 @@ func (s *Server) initialized(ctx context.Context, params *protocol.InitializedPa
 }
 
 func (s *Server) shutdown(ctx context.Context) error {
-	s.stateMu.Lock()
-	defer s.stateMu.Unlock()
-	if s.state < serverInitialized {
-		return jsonrpc2.NewErrorf(jsonrpc2.CodeInvalidRequest, "not intialised")
-	}
-	s.store.close()
 	memprofile := protocol.GetMemprofile(ctx)
 	if memprofile != "" {
 		f, err := os.Create(memprofile)
@@ -121,5 +115,11 @@ func (s *Server) shutdown(ctx context.Context) error {
 			log.Fatal("could not start memory profile: ", err)
 		}
 	}
+	s.stateMu.Lock()
+	defer s.stateMu.Unlock()
+	if s.state < serverInitialized {
+		return jsonrpc2.NewErrorf(jsonrpc2.CodeInvalidRequest, "not intialised")
+	}
+	s.store.close()
 	return nil
 }

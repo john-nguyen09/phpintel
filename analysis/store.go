@@ -183,7 +183,6 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 // Close triggers close on the fuzzy engine, and closes the disk storage
 func (s *Store) Close() {
 	s.fEngine.close()
-	s.refIndex.close()
 	s.db.Close()
 }
 
@@ -308,11 +307,11 @@ func (s *Store) CloseDocument(uri protocol.DocumentURI) {
 // this returns error if the disk cannot be written
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newFuzzyEngineDeletor(s.fEngine, uri)
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, s, uri)
 		ciDeletor.delete()
 		syDeletor := newSymbolDeletor(s.db, uri)
 		syDeletor.Delete(b)
-		s.refIndex.resetURI(s, uri)
+		s.refIndex.resetURI(s, b, uri)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
 		return nil
@@ -371,9 +370,9 @@ func (s *Store) CompareAndIndexDocument(filePath string) *Document {
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newFuzzyEngineDeletor(s.fEngine, document.GetURI())
+		ciDeletor := newFuzzyEngineDeletor(s.fEngine, s, document.GetURI())
 		syDeletor := newSymbolDeletor(s.db, document.GetURI())
-		s.refIndex.resetURI(s, document.GetURI())
+		s.refIndex.resetURI(s, b, document.GetURI())
 
 		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
 
@@ -445,6 +444,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 		}
 	}
 	tra := newTraverser()
+	var referenceEntryInfos []entryInfo
 	tra.traverseDocument(document, func(tra *traverser, child Symbol) {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
@@ -463,23 +463,22 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 		}
 
 		if r, ok := child.(SymbolReference); ok {
-			s.writeSymbolReference(batch, document, r)
+			referenceEntryInfos = append(referenceEntryInfos, entryInfo{
+				ref: r.ReferenceFQN(),
+				r:   r.ReferenceLocation().Range,
+			})
 		}
 		if h, ok := child.(HasTypes); ok {
-			s.writeReferenceIfAvailable(batch, document, h)
+			r := h.GetLocation().Range
+			for _, ref := range SymToRefs(document, h) {
+				referenceEntryInfos = append(referenceEntryInfos, entryInfo{
+					ref: ref,
+					r:   r,
+				})
+			}
 		}
 	})
-}
-
-func (s *Store) writeSymbolReference(batch storage.Batch, document *Document, sym SymbolReference) {
-	s.refIndex.insert(s, sym.ReferenceLocation(), sym.ReferenceFQN())
-}
-
-func (s *Store) writeReferenceIfAvailable(batch storage.Batch, document *Document, sym HasTypes) {
-	loc := sym.GetLocation()
-	for _, ref := range SymToRefs(document, sym) {
-		s.refIndex.insert(s, loc, ref)
-	}
+	s.refIndex.index(s, document, batch, referenceEntryInfos)
 }
 
 func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
@@ -488,7 +487,7 @@ func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
 }
 
 func (s *Store) indexName(batch storage.Batch, document *Document, indexable NameIndexable, key string) {
-	s.fEngine.index(document.GetURI(), indexable, key)
+	s.fEngine.index(s, document.GetURI(), indexable, key)
 }
 
 func writeEntry(batch storage.Batch, entry *entry) {

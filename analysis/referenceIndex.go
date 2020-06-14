@@ -2,24 +2,17 @@ package analysis
 
 import (
 	"log"
+	"strings"
 	"time"
 
+	"github.com/john-nguyen09/phpintel/analysis/filter"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
-	cuckoo "github.com/seiflotfy/cuckoofilter"
 )
 
-var refInterned map[string]string = make(map[string]string)
-
-func refIntern(str string) string {
-	if interned, ok := refInterned[str]; ok {
-		return interned
-	}
-	refInterned[str] = str
-	return str
-}
+var filterCollection = "filter"
 
 type entryInfo struct {
 	ref string
@@ -34,7 +27,7 @@ func (i entryInfo) serialise(e *storage.Encoder) {
 
 func entryInfoDecode(d *storage.Decoder) entryInfo {
 	return entryInfo{
-		ref: refIntern(d.ReadString()),
+		ref: d.ReadString(),
 		r: protocol.Range{
 			Start: d.ReadPosition(),
 			End:   d.ReadPosition(),
@@ -43,47 +36,30 @@ func entryInfoDecode(d *storage.Decoder) entryInfo {
 }
 
 type referenceEntry struct {
-	filter *cuckoo.Filter
-	data   []entryInfo
+	filter *filter.GrowingFilter
 }
 
 func newReferenceEntry() referenceEntry {
 	return referenceEntry{
-		filter: cuckoo.NewFilter(100),
+		filter: filter.NewGrowing(filter.DefaultOptions()),
 	}
 }
 
-func referenceEntryDecode(d *storage.Decoder) referenceEntry {
-	filter, err := cuckoo.Decode(d.ReadBytes())
-	if err != nil {
-		panic(err)
-	}
-	entry := referenceEntry{
-		filter: filter,
-	}
-	count := d.ReadInt()
-	for i := 0; i < count; i++ {
-		entry.data = append(entry.data, entryInfoDecode(d))
-	}
-	return entry
-}
-
-func (e referenceEntry) search(ref string) []protocol.Range {
+func (e referenceEntry) search(store *Store, uri string, ref string) []protocol.Range {
 	var results []protocol.Range
-	for _, info := range e.data {
-		if info.ref == ref {
-			results = append(results, info.r)
+	canonicalURI := util.CanonicaliseURI(store.uri, uri)
+	dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+	if data, err := store.db.Get(dbEntry.getKeyBytes()); err == nil && len(data) != 0 {
+		d := storage.NewDecoder(data)
+		infoCount := d.ReadInt()
+		for i := 0; i < infoCount; i++ {
+			info := entryInfoDecode(d)
+			if info.ref == ref {
+				results = append(results, info.r)
+			}
 		}
 	}
 	return results
-}
-
-func (e referenceEntry) serialise(en *storage.Encoder) {
-	en.WriteBytes(e.filter.Encode())
-	en.WriteInt(len(e.data))
-	for _, info := range e.data {
-		info.serialise(en)
-	}
 }
 
 type referenceIndex struct {
@@ -91,39 +67,32 @@ type referenceIndex struct {
 	entries cmap.ConcurrentMap
 }
 
-func referenceIndexDecode(d *storage.Decoder) *referenceIndex {
-	count := d.ReadInt()
-	entries := cmap.New()
-	for i := 0; i < count; i++ {
-		key := d.ReadString()
-		entries.Set(key, referenceEntryDecode(d))
-	}
-	return &referenceIndex{
-		entries: entries,
-	}
-}
-
 func newReferenceIndex(db storage.DB) *referenceIndex {
-	var index *referenceIndex
+	index := &referenceIndex{
+		db:      db,
+		entries: cmap.New(),
+	}
 	if db != nil {
-		if b, err := db.Get([]byte(referenceIndexCollection)); err == nil && len(b) > 0 {
-			start := time.Now()
-			d := storage.NewDecoder(b)
-			index = referenceIndexDecode(d)
-			log.Printf("Loading reference index from DB took %s", time.Since(start))
+		dbEntry := newEntry(referenceIndexCollection, filterCollection+KeySep)
+		start := time.Now()
+		count := 0
+		db.PrefixStream(dbEntry.getKeyBytes(), func(it storage.Iterator) {
+			count++
+			keyInfo := strings.Split(string(it.Key()), KeySep)
+			d := storage.NewDecoder(it.Value())
+			index.entries.Set(keyInfo[2], referenceEntry{
+				filter: filter.GrowingFilterDecode(d),
+			})
+		})
+		if count > 0 {
+			log.Printf("Load reference index took %s", time.Since(start))
 		}
 	}
-	if index == nil {
-		index = &referenceIndex{
-			entries: cmap.New(),
-		}
-	}
-	index.db = db
 	return index
 }
 
-func (i *referenceIndex) insert(store *Store, location protocol.Location, ref string) {
-	canonicalURI := util.CanonicaliseURI(store.uri, location.URI)
+func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch, infos []entryInfo) {
+	canonicalURI := util.CanonicaliseURI(store.uri, doc.GetURI())
 	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
 		var entry referenceEntry
 		if ok {
@@ -131,22 +100,30 @@ func (i *referenceIndex) insert(store *Store, location protocol.Location, ref st
 		} else {
 			entry = new.(referenceEntry)
 		}
-		entry.filter.Insert([]byte(ref))
-		entry.data = append(entry.data, entryInfo{
-			ref: refIntern(ref),
-			r:   location.Range,
-		})
+		dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+		dbEntry.e.WriteInt(len(infos))
+		for _, info := range infos {
+			entry.filter.Insert([]byte(info.ref))
+			info.serialise(dbEntry.e)
+		}
+		writeEntry(batch, dbEntry)
+		dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+		entry.filter.Encode(dbEntry.e)
+		writeEntry(batch, dbEntry)
 		return entry
 	})
 }
 
-func (i *referenceIndex) resetURI(store *Store, uri string) {
+func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string) {
 	canonicalURI := util.CanonicaliseURI(store.uri, uri)
 	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
 		var entry referenceEntry
 		if ok {
 			entry = curr.(referenceEntry)
-			entry.data = nil
+			dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+			batch.Delete(dbEntry.getKeyBytes())
+			dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+			batch.Delete(dbEntry.getKeyBytes())
 			entry.filter.Reset()
 		} else {
 			entry = new.(referenceEntry)
@@ -162,7 +139,7 @@ func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
 		entry := tuple.Val.(referenceEntry)
 		if entry.filter.Lookup(refBytes) {
 			uri := util.URIFromCanonicalURI(store.uri, tuple.Key)
-			for _, r := range entry.search(ref) {
+			for _, r := range entry.search(store, uri, ref) {
 				results = append(results, protocol.Location{
 					URI:   uri,
 					Range: r,
@@ -171,14 +148,4 @@ func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
 		}
 	}
 	return results
-}
-
-func (i *referenceIndex) close() error {
-	e := storage.NewEncoder()
-	e.WriteInt(i.entries.Count())
-	for tuple := range i.entries.IterBuffered() {
-		e.WriteString(tuple.Key)
-		tuple.Val.(referenceEntry).serialise(e)
-	}
-	return i.db.Put([]byte(referenceIndexCollection), e.Bytes())
 }
