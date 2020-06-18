@@ -469,12 +469,15 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			})
 		}
 		if h, ok := child.(HasTypes); ok {
-			r := h.GetLocation().Range
-			for _, ref := range SymToRefs(document, h) {
-				referenceEntryInfos = append(referenceEntryInfos, entryInfo{
-					ref: ref,
-					r:   r,
-				})
+			location := h.GetLocation()
+			if !stub.IsStub(location.URI) {
+				r := location.Range
+				for _, ref := range SymToRefs(document, h) {
+					referenceEntryInfos = append(referenceEntryInfos, entryInfo{
+						ref: ref,
+						r:   r,
+					})
+				}
 			}
 		}
 	})

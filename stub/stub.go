@@ -2,6 +2,7 @@ package stub
 
 import (
 	"log"
+	"strings"
 )
 
 // WalkFunc is a callback function that is executed on every files in a stub
@@ -18,6 +19,7 @@ type Stubber interface {
 }
 
 var stubbers []Stubber = nil
+var stubberPrefixes []string = nil
 
 // GetStubbers initialises stubbers and returns them
 func GetStubbers() []Stubber {
@@ -30,4 +32,24 @@ func GetStubbers() []Stubber {
 		}
 	}
 	return stubbers
+}
+
+// GetStubberPrefixes gets stubbers and returns their prefixes
+func GetStubberPrefixes() []string {
+	if stubberPrefixes == nil {
+		for _, stubber := range GetStubbers() {
+			stubberPrefixes = append(stubberPrefixes, stubber.Name()+"://")
+		}
+	}
+	return stubberPrefixes
+}
+
+// IsStub checks if the given URI is from stub
+func IsStub(uri string) bool {
+	for _, prefix := range GetStubberPrefixes() {
+		if strings.HasPrefix(uri, prefix) {
+			return true
+		}
+	}
+	return false
 }

@@ -2,10 +2,10 @@ package lsp
 
 import (
 	"context"
-	"strings"
 
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
+	"github.com/john-nguyen09/phpintel/util"
 )
 
 func (s *Server) definition(ctx context.Context, params *protocol.DefinitionParams) ([]protocol.Location, error) {
@@ -156,7 +156,7 @@ func (s *Server) definition(ctx context.Context, params *protocol.DefinitionPara
 	}
 	filteredLocations := locations[:0]
 	for _, location := range locations {
-		if strings.HasPrefix(location.URI, "file://") {
+		if util.IsURINavigatable(location.URI) {
 			filteredLocations = append(filteredLocations, location)
 		}
 	}

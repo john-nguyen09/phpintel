@@ -97,3 +97,11 @@ func URIFromCanonicalURI(parent string, canonicalURI string) string {
 	}
 	return parent + canonicalURI
 }
+
+// IsURINavigatable checks if the given URI is navigatable
+func IsURINavigatable(uri string) bool {
+	// TODO: Currently, the only navigatable URI is file
+	// but this is not true because there are also other navigatable URIs
+	// e.g. FTP, HTTP or other storage providers
+	return strings.HasPrefix(uri, "file://")
+}
