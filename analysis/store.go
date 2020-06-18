@@ -1032,7 +1032,7 @@ func SymToRefs(document *Document, sym HasTypes) []string {
 	var refs []string
 	switch v := sym.(type) {
 	case *FunctionCall:
-		possibleFQNs := document.ImportTableAtPos(sym.GetLocation().Range.Start).functionPossibleFQNs(NewTypeString(v.Name))
+		possibleFQNs := document.ImportTableAtPos(sym.GetLocation().Range.Start).FunctionPossibleFQNs(NewTypeString(v.Name))
 		for _, fqn := range possibleFQNs {
 			sb := &strings.Builder{}
 			sb.WriteString(fqn)

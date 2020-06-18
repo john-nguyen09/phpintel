@@ -110,7 +110,7 @@ func (i ImportTable) GetFunctionReferenceFQN(q *Query, name TypeString) string {
 	return name.GetFQN()
 }
 
-func (i ImportTable) functionPossibleFQNs(name TypeString) []string {
+func (i ImportTable) FunctionPossibleFQNs(name TypeString) []string {
 	firstPart, parts := name.GetFirstAndRestParts()
 	aliasTable := i.functions
 	if len(parts) > 0 {

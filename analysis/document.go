@@ -203,7 +203,8 @@ func (s *Document) OffsetAtPosition(pos protocol.Position) int {
 	return min
 }
 
-func (s *Document) nodeRange(node phrase.AstNode) protocol.Range {
+// NodeRange returns the lsp range of the given node
+func (s *Document) NodeRange(node phrase.AstNode) protocol.Range {
 	r := protocol.Range{}
 	first := util.FirstToken(node)
 	last := util.LastToken(node)
@@ -239,7 +240,7 @@ func (s *Document) GetText() []byte {
 func (s *Document) GetNodeLocation(node phrase.AstNode) protocol.Location {
 	return protocol.Location{
 		URI:   protocol.DocumentURI(s.GetURI()),
-		Range: s.nodeRange(node),
+		Range: s.NodeRange(node),
 	}
 }
 
@@ -293,7 +294,7 @@ func (s *Document) currentBlock() BlockSymbol {
 }
 
 func (s *Document) pushVariableTable(node *phrase.Phrase) {
-	newVarTable := newVariableTable(s.nodeRange(node), s.variableTableLevel)
+	newVarTable := newVariableTable(s.NodeRange(node), s.variableTableLevel)
 	if s.variableTableLevel > 0 {
 		s.getCurrentVariableTable().addChild(newVarTable)
 	}

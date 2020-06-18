@@ -55,21 +55,28 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		ref := "."
 		ref += document.GetNodeText(&parent)
 		results = append(results, store.GetReferences(ref)...)
-	case phrase.FunctionDeclarationHeader,
-		phrase.ClassDeclarationHeader,
+	case phrase.ClassDeclarationHeader,
 		phrase.InterfaceDeclarationHeader,
 		phrase.TraitDeclarationHeader:
 		nameToken := nodes.Token()
-		ref := document.GetNodeText(&nameToken)
-		if parent.Type == phrase.FunctionDeclarationHeader {
+		name := analysis.NewTypeString(document.GetNodeText(&nameToken))
+		name.SetNamespace(document.ImportTableAtPos(document.NodeRange(nameToken).Start).GetNamespace())
+		ref := name.GetFQN()
+		results = append(results, store.GetReferences(ref)...)
+	case phrase.FunctionDeclarationHeader:
+		nameToken := nodes.Token()
+		name := analysis.NewTypeString(document.GetNodeText(&nameToken))
+		refs := document.ImportTableAtPos(document.NodeRange(nameToken).Start).FunctionPossibleFQNs(name)
+		for _, ref := range refs {
 			ref += "()"
+			results = append(results, store.GetReferences(ref)...)
 		}
-		results = append(results, store.GetReferences(ref)...)
-	}
-	sym := document.HasTypesAtPos(pos)
-	refs := analysis.SymToRefs(document, sym)
-	for _, ref := range refs {
-		results = append(results, store.GetReferences(ref)...)
+	default:
+		sym := document.HasTypesAtPos(pos)
+		refs := analysis.SymToRefs(document, sym)
+		for _, ref := range refs {
+			results = append(results, store.GetReferences(ref)...)
+		}
 	}
 	return results, nil
 }

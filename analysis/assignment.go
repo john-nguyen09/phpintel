@@ -61,7 +61,7 @@ func analyseVariableAssignment(a analyser, document *Document, lhs *phrase.Phras
 		expression = scanForExpression(a, document, p)
 	}
 	// But the variable should be pushed after any rhs's variables
-	document.pushVariable(a, variable, document.nodeRange(parent).End, true)
+	document.pushVariable(a, variable, document.NodeRange(parent).End, true)
 	if expression != nil {
 		variable.setExpression(expression)
 	} else {

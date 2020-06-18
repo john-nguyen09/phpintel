@@ -56,7 +56,7 @@ func newArgumentList(a analyser, document *Document, node *phrase.Phrase) Symbol
 		End:   argumentList.location.Range.End,
 	})
 	for _, argument := range argumentList.GetArguments() {
-		argumentList.argumentRanges = append(argumentList.argumentRanges, document.nodeRange(argument))
+		argumentList.argumentRanges = append(argumentList.argumentRanges, document.NodeRange(argument))
 	}
 	for _, n := range nodesToScan {
 		scanNode(a, document, n)

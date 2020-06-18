@@ -68,7 +68,7 @@ func processNamespaceUseClauseList(document *Document, useType UseType, node *ph
 				}
 				child = traverser.Advance()
 			}
-			addUseToImportTable(document, useType, alias, name, document.nodeRange(p))
+			addUseToImportTable(document, useType, alias, name, document.NodeRange(p))
 
 			traverser, err = traverser.Ascend()
 			if err != nil {
@@ -108,7 +108,7 @@ func processNamespaceUseGroupClauseList(document *Document, prefix string, useTy
 					child = traverser.Advance()
 				}
 				name = prefix + "\\" + name
-				addUseToImportTable(document, useType, alias, name, document.nodeRange(p))
+				addUseToImportTable(document, useType, alias, name, document.NodeRange(p))
 
 				traverser, err = traverser.Ascend()
 				if err != nil {
