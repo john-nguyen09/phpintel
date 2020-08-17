@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -68,7 +69,7 @@ func analyse(context *ParsingContext, id int, filePaths <-chan string) {
 	count := 0
 	for filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
-		document := NewDocument("test"+string(id)+string(count), data)
+		document := NewDocument("test"+fmt.Sprint(id)+fmt.Sprint(count), data)
 		document.Load()
 		context.addDocument(document)
 		context.waitGroup.Done()

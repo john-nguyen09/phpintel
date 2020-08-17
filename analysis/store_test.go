@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -119,7 +120,7 @@ func TestStoreClose(t *testing.T) {
 	})
 	for id, filePath := range filePaths {
 		data, _ := ioutil.ReadFile(filePath)
-		document := NewDocument("test"+string(id), data)
+		document := NewDocument("test"+fmt.Sprint(id), data)
 		document.Load()
 		store.SyncDocument(document)
 	}
