@@ -89,6 +89,7 @@ func newClassConst(a analyser, document *Document, node *phrase.Phrase, visibili
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			if hasEquals {
 				classConst.Value += document.getPhraseText(p)
+				scanNode(a, document, p)
 			} else {
 				switch p.Type {
 				case phrase.Identifier:
