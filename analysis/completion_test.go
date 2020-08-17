@@ -1,6 +1,7 @@
 package analysis
 
 import (
+	"context"
 	"io/ioutil"
 	"reflect"
 	"testing"
@@ -28,7 +29,7 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 	store := setupStore("test", "TestFunctionCompletionWithNamespace")
 	indexTestCase(store, "test1", "../cases/function.php", false)
 	indexTestCase(store, "test2", "../cases/completion/functionCompletionWithNamespace.php", true)
-	document := store.GetOrCreateDocument("test2")
+	document := store.GetOrCreateDocument(context.Background(), "test2")
 	importTable := document.currImportTable()
 	word := "testF"
 	functions, _ := store.SearchFunctions(word, NewSearchOptions())

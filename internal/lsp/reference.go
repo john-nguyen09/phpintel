@@ -31,7 +31,7 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	if store == nil {
 		return nil, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil, nil
 	}
@@ -81,13 +81,13 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	return results, nil
 }
 
-func (s *Server) rename(params *protocol.RenameParams) (*protocol.WorkspaceEdit, error) {
+func (s *Server) rename(ctx context.Context, params *protocol.RenameParams) (*protocol.WorkspaceEdit, error) {
 	uri := params.TextDocument.URI
 	store := s.store.getStore(uri)
 	if store == nil {
 		return nil, nil
 	}
-	doc := store.GetOrCreateDocument(uri)
+	doc := store.GetOrCreateDocument(ctx, uri)
 	if doc == nil {
 		return nil, nil
 	}

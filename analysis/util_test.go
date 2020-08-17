@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
 	cmap "github.com/orcaman/concurrent-map"
 )
@@ -33,6 +34,7 @@ func setupStore(uri string, name string) *Store {
 	return &Store{
 		uri:       uri,
 		db:        db,
+		FS:        protocol.NewFileFS(),
 		fEngine:   newFuzzyEngine(db),
 		refIndex:  newReferenceIndex(db),
 		stubbers:  stubbers,

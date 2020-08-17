@@ -63,7 +63,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	if store == nil {
 		return nil, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil, nil
 	}

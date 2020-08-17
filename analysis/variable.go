@@ -5,7 +5,6 @@ import (
 
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 // Variable represents a reference to the variable
@@ -153,7 +152,7 @@ func (vt *VariableTable) add(a analyser, variable *Variable, start protocol.Posi
 		pos := variable.GetLocation().Range.Start
 		if ctxVars, ok := vt.variables[variable.Name]; ok {
 			for i, ctxVar := range ctxVars {
-				if util.ComparePos(pos, ctxVar.v.GetLocation().Range.Start) <= 0 {
+				if protocol.ComparePos(pos, ctxVar.v.GetLocation().Range.Start) <= 0 {
 					break
 				}
 				if ctxVar.isDeclaration && ctxVar.v.Name == variable.Name {
@@ -166,7 +165,7 @@ func (vt *VariableTable) add(a analyser, variable *Variable, start protocol.Posi
 		index := 0
 		if len(prevVars) > 0 {
 			index = sort.Search(len(prevVars), func(i int) bool {
-				return util.ComparePos(start, prevVars[i].start) < 0
+				return protocol.ComparePos(start, prevVars[i].start) < 0
 			})
 		}
 		prevVars = append(prevVars[:index], append([]contextualVariable{newCtxVar}, prevVars[index:]...)...)
@@ -179,7 +178,7 @@ func (vt *VariableTable) add(a analyser, variable *Variable, start protocol.Posi
 func (vt *VariableTable) get(name string, pos protocol.Position) *Variable {
 	if vars, ok := vt.variables[name]; ok {
 		index := sort.Search(len(vars), func(i int) bool {
-			return util.ComparePos(pos, vars[i].start) < 0
+			return protocol.ComparePos(pos, vars[i].start) < 0
 		})
 		index--
 		if index >= 0 && index < len(vars) {
@@ -208,7 +207,7 @@ func (vt *VariableTable) GetVariables(pos protocol.Position) []*Variable {
 			continue
 		}
 		index := sort.Search(len(vars), func(i int) bool {
-			return util.ComparePos(pos, vars[i].start) < 0
+			return protocol.ComparePos(pos, vars[i].start) < 0
 		})
 		index--
 		if index >= 0 && index < len(vars) {

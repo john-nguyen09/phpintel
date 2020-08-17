@@ -10,7 +10,6 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -151,7 +150,7 @@ func TestUnusedImports(t *testing.T) {
 		results = append(results, item.locationRange)
 	}
 	sort.Slice(results, func(i, j int) bool {
-		return util.CompareRange(results[i], results[j]) < 0
+		return protocol.CompareRange(results[i], results[j]) < 0
 	})
 	assert.Equal(t, []protocol.Range{
 		{Start: protocol.Position{Line: 4, Character: 4}, End: protocol.Position{Line: 4, Character: 14}},

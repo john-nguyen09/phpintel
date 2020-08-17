@@ -31,7 +31,7 @@ func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSy
 	if store == nil {
 		return symbols, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return symbols, nil
 	}

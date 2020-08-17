@@ -2,7 +2,7 @@ package analysis
 
 import (
 	"bytes"
-	"io/ioutil"
+	"context"
 	"log"
 	"strconv"
 	"strings"
@@ -14,7 +14,6 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
 	"github.com/john-nguyen09/phpintel/util"
-	putil "github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -83,6 +82,7 @@ func (s *entry) bytes() []byte {
 // for querying symbols
 type Store struct {
 	uri       protocol.DocumentURI
+	FS        protocol.FS
 	db        storage.DB
 	fEngine   *fuzzyEngine
 	refIndex  *referenceIndex
@@ -160,7 +160,7 @@ func (s SearchOptions) IsLimitReached() bool {
 
 // NewStore creates a store with the disk storage or returns an error
 // if the disk storage cannot be created
-func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
+func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Store, error) {
 	db, err := storage.NewDisk(storePath)
 	stubbers := stub.GetStubbers()
 	if err != nil {
@@ -168,6 +168,7 @@ func NewStore(uri protocol.DocumentURI, storePath string) (*Store, error) {
 	}
 	store := &Store{
 		uri:       uri,
+		FS:        fs,
 		db:        db,
 		fEngine:   newFuzzyEngine(db),
 		refIndex:  newReferenceIndex(db),
@@ -246,15 +247,10 @@ func (s *Store) LoadStubs() {
 
 // GetOrCreateDocument checks if the store contains the given URI or
 // create a new document with the given URI
-func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
+func (s *Store) GetOrCreateDocument(ctx context.Context, uri protocol.DocumentURI) *Document {
 	var document *Document
 	if value, ok := s.documents.Get(uri); !ok {
-		filePath, err := putil.UriToPath(uri)
-		if err != nil {
-			log.Printf("GetOrCreateDocument error: %v", err)
-			return nil
-		}
-		data, err := ioutil.ReadFile(filePath)
+		data, err := s.FS.ReadFile(ctx, uri)
 		if err != nil {
 			log.Printf("GetOrCreateDocument error: %v", err)
 			return nil
@@ -269,8 +265,8 @@ func (s *Store) GetOrCreateDocument(uri protocol.DocumentURI) *Document {
 
 // OpenDocument loads and index the document with the given URI, at the same time
 // marks it as open to retain it on the memory
-func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
-	document := s.GetOrCreateDocument(uri)
+func (s *Store) OpenDocument(ctx context.Context, uri protocol.DocumentURI) *Document {
+	document := s.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		log.Printf("Document %s not found", uri)
 		return nil
@@ -288,8 +284,8 @@ func (s *Store) OpenDocument(uri protocol.DocumentURI) *Document {
 
 // CloseDocument syncs the document with the given URI and marks
 // it as close to release memory
-func (s *Store) CloseDocument(uri protocol.DocumentURI) {
-	document := s.GetOrCreateDocument(uri)
+func (s *Store) CloseDocument(ctx context.Context, uri protocol.DocumentURI) {
+	document := s.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		log.Printf("document %s not found", uri)
 		return
@@ -333,9 +329,8 @@ func (s *Store) DeleteFolder(uri protocol.DocumentURI) {
 // CompareAndIndexDocument compares the file's hash with the stored one
 // on the disk, and if they are not matched load the document and sync.
 // The pointer to the document is returned
-func (s *Store) CompareAndIndexDocument(filePath string) *Document {
-	uri := putil.PathToUri(filePath)
-	document := s.GetOrCreateDocument(uri)
+func (s *Store) CompareAndIndexDocument(ctx context.Context, uri string) *Document {
+	document := s.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil
 	}

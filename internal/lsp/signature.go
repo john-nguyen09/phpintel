@@ -8,7 +8,6 @@ import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 )
 
 func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHelpParams) (*protocol.SignatureHelp, error) {
@@ -26,7 +25,7 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	if store == nil {
 		return nil, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil, nil
 	}
@@ -47,7 +46,7 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 
 	ranges := argumentList.GetRanges()
 	signatureHelp.ActiveParameter = sort.Search(len(ranges), func(i int) bool {
-		return util.IsInRange(pos, ranges[i]) <= 0
+		return protocol.IsInRange(pos, ranges[i]) <= 0
 	})
 
 	return signatureHelp, nil
@@ -64,7 +63,7 @@ func (s *Server) documentSignatures(ctx context.Context, params *protocol.TextDo
 	if store == nil {
 		return nil, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil, nil
 	}

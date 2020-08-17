@@ -31,6 +31,7 @@ func (s *Server) initialize(ctx context.Context, params *protocol.InitializePara
 		return nil, jsonrpc2.NewErrorf(jsonrpc2.CodeInvalidRequest, "already initialised")
 	}
 	s.state = serverInitializing
+	s.fileExtensionsSupported = params.Capabilities.XContentProvider && params.Capabilities.XFilesProvider
 	s.stateMu.Unlock()
 
 	s.pendingFolders = params.WorkspaceFolders
@@ -97,7 +98,7 @@ func (s *Server) initialized(ctx context.Context, params *protocol.InitializedPa
 	version := protocol.GetVersion(ctx)
 	log.Println("phpintel server initialised. Version: " + version)
 	for _, folder := range s.pendingFolders {
-		s.store.addView(s, ctx, folder.URI)
+		s.store.addView(ctx, s, folder.URI)
 	}
 	return nil
 }

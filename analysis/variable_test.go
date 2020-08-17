@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -120,7 +119,7 @@ $callback = function() use ($var2) {
 			results = append(results, unusedVar.GetLocation())
 		}
 		sort.SliceStable(results, func(i, j int) bool {
-			return util.CompareRange(results[i].Range, results[j].Range) < 0
+			return protocol.CompareRange(results[i].Range, results[j].Range) < 0
 		})
 		assert.Equal(t, []protocol.Location{
 			{URI: "test1", Range: protocol.Range{

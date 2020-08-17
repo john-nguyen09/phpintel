@@ -3,6 +3,7 @@ package lsp
 import (
 	"context"
 	"log"
+	"net/url"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -11,14 +12,14 @@ import (
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/karrick/godirwalk"
 )
 
 const numCreators int = 2
 const numDeletors int = 1
 
-type CreatorJob struct {
-	filePath  string
+type creatorJob struct {
+	uri       string
+	ctx       context.Context
 	waitGroup *sync.WaitGroup
 }
 
@@ -26,16 +27,16 @@ type workspaceStore struct {
 	server     *Server
 	ctx        context.Context
 	stores     []*analysis.Store
-	createJobs chan CreatorJob
+	createJobs chan creatorJob
 	deleteJobs chan string
 }
 
-func newWorkspaceStore(server *Server, ctx context.Context) *workspaceStore {
+func newWorkspaceStore(ctx context.Context, server *Server) *workspaceStore {
 	workspaceStore := &workspaceStore{
 		server:     server,
 		ctx:        ctx,
 		stores:     []*analysis.Store{},
-		createJobs: make(chan CreatorJob),
+		createJobs: make(chan creatorJob),
 		deleteJobs: make(chan string),
 	}
 	for i := 0; i < numCreators; i++ {
@@ -49,15 +50,15 @@ func newWorkspaceStore(server *Server, ctx context.Context) *workspaceStore {
 
 func (s *workspaceStore) newCreator(id int) {
 	for job := range s.createJobs {
-		uri := util.PathToUri(job.filePath)
-		store := s.getStore(uri)
+		store := s.getStore(job.uri)
 		if store == nil {
 			if job.waitGroup != nil {
 				job.waitGroup.Done()
 			}
+			log.Printf("workspaceStore.newCreator store not found: %s", job.uri)
 			continue
 		}
-		s.addDocument(store, job.filePath)
+		store.CompareAndIndexDocument(job.ctx, job.uri)
 		if job.waitGroup != nil {
 			job.waitGroup.Done()
 		}
@@ -80,95 +81,116 @@ func (s *workspaceStore) close() {
 	}
 }
 
-func (s *workspaceStore) addView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
-	storagePath := filepath.Join(getDataDir(), util.GetURIID(uri))
-	store, err := analysis.NewStore(uri, storagePath)
+func (s *workspaceStore) addView(ctx context.Context, server *Server, uri protocol.DocumentURI) {
+	u, err := url.Parse(uri)
 	if err != nil {
-		// TODO: don't crash the whole server just because 1
-		// folder fails to grasp the storagePath
-		panic(err)
+		log.Printf("%s: %v", uri, err)
+		return
+	}
+	var (
+		fs       protocol.FS
+		rootPath string = uri
+	)
+	switch {
+	case s.server.fileExtensionsSupported:
+		fs = protocol.NewLSPFS(s.server.Conn)
+	case u.Scheme == "file":
+		var err error
+		fs = protocol.NewFileFS()
+		rootPath, err = util.URIToPath(uri)
+		if err != nil {
+			log.Printf("addView: %s - %v", uri, err)
+			return
+		}
+	}
+	if fs == nil {
+		log.Printf("No FS found for: %s", uri)
+		return
+	}
+	storagePath := filepath.Join(getDataDir(), util.GetURIID(uri))
+	store, err := analysis.NewStore(fs, uri, storagePath)
+	if err != nil {
+		log.Printf("%s: %v", uri, err)
+		return
 	}
 	store.Migrate(protocol.GetVersion(ctx))
 	store.LoadStubs()
 	s.stores = append(s.stores, store)
-	folderPath, err := util.UriToPath(uri)
 	if err != nil {
 		log.Printf("addView error: %v", err)
 		return
 	}
-	s.indexFolder(store, folderPath)
-	err = s.registerFileWatcher(folderPath, server, ctx)
+	s.indexFolder(ctx, store, rootPath)
+	err = s.registerFileWatcher(ctx, uri, server)
 	if err != nil {
 		log.Printf("addView error: %v", err)
 	}
 }
 
-func (s *workspaceStore) removeView(server *Server, ctx context.Context, uri protocol.DocumentURI) {
+func (s *workspaceStore) removeView(ctx context.Context, server *Server, uri protocol.DocumentURI) {
 	store := s.getStore(uri)
 	if store == nil {
 		return
 	}
 	defer store.Close()
 	s.removeStore(store.GetURI())
-	folderPath, err := util.UriToPath(uri)
-	if err != nil {
-		log.Printf("removeView error: %v", err)
-	}
-	s.unregisterFileWatcher(folderPath, server, ctx)
+	s.unregisterFileWatcher(ctx, uri, server)
 }
 
-func getFileWatcherID(path string) string {
-	return path + "-fileWatcher"
+func getFileWatcherID(base string) string {
+	return base + "-fileWatcher"
 }
 
-func (s *workspaceStore) registerFileWatcher(path string, server *Server, ctx context.Context) error {
+func (s *workspaceStore) registerFileWatcher(ctx context.Context, base string, server *Server) error {
 	// fileExtensions := "php"
 	regParams := protocol.DidChangeWatchedFilesRegistrationOptions{
 		Watchers: []protocol.FileSystemWatcher{{
-			GlobPattern: path + "/**/*",
+			GlobPattern: base + "/**/*",
 			Kind:        int(protocol.WatchCreate + protocol.WatchDelete),
 		}},
 	}
 	return server.client.RegisterCapability(ctx, &protocol.RegistrationParams{
 		Registrations: []protocol.Registration{
-			protocol.Registration{
-				ID: getFileWatcherID(path), Method: "workspace/didChangeWatchedFiles", RegisterOptions: regParams,
+			{
+				ID: getFileWatcherID(base), Method: "workspace/didChangeWatchedFiles", RegisterOptions: regParams,
 			},
 		},
 	})
 }
 
-func (s *workspaceStore) unregisterFileWatcher(path string, server *Server, ctx context.Context) error {
+func (s *workspaceStore) unregisterFileWatcher(ctx context.Context, path string, server *Server) error {
 	return server.client.UnregisterCapability(ctx, &protocol.UnregistrationParams{
 		Unregisterations: []protocol.Unregistration{
-			protocol.Unregistration{
+			{
 				ID: getFileWatcherID(path), Method: "workspace/didChangeWatchedFiles",
 			},
 		},
 	})
 }
 
-func (s *workspaceStore) indexFolder(store *analysis.Store, folderPath string) {
+func (s *workspaceStore) indexFolder(ctx context.Context, store *analysis.Store, rootPath string) {
 	var waitGroup sync.WaitGroup
 	store.PrepareForIndexing()
 	go func() {
 		log.Println("Start indexing")
 		start := time.Now()
 		count := 0
-		godirwalk.Walk(folderPath, &godirwalk.Options{
-			Callback: func(path string, de *godirwalk.Dirent) error {
-				if !de.IsDir() && strings.HasSuffix(path, ".php") {
+		if docs, err := store.FS.ListFiles(ctx, rootPath); err == nil {
+			for _, doc := range docs {
+				if strings.HasSuffix(doc.URI, ".php") {
 					count++
 					waitGroup.Add(1)
-					s.createJobs <- CreatorJob{
-						filePath:  path,
+					s.createJobs <- creatorJob{
+						uri:       store.FS.ConvertToURI(doc.URI),
+						ctx:       ctx,
 						waitGroup: &waitGroup,
 					}
 				}
-				return nil
-			},
-			Unsorted: true,
-		})
+			}
+		} else {
+			log.Printf("indexFolder: %v", err)
+			return
+		}
 		waitGroup.Wait()
 		store.FinishIndexing()
 		elapsed := time.Since(start)
@@ -195,10 +217,6 @@ func (s *workspaceStore) removeStore(uri protocol.DocumentURI) {
 	}
 }
 
-func (s *workspaceStore) addDocument(store *analysis.Store, filePath string) {
-	store.CompareAndIndexDocument(filePath)
-}
-
 func (s *workspaceStore) removeDocument(store *analysis.Store, uri string) {
 	store.DeleteDocument(uri)
 	store.DeleteFolder(uri)
@@ -210,7 +228,7 @@ func (s *workspaceStore) changeDocument(ctx context.Context, params *protocol.Di
 	if store == nil {
 		return nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil
 	}

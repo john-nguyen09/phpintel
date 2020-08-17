@@ -14,7 +14,7 @@ func (s *Server) hover(ctx context.Context, params *protocol.HoverParams) (*prot
 	if store == nil {
 		return nil, nil
 	}
-	document := store.GetOrCreateDocument(uri)
+	document := store.GetOrCreateDocument(ctx, uri)
 	if document == nil {
 		return nil, nil
 	}

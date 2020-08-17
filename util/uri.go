@@ -9,7 +9,8 @@ import (
 	"strings"
 )
 
-func UriToPath(uri string) (string, error) {
+// URIToPath convert URI to file path
+func URIToPath(uri string) (string, error) {
 	urlIns, err := url.ParseRequestURI(uri)
 
 	if err != nil {
@@ -17,7 +18,7 @@ func UriToPath(uri string) (string, error) {
 	}
 
 	if urlIns.Scheme != "file" {
-		HandleError(errors.New("Cannot convert non-file URI"))
+		return "", errors.New("Cannot convert non-file URI")
 	}
 	filePath, err := url.QueryUnescape(urlIns.Path)
 
@@ -35,7 +36,8 @@ func UriToPath(uri string) (string, error) {
 	return filePath, nil
 }
 
-func PathToUri(path string) string {
+// PathToURI converts file path to URI
+func PathToURI(path string) string {
 	urlIns := new(url.URL)
 	path = strings.Replace(path, "\\", "/", -1)
 	parts := strings.Split(path, "/")
@@ -57,6 +59,7 @@ func PathToUri(path string) string {
 	return urlIns.String()
 }
 
+// GetURIID shortens the URI but still readable
 func GetURIID(uri string) string {
 	u, err := url.Parse(uri)
 	h := md5.New()
@@ -72,12 +75,14 @@ func GetURIID(uri string) string {
 	}
 	parts, lastPart := parts[:len(parts)-1], parts[len(parts)-1]
 	result := ""
-	for _, part := range parts[0 : len(parts)-1] {
-		r := []rune(part)
-		if len(r) == 0 {
-			continue
+	if len(parts) > 0 {
+		for _, part := range parts[0 : len(parts)-1] {
+			r := []rune(part)
+			if len(r) == 0 {
+				continue
+			}
+			result += string(r[0])
 		}
-		result += string(r[0])
 	}
 	result += "-" + lastPart + "-" + hash[:8]
 	return result

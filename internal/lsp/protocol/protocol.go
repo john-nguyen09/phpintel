@@ -42,8 +42,12 @@ func sendParseError(ctx context.Context, req *jsonrpc2.Request, err error) {
 	if _, ok := err.(*jsonrpc2.Error); !ok {
 		err = jsonrpc2.NewErrorf(jsonrpc2.CodeParseError, "%v", err)
 	}
+	if req.IsNotify() {
+		log.Printf("sendParseError %s: %v", req.Method, err)
+		return
+	}
 	if err := req.Reply(ctx, nil, err); err != nil {
-		log.Println(err)
+		log.Printf("sendParseError %s req.Reply failed: %v", req.Method, err)
 	}
 }
 
@@ -835,6 +839,10 @@ type ClientCapabilities struct {
 	 * capability as well.
 	 */
 	DynamicRegistration bool `json:"dynamicRegistration,omitempty"`
+
+	XFilesProvider bool `json:"xfilesProvider,omitempty"`
+
+	XContentProvider bool `json:"xcontentProvider,omitempty"`
 }
 
 /*StaticRegistrationOptions defined:
@@ -4673,3 +4681,13 @@ type LSPMessageType = string
 type ProgressToken = interface{} // number | string
 // TraceValues is a type
 type TraceValues = string
+
+// FilesParams are params of xfiles request
+type FilesParams struct {
+	Base string `json:"base,omitempty"`
+}
+
+// ContentParams are params of xcontent request
+type ContentParams struct {
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}

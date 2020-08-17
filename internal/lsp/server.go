@@ -20,7 +20,7 @@ import (
 // stream is closed.
 func NewServer(ctx context.Context, stream jsonrpc2.Stream) (context.Context, *Server) {
 	s := &Server{}
-	store := newWorkspaceStore(s, ctx)
+	store := newWorkspaceStore(ctx, s)
 	s.store = store
 	ctx, s.Conn, s.client = protocol.NewServer(ctx, stream, s)
 	return ctx, s
@@ -69,7 +69,8 @@ type Server struct {
 	state   serverState
 	store   *workspaceStore
 
-	pendingFolders []protocol.WorkspaceFolder
+	pendingFolders          []protocol.WorkspaceFolder
+	fileExtensionsSupported bool
 }
 
 func baseSearchOptions() analysis.SearchOptions {
@@ -101,10 +102,10 @@ func (s *Server) Exit(ctx context.Context) error {
 
 func (s *Server) DidChangeWorkspaceFolders(ctx context.Context, params *protocol.DidChangeWorkspaceFoldersParams) error {
 	for _, added := range params.Event.Added {
-		s.store.addView(s, ctx, added.URI)
+		s.store.addView(ctx, s, added.URI)
 	}
 	for _, removed := range params.Event.Removed {
-		s.store.removeView(s, ctx, removed.URI)
+		s.store.removeView(ctx, s, removed.URI)
 	}
 	return nil
 }
@@ -234,7 +235,7 @@ func (s *Server) OnTypeFormatting(context.Context, *protocol.DocumentOnTypeForma
 }
 
 func (s *Server) Rename(ctx context.Context, params *protocol.RenameParams) (*protocol.WorkspaceEdit, error) {
-	return s.rename(params)
+	return s.rename(ctx, params)
 }
 
 func (s *Server) Declaration(context.Context, *protocol.DeclarationParams) ([]protocol.DeclarationLink, error) {

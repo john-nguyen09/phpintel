@@ -322,7 +322,7 @@ func (s *Document) GetVariableTableAt(pos protocol.Position) *VariableTable {
 			return vt
 		}
 		for _, child := range vt.children {
-			if util.IsInRange(pos, child.locationRange) == 0 {
+			if protocol.IsInRange(pos, child.locationRange) == 0 {
 				return traverseAndFind(child)
 			}
 		}
@@ -360,7 +360,7 @@ func (s *Document) ClassAt(pos protocol.Position) Symbol {
 	var found Symbol
 	tra := newTraverser()
 	tra.traverseDocument(s, func(tra *traverser, s Symbol) {
-		relativeRange := util.IsInRange(pos, s.GetLocation().Range)
+		relativeRange := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativeRange > 0 {
 			tra.stopDescent = true
 			return
@@ -408,7 +408,7 @@ func (s *Document) GetClassScopeAtSymbol(symbol Symbol) string {
 
 func (s *Document) getClassAtPos(pos protocol.Position) Symbol {
 	index := sort.Search(len(s.classStack), func(i int) bool {
-		return util.IsInRange(pos, s.classStack[i].GetLocation().Range) <= 0
+		return protocol.IsInRange(pos, s.classStack[i].GetLocation().Range) <= 0
 	})
 	if index >= len(s.classStack) {
 		return nil
@@ -440,8 +440,8 @@ func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	var result HasTypes = nil
 	t := newTraverser()
 	t.traverseDocument(s, func(t *traverser, s Symbol) {
-		relativePos := util.IsInRange(pos, s.GetLocation().Range)
-		relativeEndPos := util.ComparePos(pos, s.GetLocation().Range.End)
+		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
+		relativeEndPos := protocol.ComparePos(pos, s.GetLocation().Range.End)
 		if relativePos == 0 || (relativePos > 0 && relativeEndPos == 0) {
 			if h, ok := s.(HasTypes); ok {
 				result = h
@@ -472,7 +472,7 @@ func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	var result HasTypes = nil
 	t := newTraverser()
 	t.traverseDocument(s, func(t *traverser, s Symbol) {
-		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativePos > 0 {
 			if h, ok := s.(HasTypes); ok {
 				result = h
@@ -503,7 +503,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 	var argumentList *ArgumentList = nil
 	t := newTraverser()
 	t.traverseDocument(s, func(t *traverser, s Symbol) {
-		relativePos := util.IsInRange(pos, s.GetLocation().Range)
+		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativePos == 0 {
 			if args, ok := s.(*ArgumentList); ok {
 				argumentList = args
@@ -642,7 +642,7 @@ func (s *Document) currImportTable() *ImportTable {
 // ImportTableAtPos finds the importTable at the position
 func (s *Document) ImportTableAtPos(pos protocol.Position) *ImportTable {
 	index := sort.Search(len(s.importTables), func(i int) bool {
-		return util.ComparePos(pos, s.importTables[i].start) <= 0
+		return protocol.ComparePos(pos, s.importTables[i].start) <= 0
 	})
 	if index == 0 {
 		return s.importTables[0]

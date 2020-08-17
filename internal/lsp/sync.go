@@ -18,7 +18,7 @@ func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocume
 	if store == nil {
 		return nil
 	}
-	document := store.OpenDocument(uri)
+	document := store.OpenDocument(ctx, uri)
 	if document != nil {
 		s.provideDiagnostics(ctx, store, document)
 	}
@@ -35,7 +35,7 @@ func (s *Server) didClose(ctx context.Context, params *protocol.DidCloseTextDocu
 	if store == nil {
 		return nil
 	}
-	store.CloseDocument(uri)
+	store.CloseDocument(ctx, uri)
 	return nil
 }
 
@@ -49,7 +49,7 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 				continue
 			}
 
-			filePath, err := util.UriToPath(change.URI)
+			filePath, err := util.URIToPath(change.URI)
 			if err != nil {
 				log.Printf("didChangeWatchedFiles error: %v", err)
 				continue
@@ -65,8 +65,9 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 
 			if matched && !stats.IsDir() {
 				wg.Add(1)
-				s.store.createJobs <- CreatorJob{
-					filePath:  filePath,
+				s.store.createJobs <- creatorJob{
+					uri:       change.URI,
+					ctx:       ctx,
 					waitGroup: &wg,
 				}
 				continue
@@ -80,8 +81,9 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 				Callback: func(path string, de *godirwalk.Dirent) error {
 					if !de.IsDir() && strings.HasSuffix(path, ".php") {
 						wg.Add(1)
-						s.store.createJobs <- CreatorJob{
-							filePath:  path,
+						s.store.createJobs <- creatorJob{
+							uri:       util.PathToURI(path),
+							ctx:       ctx,
 							waitGroup: &wg,
 						}
 					}
