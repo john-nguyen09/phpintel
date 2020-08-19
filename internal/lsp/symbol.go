@@ -9,13 +9,13 @@ import (
 
 func toDocumentSymbolRecursive(symbol analysis.Symbol) protocol.DocumentSymbol {
 	docSymbol, _ := symbolToProtocolDocumentSymbol(symbol)
-	if docSymbol.Kind == 0 {
-		return docSymbol
-	}
 	if block, ok := symbol.(analysis.BlockSymbol); ok {
 		for _, child := range block.GetChildren() {
 			childDocSymbol := toDocumentSymbolRecursive(child)
 			if childDocSymbol.Kind == 0 {
+				if len(childDocSymbol.Children) > 0 {
+					docSymbol.Children = append(docSymbol.Children, childDocSymbol.Children...)
+				}
 				continue
 			}
 			docSymbol.Children = append(docSymbol.Children, childDocSymbol)
@@ -41,6 +41,9 @@ func (s *Server) documentSymbol(ctx context.Context, params *protocol.DocumentSy
 	for _, child := range document.Children {
 		docSymbol := toDocumentSymbolRecursive(child)
 		if docSymbol.Kind == 0 {
+			if len(docSymbol.Children) > 0 {
+				results = append(results, docSymbol.Children...)
+			}
 			continue
 		}
 		results = append(results, docSymbol)

@@ -97,6 +97,7 @@ func init() {
 		phrase.GlobalDeclaration:                   newGlobalDeclaration,
 		phrase.NamespaceUseDeclaration:             processNamespaceUseDeclaration,
 		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
+		phrase.AnonymousClassDeclaration:           newAnonymousClass,
 		phrase.DocumentComment:                     newPhpDocFromNode,
 	}
 }

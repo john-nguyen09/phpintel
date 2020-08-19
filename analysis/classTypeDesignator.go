@@ -13,16 +13,18 @@ type ClassTypeDesignator struct {
 
 func newClassTypeDesignator(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	classTypeDesignator := &ClassTypeDesignator{}
-	document.addSymbol(classTypeDesignator)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
 			case phrase.ClassTypeDesignator:
+				document.addSymbol(classTypeDesignator)
 				classTypeDesignator.analyseNode(a, document, p)
 			case phrase.ArgumentExpressionList:
 				newArgumentList(a, document, p)
+			case phrase.AnonymousClassDeclaration:
+				scanNode(a, document, p)
 			}
 		}
 		child = traverser.Advance()

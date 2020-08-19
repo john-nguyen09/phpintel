@@ -139,6 +139,9 @@ func (s *Property) GetKey() string {
 }
 
 func (s *Property) GetIndexableName() string {
+	if len(s.Name) == 0 {
+		return ""
+	}
 	return string([]rune(s.Name)[1:])
 }
 
