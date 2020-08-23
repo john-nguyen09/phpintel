@@ -35,7 +35,6 @@ func setupStore(uri string, name string) *Store {
 		uri:       uri,
 		db:        db,
 		FS:        protocol.NewFileFS(),
-		fEngine:   newFuzzyEngine(db),
 		refIndex:  newReferenceIndex(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),

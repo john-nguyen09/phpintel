@@ -124,5 +124,5 @@ func TestStoreClose(t *testing.T) {
 		document.Load()
 		store.SyncDocument(document)
 	}
-	store.fEngine.close()
+	store.Close()
 }
