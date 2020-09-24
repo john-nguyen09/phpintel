@@ -73,6 +73,7 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.ForInitialiser:                 empty,
 	phrase.ForControl:                     empty,
 	phrase.ForEndOfLoop:                   empty,
+	phrase.DoStatement:                    empty,
 }
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{

@@ -22,6 +22,7 @@ func readMemberName(a analyser, document *Document, traverser *util.Traverser) (
 	memberName := traverser.Advance()
 	name := ""
 	if p, ok := memberName.(*phrase.Phrase); ok && p.Type == phrase.MemberName {
+		location = document.GetNodeLocation(p)
 		for _, child := range p.Children {
 			if t, ok := child.(*lexer.Token); ok && t.Type == lexer.Name {
 				name = document.getTokenText(t)
@@ -35,7 +36,6 @@ func readMemberName(a analyser, document *Document, traverser *util.Traverser) (
 				return name, location
 			}
 		}
-		location = document.GetNodeLocation(p)
 	}
 	return name, location
 }

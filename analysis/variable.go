@@ -207,7 +207,7 @@ func (vt *VariableTable) GetVariables(pos protocol.Position) []*Variable {
 			continue
 		}
 		index := sort.Search(len(vars), func(i int) bool {
-			return protocol.ComparePos(pos, vars[i].start) < 0
+			return protocol.ComparePos(vars[i].start, pos) >= 0
 		})
 		index--
 		if index >= 0 && index < len(vars) {

@@ -32,8 +32,8 @@ github.com/hashicorp/golang-lru v0.5.0 h1:CL2msUPvZTLb5O648aiLNJw3hnBxN2+1Jq8rCO
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/jessevdk/go-flags v1.4.0 h1:4IU2WS7AumrZ/40jfhf4QVDMsQwqA7VEHozFRrGARJA=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
-github.com/jmhodges/levigo v1.0.0 h1:q5EC36kV79HWeTBWsod3mG11EgStG3qArTKcvlksN1U=
-github.com/jmhodges/levigo v1.0.0/go.mod h1:Q6Qx+uH3RAqyK4rFQroq9RL7mdkABMcfhEI+nNuzMJQ=
+github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96 h1:HrOq/Ns3ctivzrE33VWTbPfkErqOzXwikKxZ/IvWdMY=
+github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96/go.mod h1:dM7ihgFM8Do6WGIfOXWPgpJ+4bKGR/4ZkYh8HKDdFy4=
 github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd h1:/uJ/KMlhIpHrqhwgHGvymyrqJqGo1womQPicTA1jfFs=
 github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd/go.mod h1:lF0XnkDQXyyfjOBwBjNTFyg6uQSKT6ZaWB7yhwuWE5c=
 github.com/john-nguyen09/go-phpparser v0.0.0-20200519064129-f8e3246984b4 h1:Zs/2hMiY1CxkoGYLxUE9nhbx8TH+U9nLj5ZtQyeFpEU=

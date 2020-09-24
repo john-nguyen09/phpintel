@@ -187,9 +187,14 @@ func variableCompletion(ctx *completionContext, resolveCtx analysis.ResolveConte
 		}
 
 		variable.Resolve(resolveCtx)
+		insertText := variable.Name
+		if len(variable.Name) >= 1 {
+			insertText = variable.Name[1:]
+		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.VariableCompletion,
 			Label:         variable.Name,
+			InsertText:    insertText,
 			Documentation: descriptionToMarkupContent(variable.GetDescription()),
 			Detail:        variable.GetDetail(),
 		})
