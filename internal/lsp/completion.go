@@ -92,7 +92,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		case phrase.ConstantAccessExpression:
 			completionList = nameCompletion(completionCtx, symbol, word)
 		case phrase.ClassBaseClause:
-			completionList = classCompletion(completionCtx, symbol, word)
+			completionList = classCompletion(completionCtx, word)
 		case phrase.InterfaceBaseClause:
 			completionList = interfaceCompletion(completionCtx, word)
 		case phrase.QualifiedNameList:
@@ -159,7 +159,9 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	}
 	switch s := symbol.(type) {
 	case *analysis.ClassTypeDesignator:
-		completionList = classCompletion(completionCtx, s, s.Name)
+		completionList = classCompletion(completionCtx, s.Name)
+	case *analysis.ClassAccess:
+		completionList = typeCompletion(completionCtx, s.Name)
 	case *analysis.TypeDeclaration:
 		completionList = typeCompletion(completionCtx, s.Name)
 	}
@@ -283,7 +285,7 @@ func nameCompletion(ctx *completionContext, symbol analysis.HasTypes, word strin
 	return completionList
 }
 
-func classCompletion(ctx *completionContext, symbol analysis.HasTypes, word string) *protocol.CompletionList {
+func classCompletion(ctx *completionContext, word string) *protocol.CompletionList {
 	completionList := &protocol.CompletionList{
 		IsIncomplete: false,
 	}
