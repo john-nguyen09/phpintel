@@ -1,0 +1,82 @@
+([]*analysis.ClassAccess) (len=4) {
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=18) "\\NotFoundException",
+            original: (string) (len=18) "\\NotFoundException",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 6:9-6:27
+      },
+      Name: (string) (len=18) "\\NotFoundException"
+    },
+    isResolved: (bool) false
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=14) "\\HttpException",
+            original: (string) (len=14) "\\HttpException",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 7:9-7:23
+      },
+      Name: (string) (len=14) "\\HttpException"
+    },
+    isResolved: (bool) false
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "\\Exception",
+            original: (string) (len=9) "Exception",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 7:26-7:35
+      },
+      Name: (string) (len=9) "Exception"
+    },
+    isResolved: (bool) false
+  }),
+  (*analysis.ClassAccess)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) (len=1) {
+          (analysis.TypeString) {
+            fqn: (string) (len=10) "\\Throwable",
+            original: (string) (len=10) "\\Throwable",
+            arrayLevel: (int) 0
+          }
+        }
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:9-8:19
+      },
+      Name: (string) (len=10) "\\Throwable"
+    },
+    isResolved: (bool) false
+  })
+}

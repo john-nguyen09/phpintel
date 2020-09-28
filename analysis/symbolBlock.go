@@ -100,6 +100,7 @@ func init() {
 		phrase.AnonymousFunctionCreationExpression: newAnonymousFunction,
 		phrase.AnonymousClassDeclaration:           newAnonymousClass,
 		phrase.DocumentComment:                     newPhpDocFromNode,
+		phrase.CatchNameList:                       processCatchNameList,
 	}
 }
 
