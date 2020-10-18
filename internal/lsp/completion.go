@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
@@ -16,6 +17,7 @@ type completionContext struct {
 	doc   *analysis.Document
 	query *analysis.Query
 	pos   protocol.Position
+	token lexer.Token
 }
 
 type incompleteMemberAccess struct {
@@ -71,12 +73,20 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 	pos := params.Position
 	q := analysis.NewQuery(store)
 	resolveCtx := analysis.NewResolveContext(q, document)
-	completionCtx := &completionContext{document, q, pos}
+	completionCtx := &completionContext{
+		doc:   document,
+		query: q,
+		pos:   pos,
+	}
 	symbol := document.HasTypesAtPos(pos)
 	word := document.WordAtPos(pos)
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
+	completionCtx.token = nodes.Token()
 	// log.Printf("Completion: %s %v %T %s, kind: %v", word, pos, symbol, nodes, params.Context.TriggerKind)
 	parent := nodes.Parent()
+	if parent.Type == phrase.ScopedMemberName {
+		parent = nodes.Parent()
+	}
 	switch parent.Type {
 	case phrase.SimpleVariable:
 		if nodes.Parent().Type == phrase.ScopedMemberName {
@@ -326,14 +336,18 @@ func scopedAccessCompletion(ctx *completionContext, word string, access analysis
 		ps := analysis.EmptyInheritedProps()
 		ccs := analysis.EmptyInheritedClassConst()
 		for _, class := range ctx.query.GetClasses(scopeTypeFQN) {
-			ms.Merge(ctx.query.SearchClassMethods(class, word, ms.SearchedFQNs))
 			ps.Merge(ctx.query.SearchClassProps(class, word, ps.SearchedFQNs))
-			ccs.Merge(ctx.query.SearchClassClassConsts(class, word, ccs.SearchedFQNs))
+			if ctx.token.Type != lexer.VariableName && ctx.token.Type != lexer.Dollar {
+				ms.Merge(ctx.query.SearchClassMethods(class, word, ms.SearchedFQNs))
+				ccs.Merge(ctx.query.SearchClassClassConsts(class, word, ccs.SearchedFQNs))
+			}
 		}
 		for _, intf := range ctx.query.GetInterfaces(scopeTypeFQN) {
-			ms.Merge(ctx.query.SearchInterfaceMethods(intf, word, ms.SearchedFQNs))
 			ps.Merge(ctx.query.SearchInterfaceProps(intf, word, ps.SearchedFQNs))
-			ccs.Merge(ctx.query.SearchInterfaceClassConsts(intf, word, ccs.SearchedFQNs))
+			if ctx.token.Type != lexer.VariableName && ctx.token.Type != lexer.Dollar {
+				ms.Merge(ctx.query.SearchInterfaceMethods(intf, word, ms.SearchedFQNs))
+				ccs.Merge(ctx.query.SearchInterfaceClassConsts(intf, word, ccs.SearchedFQNs))
+			}
 		}
 		methods = analysis.MergeMethodWithScope(methods, ms.ReduceStatic(currentClass, access))
 		props = analysis.MergePropWithScope(props, ps.ReduceStatic(currentClass, access))

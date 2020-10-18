@@ -517,9 +517,14 @@ func methodToCompletionItem(m analysis.MethodWithScope) protocol.CompletionItem 
 
 func propToCompletionItem(p analysis.PropWithScope) protocol.CompletionItem {
 	prop := p.Prop
+	insertText := prop.GetName()
+	if len(prop.GetName()) >= 1 {
+		insertText = insertText[1:]
+	}
 	return protocol.CompletionItem{
 		Kind:          protocol.PropertyCompletion,
 		Label:         prop.GetName(),
+		InsertText:    insertText,
 		Documentation: propDocumentation(p),
 		Detail:        p.Prop.Types.ToString(),
 	}
