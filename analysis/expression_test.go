@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/bradleyjkemp/cupaloy"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,4 +32,30 @@ if ($var1 instanceof DateTime) {
 	doc.Load()
 	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols()[0]).String())
 	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols()[0].GetTypes().ToString())
+}
+
+func TestRequireOnce(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+namespace block_purchasemanagement\payment;
+
+class payment_service {
+    private function ensure_profile_load($user) {
+        global $CFG;
+
+        require_once("$CFG->dirroot/user/profile/lib.php");
+        profile_load_custom_fields($user);
+        return $user;
+    }
+}`))
+	doc.Load()
+	results := []Symbol{}
+	results = append(results, doc.HasTypesAtPos(protocol.Position{
+		Line:      8,
+		Character: 15,
+	}))
+	results = append(results, doc.HasTypesAtPos(protocol.Position{
+		Line:      7,
+		Character: 25,
+	}))
+	cupaloy.SnapshotT(t, results)
 }

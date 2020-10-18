@@ -133,10 +133,12 @@ func processToScanChildren(a analyser, document *Document, node *phrase.Phrase) 
 
 type derivedExpression struct {
 	Expression
+	children    []Symbol
 	hasResolved bool
 }
 
 var _ HasTypes = (*derivedExpression)(nil)
+var _ BlockSymbol = (*derivedExpression)(nil)
 
 func newDerivedExpression(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	derivedExpr := &derivedExpression{
@@ -145,6 +147,7 @@ func newDerivedExpression(a analyser, document *Document, node *phrase.Phrase) (
 		},
 	}
 	document.addSymbol(derivedExpr)
+	document.pushBlock(derivedExpr)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	nodesToScan := []phrase.AstNode{}
@@ -166,6 +169,7 @@ func newDerivedExpression(a analyser, document *Document, node *phrase.Phrase) (
 	for _, node := range nodesToScan {
 		scanNode(a, document, node)
 	}
+	document.popBlock()
 	return derivedExpr, false
 }
 
@@ -188,4 +192,12 @@ func (s *derivedExpression) Resolve(ctx ResolveContext) {
 	if s.Scope != nil {
 		s.Scope.Resolve(ctx)
 	}
+}
+
+func (s *derivedExpression) GetChildren() []Symbol {
+	return s.children
+}
+
+func (s *derivedExpression) addChild(child Symbol) {
+	s.children = append(s.children, child)
 }

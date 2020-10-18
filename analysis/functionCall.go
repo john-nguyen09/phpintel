@@ -41,6 +41,9 @@ func newFunctionCall(a analyser, document *Document, node *phrase.Phrase) (HasTy
 	child := traverser.Advance()
 	firstChild := child
 	if firstChild != nil {
+		if p, ok := firstChild.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
+			scanForExpression(a, document, p)
+		}
 		functionCall.Location = document.GetNodeLocation(firstChild)
 		functionCall.Name = document.GetNodeText(firstChild)
 		document.currImportTable().useFunctionOrClass(NewTypeString(functionCall.Name))

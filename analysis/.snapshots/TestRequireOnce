@@ -1,0 +1,32 @@
+([]analysis.Symbol) (len=2) {
+  (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:8-8:34
+      },
+      Name: (string) (len=26) "profile_load_custom_fields"
+    },
+    hasResolved: (bool) false
+  }),
+  (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 7:22-7:26
+      },
+      Name: (string) (len=4) "$CFG"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  })
+}

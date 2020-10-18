@@ -13,7 +13,8 @@ func newAnonymousClass(a analyser, document *Document, node *phrase.Phrase) Symb
 		Location: document.GetNodeLocation(node),
 	}
 	hash := md5.Sum([]byte(class.Location.URI))
-	class.Name = NewTypeString("anonClass#" + hex.EncodeToString(hash[:6]) + "#" + class.Location.Range.String())
+	class.Name = NewTypeString("anonClass#" + hex.EncodeToString(hash[:6]) + "#" + class.Location.Range.Start.String())
+	class.Name.SetNamespace(document.currImportTable().GetNamespace())
 	document.addClass(class)
 	phpDoc := document.getValidPhpDoc(class.Location)
 	traverser := util.NewTraverser(node)

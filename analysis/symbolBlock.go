@@ -74,6 +74,9 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.ForControl:                     empty,
 	phrase.ForEndOfLoop:                   empty,
 	phrase.DoStatement:                    empty,
+	phrase.DoubleQuotedStringLiteral:      empty,
+	phrase.EncapsulatedVariableList:       empty,
+	phrase.RequireOnceExpression:          empty,
 }
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
