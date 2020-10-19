@@ -29,9 +29,18 @@ func GetParserDiagnostics(document *Document) []protocol.Diagnostic {
 }
 
 func parserErrorToDiagnostic(document *Document, err *phrase.ParseError) protocol.Diagnostic {
-	message := "Unexpected " + err.Type.String() + "."
+	message := ""
+	if err.Unexpected != nil {
+		message += "Unexpected " + err.Unexpected.Type.String() + "."
+	}
 	if err.Expected != lexer.Undefined {
-		message += " Expected " + err.Expected.String() + "."
+		if len(message) != 0 {
+			message += " "
+		}
+		message += "Expected " + err.Expected.String() + "."
+	}
+	if len(message) == 0 {
+		message += "Unknown error"
 	}
 
 	return protocol.Diagnostic{
