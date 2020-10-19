@@ -29,6 +29,27 @@
       },
       Name: (string) ""
     },
+    children: ([]analysis.Symbol) (len=1) {
+      (*analysis.ClassTypeDesignator)({
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) (len=1) {
+              (analysis.TypeString) {
+                fqn: (string) (len=9) "\\DateTime",
+                original: (string) (len=8) "DateTime",
+                arrayLevel: (int) 0
+              }
+            }
+          },
+          Scope: (analysis.HasTypes) <nil>,
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:5-2:13
+          },
+          Name: (string) (len=8) "DateTime"
+        }
+      })
+    },
     hasResolved: (bool) false
   }),
   (*analysis.ClassTypeDesignator)({
@@ -85,6 +106,27 @@
               Range: (protocol.Range) 2:0-2:14
             },
             Name: (string) ""
+          },
+          children: ([]analysis.Symbol) (len=1) {
+            (*analysis.ClassTypeDesignator)({
+              Expression: (analysis.Expression) {
+                Type: (analysis.TypeComposite) {
+                  typeStrings: ([]analysis.TypeString) (len=1) {
+                    (analysis.TypeString) {
+                      fqn: (string) (len=9) "\\DateTime",
+                      original: (string) (len=8) "DateTime",
+                      arrayLevel: (int) 0
+                    }
+                  }
+                },
+                Scope: (analysis.HasTypes) <nil>,
+                Location: (protocol.Location) {
+                  URI: (string) (len=5) "test1",
+                  Range: (protocol.Range) 2:5-2:13
+                },
+                Name: (string) (len=8) "DateTime"
+              }
+            })
           },
           hasResolved: (bool) false
         }),
