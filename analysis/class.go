@@ -123,6 +123,8 @@ func (s *Class) analyseHeader(a analyser, document *Document, classHeader *phras
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {
 			switch p.Type {
+			case phrase.ArgumentExpressionList:
+				scanNode(a, document, p)
 			case phrase.ClassBaseClause:
 				s.extends(a, document, p)
 			case phrase.ClassInterfaceClause:

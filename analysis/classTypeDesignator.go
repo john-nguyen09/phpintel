@@ -9,7 +9,11 @@ import (
 // ClassTypeDesignator represents a reference to object creation (e.g. new TestClass())
 type ClassTypeDesignator struct {
 	Expression
+
+	children []Symbol
 }
+
+var _ BlockSymbol = (*ClassTypeDesignator)(nil)
 
 func newClassTypeDesignator(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
 	classTypeDesignator := &ClassTypeDesignator{}
@@ -24,7 +28,11 @@ func newClassTypeDesignator(a analyser, document *Document, node *phrase.Phrase)
 			case phrase.ArgumentExpressionList:
 				newArgumentList(a, document, p)
 			case phrase.AnonymousClassDeclaration:
+				classTypeDesignator.Location = document.GetNodeLocation(p)
+				document.addSymbol(classTypeDesignator)
+				document.pushBlock(classTypeDesignator)
 				scanNode(a, document, p)
+				document.popBlock()
 			}
 		}
 		child = traverser.Advance()
@@ -57,6 +65,11 @@ func (s *ClassTypeDesignator) analyseNode(a analyser, document *Document, node *
 	}
 }
 
+func (s *ClassTypeDesignator) referenceClass(class *Class) {
+	s.Name = class.Name.GetOriginal()
+	s.Type.add(class.Name)
+}
+
 func (s *ClassTypeDesignator) GetLocation() protocol.Location {
 	return s.Location
 }
@@ -77,4 +90,15 @@ func (s *ClassTypeDesignator) ResolveToHasParams(ctx ResolveContext) []HasParams
 		}
 	}
 	return hasParams
+}
+
+func (s *ClassTypeDesignator) GetChildren() []Symbol {
+	return s.children
+}
+
+func (s *ClassTypeDesignator) addChild(child Symbol) {
+	if class, ok := child.(*Class); ok {
+		s.referenceClass(class)
+	}
+	s.children = append(s.children, child)
 }

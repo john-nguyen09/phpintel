@@ -20,7 +20,7 @@ func TestConstant(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		switch s.(type) {
 		case *Const, *Define:
 			results = append(results, s)

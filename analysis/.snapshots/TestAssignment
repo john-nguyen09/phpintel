@@ -21,7 +21,8 @@
             Range: (protocol.Range) 2:12-2:22
           },
           Name: (string) (len=10) "TestClass1"
-        }
+        },
+        children: ([]analysis.Symbol) <nil>
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -50,7 +51,8 @@
         Range: (protocol.Range) 2:12-2:22
       },
       Name: (string) (len=10) "TestClass1"
-    }
+    },
+    children: ([]analysis.Symbol) <nil>
   }),
   (*analysis.Variable)({
     Expression: (analysis.Expression) {
@@ -128,7 +130,8 @@
                 Range: (protocol.Range) 2:12-2:22
               },
               Name: (string) (len=10) "TestClass1"
-            }
+            },
+            children: ([]analysis.Symbol) <nil>
           }),
           Location: (protocol.Location) {
             URI: (string) (len=5) "test1",
@@ -178,7 +181,8 @@
             Range: (protocol.Range) 2:12-2:22
           },
           Name: (string) (len=10) "TestClass1"
-        }
+        },
+        children: ([]analysis.Symbol) <nil>
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",

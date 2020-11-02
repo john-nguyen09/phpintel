@@ -43,7 +43,7 @@ func TestClass(t *testing.T) {
 	document.Load()
 	classes := []testClass{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if class, ok := s.(*Class); ok {
 			classes = append(classes, toTestClass(class))
 		}

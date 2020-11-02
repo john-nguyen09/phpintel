@@ -439,7 +439,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 	}
 	tra := newTraverser()
 	var referenceEntryInfos []entryInfo
-	tra.traverseDocument(document, func(tra *traverser, child Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, child Symbol, _ []Symbol) {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
 			if key == "" {

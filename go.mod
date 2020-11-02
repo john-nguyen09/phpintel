@@ -8,6 +8,7 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/bep/debounce v1.2.0
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
+	github.com/davecgh/go-spew v1.1.1
 	github.com/dgryski/go-metro v0.0.0-20180109044635-280f6062b5bc // indirect
 	github.com/hashicorp/go-immutable-radix v1.2.0
 	github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96

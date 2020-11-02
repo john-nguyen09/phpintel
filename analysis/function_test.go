@@ -40,7 +40,7 @@ func TestFunction(t *testing.T) {
 	document.Load()
 	results := []testFunction{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if f, ok := s.(*Function); ok {
 			results = append(results, toTestFunction(f))
 		}

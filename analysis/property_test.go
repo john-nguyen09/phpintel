@@ -21,7 +21,7 @@ func TestProperty(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if _, ok := s.(*Property); ok {
 			results = append(results, s)
 		}
@@ -66,7 +66,7 @@ func TestPropertyPhpDoc(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if _, ok := s.(*Property); ok {
 			results = append(results, s)
 		}
@@ -81,7 +81,7 @@ func TestPropertyWithTypes(t *testing.T) {
 	doc.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(doc, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(doc, func(tra *traverser, s Symbol, _ []Symbol) {
 		if _, ok := s.(*Property); ok {
 			results = append(results, s)
 		}

@@ -1,0 +1,77 @@
+(struct { argumentList *analysis.ArgumentList; hasParams []analysis.HasParams }) {
+  argumentList: (*analysis.ArgumentList)({
+    location: (protocol.Location) {
+      URI: (string) (len=5) "test1",
+      Range: (protocol.Range) 5:9-5:11
+    },
+    children: ([]analysis.Symbol) <nil>,
+    arguments: ([]phrase.AstNode) <nil>,
+    argumentRanges: ([]protocol.Range) <nil>,
+    ranges: ([]protocol.Range) (len=1) {
+      (protocol.Range) 5:9-5:11
+    }
+  }),
+  hasParams: ([]analysis.HasParams) (len=1) {
+    (*analysis.Method)({
+      location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 2:1-2:47
+      },
+      refLocation: (protocol.Location) {
+        URI: (string) "",
+        Range: (protocol.Range) 0:0-0:0
+      },
+      children: ([]analysis.Symbol) <nil>,
+      Name: (string) (len=11) "__construct",
+      Params: ([]*analysis.Parameter) (len=2) {
+        (*analysis.Parameter)({
+          location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:29-2:34
+          },
+          varLocation: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:29-2:34
+          },
+          description: (string) "",
+          hasValue: (bool) false,
+          Name: (string) (len=5) "$view",
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Value: (string) ""
+        }),
+        (*analysis.Parameter)({
+          location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:36-2:43
+          },
+          varLocation: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:36-2:43
+          },
+          description: (string) "",
+          hasValue: (bool) false,
+          Name: (string) (len=7) "$helper",
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Value: (string) ""
+        })
+      },
+      returnTypes: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      description: (string) "",
+      Scope: (analysis.TypeString) {
+        fqn: (string) (len=10) "\\BaseClass",
+        original: (string) (len=9) "BaseClass",
+        arrayLevel: (int) 0
+      },
+      VisibilityModifier: (analysis.VisibilityModifierValue) 0,
+      isStatic: (bool) false,
+      ClassModifier: (analysis.ClassModifierValue) 0,
+      deprecatedTag: (*analysis.tag)(<nil>)
+    })
+  }
+}

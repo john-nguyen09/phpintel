@@ -17,7 +17,7 @@ func TestConstantAccess(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		switch s.(type) {
 		case *ConstantAccess:
 			results = append(results, s)

@@ -49,7 +49,7 @@ func TestMethod(t *testing.T) {
 	document.Load()
 	results := []testMethod{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if m, ok := s.(*Method); ok {
 			results = append(results, toTestMethod(m))
 		}
@@ -93,7 +93,7 @@ func TestMethodWithPhpDoc(t *testing.T) {
 	document.Load()
 	results := []testMethod{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if m, ok := s.(*Method); ok {
 			results = append(results, toTestMethod(m))
 		}
@@ -110,7 +110,7 @@ func TestMethodFromPhpDoc(t *testing.T) {
 	document.Load()
 	results := []testMethod{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if m, ok := s.(*Method); ok {
 			results = append(results, toTestMethod(m))
 		}

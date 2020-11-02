@@ -21,7 +21,8 @@
             Range: (protocol.Range) 2:5-2:13
           },
           Name: (string) (len=8) "DateTime"
-        }
+        },
+        children: ([]analysis.Symbol) <nil>
       }),
       Location: (protocol.Location) {
         URI: (string) (len=5) "test1",
@@ -47,7 +48,8 @@
             Range: (protocol.Range) 2:5-2:13
           },
           Name: (string) (len=8) "DateTime"
-        }
+        },
+        children: ([]analysis.Symbol) <nil>
       })
     },
     hasResolved: (bool) false
@@ -69,7 +71,8 @@
         Range: (protocol.Range) 2:5-2:13
       },
       Name: (string) (len=8) "DateTime"
-    }
+    },
+    children: ([]analysis.Symbol) <nil>
   }),
   (*analysis.MethodAccess)({
     MemberAccessExpression: (analysis.MemberAccessExpression) {
@@ -99,7 +102,8 @@
                   Range: (protocol.Range) 2:5-2:13
                 },
                 Name: (string) (len=8) "DateTime"
-              }
+              },
+              children: ([]analysis.Symbol) <nil>
             }),
             Location: (protocol.Location) {
               URI: (string) (len=5) "test1",
@@ -125,7 +129,8 @@
                   Range: (protocol.Range) 2:5-2:13
                 },
                 Name: (string) (len=8) "DateTime"
-              }
+              },
+              children: ([]analysis.Symbol) <nil>
             })
           },
           hasResolved: (bool) false

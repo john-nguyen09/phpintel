@@ -46,7 +46,7 @@ func setupStore(uri string, name string) *Store {
 func (s *Document) hasTypesSymbols() []HasTypes {
 	results := []HasTypes{}
 	t := newTraverser()
-	t.traverseDocument(s, func(t *traverser, s Symbol) {
+	t.traverseDocument(s, func(t *traverser, s Symbol, _ []Symbol) {
 		if hasTypes, ok := s.(HasTypes); ok {
 			results = append(results, hasTypes)
 		}

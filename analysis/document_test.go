@@ -101,7 +101,7 @@ func TestIntrinsics(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		if _, ok := s.(*FunctionCall); ok {
 			results = append(results, s)
 		}
@@ -118,7 +118,7 @@ func TestChainedMethodCalls(t *testing.T) {
 	document.Load()
 	results := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(document, func(tra *traverser, s Symbol, _ []Symbol) {
 		switch s.(type) {
 		case *MethodAccess, *ScopedMethodAccess:
 			results = append(results, s)

@@ -21,7 +21,7 @@ try {
 	doc.Load()
 	results := []*ClassAccess{}
 	tra := newTraverser()
-	tra.traverseDocument(doc, func(_ *traverser, symbol Symbol) {
+	tra.traverseDocument(doc, func(_ *traverser, symbol Symbol, _ []Symbol) {
 		if classAccess, ok := symbol.(*ClassAccess); ok {
 			results = append(results, classAccess)
 		}

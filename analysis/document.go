@@ -359,7 +359,7 @@ func (s *Document) getLastClass() Symbol {
 func (s *Document) ClassAt(pos protocol.Position) Symbol {
 	var found Symbol
 	tra := newTraverser()
-	tra.traverseDocument(s, func(tra *traverser, s Symbol) {
+	tra.traverseDocument(s, func(tra *traverser, s Symbol, _ []Symbol) {
 		relativeRange := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativeRange > 0 {
 			tra.stopDescent = true
@@ -439,7 +439,7 @@ func (s *Document) HasTypesAt(offset int) HasTypes {
 func (s *Document) HasTypesAtPos(pos protocol.Position) HasTypes {
 	var result HasTypes = nil
 	t := newTraverser()
-	t.traverseDocument(s, func(t *traverser, s Symbol) {
+	t.traverseDocument(s, func(t *traverser, s Symbol, _ []Symbol) {
 		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
 		relativeEndPos := protocol.ComparePos(pos, s.GetLocation().Range.End)
 		if relativePos == 0 || (relativePos > 0 && relativeEndPos == 0) {
@@ -471,7 +471,7 @@ func (s *Document) HasTypesBeforePos(pos protocol.Position) HasTypes {
 func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 	var result HasTypes = nil
 	t := newTraverser()
-	t.traverseDocument(s, func(t *traverser, s Symbol) {
+	t.traverseDocument(s, func(t *traverser, s Symbol, _ []Symbol) {
 		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativePos > 0 {
 			if h, ok := s.(HasTypes); ok {
@@ -501,11 +501,19 @@ func (s *Document) WordAtPos(pos protocol.Position) string {
 // ArgumentListAndFunctionCallAt returns an ArgumentList and FunctionCall at the position
 func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*ArgumentList, HasParamsResolvable) {
 	var argumentList *ArgumentList = nil
+	var hasParamsResolvable HasParamsResolvable = nil
 	t := newTraverser()
-	t.traverseDocument(s, func(t *traverser, s Symbol) {
+	t.traverseDocument(s, func(t *traverser, s Symbol, spine []Symbol) {
 		relativePos := protocol.IsInRange(pos, s.GetLocation().Range)
 		if relativePos == 0 {
 			if args, ok := s.(*ArgumentList); ok {
+				if len(spine) >= 3 {
+					if _, ok := spine[len(spine)-2].(*Class); ok {
+						if classTypeDesignator, ok2 := spine[len(spine)-3].(*ClassTypeDesignator); ok2 {
+							hasParamsResolvable = classTypeDesignator
+						}
+					}
+				}
 				argumentList = args
 			}
 		} else if relativePos < 0 {
@@ -514,8 +522,7 @@ func (s *Document) ArgumentListAndFunctionCallAt(pos protocol.Position) (*Argume
 			t.stopDescent = true
 		}
 	})
-	var hasParamsResolvable HasParamsResolvable = nil
-	if argumentList != nil {
+	if argumentList != nil && hasParamsResolvable == nil {
 		hasTypes := s.hasTypesBeforePos(argumentList.GetLocation().Range.Start)
 		if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
 			hasParamsResolvable = resolvable

@@ -108,17 +108,20 @@ func newTraverser() traverser {
 	return traverser{}
 }
 
-func (t *traverser) traverseDocument(document *Document, fn func(*traverser, Symbol)) {
+func (t *traverser) traverseDocument(document *Document, fn func(*traverser, Symbol, []Symbol)) {
+	spine := []Symbol{}
 	for _, child := range document.Children {
-		t.traverseBlock(child, fn)
+		spine = append(spine, child)
+		t.traverseBlock(child, spine, fn)
+		spine = spine[:len(spine)-1]
 		if t.shouldStop {
 			return
 		}
 	}
 }
 
-func (t *traverser) traverseBlock(s Symbol, fn func(*traverser, Symbol)) {
-	fn(t, s)
+func (t *traverser) traverseBlock(s Symbol, spine []Symbol, fn func(*traverser, Symbol, []Symbol)) {
+	fn(t, s, spine)
 	if t.shouldStop {
 		return
 	}
@@ -128,7 +131,9 @@ func (t *traverser) traverseBlock(s Symbol, fn func(*traverser, Symbol)) {
 	if !t.stopDescent {
 		if block, ok := s.(BlockSymbol); ok {
 			for _, child := range block.GetChildren() {
-				t.traverseBlock(child, fn)
+				spine = append(spine, child)
+				t.traverseBlock(child, spine, fn)
+				spine = spine[:len(spine)-1]
 				if t.shouldStop {
 					return
 				}

@@ -3,6 +3,7 @@ package analysis
 import (
 	"testing"
 
+	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
@@ -76,4 +77,30 @@ class ExtendedClass3 extends BaseClass3 { }`))
 	class3 := q.GetClasses("\\ExtendedClass3")[0]
 	method3 := q.GetClassConstructor(class3)
 	assert.Nil(t, method3.Method)
+}
+
+func TestAnonymousClassConstructor(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+class BaseClass {
+	public function __construct($view, $helper) {}
+}
+
+new class() extends BaseClass {
+}`))
+	doc.Load()
+	store := setupStore("test", t.Name())
+	store.SyncDocument(doc)
+	argumentList, hasParamsResolvable := doc.ArgumentListAndFunctionCallAt(protocol.Position{
+		Line:      5,
+		Character: 10,
+	})
+	resolveCtx := NewResolveContext(NewQuery(store), doc)
+	hasParams := hasParamsResolvable.ResolveToHasParams(resolveCtx)
+	cupaloy.SnapshotT(t, struct {
+		argumentList *ArgumentList
+		hasParams    []HasParams
+	}{
+		argumentList,
+		hasParams,
+	})
 }

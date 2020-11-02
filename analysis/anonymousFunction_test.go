@@ -17,7 +17,7 @@ func TestAnonymousFunction(t *testing.T) {
 	document.Load()
 	anonFuncs := []Symbol{}
 	tra := newTraverser()
-	tra.traverseDocument(document, func(_ *traverser, s Symbol) {
+	tra.traverseDocument(document, func(_ *traverser, s Symbol, _ []Symbol) {
 		if anonFunc, ok := s.(*AnonymousFunction); ok {
 			anonFuncs = append(anonFuncs, anonFunc)
 		}
