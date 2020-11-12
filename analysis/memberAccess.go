@@ -36,6 +36,9 @@ func readMemberName(a analyser, document *Document, traverser *util.Traverser) (
 				return name, location
 			}
 		}
+	} else if t, ok := memberName.(*lexer.Token); ok && t.Type == lexer.Name {
+		location = document.GetNodeLocation(t)
+		name = document.getTokenText(t)
 	}
 	return name, location
 }

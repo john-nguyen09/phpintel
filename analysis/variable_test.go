@@ -4,6 +4,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
@@ -172,4 +173,30 @@ function thisIsAFunction()
 			}},
 		}, results)
 	})
+}
+
+func TestInterpolatedVariables(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$user_email_params['main_content'].="<tr>" .
+    "<td>$primary_course->fullname</td>" .
+    "<td>$certificate_expire_date</td>" .
+    "<td>$course_expire_date</td>" .
+    "<td>$primary_course->related_courseprice</td>" .
+    "</tr>";
+
+date();`))
+	doc.Load()
+
+	results := struct {
+		children   []Symbol
+		propAccess Symbol
+		variable   Symbol
+		dateCall   Symbol
+	}{
+		children:   doc.Children,
+		propAccess: doc.HasTypesAtPos(protocol.Position{Line: 2, Character: 30}),
+		variable:   doc.HasTypesAtPos(protocol.Position{Line: 4, Character: 21}),
+		dateCall:   doc.HasTypesAtPos(protocol.Position{Line: 8, Character: 1}),
+	}
+	cupaloy.SnapshotT(t, results)
 }

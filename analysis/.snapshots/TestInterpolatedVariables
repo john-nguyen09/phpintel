@@ -1,0 +1,233 @@
+(struct { children []analysis.Symbol; propAccess analysis.Symbol; variable analysis.Symbol; dateCall analysis.Symbol }) {
+  children: ([]analysis.Symbol) (len=9) {
+    (*analysis.Variable)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 1:0-1:18
+        },
+        Name: (string) (len=18) "$user_email_params"
+      },
+      description: (string) "",
+      canReferenceGlobal: (bool) true,
+      hasResolved: (bool) false
+    }),
+    (*analysis.Variable)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 2:9-2:24
+        },
+        Name: (string) (len=15) "$primary_course"
+      },
+      description: (string) "",
+      canReferenceGlobal: (bool) true,
+      hasResolved: (bool) false
+    }),
+    (*analysis.PropertyAccess)({
+      MemberAccessExpression: (analysis.MemberAccessExpression) {
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Scope: (*analysis.Variable)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 2:9-2:24
+              },
+              Name: (string) (len=15) "$primary_course"
+            },
+            description: (string) "",
+            canReferenceGlobal: (bool) true,
+            hasResolved: (bool) false
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 2:26-2:34
+          },
+          Name: (string) (len=8) "fullname"
+        }
+      },
+      hasResolved: (bool) false
+    }),
+    (*analysis.Variable)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 3:9-3:33
+        },
+        Name: (string) (len=24) "$certificate_expire_date"
+      },
+      description: (string) "",
+      canReferenceGlobal: (bool) true,
+      hasResolved: (bool) false
+    }),
+    (*analysis.Variable)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 4:9-4:28
+        },
+        Name: (string) (len=19) "$course_expire_date"
+      },
+      description: (string) "",
+      canReferenceGlobal: (bool) true,
+      hasResolved: (bool) false
+    }),
+    (*analysis.Variable)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 5:9-5:24
+        },
+        Name: (string) (len=15) "$primary_course"
+      },
+      description: (string) "",
+      canReferenceGlobal: (bool) true,
+      hasResolved: (bool) false
+    }),
+    (*analysis.PropertyAccess)({
+      MemberAccessExpression: (analysis.MemberAccessExpression) {
+        Expression: (analysis.Expression) {
+          Type: (analysis.TypeComposite) {
+            typeStrings: ([]analysis.TypeString) <nil>
+          },
+          Scope: (*analysis.Variable)({
+            Expression: (analysis.Expression) {
+              Type: (analysis.TypeComposite) {
+                typeStrings: ([]analysis.TypeString) <nil>
+              },
+              Scope: (analysis.HasTypes) <nil>,
+              Location: (protocol.Location) {
+                URI: (string) (len=5) "test1",
+                Range: (protocol.Range) 5:9-5:24
+              },
+              Name: (string) (len=15) "$primary_course"
+            },
+            description: (string) "",
+            canReferenceGlobal: (bool) true,
+            hasResolved: (bool) false
+          }),
+          Location: (protocol.Location) {
+            URI: (string) (len=5) "test1",
+            Range: (protocol.Range) 5:26-5:45
+          },
+          Name: (string) (len=19) "related_courseprice"
+        }
+      },
+      hasResolved: (bool) false
+    }),
+    (*analysis.FunctionCall)({
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (analysis.HasTypes) <nil>,
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 8:0-8:4
+        },
+        Name: (string) (len=4) "date"
+      },
+      hasResolved: (bool) false
+    }),
+    (*analysis.ArgumentList)({
+      location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:4-8:6
+      },
+      children: ([]analysis.Symbol) <nil>,
+      arguments: ([]phrase.AstNode) <nil>,
+      argumentRanges: ([]protocol.Range) <nil>,
+      ranges: ([]protocol.Range) (len=1) {
+        (protocol.Range) 8:4-8:6
+      }
+    })
+  },
+  propAccess: (*analysis.PropertyAccess)({
+    MemberAccessExpression: (analysis.MemberAccessExpression) {
+      Expression: (analysis.Expression) {
+        Type: (analysis.TypeComposite) {
+          typeStrings: ([]analysis.TypeString) <nil>
+        },
+        Scope: (*analysis.Variable)({
+          Expression: (analysis.Expression) {
+            Type: (analysis.TypeComposite) {
+              typeStrings: ([]analysis.TypeString) <nil>
+            },
+            Scope: (analysis.HasTypes) <nil>,
+            Location: (protocol.Location) {
+              URI: (string) (len=5) "test1",
+              Range: (protocol.Range) 2:9-2:24
+            },
+            Name: (string) (len=15) "$primary_course"
+          },
+          description: (string) "",
+          canReferenceGlobal: (bool) true,
+          hasResolved: (bool) false
+        }),
+        Location: (protocol.Location) {
+          URI: (string) (len=5) "test1",
+          Range: (protocol.Range) 2:26-2:34
+        },
+        Name: (string) (len=8) "fullname"
+      }
+    },
+    hasResolved: (bool) false
+  }),
+  variable: (*analysis.Variable)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 4:9-4:28
+      },
+      Name: (string) (len=19) "$course_expire_date"
+    },
+    description: (string) "",
+    canReferenceGlobal: (bool) true,
+    hasResolved: (bool) false
+  }),
+  dateCall: (*analysis.FunctionCall)({
+    Expression: (analysis.Expression) {
+      Type: (analysis.TypeComposite) {
+        typeStrings: ([]analysis.TypeString) <nil>
+      },
+      Scope: (analysis.HasTypes) <nil>,
+      Location: (protocol.Location) {
+        URI: (string) (len=5) "test1",
+        Range: (protocol.Range) 8:0-8:4
+      },
+      Name: (string) (len=4) "date"
+    },
+    hasResolved: (bool) false
+  })
+}
