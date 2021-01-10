@@ -8,11 +8,10 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/bep/debounce v1.2.0
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
-	github.com/davecgh/go-spew v1.1.1
 	github.com/dgryski/go-metro v0.0.0-20180109044635-280f6062b5bc // indirect
 	github.com/hashicorp/go-immutable-radix v1.2.0
 	github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96
-	github.com/john-nguyen09/go-phpparser v0.0.0-20201019010316-27e48374a0ac
+	github.com/john-nguyen09/go-phpparser v0.0.0-20210110104513-afe74d9d7fe8
 	github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d
 	github.com/karrick/godirwalk v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0
