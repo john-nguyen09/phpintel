@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"strings"
+
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/util"
@@ -17,7 +19,7 @@ func newAssignment(a analyser, document *Document, node *phrase.Phrase) (HasType
 		}
 		if p.Type == phrase.PropertyAccessExpression {
 			block := document.currentBlock()
-			if method, ok := block.(*Method); ok && method.Name == "__construct" {
+			if method, ok := block.(*Method); ok && strings.ToLower(method.Name) == "__construct" {
 				processPropertyAccessAssignment(a, document, p, node)
 				haveProcessed = true
 			}

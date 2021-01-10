@@ -837,7 +837,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 
 // GetMethods searches for all methods with the same scope and name as given
 func (s *Store) GetMethods(scope string, name string) []*Method {
-	entry := newEntry(methodCollection, scope+KeySep+name+KeySep)
+	entry := newEntry(methodCollection, scope+KeySep+strings.ToLower(name)+KeySep)
 	methods := []*Method{}
 	s.db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 		d := storage.NewDecoder(it.Value())

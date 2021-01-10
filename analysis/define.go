@@ -56,6 +56,9 @@ func (s *Define) GetDescription() string {
 }
 
 func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
+	if len(args.GetArguments()) == 0 {
+		return
+	}
 	firstArg := args.GetArguments()[0]
 	if token, ok := firstArg.(*lexer.Token); ok {
 		if token.Type == lexer.StringLiteral {

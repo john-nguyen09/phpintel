@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"strings"
+
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
@@ -202,8 +204,18 @@ func (s *Class) GetCollection() string {
 	return classCollection
 }
 
+// GetClassFQNLowerCase gets the lower case version of FQN
+// which is lower case name and the rest is left as is
+func GetClassFQNLowerCase(fqn string) string {
+	index := strings.LastIndex(fqn, "\\")
+	if index >= 0 {
+		fqn = fqn[:index] + "\\" + strings.ToLower(fqn[index+1:])
+	}
+	return fqn
+}
+
 func (s *Class) GetKey() string {
-	return s.Name.GetFQN() + KeySep + s.Location.URI
+	return GetClassFQNLowerCase(s.Name.GetFQN()) + KeySep + s.Location.URI
 }
 
 func (s *Class) GetIndexableName() string {

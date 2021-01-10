@@ -1,6 +1,8 @@
 package analysis
 
 import (
+	"strings"
+
 	"github.com/john-nguyen09/go-phpparser/lexer"
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
@@ -184,7 +186,7 @@ func (s *Method) GetCollection() string {
 }
 
 func (s *Method) GetKey() string {
-	return s.Scope.GetFQN() + KeySep + s.Name + KeySep + s.location.URI
+	return s.Scope.GetFQN() + KeySep + strings.ToLower(s.Name) + KeySep + s.location.URI
 }
 
 func (s *Method) GetIndexableName() string {

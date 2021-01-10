@@ -28,6 +28,7 @@ func (q Query) Store() *Store {
 
 // GetClasses is a cached proxy behind store
 func (q *Query) GetClasses(name string) []*Class {
+	name = GetClassFQNLowerCase(name)
 	cacheKey := "Classes" + sep + name
 	if data, ok := q.cache[cacheKey]; ok {
 		if classes, ok := data.([]*Class); ok {
