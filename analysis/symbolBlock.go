@@ -76,6 +76,7 @@ var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
 	phrase.DoStatement:                    empty,
 	phrase.DoubleQuotedStringLiteral:      empty,
 	phrase.EncapsulatedVariableList:       empty,
+	phrase.EncapsulatedVariable:           empty,
 	phrase.RequireOnceExpression:          empty,
 }
 

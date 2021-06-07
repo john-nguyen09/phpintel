@@ -88,7 +88,7 @@ func (s *Server) completion(ctx context.Context, params *protocol.CompletionPara
 		parent = nodes.Parent()
 	}
 	switch parent.Type {
-	case phrase.SimpleVariable:
+	case phrase.SimpleVariable, phrase.EncapsulatedVariableList:
 		if nodes.Parent().Type == phrase.ScopedMemberName {
 			if s, ok := symbol.(*analysis.ScopedPropertyAccess); ok {
 				completionList = scopedAccessCompletion(completionCtx, word, s)
@@ -200,9 +200,6 @@ func variableCompletion(ctx *completionContext, resolveCtx analysis.ResolveConte
 
 		variable.Resolve(resolveCtx)
 		insertText := variable.Name
-		if len(variable.Name) >= 1 {
-			insertText = variable.Name[1:]
-		}
 		completionList.Items = append(completionList.Items, protocol.CompletionItem{
 			Kind:          protocol.VariableCompletion,
 			Label:         variable.Name,
