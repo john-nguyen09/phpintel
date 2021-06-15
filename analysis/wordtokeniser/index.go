@@ -1,20 +1,30 @@
 package wordtokeniser
 
 import (
-	"strings"
+	"sort"
 )
 
 // Tokenise tokenises name into tokens for completion search
 func Tokenise(name string) []string {
-	lastSlashIndex := strings.LastIndex(name, "\\")
-	if lastSlashIndex != -1 {
-		name = string([]rune(name)[lastSlashIndex:])
+	words := underscore(name)
+	results := []string{
+		name,
 	}
+	for _, word := range words {
+		results = append(results, casing(word)...)
+	}
+	return removeDup(results)
+}
 
-	// TODO: Combine underscore and casing tokenisers
-	if strings.Contains(name, "_") {
-		return underscore(name)
-	} else {
-		return casing(name)
+func removeDup(in []string) []string {
+	sort.Strings(in)
+	j := 0
+	for i := 1; i < len(in); i++ {
+		if in[j] == in[i] {
+			continue
+		}
+		j++
+		in[j] = in[i]
 	}
+	return in[:j+1]
 }

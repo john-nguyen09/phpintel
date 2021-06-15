@@ -1,25 +1,28 @@
 package wordtokeniser
 
 func underscore(name string) []string {
-	tokens := []string{}
+	words := []string{}
 	gotUnderscore := false
-	nameRunes := []rune(name)
-
-	tokens = append(tokens, name)
-	for i, r := range nameRunes {
+	start := 0
+	end := len(name)
+	for i, c := range name {
 		if gotUnderscore {
-			if r == '_' {
+			if c == '_' {
 				continue
 			}
 
-			tokens = append(tokens, string(nameRunes[i:]))
+			words = append(words, name[start:end])
+			start = i
 			gotUnderscore = false
 		} else {
-			if r == '_' {
+			if c == '_' {
 				gotUnderscore = true
+				end = i
 			}
 		}
 	}
-
-	return tokens
+	if start < len(name) {
+		words = append(words, name[start:])
+	}
+	return words
 }

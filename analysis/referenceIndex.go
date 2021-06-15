@@ -36,12 +36,12 @@ func entryInfoDecode(d *storage.Decoder) entryInfo {
 }
 
 type referenceEntry struct {
-	filter *filter.GrowingFilter
+	filter *filter.Filter
 }
 
 func newReferenceEntry() referenceEntry {
 	return referenceEntry{
-		filter: filter.NewGrowing(filter.DefaultOptions()),
+		filter: filter.NewFilter(),
 	}
 }
 
@@ -81,7 +81,7 @@ func newReferenceIndex(db storage.DB) *referenceIndex {
 			keyInfo := strings.Split(string(it.Key()), KeySep)
 			d := storage.NewDecoder(it.Value())
 			index.entries.Set(keyInfo[2], referenceEntry{
-				filter: filter.GrowingFilterDecode(d),
+				filter: filter.FilterDecode(d),
 			})
 		})
 		if count > 0 {
@@ -108,6 +108,10 @@ func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch,
 		}
 		writeEntry(batch, dbEntry)
 		dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+		err := entry.filter.Commit()
+		if err != nil {
+			panic(err)
+		}
 		entry.filter.Encode(dbEntry.e)
 		writeEntry(batch, dbEntry)
 		return entry
@@ -137,7 +141,11 @@ func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
 	refBytes := []byte(ref)
 	for tuple := range i.entries.IterBuffered() {
 		entry := tuple.Val.(referenceEntry)
-		if entry.filter.Lookup(refBytes) {
+		ok, err := entry.filter.Lookup(refBytes)
+		if err != nil {
+			panic(err)
+		}
+		if ok {
 			uri := util.URIFromCanonicalURI(store.uri, tuple.Key)
 			for _, r := range entry.search(store, uri, ref) {
 				results = append(results, protocol.Location{
