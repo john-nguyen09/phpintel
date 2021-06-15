@@ -16,6 +16,7 @@ func NewDisk(path string) (*disk, error) {
 	opts := levigo.NewOptions()
 	opts.SetCache(levigo.NewLRUCache(3 << 30))
 	opts.SetCreateIfMissing(true)
+	opts.SetCompression(levigo.SnappyCompression)
 	db, err := levigo.Open(path, opts)
 	if err != nil {
 		return nil, err

@@ -24,7 +24,7 @@ var (
 )
 
 func main() {
-	flag.BoolVar(&flgVersion, "version", false, "Show version of the language server")
+	flag.BoolVar(&flgVersion, "version", false, "show version of the language server")
 	flag.StringVar(&memprofile, "memprofile", "", "write mem profile to `file`")
 	flag.StringVar(&cpuprofile, "cpuprofile", "", "write cpu profile to `file`")
 	flag.StringVar(&panicLog, "paniclog", "", "write panic log to `file` (Windows only)")

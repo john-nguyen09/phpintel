@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"sort"
+	"sync"
 
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	cuckoo "github.com/seiflotfy/cuckoofilter"
@@ -11,6 +12,7 @@ import (
 
 // Filter is a wrapper around cuckoo filter
 type Filter struct {
+	mutex  sync.RWMutex
 	head   *cuckoo.Filter
 	buffer [][]byte
 }
@@ -37,11 +39,15 @@ func (f *Filter) Commit() error {
 	for _, key := range keys {
 		filter.Insert(key)
 	}
+	f.mutex.Lock()
 	f.head = filter
+	f.mutex.Unlock()
 	return nil
 }
 
 func (f *Filter) Lookup(data []byte) (bool, error) {
+	f.mutex.RLock()
+	defer f.mutex.RUnlock()
 	if f.head == nil {
 		return false, fmt.Errorf("filter is not yet commited")
 	}
@@ -49,7 +55,9 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 }
 
 func (f *Filter) Reset() *Filter {
+	f.mutex.Lock()
 	f.head = nil
+	f.mutex.Unlock()
 	return f
 }
 

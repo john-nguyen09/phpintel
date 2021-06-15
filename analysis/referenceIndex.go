@@ -92,7 +92,11 @@ func newReferenceIndex(db storage.DB) *referenceIndex {
 }
 
 func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch, infos []entryInfo) {
-	canonicalURI := util.CanonicaliseURI(store.uri, doc.GetURI())
+	uri := doc.GetURI()
+	if !strings.HasPrefix(uri, "file://") {
+		return
+	}
+	canonicalURI := util.CanonicaliseURI(store.uri, uri)
 	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
 		var entry referenceEntry
 		if ok {
@@ -137,6 +141,7 @@ func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string)
 }
 
 func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
+	defer util.TimeTrack(time.Now(), "referenceIndex.search")
 	var results []protocol.Location
 	refBytes := []byte(ref)
 	for tuple := range i.entries.IterBuffered() {
