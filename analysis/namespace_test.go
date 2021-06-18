@@ -38,31 +38,31 @@ type indexableNamspaceTestCase struct {
 
 func TestIndexableNamespace(t *testing.T) {
 	testCases := []indexableNamspaceTestCase{
-		indexableNamspaceTestCase{"", []*indexableNamespace{}},
-		indexableNamspaceTestCase{"\\", []*indexableNamespace{}},
-		indexableNamspaceTestCase{"TestNamespace1", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
+		{"", []*indexableNamespace{}},
+		{"\\", []*indexableNamespace{}},
+		{"TestNamespace1", []*indexableNamespace{
+			{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
 		}},
-		indexableNamspaceTestCase{"\\TestNamespace1", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
+		{"\\TestNamespace1", []*indexableNamespace{
+			{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
 		}},
-		indexableNamspaceTestCase{"Namespace1\\Namespace2", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
-			&indexableNamespace{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
+		{"Namespace1\\Namespace2", []*indexableNamespace{
+			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
+			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
 		}},
-		indexableNamspaceTestCase{"\\Namespace1\\Namespace2", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
-			&indexableNamespace{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
+		{"\\Namespace1\\Namespace2", []*indexableNamespace{
+			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
+			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
 		}},
-		indexableNamspaceTestCase{"Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			&indexableNamespace{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			&indexableNamespace{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
+		{"Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
+			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
+			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
+			{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
 		}},
-		indexableNamspaceTestCase{"\\Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
-			&indexableNamespace{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			&indexableNamespace{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			&indexableNamespace{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
+		{"\\Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
+			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
+			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
+			{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
 		}},
 	}
 	for i, testCase := range testCases {

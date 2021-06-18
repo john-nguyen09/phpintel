@@ -37,7 +37,6 @@ func newMethodAccess(a analyser, document *Document, node *phrase.Phrase) (HasTy
 			switch p.Type {
 			case phrase.ArgumentExpressionList:
 				newArgumentList(a, document, p)
-				break
 			}
 		}
 		child = traverser.Advance()

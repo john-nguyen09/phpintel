@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"path/filepath"
+	"sort"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -26,8 +27,11 @@ func TestMultipleIndexing(t *testing.T) {
 	for _, c := range classes {
 		results = append(results, c.Name.GetFQN())
 	}
-	assert.Equal(t, []string{
+	expected := []string{
 		"\\TestMethodClass",
 		"\\TestAbstractMethodClass",
-	}, results)
+	}
+	sort.Strings(expected)
+	sort.Strings(results)
+	assert.Equal(t, expected, results)
 }

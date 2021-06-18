@@ -123,7 +123,7 @@ func getCompletionKey(token string, symbolKey string) string {
 }
 
 func searchCompletions(db storage.DB, query searchQuery) SearchResult {
-	uniqueCompletionValues := make(map[CompletionValue]bool, 0)
+	uniqueCompletionValues := make(map[CompletionValue]void)
 	isComplete := true
 	words := wordtokeniser.Tokenise(query.keyword)
 	shouldStop := false
@@ -139,7 +139,7 @@ func searchCompletions(db storage.DB, query searchQuery) SearchResult {
 				return
 			}
 			result := query.onData(completionValue)
-			uniqueCompletionValues[completionValue] = true
+			uniqueCompletionValues[completionValue] = empty
 			if result.shouldStop {
 				isComplete = false
 				shouldStop = true

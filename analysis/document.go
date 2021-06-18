@@ -608,7 +608,7 @@ func (s *Document) getLines() []string {
 	if start == len(text) {
 		lines = append(lines, "")
 	} else {
-		lines = append(lines, string(text[start:len(text)]))
+		lines = append(lines, string(text[start:]))
 	}
 	return lines
 }

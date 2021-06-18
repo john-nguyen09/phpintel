@@ -36,8 +36,6 @@ github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96 h1:HrOq/Ns3ctivz
 github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96/go.mod h1:dM7ihgFM8Do6WGIfOXWPgpJ+4bKGR/4ZkYh8HKDdFy4=
 github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd h1:/uJ/KMlhIpHrqhwgHGvymyrqJqGo1womQPicTA1jfFs=
 github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd/go.mod h1:lF0XnkDQXyyfjOBwBjNTFyg6uQSKT6ZaWB7yhwuWE5c=
-github.com/john-nguyen09/go-phpparser v0.0.0-20210110104513-afe74d9d7fe8 h1:SJWI/dyHSlRn6TAu8/KEAmSvnTg4aMwSb67X7K5RD1U=
-github.com/john-nguyen09/go-phpparser v0.0.0-20210110104513-afe74d9d7fe8/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
 github.com/john-nguyen09/go-phpparser v0.0.0-20210607114857-e17693eb1793 h1:GaPnPq/A/M2hNsfiaTfkAxfXY0p6fPNZ5aujHHgYv78=
 github.com/john-nguyen09/go-phpparser v0.0.0-20210607114857-e17693eb1793/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
 github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d h1:1sZxqR0Uy462oYxQuH/U6Nya6vUno+V+46wNSA5cCy0=
@@ -58,8 +56,8 @@ github.com/nkovacs/streamquote v0.0.0-20170412213628-49af9bddb229 h1:E2B8qYyeSgv
 github.com/nkovacs/streamquote v0.0.0-20170412213628-49af9bddb229/go.mod h1:0aYXnNPJ8l7uZxf45rWW1a/uME32OF0rhiYGNQ2oF2E=
 github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6 h1:lNCW6THrCKBiJBpz8kbVGjC7MgdCGKwuvBgc7LoD6sw=
 github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6/go.mod h1:Lu3tH6HLW3feq74c2GC+jIMS/K2CFcDWnWD9XkenwhI=
-github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
-github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/saracen/walker v0.0.0-20191201085201-324a081bae7e/go.mod h1:G0Z6yVPru183i2MuRJx1DcR4dgIZtLcTdaaE/pC1BJU=

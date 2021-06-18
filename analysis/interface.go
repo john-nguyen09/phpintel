@@ -78,14 +78,14 @@ func (s *Interface) extends(document *Document, node *phrase.Phrase) {
 	traverser := util.NewTraverser(node)
 	child := traverser.Peek()
 	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
+		if _, ok := child.(*phrase.Phrase); ok {
 			traverser, err := traverser.Descend()
 			if err != nil {
 				continue
 			}
 			child = traverser.Advance()
 			for child != nil {
-				if p, ok = child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
+				if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.QualifiedName {
 					s.Extends = append(s.Extends, transformQualifiedName(p, document))
 				}
 				child = traverser.Advance()

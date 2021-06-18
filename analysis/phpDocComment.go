@@ -29,7 +29,6 @@ type tag struct {
 	nameLocation protocol.Location
 }
 
-var /* const */ phpDocFirstLineRegex = regexp.MustCompile(`^\/\*\*`)
 var /* const */ stripPattern = regexp.MustCompile(`(?m)^\/\*\*[ \t]*|\s*\*\/$|^[ \t]*\*[ \t]*`)
 
 func processTypeNode(document *Document, node *phrase.Phrase) string {
@@ -350,7 +349,7 @@ func parseTag(document *Document, p *phrase.Phrase) (tag, error) {
 	case "@deprecated":
 		return deprecatedTag(tagName, document, p), nil
 	}
-	return tag{}, fmt.Errorf("Unexpected tag: %s", tagName)
+	return tag{}, fmt.Errorf("unexpected tag: %s", tagName)
 }
 
 func (d phpDocComment) findTagsByTagName(tagName string) []tag {

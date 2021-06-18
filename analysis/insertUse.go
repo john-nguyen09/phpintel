@@ -6,8 +6,6 @@ import (
 	"github.com/john-nguyen09/phpintel/util"
 )
 
-var numLinesAfterUse = 2
-
 type InsertUseContext struct {
 	document     *Document
 	firstInline  *phrase.Phrase

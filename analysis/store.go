@@ -50,8 +50,6 @@ const (
 
 var /* const */ versionKey = []byte("Version")
 
-const scopeSep = "::"
-
 // KeySep is the separator when constructing key
 const KeySep string = "\x00"
 
@@ -65,10 +63,6 @@ func newEntry(collection string, key string) *entry {
 		key: []byte(collection + KeySep + key),
 		e:   storage.NewEncoder(),
 	}
-}
-
-func (s *entry) getEncoder() *storage.Encoder {
-	return s.e
 }
 
 func (s *entry) getKeyBytes() []byte {
@@ -95,18 +89,18 @@ type Store struct {
 
 type symbolDeletor struct {
 	uri     string
-	symbols map[string]bool
+	symbols map[string]void
 }
 
 func newSymbolDeletor(db storage.DB, uri string) *symbolDeletor {
 	entry := newEntry(documentSymbols, uri+KeySep)
 	deletor := &symbolDeletor{
 		uri:     uri,
-		symbols: map[string]bool{},
+		symbols: map[string]void{},
 	}
 	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 		keyInfo := strings.Split(string(it.Key()), KeySep)
-		deletor.symbols[strings.Join(keyInfo[2:], KeySep)] = true
+		deletor.symbols[strings.Join(keyInfo[2:], KeySep)] = empty
 	})
 	return deletor
 }
@@ -233,7 +227,7 @@ func (s *Store) LoadStubs() {
 			currentMD5 := document.GetHash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(entry.getKeyBytes())
-			if err != nil || bytes.Compare(currentMD5, savedMD5) != 0 {
+			if err != nil || bytes.Equal(currentMD5, savedMD5) {
 				document.Load()
 				s.SyncDocument(document)
 			}
@@ -349,7 +343,7 @@ func (s *Store) CompareAndIndexDocument(ctx context.Context, uri string) *Docume
 			savedMD5 = value
 		}
 	}
-	if savedMD5 != nil && bytes.Compare(currentMD5, savedMD5.([]byte)) == 0 {
+	if savedMD5 != nil && bytes.Equal(currentMD5, savedMD5.([]byte)) {
 		return document
 	}
 
@@ -407,7 +401,7 @@ func (s *Store) PrepareForIndexing() {
 // from the map
 func (s *Store) FinishIndexing() {
 	err := s.db.WriteBatch(func(wb storage.Batch) error {
-		for iter := range s.syncedDocumentURIs.Iter() {
+		for iter := range s.syncedDocumentURIs.IterBuffered() {
 			s.DeleteDocument(iter.Key)
 			s.syncedDocumentURIs.Remove(iter.Key)
 		}
@@ -493,10 +487,6 @@ func (s *Store) indexName(batch storage.Batch, document *Document, indexable Nam
 
 func writeEntry(batch storage.Batch, entry *entry) {
 	batch.Put(entry.getKeyBytes(), entry.bytes())
-}
-
-func deleteEntry(batch storage.Batch, entry *entry) {
-	batch.Delete(entry.getKeyBytes())
 }
 
 // GetURI returns the store URI
@@ -688,10 +678,6 @@ func (s *Store) GetTraits(name string) []*Trait {
 // `keyword` can contain scope
 func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, SearchResult) {
 	scope, keyword := GetScopeAndNameFromString(keyword)
-	prefixes := []string{""}
-	if scope != "" {
-		prefixes = append(prefixes, scope)
-	}
 	traits := []*Trait{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{

@@ -36,9 +36,7 @@ func analyseVariableNameList(a analyser, document *Document, node *phrase.Phrase
 	for child != nil {
 		if p, ok := child.(*phrase.Phrase); ok && p.Type == phrase.SimpleVariable {
 			globalVariable := newGlobalVariable(a, document, p)
-			if globalVariable != nil {
-				document.addSymbol(globalVariable)
-			}
+			document.addSymbol(globalVariable)
 		}
 		child = traverser.Advance()
 	}

@@ -133,7 +133,7 @@ func (t *TypeString) SetNamespace(namespace string) {
 }
 
 func (t TypeString) FirstPart() string {
-	if strings.Index(t.original, "\\") != -1 {
+	if strings.Contains(t.original, "\\") {
 		return strings.Split(t.original, "\\")[0]
 	}
 	return t.original

@@ -93,7 +93,7 @@ func newReferenceIndex(db storage.DB) *referenceIndex {
 
 func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch, infos []entryInfo) {
 	uri := doc.GetURI()
-	if !strings.HasPrefix(uri, "file://") {
+	if strings.HasPrefix(uri, "phpstorm-stubs://") {
 		return
 	}
 	canonicalURI := util.CanonicaliseURI(store.uri, uri)

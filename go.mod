@@ -16,7 +16,7 @@ require (
 	github.com/karrick/godirwalk v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/seiflotfy/cuckoofilter v0.0.0-20200511222245-56093a4d3841
 	github.com/stretchr/testify v1.5.1
 )

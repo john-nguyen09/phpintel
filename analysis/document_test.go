@@ -73,7 +73,7 @@ func TestSymbolAt(t *testing.T) {
 func TestApplyChanges(t *testing.T) {
 	document := NewDocument("test1", []byte("<?php\necho 'Hello world';"))
 	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
-		protocol.TextDocumentContentChangeEvent{
+		{
 			Range: &protocol.Range{
 				Start: protocol.Position{
 					Line:      1,
@@ -150,7 +150,7 @@ func TestWordAt(t *testing.T) {
 	doc1 := NewDocument("test1", []byte(`<?php function1(\Modules\`))
 
 	testCases := []wordTestCase{
-		wordTestCase{doc1, protocol.Position{Line: 0, Character: 25}, "\\Modules\\"},
+		{doc1, protocol.Position{Line: 0, Character: 25}, "\\Modules\\"},
 	}
 
 	for _, testCase := range testCases {

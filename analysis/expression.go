@@ -60,21 +60,6 @@ type MemberAccess interface {
 	ScopeTypes() TypeComposite
 }
 
-type expressionKind int
-
-const (
-	unknownKind              = iota
-	variableKind             = iota
-	classAccessKind          = iota
-	classTypeDesignatorKind  = iota
-	constantAccessKind       = iota
-	functionCallKind         = iota
-	propertyAccessKind       = iota
-	scopedConstantAccessKind = iota
-	scopedMethodAccessKind   = iota
-	scopedPropertyAccessKind = iota
-)
-
 type exprConstructor func(analyser, *Document, *phrase.Phrase) (HasTypes, bool)
 
 var nodeTypeToExprConstructor map[phrase.PhraseType]exprConstructor
@@ -117,18 +102,6 @@ func scanForExpression(a analyser, document *Document, node *phrase.Phrase) HasT
 		expression, shouldAdd = constructor(a, document, node)
 	}
 	return expression
-}
-
-func processToScanChildren(a analyser, document *Document, node *phrase.Phrase) (HasTypes, bool) {
-	traverser := util.NewTraverser(node)
-	child := traverser.Advance()
-	for child != nil {
-		if p, ok := child.(*phrase.Phrase); ok {
-			scanForExpression(a, document, p)
-		}
-		child = traverser.Advance()
-	}
-	return nil, false
 }
 
 type derivedExpression struct {

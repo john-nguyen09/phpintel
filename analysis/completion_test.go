@@ -4,6 +4,8 @@ import (
 	"context"
 	"io/ioutil"
 	"reflect"
+	"sort"
+	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -46,6 +48,9 @@ func TestFunctionCompletionWithNamespace(t *testing.T) {
 			AdditionalTextEdits: textEdits,
 		})
 	}
+	sort.Slice(items, func(i, j int) bool {
+		return strings.Compare(items[i].Label, items[j].Label) > 0
+	})
 	cupaloy.SnapshotT(t, items)
 }
 
