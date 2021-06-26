@@ -54,13 +54,6 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 	return f.head.Lookup(data), nil
 }
 
-func (f *Filter) Reset() *Filter {
-	f.mutex.Lock()
-	f.head = nil
-	f.mutex.Unlock()
-	return f
-}
-
 // Encode encodes the filter into byte slice
 func (f *Filter) Encode(e *storage.Encoder) {
 	buffer := f.head.Encode()

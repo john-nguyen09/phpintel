@@ -1,9 +1,5 @@
 package wordtokeniser
 
-import (
-	"sort"
-)
-
 // Tokenise tokenises name into tokens for completion search
 func Tokenise(name string) []string {
 	words := underscore(name)
@@ -16,15 +12,19 @@ func Tokenise(name string) []string {
 	return removeDup(results)
 }
 
+type void struct{}
+
+var empty void = void{}
+
 func removeDup(in []string) []string {
-	sort.Strings(in)
-	j := 0
-	for i := 1; i < len(in); i++ {
-		if in[j] == in[i] {
+	out := []string{}
+	set := map[string]void{}
+	for _, str := range in {
+		if _, ok := set[str]; ok {
 			continue
 		}
-		j++
-		in[j] = in[i]
+		out = append(out, str)
+		set[str] = empty
 	}
-	return in[:j+1]
+	return out
 }

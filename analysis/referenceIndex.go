@@ -132,7 +132,6 @@ func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string)
 			batch.Delete(dbEntry.getKeyBytes())
 			dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
 			batch.Delete(dbEntry.getKeyBytes())
-			entry.filter.Reset()
 		} else {
 			entry = new.(referenceEntry)
 		}
