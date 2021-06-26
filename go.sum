@@ -38,6 +38,8 @@ github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd
 github.com/john-nguyen09/go-immutable-radix v1.2.1-0.20200401082659-e38f7bb2dddd/go.mod h1:lF0XnkDQXyyfjOBwBjNTFyg6uQSKT6ZaWB7yhwuWE5c=
 github.com/john-nguyen09/go-phpparser v0.0.0-20210607114857-e17693eb1793 h1:GaPnPq/A/M2hNsfiaTfkAxfXY0p6fPNZ5aujHHgYv78=
 github.com/john-nguyen09/go-phpparser v0.0.0-20210607114857-e17693eb1793/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
+github.com/john-nguyen09/go-phpparser v0.0.0-20210626125202-106d065be921 h1:VkADNhu+ENuTPlX3a9ue0aio9STozfhf8tZMfvKrRas=
+github.com/john-nguyen09/go-phpparser v0.0.0-20210626125202-106d065be921/go.mod h1:0d22G5QmsJMz/YvruMDFO+gYJu34y7GYXjMyRu/pSBY=
 github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d h1:1sZxqR0Uy462oYxQuH/U6Nya6vUno+V+46wNSA5cCy0=
 github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d/go.mod h1:resNw+AKG+P/22pQ+3bC1nnPM4lHvWBit9Z7diHwmgk=
 github.com/karrick/godirwalk v1.12.0 h1:nkS4xxsjiZMvVlazd0mFyiwD4BR9f3m6LXGhM2TUx3Y=

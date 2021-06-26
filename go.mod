@@ -11,7 +11,7 @@ require (
 	github.com/dgryski/go-metro v0.0.0-20180109044635-280f6062b5bc // indirect
 	github.com/hashicorp/go-immutable-radix v1.2.0
 	github.com/jmhodges/levigo v1.0.1-0.20191214093932-ed89ec741d96
-	github.com/john-nguyen09/go-phpparser v0.0.0-20210607114857-e17693eb1793
+	github.com/john-nguyen09/go-phpparser v0.0.0-20210626125202-106d065be921
 	github.com/junegunn/fzf v0.0.0-20200515062533-d631c76e8d2d
 	github.com/karrick/godirwalk v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0
