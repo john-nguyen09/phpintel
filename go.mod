@@ -6,6 +6,7 @@ require (
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/JohannesKaufmann/html-to-markdown v0.0.0-20200323205911-a6f44902a8f4
 	github.com/Masterminds/semver v1.5.0
+	github.com/akrylysov/pogreb v0.10.1
 	github.com/bep/debounce v1.2.0
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/dgryski/go-metro v0.0.0-20180109044635-280f6062b5bc // indirect

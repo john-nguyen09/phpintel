@@ -30,6 +30,8 @@ func main() {
 	flag.StringVar(&panicLog, "paniclog", "", "write panic log to `file` (Windows only)")
 	flag.Parse()
 
+	memprofile = "C:\\Users\\Thuan\\.phpintel\\profile\\mem.profile"
+
 	if flgVersion {
 		fmt.Println(version)
 		return

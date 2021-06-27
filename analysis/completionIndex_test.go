@@ -5,7 +5,6 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/bradleyjkemp/cupaloy"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +14,17 @@ func TestCompletionIndex(t *testing.T) {
 	indexDocument(store, testMethodClassTest, "test1")
 
 	classes, _ := store.SearchClasses("T", NewSearchOptions())
-	cupaloy.SnapshotT(t, classes)
+	results := []string{}
+	for _, c := range classes {
+		results = append(results, c.Name.GetFQN())
+	}
+	expected := []string{
+		"\\TestMethodClass",
+		"\\TestAbstractMethodClass",
+	}
+	sort.Strings(expected)
+	sort.Strings(results)
+	assert.Equal(t, expected, results)
 }
 
 func TestMultipleIndexing(t *testing.T) {
@@ -35,3 +44,21 @@ func TestMultipleIndexing(t *testing.T) {
 	sort.Strings(results)
 	assert.Equal(t, expected, results)
 }
+
+// func TestNgram(t *testing.T) {
+// 	infos := []completionInfo{
+// 		{
+// 			collection: "",
+// 			word:       "TestMethodClass",
+// 		},
+// 		{
+// 			collection: "",
+// 			word:       "TestAbstractMethodClass",
+// 		},
+// 		{
+// 			collection: "",
+// 			word:       "function3",
+// 		},
+// 	}
+// 	fmt.Println(getSearchableTokens(infos))
+// }
