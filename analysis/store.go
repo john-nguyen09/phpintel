@@ -112,14 +112,16 @@ type Store struct {
 	DebouncedDeprecation func(func())
 }
 
-func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol)) {
+func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol) bool) {
 	b, err := greb.Get(e.getKeyBytes())
 	if err == nil && len(b) > 0 {
 		d := storage.NewDecoder(b)
 		count := d.ReadInt()
 		for i := 0; i < count; i++ {
 			symbol := readDocumentSymbol(d)
-			fn(symbol)
+			if fn(symbol) {
+				break
+			}
 		}
 	}
 	if err != nil {
@@ -137,8 +139,9 @@ func newSymbolDeletor(db storage.DB, greb *pogreb.DB, uri string) *symbolDeletor
 		uri:     uri,
 		symbols: map[string]void{},
 	}
-	readDocumentSymbols(greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) {
+	readDocumentSymbols(greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
 		deletor.symbols[symbol.collection+KeySep+symbol.key] = empty
+		return false
 	})
 	return deletor
 }
@@ -220,6 +223,7 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 // Close triggers close on the fuzzy engine, and closes the disk storage
 func (s *Store) Close() {
 	s.db.Close()
+	s.greb.Close()
 }
 
 // GetStoreVersion returns the version of the disk storage or v0.0.0 if

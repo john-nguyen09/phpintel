@@ -3,6 +3,7 @@ module github.com/john-nguyen09/phpintel
 go 1.12
 
 require (
+	github.com/FastFilter/xorfilter v0.0.0-20210113222943-0cd20fbc5711
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/JohannesKaufmann/html-to-markdown v0.0.0-20200323205911-a6f44902a8f4
 	github.com/Masterminds/semver v1.5.0

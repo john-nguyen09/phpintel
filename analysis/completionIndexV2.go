@@ -8,6 +8,7 @@ import (
 	"github.com/john-nguyen09/phpintel/analysis/filter"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
+	"github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -31,20 +32,27 @@ func newCompletionEntry() completionEntry {
 	}
 }
 
-func (e *completionEntry) search(store *Store, uri string, query searchQuery, pattern []rune, uniqueSet map[string]void) {
-	readDocumentSymbols(store.greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) {
+func (e *completionEntry) search(store *Store, uri string, query searchQuery, pattern []rune, uniqueSet map[string]void) bool {
+	shouldStop := false
+	readDocumentSymbols(store.greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
 		indexableName := symbol.indexableName
 		if len(indexableName) == 0 || symbol.collection != query.collection {
-			return
+			return false
 		}
 		if _, ok := uniqueSet[symbol.key]; ok {
-			return
+			return false
 		}
 		if ok, _ := isMatch(indexableName, pattern); ok {
-			query.onData(CompletionValue(symbol.key))
+			result := query.onData(CompletionValue(symbol.key))
+			if result.shouldStop {
+				shouldStop = true
+				return true
+			}
 			uniqueSet[symbol.key] = empty
 		}
+		return false
 	})
+	return shouldStop
 }
 
 func newCompletionIndex(db storage.DB) *completionIndex {
@@ -109,6 +117,7 @@ func (i *completionIndex) resetURI(store *Store, batch storage.Batch, uri string
 }
 
 func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
+	defer util.TimeTrack(time.Now(), "completionIndexV2.search "+query.collection)
 	isComplete := true
 	words := wordtokeniser.Tokenise(query.keyword)
 	shouldStop := false
@@ -126,7 +135,12 @@ func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
 				panic(err)
 			}
 			if ok {
-				entry.search(store, tuple.Key, query, pattern, uniqueSet)
+				if entry.search(store, tuple.Key, query, pattern, uniqueSet) {
+					shouldStop = true
+				}
+			}
+			if shouldStop {
+				break
 			}
 		}
 	}
