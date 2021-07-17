@@ -274,7 +274,7 @@ func (s *Store) LoadStubs() {
 			currentMD5 := document.GetHash()
 			entry := newEntry(documentCollection, document.GetURI())
 			savedMD5, err := s.db.Get(entry.getKeyBytes())
-			if err != nil || bytes.Equal(currentMD5, savedMD5) {
+			if err != nil || !bytes.Equal(currentMD5, savedMD5) {
 				document.Load()
 				s.SyncDocument(document)
 			}
