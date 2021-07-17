@@ -3,17 +3,19 @@ package filter
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"sort"
 	"sync"
 
+	"github.com/FastFilter/xorfilter"
+	xxhash "github.com/cespare/xxhash/v2"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
-	cuckoo "github.com/seiflotfy/cuckoofilter"
 )
 
 // Filter is a wrapper around cuckoo filter
 type Filter struct {
 	mutex  sync.RWMutex
-	head   *cuckoo.Filter
+	head   *xorfilter.Xor8
 	buffer [][]byte
 }
 
@@ -35,9 +37,13 @@ func (f *Filter) Insert(data []byte) *Filter {
 func (f *Filter) Commit() error {
 	keys := f.dataWithoutDup()
 	f.buffer = [][]byte{}
-	filter := cuckoo.NewFilter(uint(len(keys)))
+	keyHashes := []uint64{}
 	for _, key := range keys {
-		filter.Insert(key)
+		keyHashes = append(keyHashes, xxhash.Sum64(key))
+	}
+	filter, err := xorfilter.Populate(keyHashes)
+	if err != nil {
+		log.Print(err)
 	}
 	f.mutex.Lock()
 	f.head = filter
@@ -51,20 +57,22 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 	if f.head == nil {
 		return false, fmt.Errorf("filter is not yet commited")
 	}
-	return f.head.Lookup(data), nil
+	return f.head.Contains(xxhash.Sum64(data)), nil
 }
 
 // Encode encodes the filter into byte slice
 func (f *Filter) Encode(e *storage.Encoder) {
-	buffer := f.head.Encode()
-	e.WriteBytes(buffer)
+	e.WriteUInt64(f.head.Seed)
+	e.WriteUInt32(f.head.BlockLength)
+	e.WriteBytes(f.head.Fingerprints)
 }
 
 // FilterDecode decodes a filter from a byte slice
 func FilterDecode(d *storage.Decoder) *Filter {
-	head, err := cuckoo.Decode(d.ReadBytes())
-	if err != nil {
-		panic(err)
+	head := &xorfilter.Xor8{
+		Seed:         d.ReadUInt64(),
+		BlockLength:  d.ReadUInt32(),
+		Fingerprints: d.ReadBytes(),
 	}
 	f := NewFilter()
 	f.head = head

@@ -3,6 +3,7 @@ package analysis
 import (
 	"io/ioutil"
 
+	"github.com/akrylysov/pogreb"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
@@ -31,11 +32,17 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 func setupStore(uri string, name string) *Store {
 	db := storage.NewMemory()
 	stubbers := stub.GetStubbers()
+	greb, err := pogreb.Open("testData/"+name, nil)
+	if err != nil {
+		panic(err)
+	}
 	return &Store{
 		uri:       uri,
 		db:        db,
+		greb:      greb,
 		FS:        protocol.NewFileFS(),
 		refIndex:  newReferenceIndex(db),
+		comIndex:  newCompletionIndex(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 

@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"context"
 	"log"
-	"strconv"
+	"path"
 	"strings"
 	"time"
 
 	"github.com/Masterminds/semver"
+	"github.com/akrylysov/pogreb"
 	"github.com/bep/debounce"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
 	"github.com/john-nguyen09/phpintel/util"
@@ -18,18 +20,18 @@ import (
 )
 
 const (
-	documentSymbols          string = "docSym"
-	classCollection          string = "cla"
-	interfaceCollection      string = "int"
-	traitCollection          string = "tra"
-	functionCollection       string = "fun"
-	constCollection          string = "con"
-	defineCollection         string = "def"
-	methodCollection         string = "met"
-	classConstCollection     string = "claCon"
-	propertyCollection       string = "pro"
-	globalVariableCollection string = "gloVar"
-	documentCollection       string = "doc"
+	documentSymbolsCollection string = "docSym"
+	classCollection           string = "cla"
+	interfaceCollection       string = "int"
+	traitCollection           string = "tra"
+	functionCollection        string = "fun"
+	constCollection           string = "con"
+	defineCollection          string = "def"
+	methodCollection          string = "met"
+	classConstCollection      string = "claCon"
+	propertyCollection        string = "pro"
+	globalVariableCollection  string = "gloVar"
+	documentCollection        string = "doc"
 
 	documentCompletionIndex   string = "docCom"
 	completionDataCollection  string = "comDatCol"
@@ -46,6 +48,7 @@ const (
 
 	referenceIndexCollection string = "refInd"
 	documentReferenceIndex   string = "docRefInd"
+	completionIndexColletion string = "comInd"
 )
 
 var /* const */ versionKey = []byte("Version")
@@ -73,13 +76,35 @@ func (s *entry) bytes() []byte {
 	return s.e.Bytes()
 }
 
+type documentSymbol struct {
+	collection    string
+	key           string
+	indexableName string
+}
+
+func (s documentSymbol) serialise(e *storage.Encoder) {
+	e.WriteString(s.collection)
+	e.WriteString(s.key)
+	e.WriteString(s.indexableName)
+}
+
+func readDocumentSymbol(d *storage.Decoder) documentSymbol {
+	return documentSymbol{
+		collection:    d.ReadString(),
+		key:           d.ReadString(),
+		indexableName: d.ReadString(),
+	}
+}
+
 // Store contains information about a given folder and functions
 // for querying symbols
 type Store struct {
 	uri       protocol.DocumentURI
 	FS        protocol.FS
 	db        storage.DB
+	greb      *pogreb.DB
 	refIndex  *referenceIndex
+	comIndex  *completionIndex
 	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
 
@@ -87,20 +112,36 @@ type Store struct {
 	DebouncedDeprecation func(func())
 }
 
+func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol) bool) {
+	b, err := greb.Get(e.getKeyBytes())
+	if err == nil && len(b) > 0 {
+		d := storage.NewDecoder(b)
+		count := d.ReadInt()
+		for i := 0; i < count; i++ {
+			symbol := readDocumentSymbol(d)
+			if fn(symbol) {
+				break
+			}
+		}
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 type symbolDeletor struct {
 	uri     string
 	symbols map[string]void
 }
 
-func newSymbolDeletor(db storage.DB, uri string) *symbolDeletor {
-	entry := newEntry(documentSymbols, uri+KeySep)
+func newSymbolDeletor(db storage.DB, greb *pogreb.DB, uri string) *symbolDeletor {
 	deletor := &symbolDeletor{
 		uri:     uri,
 		symbols: map[string]void{},
 	}
-	db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
-		keyInfo := strings.Split(string(it.Key()), KeySep)
-		deletor.symbols[strings.Join(keyInfo[2:], KeySep)] = empty
+	readDocumentSymbols(greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
+		deletor.symbols[symbol.collection+KeySep+symbol.key] = empty
+		return false
 	})
 	return deletor
 }
@@ -112,7 +153,6 @@ func (d *symbolDeletor) MarkNotDelete(ser serialisable) {
 func (d *symbolDeletor) Delete(batch storage.Batch) {
 	for key := range d.symbols {
 		batch.Delete([]byte(key))
-		batch.Delete([]byte(documentSymbols + KeySep + d.uri + key))
 	}
 }
 
@@ -160,11 +200,17 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 	if err != nil {
 		return nil, err
 	}
+	greb, err := pogreb.Open(path.Join(storePath, "pogreb"), nil)
+	if err != nil {
+		return nil, err
+	}
 	store := &Store{
 		uri:       uri,
 		FS:        fs,
 		db:        db,
+		greb:      greb,
 		refIndex:  newReferenceIndex(db),
+		comIndex:  newCompletionIndex(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 
@@ -177,6 +223,7 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 // Close triggers close on the fuzzy engine, and closes the disk storage
 func (s *Store) Close() {
 	s.db.Close()
+	s.greb.Close()
 }
 
 // GetStoreVersion returns the version of the disk storage or v0.0.0 if
@@ -295,11 +342,10 @@ func (s *Store) CloseDocument(ctx context.Context, uri protocol.DocumentURI) {
 // this returns error if the disk cannot be written
 func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newCompletionIndexDeletor(s.db, uri)
-		ciDeletor.Delete(b)
-		syDeletor := newSymbolDeletor(s.db, uri)
+		syDeletor := newSymbolDeletor(s.db, s.greb, uri)
 		syDeletor.Delete(b)
 		s.refIndex.resetURI(s, b, uri)
+		s.comIndex.resetURI(s, b, uri)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
 		return nil
@@ -357,13 +403,12 @@ func (s *Store) CompareAndIndexDocument(ctx context.Context, uri string) *Docume
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
-		syDeletor := newSymbolDeletor(s.db, document.GetURI())
+		syDeletor := newSymbolDeletor(s.db, s.greb, document.GetURI())
 		s.refIndex.resetURI(s, b, document.GetURI())
+		s.comIndex.resetURI(s, b, document.GetURI())
 
-		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
+		s.writeAllSymbols(b, document, syDeletor)
 
-		ciDeletor.Delete(b)
 		syDeletor.Delete(b)
 		entry := newEntry(documentCollection, document.GetURI())
 		b.Put(entry.getKeyBytes(), document.GetHash())
@@ -421,18 +466,23 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	return documentURIs
 }
 
-func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
-	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
+func (s *Store) writeAllSymbols(batch storage.Batch, document *Document, syDeletor *symbolDeletor) {
+	var completionInfos []completionInfo
 	for _, impTable := range document.importTables {
 		is := indexablesFromNamespaceName(impTable.GetNamespace())
-		for index, i := range is {
-			key := i.key + KeySep + strconv.Itoa(index)
-			s.indexName(batch, document, i, key)
-			ciDeletor.MarkNotDelete(document.GetURI(), i, key)
+		for _, i := range is {
+			words := wordtokeniser.Tokenise(i.GetIndexableName())
+			for _, word := range words {
+				completionInfos = append(completionInfos, completionInfo{
+					collection: i.GetIndexCollection(),
+					word:       word,
+				})
+			}
 		}
 	}
 	tra := newTraverser()
 	var referenceEntryInfos []entryInfo
+	var documentSymbols []documentSymbol
 	tra.traverseDocument(document, func(tra *traverser, child Symbol, _ []Symbol) {
 		if ser, ok := child.(serialisable); ok {
 			key := ser.GetKey()
@@ -442,13 +492,23 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			entry := newEntry(ser.GetCollection(), key)
 			ser.Serialise(entry.e)
 			writeEntry(batch, entry)
-			rememberSymbol(batch, document, ser)
+			symbol := documentSymbol{
+				collection: ser.GetCollection(),
+				key:        ser.GetKey(),
+			}
 			syDeletor.MarkNotDelete(ser)
 
 			if indexable, ok := child.(NameIndexable); ok {
-				s.indexName(batch, document, indexable, key)
-				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
+				words := wordtokeniser.Tokenise(indexable.GetIndexableName())
+				for _, word := range words {
+					completionInfos = append(completionInfos, completionInfo{
+						collection: ser.GetCollection(),
+						word:       word,
+					})
+				}
+				symbol.indexableName = indexable.GetIndexableName()
 			}
+			documentSymbols = append(documentSymbols, symbol)
 		}
 
 		if r, ok := child.(SymbolReference); ok {
@@ -470,19 +530,19 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			}
 		}
 	})
+	s.indexDocumentSymbols(document, batch, documentSymbols)
 	s.refIndex.index(s, document, batch, referenceEntryInfos)
+	s.comIndex.index(s, document, batch, completionInfos)
 }
 
-func rememberSymbol(batch storage.Batch, document *Document, ser serialisable) {
-	entry := newEntry(documentSymbols, document.GetURI()+KeySep+ser.GetCollection()+KeySep+ser.GetKey())
-	writeEntry(batch, entry)
-}
-
-func (s *Store) indexName(batch storage.Batch, document *Document, indexable NameIndexable, key string) {
-	entries := createCompletionEntries(document.GetURI(), indexable, key)
-	for _, entry := range entries {
-		writeEntry(batch, entry)
+func (s *Store) indexDocumentSymbols(document *Document, batch storage.Batch, symbols []documentSymbol) {
+	uri := document.GetURI()
+	entry := newEntry(documentSymbolsCollection, uri)
+	entry.e.WriteInt(len(symbols))
+	for _, symbol := range symbols {
+		symbol.serialise(entry.e)
 	}
+	s.greb.Put(entry.getKeyBytes(), entry.e.Bytes())
 }
 
 func writeEntry(batch storage.Batch, entry *entry) {
@@ -535,7 +595,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 	}
 	namespaces := []string{}
 	query := searchQuery{
-		collection: namespaceCompletionIndex + KeySep + scope,
+		collection: namespaceCompletionIndex,
 		keyword:    keyword,
 		onData: func(cv CompletionValue) onDataResult {
 			parts := strings.Split(string(cv), KeySep)
@@ -543,7 +603,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return namespaces, result
 }
 
@@ -599,12 +659,16 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 	}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: classCompletionIndex,
+		collection: classCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classCollection, string(completionValue))
 			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
+				return onDataResult{false}
+			}
+			if len(value) == 0 {
+				log.Printf("Empty class: %v", strings.Split(string(completionValue), KeySep))
 				return onDataResult{false}
 			}
 			d := storage.NewDecoder(value)
@@ -618,7 +682,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return classes, result
 }
 
@@ -640,7 +704,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 	interfaces := []*Interface{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: interfaceCompletionIndex,
+		collection: interfaceCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(interfaceCollection, string(completionValue))
@@ -659,7 +723,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return interfaces, result
 }
 
@@ -681,7 +745,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 	traits := []*Trait{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: traitCompletionIndex,
+		collection: traitCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(traitCollection, string(completionValue))
@@ -700,7 +764,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return traits, result
 }
 
@@ -722,12 +786,16 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 	functions := []*Function{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: functionCompletionIndex,
+		collection: functionCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(functionCollection, string(completionValue))
 			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
+				return onDataResult{false}
+			}
+			if len(value) == 0 {
+				log.Printf("Empty function: %v", strings.Split(string(completionValue), KeySep))
 				return onDataResult{false}
 			}
 			d := storage.NewDecoder(value)
@@ -741,7 +809,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return functions, result
 }
 
@@ -760,7 +828,7 @@ func (s *Store) GetConsts(name string) []*Const {
 func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, SearchResult) {
 	consts := []*Const{}
 	query := searchQuery{
-		collection: constCompletionIndex,
+		collection: constCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(constCollection, string(completionValue))
@@ -779,7 +847,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return consts, result
 }
 
@@ -798,7 +866,7 @@ func (s *Store) GetDefines(name string) []*Define {
 func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define, SearchResult) {
 	defines := []*Define{}
 	query := searchQuery{
-		collection: defineCompletionIndex,
+		collection: defineCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(defineCollection, string(completionValue))
@@ -817,7 +885,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return defines, result
 }
 
@@ -857,7 +925,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 	methods := []*Method{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: methodCompletionIndex,
+		collection: methodCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(methodCollection, string(completionValue))
@@ -876,7 +944,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return methods, result
 }
 
@@ -917,7 +985,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 	classConsts := []*ClassConst{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: classConstCompletionIndex,
+		collection: classConstCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(classConstCollection, string(completionValue))
@@ -936,7 +1004,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return classConsts, result
 }
 
@@ -972,7 +1040,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 	properties := []*Property{}
 	options.predicates = append(options.predicates, namespacePredicate(scope))
 	query := searchQuery{
-		collection: propertyCompletionIndex,
+		collection: propertyCollection,
 		keyword:    keyword,
 		onData: func(completionValue CompletionValue) onDataResult {
 			entry := newEntry(propertyCollection, string(completionValue))
@@ -991,7 +1059,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := s.comIndex.search(s, query)
 	return properties, result
 }
 

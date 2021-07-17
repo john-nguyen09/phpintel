@@ -93,7 +93,7 @@ func newReferenceIndex(db storage.DB) *referenceIndex {
 
 func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch, infos []entryInfo) {
 	uri := doc.GetURI()
-	if strings.HasPrefix(uri, "phpstorm-stubs://") {
+	if !haveReferences(uri) {
 		return
 	}
 	canonicalURI := util.CanonicaliseURI(store.uri, uri)
@@ -123,6 +123,9 @@ func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch,
 }
 
 func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string) {
+	if !haveReferences(uri) {
+		return
+	}
 	canonicalURI := util.CanonicaliseURI(store.uri, uri)
 	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
 		var entry referenceEntry
@@ -147,7 +150,7 @@ func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
 		entry := tuple.Val.(referenceEntry)
 		ok, err := entry.filter.Lookup(refBytes)
 		if err != nil {
-			panic(err)
+			log.Printf("%s: %v", tuple.Key, err)
 		}
 		if ok {
 			uri := util.URIFromCanonicalURI(store.uri, tuple.Key)
@@ -160,4 +163,8 @@ func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {
 		}
 	}
 	return results
+}
+
+func haveReferences(uri string) bool {
+	return !strings.HasPrefix(uri, "phpstorm-stubs://")
 }
