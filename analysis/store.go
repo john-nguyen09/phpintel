@@ -667,6 +667,10 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			if err != nil {
 				return onDataResult{false}
 			}
+			if len(value) == 0 {
+				log.Printf("Empty class: %v", strings.Split(string(completionValue), KeySep))
+				return onDataResult{false}
+			}
 			d := storage.NewDecoder(value)
 			class := ReadClass(d)
 			if isSymbolValid(class, options) {
@@ -788,6 +792,10 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			entry := newEntry(functionCollection, string(completionValue))
 			value, err := s.db.Get(entry.getKeyBytes())
 			if err != nil {
+				return onDataResult{false}
+			}
+			if len(value) == 0 {
+				log.Printf("Empty function: %v", strings.Split(string(completionValue), KeySep))
 				return onDataResult{false}
 			}
 			d := storage.NewDecoder(value)

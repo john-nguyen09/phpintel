@@ -3,13 +3,12 @@ package filter
 import (
 	"bytes"
 	"fmt"
-	"hash"
-	"hash/fnv"
 	"log"
 	"sort"
 	"sync"
 
 	"github.com/FastFilter/xorfilter"
+	xxhash "github.com/cespare/xxhash/v2"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 )
 
@@ -18,7 +17,6 @@ type Filter struct {
 	mutex  sync.RWMutex
 	head   *xorfilter.Xor8
 	buffer [][]byte
-	hasher hash.Hash64
 }
 
 // NewFilter creates the Filter
@@ -26,7 +24,6 @@ func NewFilter() *Filter {
 	return &Filter{
 		head:   nil,
 		buffer: [][]byte{},
-		hasher: fnv.New64(),
 	}
 }
 
@@ -42,13 +39,7 @@ func (f *Filter) Commit() error {
 	f.buffer = [][]byte{}
 	keyHashes := []uint64{}
 	for _, key := range keys {
-		_, err := f.hasher.Write(key)
-		if err != nil {
-			log.Print(err)
-			continue
-		}
-		keyHashes = append(keyHashes, f.hasher.Sum64())
-		f.hasher.Reset()
+		keyHashes = append(keyHashes, xxhash.Sum64(key))
 	}
 	filter, err := xorfilter.Populate(keyHashes)
 	if err != nil {
@@ -66,10 +57,7 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 	if f.head == nil {
 		return false, fmt.Errorf("filter is not yet commited")
 	}
-	f.hasher.Write(data)
-	hashed := f.hasher.Sum64()
-	f.hasher.Reset()
-	return f.head.Contains(hashed), nil
+	return f.head.Contains(xxhash.Sum64(data)), nil
 }
 
 // Encode encodes the filter into byte slice
