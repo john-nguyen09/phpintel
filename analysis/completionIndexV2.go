@@ -122,12 +122,12 @@ func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
 	words := wordtokeniser.Tokenise(query.keyword)
 	shouldStop := false
 	uniqueSet := map[string]void{}
+	pattern := []rune(strings.ToLower(query.keyword))
 	for _, word := range words {
 		if shouldStop {
 			break
 		}
 		wordBytes := []byte(query.collection + KeySep + word)
-		pattern := []rune(strings.ToLower(word))
 		for tuple := range i.entries.IterBuffered() {
 			entry := tuple.Val.(completionEntry)
 			ok, err := entry.filter.Lookup(wordBytes)
