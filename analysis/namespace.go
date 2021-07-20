@@ -36,13 +36,11 @@ type indexableNamespace struct {
 	scope string
 	// The current name of a part
 	name string
-	// key is the namespaceName
-	key string
 }
 
 var _ NameIndexable = (*indexableNamespace)(nil)
 
-func indexablesFromNamespaceName(namespaceName string) []*indexableNamespace {
+func indexablesFromNamespaceName(namespaceName string) ([]*indexableNamespace, string) {
 	is := []*indexableNamespace{}
 	name := namespaceName
 	if len(name) > 0 && name[0] == '\\' {
@@ -56,7 +54,6 @@ func indexablesFromNamespaceName(namespaceName string) []*indexableNamespace {
 			is = append(is, &indexableNamespace{
 				scope: scope,
 				name:  part,
-				key:   "\\" + name,
 			})
 			if scope != "" {
 				scope += "\\"
@@ -64,7 +61,7 @@ func indexablesFromNamespaceName(namespaceName string) []*indexableNamespace {
 			scope += part
 		}
 	}
-	return is
+	return is, "\\" + name
 }
 
 func (i *indexableNamespace) GetIndexableName() string {
@@ -73,8 +70,9 @@ func (i *indexableNamespace) GetIndexableName() string {
 
 func (i *indexableNamespace) GetIndexCollection() string {
 	scope := i.scope
-	if len(scope) > 0 && scope != "\\" {
-		scope = "\\" + scope
+	if len(scope) == 0 || scope == "\\" {
+		return namespaceCompletionIndex
 	}
+	scope = "\\" + scope
 	return namespaceCompletionIndex + KeySep + scope
 }

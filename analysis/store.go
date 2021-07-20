@@ -20,18 +20,19 @@ import (
 )
 
 const (
-	documentSymbolsCollection string = "docSym"
-	classCollection           string = "cla"
-	interfaceCollection       string = "int"
-	traitCollection           string = "tra"
-	functionCollection        string = "fun"
-	constCollection           string = "con"
-	defineCollection          string = "def"
-	methodCollection          string = "met"
-	classConstCollection      string = "claCon"
-	propertyCollection        string = "pro"
-	globalVariableCollection  string = "gloVar"
-	documentCollection        string = "doc"
+	documentSymbolsCollection    string = "docSym"
+	classCollection              string = "cla"
+	interfaceCollection          string = "int"
+	traitCollection              string = "tra"
+	functionCollection           string = "fun"
+	constCollection              string = "con"
+	defineCollection             string = "def"
+	methodCollection             string = "met"
+	classConstCollection         string = "claCon"
+	propertyCollection           string = "pro"
+	globalVariableCollection     string = "gloVar"
+	documentCollection           string = "doc"
+	documentNamespacesCollection string = "docNs"
 
 	documentCompletionIndex   string = "docCom"
 	completionDataCollection  string = "comDatCol"
@@ -96,6 +97,20 @@ func readDocumentSymbol(d *storage.Decoder) documentSymbol {
 	}
 }
 
+type documentNamespace struct {
+	fullName string
+}
+
+func (s documentNamespace) serialise(e *storage.Encoder) {
+	e.WriteString(s.fullName)
+}
+
+func readDocumentNamespace(d *storage.Decoder) documentNamespace {
+	return documentNamespace{
+		fullName: d.ReadString(),
+	}
+}
+
 // Store contains information about a given folder and functions
 // for querying symbols
 type Store struct {
@@ -107,6 +122,7 @@ type Store struct {
 	comIndex  *completionIndex
 	stubbers  []stub.Stubber
 	documents cmap.ConcurrentMap
+	isClosed  bool
 
 	syncedDocumentURIs   cmap.ConcurrentMap
 	DebouncedDeprecation func(func())
@@ -120,6 +136,23 @@ func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol) bool
 		for i := 0; i < count; i++ {
 			symbol := readDocumentSymbol(d)
 			if fn(symbol) {
+				break
+			}
+		}
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func readDocumentNamespaces(greb *pogreb.DB, e *entry, fn func(documentNamespace) bool) {
+	b, err := greb.Get(e.getKeyBytes())
+	if err == nil && len(b) > 0 {
+		d := storage.NewDecoder(b)
+		count := d.ReadInt()
+		for i := 0; i < count; i++ {
+			ns := readDocumentNamespace(d)
+			if fn(ns) {
 				break
 			}
 		}
@@ -222,8 +255,12 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 
 // Close triggers close on the fuzzy engine, and closes the disk storage
 func (s *Store) Close() {
+	if s.isClosed {
+		return
+	}
 	s.db.Close()
 	s.greb.Close()
+	s.isClosed = true
 }
 
 // GetStoreVersion returns the version of the disk storage or v0.0.0 if
@@ -468,8 +505,9 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 
 func (s *Store) writeAllSymbols(batch storage.Batch, document *Document, syDeletor *symbolDeletor) {
 	var completionInfos []completionInfo
+	var documentNamespaces []documentNamespace
 	for _, impTable := range document.importTables {
-		is := indexablesFromNamespaceName(impTable.GetNamespace())
+		is, key := indexablesFromNamespaceName(impTable.GetNamespace())
 		for _, i := range is {
 			words := wordtokeniser.Tokenise(i.GetIndexableName())
 			for _, word := range words {
@@ -479,6 +517,9 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document, syDelet
 				})
 			}
 		}
+		documentNamespaces = append(documentNamespaces, documentNamespace{
+			fullName: key,
+		})
 	}
 	tra := newTraverser()
 	var referenceEntryInfos []entryInfo
@@ -531,6 +572,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document, syDelet
 		}
 	})
 	s.indexDocumentSymbols(document, batch, documentSymbols)
+	s.indexDocumentNamespaces(document, batch, documentNamespaces)
 	s.refIndex.index(s, document, batch, referenceEntryInfos)
 	s.comIndex.index(s, document, batch, completionInfos)
 }
@@ -541,6 +583,16 @@ func (s *Store) indexDocumentSymbols(document *Document, batch storage.Batch, sy
 	entry.e.WriteInt(len(symbols))
 	for _, symbol := range symbols {
 		symbol.serialise(entry.e)
+	}
+	s.greb.Put(entry.getKeyBytes(), entry.e.Bytes())
+}
+
+func (s *Store) indexDocumentNamespaces(document *Document, batch storage.Batch, namespaces []documentNamespace) {
+	uri := document.GetURI()
+	entry := newEntry(documentNamespacesCollection, uri)
+	entry.e.WriteInt(len(namespaces))
+	for _, ns := range namespaces {
+		ns.serialise(entry.e)
 	}
 	s.greb.Put(entry.getKeyBytes(), entry.e.Bytes())
 }
@@ -594,6 +646,10 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 		scope = ""
 	}
 	namespaces := []string{}
+	collection := namespaceCompletionIndex
+	if len(scope) != 0 {
+		collection += KeySep + scope
+	}
 	query := searchQuery{
 		collection: namespaceCompletionIndex,
 		keyword:    keyword,

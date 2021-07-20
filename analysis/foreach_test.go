@@ -13,15 +13,16 @@ func TestForeach(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	store := setupStore("test", "TestForeach")
-	document := NewDocument("test1", data)
-	document.Load()
-	ctx := NewResolveContext(NewQuery(store), document)
-	h := document.HasTypesAt(75)
-	h.Resolve(ctx)
-	cupaloy.SnapshotT(t, h.GetTypes())
+	withTestStore("test", "TestForeach", func(store *Store) {
+		document := NewDocument("test1", data)
+		document.Load()
+		ctx := NewResolveContext(NewQuery(store), document)
+		h := document.HasTypesAt(75)
+		h.Resolve(ctx)
+		cupaloy.SnapshotT(t, h.GetTypes())
 
-	h = document.HasTypesAt(120)
-	h.Resolve(ctx)
-	assert.Equal(t, "string", h.GetTypes().ToString())
+		h = document.HasTypesAt(120)
+		h.Resolve(ctx)
+		assert.Equal(t, "string", h.GetTypes().ToString())
+	})
 }

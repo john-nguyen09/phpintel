@@ -99,31 +99,32 @@ type functionReferenceFQNTestCase struct {
 }
 
 func TestFunctionReferenceFQN(t *testing.T) {
-	store := setupStore("test", "TestFunctionReferenceFQN")
-	doc1 := NewDocument("test1", []byte(`<?php
+	withTestStore("test", "TestFunctionReferenceFQN", func(store *Store) {
+		doc1 := NewDocument("test1", []byte(`<?php
 namespace Namespace1;
 
 use function Namespace2\func1;`))
-	doc1.Load()
+		doc1.Load()
 
-	doc2 := NewDocument("test2", []byte(`<?php
-function func2() {
-}`))
-	doc2.Load()
-	store.SyncDocument(doc2)
+		doc2 := NewDocument("test2", []byte(`<?php
+	function func2() {
+	}`))
+		doc2.Load()
+		store.SyncDocument(doc2)
 
-	doc3 := NewDocument("test3", []byte(`<?php namespace Namespace3;`))
-	doc3.Load()
+		doc3 := NewDocument("test3", []byte(`<?php namespace Namespace3;`))
+		doc3.Load()
 
-	testCases := []functionReferenceFQNTestCase{
-		{doc1.importTables[0], "func1", "\\Namespace2\\func1"},
-		{doc3.importTables[0], "func2", "\\func2"},
-		{doc3.importTables[0], "func3", "\\Namespace3\\func3"},
-	}
-	for _, testCase := range testCases {
-		actual := testCase.importTable.GetFunctionReferenceFQN(NewQuery(store), NewTypeString(testCase.funcCall))
-		assert.Equal(t, testCase.expected, actual)
-	}
+		testCases := []functionReferenceFQNTestCase{
+			{doc1.importTables[0], "func1", "\\Namespace2\\func1"},
+			{doc3.importTables[0], "func2", "\\func2"},
+			{doc3.importTables[0], "func3", "\\Namespace3\\func3"},
+		}
+		for _, testCase := range testCases {
+			actual := testCase.importTable.GetFunctionReferenceFQN(NewQuery(store), NewTypeString(testCase.funcCall))
+			assert.Equal(t, testCase.expected, actual)
+		}
+	})
 }
 
 func TestImportTableOnEmptyFile(t *testing.T) {

@@ -29,14 +29,14 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 	return document
 }
 
-func setupStore(uri string, name string) *Store {
+func withTestStore(uri string, name string, fn func(*Store)) {
 	db := storage.NewMemory()
 	stubbers := stub.GetStubbers()
 	greb, err := pogreb.Open("testData/"+name, nil)
 	if err != nil {
 		panic(err)
 	}
-	return &Store{
+	store := &Store{
 		uri:       uri,
 		db:        db,
 		greb:      greb,
@@ -48,6 +48,8 @@ func setupStore(uri string, name string) *Store {
 
 		syncedDocumentURIs: cmap.New(),
 	}
+	fn(store)
+	store.Close()
 }
 
 func (s *Document) hasTypesSymbols() []HasTypes {

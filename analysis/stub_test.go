@@ -7,8 +7,9 @@ import (
 )
 
 func TestPhpStormStub(t *testing.T) {
-	store := setupStore("", "stub_test")
-	store.LoadStubs()
-	functions := store.GetFunctions("\\preg_match")
-	cupaloy.SnapshotT(t, functions)
+	withTestStore("", "stub_test", func(store *Store) {
+		store.LoadStubs()
+		functions := store.GetFunctions("\\preg_match")
+		cupaloy.SnapshotT(t, functions)
+	})
 }

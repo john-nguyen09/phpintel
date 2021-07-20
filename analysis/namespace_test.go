@@ -31,44 +31,49 @@ func TestMultipleNamespaces(t *testing.T) {
 	}).GetNamespace())
 }
 
+type indexableNamespaceResult struct {
+	is  []*indexableNamespace
+	key string
+}
+
 type indexableNamspaceTestCase struct {
 	namespaceName string
-	expected      []*indexableNamespace
+	expected      indexableNamespaceResult
 }
 
 func TestIndexableNamespace(t *testing.T) {
 	testCases := []indexableNamspaceTestCase{
-		{"", []*indexableNamespace{}},
-		{"\\", []*indexableNamespace{}},
-		{"TestNamespace1", []*indexableNamespace{
-			{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
-		}},
-		{"\\TestNamespace1", []*indexableNamespace{
-			{scope: "", name: "TestNamespace1", key: "\\TestNamespace1"},
-		}},
-		{"Namespace1\\Namespace2", []*indexableNamespace{
-			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
-			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
-		}},
-		{"\\Namespace1\\Namespace2", []*indexableNamespace{
-			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2"},
-			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2"},
-		}},
-		{"Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
-			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
-		}},
-		{"\\Namespace1\\Namespace2\\Namespace3", []*indexableNamespace{
-			{scope: "", name: "Namespace1", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			{scope: "Namespace1", name: "Namespace2", key: "\\Namespace1\\Namespace2\\Namespace3"},
-			{scope: "Namespace1\\Namespace2", name: "Namespace3", key: "\\Namespace1\\Namespace2\\Namespace3"},
-		}},
+		{"", indexableNamespaceResult{[]*indexableNamespace{}, "\\"}},
+		{"\\", indexableNamespaceResult{[]*indexableNamespace{}, "\\"}},
+		{"TestNamespace1", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "TestNamespace1"},
+		}, "\\TestNamespace1"}},
+		{"\\TestNamespace1", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "TestNamespace1"},
+		}, "\\TestNamespace1"}},
+		{"Namespace1\\Namespace2", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "Namespace1"},
+			{scope: "Namespace1", name: "Namespace2"},
+		}, "\\Namespace1\\Namespace2"}},
+		{"\\Namespace1\\Namespace2", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "Namespace1"},
+			{scope: "Namespace1", name: "Namespace2"},
+		}, "\\Namespace1\\Namespace2"}},
+		{"Namespace1\\Namespace2\\Namespace3", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "Namespace1"},
+			{scope: "Namespace1", name: "Namespace2"},
+			{scope: "Namespace1\\Namespace2", name: "Namespace3"},
+		}, "\\Namespace1\\Namespace2\\Namespace3"}},
+		{"\\Namespace1\\Namespace2\\Namespace3", indexableNamespaceResult{[]*indexableNamespace{
+			{scope: "", name: "Namespace1"},
+			{scope: "Namespace1", name: "Namespace2"},
+			{scope: "Namespace1\\Namespace2", name: "Namespace3"},
+		}, "\\Namespace1\\Namespace2\\Namespace3"}},
 	}
 	for i, testCase := range testCases {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			actual := indexablesFromNamespaceName(testCase.namespaceName)
-			assert.Equal(t, testCase.expected, actual)
+			actual, key := indexablesFromNamespaceName(testCase.namespaceName)
+			assert.Equal(t, testCase.expected, indexableNamespaceResult{actual, key})
 		})
 	}
 }

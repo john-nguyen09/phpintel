@@ -10,19 +10,20 @@ import (
 )
 
 func TestClone(t *testing.T) {
-	store := setupStore("test", "TestClone")
-	doc := NewDocument("test1", []byte(`<?php
+	withTestStore("test", "TestClone", func(store *Store) {
+		doc := NewDocument("test1", []byte(`<?php
 $var1 = new DateTime();
 $var2 = clone $var1;
 $var3 = clone $var2;`))
-	doc.Load()
-	store.SyncDocument(doc)
-	assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols()[2]).String())
-	assert.Equal(t, "\\DateTime", doc.hasTypesSymbols()[2].GetTypes().ToString())
+		doc.Load()
+		store.SyncDocument(doc)
+		assert.Equal(t, "*analysis.Variable", reflect.TypeOf(doc.hasTypesSymbols()[2]).String())
+		assert.Equal(t, "\\DateTime", doc.hasTypesSymbols()[2].GetTypes().ToString())
 
-	var3 := doc.hasTypesSymbols()[4]
-	var3.Resolve(NewResolveContext(NewQuery(store), doc))
-	assert.Equal(t, "\\DateTime", var3.GetTypes().ToString())
+		var3 := doc.hasTypesSymbols()[4]
+		var3.Resolve(NewResolveContext(NewQuery(store), doc))
+		assert.Equal(t, "\\DateTime", var3.GetTypes().ToString())
+	})
 }
 
 func TestInstanceOf(t *testing.T) {

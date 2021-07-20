@@ -16,11 +16,12 @@ type ParsingContext struct {
 	waitGroup sync.WaitGroup
 }
 
-func newParsingContext() *ParsingContext {
-	store := setupStore("test", "BenchmarkAnalysis")
-	return &ParsingContext{
-		store: store,
-	}
+func withParsingContext(fn func(*ParsingContext)) {
+	withTestStore("test", "BenchmarkAnalysis", func(store *Store) {
+		fn(&ParsingContext{
+			store: store,
+		})
+	})
 }
 
 func (s *ParsingContext) addDocument(document *Document) {
@@ -35,24 +36,25 @@ func BenchmarkAnalysis(t *testing.B) {
 	dir, _ := filepath.Abs("../../go-phpparser/cases/moodle")
 	jobs := make(chan string)
 	numOfWorkers := 4
-	context := newParsingContext()
-	defer context.close()
+	withParsingContext(func(context *ParsingContext) {
+		defer context.close()
 
-	for i := 0; i < numOfWorkers; i++ {
-		go analyse(context, i, jobs)
-	}
+		for i := 0; i < numOfWorkers; i++ {
+			go analyse(context, i, jobs)
+		}
 
-	godirwalk.Walk(dir, &godirwalk.Options{
-		Callback: func(path string, de *godirwalk.Dirent) error {
-			if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
-				context.waitGroup.Add(1)
-				jobs <- path
-			}
-			return nil
-		},
-		Unsorted: true,
+		godirwalk.Walk(dir, &godirwalk.Options{
+			Callback: func(path string, de *godirwalk.Dirent) error {
+				if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
+					context.waitGroup.Add(1)
+					jobs <- path
+				}
+				return nil
+			},
+			Unsorted: true,
+		})
+		context.waitGroup.Wait()
 	})
-	context.waitGroup.Wait()
 }
 
 // func TestReadData(t *testing.T) {

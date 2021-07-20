@@ -34,24 +34,46 @@ func newCompletionEntry() completionEntry {
 
 func (e *completionEntry) search(store *Store, uri string, query searchQuery, pattern []rune, uniqueSet map[string]void) bool {
 	shouldStop := false
-	readDocumentSymbols(store.greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
-		indexableName := symbol.indexableName
-		if len(indexableName) == 0 || symbol.collection != query.collection {
-			return false
-		}
-		if _, ok := uniqueSet[symbol.key]; ok {
-			return false
-		}
-		if ok, _ := isMatch(indexableName, pattern); ok {
-			result := query.onData(CompletionValue(symbol.key))
-			if result.shouldStop {
-				shouldStop = true
-				return true
+	switch {
+	case strings.HasPrefix(query.collection, namespaceCompletionIndex):
+		readDocumentNamespaces(store.greb, newEntry(documentNamespacesCollection, uri), func(ns documentNamespace) bool {
+			if _, ok := uniqueSet[ns.fullName]; ok {
+				return false
 			}
-			uniqueSet[symbol.key] = empty
-		}
-		return false
-	})
+			is, key := indexablesFromNamespaceName(ns.fullName)
+			for _, i := range is {
+				if ok, _ := isMatch(i.GetIndexableName(), pattern); ok {
+					uniqueSet[ns.fullName] = empty
+					result := query.onData(CompletionValue(key))
+					if result.shouldStop {
+						shouldStop = true
+						return true
+					}
+					return false
+				}
+			}
+			return false
+		})
+	default:
+		readDocumentSymbols(store.greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
+			indexableName := symbol.indexableName
+			if len(indexableName) == 0 || symbol.collection != query.collection {
+				return false
+			}
+			if _, ok := uniqueSet[symbol.key]; ok {
+				return false
+			}
+			if ok, _ := isMatch(indexableName, pattern); ok {
+				result := query.onData(CompletionValue(symbol.key))
+				if result.shouldStop {
+					shouldStop = true
+					return true
+				}
+				uniqueSet[symbol.key] = empty
+			}
+			return false
+		})
+	}
 	return shouldStop
 }
 
