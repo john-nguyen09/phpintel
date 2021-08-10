@@ -12,16 +12,22 @@ import (
 type Define struct {
 	location      protocol.Location
 	description   string
+	children      []Symbol
 	deprecatedTag *tag
 	Name          TypeString
 	Value         string
 }
+
+var _ HasTypes = (*Define)(nil)
+var _ HasParamsResolvable = (*Define)(nil)
 
 func newDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	define := &Define{
 		location: document.GetNodeLocation(node),
 	}
 	phpDoc := document.getValidPhpDoc(define.location)
+	document.addSymbol(define)
+	document.pushBlock(define)
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -40,7 +46,8 @@ func newDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
 		child = traverser.Advance()
 	}
 	define.Name.SetNamespace(document.currImportTable().GetNamespace())
-	return define
+	document.popBlock()
+	return nil
 }
 
 func (s *Define) GetLocation() protocol.Location {
@@ -70,6 +77,34 @@ func (s *Define) analyseArgs(document *Document, args *ArgumentList) {
 		secondArg := args.GetArguments()[1]
 		s.Value = document.GetNodeText(secondArg)
 	}
+}
+
+func (s *Define) addChild(child Symbol) {
+	s.children = append(s.children, child)
+}
+
+func (s *Define) GetChildren() []Symbol {
+	return s.children
+}
+
+func (s *Define) GetTypes() TypeComposite {
+	return newTypeComposite()
+}
+
+func (s *Define) Resolve(ctx ResolveContext) {
+
+}
+
+func (s *Define) ResolveToHasParams(ctx ResolveContext) []HasParams {
+	functions := []HasParams{}
+	typeString := NewTypeString("\\define")
+	q := ctx.query
+	document := ctx.document
+	typeString.SetFQN(document.currImportTable().GetFunctionReferenceFQN(q, typeString))
+	for _, function := range q.GetFunctions(typeString.GetFQN()) {
+		functions = append(functions, function)
+	}
+	return functions
 }
 
 func (s *Define) GetCollection() string {

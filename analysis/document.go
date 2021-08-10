@@ -480,6 +480,10 @@ func (s *Document) hasTypesBeforePos(pos protocol.Position) HasTypes {
 			t.stopDescent = true
 		} else if relativePos < 0 {
 			t.shouldStop = true
+		} else {
+			if h, ok := s.(HasTypes); ok {
+				result = h
+			}
 		}
 	})
 	return result

@@ -118,7 +118,9 @@ func scanNode(a analyser, document *Document, node phrase.AstNode) {
 			return
 		}
 
-		scanForExpression(a, document, p)
+		if !isDefine(document, p) {
+			scanForExpression(a, document, p)
+		}
 		if _, ok := typesToScanForChildren[p.Type]; ok {
 			scanForChildren(a, document, p)
 			return

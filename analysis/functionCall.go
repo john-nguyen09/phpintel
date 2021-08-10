@@ -14,7 +14,7 @@ type FunctionCall struct {
 	hasResolved bool
 }
 
-func tryToNewDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
+func isDefine(document *Document, node *phrase.Phrase) bool {
 	traverser := util.NewTraverser(node)
 	child := traverser.Advance()
 	for child != nil {
@@ -23,11 +23,18 @@ func tryToNewDefine(a analyser, document *Document, node *phrase.Phrase) Symbol 
 			case phrase.QualifiedName, phrase.FullyQualifiedName:
 				nameLowerCase := strings.ToLower(document.getPhraseText(p))
 				if nameLowerCase == "\\define" || nameLowerCase == "define" {
-					return newDefine(a, document, node)
+					return true
 				}
 			}
 		}
 		child = traverser.Advance()
+	}
+	return false
+}
+
+func tryToNewDefine(a analyser, document *Document, node *phrase.Phrase) Symbol {
+	if isDefine(document, node) {
+		return newDefine(a, document, node)
 	}
 	return nil
 }

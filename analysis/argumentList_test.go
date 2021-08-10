@@ -94,5 +94,10 @@ func TestDocumentSignatures(t *testing.T) {
 		{Line: 29, Character: 27},
 		{Line: 32, Character: 39},
 		{Line: 32, Character: 47},
+		{Line: 37, Character: 7},
+		{Line: 37, Character: 15},
 	}, befores)
+
+	hasTypes := doc.HasTypesBeforePos(protocol.Position{Line: 37, Character: 7})
+	assert.NotNil(t, hasTypes)
 }

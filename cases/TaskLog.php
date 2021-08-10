@@ -34,3 +34,5 @@ class TaskLog extends Model
         }
     }
 }
+
+define('TEST', 1);
