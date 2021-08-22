@@ -171,10 +171,10 @@ func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
 
 func getSearchableTokens(infos []completionInfo) []string {
 	results := []string{}
-	uniqueSet := map[string]void{}
+	uniqueSet := map[string]map[string]void{}
 	for _, info := range infos {
 		hasCollection := len(info.collection) > 0
-		for _, ngram := range extractStringToNgram(info.word, uniqueSet) {
+		for _, ngram := range extractStringToNgram(info, uniqueSet) {
 			if hasCollection {
 				results = append(results, info.collection+KeySep+ngram)
 			} else {
@@ -187,9 +187,13 @@ func getSearchableTokens(infos []completionInfo) []string {
 
 // Extract one string to ngram list
 // Note the Ngram is a uint32 for ascii code
-func extractStringToNgram(str string, uniqueSet map[string]void) []string {
+func extractStringToNgram(info completionInfo, uniqueSet map[string]map[string]void) []string {
+	str := info.word
 	if len(str) == 0 {
 		return nil
+	}
+	if _, ok := uniqueSet[info.collection]; !ok {
+		uniqueSet[info.collection] = map[string]void{}
 	}
 
 	var results []string
@@ -198,15 +202,15 @@ func extractStringToNgram(str string, uniqueSet map[string]void) []string {
 			continue
 		}
 		ngram := str[:i]
-		if _, ok := uniqueSet[ngram]; ok {
+		if _, ok := uniqueSet[info.collection][ngram]; ok {
 			continue
 		}
 		results = append(results, ngram)
-		uniqueSet[ngram] = empty
+		uniqueSet[info.collection][ngram] = empty
 	}
-	if _, ok := uniqueSet[str]; !ok {
+	if _, ok := uniqueSet[info.collection][str]; !ok {
 		results = append(results, str)
-		uniqueSet[str] = empty
+		uniqueSet[info.collection][str] = empty
 	}
 
 	return results

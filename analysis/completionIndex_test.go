@@ -25,6 +25,23 @@ func TestCompletionIndex(t *testing.T) {
 		sort.Strings(expected)
 		sort.Strings(results)
 		assert.Equal(t, expected, results)
+
+		defDoc1 := NewDocument("test2", []byte(`<?php
+namespace Krizalys\Onedrive;
+class Onedrive {}
+`))
+		defDoc1.Load()
+		store.SaveDocOnStore(defDoc1)
+		store.SyncDocument(defDoc1)
+
+		classes, _ = store.SearchClasses("Onedrive", NewSearchOptions())
+		results = []string{}
+		for _, c := range classes {
+			results = append(results, c.Name.GetFQN())
+		}
+		assert.Equal(t, []string{
+			"\\Krizalys\\Onedrive\\Onedrive",
+		}, results)
 	})
 }
 
@@ -50,16 +67,8 @@ func TestMultipleIndexing(t *testing.T) {
 // func TestNgram(t *testing.T) {
 // 	infos := []completionInfo{
 // 		{
-// 			collection: "",
-// 			word:       "TestMethodClass",
-// 		},
-// 		{
-// 			collection: "",
-// 			word:       "TestAbstractMethodClass",
-// 		},
-// 		{
-// 			collection: "",
-// 			word:       "function3",
+// 			collection: "cla",
+// 			word:       "Onedrive",
 // 		},
 // 	}
 // 	fmt.Println(getSearchableTokens(infos))

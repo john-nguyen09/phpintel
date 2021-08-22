@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"net/url"
 	"strings"
@@ -74,7 +75,7 @@ func GetURIID(uri string) string {
 		parts = parts[:len(parts)-1]
 	}
 	parts, lastPart := parts[:len(parts)-1], parts[len(parts)-1]
-	result := ""
+	result := lastPart + "-"
 	if len(parts) > 0 {
 		for _, part := range parts[0 : len(parts)-1] {
 			r := []rune(part)
@@ -84,7 +85,7 @@ func GetURIID(uri string) string {
 			result += string(r[0])
 		}
 	}
-	result += "-" + lastPart + "-" + hash[:8]
+	result += "-" + hash[:8]
 	return result
 }
 
@@ -109,4 +110,17 @@ func IsURINavigatable(uri string) bool {
 	// but this is not true because there are also other navigatable URIs
 	// e.g. FTP, HTTP or other storage providers
 	return strings.HasPrefix(uri, "file://")
+}
+
+func DecodeURIFromQuery(uri string) (string, error) {
+	uri, err := url.QueryUnescape(uri)
+	if err != nil {
+		return "", fmt.Errorf("workspaceStore.getStore cannot QueryUnescape %s, err: %v", uri, err)
+	}
+	u, err := url.Parse(uri)
+	if err != nil {
+		return "", fmt.Errorf("workspaceStore.getStore cannot Parse %s, err: %v", uri, err)
+	}
+	uri = u.String()
+	return uri, nil
 }

@@ -50,15 +50,24 @@ func newWorkspaceStore(ctx context.Context, server *Server) *workspaceStore {
 
 func (s *workspaceStore) newCreator(id int) {
 	for job := range s.createJobs {
-		store := s.getStore(job.uri)
+		uri, err := util.DecodeURIFromQuery(job.uri)
+		if err != nil {
+			log.Printf("workspaceStore.getStore cannot DecodeURIFromQuery %s, err: %v", job.uri, err)
+			continue
+		}
+		store := s.getStore(uri)
 		if store == nil {
 			if job.waitGroup != nil {
 				job.waitGroup.Done()
 			}
-			log.Printf("workspaceStore.newCreator store not found: %s", job.uri)
+			log.Printf("workspaceStore.newCreator store not found: %s", uri)
+			log.Printf("Stores:")
+			for _, store := range s.stores {
+				log.Println(store.GetURI())
+			}
 			continue
 		}
-		store.CompareAndIndexDocument(job.ctx, job.uri)
+		store.CompareAndIndexDocument(job.ctx, uri)
 		if job.waitGroup != nil {
 			job.waitGroup.Done()
 		}
@@ -67,6 +76,12 @@ func (s *workspaceStore) newCreator(id int) {
 
 func (s *workspaceStore) newDeletor(id int) {
 	for uri := range s.deleteJobs {
+		var err error
+		uri, err = util.DecodeURIFromQuery(uri)
+		if err != nil {
+			log.Printf("workspaceStore.getStore cannot DecodeURIFromQuery %s, err: %v", uri, err)
+			continue
+		}
 		store := s.getStore(uri)
 		if store == nil {
 			continue
@@ -145,8 +160,8 @@ func (s *workspaceStore) registerFileWatcher(ctx context.Context, base string, s
 	// fileExtensions := "php"
 	regParams := protocol.DidChangeWatchedFilesRegistrationOptions{
 		Watchers: []protocol.FileSystemWatcher{{
-			GlobPattern: base + "/**/*",
-			Kind:        int(protocol.WatchCreate + protocol.WatchDelete),
+			GlobPattern: "**/*",
+			Kind:        int(protocol.WatchCreate + protocol.WatchChange + protocol.WatchDelete),
 		}},
 	}
 	return server.client.RegisterCapability(ctx, &protocol.RegistrationParams{

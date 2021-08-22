@@ -36,14 +36,15 @@ var /* const */ docs2 map[string][]string = map[string][]string{
 	"AString":             {"AString", "A", "String"},
 	"SimpleXMLParser":     {"SimpleXMLParser", "Simple", "XML", "Parser"},
 	"vimRPCPlugin":        {"vimRPCPlugin", "vim", "RPC", "Plugin"},
-	"GL11Version":         {"GL", "GL11Version", "11", "Version"},
+	"GL11Version":         {"GL11Version", "GL", "11", "Version"},
 	"99Bottles":           {"99Bottles", "99", "Bottles"},
 	"May5":                {"May5", "May", "5"},
 	"BFG9000":             {"BFG9000", "BFG", "9000"},
 	"BöseÜberraschung":    {"BöseÜberraschung", "Böse", "Überraschung"},
 	"BadUTF8\xe2\xe2\xa1": {"BadUTF8\xe2\xe2\xa1", "Bad", "UTF", "8"},
-	"\xa7Filter":          {"Filter", "\xa7Filter"},
-	"MQF":                 {"MQF", "M", "Q", "F"},
+	"\xa7Filter":          {"\xa7Filter", "Filter"},
+	"MQF":                 {"MQF"},
+	"Onedrive":            {"Onedrive"},
 }
 
 func BenchmarkCasing(t *testing.B) {

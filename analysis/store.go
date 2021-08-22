@@ -989,6 +989,10 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			if err != nil {
 				return onDataResult{false}
 			}
+			if len(value) == 0 {
+				log.Printf("Empty methods: scope %s, %v", scope, strings.Split(string(completionValue), KeySep))
+				return onDataResult{false}
+			}
 			d := storage.NewDecoder(value)
 			method := ReadMethod(d)
 			if isSymbolValid(method, options) {
