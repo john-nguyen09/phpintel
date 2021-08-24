@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"log"
+	"os"
 	"path"
 	"strings"
 	"time"
@@ -228,7 +229,13 @@ func (s SearchOptions) IsLimitReached() bool {
 // NewStore creates a store with the disk storage or returns an error
 // if the disk storage cannot be created
 func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Store, error) {
-	db, err := storage.NewDisk(storePath)
+	_, err := os.Stat(storePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			os.MkdirAll(storePath, os.ModePerm)
+		}
+	}
+	db, err := storage.NewGoLevelDB(storePath)
 	stubbers := stub.GetStubbers()
 	if err != nil {
 		return nil, err
@@ -381,8 +388,8 @@ func (s *Store) DeleteDocument(uri protocol.DocumentURI) {
 	err := s.db.WriteBatch(func(b storage.Batch) error {
 		syDeletor := newSymbolDeletor(s.db, s.greb, uri)
 		syDeletor.Delete(b)
-		s.refIndex.resetURI(s, b, uri)
-		s.comIndex.resetURI(s, b, uri)
+		s.refIndex.deleteURI(s, b, uri)
+		s.comIndex.deleteURI(s, b, uri)
 		entry := newEntry(documentCollection, uri)
 		b.Delete(entry.getKeyBytes())
 		return nil
@@ -441,8 +448,8 @@ func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
 		syDeletor := newSymbolDeletor(s.db, s.greb, document.GetURI())
-		s.refIndex.resetURI(s, b, document.GetURI())
-		s.comIndex.resetURI(s, b, document.GetURI())
+		s.refIndex.deleteURI(s, b, document.GetURI())
+		s.comIndex.deleteURI(s, b, document.GetURI())
 
 		s.writeAllSymbols(b, document, syDeletor)
 

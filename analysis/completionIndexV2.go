@@ -124,18 +124,11 @@ func (i *completionIndex) index(store *Store, doc *Document, batch storage.Batch
 	})
 }
 
-func (i *completionIndex) resetURI(store *Store, batch storage.Batch, uri string) {
-	i.entries.Upsert(uri, newCompletionEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
-		var entry completionEntry
-		if ok {
-			entry = curr.(completionEntry)
-			dbEntry := newEntry(referenceIndexCollection, filterCollection+KeySep+uri)
-			batch.Delete(dbEntry.getKeyBytes())
-		} else {
-			entry = new.(completionEntry)
-		}
-		return entry
-	})
+func (i *completionIndex) deleteURI(store *Store, batch storage.Batch, uri string) {
+	if i.entries.Has(uri) {
+		dbEntry := newEntry(referenceIndexCollection, filterCollection+KeySep+uri)
+		batch.Delete(dbEntry.getKeyBytes())
+	}
 }
 
 func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
@@ -154,7 +147,8 @@ func (i *completionIndex) search(store *Store, query searchQuery) SearchResult {
 			entry := tuple.Val.(completionEntry)
 			ok, err := entry.filter.Lookup(wordBytes)
 			if err != nil {
-				panic(err)
+				log.Printf("completionIndex.search error: %v, uri: %s", err, tuple.Key)
+				continue
 			}
 			if ok {
 				if entry.search(store, tuple.Key, query, pattern, uniqueSet) {

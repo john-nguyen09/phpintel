@@ -122,7 +122,7 @@ func (s *workspaceStore) addView(ctx context.Context, server *Server, uri protoc
 		log.Printf("No FS found for: %s", uri)
 		return
 	}
-	storagePath := filepath.Join(getDataDir(), util.GetURIID(uri))
+	storagePath := filepath.Join(getDataDir(), "data", util.GetURIID(uri))
 	store, err := analysis.NewStore(fs, uri, storagePath)
 	if err != nil {
 		log.Printf("%s: %v", uri, err)

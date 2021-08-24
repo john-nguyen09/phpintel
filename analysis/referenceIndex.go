@@ -122,24 +122,17 @@ func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch,
 	})
 }
 
-func (i *referenceIndex) resetURI(store *Store, batch storage.Batch, uri string) {
+func (i *referenceIndex) deleteURI(store *Store, batch storage.Batch, uri string) {
 	if !haveReferences(uri) {
 		return
 	}
 	canonicalURI := util.CanonicaliseURI(store.uri, uri)
-	i.entries.Upsert(canonicalURI, newReferenceEntry(), func(ok bool, curr interface{}, new interface{}) interface{} {
-		var entry referenceEntry
-		if ok {
-			entry = curr.(referenceEntry)
-			dbEntry := newEntry(referenceIndexCollection, canonicalURI)
-			batch.Delete(dbEntry.getKeyBytes())
-			dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
-			batch.Delete(dbEntry.getKeyBytes())
-		} else {
-			entry = new.(referenceEntry)
-		}
-		return entry
-	})
+	if i.entries.Has(canonicalURI) {
+		dbEntry := newEntry(referenceIndexCollection, canonicalURI)
+		batch.Delete(dbEntry.getKeyBytes())
+		dbEntry = newEntry(referenceIndexCollection, filterCollection+KeySep+canonicalURI)
+		batch.Delete(dbEntry.getKeyBytes())
+	}
 }
 
 func (i *referenceIndex) search(store *Store, ref string) []protocol.Location {

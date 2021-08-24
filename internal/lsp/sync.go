@@ -51,13 +51,12 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 
 			filePath, err := util.URIToPath(change.URI)
 			if err != nil {
-				log.Printf("didChangeWatchedFiles error: %v", err)
 				continue
 			}
 			stats, err := os.Stat(filePath)
 			if err != nil {
 				if !os.IsNotExist(err) {
-					log.Printf("didChangeWatchedFiles error: %v", err)
+					log.Printf("didChangeWatchedFiles error: %v, filePath: %s", err, filePath)
 				}
 				continue
 			}
