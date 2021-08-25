@@ -154,7 +154,7 @@ func calculateLineOffsets(text []byte, offset int) ([]int, string) {
 			}
 			lineOffsets = append(lineOffsets, n+offset)
 		} else if r == '\n' {
-			lineOffsets = append(lineOffsets, n+offset+1)
+			lineOffsets = append(lineOffsets, n+offset+size)
 		}
 		text = text[size:]
 		n += size
@@ -190,7 +190,13 @@ func (s *Document) positionAt(offset int) protocol.Position {
 }
 
 func (s *Document) OffsetAtPosition(pos protocol.Position) int {
-	offset := s.offsetAtLine(pos.Line) + pos.Character
+	offset := s.offsetAtLine(pos.Line)
+	offsetCharacter := 0
+	for i := 0; i < pos.Character; i++ {
+		_, size := utf8.DecodeRune(s.text[offset+offsetCharacter:])
+		offsetCharacter += size
+	}
+	offset += offsetCharacter
 	min := 0
 	if offset < len(s.text) {
 		min = offset

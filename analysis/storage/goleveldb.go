@@ -106,12 +106,18 @@ func (pi *goLevelDBPrefixIterator) close() {
 	pi.it.Release()
 }
 
+func copyByteSlice(src []byte) []byte {
+	result := make([]byte, len(src))
+	copy(result, src)
+	return result
+}
+
 func (pi *goLevelDBPrefixIterator) Key() []byte {
-	return pi.it.Key()
+	return copyByteSlice(pi.it.Key())
 }
 
 func (pi *goLevelDBPrefixIterator) Value() []byte {
-	return pi.it.Value()
+	return copyByteSlice(pi.it.Value())
 }
 
 func (pi *goLevelDBPrefixIterator) Stop() {

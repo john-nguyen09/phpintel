@@ -76,3 +76,9 @@ func RangeFromString(str string) Range {
 		End:   end,
 	}
 }
+
+// RangePointerFromString creates Range pointer from string
+func RangePointerFromString(str string) *Range {
+	r := RangeFromString(str)
+	return &r
+}

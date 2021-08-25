@@ -90,6 +90,21 @@ func TestApplyChanges(t *testing.T) {
 	})
 	data, _ := json.MarshalIndent(document.getLines(), "", "  ")
 	cupaloy.SnapshotT(t, string(data))
+
+	document = NewDocument("test2", []byte(`<?php
+require_once('something');
+Thuận
+function test1() {}`))
+	document.ApplyChanges([]protocol.TextDocumentContentChangeEvent{
+		{
+			Range:       protocol.RangePointerFromString("1:26-2:5"),
+			RangeLength: 7,
+			Text:        "",
+		},
+	})
+	assert.Equal(t, `<?php
+require_once('something');
+function test1() {}`, string(document.GetText()))
 }
 
 func TestIntrinsics(t *testing.T) {
