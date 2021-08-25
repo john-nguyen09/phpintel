@@ -87,6 +87,7 @@ func newGoLevelDBPrefixIterator(db *leveldb.DB, prefix []byte) *goLevelDBPrefixI
 	} else {
 		it = db.NewIterator(nil, nil)
 	}
+	it.Next()
 	return &goLevelDBPrefixIterator{it, prefix, false}
 }
 
