@@ -39,6 +39,13 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	nodes := document.NodeSpineAt(document.OffsetAtPosition(pos))
 	// log.Printf("Reference: %v %s", pos, nodes)
 	parent := nodes.Parent()
+	fallbackHandler := func() {
+		sym := document.HasTypesAtPos(pos)
+		refs := analysis.SymToRefs(document, sym)
+		for _, ref := range refs {
+			results = append(results, store.GetReferences(ref)...)
+		}
+	}
 	switch parent.Type {
 	case phrase.Identifier:
 		node := nodes.Parent()
@@ -50,6 +57,8 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 				ref += "()"
 			}
 			results = append(results, store.GetReferences(ref)...)
+		default:
+			fallbackHandler()
 		}
 	case phrase.PropertyElement:
 		ref := "."
@@ -72,11 +81,7 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 			results = append(results, store.GetReferences(ref)...)
 		}
 	default:
-		sym := document.HasTypesAtPos(pos)
-		refs := analysis.SymToRefs(document, sym)
-		for _, ref := range refs {
-			results = append(results, store.GetReferences(ref)...)
-		}
+		fallbackHandler()
 	}
 	return results, nil
 }
