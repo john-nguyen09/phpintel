@@ -1,6 +1,28 @@
-([]protocol.CompletionItem) (len=1) {
+([]protocol.CompletionItem) (len=2) {
   (protocol.CompletionItem) {
     Label: (string) (len=12) "testFunction",
+    Kind: (protocol.CompletionItemKind) 3,
+    Tags: ([]protocol.CompletionItemTag) <nil>,
+    Detail: (string) "",
+    Documentation: (protocol.MarkupContent) {
+      Kind: (protocol.MarkupKind) "",
+      Value: (string) ""
+    },
+    Deprecated: (bool) false,
+    Preselect: (bool) false,
+    SortText: (string) "",
+    FilterText: (string) "",
+    InsertText: (string) "",
+    InsertTextFormat: (protocol.InsertTextFormat) 0,
+    TextEdit: (*protocol.TextEdit)(<nil>),
+    AdditionalTextEdits: ([]protocol.TextEdit) {
+    },
+    CommitCharacters: ([]string) <nil>,
+    Command: (*protocol.Command)(<nil>),
+    Data: (interface {}) <nil>
+  },
+  (protocol.CompletionItem) {
+    Label: (string) (len=9) "function3",
     Kind: (protocol.CompletionItemKind) 3,
     Tags: ([]protocol.CompletionItemTag) <nil>,
     Detail: (string) "",

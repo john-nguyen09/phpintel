@@ -42,7 +42,6 @@ func withTestStore(uri string, name string, fn func(*Store)) {
 		greb:      greb,
 		FS:        protocol.NewFileFS(),
 		refIndex:  newReferenceIndex(db),
-		comIndex:  newCompletionIndex(db),
 		stubbers:  stubbers,
 		documents: cmap.New(),
 
