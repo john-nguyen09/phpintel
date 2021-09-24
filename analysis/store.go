@@ -117,6 +117,7 @@ type Store struct {
 	uri       protocol.DocumentURI
 	FS        protocol.FS
 	db        storage.DB
+	comDB     storage.DB
 	greb      *pogreb.DB
 	refIndex  *referenceIndex
 	stubbers  []stub.Stubber
@@ -238,6 +239,10 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 	if err != nil {
 		return nil, err
 	}
+	comDB, err := storage.NewGoLevelDB(path.Join(storePath, "completion"))
+	if err != nil {
+		return nil, err
+	}
 	greb, err := pogreb.Open(path.Join(storePath, "pogreb"), nil)
 	if err != nil {
 		return nil, err
@@ -246,6 +251,7 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 		uri:       uri,
 		FS:        fs,
 		db:        db,
+		comDB:     comDB,
 		greb:      greb,
 		refIndex:  newReferenceIndex(db),
 		stubbers:  stubbers,
@@ -445,15 +451,18 @@ func (s *Store) CompareAndIndexDocument(ctx context.Context, uri string) *Docume
 func (s *Store) SyncDocument(document *Document) {
 	defer util.TimeTrack(time.Now(), "SyncDocument")
 	err := s.db.WriteBatch(func(b storage.Batch) error {
-		ciDeletor := newCompletionIndexDeletor(s.db, document.GetURI())
-		syDeletor := newSymbolDeletor(s.db, s.greb, document.GetURI())
-		s.refIndex.deleteURI(s, b, document.GetURI())
+		s.comDB.WriteBatch(func(comB storage.Batch) error {
+			ciDeletor := newCompletionIndexDeletor(s.comDB, document.GetURI())
+			syDeletor := newSymbolDeletor(s.db, s.greb, document.GetURI())
+			s.refIndex.deleteURI(s, b, document.GetURI())
 
-		s.writeAllSymbols(b, document, ciDeletor, syDeletor)
+			s.writeAllSymbols(b, comB, document, ciDeletor, syDeletor)
 
-		syDeletor.Delete(b)
-		entry := newEntry(documentCollection, document.GetURI())
-		b.Put(entry.getKeyBytes(), document.GetHash())
+			syDeletor.Delete(b)
+			entry := newEntry(documentCollection, document.GetURI())
+			b.Put(entry.getKeyBytes(), document.GetHash())
+			return nil
+		})
 		return nil
 	})
 	if err != nil {
@@ -508,14 +517,14 @@ func (s *Store) getSyncedDocumentURIs() map[string][]byte {
 	return documentURIs
 }
 
-func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
+func (s *Store) writeAllSymbols(batch storage.Batch, comBatch storage.Batch, document *Document,
 	ciDeletor *completionIndexDeletor, syDeletor *symbolDeletor) {
 	var documentNamespaces []documentNamespace
 	for _, impTable := range document.importTables {
 		is, namespaceKey := indexablesFromNamespaceName(impTable.GetNamespace())
 		for index, i := range is {
 			key := namespaceKey + KeySep + strconv.Itoa(index)
-			s.indexName(batch, document, i, key)
+			s.indexName(comBatch, document, i, key)
 			ciDeletor.MarkNotDelete(document.GetURI(), i, key)
 		}
 	}
@@ -538,7 +547,7 @@ func (s *Store) writeAllSymbols(batch storage.Batch, document *Document,
 			syDeletor.MarkNotDelete(ser)
 
 			if indexable, ok := child.(NameIndexable); ok {
-				s.indexName(batch, document, indexable, key)
+				s.indexName(comBatch, document, indexable, key)
 				ciDeletor.MarkNotDelete(document.GetURI(), indexable, key)
 			}
 			documentSymbols = append(documentSymbols, symbol)
@@ -657,7 +666,7 @@ func (s *Store) SearchNamespaces(keyword string, options SearchOptions) ([]strin
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return namespaces, result
 }
 
@@ -736,7 +745,7 @@ func (s *Store) SearchClasses(keyword string, options SearchOptions) ([]*Class, 
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return classes, result
 }
 
@@ -777,7 +786,7 @@ func (s *Store) SearchInterfaces(keyword string, options SearchOptions) ([]*Inte
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return interfaces, result
 }
 
@@ -818,7 +827,7 @@ func (s *Store) SearchTraits(keyword string, options SearchOptions) ([]*Trait, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return traits, result
 }
 
@@ -863,7 +872,7 @@ func (s *Store) SearchFunctions(keyword string, options SearchOptions) ([]*Funct
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return functions, result
 }
 
@@ -901,7 +910,7 @@ func (s *Store) SearchConsts(keyword string, options SearchOptions) ([]*Const, S
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return consts, result
 }
 
@@ -939,7 +948,7 @@ func (s *Store) SearchDefines(keyword string, options SearchOptions) ([]*Define,
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return defines, result
 }
 
@@ -1002,7 +1011,7 @@ func (s *Store) SearchMethods(scope string, keyword string, options SearchOption
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return methods, result
 }
 
@@ -1062,7 +1071,7 @@ func (s *Store) SearchClassConsts(scope string, keyword string, options SearchOp
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return classConsts, result
 }
 
@@ -1117,7 +1126,7 @@ func (s *Store) SearchProperties(scope string, keyword string, options SearchOpt
 			return onDataResult{false}
 		},
 	}
-	result := searchCompletions(s.db, query)
+	result := searchCompletions(s.comDB, query)
 	return properties, result
 }
 

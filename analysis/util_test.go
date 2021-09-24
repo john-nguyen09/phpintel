@@ -31,6 +31,7 @@ func openDocument(store *Store, filePath string, uri string) *Document {
 
 func withTestStore(uri string, name string, fn func(*Store)) {
 	db := storage.NewMemory()
+	comDB := storage.NewMemory()
 	stubbers := stub.GetStubbers()
 	greb, err := pogreb.Open("testData/"+name, nil)
 	if err != nil {
@@ -39,6 +40,7 @@ func withTestStore(uri string, name string, fn func(*Store)) {
 	store := &Store{
 		uri:       uri,
 		db:        db,
+		comDB:     comDB,
 		greb:      greb,
 		FS:        protocol.NewFileFS(),
 		refIndex:  newReferenceIndex(db),
