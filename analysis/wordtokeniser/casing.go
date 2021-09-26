@@ -6,6 +6,10 @@ import (
 	"unicode/utf8"
 )
 
+func isNotToken(r rune) bool {
+	return r == '_'
+}
+
 func casing(name string) []string {
 	words := []string{}
 	lastClass := 0
@@ -13,14 +17,25 @@ func casing(name string) []string {
 	prev := 0
 	markNextAsStart := false
 	isBegin := true
+	appendWord := func(word string) {
+		if start == 0 {
+			return
+		}
+		words = append(words, word)
+	}
 	for i, r := range name {
+		if isNotToken(r) {
+			start = i + 1
+			prev = i + 1
+			continue
+		}
 		if markNextAsStart {
 			start = i
 			markNextAsStart = false
 		}
 		if r == utf8.RuneError {
 			if start > 0 && start < i {
-				words = append(words, name[start:i])
+				appendWord(name[start:i])
 			}
 			markNextAsStart = true
 			if i >= len(name)-1 {
@@ -41,14 +56,14 @@ func casing(name string) []string {
 			// But ABClass -> ["AB", "Class"], instead of ["ABC", "lass"] or ["ABClass"]
 			if lastClass == 2 && class == 1 {
 				if start != prev {
-					words = append(words, name[start:prev])
+					appendWord(name[start:prev])
 				}
 				start = prev
 			} else {
 				if start > i {
 					log.Printf("start: %d, i: %d, name: %s, bytes: %v", start, i, name, []byte(name))
 				}
-				words = append(words, name[start:i])
+				appendWord(name[start:i])
 				start = i
 			}
 		}
@@ -57,7 +72,7 @@ func casing(name string) []string {
 		isBegin = false
 	}
 	if start < len(name) {
-		words = append(words, string(name[start:]))
+		appendWord(string(name[start:]))
 	}
 	return words
 }

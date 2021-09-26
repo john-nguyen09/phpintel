@@ -1,14 +1,17 @@
 package wordtokeniser
 
+import "strings"
+
 // Tokenise tokenises name into tokens for completion search
 func Tokenise(name string) []string {
-	words := underscore(name)
 	results := []string{
 		name,
 	}
-	for _, word := range words {
-		results = append(results, casing(word)...)
+	nameTrimmed := strings.Trim(name, "_")
+	if nameTrimmed != name {
+		results = append(results, nameTrimmed)
 	}
+	results = append(results, casing(name)...)
 	return removeDup(results)
 }
 
