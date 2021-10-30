@@ -7,6 +7,7 @@ import (
 
 	"github.com/bradleyjkemp/cupaloy"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
+	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -109,4 +110,23 @@ class TestAssignPropertyTypesInConstructorClass
 	assert.Equal(t, []string{
 		"\\DatabaseInterface",
 	}, results)
+
+	// Make sure if right hand side expression do not have type
+	// then any expression inside should be scanned
+	doc2 := NewDocument("test2", []byte(`<?php
+class theme_base {
+    function __construct() {
+        $this->path = [
+            rawurlencode(''),
+		];
+	}
+}
+`))
+	doc2.Load()
+	hasTypes := doc2.HasTypesAtPos(protocol.Position{
+		Line:      4,
+		Character: 18,
+	})
+	assert.IsType(t, &FunctionCall{}, hasTypes)
+	assert.Equal(t, "rawurlencode", hasTypes.(*FunctionCall).Name)
 }

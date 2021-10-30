@@ -98,6 +98,10 @@ func processPropertyAccessAssignment(a analyser, document *Document, node *phras
 	if rhsP, ok := rhs.(*phrase.Phrase); ok {
 		rhsExpr = scanForExpression(a, document, rhsP)
 	}
+	if rhsExpr == nil {
+		scanNode(a, document, rhs)
+		return
+	}
 	if p, ok1 := firstChild.(*phrase.Phrase); ok1 && p.Type == phrase.SimpleVariable &&
 		document.getPhraseText(p) == "$this" {
 		if propAccess, ok2 := lhsExpr.(*PropertyAccess); ok2 && propAccess != nil {
