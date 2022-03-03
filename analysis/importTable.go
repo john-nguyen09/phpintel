@@ -167,7 +167,7 @@ func (i ImportTable) ResolveToQualified(document *Document, symbol Symbol, name 
 	}
 	wordNamespace := i.ResolveScopeNamespace(word)
 	nameNamespace := name.GetNamespace()
-	if wordNamespace == nameNamespace {
+	if wordNamespace == nameNamespace || name.GetOriginal() == "" {
 		return name.GetOriginal(), nil
 	}
 	nameParts := name.GetParts()

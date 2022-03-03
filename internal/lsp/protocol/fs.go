@@ -3,6 +3,7 @@ package protocol
 import (
 	"context"
 	"io/ioutil"
+	"log"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/util"
@@ -84,7 +85,7 @@ func (f *FileFS) ReadFile(ctx context.Context, uri string) ([]byte, error) {
 // ListFiles lists files from the base
 func (f *FileFS) ListFiles(ctx context.Context, base string) ([]TextDocumentIdentifier, error) {
 	var results []TextDocumentIdentifier
-	godirwalk.Walk(base, &godirwalk.Options{
+	err := godirwalk.Walk(base, &godirwalk.Options{
 		Callback: func(path string, de *godirwalk.Dirent) error {
 			if !de.IsDir() {
 				results = append(results, TextDocumentIdentifier{
@@ -93,7 +94,13 @@ func (f *FileFS) ListFiles(ctx context.Context, base string) ([]TextDocumentIden
 			}
 			return nil
 		},
+		ErrorCallback: func(path string, err error) godirwalk.ErrorAction {
+			return godirwalk.SkipNode
+		},
 		Unsorted: true,
 	})
+	if err != nil {
+		log.Printf("FileFS.ListFiles error: %v", err)
+	}
 	return results, nil
 }

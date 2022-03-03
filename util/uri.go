@@ -19,7 +19,7 @@ func URIToPath(uri string) (string, error) {
 	}
 
 	if urlIns.Scheme != "file" {
-		return "", errors.New("Cannot convert non-file URI")
+		return "", errors.New("cannot convert non-file URI")
 	}
 	filePath, err := url.QueryUnescape(urlIns.Path)
 
@@ -28,9 +28,7 @@ func URIToPath(uri string) (string, error) {
 	}
 
 	if strings.Contains(filePath, ":") {
-		if strings.HasPrefix(filePath, "/") {
-			filePath = strings.TrimPrefix(filePath, "/")
-		}
+		filePath = strings.TrimPrefix(filePath, "/")
 		filePath = strings.Replace(filePath, "/", "\\", -1)
 	}
 
@@ -40,7 +38,7 @@ func URIToPath(uri string) (string, error) {
 // PathToURI converts file path to URI
 func PathToURI(path string) string {
 	urlIns := new(url.URL)
-	path = strings.Replace(path, "\\", "/", -1)
+	path = strings.Replace(strings.Trim(path, "/"), "\\", "/", -1)
 	parts := strings.Split(path, "/")
 	first, parts := parts[0], parts[1:]
 
