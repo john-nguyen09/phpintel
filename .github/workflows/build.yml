@@ -1,0 +1,33 @@
+name: Test and build
+
+on:
+  push:
+    branches:
+     - main
+     - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        go: [1.18]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 🧶 Setup go ${{ matrix.go }} and dependencies
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+        run: go get -t -v ./...
+
+      - name: 🧪 Test & coverage
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: 📁 Upload coverage report
+        uses: codecov/codecov-action@v2
+        with:
+          file: ./coverage.txt
+          flags: unittests
+          name: codecov-umbrella
