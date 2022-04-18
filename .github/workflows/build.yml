@@ -46,7 +46,9 @@ jobs:
           name: codecov-umbrella
 
       - name: 🔨 Build
-        run: ./scripts/build.sh
+        run: |
+          chmod +x ./scripts/*.sh
+          ./scripts/build.sh
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

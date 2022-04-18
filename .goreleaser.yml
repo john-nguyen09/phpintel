@@ -8,7 +8,7 @@ builds:
     - amd64
     - 386
   hooks:
-    post: /bin/sh scripts/upx.sh
+    post: ./scripts/upx.sh
   ldflags:
     - -s -w -X main.version={{.Version}}
 archives:
