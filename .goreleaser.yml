@@ -10,7 +10,7 @@ builds:
   hooks:
     post: /bin/sh scripts/upx.sh
   ldflags:
-    - -s -w -X main.version={{.Version}} -extldflags "-lstdc++ -static"
+    - -s -w -X main.version={{.Version}}
 archives:
 -
   format: tar.gz

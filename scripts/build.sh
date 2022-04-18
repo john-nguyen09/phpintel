@@ -2,4 +2,4 @@
 
 VERSION=0.0.12
 
-go build -ldflags "-s -w -X main.version=$VERSION -extldflags '-lstdc++ -static'"
+go build -ldflags "-s -w -X main.version=$VERSION"
