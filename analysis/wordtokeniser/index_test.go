@@ -7,7 +7,7 @@ import (
 )
 
 var /* const */ docs map[string][]string = map[string][]string{
-	"COMPLETION_COMPLETE": {"COMPLETION_COMPLETE", "COMPLETE"},
+	"COMPLETION_COMPLETE": {"COMPLETION_COMPLETE", "COMPLETION", "COMPLETE"},
 	"_Name1":              {"_Name1", "Name1", "Name", "1"},
 	"lowercase":           {"lowercase"},
 	"Class":               {"Class"},
@@ -27,6 +27,7 @@ var /* const */ docs map[string][]string = map[string][]string{
 	"\xa7Filter":          {"\xa7Filter", "Filter"},
 	"MQF":                 {"MQF"},
 	"Onedrive":            {"Onedrive"},
+	"WP_Object_C":         {"WP_Object_C", "WP", "Object", "C"},
 }
 
 func BenchmarkTokenise(t *testing.B) {
