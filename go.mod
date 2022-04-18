@@ -26,7 +26,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.6.1
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-	github.com/virtuald/go-paniclog v0.0.0-20190812204905-43a7fa316459 // indirect
+	github.com/virtuald/go-paniclog v0.0.0-20190812204905-43a7fa316459
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
 )
 
