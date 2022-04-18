@@ -12,7 +12,7 @@ import (
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/internal/lsp"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
-	"github.com/john-nguyen09/phpintel/util"
+	pl "github.com/virtuald/go-paniclog"
 )
 
 var (
@@ -38,7 +38,7 @@ func main() {
 	if panicLog != "" {
 		f, err := os.OpenFile(panicLog, os.O_CREATE, os.ModePerm)
 		if err == nil {
-			util.RedirectStderr(f)
+			pl.RedirectStderr(f)
 		}
 	}
 	if cpuprofile != "" {
