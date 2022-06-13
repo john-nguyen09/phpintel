@@ -61,10 +61,14 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 }
 
 // Encode encodes the filter into byte slice
-func (f *Filter) Encode(e *storage.Encoder) {
+func (f *Filter) Encode(e *storage.Encoder) error {
+	if f.head == nil {
+		return fmt.Errorf("filter is not yet commited")
+	}
 	e.WriteUInt64(f.head.Seed)
 	e.WriteUInt32(f.head.BlockLength)
 	e.WriteBytes(f.head.Fingerprints)
+	return nil
 }
 
 // FilterDecode decodes a filter from a byte slice
