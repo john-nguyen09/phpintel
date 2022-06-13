@@ -9,10 +9,6 @@ import (
 type symbolConstructor func(analyser, *Document, *phrase.Phrase) Symbol
 type symbolConstructorForToken func(analyser, *Document, *lexer.Token) Symbol
 
-type void = struct{}
-
-var empty void
-
 type analyser struct {
 	nodes util.NodeStack
 }
@@ -21,64 +17,64 @@ func newAnalyser() analyser {
 	return analyser{}
 }
 
-var /* const */ typesToScanForChildren = map[phrase.PhraseType]void{
-	phrase.ExpressionStatement:            empty,
-	phrase.ClassMemberDeclarationList:     empty,
-	phrase.InterfaceMemberDeclarationList: empty,
-	phrase.TraitMemberDeclarationList:     empty,
-	phrase.CompoundStatement:              empty,
-	phrase.WhileStatement:                 empty,
-	phrase.StatementList:                  empty,
-	phrase.AdditiveExpression:             empty,
-	phrase.MultiplicativeExpression:       empty,
-	phrase.IfStatement:                    empty,
-	phrase.ElseClause:                     empty,
-	phrase.IncludeExpression:              empty,
-	phrase.EchoIntrinsic:                  empty,
-	phrase.ExpressionList:                 empty,
-	phrase.TryStatement:                   empty,
-	phrase.CatchClauseList:                empty,
-	phrase.CatchClause:                    empty,
-	phrase.ReturnStatement:                empty,
-	phrase.ArrayCreationExpression:        empty,
-	phrase.ArrayInitialiserList:           empty,
-	phrase.ArrayElement:                   empty,
-	phrase.ArrayValue:                     empty,
-	phrase.ArrayKey:                       empty,
-	phrase.LogicalExpression:              empty,
-	phrase.RelationalExpression:           empty,
-	phrase.EqualityExpression:             empty,
-	phrase.ForStatement:                   empty,
-	phrase.UnaryOpExpression:              empty,
-	phrase.ThrowStatement:                 empty,
-	phrase.ElseIfClauseList:               empty,
-	phrase.ElseIfClause:                   empty,
-	phrase.TernaryExpression:              empty,
-	phrase.SubscriptExpression:            empty,
-	phrase.EmptyIntrinsic:                 empty,
-	phrase.UnsetIntrinsic:                 empty,
-	phrase.IssetIntrinsic:                 empty,
-	phrase.EvalIntrinsic:                  empty,
-	phrase.VariableList:                   empty,
-	phrase.CastExpression:                 empty,
-	phrase.SwitchStatement:                empty,
-	phrase.CaseStatementList:              empty,
-	phrase.CaseStatement:                  empty,
-	phrase.DefaultStatement:               empty,
-	phrase.ClassConstElementList:          empty,
-	phrase.PostfixIncrementExpression:     empty,
-	phrase.PostfixDecrementExpression:     empty,
-	phrase.PrefixIncrementExpression:      empty,
-	phrase.PrefixDecrementExpression:      empty,
-	phrase.ForInitialiser:                 empty,
-	phrase.ForControl:                     empty,
-	phrase.ForEndOfLoop:                   empty,
-	phrase.DoStatement:                    empty,
-	phrase.DoubleQuotedStringLiteral:      empty,
-	phrase.EncapsulatedVariableList:       empty,
-	phrase.EncapsulatedVariable:           empty,
-	phrase.RequireOnceExpression:          empty,
-}
+var /* const */ typesToScanForChildren = util.SetFromArray([]phrase.PhraseType{
+	phrase.ExpressionStatement,
+	phrase.ClassMemberDeclarationList,
+	phrase.InterfaceMemberDeclarationList,
+	phrase.TraitMemberDeclarationList,
+	phrase.CompoundStatement,
+	phrase.WhileStatement,
+	phrase.StatementList,
+	phrase.AdditiveExpression,
+	phrase.MultiplicativeExpression,
+	phrase.IfStatement,
+	phrase.ElseClause,
+	phrase.IncludeExpression,
+	phrase.EchoIntrinsic,
+	phrase.ExpressionList,
+	phrase.TryStatement,
+	phrase.CatchClauseList,
+	phrase.CatchClause,
+	phrase.ReturnStatement,
+	phrase.ArrayCreationExpression,
+	phrase.ArrayInitialiserList,
+	phrase.ArrayElement,
+	phrase.ArrayValue,
+	phrase.ArrayKey,
+	phrase.LogicalExpression,
+	phrase.RelationalExpression,
+	phrase.EqualityExpression,
+	phrase.ForStatement,
+	phrase.UnaryOpExpression,
+	phrase.ThrowStatement,
+	phrase.ElseIfClauseList,
+	phrase.ElseIfClause,
+	phrase.TernaryExpression,
+	phrase.SubscriptExpression,
+	phrase.EmptyIntrinsic,
+	phrase.UnsetIntrinsic,
+	phrase.IssetIntrinsic,
+	phrase.EvalIntrinsic,
+	phrase.VariableList,
+	phrase.CastExpression,
+	phrase.SwitchStatement,
+	phrase.CaseStatementList,
+	phrase.CaseStatement,
+	phrase.DefaultStatement,
+	phrase.ClassConstElementList,
+	phrase.PostfixIncrementExpression,
+	phrase.PostfixDecrementExpression,
+	phrase.PrefixIncrementExpression,
+	phrase.PrefixDecrementExpression,
+	phrase.ForInitialiser,
+	phrase.ForControl,
+	phrase.ForEndOfLoop,
+	phrase.DoStatement,
+	phrase.DoubleQuotedStringLiteral,
+	phrase.EncapsulatedVariableList,
+	phrase.EncapsulatedVariable,
+	phrase.RequireOnceExpression,
+})
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{
 	lexer.DirectoryConstant: newDirectoryConstantAccess,
@@ -121,7 +117,7 @@ func scanNode(a analyser, document *Document, node phrase.AstNode) {
 		if !isDefine(document, p) {
 			scanForExpression(a, document, p)
 		}
-		if _, ok := typesToScanForChildren[p.Type]; ok {
+		if typesToScanForChildren.Has(p.Type) {
 			scanForChildren(a, document, p)
 			return
 		}

@@ -18,6 +18,7 @@ import (
 	"github.com/john-nguyen09/phpintel/stub"
 	"github.com/john-nguyen09/phpintel/util"
 	cmap "github.com/orcaman/concurrent-map"
+	"github.com/zyedidia/generic/mapset"
 )
 
 const (
@@ -105,12 +106,6 @@ func (s documentNamespace) serialise(e *storage.Encoder) {
 	e.WriteString(s.fullName)
 }
 
-func readDocumentNamespace(d *storage.Decoder) documentNamespace {
-	return documentNamespace{
-		fullName: d.ReadString(),
-	}
-}
-
 // Store contains information about a given folder and functions
 // for querying symbols
 type Store struct {
@@ -145,48 +140,31 @@ func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol) bool
 	}
 }
 
-func readDocumentNamespaces(greb *pogreb.DB, e *entry, fn func(documentNamespace) bool) {
-	b, err := greb.Get(e.getKeyBytes())
-	if err == nil && len(b) > 0 {
-		d := storage.NewDecoder(b)
-		count := d.ReadInt()
-		for i := 0; i < count; i++ {
-			ns := readDocumentNamespace(d)
-			if fn(ns) {
-				break
-			}
-		}
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 type symbolDeletor struct {
 	uri     string
-	symbols map[string]void
+	symbols mapset.Set[string]
 }
 
 func newSymbolDeletor(db storage.DB, greb *pogreb.DB, uri string) *symbolDeletor {
 	deletor := &symbolDeletor{
 		uri:     uri,
-		symbols: map[string]void{},
+		symbols: mapset.New[string](),
 	}
 	readDocumentSymbols(greb, newEntry(documentSymbolsCollection, uri), func(symbol documentSymbol) bool {
-		deletor.symbols[symbol.collection+KeySep+symbol.key] = empty
+		deletor.symbols.Put(symbol.collection + KeySep + symbol.key)
 		return false
 	})
 	return deletor
 }
 
 func (d *symbolDeletor) MarkNotDelete(ser serialisable) {
-	delete(d.symbols, ser.GetCollection()+KeySep+ser.GetKey())
+	d.symbols.Remove(ser.GetCollection() + KeySep + ser.GetKey())
 }
 
 func (d *symbolDeletor) Delete(batch storage.Batch) {
-	for key := range d.symbols {
+	d.symbols.Each(func(key string) {
 		batch.Delete([]byte(key))
-	}
+	})
 }
 
 // SearchOptions contains predicates and limiter if applicable for searching

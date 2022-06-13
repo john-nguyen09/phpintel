@@ -7,6 +7,7 @@ import (
 	"github.com/john-nguyen09/phpintel/analysis/wordtokeniser"
 	"github.com/junegunn/fzf/src/algo"
 	"github.com/junegunn/fzf/src/util"
+	"github.com/zyedidia/generic/mapset"
 )
 
 // CompletionValue holds references to uri and name
@@ -123,7 +124,7 @@ func getCompletionKey(token string, symbolKey string) string {
 }
 
 func searchCompletions(db storage.DB, query searchQuery) SearchResult {
-	uniqueCompletionValues := make(map[CompletionValue]void)
+	uniqueCompletionValues := mapset.New[CompletionValue]()
 	isComplete := true
 	words := wordtokeniser.Tokenise(query.keyword)
 	shouldStop := false
@@ -135,11 +136,11 @@ func searchCompletions(db storage.DB, query searchQuery) SearchResult {
 		entry := newEntry(query.collection, word)
 		db.PrefixStream(entry.getKeyBytes(), func(it storage.Iterator) {
 			completionValue := readCompletionValue(storage.NewDecoder(it.Value()))
-			if _, ok := uniqueCompletionValues[completionValue]; ok {
+			if uniqueCompletionValues.Has(completionValue) {
 				return
 			}
 			result := query.onData(completionValue)
-			uniqueCompletionValues[completionValue] = empty
+			uniqueCompletionValues.Put(completionValue)
 			if result.shouldStop {
 				isComplete = false
 				shouldStop = true

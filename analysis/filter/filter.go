@@ -36,6 +36,9 @@ func (f *Filter) Insert(data []byte) *Filter {
 // Commit commits the buffer into a cuckoo filter
 func (f *Filter) Commit() error {
 	keys := f.dataWithoutDup()
+	if len(keys) == 0 {
+		return nil
+	}
 	f.buffer = [][]byte{}
 	keyHashes := []uint64{}
 	for _, key := range keys {
@@ -43,7 +46,7 @@ func (f *Filter) Commit() error {
 	}
 	filter, err := xorfilter.Populate(keyHashes)
 	if err != nil {
-		log.Print(err)
+		log.Printf("xorfilter cannot be commited: %v", err)
 	}
 	f.mutex.Lock()
 	f.head = filter
