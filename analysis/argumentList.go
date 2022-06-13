@@ -5,8 +5,7 @@ import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	g "github.com/zyedidia/generic"
-	"github.com/zyedidia/generic/hashset"
+	"github.com/zyedidia/generic/mapset"
 )
 
 // ArgumentList contains information of arguments in function-like call
@@ -20,7 +19,7 @@ type ArgumentList struct {
 }
 
 var _ BlockSymbol = (*ArgumentList)(nil)
-var IgnoreTokenSet *hashset.Set[lexer.TokenType]
+var IgnoreTokenSet mapset.Set[lexer.TokenType]
 
 func init() {
 	ignoreTokens := []lexer.TokenType{
@@ -30,9 +29,7 @@ func init() {
 		lexer.Comment,
 		lexer.DocumentCommentStart,
 	}
-	IgnoreTokenSet = hashset.New(uint64(len(ignoreTokens)), g.Equals[lexer.TokenType], func(t lexer.TokenType) uint64 {
-		return g.HashUint8(uint8(t))
-	})
+	IgnoreTokenSet = mapset.New[lexer.TokenType]()
 	for _, t := range ignoreTokens {
 		IgnoreTokenSet.Put(t)
 	}
