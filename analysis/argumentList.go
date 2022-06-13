@@ -5,6 +5,8 @@ import (
 	"github.com/john-nguyen09/go-phpparser/phrase"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
+	g "github.com/zyedidia/generic"
+	"github.com/zyedidia/generic/hashset"
 )
 
 // ArgumentList contains information of arguments in function-like call
@@ -18,6 +20,23 @@ type ArgumentList struct {
 }
 
 var _ BlockSymbol = (*ArgumentList)(nil)
+var IgnoreTokenSet *hashset.Set[lexer.TokenType]
+
+func init() {
+	ignoreTokens := []lexer.TokenType{
+		lexer.Whitespace,
+		lexer.OpenParenthesis,
+		lexer.CloseParenthesis,
+		lexer.Comment,
+		lexer.DocumentCommentStart,
+	}
+	IgnoreTokenSet = hashset.New(uint64(len(ignoreTokens)), g.Equals[lexer.TokenType], func(t lexer.TokenType) uint64 {
+		return g.HashUint8(uint8(t))
+	})
+	for _, t := range ignoreTokens {
+		IgnoreTokenSet.Put(t)
+	}
+}
 
 func newArgumentList(a analyser, document *Document, node *phrase.Phrase) Symbol {
 	argumentList := &ArgumentList{
@@ -41,8 +60,7 @@ func newArgumentList(a analyser, document *Document, node *phrase.Phrase) Symbol
 				child = traverser.Advance()
 				continue
 			}
-			if token.Type != lexer.Whitespace &&
-				token.Type != lexer.OpenParenthesis && token.Type != lexer.CloseParenthesis {
+			if !IgnoreTokenSet.Has(token.Type) {
 				argumentList.arguments = append(argumentList.arguments, token)
 			}
 		} else if p, ok := child.(*phrase.Phrase); ok {

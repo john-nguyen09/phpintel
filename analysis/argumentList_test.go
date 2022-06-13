@@ -101,3 +101,57 @@ func TestDocumentSignatures(t *testing.T) {
 	hasTypes := doc.HasTypesBeforePos(protocol.Position{Line: 37, Character: 7})
 	assert.NotNil(t, hasTypes)
 }
+
+func TestDocumentArgsWithComments(t *testing.T) {
+	withTestStore("test", "BenchmarkAnalysis", func(store *Store) {
+		doc := indexDocumentAndGet(store, "../cases/documentArgs.php", "test1")
+
+		results := []protocol.TextEdit{}
+		resolveCtx := NewResolveContext(NewQuery(store), doc)
+		TraverseDocument(doc, func(s Symbol) {
+			if argumentList, ok := s.(*ArgumentList); ok {
+				hasTypes := doc.HasTypesBeforePos(argumentList.GetLocation().Range.Start)
+				if resolvable, ok := hasTypes.(HasParamsResolvable); ok {
+					hasParams := resolvable.ResolveToHasParams(resolveCtx)
+					if len(hasParams) > 0 {
+						firstHasParam := hasParams[0]
+						ranges := argumentList.GetArgumentRanges()
+						for i, param := range firstHasParam.GetParams() {
+							if i >= len(ranges) {
+								break
+							}
+							results = append(results, protocol.TextEdit{
+								NewText: param.Name,
+								Range:   ranges[i],
+							})
+						}
+					}
+				}
+			}
+		}, nil)
+
+		assert.Equal(t, 5, len(results))
+		assert.Equal(t, []protocol.TextEdit{
+			{
+				NewText: "$arg1",
+				Range:   protocol.RangeFromString("7:4-7:5"),
+			},
+			{
+				NewText: "$arg2",
+				Range:   protocol.RangeFromString("8:4-8:5"),
+			},
+			{
+				NewText: "$arg3",
+				Range:   protocol.RangeFromString("9:4-9:5"),
+			},
+			{
+				NewText: "$arg4",
+				Range:   protocol.RangeFromString("10:4-10:5"),
+			},
+			{
+				NewText: "$arg5",
+				Range:   protocol.RangeFromString("11:4-11:5"),
+			},
+		}, results)
+	})
+}

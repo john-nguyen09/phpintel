@@ -52,11 +52,6 @@ func (s *Server) signatureHelp(ctx context.Context, params *protocol.SignatureHe
 	return signatureHelp, nil
 }
 
-type signatureTuple struct {
-	argumentList        *analysis.ArgumentList
-	hasParamsResolvable analysis.HasParamsResolvable
-}
-
 func (s *Server) documentSignatures(ctx context.Context, params *protocol.TextDocumentIdentifier) ([]protocol.TextEdit, error) {
 	uri := params.URI
 	store := s.store.getStore(uri)

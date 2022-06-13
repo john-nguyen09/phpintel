@@ -20,6 +20,17 @@ func indexDocument(store *Store, filePath string, uri string) {
 	store.SyncDocument(document)
 }
 
+func indexDocumentAndGet(store *Store, filePath string, uri string) *Document {
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+	document := NewDocument(uri, data)
+	document.Load()
+	store.SyncDocument(document)
+	return document
+}
+
 func openDocument(store *Store, filePath string, uri string) *Document {
 	data, _ := ioutil.ReadFile(filePath)
 	document := NewDocument(uri, data)
