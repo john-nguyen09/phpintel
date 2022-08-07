@@ -212,12 +212,12 @@ func NewStore(fs protocol.FS, uri protocol.DocumentURI, storePath string) (*Stor
 			os.MkdirAll(storePath, os.ModePerm)
 		}
 	}
-	db, err := storage.NewGoLevelDB(storePath)
+	db, err := storage.NewNutsDB(storePath)
 	stubbers := stub.GetStubbers()
 	if err != nil {
 		return nil, err
 	}
-	comDB, err := storage.NewGoLevelDB(path.Join(storePath, "completion"))
+	comDB, err := storage.NewNutsDB(path.Join(storePath, "completion"))
 	if err != nil {
 		return nil, err
 	}
@@ -285,6 +285,7 @@ func (s *Store) Migrate(newVersion string) {
 	if sv.LessThan(targetV) {
 		log.Println("Clearing database for upgrade.")
 		s.Clear()
+		log.Println("Cleared")
 		s.PutVersion(newVersion)
 	}
 }

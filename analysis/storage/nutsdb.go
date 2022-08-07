@@ -1,15 +1,17 @@
 package storage
 
 import (
-	"fmt"
 	"log"
+	"sync"
 	"sync/atomic"
 
 	"github.com/xujiajun/nutsdb"
 )
 
 type nutsdbDB struct {
-	db *nutsdb.DB
+	db       *nutsdb.DB
+	txMu     *sync.Mutex
+	activeTx *nutsdb.Tx
 }
 
 var _ DB = (*nutsdbDB)(nil)
@@ -26,7 +28,7 @@ func NewNutsDB(path string) (*nutsdbDB, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &nutsdbDB{db}, nil
+	return &nutsdbDB{db, &sync.Mutex{}, nil}, nil
 }
 
 func (s *nutsdbDB) Close() {
@@ -72,19 +74,15 @@ func (s *nutsdbDB) WriteBatch(f func(Batch) error) error {
 }
 
 func (s *nutsdbDB) PrefixStream(prefix []byte, onData func(Iterator)) {
-	if err := s.db.View(func(tx *nutsdb.Tx) error {
-		if entries, _, err := tx.PrefixScan(DefaultBucket, prefix, 0, nutsdb.ScanNoLimit); err != nil {
-			return err
-		} else {
-			for _, entry := range entries {
-				fmt.Println(string(entry.Key), string(entry.Value))
-			}
+	var it *nutsdbDBPrefixIterator
+	if s.activeTx != nil {
+		it = newNutsdbDBPrefixIterator(s.activeTx, prefix)
+	} else {
+		s.db.View(func(tx *nutsdb.Tx) error {
+			it = newNutsdbDBPrefixIterator(tx, prefix)
 			return nil
-		}
-	}); err != nil {
-		log.Fatalf("nutsdbDB.PrefixStream: %v", err)
+		})
 	}
-	it := newNutsdbDBPrefixIterator(s.db, prefix)
 	defer it.close()
 	for ; it.valid(); it.next() {
 		onData(it)
@@ -92,12 +90,18 @@ func (s *nutsdbDB) PrefixStream(prefix []byte, onData func(Iterator)) {
 }
 
 func (s *nutsdbDB) Clear() {
-	s.WriteBatch(func(b Batch) error {
+	s.txMu.Lock()
+	defer s.txMu.Unlock()
+	if err := s.WriteBatch(func(b Batch) error {
+		s.activeTx = b.(*nutsdbDBBatch).tx
 		s.PrefixStream(nil, func(it Iterator) {
 			b.Delete(it.Key())
 		})
 		return nil
-	})
+	}); err != nil {
+		log.Printf("nutsdbDB.Clear error: %v", err)
+	}
+	s.activeTx = nil
 }
 
 func (s *nutsdbDB) Commit(b *nutsdbDBBatch) error {
@@ -112,17 +116,22 @@ type nutsdbDBPrefixIterator struct {
 
 var _ Iterator = (*nutsdbDBPrefixIterator)(nil)
 
-func newNutsdbDBPrefixIterator(db *nutsdb.DB, prefix []byte) *nutsdbDBPrefixIterator {
+func newNutsdbDBPrefixIterator(tx *nutsdb.Tx, prefix []byte) *nutsdbDBPrefixIterator {
 	readEntries := nutsdb.Entries{}
-	if err := db.View(func(tx *nutsdb.Tx) error {
-		if entries, _, err := tx.PrefixScan(DefaultBucket, prefix, 0, nutsdb.ScanNoLimit); err != nil {
-			return err
-		} else {
-			readEntries = entries
-			return nil
+	if len(prefix) == 0 {
+		var err error
+		readEntries, err = tx.GetAll(DefaultBucket)
+
+		if err != nil {
+			log.Printf("newNutsdbDBPrefixIterator error: %v", err)
 		}
-	}); err != nil {
-		log.Fatalf("nutsdbDB.PrefixStream: %v", err)
+	}
+	if entries, _, err := tx.PrefixScan(DefaultBucket, prefix, 0, nutsdb.ScanNoLimit); err != nil {
+		if err != nil {
+			log.Printf("newNutsdbDBPrefixIterator error: %v", err)
+		}
+	} else {
+		readEntries = entries
 	}
 	return &nutsdbDBPrefixIterator{readEntries, 0, false}
 }
