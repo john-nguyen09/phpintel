@@ -55,6 +55,8 @@ github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpO
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/john-nguyen09/go-phpparser v0.0.0-20220219111925-b8e899fe6704 h1:j2WMtSojQkqggPLl2l5gWqQ9R+cpMMMD/CZET58Fzvk=
 github.com/john-nguyen09/go-phpparser v0.0.0-20220219111925-b8e899fe6704/go.mod h1:EQ9ivDBWZw6KrjYV+WPZM9f0o/GMPkeF92x/P0vPYDU=
+github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf h1:2ORt/qfNCdHop+xsyn9dcm8uDPSntiWH5HEYk/9VnOc=
+github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf/go.mod h1:EQ9ivDBWZw6KrjYV+WPZM9f0o/GMPkeF92x/P0vPYDU=
 github.com/junegunn/fzf v0.0.0-20220525005010-3b7a962dc6db h1:tdktdAvGbDi7H8HfWiUKwKC7/5+5c8+Rf00oKbOw3Dw=
 github.com/junegunn/fzf v0.0.0-20220525005010-3b7a962dc6db/go.mod h1:ULlcOfgZrrquadV8aTt+RuwQS8gOnlrWuJtD7neWAXs=
 github.com/karrick/godirwalk v1.17.0 h1:b4kY7nqDdioR/6qnbHQyDvmA17u5G1cZ6J+CZXwSWoI=

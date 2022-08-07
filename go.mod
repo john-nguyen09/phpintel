@@ -12,7 +12,7 @@ require (
 	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/cespare/xxhash/v2 v2.1.2
 	github.com/hashicorp/go-immutable-radix v1.3.1
-	github.com/john-nguyen09/go-phpparser v0.0.0-20220219111925-b8e899fe6704
+	github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf
 	github.com/junegunn/fzf v0.0.0-20220525005010-3b7a962dc6db
 	github.com/karrick/godirwalk v1.17.0
 	github.com/mitchellh/go-homedir v1.1.0
