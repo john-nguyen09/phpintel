@@ -44,7 +44,7 @@ const (
 
 // NewCombined returns a combined instance of disk and memory
 func NewCombined(path string) (*Combined, error) {
-	disk, err := NewGoLevelDB(path)
+	disk, err := NewNutsDB(path)
 	if err != nil {
 		return nil, err
 	}
