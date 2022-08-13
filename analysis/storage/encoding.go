@@ -204,3 +204,8 @@ func (d *Decoder) ReadLocation() protocol.Location {
 		},
 	}
 }
+
+// Len returns the len of the buffer
+func (d *Decoder) Len() int {
+	return len(d.buf)
+}

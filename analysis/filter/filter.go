@@ -14,9 +14,10 @@ import (
 
 // Filter is a wrapper around cuckoo filter
 type Filter struct {
-	mutex  sync.RWMutex
-	head   *xorfilter.Xor8
-	buffer [][]byte
+	mutex      sync.RWMutex
+	isCommited bool
+	head       *xorfilter.Xor8
+	buffer     [][]byte
 }
 
 // NewFilter creates the Filter
@@ -36,6 +37,11 @@ func (f *Filter) Insert(data []byte) *Filter {
 // Commit commits the buffer into a cuckoo filter
 func (f *Filter) Commit() error {
 	keys := f.dataWithoutDup()
+	defer func() {
+		f.mutex.Lock()
+		f.isCommited = true
+		f.mutex.Unlock()
+	}()
 	if len(keys) == 0 {
 		return nil
 	}
@@ -57,7 +63,7 @@ func (f *Filter) Commit() error {
 func (f *Filter) Lookup(data []byte) (bool, error) {
 	f.mutex.RLock()
 	defer f.mutex.RUnlock()
-	if f.head == nil {
+	if !f.isCommited {
 		return false, fmt.Errorf("filter is not yet commited")
 	}
 	return f.head.Contains(xxhash.Sum64(data)), nil
@@ -65,8 +71,11 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 
 // Encode encodes the filter into byte slice
 func (f *Filter) Encode(e *storage.Encoder) error {
-	if f.head == nil {
+	if !f.isCommited {
 		return fmt.Errorf("filter is not yet commited")
+	}
+	if f.head == nil {
+		return nil
 	}
 	e.WriteUInt64(f.head.Seed)
 	e.WriteUInt32(f.head.BlockLength)
@@ -76,10 +85,13 @@ func (f *Filter) Encode(e *storage.Encoder) error {
 
 // FilterDecode decodes a filter from a byte slice
 func FilterDecode(d *storage.Decoder) *Filter {
-	head := &xorfilter.Xor8{
-		Seed:         d.ReadUInt64(),
-		BlockLength:  d.ReadUInt32(),
-		Fingerprints: d.ReadBytes(),
+	var head *xorfilter.Xor8
+	if d.Len() != 0 {
+		head = &xorfilter.Xor8{
+			Seed:         d.ReadUInt64(),
+			BlockLength:  d.ReadUInt32(),
+			Fingerprints: d.ReadBytes(),
+		}
 	}
 	f := NewFilter()
 	f.head = head

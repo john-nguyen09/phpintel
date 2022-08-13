@@ -116,7 +116,10 @@ func (i *referenceIndex) index(store *Store, doc *Document, batch storage.Batch,
 		if err != nil {
 			panic(err)
 		}
-		entry.filter.Encode(dbEntry.e)
+		err = entry.filter.Encode(dbEntry.e)
+		if err != nil {
+			log.Printf("filter.Encode %s error: %v", canonicalURI, err)
+		}
 		writeEntry(batch, dbEntry)
 		return entry
 	})
