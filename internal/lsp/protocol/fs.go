@@ -4,10 +4,11 @@ import (
 	"context"
 	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/john-nguyen09/phpintel/internal/jsonrpc2"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/karrick/godirwalk"
 )
 
 // FS is an interface for reading files
@@ -85,19 +86,18 @@ func (f *FileFS) ReadFile(ctx context.Context, uri string) ([]byte, error) {
 // ListFiles lists files from the base
 func (f *FileFS) ListFiles(ctx context.Context, base string) ([]TextDocumentIdentifier, error) {
 	var results []TextDocumentIdentifier
-	err := godirwalk.Walk(base, &godirwalk.Options{
-		Callback: func(path string, de *godirwalk.Dirent) error {
-			if !de.IsDir() {
-				results = append(results, TextDocumentIdentifier{
-					URI: path,
-				})
-			}
-			return nil
-		},
-		ErrorCallback: func(path string, err error) godirwalk.ErrorAction {
-			return godirwalk.SkipNode
-		},
-		Unsorted: true,
+	err := filepath.WalkDir(base, func(path string, info os.DirEntry, err error) error {
+		if err != nil {
+			log.Printf("FileFS.WalkDir error: %v", err)
+		}
+
+		if !info.IsDir() {
+			results = append(results, TextDocumentIdentifier{
+				URI: path,
+			})
+		}
+
+		return nil
 	})
 	if err != nil {
 		log.Printf("FileFS.ListFiles error: %v", err)

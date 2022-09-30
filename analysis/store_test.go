@@ -2,12 +2,13 @@ package analysis
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/karrick/godirwalk"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -112,14 +113,15 @@ namespace Namespace2 {
 func TestStoreClose(t *testing.T) {
 	withTestStore("test", "TestStoreClose", func(store *Store) {
 		filePaths := []string{}
-		godirwalk.Walk("cases", &godirwalk.Options{
-			Callback: func(path string, de *godirwalk.Dirent) error {
-				if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
-					filePaths = append(filePaths, path)
-				}
-				return nil
-			},
-			Unsorted: true,
+		filepath.WalkDir("../cases", func(path string, d fs.DirEntry, err error) error {
+			if err != nil {
+				panic(err)
+			}
+
+			if !d.IsDir() && strings.HasSuffix(path, ".php") {
+				filePaths = append(filePaths, path)
+			}
+			return nil
 		})
 		for id, filePath := range filePaths {
 			data, _ := ioutil.ReadFile(filePath)

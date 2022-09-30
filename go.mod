@@ -14,7 +14,6 @@ require (
 	github.com/hashicorp/go-immutable-radix v1.3.1
 	github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf
 	github.com/junegunn/fzf v0.0.0-20220808043900-779d8e16273a
-	github.com/karrick/godirwalk v1.17.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/orcaman/concurrent-map v1.0.0
 	github.com/pkg/errors v0.9.1

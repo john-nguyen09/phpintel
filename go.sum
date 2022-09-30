@@ -67,8 +67,6 @@ github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf h1:2ORt
 github.com/john-nguyen09/go-phpparser v0.0.0-20220807130934-3c5faa3c4bcf/go.mod h1:EQ9ivDBWZw6KrjYV+WPZM9f0o/GMPkeF92x/P0vPYDU=
 github.com/junegunn/fzf v0.0.0-20220808043900-779d8e16273a h1:B/jGG2P3rv+PQCzxGDgT/cZF+yEVjsGBmvuYENwtoxg=
 github.com/junegunn/fzf v0.0.0-20220808043900-779d8e16273a/go.mod h1:ULlcOfgZrrquadV8aTt+RuwQS8gOnlrWuJtD7neWAXs=
-github.com/karrick/godirwalk v1.17.0 h1:b4kY7nqDdioR/6qnbHQyDvmA17u5G1cZ6J+CZXwSWoI=
-github.com/karrick/godirwalk v1.17.0/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pretty v0.3.0 h1:WgNl7dwNpEZ6jJ9k1snq4pZsg7DOEN8hP9Xw0Tsjwk0=
 github.com/kr/pretty v0.3.0/go.mod h1:640gp4NfQd8pI5XOwp5fnNeVWj67G7CFk/SaSQn7NBk=

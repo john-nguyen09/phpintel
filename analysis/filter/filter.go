@@ -63,7 +63,7 @@ func (f *Filter) Commit() error {
 func (f *Filter) Lookup(data []byte) (bool, error) {
 	f.mutex.RLock()
 	defer f.mutex.RUnlock()
-	if !f.isCommited {
+	if !f.isCommited || f.head == nil {
 		return false, fmt.Errorf("filter is not yet commited")
 	}
 	return f.head.Contains(xxhash.Sum64(data)), nil
@@ -94,6 +94,7 @@ func FilterDecode(d *storage.Decoder) *Filter {
 		}
 	}
 	f := NewFilter()
+	f.isCommited = true
 	f.head = head
 	return f
 }

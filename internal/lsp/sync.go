@@ -2,14 +2,15 @@ package lsp
 
 import (
 	"context"
+	"io/fs"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/util"
-	"github.com/karrick/godirwalk"
 )
 
 func (s *Server) didOpen(ctx context.Context, params *protocol.DidOpenTextDocumentParams) error {
@@ -76,20 +77,24 @@ func (s *Server) didChangeWatchedFiles(ctx context.Context, params *protocol.Did
 				continue
 			}
 
-			godirwalk.Walk(filePath, &godirwalk.Options{
-				Callback: func(path string, de *godirwalk.Dirent) error {
-					if !de.IsDir() && strings.HasSuffix(path, ".php") {
-						wg.Add(1)
-						s.store.createJobs <- creatorJob{
-							uri:       util.PathToURI(path),
-							ctx:       ctx,
-							waitGroup: &wg,
-						}
+			err = filepath.WalkDir(filePath, func(path string, d fs.DirEntry, err error) error {
+				if err != nil {
+					return err
+				}
+				if !d.IsDir() && strings.HasSuffix(path, ".php") {
+					wg.Add(1)
+					s.store.createJobs <- creatorJob{
+						uri:       util.PathToURI(path),
+						ctx:       ctx,
+						waitGroup: &wg,
 					}
-					return nil
-				},
-				Unsorted: true,
+				}
+				return nil
 			})
+
+			if err != nil {
+				log.Println(err)
+			}
 		}
 		wg.Wait()
 	}()

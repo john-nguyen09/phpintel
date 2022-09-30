@@ -3,12 +3,11 @@ package analysis
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
-
-	"github.com/karrick/godirwalk"
 )
 
 type ParsingContext struct {
@@ -33,7 +32,7 @@ func (s *ParsingContext) close() {
 }
 
 func BenchmarkAnalysis(t *testing.B) {
-	dir, _ := filepath.Abs("../../go-phpparser/cases/moodle")
+	dir, _ := filepath.Abs("../cases/moodle")
 	jobs := make(chan string)
 	numOfWorkers := 4
 	withParsingContext(func(context *ParsingContext) {
@@ -43,15 +42,16 @@ func BenchmarkAnalysis(t *testing.B) {
 			go analyse(context, i, jobs)
 		}
 
-		godirwalk.Walk(dir, &godirwalk.Options{
-			Callback: func(path string, de *godirwalk.Dirent) error {
-				if !de.ModeType().IsDir() && strings.HasSuffix(path, ".php") {
-					context.waitGroup.Add(1)
-					jobs <- path
-				}
-				return nil
-			},
-			Unsorted: true,
+		filepath.WalkDir(dir, func(path string, info os.DirEntry, err error) error {
+			if err != nil {
+				panic(err)
+			}
+
+			if !info.IsDir() && strings.HasSuffix(path, ".php") {
+				context.waitGroup.Add(1)
+				jobs <- path
+			}
+			return nil
 		})
 		context.waitGroup.Wait()
 	})
