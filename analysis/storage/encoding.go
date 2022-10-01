@@ -1,20 +1,55 @@
 package storage
 
 import (
-	"encoding/binary"
 	"math"
+	"reflect"
+	"unsafe"
 
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 )
 
 // PutUInt64 appends an uint64 to the byte slice
 func PutUInt64(dst []byte, v uint64) []byte {
-	return append(dst, byte(v>>56), byte(v>>48), byte(v>>40), byte(v>>32), byte(v>>24), byte(v>>16), byte(v>>8), byte(v))
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Len = 8
+	sh.Cap = 8
+	sh.Data = uintptr(unsafe.Pointer(&v))
+
+	return append(dst, b...)
 }
 
 // PutUInt32 appends an uint32 to the byte slice
 func PutUInt32(dst []byte, v uint32) []byte {
-	return append(dst, byte(v>>24), byte(v>>16), byte(v>>8), byte(v))
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Len = 4
+	sh.Cap = 4
+	sh.Data = uintptr(unsafe.Pointer(&v))
+
+	return append(dst, b...)
+}
+
+// PutInt64 appends an int64 to the byte slice
+func PutInt64(dst []byte, v int64) []byte {
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Len = 8
+	sh.Cap = 8
+	sh.Data = uintptr(unsafe.Pointer(&v))
+
+	return append(dst, b...)
+}
+
+// PutInt32 appends an int32 to the byte slice
+func PutInt32(dst []byte, v int64) []byte {
+	var b []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh.Len = 4
+	sh.Cap = 4
+	sh.Data = uintptr(unsafe.Pointer(&v))
+
+	return append(dst, b...)
 }
 
 // PutFloat64 appends a float64 to the byte slice
@@ -29,12 +64,22 @@ func PutFloat32(dst []byte, v float32) []byte {
 
 // ReadUInt64 reads an uint64 from the byte slice
 func ReadUInt64(src []byte) uint64 {
-	return binary.BigEndian.Uint64(src)
+	return *(*uint64)(unsafe.Pointer(&src[0]))
 }
 
 // ReadUInt32 reads an uint32 from the byte slice
 func ReadUInt32(src []byte) uint32 {
-	return binary.BigEndian.Uint32(src)
+	return *(*uint32)(unsafe.Pointer(&src[0]))
+}
+
+// ReadInt64 reads an int64 from the byte slice
+func ReadInt64(src []byte) int64 {
+	return *(*int64)(unsafe.Pointer(&src[0]))
+}
+
+// ReadInt32 reads an int32 from the byte slice
+func ReadInt32(src []byte) int32 {
+	return *(*int32)(unsafe.Pointer(&src[0]))
 }
 
 // ReadFloat64 reads a float64 from the byte slice
@@ -69,7 +114,7 @@ func (e *Encoder) WriteUInt64(v uint64) {
 
 // WriteInt writes an int
 func (e *Encoder) WriteInt(v int) {
-	e.WriteUInt64(uint64(v))
+	e.buf = PutInt64(e.buf, int64(v))
 }
 
 // WriteUInt32 writes an uint32
@@ -135,7 +180,9 @@ func NewDecoder(b []byte) *Decoder {
 
 // ReadInt reads an int
 func (d *Decoder) ReadInt() int {
-	return int(d.ReadUInt64())
+	i := ReadInt64(d.buf)
+	d.buf = d.buf[8:]
+	return int(i)
 }
 
 // ReadUInt64 reads an uint64

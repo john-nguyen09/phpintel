@@ -32,29 +32,31 @@ func (s *ParsingContext) close() {
 }
 
 func BenchmarkAnalysis(t *testing.B) {
-	dir, _ := filepath.Abs("../cases/moodle")
-	jobs := make(chan string)
-	numOfWorkers := 4
-	withParsingContext(func(context *ParsingContext) {
-		defer context.close()
+	for i := 0; i < t.N; i++ {
+		dir, _ := filepath.Abs("../cases/moodle")
+		jobs := make(chan string)
+		numOfWorkers := 4
+		withParsingContext(func(context *ParsingContext) {
+			defer context.close()
 
-		for i := 0; i < numOfWorkers; i++ {
-			go analyse(context, i, jobs)
-		}
-
-		filepath.WalkDir(dir, func(path string, info os.DirEntry, err error) error {
-			if err != nil {
-				panic(err)
+			for i := 0; i < numOfWorkers; i++ {
+				go analyse(context, i, jobs)
 			}
 
-			if !info.IsDir() && strings.HasSuffix(path, ".php") {
-				context.waitGroup.Add(1)
-				jobs <- path
-			}
-			return nil
+			filepath.WalkDir(dir, func(path string, info os.DirEntry, err error) error {
+				if err != nil {
+					panic(err)
+				}
+
+				if !info.IsDir() && strings.HasSuffix(path, ".php") {
+					context.waitGroup.Add(1)
+					jobs <- path
+				}
+				return nil
+			})
+			context.waitGroup.Wait()
 		})
-		context.waitGroup.Wait()
-	})
+	}
 }
 
 // func TestReadData(t *testing.T) {

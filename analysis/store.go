@@ -281,7 +281,7 @@ func (s *Store) Migrate(newVersion string) {
 		return
 	}
 
-	targetV, _ := semver.NewVersion("v0.0.12")
+	targetV, _ := semver.NewVersion("v0.0.13")
 	if sv.LessThan(targetV) {
 		log.Println("Clearing database for upgrade.")
 		s.Clear()
