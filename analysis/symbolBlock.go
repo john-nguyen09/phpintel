@@ -74,6 +74,7 @@ var /* const */ typesToScanForChildren = util.SetFromArray([]phrase.PhraseType{
 	phrase.EncapsulatedVariableList,
 	phrase.EncapsulatedVariable,
 	phrase.RequireOnceExpression,
+	phrase.ErrorControlExpression,
 })
 
 var /*const */ tokenToSymbolConstructor = map[lexer.TokenType]symbolConstructorForToken{

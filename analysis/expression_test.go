@@ -60,3 +60,20 @@ class payment_service {
 	}))
 	cupaloy.SnapshotT(t, results)
 }
+
+func TestErrorControl(t *testing.T) {
+	doc := NewDocument("test1", []byte(`<?php
+$a = '1';
+@unlink($a);`))
+	doc.Load()
+	results := []Symbol{}
+	results = append(results, doc.HasTypesAtPos(protocol.Position{
+		Line:      2,
+		Character: 4,
+	}))
+	results = append(results, doc.HasTypesAtPos(protocol.Position{
+		Line:      2,
+		Character: 10,
+	}))
+	cupaloy.SnapshotT(t, results)
+}
