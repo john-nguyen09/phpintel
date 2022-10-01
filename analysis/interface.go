@@ -128,7 +128,7 @@ func (s *Interface) IsScopeSymbol() bool {
 	return false
 }
 
-func (s *Interface) Serialise(e *storage.Encoder) {
+func (s *Interface) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)
 	e.WriteInt(len(s.Extends))
@@ -139,7 +139,7 @@ func (s *Interface) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadInterface(d *storage.Decoder) *Interface {
+func ReadInterface(d storage.Decoder) *Interface {
 	theInterface := &Interface{
 		location: d.ReadLocation(),
 		Name:     ReadTypeString(d),

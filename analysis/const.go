@@ -94,7 +94,7 @@ func (s *Const) GetIndexCollection() string {
 	return constCompletionIndex
 }
 
-func (s *Const) Serialise(e *storage.Encoder) {
+func (s *Const) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.description)
 	serialiseDeprecatedTag(e, s.deprecatedTag)
@@ -102,7 +102,7 @@ func (s *Const) Serialise(e *storage.Encoder) {
 	e.WriteString(s.Value)
 }
 
-func ReadConst(d *storage.Decoder) *Const {
+func ReadConst(d storage.Decoder) *Const {
 	return &Const{
 		location:      d.ReadLocation(),
 		description:   d.ReadString(),

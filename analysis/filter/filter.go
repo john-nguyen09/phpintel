@@ -70,7 +70,7 @@ func (f *Filter) Lookup(data []byte) (bool, error) {
 }
 
 // Encode encodes the filter into byte slice
-func (f *Filter) Encode(e *storage.Encoder) error {
+func (f *Filter) Encode(e storage.Encoder) error {
 	if !f.isCommited {
 		return fmt.Errorf("filter is not yet commited")
 	}
@@ -84,7 +84,7 @@ func (f *Filter) Encode(e *storage.Encoder) error {
 }
 
 // FilterDecode decodes a filter from a byte slice
-func FilterDecode(d *storage.Decoder) *Filter {
+func FilterDecode(d storage.Decoder) *Filter {
 	var head *xorfilter.Xor8
 	if d.Len() != 0 {
 		head = &xorfilter.Xor8{

@@ -123,7 +123,7 @@ func (s *Define) GetIndexCollection() string {
 	return defineCompletionIndex
 }
 
-func (s *Define) Serialise(e *storage.Encoder) {
+func (s *Define) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.description)
 	serialiseDeprecatedTag(e, s.deprecatedTag)
@@ -131,7 +131,7 @@ func (s *Define) Serialise(e *storage.Encoder) {
 	e.WriteString(s.Value)
 }
 
-func ReadDefine(d *storage.Decoder) *Define {
+func ReadDefine(d storage.Decoder) *Define {
 	return &Define{
 		location:      d.ReadLocation(),
 		description:   d.ReadString(),

@@ -157,7 +157,7 @@ func (s *Property) IsScopeSymbol() bool {
 	return true
 }
 
-func (s *Property) Serialise(e *storage.Encoder) {
+func (s *Property) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.Name)
 	s.Scope.Write(e)
@@ -168,7 +168,7 @@ func (s *Property) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadProperty(d *storage.Decoder) *Property {
+func ReadProperty(d storage.Decoder) *Property {
 	return &Property{
 		location:           d.ReadLocation(),
 		Name:               d.ReadString(),

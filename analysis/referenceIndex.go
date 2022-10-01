@@ -19,13 +19,13 @@ type entryInfo struct {
 	r   protocol.Range
 }
 
-func (i entryInfo) serialise(e *storage.Encoder) {
+func (i entryInfo) serialise(e storage.Encoder) {
 	e.WriteString(i.ref)
 	e.WritePosition(i.r.Start)
 	e.WritePosition(i.r.End)
 }
 
-func entryInfoDecode(d *storage.Decoder) entryInfo {
+func entryInfoDecode(d storage.Decoder) entryInfo {
 	return entryInfo{
 		ref: d.ReadString(),
 		r: protocol.Range{

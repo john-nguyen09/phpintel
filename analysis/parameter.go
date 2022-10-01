@@ -100,7 +100,7 @@ func (s Parameter) HasValue() bool {
 	return s.hasValue
 }
 
-func (s *Parameter) Write(e *storage.Encoder) {
+func (s *Parameter) Write(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteLocation(s.varLocation)
 	e.WriteBool(s.hasValue)
@@ -109,7 +109,7 @@ func (s *Parameter) Write(e *storage.Encoder) {
 	e.WriteString(s.Value)
 }
 
-func ReadParameter(d *storage.Decoder) *Parameter {
+func ReadParameter(d storage.Decoder) *Parameter {
 	return &Parameter{
 		location:    d.ReadLocation(),
 		varLocation: d.ReadLocation(),

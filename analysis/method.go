@@ -218,7 +218,7 @@ func (s *Method) IsScopeSymbol() bool {
 	return true
 }
 
-func (s *Method) Serialise(e *storage.Encoder) {
+func (s *Method) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.Name)
 	e.WriteInt(len(s.Params))
@@ -235,7 +235,7 @@ func (s *Method) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadMethod(d *storage.Decoder) *Method {
+func ReadMethod(d storage.Decoder) *Method {
 	method := Method{
 		location: d.ReadLocation(),
 		Name:     d.ReadString(),

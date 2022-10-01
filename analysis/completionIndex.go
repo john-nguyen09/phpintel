@@ -34,16 +34,16 @@ func isMatch(str string, pattern []rune) (bool, int) {
 }
 
 // Serialise writes the CompletionValue
-func (cv CompletionValue) Serialise(e *storage.Encoder) {
+func (cv CompletionValue) Serialise(e storage.Encoder) {
 	e.WriteString(string(cv))
 }
 
-func readCompletionValue(d *storage.Decoder) CompletionValue {
+func readCompletionValue(d storage.Decoder) CompletionValue {
 	return CompletionValue(d.ReadString())
 }
 
-func createCompletionEntries(uri string, indexable NameIndexable, symbolKey string) []*entry {
-	entries := []*entry{}
+func createCompletionEntries(uri string, indexable NameIndexable, symbolKey string) []entry {
+	entries := []entry{}
 	keys := getCompletionKeys(uri, indexable, symbolKey)
 	completionKeys := [][]byte{}
 	for _, key := range keys {
@@ -58,7 +58,7 @@ func createCompletionEntries(uri string, indexable NameIndexable, symbolKey stri
 	return entries
 }
 
-func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]byte) *entry {
+func createEntryToReferCompletionIndex(uri string, symbolKey string, keys [][]byte) entry {
 	entry := newEntry(documentCompletionIndex, uri+KeySep+symbolKey)
 	entry.e.WriteInt(len(keys))
 	for _, key := range keys {

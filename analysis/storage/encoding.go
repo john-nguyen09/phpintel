@@ -103,8 +103,8 @@ type coder struct {
 type Encoder coder
 
 // NewEncoder creates an encoder
-func NewEncoder() *Encoder {
-	return &Encoder{}
+func NewEncoder() Encoder {
+	return Encoder{}
 }
 
 // WriteUInt64 writes an uint64
@@ -174,8 +174,8 @@ func (e *Encoder) Bytes() []byte {
 type Decoder coder
 
 // NewDecoder creates a decoder
-func NewDecoder(b []byte) *Decoder {
-	return &Decoder{b, 0}
+func NewDecoder(b []byte) Decoder {
+	return Decoder{b, 0}
 }
 
 // ReadInt reads an int

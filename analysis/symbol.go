@@ -88,7 +88,7 @@ type MemberSymbol interface {
 type serialisable interface {
 	GetCollection() string
 	GetKey() string
-	Serialise(*storage.Encoder)
+	Serialise(storage.Encoder)
 }
 
 type HasParamsResolvable interface {

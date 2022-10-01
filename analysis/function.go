@@ -163,7 +163,7 @@ func (s *Function) GetParams() []*Parameter {
 	return s.Params
 }
 
-func (s *Function) Serialise(e *storage.Encoder) {
+func (s *Function) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)
 	e.WriteInt(len(s.Params))
@@ -175,7 +175,7 @@ func (s *Function) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadFunction(d *storage.Decoder) *Function {
+func ReadFunction(d storage.Decoder) *Function {
 	function := Function{
 		location: d.ReadLocation(),
 		Name:     ReadTypeString(d),

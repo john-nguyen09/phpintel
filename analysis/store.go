@@ -60,21 +60,21 @@ const KeySep string = "\x00"
 
 type entry struct {
 	key []byte
-	e   *storage.Encoder
+	e   storage.Encoder
 }
 
-func newEntry(collection string, key string) *entry {
-	return &entry{
+func newEntry(collection string, key string) entry {
+	return entry{
 		key: []byte(collection + KeySep + key),
 		e:   storage.NewEncoder(),
 	}
 }
 
-func (s *entry) getKeyBytes() []byte {
+func (s entry) getKeyBytes() []byte {
 	return s.key
 }
 
-func (s *entry) bytes() []byte {
+func (s entry) bytes() []byte {
 	return s.e.Bytes()
 }
 
@@ -84,13 +84,13 @@ type documentSymbol struct {
 	indexableName string
 }
 
-func (s documentSymbol) serialise(e *storage.Encoder) {
+func (s documentSymbol) serialise(e storage.Encoder) {
 	e.WriteString(s.collection)
 	e.WriteString(s.key)
 	e.WriteString(s.indexableName)
 }
 
-func readDocumentSymbol(d *storage.Decoder) documentSymbol {
+func readDocumentSymbol(d storage.Decoder) documentSymbol {
 	return documentSymbol{
 		collection:    d.ReadString(),
 		key:           d.ReadString(),
@@ -102,7 +102,7 @@ type documentNamespace struct {
 	fullName string
 }
 
-func (s documentNamespace) serialise(e *storage.Encoder) {
+func (s documentNamespace) serialise(e storage.Encoder) {
 	e.WriteString(s.fullName)
 }
 
@@ -123,7 +123,7 @@ type Store struct {
 	DebouncedDeprecation func(func())
 }
 
-func readDocumentSymbols(greb *pogreb.DB, e *entry, fn func(documentSymbol) bool) {
+func readDocumentSymbols(greb *pogreb.DB, e entry, fn func(documentSymbol) bool) {
 	b, err := greb.Get(e.getKeyBytes())
 	if err == nil && len(b) > 0 {
 		d := storage.NewDecoder(b)
@@ -582,7 +582,7 @@ func (s *Store) indexDocumentNamespaces(document *Document, batch storage.Batch,
 	s.greb.Put(entry.getKeyBytes(), entry.e.Bytes())
 }
 
-func writeEntry(batch storage.Batch, entry *entry) {
+func writeEntry(batch storage.Batch, entry entry) {
 	batch.Put(entry.getKeyBytes(), entry.bytes())
 }
 

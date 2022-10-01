@@ -143,7 +143,7 @@ func (s *ClassConst) IsScopeSymbol() bool {
 	return true
 }
 
-func (s *ClassConst) Serialise(e *storage.Encoder) {
+func (s *ClassConst) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	e.WriteString(s.description)
 	e.WriteString(s.Name)
@@ -152,7 +152,7 @@ func (s *ClassConst) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadClassConst(d *storage.Decoder) *ClassConst {
+func ReadClassConst(d storage.Decoder) *ClassConst {
 	return &ClassConst{
 		location:      d.ReadLocation(),
 		description:   d.ReadString(),

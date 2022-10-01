@@ -395,7 +395,7 @@ func (d *phpDocComment) GetLocation() protocol.Location {
 	return d.location
 }
 
-func serialiseDeprecatedTag(e *storage.Encoder, t *tag) {
+func serialiseDeprecatedTag(e storage.Encoder, t *tag) {
 	if t == nil {
 		e.WriteBool(false)
 	} else {
@@ -405,7 +405,7 @@ func serialiseDeprecatedTag(e *storage.Encoder, t *tag) {
 	}
 }
 
-func deserialiseDeprecatedTag(d *storage.Decoder) *tag {
+func deserialiseDeprecatedTag(d storage.Decoder) *tag {
 	if d.ReadBool() {
 		return &tag{
 			TagName:     "@deprecated",

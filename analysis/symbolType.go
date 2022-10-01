@@ -165,13 +165,13 @@ func IsFQN(name string) bool {
 	return name[0] == '\\'
 }
 
-func (t TypeString) Write(e *storage.Encoder) {
+func (t TypeString) Write(e storage.Encoder) {
 	e.WriteString(t.original)
 	e.WriteString(t.fqn)
 	e.WriteInt(t.arrayLevel)
 }
 
-func ReadTypeString(d *storage.Decoder) TypeString {
+func ReadTypeString(d storage.Decoder) TypeString {
 	return TypeString{
 		original:   d.ReadString(),
 		fqn:        d.ReadString(),
@@ -251,14 +251,14 @@ func (t *TypeComposite) mergeWithArrayLevel(types TypeComposite, arrayLevel int)
 	}
 }
 
-func (t *TypeComposite) Write(e *storage.Encoder) {
+func (t *TypeComposite) Write(e storage.Encoder) {
 	e.WriteInt(len(t.typeStrings))
 	for _, typeString := range t.typeStrings {
 		typeString.Write(e)
 	}
 }
 
-func ReadTypeComposite(d *storage.Decoder) TypeComposite {
+func ReadTypeComposite(d storage.Decoder) TypeComposite {
 	count := d.ReadInt()
 	types := TypeComposite{}
 	for i := 0; i < count; i++ {

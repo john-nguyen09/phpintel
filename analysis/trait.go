@@ -86,12 +86,12 @@ func (s *Trait) GetIndexCollection() string {
 	return traitCompletionIndex
 }
 
-func (s *Trait) Serialise(e *storage.Encoder) {
+func (s *Trait) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.Name.Write(e)
 }
 
-func ReadTrait(d *storage.Decoder) *Trait {
+func ReadTrait(d storage.Decoder) *Trait {
 	return &Trait{
 		location: d.ReadLocation(),
 		Name:     ReadTypeString(d),

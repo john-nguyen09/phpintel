@@ -96,7 +96,7 @@ func (s *GlobalVariable) GetKey() string {
 	return s.Name + KeySep + s.location.URI
 }
 
-func (s *GlobalVariable) Serialise(e *storage.Encoder) {
+func (s *GlobalVariable) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.location)
 	s.types.Write(e)
 	e.WriteString(s.description)
@@ -114,7 +114,7 @@ func (s GlobalVariable) toVariable() *Variable {
 	}
 }
 
-func ReadGlobalVariable(d *storage.Decoder) *GlobalVariable {
+func ReadGlobalVariable(d storage.Decoder) *GlobalVariable {
 	return &GlobalVariable{
 		location:    d.ReadLocation(),
 		types:       ReadTypeComposite(d),

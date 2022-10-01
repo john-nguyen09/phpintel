@@ -234,7 +234,7 @@ func (s *Class) IsScopeSymbol() bool {
 	return false
 }
 
-func (s *Class) Serialise(e *storage.Encoder) {
+func (s *Class) Serialise(e storage.Encoder) {
 	e.WriteLocation(s.Location)
 	e.WriteLocation(s.refLocation)
 	e.WriteInt(int(s.Modifier))
@@ -252,7 +252,7 @@ func (s *Class) Serialise(e *storage.Encoder) {
 	serialiseDeprecatedTag(e, s.deprecatedTag)
 }
 
-func ReadClass(d *storage.Decoder) *Class {
+func ReadClass(d storage.Decoder) *Class {
 	theClass := &Class{
 		Location:    d.ReadLocation(),
 		refLocation: d.ReadLocation(),
