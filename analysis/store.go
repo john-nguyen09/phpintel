@@ -11,12 +11,12 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver"
-	"github.com/akrylysov/pogreb"
 	"github.com/bep/debounce"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
 	"github.com/john-nguyen09/phpintel/util"
+	"github.com/john-nguyen09/pogreb"
 	cmap "github.com/orcaman/concurrent-map"
 	"github.com/zyedidia/generic/mapset"
 )

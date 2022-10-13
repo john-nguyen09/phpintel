@@ -3,10 +3,10 @@ package analysis
 import (
 	"io/ioutil"
 
-	"github.com/akrylysov/pogreb"
 	"github.com/john-nguyen09/phpintel/analysis/storage"
 	"github.com/john-nguyen09/phpintel/internal/lsp/protocol"
 	"github.com/john-nguyen09/phpintel/stub"
+	"github.com/john-nguyen09/pogreb"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
