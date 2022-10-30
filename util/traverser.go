@@ -180,9 +180,12 @@ func (s NodeStack) Token() lexer.Token {
 
 // String returns the string representation of a NodeStack
 func (s NodeStack) String() string {
-	strs := []string{
-		s.token.String(),
+	strs := []string{}
+
+	if s.token != nil {
+		strs = append(strs, s.token.String())
 	}
+
 	for p := s.Parent(); p.Type != phrase.Unknown; p = s.Parent() {
 		strs = append(strs, p.Type.String())
 	}

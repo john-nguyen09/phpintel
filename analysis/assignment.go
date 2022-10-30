@@ -59,14 +59,16 @@ func analyseVariableAssignment(a analyser, document *Document, lhs *phrase.Phras
 	document.addSymbol(variable)
 
 	var expression HasTypes = nil
+	isExprType := false
 	if p, ok := rhs.(*phrase.Phrase); ok {
 		expression = scanForExpression(a, document, p)
+		_, isExprType = nodeTypeToExprConstructor[p.Type]
 	}
 	// But the variable should be pushed after any rhs's variables
 	document.pushVariable(a, variable, document.NodeRange(parent).End, true)
 	if expression != nil {
 		variable.setExpression(expression)
-	} else {
+	} else if !isExprType {
 		scanNode(a, document, rhs)
 	}
 	globalVariable := document.getGlobalVariable(variable.Name)
